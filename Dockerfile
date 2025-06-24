@@ -16,7 +16,7 @@ RUN dotnet restore
 RUN dotnet build --no-incremental -warnaserror
 
 ## Publish project
-RUN dotnet publish ./src/Presentation/WebApi/WebApi.csproj \
+RUN dotnet publish ./src/WebApi/WebApi.csproj \
   -c Release \
   --no-restore \
   -o ./output
