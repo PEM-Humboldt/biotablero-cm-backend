@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Presentation.WebApi;
+﻿namespace IAVH.BioTablero.CM.WebApi;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
