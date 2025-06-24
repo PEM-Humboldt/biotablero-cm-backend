@@ -4,6 +4,10 @@
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="8.0.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <RootNamespace>IAVH.BioTablero.CM.Application.Application</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
