@@ -1,19 +1,25 @@
+﻿namespace IAVH.BioTablero.CM.Presentation.WebApi;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-
-namespace IAVH.BioTablero.CM.Presentation.WebApi;
-
+/// <summary>
+/// Main program class
+/// </summary>
 public class Program
 {
+    /// <summary>
+    /// Main function
+    /// </summary>
+    /// <param name="args">System arguments</param>
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
         builder.Services.AddControllers();
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -28,7 +34,6 @@ public class Program
         }
 
         app.UseAuthorization();
-
 
         app.MapControllers();
 
