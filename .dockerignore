@@ -1,0 +1,13 @@
+.git/
+.gitignore
+.gitattributes
+.dockerignore
+.vscode/
+docs/
+scripts/
+Dockerfile*
+README.md
+**/[b|B]in/
+**/[O|o]bj/
+**/*.env
+.github/
