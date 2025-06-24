@@ -10,6 +10,27 @@ Built with .NET 8.0.
 
 ## Configuration (Development)
 
+### Code format
+
+#### dotnet-format
+
+Formats code to match `.editorconfig` settings. Install it with `dotnet tool install -g dotnet-format` command.
+
+```sh
+# Check format
+dotnet format --verify-no-changes
+# Fix format issues
+dotnet format
+```
+
+#### Warnings
+
+Check project warnings as errors
+
+```sh
+dotnet build --no-incremental -warnaserror
+```
+
 ### Run
 
 ```sh

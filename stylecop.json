@@ -1,0 +1,50 @@
+{
+    "settings": {
+        "documentationRules": {
+            "companyName": "TuEmpresa",
+            "documentExposedElements": true,
+            "documentInternalElements": true,
+            "documentPrivateElements": true,
+            "fileNamingConvention": "metadata",
+            "xmlHeader": false
+        },
+        "orderingRules": {
+            "usingDirectivesPlacement": "outsideNamespace",
+            "systemUsingDirectivesFirst": true,
+            "blankLinesBetweenUsingGroups": "allow",
+            "elementOrder": [
+                "kind",
+                "accessibility",
+                "constant",
+                "readonly"
+            ]
+        },
+        "namingRules": {
+            "includeInferredTupleElementNames": true,
+            "includeInferredAnonymousTypeMemberNames": true,
+            "allowedHungarianPrefixes": [],
+            "allowCommonHungarianPrefixes": false
+        },
+        "indentation": {
+            "useTabs": false,
+            "indentationSize": 4,
+            "tabSize": 4
+        },
+        "layoutRules": {
+            "newlineAtEndOfFile": "require",
+            "allowConsecutiveUsings": true
+        },
+        "readabilityRules": {
+            "allowBuiltInTypeAliases": true
+        },
+        "maintainabilityRules": {
+            "topLevelTypes": [
+                "class",
+                "interface",
+                "enum",
+                "struct",
+                "delegate"
+            ]
+        }
+    }
+}
