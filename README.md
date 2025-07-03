@@ -10,6 +10,16 @@ Built with .NET 8.0.
 
 ## Configuration (Development)
 
+### Environment Variables
+
+Generate a `.env` file with the project parameters. You can generate the file based on the `sample.env` example.
+
+### Run containers
+
+```sh
+docker compose -f docker-compose-dev.yml up
+```
+
 ### Code format
 
 #### dotnet-format
