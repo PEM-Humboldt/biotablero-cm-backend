@@ -10,16 +10,16 @@ public class LogMappings : IMapper<LogEntity, LogDto>
     {
         Id = entity.Id,
         Level = entity.Level,
-        UtcTimeStamp = entity.UtcTimeStamp,
-        RenderedMessage = entity.RenderedMessage,
+        TimeStamp = entity.TimeStamp,
+        Message = entity.Message,
         Properties = entity.Properties,
     };
     public LogEntity Map(LogDto entity) => new()
     {
         Id = entity.Id,
         Level = entity.Level,
-        UtcTimeStamp = entity.UtcTimeStamp,
-        RenderedMessage = entity.RenderedMessage,
+        TimeStamp = entity.TimeStamp,
+        Message = entity.Message,
         Properties = entity.Properties,
     };
 }

@@ -23,10 +23,22 @@ public static class ConfigLogProperties
     /// <returns>Host builder configuration</returns>
     public static ConfigureHostBuilder AddLogConfig(this ConfigureHostBuilder host)
     {
+        var columnWriters = new Dictionary<string, ColumnWriterBase>
+        {
+            { "id", new SinglePropertyColumnWriter("Id", dbType: NpgsqlTypes.NpgsqlDbType.Varchar) },
+            { "timestamp", new TimestampColumnWriter() },
+            { "level", new LevelColumnWriter(true, NpgsqlTypes.NpgsqlDbType.Varchar) },
+            { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
+            { "exception", new ExceptionColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
+            { "properties", new LogEventSerializedColumnWriter(NpgsqlTypes.NpgsqlDbType.Jsonb) },
+            { "environment", new SinglePropertyColumnWriter("Environment", dbType: NpgsqlTypes.NpgsqlDbType.Text) },
+        };
+
         // General setup
         host.UseSerilog((context, loggerConfiguration) =>
             {
                 loggerConfiguration
+                    .Enrich.With<UniqueIdEnricher>()
                     .Enrich.WithProperty(LogConstants.ApplicationName, LogConstants.ProjectName)
                     .Enrich.WithProperty(LogConstants.CustomRecord, false)
                     .ReadFrom.Configuration(context.Configuration)
@@ -38,14 +50,7 @@ public static class ConfigLogProperties
                             schemaName: LogConstants.DefaultSchemaName,
                             tableName: LogConstants.DefaultTableName,
                             needAutoCreateTable: true,
-                            columnOptions: new Dictionary<string, ColumnWriterBase>
-                            {
-                                { "timestamp", new TimestampColumnWriter() },
-                                { "level", new LevelColumnWriter(true, NpgsqlTypes.NpgsqlDbType.Varchar) },
-                                { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
-                                { "exception", new ExceptionColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
-                                { "properties", new LogEventSerializedColumnWriter(NpgsqlTypes.NpgsqlDbType.Jsonb) },
-                            }));
+                            columnOptions: columnWriters));
             });
 
         return host;

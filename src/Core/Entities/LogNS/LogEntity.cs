@@ -7,10 +7,10 @@ using IAVH.BioTablero.CM.Core.interfaces;
 
 using static IAVH.BioTablero.CM.Core.Enums.LogEnums;
 
-public class LogEntity : BaseEntity<string>, IAggregateRoot
+public class LogEntity : BaseEntity<Guid>, IAggregateRoot
 {
     public LogLevel Level { get; set; }
-    public DateTimeOffset UtcTimeStamp { get; set; }
-    public string RenderedMessage { get; set; }
+    public DateTimeOffset TimeStamp { get; set; }
+    public string Message { get; set; }
     public Dictionary<string, object> Properties { get; set; }
 }

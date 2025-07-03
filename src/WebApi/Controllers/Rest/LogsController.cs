@@ -1,5 +1,6 @@
 namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest;
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,7 +26,7 @@ public class LogsController(IWebTools webTools,
     /// <param name="ct">Cancellation token</param>
     /// <returns>Selected entity data</returns>
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(string id, CancellationToken ct)
+    public async Task<IActionResult> Get(Guid id, CancellationToken ct)
     {
         var response = await entityService.Get(id, ct);
         return webTools.CustomResponse(response);

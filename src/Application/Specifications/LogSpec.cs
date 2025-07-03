@@ -1,15 +1,18 @@
 namespace IAVH.BioTablero.CM.Application.Specifications;
 
+using System;
+
+
 using Ardalis.Specification;
 
 using IAVH.BioTablero.CM.Core.Entities.LogNS;
 
 
-public class LogSpec : GeneralSpecification<string, LogEntity>
+public class LogSpec : GeneralSpecification<Guid, LogEntity>
 {
     public LogSpec() { }
 
-    public LogSpec(string id) : base(id)
+    public LogSpec(Guid id) : base(id)
     {
         Query
             .Where(e => e.Id == id);

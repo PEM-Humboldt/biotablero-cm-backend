@@ -5,8 +5,10 @@ using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.DTOs.LogNS;
 using IAVH.BioTablero.CM.Core.Entities.LogNS;
+using System;
+
 
 public class LogService(IRepository<LogEntity> entityRepository,
-    IMapper<LogEntity, LogDto> mapper) : ServiceRead<LogEntity, LogDto, string, LogSpec>(entityRepository, mapper), ILogService
+    IMapper<LogEntity, LogDto> mapper) : ServiceRead<LogEntity, LogDto, Guid, LogSpec>(entityRepository, mapper), ILogService
 {
 }
