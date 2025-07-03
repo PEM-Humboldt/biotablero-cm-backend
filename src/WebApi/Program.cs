@@ -1,11 +1,15 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi;
 
+using DotNetEnv;
+
 using IAVH.BioTablero.CM.Persistence;
 using IAVH.BioTablero.CM.WebApi.Config;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
+using Serilog;
 
 /// <summary>
 /// Main program class
@@ -19,6 +23,9 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        // Load environment variables from a local file
+        Env.Load("../../.env");
 
         // Logs setup
         builder.Host.AddLogConfig();
@@ -45,10 +52,23 @@ public class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            app.UseDeveloperExceptionPage();
+
+            // Global CORS policy
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
         }
 
-        app.UseAuthorization();
+        // Setup health checks endpoint
+        app.MapHealthChecks("/health");
 
+        // Add support to logging request with SERILOG
+        app.UseSerilogRequestLogging();
+
+        app.UseAuthorization();
         app.MapControllers();
 
         app.Run();
