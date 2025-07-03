@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi;
 
+using IAVH.BioTablero.CM.Persistence;
 using IAVH.BioTablero.CM.WebApi.Config;
 
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +22,14 @@ public class Program
 
         // Logs setup
         builder.Host.AddLogConfig();
+
+        // Add DB Contexts
+        Dependencies.ConfigureServices(builder.Configuration, builder.Services);
+
+        // Dependency injection configuration
+        builder.Services.AddCoreServices();
+        builder.Services.AddAppServices();
+        builder.Services.AddMappings();
 
         // Add services to the container.
         builder.Services.AddControllers();
