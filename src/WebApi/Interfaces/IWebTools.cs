@@ -1,0 +1,24 @@
+namespace IAVH.BioTablero.CM.WebApi.Interfaces;
+
+using IAVH.BioTablero.CM.Core.Helpers.General;
+
+using Microsoft.AspNetCore.Mvc;
+
+/// <summary>
+/// Custom web tools
+/// </summary>
+public interface IWebTools
+{
+    /// <summary>
+    /// Get base URL
+    /// </summary>
+    /// <returns>Current project base URL</returns>
+    public string GetBaseUrl();
+
+    /// <summary>
+    /// Generate custom http response
+    /// </summary>
+    /// <param name="response">Model with response data</param>
+    /// <returns>HTTP response with custom parameters</returns>
+    public IActionResult CustomResponse(CustomWebResponse response);
+}
