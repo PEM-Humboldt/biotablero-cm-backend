@@ -29,16 +29,14 @@ public static class ConfigLogProperties
             { "timestamp", new TimestampColumnWriter() },
             { "level", new LevelColumnWriter(true, NpgsqlTypes.NpgsqlDbType.Varchar) },
             { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
-            { "exception", new ExceptionColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
             { "properties", new LogEventSerializedColumnWriter(NpgsqlTypes.NpgsqlDbType.Jsonb) },
-            { "environment", new SinglePropertyColumnWriter("Environment", dbType: NpgsqlTypes.NpgsqlDbType.Text) },
         };
 
         // General setup
         host.UseSerilog((context, loggerConfiguration) =>
             {
                 loggerConfiguration
-                    .Enrich.With<UniqueIdEnricher>()
+                    .Enrich.With<IdEnricher>()
                     .Enrich.WithProperty(LogConstants.ApplicationName, LogConstants.ProjectName)
                     .Enrich.WithProperty(LogConstants.CustomRecord, false)
                     .ReadFrom.Configuration(context.Configuration)
