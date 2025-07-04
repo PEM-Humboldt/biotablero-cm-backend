@@ -27,7 +27,7 @@ public static class ConfigLogProperties
     {
         var columnWriters = new Dictionary<string, ColumnWriterBase>
         {
-            { "id", new RawStringColumnWriter("Id") },
+            { "id", new GuidColumnWriter("Id") },
             { "timestamp", new TimestampColumnWriter() },
             { "level", new LevelColumnWriter(true, NpgsqlTypes.NpgsqlDbType.Varchar) },
             { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },

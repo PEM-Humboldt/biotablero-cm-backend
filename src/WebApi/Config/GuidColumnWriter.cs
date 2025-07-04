@@ -7,11 +7,11 @@ using NpgsqlTypes;
 using Serilog.Events;
 using Serilog.Sinks.PostgreSQL;
 
-public class RawStringColumnWriter : ColumnWriterBase
+public class GuidColumnWriter : ColumnWriterBase
 {
     private readonly string propertyName;
 
-    public RawStringColumnWriter(string propertyName, NpgsqlDbType dbType = NpgsqlDbType.Text)
+    public GuidColumnWriter(string propertyName, NpgsqlDbType dbType = NpgsqlDbType.Uuid)
         : base(dbType)
     {
         this.propertyName = propertyName;
@@ -21,13 +21,12 @@ public class RawStringColumnWriter : ColumnWriterBase
     {
         if (logEvent.Properties.TryGetValue(propertyName, out var value))
         {
-            if (value is ScalarValue scalar)
+            if (value is ScalarValue scalar && scalar.Value is Guid guidValue)
             {
-                return scalar.Value?.ToString();
+                return guidValue;
             }
-            return value.ToString();
         }
 
-        return null;
+        throw new InvalidCastException("Property is missing or not a Guid.");
     }
 }

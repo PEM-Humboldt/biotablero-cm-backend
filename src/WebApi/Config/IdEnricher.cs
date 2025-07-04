@@ -18,6 +18,8 @@ public class IdEnricher : ILogEventEnricher
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
         var id = Guid.NewGuid();
-        logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty("Id", id.ToString()));
+        var idProperty = new LogEventProperty("Id", new ScalarValue(id));
+
+        logEvent.AddOrUpdateProperty(idProperty);
     }
 }
