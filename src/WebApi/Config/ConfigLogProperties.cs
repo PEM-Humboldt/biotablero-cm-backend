@@ -31,6 +31,7 @@ public static class ConfigLogProperties
             { "timestamp", new TimestampColumnWriter() },
             { "level", new LevelColumnWriter(true, NpgsqlTypes.NpgsqlDbType.Varchar) },
             { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
+            { "user_name", new SinglePropertyColumnWriter("UserName", dbType: NpgsqlTypes.NpgsqlDbType.Varchar) },
             { "properties", new LogEventSerializedColumnWriter(NpgsqlTypes.NpgsqlDbType.Jsonb) },
         };
 
