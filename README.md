@@ -52,7 +52,7 @@ dotnet build
 dotnet run --no-build --project src/WebApi/WebApi.csproj
 ```
 
-Check Swagger docs [here](http://localhost:5193/swagger/index.html).
+Check Swagger docs [here](http://localhost:8001/swagger/index.html).
 
 ## Docker
 
