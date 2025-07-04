@@ -26,8 +26,6 @@ public static class ConfigCoreDependencies
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddSingleton<IWebTools, WebTools>();
 
-        // Enum services setup
-        // services.AddSingleton(typeof(IServiceReadEnum<>), typeof(ServiceReadEnum<>));
         return services;
     }
 }

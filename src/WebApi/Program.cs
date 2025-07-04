@@ -37,7 +37,6 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllers();
-        builder.Services.AddHttpContextAccessor();
 
         // Logs setup
         builder.Host.AddLogConfig(builder.Services);
