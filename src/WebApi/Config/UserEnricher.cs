@@ -13,8 +13,8 @@ using Serilog.Events;
 public class UserEnricher(IHttpContextAccessor httpContextAccessor) : ILogEventEnricher
 {
     private const string ClientUserPropertyName = "UserName";
-    private const string UserSystem = "SYSTEM";
     private const string UserAnonymous = "anonymous";
+    private const string UserSystem = "SYSTEM";
 
     private readonly IHttpContextAccessor httpContextAccessor = httpContextAccessor;
 
@@ -26,10 +26,9 @@ public class UserEnricher(IHttpContextAccessor httpContextAccessor) : ILogEventE
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
         var httpContext = httpContextAccessor.HttpContext;
-
-        string userName = httpContext == null ? UserSystem : (httpContext?.GetUserName() ?? UserAnonymous);
-
+        var userName = httpContext == null ? UserSystem : (httpContext?.GetUserName() ?? UserAnonymous);
         var userNameProperty = new LogEventProperty(ClientUserPropertyName, new ScalarValue(userName));
+
         logEvent.AddOrUpdateProperty(userNameProperty);
     }
 }

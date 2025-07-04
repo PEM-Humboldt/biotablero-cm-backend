@@ -27,11 +27,11 @@ public static class ConfigLogProperties
     {
         var columnWriters = new Dictionary<string, ColumnWriterBase>
         {
-            { "id", new SinglePropertyColumnWriter("Id", dbType: NpgsqlTypes.NpgsqlDbType.Varchar) },
+            { "id", new RawStringColumnWriter("Id") },
             { "timestamp", new TimestampColumnWriter() },
             { "level", new LevelColumnWriter(true, NpgsqlTypes.NpgsqlDbType.Varchar) },
             { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
-            { "user_name", new SinglePropertyColumnWriter("UserName", dbType: NpgsqlTypes.NpgsqlDbType.Varchar) },
+            { "user_name", new RawStringColumnWriter("UserName") },
             { "properties", new LogEventSerializedColumnWriter(NpgsqlTypes.NpgsqlDbType.Jsonb) },
         };
 
