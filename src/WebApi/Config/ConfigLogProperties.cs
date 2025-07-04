@@ -7,6 +7,7 @@ using IAVH.BioTablero.CM.Core.Constants;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 using Serilog;
 using Serilog.Sinks.PostgreSQL;
@@ -20,8 +21,9 @@ public static class ConfigLogProperties
     /// System log configuration
     /// </summary>
     /// <param name="host">Host builder</param>
+    /// <param name="services">Application services</param>
     /// <returns>Host builder configuration</returns>
-    public static ConfigureHostBuilder AddLogConfig(this ConfigureHostBuilder host)
+    public static ConfigureHostBuilder AddLogConfig(this ConfigureHostBuilder host, IServiceCollection services)
     {
         var columnWriters = new Dictionary<string, ColumnWriterBase>
         {
@@ -39,6 +41,7 @@ public static class ConfigLogProperties
                     .Enrich.With<IdEnricher>()
                     .Enrich.WithProperty(LogConstants.ApplicationName, LogConstants.ProjectName)
                     .Enrich.WithProperty(LogConstants.CustomRecord, false)
+                    .Enrich.With(new UserEnricher(services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>()))
                     .ReadFrom.Configuration(context.Configuration)
                     .WriteTo.Logger(lc => lc
                         .Filter.ByExcluding(

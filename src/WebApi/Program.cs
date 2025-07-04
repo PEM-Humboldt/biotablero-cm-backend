@@ -27,9 +27,6 @@ public class Program
         // Load environment variables from a local file
         Env.Load("../../.env");
 
-        // Logs setup
-        builder.Host.AddLogConfig();
-
         // Add DB Contexts
         Dependencies.ConfigureServices(builder.Configuration, builder.Services);
 
@@ -40,6 +37,10 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllers();
+        builder.Services.AddHttpContextAccessor();
+
+        // Logs setup
+        builder.Host.AddLogConfig(builder.Services);
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
