@@ -40,6 +40,10 @@ public class UserConfig : IEntityTypeConfiguration<LogEntity>
             .HasDefaultValue(false)
             .IsRequired();
 
+        builder.Property(e => e.ClientIp)
+            .HasColumnName("client_ip")
+            .HasColumnType("text");
+
         builder.Property(e => e.Properties)
             .HasColumnName("properties")
             .HasColumnType("jsonb")

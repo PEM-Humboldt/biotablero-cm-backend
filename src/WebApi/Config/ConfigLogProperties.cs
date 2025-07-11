@@ -33,6 +33,7 @@ public static class ConfigLogProperties
             { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
             { "user_name", new RawStringColumnWriter("UserName") },
             { "custom_record", new BoolColumnWriter("CustomRecord") },
+            { "client_ip", new RawStringColumnWriter("ClientIp") },
             { "properties", new LogEventSerializedColumnWriter(NpgsqlTypes.NpgsqlDbType.Jsonb) },
         };
 

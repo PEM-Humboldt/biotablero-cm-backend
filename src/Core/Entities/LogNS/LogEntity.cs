@@ -13,5 +13,6 @@ public class LogEntity : BaseEntity<Guid>, IAggregateRoot
     public string Message { get; set; }
     public string UserName { get; set; }
     public bool CustomRecord { get; set; }
+    public string ClientIp { get; set; }
     public string Properties { get; set; }
 }

@@ -14,5 +14,6 @@ public class LogDto : IDto
     public string Message { get; set; }
     public string UserName { get; set; }
     public bool CustomRecord { get; set; }
+    public string ClientIp { get; set; }
     public string Properties { get; set; }
 }
