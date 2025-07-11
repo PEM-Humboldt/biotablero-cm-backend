@@ -32,6 +32,7 @@ public static class ConfigLogProperties
             { "level", new LevelColumnWriter(true, NpgsqlTypes.NpgsqlDbType.Varchar) },
             { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
             { "user_name", new RawStringColumnWriter("UserName") },
+            { "custom_record", new BoolColumnWriter("CustomRecord") },
             { "properties", new LogEventSerializedColumnWriter(NpgsqlTypes.NpgsqlDbType.Jsonb) },
         };
 
