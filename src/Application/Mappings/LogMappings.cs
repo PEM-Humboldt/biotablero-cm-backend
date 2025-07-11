@@ -15,6 +15,7 @@ public class LogMappings : IMapper<LogEntity, LogDto>
         CustomRecord = entity.CustomRecord,
         Message = entity.Message,
         ClientIp = entity.ClientIp,
+        ClientAgent = entity.ClientAgent,
         Properties = entity.Properties,
     };
     public LogEntity Map(LogDto entity) => new()
@@ -26,6 +27,7 @@ public class LogMappings : IMapper<LogEntity, LogDto>
         CustomRecord = entity.CustomRecord,
         Message = entity.Message,
         ClientIp = entity.ClientIp,
+        ClientAgent = entity.ClientAgent,
         Properties = entity.Properties,
     };
 }

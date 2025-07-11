@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 using Serilog;
+using Serilog.Enrichers;
 using Serilog.Sinks.PostgreSQL;
 
 /// <summary>
@@ -34,6 +35,7 @@ public static class ConfigLogProperties
             { "user_name", new RawStringColumnWriter("UserName") },
             { "custom_record", new BoolColumnWriter("CustomRecord") },
             { "client_ip", new RawStringColumnWriter("ClientIp") },
+            { "client_agent", new RawStringColumnWriter("ClientAgent") },
             { "properties", new LogEventSerializedColumnWriter(NpgsqlTypes.NpgsqlDbType.Jsonb) },
         };
 
@@ -45,6 +47,8 @@ public static class ConfigLogProperties
                     .Enrich.WithProperty(LogConstants.ApplicationName, LogConstants.ProjectName)
                     .Enrich.WithProperty(LogConstants.CustomRecord, false)
                     .Enrich.With(new UserEnricher(services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>()))
+                    .Enrich.With(new ClientIpEnricher())
+                    .Enrich.With(new ClientHeaderEnricher("User-Agent", "ClientAgent"))
                     .ReadFrom.Configuration(context.Configuration)
                     .WriteTo.Logger(lc => lc
                         .Filter.ByExcluding(

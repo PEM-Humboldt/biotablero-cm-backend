@@ -44,6 +44,10 @@ public class UserConfig : IEntityTypeConfiguration<LogEntity>
             .HasColumnName("client_ip")
             .HasColumnType("text");
 
+        builder.Property(e => e.ClientAgent)
+            .HasColumnName("client_agent")
+            .HasColumnType("text");
+
         builder.Property(e => e.Properties)
             .HasColumnName("properties")
             .HasColumnType("jsonb")
