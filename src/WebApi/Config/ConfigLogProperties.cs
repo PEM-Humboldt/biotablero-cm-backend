@@ -29,7 +29,7 @@ public static class ConfigLogProperties
         {
             { "id", new GuidColumnWriter("Id") },
             { "timestamp", new TimestampColumnWriter() },
-            { "level", new LevelColumnWriter(true, NpgsqlTypes.NpgsqlDbType.Varchar) },
+            { "level", new LevelColumnWriter() },
             { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
             { "user_name", new RawStringColumnWriter("UserName") },
             { "custom_record", new BoolColumnWriter("CustomRecord") },

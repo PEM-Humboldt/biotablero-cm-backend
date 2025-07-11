@@ -24,8 +24,7 @@ public class UserConfig : IEntityTypeConfiguration<LogEntity>
 
         builder.Property(e => e.Level)
             .HasColumnName("level")
-            .HasConversion<string>()
-            .HasMaxLength(50)
+            .HasConversion<int>()
             .IsRequired();
 
         builder.Property(e => e.Message)

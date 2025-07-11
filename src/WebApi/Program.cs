@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi;
 
+using System.Text.Json.Serialization;
+
 using DotNetEnv;
 
 using IAVH.BioTablero.CM.Persistence;
@@ -36,7 +38,11 @@ public class Program
         builder.Services.AddMappings();
 
         // Add services to the container.
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddJsonOptions(x =>
+        {
+            // Serialize enums as strings in api responses
+            x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
 
         // Logs setup
         builder.Host.AddLogConfig(builder.Services);
