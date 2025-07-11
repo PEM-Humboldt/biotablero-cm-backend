@@ -36,6 +36,11 @@ public class UserConfig : IEntityTypeConfiguration<LogEntity>
             .HasColumnName("user_name")
             .HasColumnType("text");
 
+        builder.Property(e => e.CustomRecord)
+            .HasColumnName("custom_record")
+            .HasDefaultValue(false)
+            .IsRequired();
+
         builder.Property(e => e.Properties)
             .HasColumnName("properties")
             .HasColumnType("jsonb")

@@ -11,6 +11,8 @@ public class LogMappings : IMapper<LogEntity, LogDto>
         Id = entity.Id,
         Level = entity.Level,
         TimeStamp = entity.TimeStamp,
+        UserName = entity.UserName,
+        CustomRecord = entity.CustomRecord,
         Message = entity.Message,
         Properties = entity.Properties,
     };
@@ -19,6 +21,8 @@ public class LogMappings : IMapper<LogEntity, LogDto>
         Id = entity.Id,
         Level = entity.Level,
         TimeStamp = entity.TimeStamp,
+        UserName = entity.UserName,
+        CustomRecord = entity.CustomRecord,
         Message = entity.Message,
         Properties = entity.Properties,
     };

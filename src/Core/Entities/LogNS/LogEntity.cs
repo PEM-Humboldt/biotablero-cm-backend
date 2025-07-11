@@ -12,5 +12,6 @@ public class LogEntity : BaseEntity<Guid>, IAggregateRoot
     public LogLevel Level { get; set; }
     public string Message { get; set; }
     public string UserName { get; set; }
+    public bool CustomRecord { get; set; }
     public string Properties { get; set; }
 }
