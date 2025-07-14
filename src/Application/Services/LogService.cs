@@ -10,8 +10,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.OData.Query;
 using System.Threading;
 using System.Linq;
-using Microsoft.AspNetCore.OData.Results;
 using IAVH.BioTablero.CM.Core.Helpers.General;
+using System.Collections.Generic;
+
 
 public class LogService(IRepository<LogEntity> entityRepository,
     IMapper<LogEntity, LogDto> mapper) : ServiceRead<LogEntity, LogDto, Guid, LogSpec>(entityRepository, mapper), ILogService
@@ -44,11 +45,12 @@ public class LogService(IRepository<LogEntity> entityRepository,
 
         return new()
         {
-            ResponseBody = new ODataPageResult<LogDto>(
-                dataListDto,
-                nextLink,
-                totalCount
-            )
+            ResponseBody = new Dictionary<string, object>
+            {
+                ["@odata.count"] = totalCount,
+                ["value"] = dataListDto,
+                ["@odata.nextLink"] = nextLink,
+            }
         };
     }
 }
