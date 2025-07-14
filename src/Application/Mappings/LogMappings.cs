@@ -10,6 +10,7 @@ public class LogMappings : IMapper<LogEntity, LogDto>
     {
         Id = entity.Id,
         Level = entity.Level,
+        Type = entity.Type,
         TimeStamp = entity.TimeStamp,
         UserName = entity.UserName,
         CustomRecord = entity.CustomRecord,
@@ -22,6 +23,7 @@ public class LogMappings : IMapper<LogEntity, LogDto>
     {
         Id = entity.Id,
         Level = entity.Level,
+        Type = entity.Type,
         TimeStamp = entity.TimeStamp,
         UserName = entity.UserName,
         CustomRecord = entity.CustomRecord,

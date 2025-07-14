@@ -11,6 +11,7 @@ public class LogDto : IDto
     public Guid Id { get; set; }
     public DateTime TimeStamp { get; set; }
     public LogLevel Level { get; set; }
+    public LogType? Type { get; set; }
     public string Message { get; set; }
     public string UserName { get; set; }
     public bool CustomRecord { get; set; }

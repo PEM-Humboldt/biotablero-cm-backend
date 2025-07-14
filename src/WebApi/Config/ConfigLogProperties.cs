@@ -31,6 +31,7 @@ public static class ConfigLogProperties
             { "id", new GuidColumnWriter("Id") },
             { "timestamp", new TimestampColumnWriter() },
             { "level", new LevelColumnWriter() },
+            { "type", new SinglePropertyColumnWriter("Type", dbType: NpgsqlTypes.NpgsqlDbType.Integer) },
             { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
             { "user_name", new RawStringColumnWriter("UserName") },
             { "custom_record", new BoolColumnWriter("CustomRecord") },

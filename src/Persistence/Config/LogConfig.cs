@@ -27,6 +27,10 @@ public class UserConfig : IEntityTypeConfiguration<LogEntity>
             .HasConversion<int>()
             .IsRequired();
 
+        builder.Property(e => e.Type)
+            .HasColumnName("type")
+            .HasConversion<int>();
+
         builder.Property(e => e.Message)
             .HasColumnName("message")
             .HasColumnType("text");

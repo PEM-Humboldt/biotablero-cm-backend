@@ -11,4 +11,12 @@ public static class LogEnums
         Error,
         Fatal,
     }
+
+    public enum LogType
+    {
+        Create,
+        Read,
+        Update,
+        Delete,
+    }
 }
