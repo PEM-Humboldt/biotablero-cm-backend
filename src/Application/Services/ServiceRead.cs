@@ -56,14 +56,14 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
         if (dataEntity != null)
         {
             var dataDto = mapper.Map(dataEntity);
-            return new CustomWebResponse()
+            return new()
             {
                 ResponseBody = dataDto
             };
         }
         else
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.NotFound,
                 Message = "Not found",
@@ -82,7 +82,7 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
         var dataListDto = dataListEntity
             .Select(mapper.Map);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = dataListDto
         };
@@ -102,7 +102,7 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
         var dataListDto = dataListEntity
             .Select(mapper.Map);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = dataListDto
         };

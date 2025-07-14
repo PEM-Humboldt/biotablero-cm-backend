@@ -5,9 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
+using IAVH.BioTablero.CM.Core.DTOs.LogNS;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 /// <summary>
 /// Logs controller
@@ -17,7 +20,7 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 [Route("[controller]")]
 public class LogsController(IWebTools webTools,
-    ILogService entityService) : ControllerBase
+    ILogService entityService) : ODataController
 {
     /// <summary>
     /// Get entity
@@ -35,14 +38,13 @@ public class LogsController(IWebTools webTools,
     /// <summary>
     /// Get entities (paginated)
     /// </summary>
-    /// <param name="skip">Page</param>
-    /// <param name="take">Page size</param>
+    /// <param name="queryOptions">OData query options</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Entities list from parameters</returns>
     [HttpGet]
-    public async Task<IActionResult> Get(int skip, int take, CancellationToken ct)
+    public async Task<IActionResult> Get(ODataQueryOptions<LogDto> queryOptions, CancellationToken ct)
     {
-        var response = await entityService.GetList(skip, take, ct);
+        var response = await entityService.GetList(queryOptions, ct);
         return webTools.CustomResponse(response);
     }
 }
