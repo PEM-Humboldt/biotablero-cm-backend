@@ -44,7 +44,7 @@ public class LogsController(IWebTools webTools,
     [HttpGet]
     public async Task<IActionResult> Get(ODataQueryOptions<LogDto> queryOptions, CancellationToken ct)
     {
-        var response = await entityService.GetList(queryOptions, ct);
+        var response = await entityService.GetList($"{webTools.GetBaseUrl()}Logs", queryOptions, ct);
         return webTools.CustomResponse(response);
     }
 }

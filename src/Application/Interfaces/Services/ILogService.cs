@@ -15,8 +15,9 @@ public interface ILogService : IServiceRead<LogDto, Guid>
     /// <summary>
     /// Get elements list (OData)
     /// </summary>
+    /// <param name="baseUrl">API base url</param>
     /// <param name="queryOptions">OData query options</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public Task<CustomWebResponse> GetList(ODataQueryOptions<LogDto> queryOptions, CancellationToken ct = default);
+    public Task<CustomWebResponse> GetList(string baseUrl, ODataQueryOptions<LogDto> queryOptions, CancellationToken ct = default);
 }
