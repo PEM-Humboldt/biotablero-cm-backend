@@ -14,6 +14,7 @@ using IAVH.BioTablero.CM.Core.interfaces;
 
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OData;
 
 /// <summary>
 /// General service for only read functions
@@ -120,48 +121,65 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
     /// <returns>Process result</returns>
     public virtual async Task<CustomWebResponse> GetList(ODataQueryOptions<E> queryOptions, CancellationToken ct = default)
     {
-        var query = entityRepository.GetQueryable();
+        const int maxPageSize = 50;
 
-        var settings = new ODataQuerySettings
+        try
         {
-            HandleNullPropagation = HandleNullPropagationOption.True
-        };
+            var query = entityRepository.GetQueryable();
 
-        // Apply order and filter settings
-        if (queryOptions.Filter != null)
-        {
-            query = (IQueryable<E>)queryOptions.Filter.ApplyTo(query, settings);
-        }
-
-        if (queryOptions.OrderBy != null)
-        {
-            query = queryOptions.OrderBy.ApplyTo(query, settings);
-        }
-
-        // Check total items
-        var totalCount = await query.CountAsync(ct);
-
-        // Apply pagination settings ($skip and $top)
-        if (queryOptions.Skip != null)
-        {
-            query = queryOptions.Skip.ApplyTo(query, settings);
-        }
-
-        if (queryOptions.Top != null)
-        {
-            query = queryOptions.Top.ApplyTo(query, settings);
-        }
-
-        // Get result
-        var dataList = await query.ToListAsync(ct);
-
-        return new()
-        {
-            ResponseBody = new Dictionary<string, object>
+            var settings = new ODataQuerySettings
             {
-                ["@odata.count"] = totalCount,
-                ["value"] = dataList.Select(mapper.Map),
+                HandleNullPropagation = HandleNullPropagationOption.True
+            };
+
+            // Apply order and filter settings
+            if (queryOptions.Filter != null)
+            {
+                query = (IQueryable<E>)queryOptions.Filter.ApplyTo(query, settings);
             }
-        };
+
+            if (queryOptions.OrderBy != null)
+            {
+                query = queryOptions.OrderBy.ApplyTo(query, settings);
+            }
+
+            // Check total items
+            var totalCount = await query.CountAsync(ct);
+
+            // Apply pagination settings ($skip and $top)
+            var pageSize = queryOptions.Top?.Value ?? maxPageSize;
+
+            if (pageSize > maxPageSize)
+            {
+                pageSize = maxPageSize;
+            }
+
+            query = query.Take(pageSize);
+
+            if (queryOptions.Skip != null)
+            {
+                query = queryOptions.Skip.ApplyTo(query, settings);
+            }
+
+            // Get result
+            var dataList = await query.ToListAsync(ct);
+
+            return new()
+            {
+                ResponseBody = new Dictionary<string, object>
+                {
+                    ["@odata.count"] = totalCount,
+                    ["value"] = dataList.Select(mapper.Map),
+                }
+            };
+        }
+        catch (ODataException ex)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Message = $"Invalid filter: {ex.Message}",
+            };
+        }
     }
 }
