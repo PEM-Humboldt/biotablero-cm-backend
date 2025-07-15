@@ -12,9 +12,9 @@ public static class LogEnums
         Fatal,
     }
 
-    public enum LogType
+    public enum LogType : int
     {
-        Create,
+        Create = 1,
         Read,
         Update,
         Delete,

@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Services;
 using IAVH.BioTablero.CM.Persistence.Repositories;
 using IAVH.BioTablero.CM.WebApi.Controllers.Tools;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -25,6 +26,9 @@ public static class ConfigCoreDependencies
         // Ardalis repository registry
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddSingleton<IWebTools, WebTools>();
+
+        // Enum services setup
+        services.AddSingleton(typeof(IServiceReadEnum<>), typeof(ServiceReadEnum<>));
 
         return services;
     }
