@@ -6,12 +6,17 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Core.Helpers.General;
 using IAVH.BioTablero.CM.Core.interfaces;
 
+using Microsoft.AspNetCore.OData.Query;
+
+
 /// <summary>
 /// Read data service interface 
 /// </summary>
+/// <typeparam name="E">Entity type</typeparam>
 /// <typeparam name="DTO">DTO class type</typeparam>
 /// <typeparam name="ET">Entity identifier type</typeparam>
-public interface IServiceRead<DTO, ET>
+public interface IServiceRead<E, DTO, ET>
+    where E : class, IAggregateRoot
     where DTO : class, IDto
     where ET : notnull
 {
@@ -46,4 +51,12 @@ public interface IServiceRead<DTO, ET>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
     public Task<CustomWebResponse> GetList(int skip, int take, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get elements list (OData)
+    /// </summary>
+    /// <param name="queryOptions">OData query options</param>
+    /// <param name="ct">Cancellation token</param>
+    /// <returns>Process result</returns>
+    public Task<CustomWebResponse> GetList(ODataQueryOptions<E> queryOptions, CancellationToken ct = default);
 }

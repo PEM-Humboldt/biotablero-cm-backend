@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
-using IAVH.BioTablero.CM.Core.DTOs.LogNS;
+using IAVH.BioTablero.CM.Core.Entities.LogNS;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
@@ -42,9 +42,9 @@ public class LogsController(IWebTools webTools,
     /// <param name="ct">Cancellation token</param>
     /// <returns>Entities list from parameters</returns>
     [HttpGet]
-    public async Task<IActionResult> Get(ODataQueryOptions<LogDto> queryOptions, CancellationToken ct)
+    public async Task<IActionResult> Get(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct)
     {
-        var response = await entityService.GetList($"{webTools.GetBaseUrl()}Logs", queryOptions, ct);
+        var response = await entityService.GetList(queryOptions, ct);
         return webTools.CustomResponse(response);
     }
 }

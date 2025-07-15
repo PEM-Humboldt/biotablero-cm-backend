@@ -1,6 +1,7 @@
 namespace IAVH.BioTablero.CM.Application.Services;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -10,6 +11,9 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Core.Helpers.General;
 using IAVH.BioTablero.CM.Core.interfaces;
+
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// General service for only read functions
@@ -21,7 +25,7 @@ using IAVH.BioTablero.CM.Core.interfaces;
 /// <remarks>
 /// Initialize service
 /// </remarks>
-public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepository, IMapper<E, DTO> mapper) : IServiceRead<DTO, ET>
+public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepository, IMapper<E, DTO> mapper) : IServiceRead<E, DTO, ET>
     where DTO : class, IDto
     where ET : notnull
     where E : class, IAggregateRoot
@@ -105,6 +109,59 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
         return new()
         {
             ResponseBody = dataListDto
+        };
+    }
+
+    /// <summary>
+    /// Get elements list (OData)
+    /// </summary>
+    /// <param name="queryOptions">OData query options</param>
+    /// <param name="ct">Cancellation token</param>
+    /// <returns>Process result</returns>
+    public virtual async Task<CustomWebResponse> GetList(ODataQueryOptions<E> queryOptions, CancellationToken ct = default)
+    {
+        var query = entityRepository.GetQueryable();
+
+        var settings = new ODataQuerySettings
+        {
+            HandleNullPropagation = HandleNullPropagationOption.True
+        };
+
+        // Apply order and filter settings
+        if (queryOptions.Filter != null)
+        {
+            query = (IQueryable<E>)queryOptions.Filter.ApplyTo(query, settings);
+        }
+
+        if (queryOptions.OrderBy != null)
+        {
+            query = queryOptions.OrderBy.ApplyTo(query, settings);
+        }
+
+        // Check total items
+        var totalCount = await query.CountAsync(ct);
+
+        // Apply pagination settings ($skip and $top)
+        if (queryOptions.Skip != null)
+        {
+            query = queryOptions.Skip.ApplyTo(query, settings);
+        }
+
+        if (queryOptions.Top != null)
+        {
+            query = queryOptions.Top.ApplyTo(query, settings);
+        }
+
+        // Get result
+        var dataList = await query.ToListAsync(ct);
+
+        return new()
+        {
+            ResponseBody = new Dictionary<string, object>
+            {
+                ["@odata.count"] = totalCount,
+                ["value"] = dataList.Select(mapper.Map),
+            }
         };
     }
 }

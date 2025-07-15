@@ -8,6 +8,7 @@ using IAVH.BioTablero.CM.Persistence;
 using IAVH.BioTablero.CM.WebApi.Config;
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -38,11 +39,17 @@ public class Program
         builder.Services.AddMappings();
 
         // Add services to the container.
-        builder.Services.AddControllers().AddJsonOptions(x =>
-        {
-            // Serialize enums as strings in api responses
-            x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-        });
+        builder.Services.AddControllers()
+            .AddJsonOptions(x =>
+            {
+                // Serialize enums as strings in api responses
+                x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            })
+            .AddOData(opt =>
+            {
+                // Add OData default settings
+                opt.Select().Filter().OrderBy().Expand().Count().SetMaxTop(50);
+            });
 
         // Logs setup
         builder.Host.AddLogConfig(builder.Services);
