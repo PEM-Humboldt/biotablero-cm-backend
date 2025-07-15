@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Core.Entities;
+﻿namespace IAVH.BioTablero.CM.Core.Entities;
 
 /// <summary>
 /// Generic base entity

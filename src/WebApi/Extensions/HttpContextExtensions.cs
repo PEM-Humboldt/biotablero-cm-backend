@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Extensions;
+﻿namespace IAVH.BioTablero.CM.WebApi.Extensions;
 
 using System.Linq;
 

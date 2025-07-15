@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Core.Constants;
+﻿namespace IAVH.BioTablero.CM.Core.Constants;
 
 /// <summary>
 /// Constants for Identity and Access Management

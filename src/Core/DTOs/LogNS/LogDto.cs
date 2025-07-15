@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Core.DTOs.LogNS;
+﻿namespace IAVH.BioTablero.CM.Core.DTOs.LogNS;
 
 using System;
 

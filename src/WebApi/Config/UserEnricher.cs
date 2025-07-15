@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config;
 
 using IAVH.BioTablero.CM.WebApi.Extensions;
 

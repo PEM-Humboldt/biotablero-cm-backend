@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Controllers.Tools;
+﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Tools;
 
 using IAVH.BioTablero.CM.Core.Helpers.General;
 using IAVH.BioTablero.CM.WebApi.Interfaces;

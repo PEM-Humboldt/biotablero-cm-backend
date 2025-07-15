@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Core.Enums;
+﻿namespace IAVH.BioTablero.CM.Core.Enums;
 
 public static class LogEnums
 {

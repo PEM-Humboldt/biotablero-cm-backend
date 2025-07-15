@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Application.Specifications;
+﻿namespace IAVH.BioTablero.CM.Application.Specifications;
 
 using System;
 
