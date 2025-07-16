@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.SerilogSetup.ColumWriters;
 
 using System;
 
@@ -8,14 +8,11 @@ using Serilog.Events;
 using Serilog.Sinks.PostgreSQL;
 
 /// <summary>
-/// Custom Serilog column writer for strings
+/// Custom Serilog column writer for GUID data
 /// </summary>
-/// <remarks>
-/// Constructor
-/// </remarks>
 /// <param name="propertyName">Serilog property name</param>
 /// <param name="dbType">Column database type</param>
-public class RawStringColumnWriter(string propertyName, NpgsqlDbType dbType = NpgsqlDbType.Text) : ColumnWriterBase(dbType)
+public class GuidColumnWriter(string propertyName, NpgsqlDbType dbType = NpgsqlDbType.Uuid) : ColumnWriterBase(dbType)
 {
     private readonly string propertyName = propertyName;
 
@@ -29,14 +26,12 @@ public class RawStringColumnWriter(string propertyName, NpgsqlDbType dbType = Np
     {
         if (logEvent.Properties.TryGetValue(propertyName, out var value))
         {
-            if (value is ScalarValue scalar)
+            if (value is ScalarValue scalar && scalar.Value is Guid guidValue)
             {
-                return scalar.Value?.ToString();
+                return guidValue;
             }
-
-            return value.ToString();
         }
 
-        return null;
+        throw new InvalidCastException("Property is missing or not a Guid.");
     }
 }

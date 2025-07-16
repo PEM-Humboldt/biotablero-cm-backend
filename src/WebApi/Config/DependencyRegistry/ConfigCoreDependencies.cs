@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Services;

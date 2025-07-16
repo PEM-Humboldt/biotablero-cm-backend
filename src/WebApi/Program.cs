@@ -5,7 +5,9 @@ using System.Text.Json.Serialization;
 using DotNetEnv;
 
 using IAVH.BioTablero.CM.Persistence;
-using IAVH.BioTablero.CM.WebApi.Config;
+using IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
+using IAVH.BioTablero.CM.WebApi.Config.SerilogSetup;
+using IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Filters;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.OData;
