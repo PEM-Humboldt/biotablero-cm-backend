@@ -10,7 +10,7 @@ using IAVH.BioTablero.CM.Core.Helpers.General;
 /// Read enum service 
 /// </summary>
 public class ServiceReadEnum<TEnum> : IServiceReadEnum<TEnum>
-    where TEnum : struct
+    where TEnum : Enum
 {
     /// <summary>
     /// Get all elements

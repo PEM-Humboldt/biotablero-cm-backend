@@ -1,5 +1,7 @@
 namespace IAVH.BioTablero.CM.Core.Helpers.General;
 
+using System;
+
 using IAVH.BioTablero.CM.Core.interfaces;
 
 /// <summary>
@@ -7,7 +9,7 @@ using IAVH.BioTablero.CM.Core.interfaces;
 /// </summary>
 /// <typeparam name="TEnum">Enum</typeparam>
 public class EnumEntityDto<TEnum> : IDto
-    where TEnum : struct
+    where TEnum : Enum
 {
     /// <summary>
     /// Constructor
@@ -17,10 +19,10 @@ public class EnumEntityDto<TEnum> : IDto
     /// <summary>
     /// Constructor
     /// </summary>
-    /// <param name="id">Enum value</param>
-    public EnumEntityDto(TEnum id)
+    /// <param name="typeEnum">Enum value</param>
+    public EnumEntityDto(TEnum typeEnum)
     {
-        Id = id;
+        TypeEnum = typeEnum;
     }
 
     /// <summary>
@@ -31,30 +33,38 @@ public class EnumEntityDto<TEnum> : IDto
     {
         if (!typeof(TEnum).IsEnumDefined(id))
         {
-            return;
+            throw new InvalidCastException($"{id} is not a valid value for {typeof(TEnum)} enum");
         }
 
-        Id = (TEnum)(object)id;
+        TypeEnum = (TEnum)(object)id;
     }
 
     /// <summary>
     /// Enum value
     /// </summary>
-    public TEnum Id { get; set; }
+    public TEnum TypeEnum { private get; set; }
+
+    /// <summary>
+    /// Enum value as integer
+    /// </summary>
+    public int Id
+    {
+        get
+        {
+            var valueStr = TypeEnum.ToString("D");
+
+            if (!int.TryParse(valueStr, out var value))
+            {
+                throw new InvalidCastException($"Invalid integer enum value: {valueStr}");
+            }
+
+            return value;
+        }
+    }
 
     /// <summary>
     /// Enum value as string
     /// </summary>
-    public string Name
-    {
-        get
-        {
-            if (!typeof(TEnum).IsEnum)
-            {
-                return null;
-            }
-
-            return Id.ToString();
-        }
-    }
+    public string Name =>
+            TypeEnum.ToString("G");
 }
