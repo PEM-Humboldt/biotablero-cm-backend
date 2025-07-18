@@ -1,13 +1,14 @@
-﻿namespace IAVH.BioTablero.CM.Application.Interfaces.General;
+namespace IAVH.BioTablero.CM.Application.Interfaces.General;
 
 using System;
 
 using IAVH.BioTablero.CM.Core.Helpers.General;
 
 /// <summary>
-/// Read enum service interface
+/// Read enum service
 /// </summary>
-public interface IServiceReadEnum<TEnum>
+/// <typeparam name="TEnum">Enum type</typeparam>
+public interface IServiceReadEnumeration<TEnum>
     where TEnum : Enum
 {
     /// <summary>

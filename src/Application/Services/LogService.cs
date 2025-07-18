@@ -9,6 +9,9 @@ using IAVH.BioTablero.CM.Core.DTOs.LogNS;
 using IAVH.BioTablero.CM.Core.Entities.LogNS;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
+/// <summary>
+/// System logs service
+/// </summary>
 public class LogService(IRepository<LogEntity> entityRepository,
     IMapper<LogEntity, LogDto> mapper) : ServiceRead<LogEntity, LogDto, Guid, LogSpec>(entityRepository, mapper), ILogService
 {

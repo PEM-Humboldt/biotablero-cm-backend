@@ -29,7 +29,7 @@ public static class ConfigCoreDependencies
         services.AddSingleton<IWebTools, WebTools>();
 
         // Enum services setup
-        services.AddSingleton(typeof(IServiceReadEnum<>), typeof(ServiceReadEnum<>));
+        services.AddSingleton(typeof(IServiceReadEnumeration<>), typeof(ServiceReadEnumeration<>));
 
         return services;
     }

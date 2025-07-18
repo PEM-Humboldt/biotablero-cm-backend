@@ -7,11 +7,11 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 /// <summary>
 /// General Ardalis Specification
 /// </summary>
-/// <typeparam name="T">Entity identifier type</typeparam>
-/// <typeparam name="E">Entity type</typeparam>
-public abstract class GeneralSpecification<T, E> : Specification<E>
-where T : notnull
-where E : class, IAggregateRoot
+/// <typeparam name="TI">Entity identifier type</typeparam>
+/// <typeparam name="TE">Entity type</typeparam>
+public abstract class GeneralSpecification<TI, TE> : Specification<TE>
+where TI : notnull
+where TE : class, IAggregateRoot
 {
     /// <summary>
     /// Default constructor
@@ -24,7 +24,7 @@ where E : class, IAggregateRoot
     /// Constructor for one element query
     /// </summary>
     /// <param name="id">Element identifier</param>
-    protected GeneralSpecification(T id)
+    protected GeneralSpecification(TI id)
     {
     }
 

@@ -1,17 +1,24 @@
-﻿namespace IAVH.BioTablero.CM.Persistence.Config;
+﻿namespace IAVH.BioTablero.CM.Persistence.Config.Entities;
 
 using IAVH.BioTablero.CM.Core.Entities.LogNS;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-public class UserConfig : IEntityTypeConfiguration<LogEntity>
+/// <summary>
+/// Log entity configuration
+/// </summary>
+public class LogConfig : IEntityTypeConfiguration<LogEntity>
 {
+    /// <summary>
+    /// Configure entity
+    /// </summary>
+    /// <param name="builder">Entity builder</param>
     public void Configure(EntityTypeBuilder<LogEntity> builder)
     {
         builder.ToTable("logs", "logs");
 
-        builder.HasKey(e => e.Id);
+        builder?.HasKey(e => e.Id);
 
         builder.Property(e => e.Id)
             .HasColumnName("id")

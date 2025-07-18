@@ -6,12 +6,15 @@ using Ardalis.Specification;
 
 using IAVH.BioTablero.CM.Core.Entities.LogNS;
 
+/// <summary>
+/// Log ardalis specifications
+/// </summary>
 public class LogSpec : GeneralSpecification<Guid, LogEntity>
 {
-    public LogSpec()
-    {
-    }
-
+    /// <summary>
+    /// Specification for get element by identifier
+    /// </summary>
+    /// <param name="id">Element identifier</param>
     public LogSpec(Guid id)
         : base(id)
     {
@@ -19,6 +22,11 @@ public class LogSpec : GeneralSpecification<Guid, LogEntity>
             .Where(e => e.Id == id);
     }
 
+    /// <summary>
+    /// Specification for get paginated elements
+    /// </summary>
+    /// <param name="skip">Page number</param>
+    /// <param name="take">Page size</param>
     public LogSpec(int skip, int take)
         : base(skip, take)
     {

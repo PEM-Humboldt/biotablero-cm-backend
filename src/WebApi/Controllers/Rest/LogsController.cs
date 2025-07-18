@@ -31,7 +31,7 @@ public class LogsController(IWebTools webTools,
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id, CancellationToken ct)
     {
-        var response = await entityService.Get(id, ct);
+        var response = await entityService.GetItem(id, ct);
         return webTools.CustomResponse(response);
     }
 

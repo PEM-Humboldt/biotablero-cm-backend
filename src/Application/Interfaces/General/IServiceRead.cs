@@ -12,13 +12,13 @@ using Microsoft.AspNetCore.OData.Query;
 /// <summary>
 /// Read data service interface
 /// </summary>
-/// <typeparam name="E">Entity type</typeparam>
-/// <typeparam name="DTO">DTO class type</typeparam>
-/// <typeparam name="ET">Entity identifier type</typeparam>
-public interface IServiceRead<E, DTO, ET>
-    where E : class, IAggregateRoot
-    where DTO : class, IDto
-    where ET : notnull
+/// <typeparam name="TE">Entity type</typeparam>
+/// <typeparam name="TDto">DTO class type</typeparam>
+/// <typeparam name="TI">Entity identifier type</typeparam>
+public interface IServiceRead<TE, TDto, TI>
+    where TE : class, IAggregateRoot
+    where TDto : class, IDto
+    where TI : notnull
 {
     /// <summary>
     /// Check if element exists
@@ -26,7 +26,7 @@ public interface IServiceRead<E, DTO, ET>
     /// <param name="id">Element identifier</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    Task<bool> Exists(ET id, CancellationToken ct = default);
+    Task<bool> Exists(TI id, CancellationToken ct = default);
 
     /// <summary>
     /// Get element
@@ -34,7 +34,7 @@ public interface IServiceRead<E, DTO, ET>
     /// <param name="id">Element identifier</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    Task<CustomWebResponse> Get(ET id, CancellationToken ct = default);
+    Task<CustomWebResponse> GetItem(TI id, CancellationToken ct = default);
 
     /// <summary>
     /// Get all elements
@@ -58,5 +58,5 @@ public interface IServiceRead<E, DTO, ET>
     /// <param name="queryOptions">OData query options</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    Task<CustomWebResponse> GetList(ODataQueryOptions<E> queryOptions, CancellationToken ct = default);
+    Task<CustomWebResponse> GetList(ODataQueryOptions<TE> queryOptions, CancellationToken ct = default);
 }

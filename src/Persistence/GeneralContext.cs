@@ -4,10 +4,18 @@ using System;
 using System.Reflection;
 
 using IAVH.BioTablero.CM.Core.DTOs.LogNS;
+
 using Microsoft.EntityFrameworkCore;
 
+/// <summary>
+/// General database context
+/// </summary>
 public sealed class GeneralContext : DbContext
 {
+    /// <summary>
+    /// General constructor
+    /// /// </summary>
+    /// <param name="options">Database context options</param>
     public GeneralContext(DbContextOptions<GeneralContext> options)
         : base(options)
     {
@@ -19,13 +27,20 @@ public sealed class GeneralContext : DbContext
 
     #region Logs module
 
+    /// <summary>
+    /// System logs DbSet
+    /// </summary>
     public DbSet<LogDto> Logs { get; set; }
 
     #endregion
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    /// <summary>
+    /// Configure conventions for custom DbContext
+    /// </summary>
+    /// <param name="modelBuilder">Database model builder</param>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(builder);
-        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        base.OnModelCreating(modelBuilder);
+        modelBuilder?.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

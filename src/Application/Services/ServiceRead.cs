@@ -20,21 +20,21 @@ using Microsoft.OData;
 /// <summary>
 /// General service for only read functions
 /// </summary>
-/// <typeparam name="E">Entity type</typeparam>
-/// <typeparam name="DTO">DTO class type</typeparam>
-/// <typeparam name="ET">Entity identifier type</typeparam>
-/// <typeparam name="GS">General Specification type</typeparam>
+/// <typeparam name="TE">Entity type</typeparam>
+/// <typeparam name="TDto">DTO class type</typeparam>
+/// <typeparam name="TI">Entity identifier type</typeparam>
+/// <typeparam name="TS">General Specification type</typeparam>
 /// <remarks>
 /// Initialize service
 /// </remarks>
-public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepository, IMapper<E, DTO> mapper) : IServiceRead<E, DTO, ET>
-    where DTO : class, IDto
-    where ET : notnull
-    where E : class, IAggregateRoot
-    where GS : GeneralSpecification<ET, E>
+public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityRepository, IMapper<TE, TDto> mapper) : IServiceRead<TE, TDto, TI>
+    where TDto : class, IDto
+    where TI : notnull
+    where TE : class, IAggregateRoot
+    where TS : GeneralSpecification<TI, TE>
 {
-    private readonly IRepository<E> entityRepository = entityRepository;
-    private readonly IMapper<E, DTO> mapper = mapper;
+    private readonly IRepository<TE> entityRepository = entityRepository;
+    private readonly IMapper<TE, TDto> mapper = mapper;
 
     /// <summary>
     /// Check if element exists
@@ -42,9 +42,9 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
     /// <param name="id">Element identifier</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public virtual async Task<bool> Exists(ET id, CancellationToken ct = default)
+    public virtual async Task<bool> Exists(TI id, CancellationToken ct = default)
     {
-        var specification = (GS)Activator.CreateInstance(typeof(GS), [id]);
+        var specification = (TS)Activator.CreateInstance(typeof(TS), [id]);
         return await entityRepository.AnyAsync(specification, ct);
     }
 
@@ -54,9 +54,9 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
     /// <param name="id">Element identifier</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public virtual async Task<CustomWebResponse> Get(ET id, CancellationToken ct = default)
+    public virtual async Task<CustomWebResponse> GetItem(TI id, CancellationToken ct = default)
     {
-        var specification = (GS)Activator.CreateInstance(typeof(GS), [id]);
+        var specification = (TS)Activator.CreateInstance(typeof(TS), [id]);
         var dataEntity = await entityRepository.FirstOrDefaultAsync(specification, ct);
 
         if (dataEntity != null)
@@ -103,7 +103,7 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
     /// <returns>Process result</returns>
     public virtual async Task<CustomWebResponse> GetList(int skip, int take, CancellationToken ct = default)
     {
-        var specification = (GS)Activator.CreateInstance(typeof(GS), [skip, take]);
+        var specification = (TS)Activator.CreateInstance(typeof(TS), [skip, take]);
         var dataListEntity = await entityRepository.ListAsync(specification, ct);
         var dataListDto = dataListEntity
             .Select(mapper.Map);
@@ -120,7 +120,7 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
     /// <param name="queryOptions">OData query options</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public virtual async Task<CustomWebResponse> GetList(ODataQueryOptions<E> queryOptions, CancellationToken ct = default)
+    public virtual async Task<CustomWebResponse> GetList(ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
         const int maxPageSize = 50;
 
@@ -134,9 +134,9 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
             };
 
             // Apply order and filter settings
-            if (queryOptions.Filter != null)
+            if (queryOptions?.Filter != null)
             {
-                query = (IQueryable<E>)queryOptions.Filter.ApplyTo(query, settings);
+                query = (IQueryable<TE>)queryOptions.Filter.ApplyTo(query, settings);
             }
 
             if (queryOptions.OrderBy != null)
