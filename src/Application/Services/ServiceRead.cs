@@ -15,7 +15,6 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 using Microsoft.AspNetCore.OData.Query;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OData;
 
 /// <summary>
@@ -146,7 +145,7 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
             }
 
             // Check total items
-            var totalCount = await query.CountAsync(ct);
+            var totalCount = await entityRepository.QueryCountAsync(query, ct);
 
             // Apply pagination settings ($skip and $top)
             var pageSize = queryOptions.Top?.Value ?? maxPageSize;
@@ -164,7 +163,7 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
             }
 
             // Get result
-            var dataList = await query.ToListAsync(ct);
+            var dataList = await entityRepository.QueryToListAsync(query, ct);
 
             return new()
             {

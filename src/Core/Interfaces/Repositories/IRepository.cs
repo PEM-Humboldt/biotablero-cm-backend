@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Ardalis.Specification;
 
@@ -14,4 +17,6 @@ public interface IRepository<T> : IRepositoryBase<T>
     where T : class, IAggregateRoot
 {
     public IQueryable<T> GetQueryable();
+    public Task<int> QueryCountAsync(IQueryable<T> query, CancellationToken ct = default);
+    public Task<List<T>> QueryToListAsync(IQueryable<T> query, CancellationToken ct = default);
 }

@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Ardalis.Specification.EntityFrameworkCore;
 
@@ -14,4 +17,6 @@ public class Repository<T>(GeneralContext dbContext) : RepositoryBase<T>(dbConte
 {
     public IQueryable<T> GetQueryable() =>
         dbContext.Set<T>().AsNoTracking();
+    public async Task<int> QueryCountAsync(IQueryable<T> query, CancellationToken ct = default) => await query.CountAsync(ct);
+    public async Task<List<T>> QueryToListAsync(IQueryable<T> query, CancellationToken ct = default) => await query.ToListAsync(ct);
 }
