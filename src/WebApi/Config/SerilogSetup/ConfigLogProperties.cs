@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 using IAVH.BioTablero.CM.Core.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.SerilogSetup.ColumWriters;
@@ -55,13 +56,14 @@ public static class ConfigLogProperties
                     .ReadFrom.Configuration(context.Configuration)
                     .WriteTo.Logger(lc => lc
                         .Filter.ByExcluding(
-                            e => e.Properties.ContainsKey("SourceContext") && e.Properties["SourceContext"].ToString().Contains("Microsoft.EntityFrameworkCore.Database.Command"))
+                            e => e.Properties.ContainsKey("SourceContext") && e.Properties["SourceContext"].ToString().Contains("Microsoft.EntityFrameworkCore.Database.Command", StringComparison.CurrentCultureIgnoreCase))
                         .WriteTo.PostgreSQL(
                             connectionString: Environment.GetEnvironmentVariable("CS_MAIN"),
                             schemaName: LogConstants.DefaultSchemaName,
                             tableName: LogConstants.DefaultTableName,
                             needAutoCreateTable: true,
-                            columnOptions: columnWriters));
+                            columnOptions: columnWriters,
+                            formatProvider: new CultureInfo("es-CO")));
             });
 
         return host;
@@ -75,5 +77,5 @@ public static class ConfigLogProperties
     public static void PushProperties(IDiagnosticContext diagnosticContext, HttpContext httpContext) =>
 
         // Add HTTP host
-        diagnosticContext.Set("HttpHost", $"{httpContext.Request.Host}{httpContext.Request.PathBase}");
+        diagnosticContext?.Set("HttpHost", $"{httpContext?.Request.Host}{httpContext.Request.PathBase}");
 }

@@ -18,7 +18,7 @@ public static class HttpContextExtensions
     /// <returns>User name</returns>
     public static string GetUserName(this HttpContext httpContext)
     {
-        var username = httpContext.User.FindAll(IamConstants.UserName);
+        var username = httpContext?.User.FindAll(IamConstants.UserName);
 
         return username.FirstOrDefault()?.Value;
     }

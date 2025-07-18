@@ -20,6 +20,6 @@ public class IdEnricher : ILogEventEnricher
         var id = Guid.NewGuid();
         var idProperty = new LogEventProperty("Id", new ScalarValue(id));
 
-        logEvent.AddOrUpdateProperty(idProperty);
+        logEvent?.AddOrUpdateProperty(idProperty);
     }
 }

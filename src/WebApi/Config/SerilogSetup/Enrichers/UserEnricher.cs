@@ -26,9 +26,9 @@ public class UserEnricher(IHttpContextAccessor httpContextAccessor) : ILogEventE
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
         var httpContext = httpContextAccessor.HttpContext;
-        var userName = httpContext == null ? UserSystem : httpContext?.GetUserName() ?? UserAnonymous;
+        var userName = httpContext == null ? UserSystem : httpContext.GetUserName() ?? UserAnonymous;
         var userNameProperty = new LogEventProperty(ClientUserPropertyName, new ScalarValue(userName));
 
-        logEvent.AddOrUpdateProperty(userNameProperty);
+        logEvent?.AddOrUpdateProperty(userNameProperty);
     }
 }

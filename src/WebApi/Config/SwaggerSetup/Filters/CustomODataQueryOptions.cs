@@ -20,13 +20,13 @@ public class CustomODataQueryOptions : IOperationFilter
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         // Remove odata params
-        var odataParams = context.ApiDescription.ParameterDescriptions
+        var odataParams = context?.ApiDescription.ParameterDescriptions
             .Where(p => p.Type.IsGenericType && p.Type.GetGenericTypeDefinition() == typeof(ODataQueryOptions<>))
             .ToList();
 
         foreach (var param in odataParams)
         {
-            var toRemove = operation.Parameters
+            var toRemove = operation?.Parameters
                 .FirstOrDefault(p => p.Name == param.Name);
             if (toRemove != null)
             {
@@ -39,7 +39,7 @@ public class CustomODataQueryOptions : IOperationFilter
             .Any(p => p.ParameterType.IsGenericType &&
                       p.ParameterType.GetGenericTypeDefinition() == typeof(ODataQueryOptions<>)))
         {
-            operation.Parameters.Add(new OpenApiParameter
+            operation?.Parameters.Add(new OpenApiParameter
             {
                 Name = "$filter",
                 In = ParameterLocation.Query,
