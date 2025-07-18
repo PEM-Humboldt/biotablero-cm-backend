@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Filters;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Filters;
 
 using System.Linq;
 
