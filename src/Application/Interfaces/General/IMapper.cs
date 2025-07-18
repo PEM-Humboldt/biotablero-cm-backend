@@ -1,4 +1,5 @@
-﻿using IAVH.BioTablero.CM.Core.interfaces;
+﻿using IAVH.BioTablero.CM.Core.Interfaces.DTOs;
+using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 namespace IAVH.BioTablero.CM.Application.Interfaces.General;
 

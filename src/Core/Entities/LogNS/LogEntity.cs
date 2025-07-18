@@ -2,7 +2,7 @@
 
 using System;
 
-using IAVH.BioTablero.CM.Core.interfaces;
+using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 using static IAVH.BioTablero.CM.Core.Enums.LogEnums;
 

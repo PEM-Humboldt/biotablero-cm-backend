@@ -2,9 +2,9 @@
 
 using Ardalis.Specification;
 
-using IAVH.BioTablero.CM.Core.interfaces;
+using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
-namespace IAVH.BioTablero.CM.Application.Interfaces.General;
+namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 /// <summary>
 /// General repository interface

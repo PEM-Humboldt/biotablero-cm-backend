@@ -4,7 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Helpers.General;
-using IAVH.BioTablero.CM.Core.interfaces;
+using IAVH.BioTablero.CM.Core.Interfaces.DTOs;
+using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 using Microsoft.AspNetCore.OData.Query;
 

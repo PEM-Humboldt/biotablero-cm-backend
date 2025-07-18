@@ -2,7 +2,8 @@ namespace IAVH.BioTablero.CM.Core.Helpers.General;
 
 using System;
 
-using IAVH.BioTablero.CM.Core.interfaces;
+using IAVH.BioTablero.CM.Core.Interfaces.DTOs;
+
 
 /// <summary>
 /// General entity for Enum values

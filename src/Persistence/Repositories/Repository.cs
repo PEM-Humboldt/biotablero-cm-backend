@@ -2,8 +2,8 @@
 
 using Ardalis.Specification.EntityFrameworkCore;
 
-using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Core.interfaces;
+using IAVH.BioTablero.CM.Core.Interfaces.Entities;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 using Microsoft.EntityFrameworkCore;
 

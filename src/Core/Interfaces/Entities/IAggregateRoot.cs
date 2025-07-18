@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Core.interfaces;
+﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
 /// Database entity interface

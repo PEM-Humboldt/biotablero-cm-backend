@@ -2,8 +2,7 @@
 
 using Ardalis.Specification;
 
-using IAVH.BioTablero.CM.Core.interfaces;
-
+using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
 /// General Ardalis Specification

@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Core.interfaces;
+﻿namespace IAVH.BioTablero.CM.Core.Interfaces.DTOs;
 
 /// <summary>
 /// Data Transfer Object interface
