@@ -7,7 +7,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Helpers.General;
 
 /// <summary>
-/// Read enum service 
+/// Read enum service
 /// </summary>
 public class ServiceReadEnum<TEnum> : IServiceReadEnum<TEnum>
     where TEnum : Enum

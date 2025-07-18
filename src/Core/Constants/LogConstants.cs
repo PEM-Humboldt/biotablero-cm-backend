@@ -22,7 +22,6 @@ public static class LogConstants
     /// </summary>
     public const string DefaultSchemaName = "logs";
 
-
     /// <summary>
     /// Default table name
     /// </summary>

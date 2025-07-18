@@ -16,21 +16,24 @@ where E : class, IAggregateRoot
     /// <summary>
     /// Default constructor
     /// </summary>
-    public GeneralSpecification()
-    { }
+    protected GeneralSpecification()
+    {
+    }
 
     /// <summary>
     /// Constructor for one element query
     /// </summary>
     /// <param name="id">Element identifier</param>
-    public GeneralSpecification(T id)
-    { }
+    protected GeneralSpecification(T id)
+    {
+    }
 
     /// <summary>
     /// Constructor for a paginated query
     /// </summary>
     /// <param name="skip">Page number</param>
     /// <param name="take">Page size</param>
-    public GeneralSpecification(int skip, int take)
-    { }
+    protected GeneralSpecification(int skip, int take)
+    {
+    }
 }

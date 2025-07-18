@@ -4,4 +4,5 @@
 /// Database entity interface
 /// </summary>
 public interface IAggregateRoot
-{ }
+{
+}

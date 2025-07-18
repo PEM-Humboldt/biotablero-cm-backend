@@ -2,23 +2,25 @@
 
 using System;
 
-
 using Ardalis.Specification;
 
 using IAVH.BioTablero.CM.Core.Entities.LogNS;
 
-
 public class LogSpec : GeneralSpecification<Guid, LogEntity>
 {
-    public LogSpec() { }
+    public LogSpec()
+    {
+    }
 
-    public LogSpec(Guid id) : base(id)
+    public LogSpec(Guid id)
+        : base(id)
     {
         Query
             .Where(e => e.Id == id);
     }
 
-    public LogSpec(int skip, int take) : base(skip, take)
+    public LogSpec(int skip, int take)
+        : base(skip, take)
     {
         Query
             .Skip(skip)

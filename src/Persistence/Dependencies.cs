@@ -1,10 +1,10 @@
-﻿using System;
+﻿namespace IAVH.BioTablero.CM.Persistence;
+
+using System;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-namespace IAVH.BioTablero.CM.Persistence;
 
 public static class Dependencies
 {
@@ -12,6 +12,5 @@ public static class Dependencies
 
     public static void ConfigureServices(IConfiguration _, IServiceCollection services) =>
         services.AddDbContext<GeneralContext>(c =>
-            c.UseNpgsql(ConnectionString)
-        );
+            c.UseNpgsql(ConnectionString));
 }

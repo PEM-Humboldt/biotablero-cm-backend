@@ -4,7 +4,6 @@ using System;
 
 using IAVH.BioTablero.CM.Core.Interfaces.DTOs;
 
-
 /// <summary>
 /// General entity for Enum values
 /// </summary>
@@ -15,7 +14,9 @@ public class EnumEntityDto<TEnum> : IDto
     /// <summary>
     /// Constructor
     /// </summary>
-    public EnumEntityDto() { }
+    public EnumEntityDto()
+    {
+    }
 
     /// <summary>
     /// Constructor

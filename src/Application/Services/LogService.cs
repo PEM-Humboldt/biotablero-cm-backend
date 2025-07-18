@@ -11,4 +11,5 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 public class LogService(IRepository<LogEntity> entityRepository,
     IMapper<LogEntity, LogDto> mapper) : ServiceRead<LogEntity, LogDto, Guid, LogSpec>(entityRepository, mapper), ILogService
-{ }
+{
+}

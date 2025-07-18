@@ -4,4 +4,5 @@
 /// Data Transfer Object interface
 /// </summary>
 public interface IDto
-{ }
+{
+}

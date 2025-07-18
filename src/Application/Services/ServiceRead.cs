@@ -64,7 +64,7 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
             var dataDto = mapper.Map(dataEntity);
             return new()
             {
-                ResponseBody = dataDto
+                ResponseBody = dataDto,
             };
         }
         else
@@ -90,7 +90,7 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
 
         return new()
         {
-            ResponseBody = dataListDto
+            ResponseBody = dataListDto,
         };
     }
 
@@ -110,7 +110,7 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
 
         return new()
         {
-            ResponseBody = dataListDto
+            ResponseBody = dataListDto,
         };
     }
 
@@ -130,7 +130,7 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
 
             var settings = new ODataQuerySettings
             {
-                HandleNullPropagation = HandleNullPropagationOption.True
+                HandleNullPropagation = HandleNullPropagationOption.True,
             };
 
             // Apply order and filter settings
@@ -171,7 +171,7 @@ public abstract class ServiceRead<E, DTO, ET, GS>(IRepository<E> entityRepositor
                 {
                     ["@odata.count"] = totalCount,
                     ["value"] = dataList.Select(mapper.Map),
-                }
+                },
             };
         }
         catch (ODataException ex)

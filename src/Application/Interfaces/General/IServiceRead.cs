@@ -9,9 +9,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 using Microsoft.AspNetCore.OData.Query;
 
-
 /// <summary>
-/// Read data service interface 
+/// Read data service interface
 /// </summary>
 /// <typeparam name="E">Entity type</typeparam>
 /// <typeparam name="DTO">DTO class type</typeparam>

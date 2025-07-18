@@ -2,11 +2,10 @@
 
 using System;
 
-
 using IAVH.BioTablero.CM.Core.Helpers.General;
 
 /// <summary>
-/// Read enum service interface 
+/// Read enum service interface
 /// </summary>
 public interface IServiceReadEnum<TEnum>
     where TEnum : Enum
