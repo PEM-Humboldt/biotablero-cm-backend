@@ -7,6 +7,6 @@ public interface IMapper<E, DTO>
     where E : class, IAggregateRoot
     where DTO : class, IDto
 {
-    public DTO Map(E entity);
-    public E Map(DTO entity);
+    DTO Map(E entity);
+    E Map(DTO entity);
 }

@@ -16,7 +16,7 @@ namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 public interface IRepository<T> : IRepositoryBase<T>
     where T : class, IAggregateRoot
 {
-    public IQueryable<T> GetQueryable();
-    public Task<int> QueryCountAsync(IQueryable<T> query, CancellationToken ct = default);
-    public Task<List<T>> QueryToListAsync(IQueryable<T> query, CancellationToken ct = default);
+    IQueryable<T> GetQueryable();
+    Task<int> QueryCountAsync(IQueryable<T> query, CancellationToken ct = default);
+    Task<List<T>> QueryToListAsync(IQueryable<T> query, CancellationToken ct = default);
 }

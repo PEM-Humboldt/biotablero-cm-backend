@@ -27,7 +27,7 @@ public interface IServiceRead<E, DTO, ET>
     /// <param name="id">Element identifier</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public Task<bool> Exists(ET id, CancellationToken ct = default);
+    Task<bool> Exists(ET id, CancellationToken ct = default);
 
     /// <summary>
     /// Get element
@@ -35,14 +35,14 @@ public interface IServiceRead<E, DTO, ET>
     /// <param name="id">Element identifier</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public Task<CustomWebResponse> Get(ET id, CancellationToken ct = default);
+    Task<CustomWebResponse> Get(ET id, CancellationToken ct = default);
 
     /// <summary>
     /// Get all elements
     /// </summary>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public Task<CustomWebResponse> GetAll(CancellationToken ct = default);
+    Task<CustomWebResponse> GetAll(CancellationToken ct = default);
 
     /// <summary>
     /// Get elements list (paginated)
@@ -51,7 +51,7 @@ public interface IServiceRead<E, DTO, ET>
     /// <param name="take">Page size</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public Task<CustomWebResponse> GetList(int skip, int take, CancellationToken ct = default);
+    Task<CustomWebResponse> GetList(int skip, int take, CancellationToken ct = default);
 
     /// <summary>
     /// Get elements list (OData)
@@ -59,5 +59,5 @@ public interface IServiceRead<E, DTO, ET>
     /// <param name="queryOptions">OData query options</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public Task<CustomWebResponse> GetList(ODataQueryOptions<E> queryOptions, CancellationToken ct = default);
+    Task<CustomWebResponse> GetList(ODataQueryOptions<E> queryOptions, CancellationToken ct = default);
 }

@@ -15,5 +15,5 @@ public interface IServiceReadEnum<TEnum>
     /// Get all elements
     /// </summary>
     /// <returns>Process result</returns>
-    public CustomWebResponse GetAll();
+    CustomWebResponse GetAll();
 }

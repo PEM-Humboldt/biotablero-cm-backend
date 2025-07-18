@@ -60,10 +60,6 @@ csharp_style_prefer_pattern_matching = true:error
 csharp_style_prefer_switch_expression = true:error
 csharp_style_pattern_local_over_anonymous_function = true:error
 
-# Implicit accessibility
-
-dotnet_style_require_accessibility_modifiers = always:error
-
 # Others
 
 csharp_style_var_elsewhere = true:error
