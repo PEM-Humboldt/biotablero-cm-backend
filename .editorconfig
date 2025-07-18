@@ -89,6 +89,10 @@ dotnet_diagnostic.ca2007.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1040
 dotnet_diagnostic.ca1040.severity = none
 
+# Add a member to LogType that has a value of zero with a suggested name of 'None'
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1008
+dotnet_diagnostic.ca1008.severity = none
+
 # --------------------- #
 # Custom StyleCop rules #
 # --------------------- #

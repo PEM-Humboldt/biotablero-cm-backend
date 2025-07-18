@@ -42,11 +42,6 @@ public class EnumEntityDto<TEnum> : IDto
     }
 
     /// <summary>
-    /// Enum value
-    /// </summary>
-    public TEnum TypeEnum { private get; set; }
-
-    /// <summary>
     /// Enum value as integer
     /// </summary>
     public int Id
@@ -54,13 +49,8 @@ public class EnumEntityDto<TEnum> : IDto
         get
         {
             var valueStr = TypeEnum.ToString("D");
-
-            if (!int.TryParse(valueStr, out var value))
-            {
-                throw new InvalidCastException($"Invalid integer enum value: {valueStr}");
-            }
-
-            return value;
+            var successfulCast = int.TryParse(valueStr, out var value);
+            return successfulCast ? value : 0;
         }
     }
 
@@ -69,4 +59,9 @@ public class EnumEntityDto<TEnum> : IDto
     /// </summary>
     public string Name =>
             TypeEnum.ToString("G");
+
+    /// <summary>
+    /// Enum value
+    /// </summary>
+    private TEnum TypeEnum { get; set; }
 }
