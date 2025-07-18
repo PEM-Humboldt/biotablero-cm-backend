@@ -56,7 +56,8 @@ public static class ConfigLogProperties
                     .ReadFrom.Configuration(context.Configuration)
                     .WriteTo.Logger(lc => lc
                         .Filter.ByExcluding(
-                            e => e.Properties.ContainsKey("SourceContext") && e.Properties["SourceContext"].ToString().Contains("Microsoft.EntityFrameworkCore.Database.Command", StringComparison.CurrentCultureIgnoreCase))
+                            e => e.Properties.ContainsKey("SourceContext") && e.Properties["SourceContext"].ToString()
+                                .Contains("Microsoft.EntityFrameworkCore.Database.Command", StringComparison.CurrentCultureIgnoreCase))
                         .WriteTo.PostgreSQL(
                             connectionString: Environment.GetEnvironmentVariable("CS_MAIN"),
                             schemaName: LogConstants.DefaultSchemaName,
