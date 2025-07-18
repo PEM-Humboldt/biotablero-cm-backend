@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Tools;
 
+using System;
+
 using IAVH.BioTablero.CM.Core.Helpers.General;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
@@ -16,10 +18,10 @@ public sealed class WebTools(IHttpContextAccessor httpContextAccessor) : Control
     /// </summary>
     /// <returns>Current project base URL</returns>
     [ApiExplorerSettings(IgnoreApi = true)]
-    public string GetBaseUrl()
+    public Uri GetBaseUrl()
     {
         var context = httpContextAccessor.HttpContext;
-        return $"{context?.Request.Scheme}://{context?.Request.Host.Value}{context?.Request.PathBase.Value}/";
+        return new Uri($"{context?.Request.Scheme}://{context?.Request.Host.Value}{context?.Request.PathBase.Value}/");
     }
 
     /// <summary>
@@ -30,7 +32,7 @@ public sealed class WebTools(IHttpContextAccessor httpContextAccessor) : Control
     [ApiExplorerSettings(IgnoreApi = true)]
     public IActionResult CustomResponse(CustomWebResponse response)
     {
-        if (response.Success)
+        if (response?.Success ?? false)
         {
             return Ok(response.ResponseBody);
         }

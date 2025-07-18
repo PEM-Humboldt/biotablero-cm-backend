@@ -81,6 +81,14 @@ dotnet_diagnostic.ca1050.severity = warning
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/naming-rules
 dotnet_diagnostic.ide1006.severity = warning
 
+# Do not directly await a Task
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2007
+dotnet_diagnostic.ca2007.severity = none
+
+# Avoid empty interfaces
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1040
+dotnet_diagnostic.ca1040.severity = none
+
 # --------------------- #
 # Custom StyleCop rules #
 # --------------------- #
@@ -104,3 +112,15 @@ dotnet_diagnostic.SA1133.severity = none
 # A call to an instance member of the local class or a base class is not prefixed with 'this.', within a C# code file
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1101.md
 dotnet_diagnostic.SA1101.severity = none
+
+# Constructor summary documentation should begin with standard text
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1642.md
+dotnet_diagnostic.SA1642.severity = none
+
+# Do not use regions
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1124.md
+dotnet_diagnostic.SA1124.severity = none
+
+# The property's documentation summary text should begin with: 'Gets'
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1623.md
+dotnet_diagnostic.SA1623.severity = none

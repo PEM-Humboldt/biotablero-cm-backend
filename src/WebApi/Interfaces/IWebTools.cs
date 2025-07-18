@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Interfaces;
 
+using System;
+
 using IAVH.BioTablero.CM.Core.Helpers.General;
 
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +15,7 @@ public interface IWebTools
     /// Get base URL
     /// </summary>
     /// <returns>Current project base URL</returns>
-    string GetBaseUrl();
+    Uri GetBaseUrl();
 
     /// <summary>
     /// Generate custom http response
