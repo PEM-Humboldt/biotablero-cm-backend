@@ -7,7 +7,7 @@ using DotNetEnv;
 using IAVH.BioTablero.CM.Persistence.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.WebApi.Config.SerilogSetup;
-using IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.OData;
@@ -58,9 +58,9 @@ public static class Program
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(c =>
+        builder.Services.AddSwaggerGen(options =>
         {
-            c.OperationFilter<CustomODataQueryOptions>();
+            options.AddCustomOptions();
         });
 
         var app = builder.Build();

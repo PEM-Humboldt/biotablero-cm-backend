@@ -18,7 +18,6 @@ public class LogTypeController(IWebTools webTools,
     /// <summary>
     /// Get all entities
     /// </summary>
-    /// <param name="ct">Cancellation token</param>
     /// <returns>Entities list from parameters</returns>
     [HttpGet]
     public IActionResult Get()
