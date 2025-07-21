@@ -69,12 +69,6 @@ csharp_style_deconstructed_variable_declaration = true:error
 # Custom dotnet rules #
 # ------------------- #
 
-# Ignore CA1062 only in Migrations folder
-# Validate arguments of public methods
-# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1062
-[src/Persistence/Migrations/*.cs]
-dotnet_diagnostic.CA1062.severity = none
-
 # Namespace does not match folder structure
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0130
 dotnet_diagnostic.ide0130.severity = warning
