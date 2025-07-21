@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Interfaces.General;
 
 using System;
+using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Core.Helpers.General;
 
@@ -11,6 +12,12 @@ using IAVH.BioTablero.CM.Core.Helpers.General;
 public interface IServiceReadEnumeration<TEnum>
     where TEnum : Enum
 {
+    /// <summary>
+    /// Get all elements as IEnumerable
+    /// </summary>
+    /// <returns>IEnumerable list</returns>
+    IEnumerable<EnumEntityDto<TEnum>> GetEnumerable();
+
     /// <summary>
     /// Get all elements
     /// </summary>

@@ -93,6 +93,10 @@ dotnet_diagnostic.ca1040.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1008
 dotnet_diagnostic.ca1008.severity = none
 
+# Type 'Program' is a static holder type but is neither static nor NotInheritable
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1052
+dotnet_diagnostic.ca1052.severity = none
+
 # --------------------- #
 # Custom StyleCop rules #
 # --------------------- #

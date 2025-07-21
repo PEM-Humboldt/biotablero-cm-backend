@@ -9,6 +9,7 @@ using IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
+using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 /// <summary>
@@ -43,6 +44,9 @@ public static class SwaggerConfig
 
         // Add custom filters
         options.OperationFilter<CustomODataQueryOptions>();
+
+        // Enable example filters
+        options.ExampleFilters();
 
         return options;
     }

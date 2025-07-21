@@ -5,12 +5,18 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
+using IAVH.BioTablero.CM.Core.DTOs.LogNS;
 using IAVH.BioTablero.CM.Core.Entities.LogNS;
+using IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Examples.General;
+using IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Examples.LogsNS;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
+
+using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Logs controller
@@ -19,6 +25,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 /// <param name="entityService">Entity service</param>
 [ApiController]
 [Route("[controller]")]
+[Produces("application/json")]
 public class LogsController(IWebTools webTools,
     ILogService entityService) : ODataController
 {
@@ -29,6 +36,10 @@ public class LogsController(IWebTools webTools,
     /// <param name="ct">Cancellation token</param>
     /// <returns>Selected entity data</returns>
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(LogDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(NotFoundResponseExample))]
     public async Task<IActionResult> Get(Guid id, CancellationToken ct)
     {
         var response = await entityService.GetItem(id, ct);
@@ -42,6 +53,9 @@ public class LogsController(IWebTools webTools,
     /// <param name="ct">Cancellation token</param>
     /// <returns>Entities list from parameters</returns>
     [HttpGet]
+    [ProducesResponseType(typeof(LogOdataResponseExample), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LogOdataResponseExample))]
     public async Task<IActionResult> Get(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetList(queryOptions, ct);

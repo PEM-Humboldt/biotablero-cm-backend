@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
@@ -14,18 +15,19 @@ public class ServiceReadEnumeration<TEnum> : IServiceReadEnumeration<TEnum>
     where TEnum : Enum
 {
     /// <summary>
-    /// Get all elements
+    /// Get all elements as IEnumerable
     /// </summary>
-    /// <returns>Process result</returns>
-    public CustomWebResponse GetAll()
-    {
-        var enumData = Enum.GetValues(typeof(TEnum))
+    /// <returns>IEnumerable list</returns>
+    public IEnumerable<EnumEntityDto<TEnum>> GetEnumerable() => Enum.GetValues(typeof(TEnum))
             .Cast<TEnum>()
             .Select(t => new EnumEntityDto<TEnum>(t));
 
-        return new CustomWebResponse()
-        {
-            ResponseBody = enumData,
-        };
-    }
+    /// <summary>
+    /// Get all elements
+    /// </summary>
+    /// <returns>Process result</returns>
+    public CustomWebResponse GetAll() => new()
+    {
+        ResponseBody = GetEnumerable(),
+    };
 }

@@ -52,7 +52,7 @@ public class CustomODataQueryOptions : IOperationFilter
             {
                 Name = "$orderby",
                 In = ParameterLocation.Query,
-                Description = "OData order by expression",
+                Description = "OData 'order by' expression",
                 Required = false,
                 Schema = new OpenApiSchema { Type = "string" },
             });

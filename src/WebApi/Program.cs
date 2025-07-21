@@ -16,10 +16,12 @@ using Microsoft.Extensions.Hosting;
 
 using Serilog;
 
+using Swashbuckle.AspNetCore.Filters;
+
 /// <summary>
 /// Main program class
 /// </summary>
-public static class Program
+public class Program
 {
     /// <summary>
     /// Main function
@@ -62,6 +64,9 @@ public static class Program
         {
             options.AddCustomOptions();
         });
+
+        // Enable Swagger custom examples
+        builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 
         var app = builder.Build();
 
