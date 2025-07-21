@@ -62,7 +62,7 @@ public static class ConfigLogProperties
                             connectionString: Environment.GetEnvironmentVariable("CS_MAIN"),
                             schemaName: LogConstants.DefaultSchemaName,
                             tableName: LogConstants.DefaultTableName,
-                            needAutoCreateTable: true,
+                            needAutoCreateTable: false,
                             columnOptions: columnWriters,
                             formatProvider: new CultureInfo("es-CO")));
             });
