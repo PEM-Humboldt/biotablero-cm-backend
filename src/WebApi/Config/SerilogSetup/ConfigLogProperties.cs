@@ -55,9 +55,17 @@ public static class ConfigLogProperties
                     .Enrich.With(new ClientHeaderEnricher("User-Agent", "ClientAgent"))
                     .ReadFrom.Configuration(context.Configuration)
                     .WriteTo.Logger(lc => lc
+
+                        // Discard SQL Command logs
                         .Filter.ByExcluding(
                             e => e.Properties.ContainsKey("SourceContext") && e.Properties["SourceContext"].ToString()
                                 .Contains("Microsoft.EntityFrameworkCore.Database.Command", StringComparison.CurrentCultureIgnoreCase))
+
+                        // Discard Requests logs
+                        .Filter.ByExcluding(
+                            e => e.Properties.ContainsKey("SourceContext") && e.Properties["SourceContext"].ToString()
+                                .Contains("Serilog.AspNetCore.RequestLoggingMiddleware", StringComparison.CurrentCultureIgnoreCase))
+
                         .WriteTo.PostgreSQL(
                             connectionString: Environment.GetEnvironmentVariable("CS_MAIN"),
                             schemaName: LogConstants.DefaultSchemaName,
