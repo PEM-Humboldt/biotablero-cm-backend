@@ -32,7 +32,7 @@ dotnet restore
 ### Run database migrations
 
 ```sh
-
+dotnet ef --startup-project src/WebApi --project src/Persistence database update --context GeneralContext
 ```
 
 ### Run development server
@@ -66,9 +66,11 @@ dotnet build --no-incremental -warnaserror
 
 ## Database migrations
 
+> Check the format of the generated code before uploading it to the repository
+
 ```sh
 # Generate migration
-dotnet ef migrations add --startup-project src/WebApi --project src/Persistence --output-dir Migrations --context GeneralContext $MigrationName
+dotnet ef migrations add --startup-project src/WebApi --project src/Persistence --output-dir Migrations --context GeneralContext $MIGRATION_NAME
 # Apply format rules in Persistence project
 dotnet format src/Persistence
 ```

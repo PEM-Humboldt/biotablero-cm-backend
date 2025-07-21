@@ -3,7 +3,7 @@
 using System;
 using System.Reflection;
 
-using IAVH.BioTablero.CM.Core.DTOs.LogNS;
+using IAVH.BioTablero.CM.Core.Entities.LogNS;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -21,8 +21,6 @@ public sealed class GeneralContext : DbContext
     {
         // Patch for Postgres DateTime variables
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
-        Database.EnsureCreated();
     }
 
     #region Logs module
@@ -30,7 +28,7 @@ public sealed class GeneralContext : DbContext
     /// <summary>
     /// System logs DbSet
     /// </summary>
-    public DbSet<LogDto> Logs { get; set; }
+    public DbSet<LogEntity> Logs { get; set; }
 
     #endregion
 
