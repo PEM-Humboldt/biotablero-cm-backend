@@ -97,6 +97,10 @@ dotnet_diagnostic.ca1008.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1052
 dotnet_diagnostic.ca1052.severity = none
 
+# Validate arguments of public methods
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1062
+dotnet_diagnostic.CA1062.severity = none
+
 # --------------------- #
 # Custom StyleCop rules #
 # --------------------- #
