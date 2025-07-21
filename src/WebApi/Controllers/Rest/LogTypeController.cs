@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Helpers.General;
-using IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Examples.General;
+using IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Examples.LogsNS;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Http;
@@ -28,9 +28,9 @@ public class LogTypeController(IWebTools webTools,
     /// </summary>
     /// <returns>Entities list from parameters</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(EnumerationResponseExample), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(LogTypeResponseExample), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(EnumerationResponseExample))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LogTypeResponseExample))]
     public IActionResult Get()
     {
         var response = entityService.GetAll();

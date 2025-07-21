@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Examples.LogsNS;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Examples.LogsNS;
 
 using System.Collections.Generic;
 
@@ -6,6 +6,9 @@ using IAVH.BioTablero.CM.Core.DTOs.LogNS;
 
 using Swashbuckle.AspNetCore.Filters;
 
+/// <summary>
+/// Log OData response example
+/// </summary>
 public class LogOdataResponseExample : IExamplesProvider<Dictionary<string, object>>
 {
     /// <summary>
