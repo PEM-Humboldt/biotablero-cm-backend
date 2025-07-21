@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup;
 
 using System;
 using System.IO;
@@ -14,7 +14,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 /// <summary>
 /// OpenAPI and Swagger UI configuration
 /// </summary>
-public static class ConfigSwaggerUi
+public static class SwaggerConfig
 {
     /// <summary>
     /// Add OpenAPI and Swagger UI custom options
@@ -23,7 +23,7 @@ public static class ConfigSwaggerUi
     /// <returns>Custom SwaggerGen options</returns>
     public static SwaggerGenOptions AddCustomOptions(this SwaggerGenOptions options)
     {
-        options.OperationFilter<CustomODataQueryOptions>();
+        // Add general options
         options.SwaggerDoc("v1", new OpenApiInfo
         {
             Version = "0.1.0",
@@ -37,8 +37,12 @@ public static class ConfigSwaggerUi
             },
         });
 
+        // Add xml comments file for docs
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
+        // Add custom filters
+        options.OperationFilter<CustomODataQueryOptions>();
 
         return options;
     }

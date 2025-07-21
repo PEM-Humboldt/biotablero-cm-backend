@@ -42,15 +42,15 @@ public static class Program
 
         // Add services to the container.
         builder.Services.AddControllers()
-            .AddJsonOptions(x =>
+            .AddJsonOptions(options =>
             {
-                // Serialize enums as strings in api responses
-                x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                // Serialize enums as strings in API responses
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             })
-            .AddOData(opt =>
+            .AddOData(options =>
             {
                 // Add OData default settings
-                opt.Select().Filter().OrderBy().Expand().Count().SetMaxTop(50);
+                options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(50);
             });
 
         // Logs setup
@@ -83,7 +83,7 @@ public static class Program
         // Setup health checks endpoint
         app.MapHealthChecks("/health");
 
-        // Add support to logging request with SERILOG
+        // Add support to logging request with Serilog
         app.UseSerilogRequestLogging();
 
         app.UseAuthorization();
