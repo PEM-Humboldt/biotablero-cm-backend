@@ -8,7 +8,7 @@ Built with .NET 8.0.
 
 * [.NET 8.0 (SDK)](https://dotnet.microsoft.com/en-us/download)
 
-## Configuration (Development)
+## Getting Started
 
 ### Environment Variables
 
@@ -20,11 +20,34 @@ Generate a `.env` file with the project parameters. You can generate the file ba
 docker compose -f docker-compose-dev.yml up
 ```
 
-### Code format
+### Install dependencies
 
-#### dotnet-format
+```sh
+# Install EF Core tools
+dotnet tool install --global dotnet-ef --version 8.0.18
+# Install project dependencies
+dotnet restore
+```
 
-Formats code to match `.editorconfig` settings. Install it with `dotnet tool install -g dotnet-format` command.
+### Run database migrations
+
+```sh
+
+```
+
+### Run development server
+
+```sh
+dotnet run --project src/WebApi/WebApi.csproj
+```
+
+Check Swagger docs [here](http://localhost:8001/swagger/index.html).
+
+## Code checks
+
+### dotnet-format
+
+Formats code to match `.editorconfig` settings.
 
 ```sh
 # Check format
@@ -33,7 +56,7 @@ dotnet format --verify-no-changes
 dotnet format
 ```
 
-#### Warnings
+### Warnings
 
 Check project warnings as errors
 
@@ -41,18 +64,14 @@ Check project warnings as errors
 dotnet build --no-incremental -warnaserror
 ```
 
-### Run
+## Database migrations
 
 ```sh
-# Download dependencies
-dotnet restore
-# Build project
-dotnet build
-# Run project
-dotnet run --no-build --project src/WebApi/WebApi.csproj
+# Generate migration
+dotnet ef migrations add --startup-project src/WebApi --project src/Persistence --output-dir Migrations --context GeneralContext $MigrationName
+# Apply format rules in Persistence project
+dotnet format src/Persistence
 ```
-
-Check Swagger docs [here](http://localhost:8001/swagger/index.html).
 
 ## Docker
 

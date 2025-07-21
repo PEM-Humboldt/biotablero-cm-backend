@@ -1,9 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest;
 
-using System.Collections.Generic;
-
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Core.Helpers.General;
 using IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Examples.LogsNS;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
@@ -15,7 +12,7 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Enums.LogEnums;
 
 /// <summary>
-/// General bot controller
+/// Log type controller
 /// </summary>
 [ApiController]
 [Route("[controller]")]
