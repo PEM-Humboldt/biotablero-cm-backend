@@ -34,7 +34,7 @@ public static class ConfigLogProperties
             { "id", new GuidColumnWriter("Id") },
             { "timestamp", new TimestampColumnWriter() },
             { "level", new LevelColumnWriter() },
-            { "type", new SinglePropertyColumnWriter("Type", dbType: NpgsqlTypes.NpgsqlDbType.Integer) },
+            { "type", new IntegerColumnWriter("Type") },
             { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
             { "user_name", new RawStringColumnWriter("UserName") },
             { "custom_record", new BoolColumnWriter("CustomRecord") },
@@ -61,7 +61,7 @@ public static class ConfigLogProperties
                             e => e.Properties.ContainsKey("SourceContext") && e.Properties["SourceContext"].ToString()
                                 .Contains("Microsoft.EntityFrameworkCore.Database.Command", StringComparison.CurrentCultureIgnoreCase))
 
-                        // Discard Requests logs
+                        // Discard HTTP Requests logs
                         .Filter.ByExcluding(
                             e => e.Properties.ContainsKey("SourceContext") && e.Properties["SourceContext"].ToString()
                                 .Contains("Serilog.AspNetCore.RequestLoggingMiddleware", StringComparison.CurrentCultureIgnoreCase))
