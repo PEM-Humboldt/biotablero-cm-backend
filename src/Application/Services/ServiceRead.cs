@@ -122,7 +122,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <returns>Process result</returns>
     public virtual async Task<CustomWebResponse> GetList(ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
-        const int maxPageSize = 50;
+        const int maxPageSize = 20;
 
         try
         {

@@ -16,18 +16,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
+using Serilog;
+
 using Swashbuckle.AspNetCore.Filters;
+
+using static IAVH.BioTablero.CM.Core.Enums.LogEnums;
 
 /// <summary>
 /// Logs controller
 /// </summary>
 /// <param name="webTools">General web tools</param>
 /// <param name="entityService">Entity service</param>
+/// <param name="logger">Logging API</param>
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
 public class LogsController(IWebTools webTools,
-    ILogService entityService) : ODataController
+    ILogService entityService,
+    ILogger logger) : ODataController
 {
     /// <summary>
     /// Get entity
@@ -43,6 +49,16 @@ public class LogsController(IWebTools webTools,
     public async Task<IActionResult> Get(Guid id, CancellationToken ct)
     {
         var response = await entityService.GetItem(id, ct);
+
+        // TODO: delete this after ticket lib-230
+        if (response.Success)
+        {
+            logger
+                .ForContext("CustomRecord", true)
+                .ForContext("Type", (int)LogType.Read)
+                .Information("Get log: {@id}", id);
+        }
+
         return webTools.CustomResponse(response);
     }
 
@@ -59,6 +75,16 @@ public class LogsController(IWebTools webTools,
     public async Task<IActionResult> Get(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetList(queryOptions, ct);
+
+        // TODO: delete this after ticket lib-230
+        if (response.Success)
+        {
+            logger
+                .ForContext("CustomRecord", true)
+                .ForContext("Type", (int)LogType.Read)
+                .Information("Get logs: {@queryOptions}", queryOptions.RawValues);
+        }
+
         return webTools.CustomResponse(response);
     }
 }

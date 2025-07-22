@@ -7,6 +7,8 @@ using IAVH.BioTablero.CM.WebApi.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using Serilog;
+
 using Swashbuckle.AspNetCore.Filters;
 
 using static IAVH.BioTablero.CM.Core.Enums.LogEnums;
@@ -18,7 +20,8 @@ using static IAVH.BioTablero.CM.Core.Enums.LogEnums;
 [Route("[controller]")]
 [Produces("application/json")]
 public class LogTypeController(IWebTools webTools,
-    IServiceReadEnumeration<LogType> entityService) : ControllerBase
+    IServiceReadEnumeration<LogType> entityService,
+    ILogger logger) : ControllerBase
 {
     /// <summary>
     /// Get all entities
@@ -31,6 +34,16 @@ public class LogTypeController(IWebTools webTools,
     public IActionResult Get()
     {
         var response = entityService.GetAll();
+
+        // TODO: delete this after ticket lib-230
+        if (response.Success)
+        {
+            logger
+                .ForContext("CustomRecord", true)
+                .ForContext("Type", (int)LogType.Read)
+                .Information("Get log types");
+        }
+
         return webTools.CustomResponse(response);
     }
 }
