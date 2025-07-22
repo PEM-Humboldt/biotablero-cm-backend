@@ -30,11 +30,13 @@ public partial class InitialMigration : Migration
                 client_ip = table.Column<string>(type: "text", nullable: true),
                 client_agent = table.Column<string>(type: "text", nullable: true),
                 properties = table.Column<string>(type: "jsonb", nullable: false),
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_logs", x => x.id);
             });
+
+        // Create index on identifier
+        migrationBuilder.Sql("CREATE INDEX ON logs.logs (id);");
+
+        // Convert table to hypertable (TimescaleDB)
+        migrationBuilder.Sql("SELECT create_hypertable('logs.logs', 'timestamp');");
     }
 
     /// <inheritdoc />
