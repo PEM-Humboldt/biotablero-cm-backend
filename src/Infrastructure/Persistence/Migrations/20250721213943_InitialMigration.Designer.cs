@@ -3,12 +3,10 @@ using System;
 
 using IAVH.BioTablero.CM.Infrastructure.Persistence;
 
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-
 
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -30,7 +28,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Entities.LogNS.LogEntity", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.LogNS.LogEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

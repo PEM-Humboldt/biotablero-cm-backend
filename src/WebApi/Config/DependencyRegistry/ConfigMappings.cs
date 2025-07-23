@@ -19,7 +19,7 @@ public static class ConfigMappings
     /// <returns>Host builder configuration</returns>
     public static IServiceCollection AddMappings(this IServiceCollection services)
     {
-        services.AddScoped<IMapper<LogEntity, LogDto>, LogMappings>();
+        services.AddSingleton<IMapper<LogEntity, LogDto>, LogMappings>();
 
         return services;
     }

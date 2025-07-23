@@ -32,7 +32,7 @@ dotnet restore
 ### Run database migrations
 
 ```sh
-dotnet ef --startup-project src/WebApi --project src/Infrastructure database update --context GeneralContext
+dotnet ef database update --startup-project src/WebApi --project src/Infrastructure --context GeneralContext
 ```
 
 ### Run development server
@@ -70,7 +70,7 @@ dotnet build --no-incremental -warnaserror
 
 ```sh
 # Generate migration
-dotnet ef migrations add --startup-project src/WebApi --project src/Infrastructure --output-dir Persistence/Migrations --context GeneralContext $MIGRATION_NAME
+dotnet ef migrations add $MIGRATION_NAME --startup-project src/WebApi --project src/Infrastructure --output-dir Persistence/Migrations --context GeneralContext
 # Apply format rules in Infrastructure project
 dotnet format src/Infrastructure
 ```
