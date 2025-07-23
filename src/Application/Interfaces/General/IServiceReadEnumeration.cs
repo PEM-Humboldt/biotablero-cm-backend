@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-using IAVH.BioTablero.CM.Core.Helpers.General;
+using IAVH.BioTablero.CM.Core.Domain.Utils;
 
 /// <summary>
 /// Read enum service

@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Core.Constants;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Constants;
 
 /// <summary>
 /// Constants for Logs Management

@@ -3,7 +3,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Core.Helpers.General;
+using IAVH.BioTablero.CM.Core.Domain.Utils;
 using IAVH.BioTablero.CM.Core.Interfaces.DTOs;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 

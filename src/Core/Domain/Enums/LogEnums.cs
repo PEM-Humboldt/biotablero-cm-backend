@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Core.Enums;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Enums;
 
 /// <summary>
 /// Logs enumerations

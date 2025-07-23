@@ -11,7 +11,7 @@ using Serilog;
 
 using Swashbuckle.AspNetCore.Filters;
 
-using static IAVH.BioTablero.CM.Core.Enums.LogEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Enums.LogEnums;
 
 /// <summary>
 /// Log type controller

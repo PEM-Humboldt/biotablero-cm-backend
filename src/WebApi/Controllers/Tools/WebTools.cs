@@ -2,7 +2,7 @@
 
 using System;
 
-using IAVH.BioTablero.CM.Core.Helpers.General;
+using IAVH.BioTablero.CM.Core.Domain.Utils;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Http;

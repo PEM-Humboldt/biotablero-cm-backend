@@ -3,11 +3,11 @@
 using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Core.Helpers.General;
+using IAVH.BioTablero.CM.Core.Domain.Utils;
 
 using Swashbuckle.AspNetCore.Filters;
 
-using static IAVH.BioTablero.CM.Core.Enums.LogEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Enums.LogEnums;
 
 /// <summary>
 /// Log type response example

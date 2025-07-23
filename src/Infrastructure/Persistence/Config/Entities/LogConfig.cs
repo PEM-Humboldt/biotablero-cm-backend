@@ -1,6 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities;
 
-using IAVH.BioTablero.CM.Core.Entities.LogNS;
+using IAVH.BioTablero.CM.Core.Domain.Entities.LogNS;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

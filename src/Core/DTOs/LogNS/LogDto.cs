@@ -4,7 +4,7 @@ using System;
 
 using IAVH.BioTablero.CM.Core.Interfaces.DTOs;
 
-using static IAVH.BioTablero.CM.Core.Enums.LogEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Enums.LogEnums;
 
 /// <summary>
 /// Serilog log DTO

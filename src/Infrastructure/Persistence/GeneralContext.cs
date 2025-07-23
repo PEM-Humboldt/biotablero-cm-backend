@@ -3,7 +3,7 @@
 using System;
 using System.Reflection;
 
-using IAVH.BioTablero.CM.Core.Entities.LogNS;
+using IAVH.BioTablero.CM.Core.Domain.Entities.LogNS;
 
 using Microsoft.EntityFrameworkCore;
 

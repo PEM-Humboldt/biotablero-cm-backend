@@ -1,10 +1,11 @@
-﻿namespace IAVH.BioTablero.CM.Core.Entities.LogNS;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.LogNS;
 
 using System;
 
+using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
-using static IAVH.BioTablero.CM.Core.Enums.LogEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Enums.LogEnums;
 
 /// <summary>
 /// Serilog log entity

@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Core.Helpers.General;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Utils;
 
 using System.Net;
 
