@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Core.Domain.Utils;
+using IAVH.BioTablero.CM.Application.Utils;
 
 using Swashbuckle.AspNetCore.Filters;
 

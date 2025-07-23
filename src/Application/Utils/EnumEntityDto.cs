@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Core.Domain.Utils;
+﻿namespace IAVH.BioTablero.CM.Application.Utils;
 
 using System;
 
