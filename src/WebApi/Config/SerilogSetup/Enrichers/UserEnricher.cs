@@ -1,6 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.SerilogSetup.Enrichers;
 
-using IAVH.BioTablero.CM.WebApi.Extensions;
+using IAVH.BioTablero.CM.WebApi.Utils;
 
 using Microsoft.AspNetCore.Http;
 
