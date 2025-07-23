@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.SerilogSetup.ColumWriters;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.ColumWriters;
 
 using System;
 

@@ -1,12 +1,12 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.SerilogSetup;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.LoggerSetup;
 
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 
 using IAVH.BioTablero.CM.Core.Constants;
-using IAVH.BioTablero.CM.WebApi.Config.SerilogSetup.ColumWriters;
-using IAVH.BioTablero.CM.WebApi.Config.SerilogSetup.Enrichers;
+using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.ColumWriters;
+using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.Enrichers;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

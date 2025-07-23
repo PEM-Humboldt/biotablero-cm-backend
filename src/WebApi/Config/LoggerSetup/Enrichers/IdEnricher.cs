@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.SerilogSetup.Enrichers;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.Enrichers;
 
 using System;
 

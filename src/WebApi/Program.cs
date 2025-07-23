@@ -6,7 +6,7 @@ using DotNetEnv;
 
 using IAVH.BioTablero.CM.Persistence.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
-using IAVH.BioTablero.CM.WebApi.Config.SerilogSetup;
+using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup;
 using IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup;
 
 using Microsoft.AspNetCore.Builder;
