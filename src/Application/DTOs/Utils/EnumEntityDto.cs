@@ -2,7 +2,7 @@
 
 using System;
 
-using IAVH.BioTablero.CM.Core.Interfaces.DTOs;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// General entity for Enum values
