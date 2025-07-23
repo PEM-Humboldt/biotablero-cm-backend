@@ -1,6 +1,8 @@
-﻿namespace IAVH.BioTablero.CM.Persistence.Config.DependencyRegistry;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.DependencyRegistry;
 
 using System;
+
+using IAVH.BioTablero.CM.Infrastructure.Persistence;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

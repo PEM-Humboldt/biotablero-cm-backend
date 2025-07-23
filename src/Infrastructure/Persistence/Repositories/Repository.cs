@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Persistence.Repositories;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,7 @@ using Ardalis.Specification.EntityFrameworkCore;
 
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Infrastructure.Persistence;
 
 using Microsoft.EntityFrameworkCore;
 

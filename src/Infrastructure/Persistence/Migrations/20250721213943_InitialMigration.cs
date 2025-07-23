@@ -1,6 +1,6 @@
-﻿#nullable disable
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations;
 
-namespace IAVH.BioTablero.CM.Persistence.Migrations;
+#nullable disable
 
 using System;
 

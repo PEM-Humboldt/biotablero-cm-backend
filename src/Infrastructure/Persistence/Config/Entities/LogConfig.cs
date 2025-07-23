@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Persistence.Config.Entities;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities;
 
 using IAVH.BioTablero.CM.Core.Entities.LogNS;
 
