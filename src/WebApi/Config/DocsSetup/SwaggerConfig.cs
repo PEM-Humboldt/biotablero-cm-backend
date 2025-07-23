@@ -1,10 +1,10 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup;
 
 using System;
 using System.IO;
 using System.Reflection;
 
-using IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Filters;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;

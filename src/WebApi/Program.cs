@@ -6,8 +6,8 @@ using DotNetEnv;
 
 using IAVH.BioTablero.CM.Persistence.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup;
 using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup;
-using IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.OData;

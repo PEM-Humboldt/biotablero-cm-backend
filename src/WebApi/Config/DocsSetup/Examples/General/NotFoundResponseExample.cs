@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.SwaggerSetup.Examples.General;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
 
 using System.Collections.Generic;
 
