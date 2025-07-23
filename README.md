@@ -32,7 +32,7 @@ dotnet restore
 ### Run database migrations
 
 ```sh
-dotnet ef --startup-project src/WebApi --project src/Persistence database update --context GeneralContext
+dotnet ef --startup-project src/WebApi --project src/Infrastructure database update --context GeneralContext
 ```
 
 ### Run development server
@@ -70,9 +70,9 @@ dotnet build --no-incremental -warnaserror
 
 ```sh
 # Generate migration
-dotnet ef migrations add --startup-project src/WebApi --project src/Persistence --output-dir Migrations --context GeneralContext $MIGRATION_NAME
-# Apply format rules in Persistence project
-dotnet format src/Persistence
+dotnet ef migrations add --startup-project src/WebApi --project src/Infrastructure --output-dir Migrations --context GeneralContext $MIGRATION_NAME
+# Apply format rules in Infrastructure project
+dotnet format src/Infrastructure
 ```
 
 ## Docker
