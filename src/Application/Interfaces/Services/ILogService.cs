@@ -2,9 +2,9 @@
 
 using System;
 
+using IAVH.BioTablero.CM.Application.DTOs.LogNS;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.LogNS;
-using IAVH.BioTablero.CM.Core.DTOs.LogNS;
 
 /// <summary>
 /// System logs service interface

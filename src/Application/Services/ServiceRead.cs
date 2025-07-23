@@ -12,7 +12,6 @@ using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Interfaces.DTOs;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
-using IAVH.BioTablero.CM.Core.Interfaces.Mapping;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 using Microsoft.AspNetCore.OData.Query;
