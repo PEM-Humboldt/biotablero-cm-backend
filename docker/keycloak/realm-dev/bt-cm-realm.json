@@ -1,0 +1,64 @@
+{
+    "realm": "bt-cm",
+    "enabled": true,
+    "users": [
+        {
+            "username": "general-user",
+            "enabled": true,
+            "firstName": "User",
+            "lastName": "Example",
+            "email": "user@example.com",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "pass"
+                }
+            ],
+            "realmRoles": [
+                "user"
+            ]
+        },
+        {
+            "username": "general-admin",
+            "enabled": true,
+            "firstName": "Admin",
+            "lastName": "Example",
+            "email": "admin@example.com",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "pass"
+                }
+            ],
+            "realmRoles": [
+                "admin"
+            ]
+        }
+    ],
+    "roles": {
+        "realm": [
+            {
+                "name": "admin",
+                "description": "Admin role"
+            },
+            {
+                "name": "user",
+                "description": "User role"
+            }
+        ]
+    },
+    "clients": [
+        {
+            "clientId": "bt-mc-client",
+            "enabled": true,
+            "publicClient": false,
+            "redirectUris": [
+                "*"
+            ],
+            "protocol": "openid-connect",
+            "standardFlowEnabled": true,
+            "directAccessGrantsEnabled": true,
+            "serviceAccountsEnabled": true
+        }
+    ]
+}
