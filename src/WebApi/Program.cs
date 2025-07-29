@@ -91,7 +91,9 @@ public class Program
         // Add support to logging request with Serilog
         app.UseSerilogRequestLogging();
 
+        app.UseAuthentication();
         app.UseAuthorization();
+
         app.MapControllers();
 
         app.Run();
