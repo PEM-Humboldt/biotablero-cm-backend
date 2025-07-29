@@ -5,13 +5,16 @@ services:
     container_name: bt-cm-db
     restart: "no"
     environment:
+      POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
     ports:
       - "${DB_PORT:-5432}:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+      # Keycloak database setup
+      - ./docker/keycloak/db/init-db.sql:/docker-entrypoint-initdb.d/init-keycloak-db.sql:ro
+      - ./docker/keycloak/db/init-schema.sql:/docker-entrypoint-initdb.d/init-keycloak-schema.sql:ro
     networks:
       - bt-search-network
 
@@ -21,9 +24,9 @@ services:
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: bt-cm-db
-      KC_DB_URL_DATABASE: ${DB_NAME}
-      KC_DB_USERNAME: ${DB_USER}
-      KC_DB_PASSWORD: ${DB_PASSWORD}
+      KC_DB_URL_DATABASE: ${DB_KEYCLOAK_NAME}
+      KC_DB_USERNAME: ${DB_KEYCLOAK_USER}
+      KC_DB_PASSWORD: ${DB_KEYCLOAK_PASSWORD}
       KC_HOSTNAME: localhost
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
