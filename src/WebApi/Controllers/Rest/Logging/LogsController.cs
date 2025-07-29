@@ -20,7 +20,7 @@ using Serilog;
 
 using Swashbuckle.AspNetCore.Filters;
 
-using static IAVH.BioTablero.CM.Core.Domain.Enums.LogEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
 /// Logs controller

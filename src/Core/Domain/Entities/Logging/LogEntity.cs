@@ -5,7 +5,7 @@ using System;
 using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
-using static IAVH.BioTablero.CM.Core.Domain.Enums.LogEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
 /// Serilog log entity
