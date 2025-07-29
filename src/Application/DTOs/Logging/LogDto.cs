@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.DTOs.LogNS;
+﻿namespace IAVH.BioTablero.CM.Application.DTOs.Logging;
 
 using System;
 

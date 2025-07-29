@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Services;
+﻿namespace IAVH.BioTablero.CM.Application.Services.Logging;
 
 using System;
 using System.Collections.Generic;

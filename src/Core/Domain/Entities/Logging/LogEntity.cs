@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.LogNS;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 
 using System;
 

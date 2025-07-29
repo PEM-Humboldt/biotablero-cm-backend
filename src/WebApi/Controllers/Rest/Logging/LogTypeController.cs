@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest;
+﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Logging;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.LogsNS;
