@@ -24,9 +24,9 @@ services:
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: bt-cm-db
-      KC_DB_URL_DATABASE: ${DB_KEYCLOAK_NAME}
-      KC_DB_USERNAME: ${DB_KEYCLOAK_USER}
-      KC_DB_PASSWORD: ${DB_KEYCLOAK_PASSWORD}
+      KC_DB_URL_DATABASE: ${KC_DB_NAME}
+      KC_DB_USERNAME: ${KC_DB_USER}
+      KC_DB_PASSWORD: ${KC_DB_PASS}
       KC_HOSTNAME: localhost
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin

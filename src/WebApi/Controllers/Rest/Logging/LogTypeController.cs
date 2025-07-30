@@ -4,6 +4,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.LogsNS;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <summary>
 /// Log type controller
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
