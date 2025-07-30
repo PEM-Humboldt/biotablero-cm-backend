@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-using IAVH.BioTablero.CM.Application.DTOs.LogNS;
+using IAVH.BioTablero.CM.Application.DTOs.Logging;
 
 using Swashbuckle.AspNetCore.Filters;
 

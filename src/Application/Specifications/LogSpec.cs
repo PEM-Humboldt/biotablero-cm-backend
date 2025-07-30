@@ -4,7 +4,7 @@ using System;
 
 using Ardalis.Specification;
 
-using IAVH.BioTablero.CM.Core.Domain.Entities.LogNS;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 
 /// <summary>
 /// Log ardalis specifications

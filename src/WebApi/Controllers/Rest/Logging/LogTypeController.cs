@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest;
+﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Logging;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.LogsNS;
@@ -11,7 +11,7 @@ using Serilog;
 
 using Swashbuckle.AspNetCore.Filters;
 
-using static IAVH.BioTablero.CM.Core.Domain.Enums.LogEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
 /// Log type controller

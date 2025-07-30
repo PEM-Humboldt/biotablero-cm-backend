@@ -2,7 +2,7 @@
 
 using System.Linq;
 
-using IAVH.BioTablero.CM.Core.Domain.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 using Microsoft.AspNetCore.Http;
 

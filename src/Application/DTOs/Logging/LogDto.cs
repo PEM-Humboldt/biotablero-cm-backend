@@ -1,10 +1,10 @@
-﻿namespace IAVH.BioTablero.CM.Application.DTOs.LogNS;
+﻿namespace IAVH.BioTablero.CM.Application.DTOs.Logging;
 
 using System;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
-using static IAVH.BioTablero.CM.Core.Domain.Enums.LogEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
 /// Serilog log DTO

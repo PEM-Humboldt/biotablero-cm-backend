@@ -1,7 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
-using IAVH.BioTablero.CM.Application.Services;
+using IAVH.BioTablero.CM.Application.Services.Logging;
 
 using Microsoft.Extensions.DependencyInjection;
 

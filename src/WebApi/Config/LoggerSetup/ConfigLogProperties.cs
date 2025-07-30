@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-using IAVH.BioTablero.CM.Core.Domain.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.ColumWriters;
 using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.Enrichers;
 
