@@ -20,7 +20,7 @@ services:
 
   keycloak:
     image: keycloak/keycloak:26.3
-    container_name: keycloak
+    container_name: bt-cm-auth
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: bt-cm-db

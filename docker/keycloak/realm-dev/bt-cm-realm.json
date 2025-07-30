@@ -113,7 +113,7 @@
         {
             "clientId": "bt-mc-client",
             "enabled": true,
-            "publicClient": false,
+            "publicClient": true,
             "redirectUris": [
                 "*"
             ],
