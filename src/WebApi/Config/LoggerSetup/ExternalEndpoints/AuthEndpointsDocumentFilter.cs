@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.ExternalEndpoints;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.ExternalEndpoints;
 
 using System;
 using System.Collections.Generic;
