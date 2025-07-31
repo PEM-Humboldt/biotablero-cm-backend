@@ -28,7 +28,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.LogNS.LogEntity", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Logging.LogEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +68,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnName("timestamp")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<int?>("Type")
+                    b.Property<int>("Type")
                         .HasColumnType("integer")
                         .HasColumnName("type");
 
