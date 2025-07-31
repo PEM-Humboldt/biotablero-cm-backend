@@ -48,6 +48,43 @@ public static class SwaggerConfig
         // Enable example filters
         options.ExampleFilters();
 
+        // Enable default security
+        options.ConfigDefaultSecurity();
+
         return options;
+    }
+
+    /// <summary>
+    /// Default OpenAPI security
+    /// </summary>
+    /// <param name="options">Swagger options</param>
+    private static void ConfigDefaultSecurity(this SwaggerGenOptions options)
+    {
+        const string securityDefinitionName = "Bearer";
+
+        options.AddSecurityDefinition(securityDefinitionName, new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Description = "Please enter a valid token",
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            Scheme = "bearer",
+        });
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = securityDefinitionName,
+                    },
+                },
+                Array.Empty<string>()
+            },
+        });
     }
 }
