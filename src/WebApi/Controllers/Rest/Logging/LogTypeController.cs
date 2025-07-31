@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Serilog;
-
 using Swashbuckle.AspNetCore.Filters;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
@@ -18,13 +16,14 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <summary>
 /// Log type controller
 /// </summary>
+/// <param name="webTools">General web tools</param>
+/// <param name="entityService">Entity service</param>
 [Authorize(Roles = IamConstants.RoleModuleAdmin)]
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
 public class LogTypeController(IWebTools webTools,
-    IServiceReadEnumeration<LogType> entityService,
-    ILogger logger) : ControllerBase
+    IServiceReadEnumeration<LogType> entityService) : ControllerBase
 {
     /// <summary>
     /// Get all entities
@@ -37,16 +36,6 @@ public class LogTypeController(IWebTools webTools,
     public IActionResult Get()
     {
         var response = entityService.GetAll();
-
-        // TODO: delete this after ticket lib-230
-        if (response.Success)
-        {
-            logger
-                .ForContext("CustomRecord", true)
-                .ForContext("Type", (int)LogType.Read)
-                .Information("Get log types");
-        }
-
         return webTools.CustomResponse(response);
     }
 }
