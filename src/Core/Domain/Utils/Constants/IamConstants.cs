@@ -13,4 +13,13 @@ public static class IamConstants
     public const string UserName = "username";
 
     #endregion
+
+    #region User roles
+
+    /// <summary>
+    /// Administrator role name for this module
+    /// </summary>
+    public const string RoleModuleAdmin = "Admin";
+
+    #endregion
 }

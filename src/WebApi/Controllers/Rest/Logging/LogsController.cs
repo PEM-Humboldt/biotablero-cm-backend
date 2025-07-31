@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.LogsNS;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -29,7 +30,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <param name="webTools">General web tools</param>
 /// <param name="entityService">Entity service</param>
 /// <param name="logger">Logging API</param>
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = IamConstants.RoleModuleAdmin)]
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
