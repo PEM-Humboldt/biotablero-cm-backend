@@ -5,6 +5,8 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
+
 /// <summary>
 /// Log entity configuration
 /// </summary>
@@ -36,6 +38,7 @@ public class LogConfig : IEntityTypeConfiguration<LogEntity>
 
         builder.Property(e => e.Type)
             .HasColumnName("type")
+            .HasDefaultValue(LogType.System)
             .HasConversion<int>()
             .IsRequired();
 

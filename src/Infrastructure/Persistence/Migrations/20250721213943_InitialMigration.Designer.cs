@@ -70,6 +70,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("integer")
+                        .HasDefaultValue(1)
                         .HasColumnName("type");
 
                     b.Property<string>("UserName")

@@ -66,7 +66,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("Type")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasDefaultValue(1)
                         .HasColumnName("type");
 
                     b.Property<string>("UserName")
