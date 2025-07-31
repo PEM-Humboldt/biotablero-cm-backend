@@ -123,6 +123,10 @@
             "serviceAccountsEnabled": true,
             "defaultClientScopes": [
                 "aud-bt-mc-client"
+            ],
+            "webOrigins": [
+                "http://localhost:3000",
+                "http://localhost:8001"
             ]
         }
     ]
