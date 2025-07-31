@@ -1,11 +1,9 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Logging;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.LogsNS;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +16,6 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// </summary>
 /// <param name="webTools">General web tools</param>
 /// <param name="entityService">Entity service</param>
-[Authorize(Roles = IamConstants.RoleModuleAdmin)]
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
