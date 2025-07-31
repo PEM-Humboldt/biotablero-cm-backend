@@ -15,7 +15,7 @@
                 }
             ],
             "realmRoles": [
-                "user"
+                "User"
             ]
         },
         {
@@ -31,18 +31,18 @@
                 }
             ],
             "realmRoles": [
-                "admin"
+                "Admin"
             ]
         }
     ],
     "roles": {
         "realm": [
             {
-                "name": "admin",
+                "name": "Admin",
                 "description": "Admin role"
             },
             {
-                "name": "user",
+                "name": "User",
                 "description": "User role"
             }
         ]
