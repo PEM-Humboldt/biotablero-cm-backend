@@ -11,6 +11,7 @@ using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.LogsNS;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -28,6 +29,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <param name="webTools">General web tools</param>
 /// <param name="entityService">Entity service</param>
 /// <param name="logger">Logging API</param>
+[Authorize(Roles = "Admin")]
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]

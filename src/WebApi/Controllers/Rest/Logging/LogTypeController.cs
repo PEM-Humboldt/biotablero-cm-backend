@@ -17,7 +17,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <summary>
 /// Log type controller
 /// </summary>
-[Authorize]
+[Authorize(Roles = "Admin")]
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
