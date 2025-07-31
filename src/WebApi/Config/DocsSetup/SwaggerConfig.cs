@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.ExternalEndpoints;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -50,6 +51,9 @@ public static class SwaggerConfig
 
         // Enable default security
         options.ConfigDefaultSecurity();
+
+        // Add custom endpoints docs
+        options.DocumentFilter<AuthEndpointsDocumentFilter>();
 
         return options;
     }
