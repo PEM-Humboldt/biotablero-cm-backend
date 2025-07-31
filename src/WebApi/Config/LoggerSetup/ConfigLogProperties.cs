@@ -16,6 +16,8 @@ using Serilog;
 using Serilog.Enrichers;
 using Serilog.Sinks.PostgreSQL;
 
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
+
 /// <summary>
 /// Logger configuration
 /// </summary>
@@ -50,6 +52,7 @@ public static class ConfigLogProperties
                     .Enrich.With<IdEnricher>()
                     .Enrich.WithProperty(LogConstants.ApplicationName, LogConstants.ProjectName)
                     .Enrich.WithProperty(LogConstants.CustomRecord, false)
+                    .Enrich.WithProperty(LogConstants.CustomType, (int)LogType.System)
                     .Enrich.With(new UserEnricher(services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>()))
                     .Enrich.With(new ClientIpEnricher())
                     .Enrich.With(new ClientHeaderEnricher("User-Agent", "ClientAgent"))

@@ -36,7 +36,8 @@ public class LogConfig : IEntityTypeConfiguration<LogEntity>
 
         builder.Property(e => e.Type)
             .HasColumnName("type")
-            .HasConversion<int>();
+            .HasConversion<int>()
+            .IsRequired();
 
         builder.Property(e => e.Message)
             .HasColumnName("message")

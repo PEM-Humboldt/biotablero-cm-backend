@@ -41,5 +41,10 @@ public static class LogConstants
     /// </summary>
     public const string CustomRecord = "CustomRecord";
 
+    /// <summary>
+    /// Custom type property value
+    /// </summary>
+    public const string CustomType = "Type";
+
     #endregion
 }

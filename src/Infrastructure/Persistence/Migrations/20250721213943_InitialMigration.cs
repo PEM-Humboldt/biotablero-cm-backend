@@ -23,7 +23,7 @@ public partial class InitialMigration : Migration
                 id = table.Column<Guid>(type: "uuid", nullable: false),
                 timestamp = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                 level = table.Column<int>(type: "integer", nullable: false),
-                type = table.Column<int>(type: "integer", nullable: true),
+                type = table.Column<int>(type: "integer", nullable: false),
                 message = table.Column<string>(type: "text", nullable: true),
                 user_name = table.Column<string>(type: "text", nullable: true),
                 custom_record = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
