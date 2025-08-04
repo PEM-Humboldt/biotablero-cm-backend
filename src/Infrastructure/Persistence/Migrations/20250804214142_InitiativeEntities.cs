@@ -5,7 +5,6 @@
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations;
 
 using Microsoft.EntityFrameworkCore.Migrations;
-
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 /// <inheritdoc />
@@ -57,7 +56,7 @@ public partial class InitiativeEntities : Migration
             {
                 id = table.Column<int>(type: "integer", nullable: false)
                     .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                name = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
                 code = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
                 parent_id = table.Column<int>(type: "integer", nullable: true),
             },

@@ -26,7 +26,7 @@ public class LocationConfig : IEntityTypeConfiguration<Location>
 
         builder.Property(l => l.Name)
             .HasColumnName("name")
-            .HasMaxLength(50)
+            .HasMaxLength(80)
             .IsRequired();
 
         builder.Property(l => l.Code)
