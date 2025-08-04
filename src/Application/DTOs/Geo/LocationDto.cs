@@ -1,7 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Geo;
 
-using System.Collections.Generic;
-
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
@@ -28,9 +26,4 @@ public class LocationDto : IDto
     /// Parent location identifier
     /// </summary>
     public int? ParentId { get; set; }
-
-    /// <summary>
-    /// Child locations relationship
-    /// </summary>
-    public ICollection<LocationDto> Children { get; } = [];
 }

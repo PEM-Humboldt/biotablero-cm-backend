@@ -10,6 +10,13 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 public class LocationSpec : GeneralSpecification<int, Location>
 {
     /// <summary>
+    /// Constructor
+    /// </summary>
+    public LocationSpec()
+    {
+    }
+
+    /// <summary>
     /// Specification for get element by identifier
     /// </summary>
     /// <param name="id">Element identifier</param>
@@ -31,5 +38,19 @@ public class LocationSpec : GeneralSpecification<int, Location>
         Query
             .Skip(skip)
             .Take(take);
+    }
+
+    /// <summary>
+    /// Specification for get elements by parent
+    /// </summary>
+    /// <param name="parentId">Parent identifier</param>
+    /// <returns>Custom location specification</returns>
+    public static LocationSpec ParentIdSpec(int? parentId)
+    {
+        var spec = new LocationSpec();
+        spec.Query
+            .Where(e => e.ParentId == parentId);
+
+        return spec;
     }
 }

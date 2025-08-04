@@ -7,14 +7,11 @@ using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Location;
 
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData.Query;
-using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 using Swashbuckle.AspNetCore.Filters;
 
@@ -27,7 +24,7 @@ using Swashbuckle.AspNetCore.Filters;
 [Route("[controller]")]
 [Produces("application/json")]
 public class LocationController(IWebTools webTools,
-    ILocationService entityService) : ODataController
+    ILocationService entityService) : ControllerBase
 {
     /// <summary>
     /// Get entity
@@ -47,18 +44,15 @@ public class LocationController(IWebTools webTools,
     }
 
     /// <summary>
-    /// Get entities (paginated)
+    /// Get entities by parent
     /// </summary>
-    /// <param name="queryOptions">OData query options</param>
+    /// <param name="parentId">Parent identifier</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Entities list from parameters</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(LocationOdataResponseExample), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LocationOdataResponseExample))]
-    public async Task<IActionResult> Get(ODataQueryOptions<Location> queryOptions, CancellationToken ct)
+    public async Task<IActionResult> Get(int? parentId, CancellationToken ct)
     {
-        var response = await entityService.GetList(queryOptions, ct);
+        var response = await entityService.GetByParent(parentId, ct);
         return webTools.CustomResponse(response);
     }
 }
