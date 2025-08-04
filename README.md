@@ -77,6 +77,8 @@ dotnet ef migrations add $MIGRATION_NAME --startup-project src/WebApi --project 
 dotnet format src/Infrastructure
 ```
 
+If you need to remove the last generated migration, you can do so with the command: `dotnet ef migrations remove --startup-project src/WebApi --project src/Infrastructure --context GeneralContext`.
+
 ## Docker
 
 ### Build image
