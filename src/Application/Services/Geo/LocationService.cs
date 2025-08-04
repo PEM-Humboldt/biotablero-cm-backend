@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Application.Services.Geo;
+﻿namespace IAVH.BioTablero.CM.Application.Services.Geo;
 
 using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.General;

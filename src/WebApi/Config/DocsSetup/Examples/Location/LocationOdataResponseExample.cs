@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Location;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Location;
 
 using System.Collections.Generic;
 
