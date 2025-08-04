@@ -68,6 +68,8 @@ dotnet build --no-incremental -warnaserror
 
 > Check the format of the generated code before uploading it to the repository
 
+> Replace the `MIGRATION_NAME` variable with a short description in **Pascal Case**
+
 ```sh
 # Generate migration
 dotnet ef migrations add $MIGRATION_NAME --startup-project src/WebApi --project src/Infrastructure --output-dir Persistence/Migrations --context GeneralContext
