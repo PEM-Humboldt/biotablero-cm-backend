@@ -1,6 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities.Geo;
 
-using IAVH.BioTablero.CM.Core.Domain.Geo;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

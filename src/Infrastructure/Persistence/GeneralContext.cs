@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
-using IAVH.BioTablero.CM.Core.Domain.Geo;
-using IAVH.BioTablero.CM.Core.Domain.Initiatives;
 
 using Microsoft.EntityFrameworkCore;
 

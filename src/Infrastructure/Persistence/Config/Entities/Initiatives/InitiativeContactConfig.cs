@@ -1,6 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities.Initiatives;
 
-using IAVH.BioTablero.CM.Core.Domain.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

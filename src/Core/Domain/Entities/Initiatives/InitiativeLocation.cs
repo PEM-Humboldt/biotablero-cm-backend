@@ -1,7 +1,7 @@
-﻿namespace IAVH.BioTablero.CM.Core.Domain.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities;
-using IAVH.BioTablero.CM.Core.Domain.Geo;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>

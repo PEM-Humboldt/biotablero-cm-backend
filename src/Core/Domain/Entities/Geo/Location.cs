@@ -1,9 +1,9 @@
-﻿namespace IAVH.BioTablero.CM.Core.Domain.Geo;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 
 using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities;
-using IAVH.BioTablero.CM.Core.Domain.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
