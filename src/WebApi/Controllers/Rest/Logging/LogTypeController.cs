@@ -1,7 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Logging;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.LogsNS;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Logging;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Http;

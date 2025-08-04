@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.LogsNS;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Logging;
 
 using System.Collections.Generic;
 
