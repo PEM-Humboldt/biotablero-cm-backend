@@ -86,14 +86,18 @@ public sealed class GeneralContext : DbContext
         modelBuilder?.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         // Seeding data
-        modelBuilder.Entity<InitiativeUserLevel>().HasData(GetPreconfiguredModules());
+        modelBuilder.Entity<InitiativeUserLevel>().HasData(GetDefaultInitiativeUserLevels());
     }
 
     #region Seeding functions
 
     #region Initiatives user level data
 
-    private static IEnumerable<InitiativeUserLevel> GetPreconfiguredModules()
+    /// <summary>
+    /// Get default initative user levels
+    /// </summary>
+    /// <returns>Default initative user levels list</returns>
+    private static IEnumerable<InitiativeUserLevel> GetDefaultInitiativeUserLevels()
     {
         var enumData = Enum.GetValues(typeof(InitiativeUserLevelEnum))
             .Cast<InitiativeUserLevelEnum>()
