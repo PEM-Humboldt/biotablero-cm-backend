@@ -1,6 +1,8 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence;
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
@@ -8,6 +10,8 @@ using IAVH.BioTablero.CM.Core.Domain.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Initiatives;
 
 using Microsoft.EntityFrameworkCore;
+
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
 /// <summary>
 /// General database context
@@ -80,5 +84,25 @@ public sealed class GeneralContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder?.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        // Seeding data
+        modelBuilder.Entity<InitiativeUserLevel>().HasData(GetPreconfiguredModules());
     }
+
+    #region Seeding functions
+
+    #region Initiatives user level data
+
+    private static IEnumerable<InitiativeUserLevel> GetPreconfiguredModules()
+    {
+        var enumData = Enum.GetValues(typeof(InitiativeUserLevelEnum))
+            .Cast<InitiativeUserLevelEnum>()
+            .Select(t => new InitiativeUserLevel() { Id = (int)t, Name = t.ToString() });
+
+        return enumData;
+    }
+
+    #endregion
+
+    #endregion
 }
