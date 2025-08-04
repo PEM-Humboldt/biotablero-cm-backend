@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations;
 
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -151,6 +153,17 @@ public partial class InitiativeEntities : Migration
                     principalTable: "location",
                     principalColumn: "id",
                     onDelete: ReferentialAction.Cascade);
+            });
+
+        migrationBuilder.InsertData(
+            schema: "initiatives",
+            table: "initiative_user_level",
+            columns: new[] { "id", "name" },
+            values: new object[,]
+            {
+                { 1, "Leader" },
+                { 2, "Member" },
+                { 3, "Reader" },
             });
 
         migrationBuilder.CreateIndex(
