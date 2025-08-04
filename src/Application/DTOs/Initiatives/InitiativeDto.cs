@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
 using System;
 using System.Collections.Generic;

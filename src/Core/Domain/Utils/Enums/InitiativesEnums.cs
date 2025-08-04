@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Core.Domain.Utils.Enums;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Utils.Enums;
 
 /// <summary>
 /// Initiatives enumerations
