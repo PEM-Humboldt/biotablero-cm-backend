@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities.Logging;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 
