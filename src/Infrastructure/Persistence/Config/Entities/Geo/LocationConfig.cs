@@ -16,7 +16,7 @@ public class LocationConfig : IEntityTypeConfiguration<Location>
     /// <param name="builder">Entity builder</param>
     public void Configure(EntityTypeBuilder<Location> builder)
     {
-        builder.ToTable("location", "public");
+        builder.ToTable("location", "geo");
 
         builder?.HasKey(e => e.Id);
 

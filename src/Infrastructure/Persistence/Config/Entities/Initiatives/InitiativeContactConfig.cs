@@ -32,7 +32,8 @@ public class InitiativeContactConfig : IEntityTypeConfiguration<InitiativeContac
             .HasColumnName("phone");
 
         builder.Property(i => i.Email)
-            .HasColumnName("email");
+            .HasColumnName("email")
+            .IsRequired();
 
         builder.HasOne(e => e.Initiative)
             .WithMany(p => p.InitiativeContacts)
