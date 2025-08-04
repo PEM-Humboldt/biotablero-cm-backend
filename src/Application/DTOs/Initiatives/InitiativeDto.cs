@@ -33,15 +33,10 @@ public class InitiativeDto : IDto
     /// <summary>
     /// Initiative Locations relationship
     /// </summary>
-    public ICollection<InitiativeLocationDto> InitiativeLocations { get; } = [];
+    public IEnumerable<InitiativeLocationDto> InitiativeLocations { get; init; } = [];
 
     /// <summary>
     /// Initiative Contacts relationship
     /// </summary>
-    public ICollection<InitiativeContactDto> InitiativeContacts { get; } = [];
-
-    /// <summary>
-    /// Initiative Users relationship
-    /// </summary>
-    public ICollection<InitiativeUserDto> InitiativeUsers { get; } = [];
+    public IEnumerable<InitiativeContactDto> InitiativeContacts { get; init; } = [];
 }
