@@ -101,6 +101,10 @@ dotnet_diagnostic.ca1052.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1062
 dotnet_diagnostic.CA1062.severity = none
 
+# Avoid constant arrays as arguments
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1861
+dotnet_diagnostic.CA1861.severity = none
+
 # --------------------- #
 # Custom StyleCop rules #
 # --------------------- #
