@@ -1,7 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Initiatives;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiatives;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
