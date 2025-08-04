@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Core.Domain.Geo;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Geo;
 
 using System.Collections.Generic;
 

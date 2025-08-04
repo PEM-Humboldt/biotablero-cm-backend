@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities.Initiatives;
 
 using IAVH.BioTablero.CM.Core.Domain.Initiatives;
 

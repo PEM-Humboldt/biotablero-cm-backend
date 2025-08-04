@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities.Geo;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities.Geo;
 
 using IAVH.BioTablero.CM.Core.Domain.Geo;
 
