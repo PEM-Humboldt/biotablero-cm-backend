@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
+using IAVH.BioTablero.CM.Application.Services.Geo;
 using IAVH.BioTablero.CM.Application.Services.Logging;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,7 @@ public static class ConfigAppServices
     public static IServiceCollection AddAppServices(this IServiceCollection services)
     {
         services.AddScoped<ILogService, LogService>();
+        services.AddScoped<ILocationService, LocationService>();
 
         return services;
     }

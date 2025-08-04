@@ -1,8 +1,10 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
+using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Mappings;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +22,7 @@ public static class ConfigMappings
     public static IServiceCollection AddMappings(this IServiceCollection services)
     {
         services.AddSingleton<IMapper<LogEntity, LogDto>, LogMappings>();
+        services.AddSingleton<IMapper<Location, LocationDto>, LocationMappings>();
 
         return services;
     }
