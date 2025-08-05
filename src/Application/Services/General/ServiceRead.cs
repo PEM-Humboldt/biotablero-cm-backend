@@ -32,8 +32,15 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     where TE : class, IAggregateRoot
     where TS : GeneralSpecification<TI, TE>
 {
-    private readonly IRepository<TE> entityRepository = entityRepository;
-    private readonly IMapper<TE, TDto> mapper = mapper;
+    /// <summary>
+    /// Entity repository
+    /// </summary>
+    private protected readonly IRepository<TE> entityRepository = entityRepository;
+
+    /// <summary>
+    /// Entity mapper
+    /// </summary>
+    private protected readonly IMapper<TE, TDto> mapper = mapper;
 
     /// <summary>
     /// Check if element exists
@@ -177,7 +184,6 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
         {
             return new(true)
             {
-                StatusCode = HttpStatusCode.BadRequest,
                 Message = $"Invalid filter: {ex.Message}",
             };
         }

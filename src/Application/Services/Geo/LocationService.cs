@@ -18,21 +18,16 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 /// </summary>
 public class LocationService : ServiceRead<Location, LocationDto, int, LocationSpec>, ILocationService
 {
-    private readonly IRepository<Location> entityRepository;
-    private readonly IMapper<Location, LocationDto> mapper;
-
     /// <summary>
     /// Constructor
     /// </summary>
-    /// <param name="entityRepository">hello</param>
-    /// <param name="mapper">world</param>
+    /// <param name="entityRepository">Entity repository</param>
+    /// <param name="mapper">Entity mapper</param>
     public LocationService(
         IRepository<Location> entityRepository,
         IMapper<Location, LocationDto> mapper)
         : base(entityRepository, mapper)
     {
-        this.entityRepository = entityRepository;
-        this.mapper = mapper;
     }
 
     /// <summary>
