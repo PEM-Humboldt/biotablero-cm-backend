@@ -2,7 +2,7 @@ namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
 using FluentValidation;
 
-using IAVH.BioTablero.CM.Application.Validators;
+using IAVH.BioTablero.CM.Application.Validators.Initiatives;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,6 +19,8 @@ public static class ConfigValidators
     public static IServiceCollection AddValidators(this IServiceCollection services)
     {
         services.AddValidatorsFromAssemblyContaining<InitiativeValidator>();
+        services.AddValidatorsFromAssemblyContaining<InitiativeContactValidator>();
+        services.AddValidatorsFromAssemblyContaining<InitiativeUserValidator>();
 
         return services;
     }

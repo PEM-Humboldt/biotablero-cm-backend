@@ -48,7 +48,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         this.initiativeLocationRepository = initiativeLocationRepository;
     }
 
-
     /// <summary>
     /// Add element
     /// </summary>
