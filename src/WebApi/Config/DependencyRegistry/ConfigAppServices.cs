@@ -2,6 +2,7 @@
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.Geo;
+using IAVH.BioTablero.CM.Application.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.Logging;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ public static class ConfigAppServices
     {
         services.AddScoped<ILogService, LogService>();
         services.AddScoped<ILocationService, LocationService>();
+        services.AddScoped<IInitiativeService, InitiativeService>();
 
         return services;
     }

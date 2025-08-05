@@ -4,6 +4,12 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Application.Interfaces.Services;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Logging;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
@@ -11,10 +17,13 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 /// <summary>
 /// Initiatives controller
 /// </summary>
+/// <param name="webTools">General web tools</param>
+/// <param name="entityService">Entity service</param>
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
-public class InitiativeController() : ODataController
+public class InitiativeController(IWebTools webTools,
+    IInitiativeService entityService) : ODataController
 {
     /// <summary>
     /// Get entity
@@ -23,7 +32,11 @@ public class InitiativeController() : ODataController
     /// <param name="ct">Cancellation token</param>
     /// <returns>Selected entity data</returns>
     [HttpGet("{id}")]
-    public Task<IActionResult> Get(int id, CancellationToken ct) => throw new NotImplementedException();
+    public async Task<IActionResult> Get(int id, CancellationToken ct)
+    {
+        var response = await entityService.GetItem(id, ct);
+        return webTools.CustomResponse(response);
+    }
 
     /// <summary>
     /// Get entities (paginated)
@@ -32,7 +45,13 @@ public class InitiativeController() : ODataController
     /// <param name="ct">Cancellation token</param>
     /// <returns>Entities list from parameters</returns>
     [HttpGet]
-    public Task<IActionResult> Get(ODataQueryOptions<object> queryOptions, CancellationToken ct) => throw new NotImplementedException();
+    [ProducesResponseType(typeof(LogOdataResponseExample), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Get(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct)
+    {
+        var response = await entityService.GetList(queryOptions, ct);
+        return webTools.CustomResponse(response);
+    }
 
     /// <summary>
     /// Add entity
