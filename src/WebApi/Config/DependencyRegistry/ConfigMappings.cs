@@ -26,6 +26,9 @@ public static class ConfigMappings
         services.AddSingleton<IMapper<LogEntity, LogDto>, LogMappings>();
         services.AddSingleton<IMapper<Location, LocationDto>, LocationMappings>();
         services.AddSingleton<IMapper<Initiative, InitiativeDto>, InitiativeMappings>();
+        services.AddSingleton<IMapper<InitiativeContact, InitiativeContactDto>, InitiativeContactMappings>();
+        services.AddSingleton<IMapper<InitiativeLocation, InitiativeLocationDto>, InitiativeLocationMappings>();
+        services.AddSingleton<IMapper<InitiativeUser, InitiativeUserDto>, InitiativeUserMappings>();
 
         return services;
     }
