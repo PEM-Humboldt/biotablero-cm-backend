@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
 using System.Linq;
 using System.Threading;

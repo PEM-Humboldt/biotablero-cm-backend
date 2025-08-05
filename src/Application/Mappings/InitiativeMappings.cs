@@ -46,6 +46,7 @@ public class InitiativeMappings : IMapper<Initiative, InitiativeDto>
                     Name = i.Location.Name,
                 },
             }),
+
             // InitiativeUsers = entity.InitiativeUsers.Select(i => new InitiativeUserDto()
             // {
             //     Id = i.Id,

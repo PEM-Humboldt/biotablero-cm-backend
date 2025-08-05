@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
 using FluentValidation;
 
