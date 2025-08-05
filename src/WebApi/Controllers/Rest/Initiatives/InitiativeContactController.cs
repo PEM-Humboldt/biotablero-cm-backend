@@ -41,6 +41,7 @@ public class InitiativeContactController() : ODataController
     /// <param name="ct">Cancellation token</param>
     /// <returns>Added entity data</returns>
     [HttpPut]
+    [Consumes("application/json")]
     public Task<IActionResult> Put([FromBody] object requestData, CancellationToken ct) => throw new NotImplementedException();
 
     /// <summary>
@@ -51,6 +52,7 @@ public class InitiativeContactController() : ODataController
     /// <param name="ct">Cancellation token</param>
     /// <returns>Updated entity data</returns>
     [HttpPost("{id}")]
+    [Consumes("application/json")]
     public Task<IActionResult> Post(int id, [FromBody] object entityData, CancellationToken ct) => throw new NotImplementedException();
 
     /// <summary>

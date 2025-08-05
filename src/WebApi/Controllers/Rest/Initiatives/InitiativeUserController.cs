@@ -22,6 +22,7 @@ public class InitiativeUserController() : ODataController
     /// <param name="ct">Cancellation token</param>
     /// <returns>Added entity data</returns>
     [HttpPut]
+    [Consumes("application/json")]
     public Task<IActionResult> Put([FromBody] object requestData, CancellationToken ct) => throw new NotImplementedException();
 
     /// <summary>

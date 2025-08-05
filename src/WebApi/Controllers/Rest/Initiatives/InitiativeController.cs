@@ -61,6 +61,7 @@ public class InitiativeController(IWebTools webTools,
     /// <param name="ct">Cancellation token</param>
     /// <returns>Added entity data</returns>
     [HttpPut]
+    [Consumes("application/json")]
     public async Task<IActionResult> Put([FromBody] InitiativeDto requestData, CancellationToken ct)
     {
         var response = await entityService.Add(requestData, ct);
@@ -75,6 +76,7 @@ public class InitiativeController(IWebTools webTools,
     /// <param name="ct">Cancellation token</param>
     /// <returns>Updated entity data</returns>
     [HttpPost("{id}")]
+    [Consumes("application/json")]
     public Task<IActionResult> Post(int id, [FromBody] InitiativeDto entityData, CancellationToken ct) => throw new NotImplementedException();
 
     /// <summary>
