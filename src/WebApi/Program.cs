@@ -42,6 +42,7 @@ public class Program
         builder.Services.AddCoreServices(Debugger.IsAttached);
         builder.Services.AddAppServices();
         builder.Services.AddMappings();
+        builder.Services.AddValidators();
 
         // Add services to the container.
         builder.Services.AddControllers()

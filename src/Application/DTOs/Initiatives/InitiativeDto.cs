@@ -39,4 +39,9 @@ public class InitiativeDto : IDto
     /// Initiative Contacts relationship
     /// </summary>
     public IEnumerable<InitiativeContactDto> InitiativeContacts { get; init; } = [];
+
+    /// <summary>
+    /// Initiative Users relationship
+    /// </summary>
+    public IEnumerable<InitiativeUserDto> InitiativeUsers { get; init; } = [];
 }

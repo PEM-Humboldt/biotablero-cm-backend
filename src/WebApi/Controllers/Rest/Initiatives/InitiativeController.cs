@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Logging;
@@ -60,7 +61,11 @@ public class InitiativeController(IWebTools webTools,
     /// <param name="ct">Cancellation token</param>
     /// <returns>Added entity data</returns>
     [HttpPut]
-    public Task<IActionResult> Put([FromBody] object requestData, CancellationToken ct) => throw new NotImplementedException();
+    public async Task<IActionResult> Put([FromBody] InitiativeDto requestData, CancellationToken ct)
+    {
+        var response = await entityService.Add(requestData, ct);
+        return webTools.CustomResponse(response);
+    }
 
     /// <summary>
     /// Edit entity
@@ -70,7 +75,7 @@ public class InitiativeController(IWebTools webTools,
     /// <param name="ct">Cancellation token</param>
     /// <returns>Updated entity data</returns>
     [HttpPost("{id}")]
-    public Task<IActionResult> Post(int id, [FromBody] object entityData, CancellationToken ct) => throw new NotImplementedException();
+    public Task<IActionResult> Post(int id, [FromBody] InitiativeDto entityData, CancellationToken ct) => throw new NotImplementedException();
 
     /// <summary>
     /// Disable entity
