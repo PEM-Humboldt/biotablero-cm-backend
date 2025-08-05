@@ -15,12 +15,46 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+
 /// <summary>
 /// Initiative service
 /// </summary>
-public class InitiativeService(IRepository<Initiative> entityRepository,
-    IMapper<Initiative, InitiativeDto> mapper, IValidator<InitiativeDto> entityValidator) : ServiceRead<Initiative, InitiativeDto, int, InitiativeSpec>(entityRepository, mapper), IInitiativeService
+public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, InitiativeSpec>, IInitiativeService
 {
+    private const int MaxLeadersByInitiative = 3;
+    private readonly IValidator<InitiativeDto> entityValidator;
+    private readonly IRepository<InitiativeUser> initiativeUserRepository;
+    private readonly IRepository<InitiativeLocation> initiativeLocationRepository;
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="entityRepository">Entity repository</param>
+    /// <param name="mapper">Entity mapper</param>
+    /// <param name="entityValidator">Entity validator</param>
+    /// <param name="initiativeUserRepository">Initiative User repository</param>
+    /// <param name="initiativeLocationRepository">Initiative Location repository</param>
+    public InitiativeService(
+        IRepository<Initiative> entityRepository,
+        IMapper<Initiative, InitiativeDto> mapper,
+        IValidator<InitiativeDto> entityValidator,
+        IRepository<InitiativeUser> initiativeUserRepository,
+        IRepository<InitiativeLocation> initiativeLocationRepository)
+        : base(entityRepository, mapper)
+    {
+        this.entityValidator = entityValidator;
+        this.initiativeUserRepository = initiativeUserRepository;
+        this.initiativeLocationRepository = initiativeLocationRepository;
+    }
+
+
+    /// <summary>
+    /// Add element
+    /// </summary>
+    /// <param name="entityData">Entity data</param>
+    /// <param name="ct">Cancellation token</param>
+    /// <returns>Process result</returns>
     public async Task<CustomWebResponse> Add(InitiativeDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -28,22 +62,89 @@ public class InitiativeService(IRepository<Initiative> entityRepository,
 
         if (!validationResult.IsValid)
         {
-            var errors = validationResult.Errors
-                .Select(error => error.ErrorMessage);
-
             return new CustomWebResponse(true)
             {
                 Message = "Validation errors",
-                ResponseBody = errors,
+                ResponseBody = validationResult.Errors
+                    .Select(error => error.ErrorMessage),
             };
         }
 
+        // Validate users data
+        var leaderCount = entityData.InitiativeUsers
+            .Select(u => u.Level.Id == (int)InitiativeUserLevelEnum.Leader)
+            .Count();
+
+        if (leaderCount > MaxLeadersByInitiative)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = $"The number of leaders per initiative should be between 1 and 3",
+            };
+        }
+
+        var usersIds = entityData.InitiativeUsers
+            .Select(u => u.UserId);
+
+        var initiativeUserQuery = initiativeUserRepository
+            .GetQueryable()
+            .Where(iu => usersIds.Contains(iu.Id));
+
+        var usersDb = await initiativeUserRepository.QueryToListAsync(initiativeUserQuery, ct);
+
+        if (usersIds.Count() != usersDb.Count)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = $"Invalid initiative users data",
+            };
+        }
+
+        // Validate locations data
+        var locationsIds = entityData.InitiativeLocations
+            .Select(l => l.Location.Id);
+
+        var initiativeLocationQuery = initiativeLocationRepository
+            .GetQueryable()
+            .Where(il => usersIds.Contains(il.Id));
+
+        var locationsDb = await initiativeLocationRepository.QueryToListAsync(initiativeLocationQuery, ct);
+
+        if (locationsIds.Count() != locationsDb.Count)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = $"Invalid initiative locations data",
+            };
+        }
+
+        // Build entity data
+        var initiative = mapper.Map(entityData);
+
+        // Save user
+        initiative = await entityRepository.AddAsync(initiative, ct);
+
         return new CustomWebResponse()
         {
-            ResponseBody = entityData,
+            ResponseBody = initiative,
         };
     }
 
+    /// <summary>
+    /// Disable or enable element
+    /// </summary>
+    /// <param name="id">Element identifier</param>
+    /// <param name="disable">Disable flag</param>
+    /// <param name="ct">Cancellation token</param>
+    /// <returns>Process result</returns>
     public Task<CustomWebResponse> Disable(int id, bool disable, CancellationToken ct = default) => throw new System.NotImplementedException();
+
+    /// <summary>
+    /// Update element
+    /// </summary>
+    /// <param name="id">Element identifier</param>
+    /// <param name="entityData">Entity data</param>
+    /// <param name="ct">Cancellation token</param>
+    /// <returns>Process result</returns>
     public Task<CustomWebResponse> Update(int id, InitiativeDto entityData, CancellationToken ct = default) => throw new System.NotImplementedException();
 }
