@@ -16,6 +16,10 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
+using Serilog;
+
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
+
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
 /// <summary>
@@ -26,6 +30,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     private const int MaxLeadersByInitiative = 3;
     private readonly IValidator<InitiativeDto> entityValidator;
     private readonly IRepository<Location> locationRepository;
+    private readonly ILogger logger;
 
     /// <summary>
     /// Constructor.
@@ -33,16 +38,19 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="entityValidator">Entity validator.</param>
+    /// <param name="logger">System logger.</param>
     /// <param name="initiativeUserRepository">Initiative User repository.</param>
     /// <param name="locationRepository">Initiative Location repository.</param>
     public InitiativeService(
         IRepository<Initiative> entityRepository,
         IMapper<Initiative, InitiativeDto> mapper,
         IValidator<InitiativeDto> entityValidator,
+        ILogger logger,
         IRepository<Location> locationRepository)
         : base(entityRepository, mapper)
     {
         this.entityValidator = entityValidator;
+        this.logger = logger;
         this.locationRepository = locationRepository;
     }
 
@@ -109,17 +117,23 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             };
         }
 
-        // TODO: add external users data validation!
+        // TODO: Add external users data validation!
 
         // Build entity data
         var entity = mapper.Map(entityData);
+        entityData = mapper.Map(entity);
+
+        logger
+            .ForContext("CustomRecord", true)
+            .ForContext("Type", (int)LogType.Create)
+            .Information("Added initiative: {@entityData}", entityData);
 
         // Save user
         entity = await entityRepository.AddAsync(entity, ct);
 
         return new CustomWebResponse()
         {
-            ResponseBody = mapper.Map(entity),
+            ResponseBody = entityData,
         };
     }
 
