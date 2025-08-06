@@ -13,7 +13,7 @@ public class InitiativeDto : IDto
     /// <summary>
     /// Item identifier
     /// </summary>
-    public int Id { get; set; }
+    public int? Id { get; set; }
 
     /// <summary>
     /// Initiative name

@@ -21,6 +21,7 @@ public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto
         RuleFor(o => o.Email)
             .NotEmpty()
                 .WithMessage("Email is required")
+            .EmailAddress()
             .MaximumLength(100);
 
         RuleFor(o => o.Phone)

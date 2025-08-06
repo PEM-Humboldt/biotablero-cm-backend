@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Logging;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
@@ -14,6 +16,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
+
+using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Initiatives controller
@@ -33,6 +37,10 @@ public class InitiativeController(IWebTools webTools,
     /// <param name="ct">Cancellation token</param>
     /// <returns>Selected entity data</returns>
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(NotFoundResponseExample))]
     public async Task<IActionResult> Get(int id, CancellationToken ct)
     {
         var response = await entityService.GetItem(id, ct);
@@ -48,6 +56,7 @@ public class InitiativeController(IWebTools webTools,
     [HttpGet]
     [ProducesResponseType(typeof(LogOdataResponseExample), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeOdataResponseExample))]
     public async Task<IActionResult> Get(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetList(queryOptions, ct);
@@ -62,6 +71,9 @@ public class InitiativeController(IWebTools webTools,
     /// <returns>Added entity data</returns>
     [HttpPut]
     [Consumes("application/json")]
+    [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeAddResponseExample))]
     public async Task<IActionResult> Put([FromBody] InitiativeDto requestData, CancellationToken ct)
     {
         var response = await entityService.Add(requestData, ct);

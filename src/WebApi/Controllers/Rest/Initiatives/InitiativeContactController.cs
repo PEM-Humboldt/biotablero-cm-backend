@@ -4,9 +4,13 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData.Query;
-using Microsoft.AspNetCore.OData.Routing.Controllers;
+
+using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Initiative contact controller
@@ -14,7 +18,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
-public class InitiativeContactController() : ODataController
+public class InitiativeContactController() : ControllerBase
 {
     /// <summary>
     /// Get entity
@@ -23,16 +27,11 @@ public class InitiativeContactController() : ODataController
     /// <param name="ct">Cancellation token</param>
     /// <returns>Selected entity data</returns>
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(InitiativeContactDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(NotFoundResponseExample))]
     public Task<IActionResult> Get(int id, CancellationToken ct) => throw new NotImplementedException();
-
-    /// <summary>
-    /// Get entities (paginated)
-    /// </summary>
-    /// <param name="queryOptions">OData query options</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Entities list from parameters</returns>
-    [HttpGet]
-    public Task<IActionResult> Get(ODataQueryOptions<object> queryOptions, CancellationToken ct) => throw new NotImplementedException();
 
     /// <summary>
     /// Add entity

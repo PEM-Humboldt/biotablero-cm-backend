@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 /// <summary>
 /// Initiative-Location controller
@@ -13,7 +12,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
-public class InitiativeLocationController() : ODataController
+public class InitiativeLocationController() : ControllerBase
 {
     /// <summary>
     /// Add entity

@@ -47,7 +47,6 @@ public class InitiativeMappings(
 
         return new()
         {
-            Id = dto.Id,
             Name = dto.Name,
             Description = dto.Description,
             LogoUrl = dto.LogoUrl,
