@@ -13,10 +13,10 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Log type controller
+/// Log type controller.
 /// </summary>
-/// <param name="webTools">General web tools</param>
-/// <param name="entityService">Entity service</param>
+/// <param name="webTools">General web tools.</param>
+/// <param name="entityService">Entity service.</param>
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
@@ -24,9 +24,9 @@ public class InitiativeUserLevelController(IWebTools webTools,
     IServiceReadEnumeration<InitiativeUserLevel> entityService) : ControllerBase
 {
     /// <summary>
-    /// Get all entities
+    /// Get all entities.
     /// </summary>
-    /// <returns>Entities list from parameters</returns>
+    /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(InitiativeUserLevelResponseExample), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Initiative Location entity configuration
+/// Initiative Location entity configuration.
 /// </summary>
 public class InitiativeLocationConfig : IEntityTypeConfiguration<InitiativeLocation>
 {
     /// <summary>
-    /// Configure entity
+    /// Configure entity.
     /// </summary>
-    /// <param name="builder">Entity builder</param>
+    /// <param name="builder">Entity builder.</param>
     public void Configure(EntityTypeBuilder<InitiativeLocation> builder)
     {
         builder.ToTable("initiative_location", "initiatives");

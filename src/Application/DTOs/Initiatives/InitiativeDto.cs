@@ -6,42 +6,42 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Initiative entity
+/// Initiative entity.
 /// </summary>
 public class InitiativeDto : IDto
 {
     /// <summary>
-    /// Item identifier
+    /// Item identifier.
     /// </summary>
     public int? Id { get; set; }
 
     /// <summary>
-    /// Initiative name
+    /// Initiative name.
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    /// Initiative description
+    /// Initiative description.
     /// </summary>
     public string Description { get; set; }
 
     /// <summary>
-    /// Initiative logo URL
+    /// Initiative logo URL.
     /// </summary>
     public Uri LogoUrl { get; set; }
 
     /// <summary>
-    /// Initiative Locations relationship
+    /// Initiative Locations relationship.
     /// </summary>
     public IEnumerable<InitiativeLocationDto> InitiativeLocations { get; init; } = [];
 
     /// <summary>
-    /// Initiative Contacts relationship
+    /// Initiative Contacts relationship.
     /// </summary>
     public IEnumerable<InitiativeContactDto> InitiativeContacts { get; init; } = [];
 
     /// <summary>
-    /// Initiative Users relationship
+    /// Initiative Users relationship.
     /// </summary>
     public IEnumerable<InitiativeUserDto> InitiativeUsers { get; init; } = [];
 }

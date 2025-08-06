@@ -7,37 +7,37 @@ using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Initiative entity
+/// Initiative entity.
 /// </summary>
 public class Initiative : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Initiative name
+    /// Initiative name.
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    /// Initiative description
+    /// Initiative description.
     /// </summary>
     public string Description { get; set; }
 
     /// <summary>
-    /// Initiative logo URL
+    /// Initiative logo URL.
     /// </summary>
     public Uri LogoUrl { get; set; }
 
     /// <summary>
-    /// Initiative Locations relationship
+    /// Initiative Locations relationship.
     /// </summary>
     public ICollection<InitiativeLocation> InitiativeLocations { get; init; } = [];
 
     /// <summary>
-    /// Initiative Contacts relationship
+    /// Initiative Contacts relationship.
     /// </summary>
     public ICollection<InitiativeContact> InitiativeContacts { get; init; } = [];
 
     /// <summary>
-    /// Initiative Users relationship
+    /// Initiative Users relationship.
     /// </summary>
     public ICollection<InitiativeUser> InitiativeUsers { get; init; } = [];
 }

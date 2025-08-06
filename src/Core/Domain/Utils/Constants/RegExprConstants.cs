@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 /// <summary>
 /// Constants for regular expressions.

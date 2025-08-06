@@ -20,14 +20,14 @@ using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
-/// Main program class
+/// Main program class.
 /// </summary>
 public class Program
 {
     /// <summary>
-    /// Main function
+    /// Main function.
     /// </summary>
-    /// <param name="args">System arguments</param>
+    /// <param name="args">System arguments.</param>
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);

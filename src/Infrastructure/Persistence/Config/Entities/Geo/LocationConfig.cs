@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Location builder configuration
+/// Location builder configuration.
 /// </summary>
 public class LocationConfig : IEntityTypeConfiguration<Location>
 {
     /// <summary>
-    /// Configure builder
+    /// Configure builder.
     /// </summary>
-    /// <param name="builder">Entity builder</param>
+    /// <param name="builder">Entity builder.</param>
     public void Configure(EntityTypeBuilder<Location> builder)
     {
         builder.ToTable("location", "geo");

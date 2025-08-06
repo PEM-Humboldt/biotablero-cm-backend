@@ -6,12 +6,12 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 /// <summary>
-/// Initiative contact validator
+/// Initiative contact validator.
 /// </summary>
 public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto>
 {
     /// <summary>
-    /// Constructor
+    /// Constructor.
     /// </summary>
     public InitiativeContactValidator()
     {

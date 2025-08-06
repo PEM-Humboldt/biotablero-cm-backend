@@ -3,27 +3,27 @@
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Initiative Contact entity
+/// Initiative Contact entity.
 /// </summary>
 public class InitiativeContactDto : IDto
 {
     /// <summary>
-    /// Item identifier
+    /// Item identifier.
     /// </summary>
     public int? Id { get; set; }
 
     /// <summary>
-    /// Initiative identifier
+    /// Initiative identifier.
     /// </summary>
     public int? InitiativeId { get; set; }
 
     /// <summary>
-    /// Phone number
+    /// Phone number.
     /// </summary>
     public string Phone { get; set; }
 
     /// <summary>
-    /// Email address
+    /// Email address.
     /// </summary>
     public string Email { get; set; }
 }

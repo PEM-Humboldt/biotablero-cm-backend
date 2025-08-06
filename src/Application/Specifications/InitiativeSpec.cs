@@ -5,14 +5,14 @@ using Ardalis.Specification;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
-/// Initiative ardalis specifications
+/// Initiative ardalis specifications.
 /// </summary>
 public class InitiativeSpec : GeneralSpecification<int, Initiative>
 {
     /// <summary>
-    /// Specification for get element by identifier
+    /// Specification for get element by identifier.
     /// </summary>
-    /// <param name="id">Element identifier</param>
+    /// <param name="id">Element identifier.</param>
     public InitiativeSpec(int id)
         : base(id)
     {
@@ -21,10 +21,10 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     }
 
     /// <summary>
-    /// Specification for get paginated elements
+    /// Specification for get paginated elements.
     /// </summary>
-    /// <param name="skip">Page number</param>
-    /// <param name="take">Page size</param>
+    /// <param name="skip">Page number.</param>
+    /// <param name="take">Page size.</param>
     public InitiativeSpec(int skip, int take)
         : base(skip, take)
     {
@@ -34,9 +34,9 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     }
 
     /// <summary>
-    /// Specification for get element by name
+    /// Specification for get element by name.
     /// </summary>
-    /// <param name="name">Element name</param>
+    /// <param name="name">Element name.</param>
     public InitiativeSpec(string name)
     {
         Query

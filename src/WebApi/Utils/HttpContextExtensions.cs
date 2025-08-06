@@ -7,15 +7,15 @@ using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using Microsoft.AspNetCore.Http;
 
 /// <summary>
-/// General HTTP context extensions
+/// General HTTP context extensions.
 /// </summary>
 public static class HttpContextExtensions
 {
     /// <summary>
-    /// Get username
+    /// Get username.
     /// </summary>
-    /// <param name="httpContext">Current HTTP Context</param>
-    /// <returns>User name</returns>
+    /// <param name="httpContext">Current HTTP Context.</param>
+    /// <returns>User name.</returns>
     public static string GetUserName(this HttpContext httpContext)
     {
         var username = httpContext?.User.FindAll(IamConstants.UserName);

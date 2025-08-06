@@ -7,15 +7,15 @@ using IAVH.BioTablero.CM.Application.Validators.Initiatives;
 using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
-/// Validators configuration
+/// Validators configuration.
 /// </summary>
 public static class ConfigValidators
 {
     /// <summary>
-    /// Add system validators
+    /// Add system validators.
     /// </summary>
-    /// <param name="services">Application services</param>
-    /// <returns>Host builder configuration</returns>
+    /// <param name="services">Application services.</param>
+    /// <returns>Host builder configuration.</returns>
     public static IServiceCollection AddValidators(this IServiceCollection services)
     {
         services.AddValidatorsFromAssemblyContaining<InitiativeValidator>();

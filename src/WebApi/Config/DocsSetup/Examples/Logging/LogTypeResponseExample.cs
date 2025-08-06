@@ -10,14 +10,14 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// Log type response example
+/// Log type response example.
 /// </summary>
-/// <param name="entityService">General enumeration service</param>
+/// <param name="entityService">General enumeration service.</param>
 public class LogTypeResponseExample(IServiceReadEnumeration<LogType> entityService) : IExamplesProvider<IEnumerable<EnumEntityDto<LogType>>>
 {
     /// <summary>
-    /// Get examples for entity
+    /// Get examples for entity.
     /// </summary>
-    /// <returns>Entity examples</returns>
+    /// <returns>Entity examples.</returns>
     public IEnumerable<EnumEntityDto<LogType>> GetExamples() => entityService.GetEnumerable();
 }

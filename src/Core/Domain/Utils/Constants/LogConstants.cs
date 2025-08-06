@@ -1,29 +1,29 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 /// <summary>
-/// Constants for Logs Management
+/// Constants for Logs Management.
 /// </summary>
 public static class LogConstants
 {
     #region General
 
     /// <summary>
-    /// Default project name
+    /// Default project name.
     /// </summary>
     public const string ProjectName = "CommunityMonitoring";
 
     /// <summary>
-    /// Default storage database name
+    /// Default storage database name.
     /// </summary>
     public const string DefaultDbName = "logs";
 
     /// <summary>
-    /// Default schema name
+    /// Default schema name.
     /// </summary>
     public const string DefaultSchemaName = "logs";
 
     /// <summary>
-    /// Default table name
+    /// Default table name.
     /// </summary>
     public const string DefaultTableName = "logs";
 
@@ -32,17 +32,17 @@ public static class LogConstants
     #region Custom attributes
 
     /// <summary>
-    /// Application Name property value
+    /// Application Name property value.
     /// </summary>
     public const string ApplicationName = "ApplicationName";
 
     /// <summary>
-    /// Custom record property value
+    /// Custom record property value.
     /// </summary>
     public const string CustomRecord = "CustomRecord";
 
     /// <summary>
-    /// Custom type property value
+    /// Custom type property value.
     /// </summary>
     public const string CustomType = "Type";
 

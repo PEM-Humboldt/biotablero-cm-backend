@@ -14,16 +14,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
 /// <summary>
-/// Core dependencies registry
+/// Core dependencies registry.
 /// </summary>
 public static class ConfigCoreDependencies
 {
     /// <summary>
-    /// Add core services
+    /// Add core services.
     /// </summary>
-    /// <param name="services">Service descriptors collection</param>
-    /// <param name="isDevelopment">Check if development environment is enabled</param>
-    /// <returns>Service descriptors collection with custom services</returns>
+    /// <param name="services">Service descriptors collection.</param>
+    /// <param name="isDevelopment">Check if development environment is enabled.</param>
+    /// <returns>Service descriptors collection with custom services.</returns>
     public static IServiceCollection AddCoreServices(this IServiceCollection services, bool isDevelopment = false)
     {
         services.AddHealthChecks();
@@ -39,11 +39,11 @@ public static class ConfigCoreDependencies
     }
 
     /// <summary>
-    /// Add authentication service
+    /// Add authentication service.
     /// </summary>
-    /// <param name="services">Service descriptors collection</param>
-    /// <param name="isDevelopment">Check if development environment is enabled</param>
-    /// <returns>Service descriptors collection with authentication service</returns>
+    /// <param name="services">Service descriptors collection.</param>
+    /// <param name="isDevelopment">Check if development environment is enabled.</param>
+    /// <returns>Service descriptors collection with authentication service.</returns>
     private static IServiceCollection AddAuthService(this IServiceCollection services, bool isDevelopment)
     {
         var url = Environment.GetEnvironmentVariable("KC_REALM_URL");

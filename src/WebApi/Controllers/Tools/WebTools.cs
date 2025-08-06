@@ -9,14 +9,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
-/// Custom web tools
+/// Custom web tools.
 /// </summary>
 public sealed class WebTools(IHttpContextAccessor httpContextAccessor) : ControllerBase, IWebTools
 {
     /// <summary>
-    /// Get base URL
+    /// Get base URL.
     /// </summary>
-    /// <returns>Current project base URL</returns>
+    /// <returns>Current project base URL.</returns>
     [ApiExplorerSettings(IgnoreApi = true)]
     public Uri GetBaseUrl()
     {
@@ -25,10 +25,10 @@ public sealed class WebTools(IHttpContextAccessor httpContextAccessor) : Control
     }
 
     /// <summary>
-    /// Generate custom http response
+    /// Generate custom http response.
     /// </summary>
-    /// <param name="response">Model with response data</param>
-    /// <returns>HTTP response with custom parameters</returns>
+    /// <param name="response">Model with response data.</param>
+    /// <returns>HTTP response with custom parameters.</returns>
     [ApiExplorerSettings(IgnoreApi = true)]
     public IActionResult CustomResponse(CustomWebResponse response)
     {

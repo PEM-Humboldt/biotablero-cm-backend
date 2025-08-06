@@ -21,10 +21,10 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
-/// Logs controller
+/// Logs controller.
 /// </summary>
-/// <param name="webTools">General web tools</param>
-/// <param name="entityService">Entity service</param>
+/// <param name="webTools">General web tools.</param>
+/// <param name="entityService">Entity service.</param>
 [Authorize(Roles = IamConstants.RoleModuleAdmin)]
 [ApiController]
 [Route("[controller]")]
@@ -33,11 +33,11 @@ public class LogsController(IWebTools webTools,
     ILogService entityService) : ODataController
 {
     /// <summary>
-    /// Get entity
+    /// Get entity.
     /// </summary>
-    /// <param name="id">Entity identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Selected entity data</returns>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(LogDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -50,11 +50,11 @@ public class LogsController(IWebTools webTools,
     }
 
     /// <summary>
-    /// Get entities (paginated)
+    /// Get entities (paginated).
     /// </summary>
-    /// <param name="queryOptions">OData query options</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Entities list from parameters</returns>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(LogOdataResponseExample), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

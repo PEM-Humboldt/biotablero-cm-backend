@@ -7,12 +7,12 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiative user validator
+/// Initiative user validator.
 /// </summary>
 public class InitiativeUserValidator : AbstractValidator<InitiativeUserDto>
 {
     /// <summary>
-    /// Constructor
+    /// Constructor.
     /// </summary>
     public InitiativeUserValidator()
     {

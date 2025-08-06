@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Initiative Contact entity configuration
+/// Initiative Contact entity configuration.
 /// </summary>
 public class InitiativeContactConfig : IEntityTypeConfiguration<InitiativeContact>
 {
     /// <summary>
-    /// Configure entity
+    /// Configure entity.
     /// </summary>
-    /// <param name="builder">Entity builder</param>
+    /// <param name="builder">Entity builder.</param>
     public void Configure(EntityTypeBuilder<InitiativeContact> builder)
     {
         builder.ToTable("initiative_contact", "initiatives");

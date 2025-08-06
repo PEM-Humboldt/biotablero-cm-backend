@@ -4,27 +4,27 @@ using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Initiative Contact entity
+/// Initiative Contact entity.
 /// </summary>
 public class InitiativeContact : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Initiative identifier
+    /// Initiative identifier.
     /// </summary>
     public int InitiativeId { get; set; }
 
     /// <summary>
-    /// Phone number
+    /// Phone number.
     /// </summary>
     public string Phone { get; set; }
 
     /// <summary>
-    /// Email address
+    /// Email address.
     /// </summary>
     public string Email { get; set; }
 
     /// <summary>
-    /// Initiative relationship
+    /// Initiative relationship.
     /// </summary>
     public Initiative Initiative { get; set; }
 }

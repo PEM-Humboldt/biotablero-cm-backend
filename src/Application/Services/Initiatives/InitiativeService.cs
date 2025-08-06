@@ -19,7 +19,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
 /// <summary>
-/// Initiative service
+/// Initiative service.
 /// </summary>
 public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, InitiativeSpec>, IInitiativeService
 {
@@ -29,13 +29,13 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     private readonly IRepository<Location> locationRepository;
 
     /// <summary>
-    /// Constructor
+    /// Constructor.
     /// </summary>
-    /// <param name="entityRepository">Entity repository</param>
-    /// <param name="mapper">Entity mapper</param>
-    /// <param name="entityValidator">Entity validator</param>
-    /// <param name="initiativeUserRepository">Initiative User repository</param>
-    /// <param name="locationRepository">Initiative Location repository</param>
+    /// <param name="entityRepository">Entity repository.</param>
+    /// <param name="mapper">Entity mapper.</param>
+    /// <param name="entityValidator">Entity validator.</param>
+    /// <param name="initiativeUserRepository">Initiative User repository.</param>
+    /// <param name="locationRepository">Initiative Location repository.</param>
     public InitiativeService(
         IRepository<Initiative> entityRepository,
         IMapper<Initiative, InitiativeDto> mapper,
@@ -50,11 +50,11 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     }
 
     /// <summary>
-    /// Add element
+    /// Add element.
     /// </summary>
-    /// <param name="entityData">Entity data</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> Add(InitiativeDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -127,20 +127,20 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     }
 
     /// <summary>
-    /// Disable or enable element
+    /// Disable or enable element.
     /// </summary>
-    /// <param name="id">Element identifier</param>
-    /// <param name="disable">Disable flag</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="disable">Disable flag.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public Task<CustomWebResponse> Disable(int id, bool disable, CancellationToken ct = default) => throw new System.NotImplementedException();
 
     /// <summary>
-    /// Update element
+    /// Update element.
     /// </summary>
-    /// <param name="id">Element identifier</param>
-    /// <param name="entityData">Entity data</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public Task<CustomWebResponse> Update(int id, InitiativeDto entityData, CancellationToken ct = default) => throw new System.NotImplementedException();
 }

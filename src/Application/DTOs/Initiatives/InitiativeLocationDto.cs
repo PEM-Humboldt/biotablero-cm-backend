@@ -4,22 +4,22 @@ using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Initiative Location entity
+/// Initiative Location entity.
 /// </summary>
 public class InitiativeLocationDto : IDto
 {
     /// <summary>
-    /// Item identifier
+    /// Item identifier.
     /// </summary>
     public int? Id { get; set; }
 
     /// <summary>
-    /// Locality
+    /// Locality.
     /// </summary>
     public string Locality { get; set; }
 
     /// <summary>
-    /// Location relationship
+    /// Location relationship.
     /// </summary>
     public LocationDto Location { get; set; }
 }

@@ -5,7 +5,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
-/// Initiative service interface
+/// Initiative service interface.
 /// </summary>
 public interface IInitiativeService : IServiceRead<Initiative, InitiativeDto, int>, IServiceAdd<InitiativeDto>, IServiceUpdate<InitiativeDto, int>, IServiceDisable<int>
 {

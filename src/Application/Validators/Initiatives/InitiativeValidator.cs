@@ -5,12 +5,12 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
 /// <summary>
-/// Initiative validator
+/// Initiative validator.
 /// </summary>
 public class InitiativeValidator : AbstractValidator<InitiativeDto>
 {
     /// <summary>
-    /// Constructor
+    /// Constructor.
     /// </summary>
     public InitiativeValidator()
     {

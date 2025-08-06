@@ -17,14 +17,14 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.OData;
 
 /// <summary>
-/// General service for only read functions
+/// General service for only read functions.
 /// </summary>
-/// <typeparam name="TE">Entity type</typeparam>
-/// <typeparam name="TDto">DTO class type</typeparam>
-/// <typeparam name="TI">Entity identifier type</typeparam>
-/// <typeparam name="TS">General Specification type</typeparam>
+/// <typeparam name="TE">Entity type.</typeparam>
+/// <typeparam name="TDto">DTO class type.</typeparam>
+/// <typeparam name="TI">Entity identifier type.</typeparam>
+/// <typeparam name="TS">General Specification type.</typeparam>
 /// <remarks>
-/// Initialize service
+/// Initialize service.
 /// </remarks>
 public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityRepository, IMapper<TE, TDto> mapper) : IServiceRead<TE, TDto, TI>
     where TDto : class, IDto
@@ -33,21 +33,21 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     where TS : GeneralSpecification<TI, TE>
 {
     /// <summary>
-    /// Entity repository
+    /// Entity repository.
     /// </summary>
     private protected readonly IRepository<TE> entityRepository = entityRepository;
 
     /// <summary>
-    /// Entity mapper
+    /// Entity mapper.
     /// </summary>
     private protected readonly IMapper<TE, TDto> mapper = mapper;
 
     /// <summary>
-    /// Check if element exists
+    /// Check if element exists.
     /// </summary>
-    /// <param name="id">Element identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public virtual async Task<bool> Exists(TI id, CancellationToken ct = default)
     {
         var specification = (TS)Activator.CreateInstance(typeof(TS), [id]);
@@ -55,11 +55,11 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     }
 
     /// <summary>
-    /// Get element
+    /// Get element.
     /// </summary>
-    /// <param name="id">Element identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public virtual async Task<CustomWebResponse> GetItem(TI id, CancellationToken ct = default)
     {
         var specification = (TS)Activator.CreateInstance(typeof(TS), [id]);
@@ -84,10 +84,10 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     }
 
     /// <summary>
-    /// Get all elements
+    /// Get all elements.
     /// </summary>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public virtual async Task<CustomWebResponse> GetAll(CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.ListAsync(ct);
@@ -101,12 +101,12 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     }
 
     /// <summary>
-    /// Get elements list (paginated)
+    /// Get elements list (paginated).
     /// </summary>
-    /// <param name="skip">Page</param>
-    /// <param name="take">Page size</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="skip">Page.</param>
+    /// <param name="take">Page size.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public virtual async Task<CustomWebResponse> GetList(int skip, int take, CancellationToken ct = default)
     {
         var specification = (TS)Activator.CreateInstance(typeof(TS), [skip, take]);
@@ -121,11 +121,11 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     }
 
     /// <summary>
-    /// Get elements list (OData)
+    /// Get elements list (OData).
     /// </summary>
-    /// <param name="queryOptions">OData query options</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public virtual async Task<CustomWebResponse> GetList(ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
         const int maxPageSize = 20;

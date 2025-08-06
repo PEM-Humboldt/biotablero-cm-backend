@@ -6,15 +6,15 @@ using Serilog.Core;
 using Serilog.Events;
 
 /// <summary>
-/// Serilog custom unique identifier enricher
+/// Serilog custom unique identifier enricher.
 /// </summary>
 public class IdEnricher : ILogEventEnricher
 {
     /// <summary>
-    /// Enrich logs with custom identifier
+    /// Enrich logs with custom identifier.
     /// </summary>
-    /// <param name="logEvent">Serilog log event</param>
-    /// <param name="propertyFactory">Serilog property factory</param>
+    /// <param name="logEvent">Serilog log event.</param>
+    /// <param name="propertyFactory">Serilog property factory.</param>
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
         var id = Guid.NewGuid();

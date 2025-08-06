@@ -16,10 +16,10 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
-/// Location controller
+/// Location controller.
 /// </summary>
-/// <param name="webTools">General web tools</param>
-/// <param name="entityService">Entity service</param>
+/// <param name="webTools">General web tools.</param>
+/// <param name="entityService">Entity service.</param>
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
@@ -27,11 +27,11 @@ public class LocationController(IWebTools webTools,
     ILocationService entityService) : ControllerBase
 {
     /// <summary>
-    /// Get entity
+    /// Get entity.
     /// </summary>
-    /// <param name="id">Entity identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Selected entity data</returns>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(LocationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -44,11 +44,11 @@ public class LocationController(IWebTools webTools,
     }
 
     /// <summary>
-    /// Get entities by parent
+    /// Get entities by parent.
     /// </summary>
-    /// <param name="parentId">Parent identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Entities list from parameters</returns>
+    /// <param name="parentId">Parent identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<LocationDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

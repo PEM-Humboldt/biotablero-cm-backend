@@ -8,14 +8,14 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiative Add response example
+/// Initiative Add response example.
 /// </summary>
 public class InitiativeAddResponseExample : IExamplesProvider<InitiativeDto>
 {
     /// <summary>
-    /// Get examples for entity
+    /// Get examples for entity.
     /// </summary>
-    /// <returns>Entity examples</returns>
+    /// <returns>Entity examples.</returns>
     public InitiativeDto GetExamples() => new()
     {
         Name = "Initiative example",

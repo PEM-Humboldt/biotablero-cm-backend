@@ -14,14 +14,14 @@ using Microsoft.EntityFrameworkCore;
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
 /// <summary>
-/// General database context
+/// General database context.
 /// </summary>
 public sealed class GeneralContext : DbContext
 {
     /// <summary>
-    /// General constructor
-    /// /// </summary>
-    /// <param name="options">Database context options</param>
+    /// General constructor.
+    /// </summary>
+    /// <param name="options">Database context options.</param>
     public GeneralContext(DbContextOptions<GeneralContext> options)
         : base(options)
     {
@@ -32,7 +32,7 @@ public sealed class GeneralContext : DbContext
     #region Logs module
 
     /// <summary>
-    /// System logs DbSet
+    /// System logs DbSet.
     /// </summary>
     public DbSet<LogEntity> Logs { get; set; }
 
@@ -41,7 +41,7 @@ public sealed class GeneralContext : DbContext
     #region Geographic module
 
     /// <summary>
-    /// System logs DbSet
+    /// System logs DbSet.
     /// </summary>
     public DbSet<Location> Locations { get; set; }
 
@@ -50,36 +50,36 @@ public sealed class GeneralContext : DbContext
     #region Initiatives module
 
     /// <summary>
-    /// Initiatives DbSet
+    /// Initiatives DbSet.
     /// </summary>
     public DbSet<Initiative> Initiatives { get; set; }
 
     /// <summary>
-    /// Initiative contacts DbSet
+    /// Initiative contacts DbSet.
     /// </summary>
     public DbSet<InitiativeContact> InitiativeContacts { get; set; }
 
     /// <summary>
-    /// Initiative locations DbSet
+    /// Initiative locations DbSet.
     /// </summary>
     public DbSet<InitiativeLocation> InitiativeLocations { get; set; }
 
     /// <summary>
-    /// Initiative users DbSet
+    /// Initiative users DbSet.
     /// </summary>
     public DbSet<InitiativeUser> InitiativeUsers { get; set; }
 
     /// <summary>
-    /// Initiative user levels DbSet
+    /// Initiative user levels DbSet.
     /// </summary>
     public DbSet<InitiativeUserLevel> InitiativeUserLevels { get; set; }
 
     #endregion
 
     /// <summary>
-    /// Configure conventions for custom DbContext
+    /// Configure conventions for custom DbContext.
     /// </summary>
-    /// <param name="modelBuilder">Database model builder</param>
+    /// <param name="modelBuilder">Database model builder.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -94,9 +94,9 @@ public sealed class GeneralContext : DbContext
     #region Initiatives user level data
 
     /// <summary>
-    /// Get default initative user levels
+    /// Get default initative user levels.
     /// </summary>
-    /// <returns>Default initative user levels list</returns>
+    /// <returns>Default initative user levels list.</returns>
     private static IEnumerable<InitiativeUserLevel> GetDefaultInitiativeUserLevels()
     {
         var enumData = Enum.GetValues(typeof(InitiativeUserLevelEnum))

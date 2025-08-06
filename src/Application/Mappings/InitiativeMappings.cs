@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
-/// Initiative mappings
+/// Initiative mappings.
 /// </summary>
 public class InitiativeMappings(
     IMapper<InitiativeContact, InitiativeContactDto> initiativeContactMappings,
@@ -16,10 +16,10 @@ public class InitiativeMappings(
     IMapper<InitiativeUser, InitiativeUserDto> initiativeUserMappings) : IMapper<Initiative, InitiativeDto>
 {
     /// <summary>
-    /// Map from entity to DTO
+    /// Map from entity to DTO.
     /// </summary>
-    /// <param name="entity">Entity data</param>
-    /// <returns>DTO data</returns>
+    /// <param name="entity">Entity data.</param>
+    /// <returns>DTO data.</returns>
     public InitiativeDto Map(Initiative entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -37,10 +37,10 @@ public class InitiativeMappings(
     }
 
     /// <summary>
-    /// Map from DTO to entity
+    /// Map from DTO to entity.
     /// </summary>
-    /// <param name="dto">DTO data</param>
-    /// <returns>Entity data</returns>
+    /// <param name="dto">DTO data.</param>
+    /// <returns>Entity data.</returns>
     public Initiative Map(InitiativeDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);

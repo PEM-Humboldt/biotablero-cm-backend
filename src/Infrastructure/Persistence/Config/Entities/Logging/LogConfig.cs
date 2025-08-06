@@ -8,14 +8,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// Log entity configuration
+/// Log entity configuration.
 /// </summary>
 public class LogConfig : IEntityTypeConfiguration<LogEntity>
 {
     /// <summary>
-    /// Configure entity
+    /// Configure entity.
     /// </summary>
-    /// <param name="builder">Entity builder</param>
+    /// <param name="builder">Entity builder.</param>
     public void Configure(EntityTypeBuilder<LogEntity> builder)
     {
         builder.ToTable("logs", "logs");

@@ -10,14 +10,14 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Log type response example
+/// Log type response example.
 /// </summary>
-/// <param name="entityService">General enumeration service</param>
+/// <param name="entityService">General enumeration service.</param>
 public class InitiativeUserLevelResponseExample(IServiceReadEnumeration<InitiativeUserLevel> entityService) : IExamplesProvider<IEnumerable<EnumEntityDto<InitiativeUserLevel>>>
 {
     /// <summary>
-    /// Get examples for entity
+    /// Get examples for entity.
     /// </summary>
-    /// <returns>Entity examples</returns>
+    /// <returns>Entity examples.</returns>
     public IEnumerable<EnumEntityDto<InitiativeUserLevel>> GetExamples() => entityService.GetEnumerable();
 }

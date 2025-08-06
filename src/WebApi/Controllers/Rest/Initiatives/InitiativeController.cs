@@ -20,10 +20,10 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
-/// Initiatives controller
+/// Initiatives controller.
 /// </summary>
-/// <param name="webTools">General web tools</param>
-/// <param name="entityService">Entity service</param>
+/// <param name="webTools">General web tools.</param>
+/// <param name="entityService">Entity service.</param>
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
@@ -31,11 +31,11 @@ public class InitiativeController(IWebTools webTools,
     IInitiativeService entityService) : ODataController
 {
     /// <summary>
-    /// Get entity
+    /// Get entity.
     /// </summary>
-    /// <param name="id">Entity identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Selected entity data</returns>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -48,11 +48,11 @@ public class InitiativeController(IWebTools webTools,
     }
 
     /// <summary>
-    /// Get entities (paginated)
+    /// Get entities (paginated).
     /// </summary>
-    /// <param name="queryOptions">OData query options</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Entities list from parameters</returns>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(LogOdataResponseExample), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -64,11 +64,11 @@ public class InitiativeController(IWebTools webTools,
     }
 
     /// <summary>
-    /// Add entity
+    /// Add entity.
     /// </summary>
-    /// <param name="requestData">Request data</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Added entity data</returns>
+    /// <param name="requestData">Request data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Added entity data.</returns>
     [HttpPut]
     [Consumes("application/json")]
     [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
@@ -81,22 +81,22 @@ public class InitiativeController(IWebTools webTools,
     }
 
     /// <summary>
-    /// Edit entity
+    /// Edit entity.
     /// </summary>
-    /// <param name="id">Entity identifier</param>
-    /// <param name="entityData">Entity data</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Updated entity data</returns>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated entity data.</returns>
     [HttpPost("{id}")]
     [Consumes("application/json")]
     public Task<IActionResult> Post(int id, [FromBody] InitiativeDto entityData, CancellationToken ct) => throw new NotImplementedException();
 
     /// <summary>
-    /// Disable entity
+    /// Disable entity.
     /// </summary>
-    /// <param name="id">Entity identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
     public Task<IActionResult> Disable(int id, CancellationToken ct) => throw new NotImplementedException();
 }

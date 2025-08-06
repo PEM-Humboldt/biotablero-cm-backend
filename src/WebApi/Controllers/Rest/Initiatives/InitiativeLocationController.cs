@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
-/// Initiative-Location controller
+/// Initiative-Location controller.
 /// </summary>
 [ApiController]
 [Route("[controller]")]
@@ -15,21 +15,21 @@ using Microsoft.AspNetCore.Mvc;
 public class InitiativeLocationController() : ControllerBase
 {
     /// <summary>
-    /// Add entity
+    /// Add entity.
     /// </summary>
-    /// <param name="requestData">Request data</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Added entity data</returns>
+    /// <param name="requestData">Request data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Added entity data.</returns>
     [HttpPut]
     [Consumes("application/json")]
     public Task<IActionResult> Put([FromBody] object requestData, CancellationToken ct) => throw new NotImplementedException();
 
     /// <summary>
-    /// Delete entity
+    /// Delete entity.
     /// </summary>
-    /// <param name="id">Entity identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
     public Task<IActionResult> Delete(int id, CancellationToken ct) => throw new NotImplementedException();
 }

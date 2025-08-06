@@ -8,7 +8,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 /// <summary>
-/// Custom Swagger docs for auth server
+/// Custom Swagger docs for auth server.
 /// </summary>
 public class AuthEndpointsDocumentFilter : IDocumentFilter
 {
@@ -28,10 +28,10 @@ public class AuthEndpointsDocumentFilter : IDocumentFilter
     private static readonly string ClientId = Environment.GetEnvironmentVariable("KC_CLIENT");
 
     /// <summary>
-    /// Apply custom documentation rules
+    /// Apply custom documentation rules.
     /// </summary>
-    /// <param name="swaggerDoc">OpenAPi document data</param>
-    /// <param name="context">Document filter context</param>
+    /// <param name="swaggerDoc">OpenAPi document data.</param>
+    /// <param name="context">Document filter context.</param>
     public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
     {
         swaggerDoc.Paths.Add("/protocol/openid-connect/token?password", new OpenApiPathItem

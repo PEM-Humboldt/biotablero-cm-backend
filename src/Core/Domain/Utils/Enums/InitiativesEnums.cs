@@ -1,27 +1,27 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Utils.Enums;
 
 /// <summary>
-/// Initiatives enumerations
+/// Initiatives enumerations.
 /// </summary>
 public static class InitiativesEnums
 {
     /// <summary>
-    /// Initiative user level
+    /// Initiative user level.
     /// </summary>
     public enum InitiativeUserLevel
     {
         /// <summary>
-        /// User leader level
+        /// User leader level.
         /// </summary>
         Leader = 1,
 
         /// <summary>
-        /// User member level
+        /// User member level.
         /// </summary>
         Member,
 
         /// <summary>
-        /// User reader level
+        /// User reader level.
         /// </summary>
         Reader,
     }

@@ -5,32 +5,32 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Initiative Location entity
+/// Initiative Location entity.
 /// </summary>
 public class InitiativeLocation : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Initiative identifier
+    /// Initiative identifier.
     /// </summary>
     public int InitiativeId { get; set; }
 
     /// <summary>
-    /// Location identifier
+    /// Location identifier.
     /// </summary>
     public int LocationId { get; set; }
 
     /// <summary>
-    /// Locality
+    /// Locality.
     /// </summary>
     public string Locality { get; set; }
 
     /// <summary>
-    /// Initiative relationship
+    /// Initiative relationship.
     /// </summary>
     public Initiative Initiative { get; set; }
 
     /// <summary>
-    /// Location relationship
+    /// Location relationship.
     /// </summary>
     public Location Location { get; set; }
 }

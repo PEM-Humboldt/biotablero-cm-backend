@@ -14,15 +14,15 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 /// <summary>
-/// Location service
+/// Location service.
 /// </summary>
 public class LocationService : ServiceRead<Location, LocationDto, int, LocationSpec>, ILocationService
 {
     /// <summary>
-    /// Constructor
+    /// Constructor.
     /// </summary>
-    /// <param name="entityRepository">Entity repository</param>
-    /// <param name="mapper">Entity mapper</param>
+    /// <param name="entityRepository">Entity repository.</param>
+    /// <param name="mapper">Entity mapper.</param>
     public LocationService(
         IRepository<Location> entityRepository,
         IMapper<Location, LocationDto> mapper)
@@ -31,11 +31,11 @@ public class LocationService : ServiceRead<Location, LocationDto, int, LocationS
     }
 
     /// <summary>
-    /// Get locations by parent
+    /// Get locations by parent.
     /// </summary>
-    /// <param name="parentId">Parent identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="parentId">Parent identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> GetByParent(int? parentId, CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.ListAsync(LocationSpec.ParentIdSpec(parentId), ct);

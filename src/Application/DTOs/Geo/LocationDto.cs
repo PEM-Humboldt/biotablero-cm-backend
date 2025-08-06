@@ -3,27 +3,27 @@
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Location DTO
+/// Location DTO.
 /// </summary>
 public class LocationDto : IDto
 {
     /// <summary>
-    /// Item identifier
+    /// Item identifier.
     /// </summary>
     public int? Id { get; set; }
 
     /// <summary>
-    /// Location name
+    /// Location name.
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    /// Location code
+    /// Location code.
     /// </summary>
     public string Code { get; set; }
 
     /// <summary>
-    /// Parent location identifier
+    /// Parent location identifier.
     /// </summary>
     public int? ParentId { get; set; }
 }
