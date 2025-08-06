@@ -30,7 +30,7 @@ public class InitiativeAddResponseExample : IExamplesProvider<InitiativeDto>
         InitiativeContacts = [
             new()
             {
-                Phone = "30555555",
+                Phone = "3055555555",
                 Email = "example@example.com",
             }
         ],

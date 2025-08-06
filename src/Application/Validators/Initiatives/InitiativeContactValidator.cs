@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 /// <summary>
 /// Initiative contact validator
@@ -25,6 +26,7 @@ public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto
             .MaximumLength(100);
 
         RuleFor(o => o.Phone)
+            .Matches(RegExprConstants.Phone)
             .MaximumLength(15);
     }
 }
