@@ -75,7 +75,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             };
         }
 
-        // Validate existent initiatives
+        // Validate duplicated initiatives
         var hasDuplicatedInitiatives = await entityRepository.AnyAsync(new InitiativeSpec(entityData.Name), ct);
 
         if (hasDuplicatedInitiatives)
@@ -121,6 +121,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         // Build entity data
         var entity = mapper.Map(entityData);
+
+        // Save data
+        entity = await entityRepository.AddAsync(entity, ct);
+
         entityData = mapper.Map(entity);
 
         logger
@@ -128,8 +132,68 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             .ForContext("Type", (int)LogType.Create)
             .Information("Added initiative: {@entityData}", entityData);
 
-        // Save user
-        entity = await entityRepository.AddAsync(entity, ct);
+        return new CustomWebResponse()
+        {
+            ResponseBody = entityData,
+        };
+    }
+
+    /// <summary>
+    /// Update element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> Update(int id, InitiativeDto entityData, CancellationToken ct = default)
+    {
+        // Validate data
+        var validationResult = await entityValidator.ValidateAsync(entityData, ct);
+
+        if (!validationResult.IsValid)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Validation errors",
+                ResponseBody = validationResult.Errors
+                    .Select(error => error.ErrorMessage),
+            };
+        }
+
+        // Validate duplicated initiatives
+        var hasDuplicatedInitiatives = await entityRepository.AnyAsync(InitiativeSpec.GetDuplicatesSpec(id, entityData.Name), ct);
+
+        if (hasDuplicatedInitiatives)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "There is already an initiative with the same name",
+            };
+        }
+
+        // Validate initiative
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Not found",
+            };
+        }
+
+        // Update entity data
+        entity.Name = entityData.Name;
+        entity.Description = entityData.Description;
+
+        await entityRepository.UpdateAsync(entity, ct);
+
+        entityData = mapper.Map(entity);
+
+        logger
+            .ForContext("CustomRecord", true)
+            .ForContext("Type", (int)LogType.Update)
+            .Information("Updated initiative: {@entityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -145,13 +209,4 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     public Task<CustomWebResponse> Disable(int id, bool disable, CancellationToken ct = default) => throw new System.NotImplementedException();
-
-    /// <summary>
-    /// Update element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    public Task<CustomWebResponse> Update(int id, InitiativeDto entityData, CancellationToken ct = default) => throw new System.NotImplementedException();
 }

@@ -44,7 +44,7 @@ public class LocationSpec : GeneralSpecification<int, Location>
     /// Specification for get elements by parent.
     /// </summary>
     /// <param name="parentId">Parent identifier.</param>
-    /// <returns>Custom location specification.</returns>
+    /// <returns>Custom specification.</returns>
     public static LocationSpec ParentIdSpec(int? parentId)
     {
         var spec = new LocationSpec();

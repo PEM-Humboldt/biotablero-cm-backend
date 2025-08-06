@@ -87,13 +87,20 @@ public class InitiativeController(IWebTools webTools,
     /// Edit entity.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
-    /// <param name="entityData">Entity data.</param>
+    /// <param name="requestData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
     [HttpPost("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    public Task<IActionResult> Post(int id, [FromBody] InitiativeDto entityData, CancellationToken ct) => throw new NotImplementedException();
+    [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeEditRequestExample))]
+    public async Task<IActionResult> Post(int id, [FromBody] InitiativeDto requestData, CancellationToken ct)
+    {
+        var response = await entityService.Update(id, requestData, ct);
+        return webTools.CustomResponse(response);
+    }
 
     /// <summary>
     /// Disable entity.

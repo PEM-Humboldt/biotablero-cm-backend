@@ -10,6 +10,13 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 public class InitiativeSpec : GeneralSpecification<int, Initiative>
 {
     /// <summary>
+    /// Constructor.
+    /// </summary>
+    public InitiativeSpec()
+    {
+    }
+
+    /// <summary>
     /// Specification for get element by identifier.
     /// </summary>
     /// <param name="id">Element identifier.</param>
@@ -41,5 +48,20 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     {
         Query
             .Where(e => e.Name == name);
+    }
+
+    /// <summary>
+    /// Specification for get duplicated initiatives.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="name">Entity name.</param>
+    /// <returns>Custom specification.</returns>
+    public static InitiativeSpec GetDuplicatesSpec(int id, string name)
+    {
+        var spec = new InitiativeSpec();
+        spec.Query
+            .Where(e => e.Id != id && e.Name == name);
+
+        return spec;
     }
 }
