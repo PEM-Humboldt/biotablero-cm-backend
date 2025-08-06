@@ -104,14 +104,14 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         // TODO: add external users data validation!
 
         // Build entity data
-        var initiative = mapper.Map(entityData);
+        var entity = mapper.Map(entityData);
 
         // Save user
-        initiative = await entityRepository.AddAsync(initiative, ct);
+        entity = await entityRepository.AddAsync(entity, ct);
 
         return new CustomWebResponse()
         {
-            ResponseBody = mapper.Map(initiative),
+            ResponseBody = mapper.Map(entity),
         };
     }
 

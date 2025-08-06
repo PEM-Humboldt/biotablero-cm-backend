@@ -45,6 +45,7 @@ public class InitiativeLocationMappings : IMapper<InitiativeLocation, Initiative
 
         return new()
         {
+            LocationId = dto.Location?.Id ?? 0,
             Locality = dto.Locality,
         };
     }
