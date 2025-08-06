@@ -21,6 +21,7 @@ public static class ConfigValidators
         services.AddValidatorsFromAssemblyContaining<InitiativeValidator>();
         services.AddValidatorsFromAssemblyContaining<InitiativeContactValidator>();
         services.AddValidatorsFromAssemblyContaining<InitiativeUserValidator>();
+        services.AddValidatorsFromAssemblyContaining<InitiativeLocationValidator>();
 
         return services;
     }

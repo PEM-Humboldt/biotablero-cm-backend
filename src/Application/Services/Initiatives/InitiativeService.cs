@@ -111,7 +111,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         return new CustomWebResponse()
         {
-            ResponseBody = initiative,
+            ResponseBody = mapper.Map(initiative),
         };
     }
 

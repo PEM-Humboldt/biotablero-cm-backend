@@ -40,7 +40,6 @@ public class LocationMappings : IMapper<Location, LocationDto>
 
         return new()
         {
-            Id = dto.Id,
             Name = dto.Name,
             Code = dto.Code,
             ParentId = dto.ParentId,

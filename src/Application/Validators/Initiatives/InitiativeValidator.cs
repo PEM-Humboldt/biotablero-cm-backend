@@ -32,6 +32,9 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
             .NotEmpty()
                 .WithMessage("At least one location is required");
 
+        RuleForEach(x => x.InitiativeLocations)
+            .SetValidator(new InitiativeLocationValidator());
+
         RuleFor(dto => dto.InitiativeContacts)
             .NotEmpty()
                 .WithMessage("At least one contact is required");
