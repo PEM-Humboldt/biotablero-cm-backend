@@ -12,6 +12,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
@@ -25,7 +26,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     private const int MaxLeadersByInitiative = 3;
     private readonly IValidator<InitiativeDto> entityValidator;
     private readonly IRepository<InitiativeUser> initiativeUserRepository;
-    private readonly IRepository<InitiativeLocation> initiativeLocationRepository;
+    private readonly IRepository<Location> locationRepository;
 
     /// <summary>
     /// Constructor
@@ -34,18 +35,18 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="mapper">Entity mapper</param>
     /// <param name="entityValidator">Entity validator</param>
     /// <param name="initiativeUserRepository">Initiative User repository</param>
-    /// <param name="initiativeLocationRepository">Initiative Location repository</param>
+    /// <param name="locationRepository">Initiative Location repository</param>
     public InitiativeService(
         IRepository<Initiative> entityRepository,
         IMapper<Initiative, InitiativeDto> mapper,
         IValidator<InitiativeDto> entityValidator,
         IRepository<InitiativeUser> initiativeUserRepository,
-        IRepository<InitiativeLocation> initiativeLocationRepository)
+        IRepository<Location> locationRepository)
         : base(entityRepository, mapper)
     {
         this.entityValidator = entityValidator;
         this.initiativeUserRepository = initiativeUserRepository;
-        this.initiativeLocationRepository = initiativeLocationRepository;
+        this.locationRepository = locationRepository;
     }
 
     /// <summary>
@@ -82,32 +83,15 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             };
         }
 
-        var usersIds = entityData.InitiativeUsers
-            .Select(u => u.UserId);
-
-        var initiativeUserQuery = initiativeUserRepository
-            .GetQueryable()
-            .Where(iu => usersIds.Contains(iu.Id));
-
-        var usersDb = await initiativeUserRepository.QueryToListAsync(initiativeUserQuery, ct);
-
-        if (usersIds.Count() != usersDb.Count)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = $"Invalid initiative users data",
-            };
-        }
-
         // Validate locations data
         var locationsIds = entityData.InitiativeLocations
             .Select(l => l.Location.Id);
 
-        var initiativeLocationQuery = initiativeLocationRepository
+        var initiativeLocationQuery = locationRepository
             .GetQueryable()
-            .Where(il => usersIds.Contains(il.Id));
+            .Where(l => locationsIds.Contains(l.Id));
 
-        var locationsDb = await initiativeLocationRepository.QueryToListAsync(initiativeLocationQuery, ct);
+        var locationsDb = await locationRepository.QueryToListAsync(initiativeLocationQuery, ct);
 
         if (locationsIds.Count() != locationsDb.Count)
         {
@@ -116,6 +100,8 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
                 Message = $"Invalid initiative locations data",
             };
         }
+
+        // TODO: add external users data validation!
 
         // Build entity data
         var initiative = mapper.Map(entityData);
