@@ -4,6 +4,8 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
+
 /// <summary>
 /// Initiative user validator
 /// </summary>
@@ -23,9 +25,9 @@ public class InitiativeUserValidator : AbstractValidator<InitiativeUserDto>
                 .WithMessage("Level cannot be null")
             .ChildRules(level =>
             {
-                level.RuleFor(levelEnumDto => levelEnumDto.Id)
-                    .IsInEnum()
-                        .WithMessage("Level id invalid");
+                level.RuleFor(levelEnumDto => levelEnumDto.Name)
+                    .IsEnumName(typeof(InitiativeUserLevel), caseSensitive: false)
+                        .WithMessage("Level invalid");
             });
     }
 }

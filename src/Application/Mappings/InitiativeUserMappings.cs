@@ -43,8 +43,6 @@ public class InitiativeUserMappings : IMapper<InitiativeUser, InitiativeUserDto>
 
         return new()
         {
-            Id = dto.Id,
-            InitiativeId = dto.InitiativeId,
             UserName = dto.UserName,
             LevelId = dto.Level.Id,
         };

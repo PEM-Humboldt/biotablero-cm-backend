@@ -36,6 +36,7 @@ public class InitiativeAddResponseExample : IExamplesProvider<InitiativeDto>
         InitiativeUsers = [
             new()
             {
+                UserName = "Admin",
                 Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Leader),
             }
         ],
