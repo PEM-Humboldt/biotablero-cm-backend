@@ -50,6 +50,9 @@ public class Program
             {
                 // Serialize enums as strings in API responses
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
+                // Ignore null values
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             })
             .AddOData(options =>
             {
