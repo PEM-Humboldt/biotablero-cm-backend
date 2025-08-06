@@ -25,7 +25,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 {
     private const int MaxLeadersByInitiative = 3;
     private readonly IValidator<InitiativeDto> entityValidator;
-    private readonly IRepository<InitiativeUser> initiativeUserRepository;
     private readonly IRepository<Location> locationRepository;
 
     /// <summary>
@@ -40,12 +39,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         IRepository<Initiative> entityRepository,
         IMapper<Initiative, InitiativeDto> mapper,
         IValidator<InitiativeDto> entityValidator,
-        IRepository<InitiativeUser> initiativeUserRepository,
         IRepository<Location> locationRepository)
         : base(entityRepository, mapper)
     {
         this.entityValidator = entityValidator;
-        this.initiativeUserRepository = initiativeUserRepository;
         this.locationRepository = locationRepository;
     }
 
