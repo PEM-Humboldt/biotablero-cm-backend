@@ -41,7 +41,7 @@ public class InitiativeLocationConfig : IEntityTypeConfiguration<InitiativeLocat
 
         builder.HasOne(e => e.Location)
             .WithMany(p => p.InitiativeLocations)
-            .HasForeignKey(e => e.InitiativeId);
+            .HasForeignKey(e => e.LocationId);
 
         builder
             .HasIndex(e => new { e.InitiativeId, e.LocationId })

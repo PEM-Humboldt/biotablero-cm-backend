@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20250806164313_InitiativeEntities")]
+    [Migration("20250806182626_InitiativeEntities")]
     partial class InitiativeEntities
     {
         /// <inheritdoc />
@@ -142,6 +142,8 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnName("location_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
 
                     b.HasIndex("InitiativeId", "LocationId")
                         .IsUnique();
@@ -302,15 +304,15 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.InitiativeLocation", b =>
                 {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location", "Location")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", "Initiative")
                         .WithMany("InitiativeLocations")
                         .HasForeignKey("InitiativeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", "Initiative")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location", "Location")
                         .WithMany("InitiativeLocations")
-                        .HasForeignKey("InitiativeId")
+                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

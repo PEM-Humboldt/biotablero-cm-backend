@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Application.Validators.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Application.Validators.Initiatives;
 
 using FluentValidation;
 

@@ -147,8 +147,8 @@ public partial class InitiativeEntities : Migration
                     principalColumn: "id",
                     onDelete: ReferentialAction.Cascade);
                 table.ForeignKey(
-                    name: "FK_initiative_location_location_initiative_id",
-                    column: x => x.initiative_id,
+                    name: "FK_initiative_location_location_location_id",
+                    column: x => x.location_id,
                     principalSchema: "geo",
                     principalTable: "location",
                     principalColumn: "id",
@@ -178,6 +178,12 @@ public partial class InitiativeEntities : Migration
             table: "initiative_location",
             columns: new[] { "initiative_id", "location_id" },
             unique: true);
+
+        migrationBuilder.CreateIndex(
+            name: "IX_initiative_location_location_id",
+            schema: "initiatives",
+            table: "initiative_location",
+            column: "location_id");
 
         migrationBuilder.CreateIndex(
             name: "IX_initiative_user_initiative_id",
