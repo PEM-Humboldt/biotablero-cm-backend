@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
+namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
@@ -8,9 +8,9 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiative Add response example.
+/// Initiative add request example.
 /// </summary>
-public class InitiativeAddResponseExample : IExamplesProvider<InitiativeDto>
+public class InitiativeAddRequestExample : IExamplesProvider<InitiativeDto>
 {
     /// <summary>
     /// Get examples for entity.

@@ -76,7 +76,7 @@ public class InitiativeController(IWebTools webTools,
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeAddResponseExample))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeAddRequestExample))]
     public async Task<IActionResult> Put([FromBody] InitiativeDto requestData, CancellationToken ct)
     {
         var response = await entityService.Add(requestData, ct);
