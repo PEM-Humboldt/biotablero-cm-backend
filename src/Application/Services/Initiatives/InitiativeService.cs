@@ -70,6 +70,17 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             };
         }
 
+        // Validate existent initiatives
+        var hasDuplicatedInitiatives = await entityRepository.AnyAsync(new InitiativeSpec(entityData.Name), ct);
+
+        if (hasDuplicatedInitiatives)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "There is already an initiative with the same name",
+            };
+        }
+
         // Validate users data
         var leaderCount = entityData.InitiativeUsers
             .Select(u => u.Level.Id == (int)InitiativeUserLevelEnum.Leader)

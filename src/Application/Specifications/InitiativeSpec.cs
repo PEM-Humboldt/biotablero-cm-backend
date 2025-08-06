@@ -32,4 +32,14 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
             .Skip(skip)
             .Take(take);
     }
+
+    /// <summary>
+    /// Specification for get element by name
+    /// </summary>
+    /// <param name="name">Element name</param>
+    public InitiativeSpec(string name)
+    {
+        Query
+            .Where(e => e.Name == name);
+    }
 }
