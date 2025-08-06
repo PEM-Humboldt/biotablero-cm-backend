@@ -28,8 +28,9 @@ public class InitiativeUserConfig : IEntityTypeConfiguration<InitiativeUser>
             .HasColumnName("initiative_id")
             .IsRequired();
 
-        builder.Property(i => i.UserId)
-            .HasColumnName("user_id")
+        builder.Property(i => i.UserName)
+            .HasColumnName("user_name")
+            .HasMaxLength(75)
             .IsRequired();
 
         builder.Property(i => i.LevelId)
@@ -41,7 +42,7 @@ public class InitiativeUserConfig : IEntityTypeConfiguration<InitiativeUser>
             .HasForeignKey(e => e.InitiativeId);
 
         builder
-            .HasIndex(e => new { e.UserId, e.InitiativeId })
+            .HasIndex(e => new { e.UserName, e.InitiativeId })
             .IsUnique();
     }
 }

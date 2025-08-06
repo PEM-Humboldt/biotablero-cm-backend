@@ -16,7 +16,7 @@ public class InitiativeUser : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// User identifier
     /// </summary>
-    public int UserId { get; set; }
+    public string UserName { get; set; }
 
     /// <summary>
     /// Level identifier

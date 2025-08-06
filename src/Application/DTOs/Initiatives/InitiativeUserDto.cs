@@ -23,7 +23,7 @@ public class InitiativeUserDto : IDto
     /// <summary>
     /// User identifier
     /// </summary>
-    public int UserId { get; set; }
+    public string UserName { get; set; }
 
     /// <summary>
     /// Level relationship

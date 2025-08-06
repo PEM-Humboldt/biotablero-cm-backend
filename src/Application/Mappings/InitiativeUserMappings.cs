@@ -27,7 +27,7 @@ public class InitiativeUserMappings : IMapper<InitiativeUser, InitiativeUserDto>
         {
             Id = entity.Id,
             InitiativeId = entity.InitiativeId,
-            UserId = entity.UserId,
+            UserName = entity.UserName,
             Level = new EnumEntityDto<InitiativeUserLevelEnum>(entity.LevelId),
         };
     }
@@ -45,7 +45,7 @@ public class InitiativeUserMappings : IMapper<InitiativeUser, InitiativeUserDto>
         {
             Id = dto.Id,
             InitiativeId = dto.InitiativeId,
-            UserId = dto.UserId,
+            UserName = dto.UserName,
             LevelId = dto.Level.Id,
         };
     }
