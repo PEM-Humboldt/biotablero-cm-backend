@@ -29,15 +29,15 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiative Locations relationship
     /// </summary>
-    public ICollection<InitiativeLocation> InitiativeLocations { get; } = [];
+    public ICollection<InitiativeLocation> InitiativeLocations { get; init; } = [];
 
     /// <summary>
     /// Initiative Contacts relationship
     /// </summary>
-    public ICollection<InitiativeContact> InitiativeContacts { get; } = [];
+    public ICollection<InitiativeContact> InitiativeContacts { get; init; } = [];
 
     /// <summary>
     /// Initiative Users relationship
     /// </summary>
-    public ICollection<InitiativeUser> InitiativeUsers { get; } = [];
+    public ICollection<InitiativeUser> InitiativeUsers { get; init; } = [];
 }

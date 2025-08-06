@@ -3,7 +3,6 @@
 using System;
 using System.Linq;
 
-using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
@@ -11,7 +10,10 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// <summary>
 /// Initiative mappings
 /// </summary>
-public class InitiativeMappings : IMapper<Initiative, InitiativeDto>
+public class InitiativeMappings(
+    InitiativeContactMappings initiativeContactMappings,
+    InitiativeLocationMappings initiativeLocationMappings,
+    InitiativeUserMappings initiativeUserMappings) : IMapper<Initiative, InitiativeDto>
 {
     /// <summary>
     /// Map from entity to DTO
@@ -28,29 +30,9 @@ public class InitiativeMappings : IMapper<Initiative, InitiativeDto>
             Name = entity.Name,
             Description = entity.Description,
             LogoUrl = entity.LogoUrl,
-            InitiativeContacts = entity.InitiativeContacts.Select(i => new InitiativeContactDto()
-            {
-                Id = i.Id,
-                InitiativeId = i.InitiativeId,
-                Phone = i.Phone,
-                Email = i.Email,
-            }),
-            InitiativeLocations = entity.InitiativeLocations.Select(i => new InitiativeLocationDto()
-            {
-                Id = i.Id,
-                Locality = i.Locality,
-                Location = new LocationDto()
-                {
-                    Id = i.LocationId,
-                    Code = i.Location.Code,
-                    Name = i.Location.Name,
-                },
-            }),
-
-            // InitiativeUsers = entity.InitiativeUsers.Select(i => new InitiativeUserDto()
-            // {
-            //     Id = i.Id,
-            // }),
+            InitiativeContacts = entity.InitiativeContacts.Select(initiativeContactMappings.Map),
+            InitiativeLocations = entity.InitiativeLocations.Select(initiativeLocationMappings.Map),
+            InitiativeUsers = entity.InitiativeUsers.Select(initiativeUserMappings.Map),
         };
     }
 
@@ -69,6 +51,9 @@ public class InitiativeMappings : IMapper<Initiative, InitiativeDto>
             Name = dto.Name,
             Description = dto.Description,
             LogoUrl = dto.LogoUrl,
+            InitiativeContacts = [.. dto.InitiativeContacts.Select(initiativeContactMappings.Map)],
+            InitiativeLocations = [.. dto.InitiativeLocations.Select(initiativeLocationMappings.Map)],
+            InitiativeUsers = [.. dto.InitiativeUsers.Select(initiativeUserMappings.Map)],
         };
     }
 }
