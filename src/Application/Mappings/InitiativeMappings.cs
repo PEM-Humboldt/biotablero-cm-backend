@@ -11,9 +11,9 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// Initiative mappings
 /// </summary>
 public class InitiativeMappings(
-    InitiativeContactMappings initiativeContactMappings,
-    InitiativeLocationMappings initiativeLocationMappings,
-    InitiativeUserMappings initiativeUserMappings) : IMapper<Initiative, InitiativeDto>
+    IMapper<InitiativeContact, InitiativeContactDto> initiativeContactMappings,
+    IMapper<InitiativeLocation, InitiativeLocationDto> initiativeLocationMappings,
+    IMapper<InitiativeUser, InitiativeUserDto> initiativeUserMappings) : IMapper<Initiative, InitiativeDto>
 {
     /// <summary>
     /// Map from entity to DTO
