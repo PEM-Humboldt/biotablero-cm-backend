@@ -103,7 +103,7 @@ public partial class InitiativeEntities : Migration
                 id = table.Column<int>(type: "integer", nullable: false)
                     .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                 initiative_id = table.Column<int>(type: "integer", nullable: false),
-                user_id = table.Column<int>(type: "integer", nullable: false),
+                user_name = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: false),
                 level_id = table.Column<int>(type: "integer", nullable: false),
             },
             constraints: table =>
@@ -192,10 +192,10 @@ public partial class InitiativeEntities : Migration
             column: "level_id");
 
         migrationBuilder.CreateIndex(
-            name: "IX_initiative_user_user_id_initiative_id",
+            name: "IX_initiative_user_user_name_initiative_id",
             schema: "initiatives",
             table: "initiative_user",
-            columns: new[] { "user_id", "initiative_id" },
+            columns: new[] { "user_name", "initiative_id" },
             unique: true);
 
         migrationBuilder.CreateIndex(

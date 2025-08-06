@@ -163,9 +163,11 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("level_id");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("character varying(75)")
+                        .HasColumnName("user_name");
 
                     b.HasKey("Id");
 
@@ -173,7 +175,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("LevelId");
 
-                    b.HasIndex("UserId", "InitiativeId")
+                    b.HasIndex("UserName", "InitiativeId")
                         .IsUnique();
 
                     b.ToTable("initiative_user", "initiatives");
