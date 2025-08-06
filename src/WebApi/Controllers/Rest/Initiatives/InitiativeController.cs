@@ -43,6 +43,7 @@ public class InitiativeController(IWebTools webTools,
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(NotFoundResponseExample))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Get(int id, CancellationToken ct)
     {
         var response = await entityService.GetItem(id, ct);
@@ -74,9 +75,10 @@ public class InitiativeController(IWebTools webTools,
     [HttpPut]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [SwaggerRequestExample(typeof(InitiativeDto), typeof(InitiativeAddRequestExample))]
     [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeAddRequestExample))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Put([FromBody] InitiativeDto requestData, CancellationToken ct)
     {
         var response = await entityService.Add(requestData, ct);
@@ -93,9 +95,10 @@ public class InitiativeController(IWebTools webTools,
     [HttpPost("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [SwaggerRequestExample(typeof(InitiativeDto), typeof(InitiativeEditRequestExample))]
     [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeEditRequestExample))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Post(int id, [FromBody] InitiativeDto requestData, CancellationToken ct)
     {
         var response = await entityService.Update(id, requestData, ct);
