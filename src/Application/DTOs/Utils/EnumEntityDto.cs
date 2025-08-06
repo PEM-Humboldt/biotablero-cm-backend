@@ -52,6 +52,7 @@ public class EnumEntityDto<TEnum> : IDto
             var successfulCast = int.TryParse(valueStr, out var value);
             return successfulCast ? value : 0;
         }
+        set => TypeEnum = (TEnum)Enum.ToObject(typeof(TEnum), value);
     }
 
     /// <summary>
