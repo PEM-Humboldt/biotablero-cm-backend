@@ -5,8 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,6 +43,7 @@ public class InitiativeContactController() : ControllerBase
     /// <returns>Added entity data.</returns>
     [HttpPut]
     [Consumes("application/json")]
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     public Task<IActionResult> Put([FromBody] object requestData, CancellationToken ct) => throw new NotImplementedException();
 
     /// <summary>
@@ -52,14 +55,16 @@ public class InitiativeContactController() : ControllerBase
     /// <returns>Updated entity data.</returns>
     [HttpPost("{id}")]
     [Consumes("application/json")]
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     public Task<IActionResult> Post(int id, [FromBody] object entityData, CancellationToken ct) => throw new NotImplementedException();
 
     /// <summary>
-    /// Disable entity.
+    /// Delete entity.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
-    public Task<IActionResult> Disable(int id, CancellationToken ct) => throw new NotImplementedException();
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    public Task<IActionResult> Delete(int id, CancellationToken ct) => throw new NotImplementedException();
 }

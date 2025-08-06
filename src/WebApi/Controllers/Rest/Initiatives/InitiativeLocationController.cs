@@ -4,6 +4,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
@@ -22,6 +25,7 @@ public class InitiativeLocationController() : ControllerBase
     /// <returns>Added entity data.</returns>
     [HttpPut]
     [Consumes("application/json")]
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     public Task<IActionResult> Put([FromBody] object requestData, CancellationToken ct) => throw new NotImplementedException();
 
     /// <summary>
@@ -31,5 +35,6 @@ public class InitiativeLocationController() : ControllerBase
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     public Task<IActionResult> Delete(int id, CancellationToken ct) => throw new NotImplementedException();
 }
