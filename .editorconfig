@@ -121,10 +121,6 @@ dotnet_diagnostic.SA0001.severity = none
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1633.md
 dotnet_diagnostic.SA1633.severity = none
 
-# Documentation text should end with a period
-# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1629.md
-dotnet_diagnostic.SA1629.severity = none
-
 # Two or more attributes appeared within the same set of square brackets.
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1133.md
 dotnet_diagnostic.SA1133.severity = none
