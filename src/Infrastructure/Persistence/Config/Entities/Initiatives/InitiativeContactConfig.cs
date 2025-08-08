@@ -38,5 +38,13 @@ public class InitiativeContactConfig : IEntityTypeConfiguration<InitiativeContac
         builder.HasOne(e => e.Initiative)
             .WithMany(p => p.InitiativeContacts)
             .HasForeignKey(e => e.InitiativeId);
+
+        builder
+            .HasIndex(e => new { e.InitiativeId, e.Email })
+            .IsUnique();
+
+        builder
+            .HasIndex(e => new { e.InitiativeId, e.Phone })
+            .IsUnique();
     }
 }

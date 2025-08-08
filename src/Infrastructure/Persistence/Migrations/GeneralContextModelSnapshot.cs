@@ -123,7 +123,11 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InitiativeId");
+                    b.HasIndex("InitiativeId", "Email")
+                        .IsUnique();
+
+                    b.HasIndex("InitiativeId", "Phone")
+                        .IsUnique();
 
                     b.ToTable("initiative_contact", "initiatives");
                 });

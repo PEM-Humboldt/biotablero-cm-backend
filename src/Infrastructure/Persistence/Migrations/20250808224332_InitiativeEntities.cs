@@ -169,10 +169,18 @@ public partial class InitiativeEntities : Migration
             });
 
         migrationBuilder.CreateIndex(
-            name: "IX_initiative_contact_initiative_id",
+            name: "IX_initiative_contact_initiative_id_email",
             schema: "initiatives",
             table: "initiative_contact",
-            column: "initiative_id");
+            columns: new[] { "initiative_id", "email" },
+            unique: true);
+
+        migrationBuilder.CreateIndex(
+            name: "IX_initiative_contact_initiative_id_phone",
+            schema: "initiatives",
+            table: "initiative_contact",
+            columns: new[] { "initiative_id", "phone" },
+            unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_initiative_location_initiative_id_location_id",

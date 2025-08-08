@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20250808181738_InitiativeEntities")]
+    [Migration("20250808224332_InitiativeEntities")]
     partial class InitiativeEntities
     {
         /// <inheritdoc />
@@ -126,7 +126,11 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InitiativeId");
+                    b.HasIndex("InitiativeId", "Email")
+                        .IsUnique();
+
+                    b.HasIndex("InitiativeId", "Phone")
+                        .IsUnique();
 
                     b.ToTable("initiative_contact", "initiatives");
                 });
