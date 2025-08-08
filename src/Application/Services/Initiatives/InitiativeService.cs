@@ -16,6 +16,9 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.OData;
+
 using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
@@ -52,6 +55,21 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.locationRepository = locationRepository;
+    }
+
+    /// <summary>
+    /// Get elements list (OData).
+    /// </summary>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public override async Task<CustomWebResponse> GetList(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct = default)
+    {
+        // Get only enabled entities
+        var query = entityRepository.GetQueryable();
+        query = query.Where(e => e.Enabled);
+
+        return await GetOdataListByQuery(query, queryOptions, ct);
     }
 
     /// <summary>
