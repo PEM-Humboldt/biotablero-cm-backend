@@ -18,6 +18,7 @@ public class InitiativeResponseExample : IExamplesProvider<InitiativeDto>
         Id = 0,
         Name = "Initiative example",
         Description = "example",
+        Enabled = true,
         InitiativeLocations = null,
         InitiativeContacts = null,
         InitiativeUsers = null,
