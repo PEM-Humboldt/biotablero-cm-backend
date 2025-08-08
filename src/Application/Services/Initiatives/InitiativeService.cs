@@ -17,7 +17,6 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 using Microsoft.AspNetCore.OData.Query;
-using Microsoft.OData;
 
 using Serilog;
 

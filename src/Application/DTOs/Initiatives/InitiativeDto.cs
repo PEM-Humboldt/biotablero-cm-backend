@@ -26,9 +26,14 @@ public class InitiativeDto : IDto
     public string Description { get; set; }
 
     /// <summary>
-    /// Initiative logo URL.
+    /// Initiative image URL.
     /// </summary>
-    public Uri LogoUrl { get; set; }
+    public Uri ImageUrl { get; set; }
+
+    /// <summary>
+    /// Initiative banner URL.
+    /// </summary>
+    public Uri BannerUrl { get; set; }
 
     /// <summary>
     /// Enabled flag.
