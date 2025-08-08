@@ -148,11 +148,11 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
 
         try
         {
-            AddOdataQueryFilterAndOrder(query, queryOptions, defaultSettings);
+            query = AddOdataQueryFilterAndOrder(query, queryOptions, defaultSettings);
 
             var totalItems = await entityRepository.QueryCountAsync(query, ct);
 
-            AddOdataQueryPagination(query, queryOptions, defaultSettings);
+            query = AddOdataQueryPagination(query, queryOptions, defaultSettings);
 
             // Get result
             var dataList = await entityRepository.QueryToListAsync(query, ct);
@@ -181,18 +181,21 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <param name="query">Linq SQL Query.</param>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="settings">OData query settings.</param>
-    private protected static void AddOdataQueryFilterAndOrder(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, ODataQuerySettings settings)
+    /// <returns>Modified Linq query.</returns>
+    private protected static IQueryable<TE> AddOdataQueryFilterAndOrder(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, ODataQuerySettings settings)
     {
         // Apply order and filter settings
         if (queryOptions?.Filter != null)
         {
-            queryOptions.Filter.ApplyTo(query, settings);
+            query = (IQueryable<TE>)queryOptions.Filter.ApplyTo(query, settings);
         }
 
         if (queryOptions.OrderBy != null)
         {
-            queryOptions.OrderBy.ApplyTo(query, settings);
+            query = queryOptions.OrderBy.ApplyTo(query, settings);
         }
+
+        return query;
     }
 
     /// <summary>
@@ -201,13 +204,17 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <param name="query">Linq SQL Query.</param>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="settings">OData query settings.</param>
-    private protected static void AddOdataQueryPagination(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, ODataQuerySettings settings)
+    /// <returns>Modified Linq query.</returns>
+    private protected static IQueryable<TE> AddOdataQueryPagination(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, ODataQuerySettings settings)
     {
         const int maxPageSize = 20;
 
-        // Apply pagination settings ($skip and $top)
-        var pageSize = queryOptions.Top?.Value ?? maxPageSize;
+        if (queryOptions.Skip != null)
+        {
+            query = queryOptions.Skip.ApplyTo(query, settings);
+        }
 
+        var pageSize = queryOptions.Top?.Value ?? maxPageSize;
         if (pageSize > maxPageSize)
         {
             pageSize = maxPageSize;
@@ -215,9 +222,6 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
 
         query = query.Take(pageSize);
 
-        if (queryOptions.Skip != null)
-        {
-            queryOptions.Skip.ApplyTo(query, settings);
-        }
+        return query;
     }
 }
