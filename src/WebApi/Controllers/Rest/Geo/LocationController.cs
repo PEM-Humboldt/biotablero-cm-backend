@@ -51,9 +51,7 @@ public class LocationController(IWebTools webTools,
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<LocationDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(NotFoundResponseExample))]
     public async Task<IActionResult> Get(int? parentId, CancellationToken ct)
     {
         var response = await entityService.GetByParent(parentId, ct);

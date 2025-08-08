@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Initiatives;
 
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -49,6 +50,8 @@ public class InitiativeContactController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByInitiative/{initiativeId}")]
+    [ProducesResponseType(typeof(IEnumerable<InitiativeContactDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetByInitiative(int initiativeId, CancellationToken ct)
     {
         var response = await entityService.GetByInitiative(initiativeId, ct);
@@ -64,6 +67,9 @@ public class InitiativeContactController(
     [HttpPut]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [ProducesResponseType(typeof(InitiativeContactDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactDto))]
     public async Task<IActionResult> Put([FromBody] InitiativeContactDto requestData, CancellationToken ct)
     {
         var response = await entityService.Add(requestData, ct);
@@ -80,6 +86,9 @@ public class InitiativeContactController(
     [HttpPost("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [ProducesResponseType(typeof(InitiativeContactDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactDto))]
     public async Task<IActionResult> Post(int id, [FromBody] InitiativeContactDto requestData, CancellationToken ct)
     {
         var response = await entityService.Update(id, requestData, ct);
@@ -94,6 +103,9 @@ public class InitiativeContactController(
     /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [ProducesResponseType(typeof(InitiativeContactDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactDto))]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
         var response = await entityService.Delete(id, ct);
