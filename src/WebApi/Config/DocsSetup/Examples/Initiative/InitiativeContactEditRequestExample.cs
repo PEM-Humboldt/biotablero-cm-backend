@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
