@@ -55,7 +55,7 @@ public class InitiativeContactSpec : GeneralSpecification<int, InitiativeContact
     }
 
     /// <summary>
-    /// Specification for get duplicated contacts (email or phone).
+    /// Specification for get duplicated entities (email or phone).
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="email">Contact email.</param>
@@ -71,7 +71,7 @@ public class InitiativeContactSpec : GeneralSpecification<int, InitiativeContact
     }
 
     /// <summary>
-    /// Specification for get duplicated contacts (email or phone).
+    /// Specification for get duplicated entities (email or phone).
     /// </summary>
     /// <param name="id">Entity identifier.</param>
     /// <param name="initiativeId">Initiative identifier.</param>

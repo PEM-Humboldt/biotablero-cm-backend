@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services;
+namespace IAVH.BioTablero.CM.Application.Interfaces.Services;
 
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,9 +9,9 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
-/// Initiative Contact service interface.
+/// Initiative User service interface.
 /// </summary>
-public interface IInitiativeContactService : IServiceRead<InitiativeContact, InitiativeContactDto, int>, IServiceAdd<InitiativeContactDto>, IServiceUpdate<InitiativeContactDto, int>, IServiceDelete<int>
+public interface IInitiativeUserService : IServiceRead<InitiativeUser, InitiativeUserDto, int>, IServiceAdd<InitiativeUserDto>, IServiceUpdate<InitiativeUserDto, int>, IServiceDelete<int>
 {
     /// <summary>
     /// Get entities by initiative.

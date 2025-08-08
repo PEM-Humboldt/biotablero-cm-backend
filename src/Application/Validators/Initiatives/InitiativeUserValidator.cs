@@ -20,14 +20,26 @@ public class InitiativeUserValidator : AbstractValidator<InitiativeUserDto>
             .NotNull()
                 .WithMessage("Entity data cannot be null");
 
+        RuleFor(dto => dto.UserName)
+            .NotEmpty()
+                .WithMessage("User name is required")
+            .MaximumLength(75);
+
         RuleFor(dto => dto.Level)
             .NotNull()
-                .WithMessage("Level cannot be null")
+                .WithMessage("User level cannot be null")
             .ChildRules(level =>
             {
                 level.RuleFor(levelEnumDto => levelEnumDto.Name)
                     .IsEnumName(typeof(InitiativeUserLevel), caseSensitive: false)
-                        .WithMessage("Level invalid");
+                        .WithMessage("User level invalid");
             });
+
+        RuleSet("Create", () =>
+        {
+            RuleFor(dto => dto.InitiativeId)
+                .NotNull()
+                    .WithMessage("Initiative identifier is required");
+        });
     }
 }

@@ -5,14 +5,14 @@ using Ardalis.Specification;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
-/// Initiative ardalis specifications.
+/// Initiative User ardalis specifications.
 /// </summary>
-public class InitiativeSpec : GeneralSpecification<int, Initiative>
+public class InitiativeUserSpec : GeneralSpecification<int, InitiativeUser>
 {
     /// <summary>
     /// Constructor.
     /// </summary>
-    public InitiativeSpec()
+    public InitiativeUserSpec()
     {
     }
 
@@ -20,7 +20,7 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     /// Specification for get element by identifier.
     /// </summary>
     /// <param name="id">Element identifier.</param>
-    public InitiativeSpec(int id)
+    public InitiativeUserSpec(int id)
         : base(id)
     {
         Query
@@ -32,7 +32,7 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     /// </summary>
     /// <param name="skip">Page number.</param>
     /// <param name="take">Page size.</param>
-    public InitiativeSpec(int skip, int take)
+    public InitiativeUserSpec(int skip, int take)
         : base(skip, take)
     {
         Query
@@ -41,26 +41,30 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     }
 
     /// <summary>
-    /// Specification for get element by name.
+    /// Specification for get elements by initiative.
     /// </summary>
-    /// <param name="name">Element name.</param>
-    public InitiativeSpec(string name)
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <returns>Custom specification.</returns>
+    public static InitiativeUserSpec InitiativeIdSpec(int initiativeId)
     {
-        Query
-            .Where(e => e.Name == name);
+        var spec = new InitiativeUserSpec();
+        spec.Query
+            .Where(e => e.InitiativeId == initiativeId);
+
+        return spec;
     }
 
     /// <summary>
     /// Specification for get duplicated entities.
     /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="name">Entity name.</param>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <returns>Custom specification.</returns>
-    public static InitiativeSpec GetDuplicatesSpec(int id, string name)
+    public static InitiativeUserSpec UserNameSpec(int initiativeId, string userName)
     {
-        var spec = new InitiativeSpec();
+        var spec = new InitiativeUserSpec();
         spec.Query
-            .Where(e => e.Id != id && e.Name == name);
+            .Where(e => e.InitiativeId == initiativeId && e.UserName == userName);
 
         return spec;
     }

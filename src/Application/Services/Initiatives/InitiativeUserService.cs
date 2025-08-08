@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
+namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
 using System.Linq;
 using System.Threading;
@@ -20,11 +20,11 @@ using Serilog;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// Initiative Contact service.
+/// Initiative User service.
 /// </summary>
-public class InitiativeContactService : ServiceRead<InitiativeContact, InitiativeContactDto, int, InitiativeContactSpec>, IInitiativeContactService
+public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserDto, int, InitiativeUserSpec>, IInitiativeUserService
 {
-    private readonly IValidator<InitiativeContactDto> entityValidator;
+    private readonly IValidator<InitiativeUserDto> entityValidator;
     private readonly ILogger logger;
 
     /// <summary>
@@ -34,10 +34,10 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
-    public InitiativeContactService(
-        IRepository<InitiativeContact> entityRepository,
-        IMapper<InitiativeContact, InitiativeContactDto> mapper,
-        IValidator<InitiativeContactDto> entityValidator,
+    public InitiativeUserService(
+        IRepository<InitiativeUser> entityRepository,
+        IMapper<InitiativeUser, InitiativeUserDto> mapper,
+        IValidator<InitiativeUserDto> entityValidator,
         ILogger logger)
         : base(entityRepository, mapper)
     {
@@ -53,7 +53,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> GetByInitiative(int initiativeId, CancellationToken ct = default)
     {
-        var dataListEntity = await entityRepository.ListAsync(InitiativeContactSpec.InitiativeIdSpec(initiativeId), ct);
+        var dataListEntity = await entityRepository.ListAsync(InitiativeUserSpec.InitiativeIdSpec(initiativeId), ct);
 
         var dataListDto = dataListEntity
             .Select(mapper.Map);
@@ -70,7 +70,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Add(InitiativeContactDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> Add(InitiativeUserDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("Create"), ct);
@@ -87,7 +87,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         // Validate initiative
         var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeExists = await entityRepository.AnyAsync(new InitiativeContactSpec(initiativeId), ct);
+        var initiativeExists = await entityRepository.AnyAsync(new InitiativeUserSpec(initiativeId), ct);
 
         if (!initiativeExists)
         {
@@ -98,13 +98,13 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         }
 
         // Validate duplicated entities
-        var hasDuplicatedInitiatives = await entityRepository.AnyAsync(InitiativeContactSpec.EmailOrPhoneSpec(initiativeId, entityData.Email, entityData.Phone), ct);
+        var hasDuplicatedInitiatives = await entityRepository.AnyAsync(InitiativeUserSpec.UserNameSpec(initiativeId, entityData.UserName), ct);
 
         if (hasDuplicatedInitiatives)
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already a contact with the same email and/or phone",
+                Message = "The user already belongs to the initiative",
             };
         }
 
@@ -119,7 +119,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         logger
             .ForContext("CustomRecord", true)
             .ForContext("Type", (int)LogType.Create)
-            .Information("Added initiative contact: {@entityData}", entityData);
+            .Information("Added initiative user: {@entityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -134,7 +134,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Update(int id, InitiativeContactDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> Update(int id, InitiativeUserDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -160,21 +160,8 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
             };
         }
 
-        // Validate duplicated entities
-        var hasDuplicatedInitiatives = await entityRepository
-            .AnyAsync(InitiativeContactSpec.EmailOrPhoneSpec(id, entity.InitiativeId, entityData.Email, entityData.Phone), ct);
-
-        if (hasDuplicatedInitiatives)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = "There is already a contact with the same email and/or phone",
-            };
-        }
-
         // Update entity data
-        entity.Email = entityData.Email;
-        entity.Phone = entityData.Phone;
+        entity.LevelId = entityData.Level.Id;
 
         await entityRepository.UpdateAsync(entity, ct);
 
@@ -183,7 +170,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         logger
             .ForContext("CustomRecord", true)
             .ForContext("Type", (int)LogType.Update)
-            .Information("Updated initiative contact: {@entityData}", entityData);
+            .Information("Updated initiative user: {@entityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -217,7 +204,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         logger
             .ForContext("CustomRecord", true)
             .ForContext("Type", (int)LogType.Delete)
-            .Information("Deleted initiative contact: {@entityData}", entityData);
+            .Information("Deleted initiative user: {@entityData}", entityData);
 
         return new CustomWebResponse();
     }

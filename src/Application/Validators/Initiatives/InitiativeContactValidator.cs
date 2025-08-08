@@ -32,8 +32,8 @@ public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.InitiativeId)
-            .NotNull()
-                .WithMessage("Initiative identifier is required");
+                .NotNull()
+                    .WithMessage("Initiative identifier is required");
         });
     }
 }
