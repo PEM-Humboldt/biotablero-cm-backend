@@ -53,4 +53,37 @@ public class InitiativeContactSpec : GeneralSpecification<int, InitiativeContact
 
         return spec;
     }
+
+    /// <summary>
+    /// Specification for get duplicated contacts (email or phone).
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="email">Contact email.</param>
+    /// <param name="phone">Contact phone.</param>
+    /// <returns>Custom specification.</returns>
+    public static InitiativeContactSpec EmailOrPhoneSpec(int initiativeId, string email, string phone)
+    {
+        var spec = new InitiativeContactSpec();
+        spec.Query
+            .Where(e => e.InitiativeId == initiativeId && (e.Phone == phone || e.Email == email));
+
+        return spec;
+    }
+
+    /// <summary>
+    /// Specification for get duplicated contacts (email or phone).
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="email">Contact email.</param>
+    /// <param name="phone">Contact phone.</param>
+    /// <returns>Custom specification.</returns>
+    public static InitiativeContactSpec EmailOrPhoneSpec(int id, int initiativeId, string email, string phone)
+    {
+        var spec = new InitiativeContactSpec();
+        spec.Query
+            .Where(e => e.Id != id && e.InitiativeId == initiativeId && (e.Phone == phone || e.Email == email));
+
+        return spec;
+    }
 }

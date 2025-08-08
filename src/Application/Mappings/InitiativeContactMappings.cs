@@ -40,6 +40,7 @@ public class InitiativeContactMappings : IMapper<InitiativeContact, InitiativeCo
 
         return new()
         {
+            InitiativeId = dto?.InitiativeId ?? 0,
             Phone = dto.Phone,
             Email = dto.Email,
         };

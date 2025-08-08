@@ -28,5 +28,12 @@ public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto
         RuleFor(o => o.Phone)
             .Matches(RegExprConstants.Phone)
             .MaximumLength(15);
+
+        RuleSet("Create", () =>
+        {
+            RuleFor(dto => dto.InitiativeId)
+            .NotNull()
+                .WithMessage("Initiative identifier is required");
+        });
     }
 }

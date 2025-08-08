@@ -92,7 +92,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             };
         }
 
-        // Validate duplicated initiatives
+        // Validate duplicated entities
         var hasDuplicatedInitiatives = await entityRepository.AnyAsync(new InitiativeSpec(entityData.Name), ct);
 
         if (hasDuplicatedInitiatives)
@@ -177,7 +177,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             };
         }
 
-        // Validate duplicated initiatives
+        // Validate duplicated entities
         var hasDuplicatedInitiatives = await entityRepository.AnyAsync(InitiativeSpec.GetDuplicatesSpec(id, entityData.Name), ct);
 
         if (hasDuplicatedInitiatives)
@@ -188,7 +188,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             };
         }
 
-        // Validate initiative
+        // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
         if (entity == null)

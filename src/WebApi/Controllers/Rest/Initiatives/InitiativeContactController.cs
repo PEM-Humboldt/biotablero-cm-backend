@@ -8,6 +8,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Authorization;
@@ -67,6 +68,7 @@ public class InitiativeContactController(
     [HttpPut]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [SwaggerRequestExample(typeof(InitiativeContactDto), typeof(InitiativeContactAddRequestExample))]
     [ProducesResponseType(typeof(InitiativeContactDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactDto))]
@@ -86,6 +88,7 @@ public class InitiativeContactController(
     [HttpPost("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [SwaggerRequestExample(typeof(InitiativeContactDto), typeof(InitiativeContactEditRequestExample))]
     [ProducesResponseType(typeof(InitiativeContactDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactDto))]
