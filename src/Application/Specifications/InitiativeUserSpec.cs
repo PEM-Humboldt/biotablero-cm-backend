@@ -68,4 +68,35 @@ public class InitiativeUserSpec : GeneralSpecification<int, InitiativeUser>
 
         return spec;
     }
+
+    /// <summary>
+    /// Specification for get entities by level.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="levelId">Level identifier.</param>
+    /// <returns>Custom specification.</returns>
+    public static InitiativeUserSpec LevelSpec(int initiativeId, int levelId)
+    {
+        var spec = new InitiativeUserSpec();
+        spec.Query
+            .Where(e => e.InitiativeId == initiativeId && e.LevelId == levelId);
+
+        return spec;
+    }
+
+    /// <summary>
+    /// Specification for get entities by level.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="levelId">Level identifier.</param>
+    /// <returns>Custom specification.</returns>
+    public static InitiativeUserSpec LevelSpec(int id, int initiativeId, int levelId)
+    {
+        var spec = new InitiativeUserSpec();
+        spec.Query
+            .Where(e => e.Id != id && e.InitiativeId == initiativeId && e.LevelId == levelId);
+
+        return spec;
+    }
 }

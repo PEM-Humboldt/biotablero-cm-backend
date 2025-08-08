@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -19,11 +20,14 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+
 /// <summary>
 /// Initiative User service.
 /// </summary>
 public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserDto, int, InitiativeUserSpec>, IInitiativeUserService
 {
+    private const int MaxLeadersByInitiative = 3;
     private readonly IValidator<InitiativeUserDto> entityValidator;
     private readonly ILogger logger;
 
@@ -108,6 +112,22 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             };
         }
 
+        // Validate number of leaders
+        if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader)
+        {
+            var totalUserLeaders = await entityRepository.CountAsync(InitiativeUserSpec.LevelSpec(initiativeId, (int)InitiativeUserLevelEnum.Leader), ct);
+
+            if (totalUserLeaders >= MaxLeadersByInitiative)
+            {
+                return new CustomWebResponse(true)
+                {
+                    Message = $"Initiatives cannot have more than {MaxLeadersByInitiative} leaders",
+                };
+            }
+        }
+
+        // TODO: Add external user data validation!
+
         // Build entity data
         var entity = mapper.Map(entityData);
 
@@ -160,6 +180,31 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             };
         }
 
+        // Validate number of leaders
+        var totalUserLeaders = await entityRepository.CountAsync(InitiativeUserSpec.LevelSpec(id, entity.InitiativeId, (int)InitiativeUserLevelEnum.Leader), ct);
+
+        if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader)
+        {
+            if (totalUserLeaders is < 1)
+            {
+                return new CustomWebResponse(true)
+                {
+                    Message = $"At least one leader is required per initiative",
+                };
+            }
+        }
+
+        if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader)
+        {
+            if (totalUserLeaders >= MaxLeadersByInitiative)
+            {
+                return new CustomWebResponse(true)
+                {
+                    Message = $"Initiatives cannot have more than {MaxLeadersByInitiative} leaders",
+                };
+            }
+        }
+
         // Update entity data
         entity.LevelId = entityData.Level.Id;
 
@@ -195,6 +240,20 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             {
                 Message = "Not found",
             };
+        }
+
+        // Validate number of leaders
+        if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader)
+        {
+            var totalUserLeaders = await entityRepository.CountAsync(InitiativeUserSpec.LevelSpec(entity.InitiativeId, (int)InitiativeUserLevelEnum.Leader), ct);
+
+            if (totalUserLeaders is <= 1)
+            {
+                return new CustomWebResponse(true)
+                {
+                    Message = $"At least one leader is required per initiative",
+                };
+            }
         }
 
         await entityRepository.DeleteAsync(entity, ct);
