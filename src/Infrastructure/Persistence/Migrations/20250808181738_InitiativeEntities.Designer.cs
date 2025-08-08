@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20250808135456_InitiativeEntities")]
+    [Migration("20250808181738_InitiativeEntities")]
     partial class InitiativeEntities
     {
         /// <inheritdoc />
@@ -69,6 +69,11 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BannerUrl")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("banner_url");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -81,10 +86,10 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasDefaultValue(true)
                         .HasColumnName("enabled");
 
-                    b.Property<string>("LogoUrl")
+                    b.Property<string>("ImageUrl")
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)")
-                        .HasColumnName("logo_url");
+                        .HasColumnName("image_url");
 
                     b.Property<string>("Name")
                         .IsRequired()
