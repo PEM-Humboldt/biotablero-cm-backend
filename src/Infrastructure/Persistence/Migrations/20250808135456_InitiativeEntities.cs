@@ -30,6 +30,7 @@ public partial class InitiativeEntities : Migration
                 name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                 description = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                 logo_url = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
+                enabled = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
             },
             constraints: table =>
             {

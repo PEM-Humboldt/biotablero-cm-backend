@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20250806182626_InitiativeEntities")]
+    [Migration("20250808135456_InitiativeEntities")]
     partial class InitiativeEntities
     {
         /// <inheritdoc />
@@ -74,6 +74,12 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)")
                         .HasColumnName("description");
+
+                    b.Property<bool>("Enabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("enabled");
 
                     b.Property<string>("LogoUrl")
                         .HasMaxLength(150)
