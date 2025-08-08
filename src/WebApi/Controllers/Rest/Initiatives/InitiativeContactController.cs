@@ -1,12 +1,13 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Initiatives;
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +21,9 @@ using Swashbuckle.AspNetCore.Filters;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
-public class InitiativeContactController() : ControllerBase
+public class InitiativeContactController(
+    IWebTools webTools,
+    IInitiativeContactService entityService) : ControllerBase
 {
     /// <summary>
     /// Get entity.
@@ -33,7 +36,24 @@ public class InitiativeContactController() : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(NotFoundResponseExample))]
-    public Task<IActionResult> Get(int id, CancellationToken ct) => throw new NotImplementedException();
+    public async Task<IActionResult> Get(int id, CancellationToken ct)
+    {
+        var response = await entityService.GetItem(id, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
+    /// Get entities by Initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities list from parameters.</returns>
+    [HttpGet("GetByInitiative/{initiativeId}")]
+    public async Task<IActionResult> GetByInitiative(int initiativeId, CancellationToken ct)
+    {
+        var response = await entityService.GetByInitiative(initiativeId, ct);
+        return webTools.CustomResponse(response);
+    }
 
     /// <summary>
     /// Add entity.
@@ -44,19 +64,27 @@ public class InitiativeContactController() : ControllerBase
     [HttpPut]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    public Task<IActionResult> Put([FromBody] object requestData, CancellationToken ct) => throw new NotImplementedException();
+    public async Task<IActionResult> Put([FromBody] InitiativeContactDto requestData, CancellationToken ct)
+    {
+        var response = await entityService.Add(requestData, ct);
+        return webTools.CustomResponse(response);
+    }
 
     /// <summary>
     /// Edit entity.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
-    /// <param name="entityData">Entity data.</param>
+    /// <param name="requestData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
     [HttpPost("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    public Task<IActionResult> Post(int id, [FromBody] object entityData, CancellationToken ct) => throw new NotImplementedException();
+    public async Task<IActionResult> Post(int id, [FromBody] InitiativeContactDto requestData, CancellationToken ct)
+    {
+        var response = await entityService.Update(id, requestData, ct);
+        return webTools.CustomResponse(response);
+    }
 
     /// <summary>
     /// Delete entity.
@@ -66,5 +94,9 @@ public class InitiativeContactController() : ControllerBase
     /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    public Task<IActionResult> Delete(int id, CancellationToken ct) => throw new NotImplementedException();
+    public async Task<IActionResult> Delete(int id, CancellationToken ct)
+    {
+        var response = await entityService.Delete(id, ct);
+        return webTools.CustomResponse(response);
+    }
 }
