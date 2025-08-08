@@ -27,17 +27,22 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     public Uri LogoUrl { get; set; }
 
     /// <summary>
+    /// Enabled flag.
+    /// </summary>
+    public bool Enabled { get; set; }
+
+    /// <summary>
     /// Initiative Locations relationship.
     /// </summary>
-    public ICollection<InitiativeLocation> InitiativeLocations { get; init; } = [];
+    public ICollection<InitiativeLocation> InitiativeLocations { get; init; }
 
     /// <summary>
     /// Initiative Contacts relationship.
     /// </summary>
-    public ICollection<InitiativeContact> InitiativeContacts { get; init; } = [];
+    public ICollection<InitiativeContact> InitiativeContacts { get; init; }
 
     /// <summary>
     /// Initiative Users relationship.
     /// </summary>
-    public ICollection<InitiativeUser> InitiativeUsers { get; init; } = [];
+    public ICollection<InitiativeUser> InitiativeUsers { get; init; }
 }

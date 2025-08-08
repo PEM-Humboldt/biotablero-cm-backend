@@ -37,5 +37,10 @@ public class InitiativeConfig : IEntityTypeConfiguration<Initiative>
         builder.Property(i => i.LogoUrl)
             .HasColumnName("logo_url")
             .HasMaxLength(150);
+
+        builder.Property(i => i.Enabled)
+            .HasColumnName("enabled")
+            .HasDefaultValue(true)
+            .IsRequired();
     }
 }

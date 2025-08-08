@@ -31,17 +31,22 @@ public class InitiativeDto : IDto
     public Uri LogoUrl { get; set; }
 
     /// <summary>
+    /// Enabled flag.
+    /// </summary>
+    public bool? Enabled { get; set; }
+
+    /// <summary>
     /// Initiative Locations relationship.
     /// </summary>
-    public IEnumerable<InitiativeLocationDto> InitiativeLocations { get; init; } = [];
+    public IEnumerable<InitiativeLocationDto> InitiativeLocations { get; init; }
 
     /// <summary>
     /// Initiative Contacts relationship.
     /// </summary>
-    public IEnumerable<InitiativeContactDto> InitiativeContacts { get; init; } = [];
+    public IEnumerable<InitiativeContactDto> InitiativeContacts { get; init; }
 
     /// <summary>
     /// Initiative Users relationship.
     /// </summary>
-    public IEnumerable<InitiativeUserDto> InitiativeUsers { get; init; } = [];
+    public IEnumerable<InitiativeUserDto> InitiativeUsers { get; init; }
 }
