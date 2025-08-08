@@ -241,7 +241,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         await entityRepository.UpdateAsync(entity, ct);
 
         var entityData = mapper.Map(entity);
-        logger.Information((disable ? "Disabled" : "Enabled") + " initiative: {@entityData}", entityData);
+        logger
+            .ForContext("CustomRecord", true)
+            .ForContext("Type", (int)LogType.Update)
+            .Information((disable ? "Disabled" : "Enabled") + " initiative: {@entityData}", entityData);
 
         return new CustomWebResponse()
         {
