@@ -106,9 +106,8 @@ public class InitiativeContactController(
     /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [ProducesResponseType(typeof(InitiativeContactDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactDto))]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
         var response = await entityService.Delete(id, ct);

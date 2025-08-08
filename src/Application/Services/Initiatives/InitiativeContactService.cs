@@ -197,5 +197,28 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public Task<CustomWebResponse> Delete(int id, CancellationToken ct = default) => throw new System.NotImplementedException();
+    public async Task<CustomWebResponse> Delete(int id, CancellationToken ct = default)
+    {
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Not found",
+            };
+        }
+
+        await entityRepository.DeleteAsync(entity, ct);
+
+        var entityData = mapper.Map(entity);
+
+        logger
+            .ForContext("CustomRecord", true)
+            .ForContext("Type", (int)LogType.Delete)
+            .Information("Deleted initiative contact: {@entityData}", entityData);
+
+        return new CustomWebResponse();
+    }
 }
