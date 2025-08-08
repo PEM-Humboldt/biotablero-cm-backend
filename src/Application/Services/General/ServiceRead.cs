@@ -121,54 +121,40 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <returns>Process result</returns>
     public virtual async Task<CustomWebResponse> GetList(ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
-        const int maxPageSize = 20;
+        var query = entityRepository.GetQueryable();
+        return await GetOdataListByQuery(query, queryOptions, ct);
+    }
+
+    /// <summary>
+    /// Get OData list data by custom Linq query.
+    /// </summary>
+    /// <param name="query">Linq SQL Query.</param>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    private protected async Task<CustomWebResponse> GetOdataListByQuery(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
+    {
+        var defaultSettings = new ODataQuerySettings()
+        {
+            HandleNullPropagation = HandleNullPropagationOption.True,
+        };
 
         try
         {
-            var query = entityRepository.GetQueryable();
+            AddOdataQueryFilterAndOrder(query, queryOptions, defaultSettings);
 
-            var settings = new ODataQuerySettings
-            {
-                HandleNullPropagation = HandleNullPropagationOption.True,
-            };
+            var totalItems = await entityRepository.QueryCountAsync(query, ct);
 
-            // Apply order and filter settings
-            if (queryOptions?.Filter != null)
-            {
-                query = (IQueryable<TE>)queryOptions.Filter.ApplyTo(query, settings);
-            }
-
-            if (queryOptions.OrderBy != null)
-            {
-                query = queryOptions.OrderBy.ApplyTo(query, settings);
-            }
-
-            // Check total items
-            var totalCount = await entityRepository.QueryCountAsync(query, ct);
-
-            // Apply pagination settings ($skip and $top)
-            var pageSize = queryOptions.Top?.Value ?? maxPageSize;
-
-            if (pageSize > maxPageSize)
-            {
-                pageSize = maxPageSize;
-            }
-
-            query = query.Take(pageSize);
-
-            if (queryOptions.Skip != null)
-            {
-                query = queryOptions.Skip.ApplyTo(query, settings);
-            }
+            AddOdataQueryPagination(query, queryOptions, defaultSettings);
 
             // Get result
             var dataList = await entityRepository.QueryToListAsync(query, ct);
 
             return new()
             {
-                ResponseBody = new Dictionary<string, object>
+                ResponseBody = new Dictionary<string, object>()
                 {
-                    ["@odata.count"] = totalCount,
+                    ["@odata.count"] = totalItems,
                     ["value"] = dataList.Select(mapper.Map),
                 },
             };
@@ -180,6 +166,52 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
                 StatusCode = HttpStatusCode.BadRequest,
                 Message = $"Invalid filter: {ex.Message}",
             };
+        }
+    }
+
+    /// <summary>
+    /// Add filter and order settings to OData query.
+    /// </summary>
+    /// <param name="query">Linq SQL Query.</param>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="settings">OData query settings.</param>
+    private protected static void AddOdataQueryFilterAndOrder(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, ODataQuerySettings settings)
+    {
+        // Apply order and filter settings
+        if (queryOptions?.Filter != null)
+        {
+            queryOptions.Filter.ApplyTo(query, settings);
+        }
+
+        if (queryOptions.OrderBy != null)
+        {
+            queryOptions.OrderBy.ApplyTo(query, settings);
+        }
+    }
+
+    /// <summary>
+    /// Add pagination settings to OData query.
+    /// </summary>
+    /// <param name="query">Linq SQL Query.</param>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="settings">OData query settings.</param>
+    private protected static void AddOdataQueryPagination(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, ODataQuerySettings settings)
+    {
+        const int maxPageSize = 20;
+
+        // Apply pagination settings ($skip and $top)
+        var pageSize = queryOptions.Top?.Value ?? maxPageSize;
+
+        if (pageSize > maxPageSize)
+        {
+            pageSize = maxPageSize;
+        }
+
+        query = query.Take(pageSize);
+
+        if (queryOptions.Skip != null)
+        {
+            queryOptions.Skip.ApplyTo(query, settings);
         }
     }
 }
