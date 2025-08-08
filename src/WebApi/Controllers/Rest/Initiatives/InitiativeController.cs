@@ -74,7 +74,8 @@ public class InitiativeController(IWebTools webTools,
     /// <returns>Added entity data.</returns>
     [HttpPut]
     [Consumes("application/json")]
-    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+
+    // [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeDto), typeof(InitiativeAddRequestExample))]
     [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -94,7 +95,8 @@ public class InitiativeController(IWebTools webTools,
     /// <returns>Updated entity data.</returns>
     [HttpPost("{id}")]
     [Consumes("application/json")]
-    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+
+    // [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeDto), typeof(InitiativeEditRequestExample))]
     [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -106,12 +108,28 @@ public class InitiativeController(IWebTools webTools,
     }
 
     /// <summary>
+    /// Enable entity.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    [HttpPost("Enable/{id}")]
+    public async Task<IActionResult> Enable(int id, CancellationToken ct)
+    {
+        var response = await entityService.Disable(id, false, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
     /// Disable entity.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    [HttpDelete("{id}")]
-    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    public Task<IActionResult> Disable(int id, CancellationToken ct) => throw new NotImplementedException();
+    [HttpDelete("Disable/{id}")]
+    public async Task<IActionResult> Disable(int id, CancellationToken ct)
+    {
+        var response = await entityService.Disable(id, true, ct);
+        return webTools.CustomResponse(response);
+    }
 }

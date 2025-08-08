@@ -31,9 +31,9 @@ public class InitiativeMappings(
             Description = entity.Description,
             LogoUrl = entity.LogoUrl,
             Enabled = entity.Enabled,
-            InitiativeContacts = entity.InitiativeContacts.Select(initiativeContactMappings.Map),
-            InitiativeLocations = entity.InitiativeLocations.Select(initiativeLocationMappings.Map),
-            InitiativeUsers = entity.InitiativeUsers.Select(initiativeUserMappings.Map),
+            InitiativeContacts = entity.InitiativeContacts?.Select(initiativeContactMappings.Map),
+            InitiativeLocations = entity.InitiativeLocations?.Select(initiativeLocationMappings.Map),
+            InitiativeUsers = entity.InitiativeUsers?.Select(initiativeUserMappings.Map),
         };
     }
 
@@ -52,9 +52,9 @@ public class InitiativeMappings(
             Description = dto.Description,
             LogoUrl = dto.LogoUrl,
             Enabled = dto?.Enabled ?? true,
-            InitiativeContacts = [.. dto.InitiativeContacts.Select(initiativeContactMappings.Map)],
-            InitiativeLocations = [.. dto.InitiativeLocations.Select(initiativeLocationMappings.Map)],
-            InitiativeUsers = [.. dto.InitiativeUsers.Select(initiativeUserMappings.Map)],
+            InitiativeContacts = [.. dto.InitiativeContacts?.Select(initiativeContactMappings.Map)],
+            InitiativeLocations = [.. dto.InitiativeLocations?.Select(initiativeLocationMappings.Map)],
+            InitiativeUsers = [.. dto.InitiativeUsers?.Select(initiativeUserMappings.Map)],
         };
     }
 }

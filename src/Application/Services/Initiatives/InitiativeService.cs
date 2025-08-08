@@ -208,5 +208,27 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="disable">Disable flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public Task<CustomWebResponse> Disable(int id, bool disable, CancellationToken ct = default) => throw new System.NotImplementedException();
+    public async Task<CustomWebResponse> Disable(int id, bool disable, CancellationToken ct = default)
+    {
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Not found",
+            };
+        }
+
+        entity.Enabled = !disable;
+        await entityRepository.UpdateAsync(entity, ct);
+
+        var entityData = mapper.Map(entity);
+        logger.Information((disable ? "Disabled" : "Enabled") + " initiative: {@entityData}", entityData);
+
+        return new CustomWebResponse()
+        {
+            ResponseBody = entityData,
+        };
+    }
 }
