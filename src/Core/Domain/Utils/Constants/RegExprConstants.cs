@@ -11,7 +11,8 @@ public static class RegExprConstants
     /// Valid phone numbers:
     /// - 3055555555
     /// - 6015555555
+    /// - 7785555
     /// </example>
     /// </summary>
-    public const string Phone = "^([36]{1}[0-9]{9})$";
+    public const string Phone = "^(([0-9]{7})|([36]{1}[0-9]{9}))$";
 }
