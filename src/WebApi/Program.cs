@@ -41,6 +41,7 @@ public class Program
         // Dependency injection configuration
         builder.Services.AddCoreServices(Debugger.IsAttached);
         builder.Services.AddAppServices();
+        builder.Services.AddExternalServices();
         builder.Services.AddMappings();
         builder.Services.AddValidators();
 
