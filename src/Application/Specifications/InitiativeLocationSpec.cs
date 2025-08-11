@@ -24,7 +24,8 @@ public class InitiativeLocationSpec : GeneralSpecification<int, InitiativeLocati
         : base(id)
     {
         Query
-            .Where(e => e.Id == id);
+            .Where(e => e.Id == id)
+            .Include(e => e.Location);
     }
 
     /// <summary>
@@ -49,7 +50,8 @@ public class InitiativeLocationSpec : GeneralSpecification<int, InitiativeLocati
     {
         var spec = new InitiativeLocationSpec();
         spec.Query
-            .Where(e => e.InitiativeId == initiativeId);
+            .Where(e => e.InitiativeId == initiativeId)
+            .Include(e => e.Location);
 
         return spec;
     }
