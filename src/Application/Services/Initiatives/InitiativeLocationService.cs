@@ -16,23 +16,18 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
-using Microsoft.AspNetCore.OData.Query;
-
 using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
-
 /// <summary>
-/// Initiative service.
+/// Initiative Location service.
 /// </summary>
-public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, InitiativeSpec>, IInitiativeService
+public class InitiativeLocationService : ServiceRead<InitiativeLocation, InitiativeLocationDto, int, InitiativeLocationSpec>, IInitiativeLocationService
 {
-    private const int MaxLeadersByInitiative = 3;
-    private readonly IValidator<InitiativeDto> entityValidator;
-    private readonly IRepository<Location> locationRepository;
+    private readonly IValidator<InitiativeLocationDto> entityValidator;
     private readonly ILogger logger;
+    private readonly IRepository<Location> locationRepository;
 
     /// <summary>
     /// Constructor.
@@ -41,12 +36,11 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="initiativeUserRepository">Initiative User repository.</param>
-    /// <param name="locationRepository">Initiative Location repository.</param>
-    public InitiativeService(
-        IRepository<Initiative> entityRepository,
-        IMapper<Initiative, InitiativeDto> mapper,
-        IValidator<InitiativeDto> entityValidator,
+    /// <param name="locationRepository">Location repository.</param>
+    public InitiativeLocationService(
+        IRepository<InitiativeLocation> entityRepository,
+        IMapper<InitiativeLocation, InitiativeLocationDto> mapper,
+        IValidator<InitiativeLocationDto> entityValidator,
         ILogger logger,
         IRepository<Location> locationRepository)
         : base(entityRepository, mapper)
@@ -57,18 +51,22 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     }
 
     /// <summary>
-    /// Get elements list (OData).
+    /// Get entities by initiative.
     /// </summary>
-    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public override async Task<CustomWebResponse> GetList(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByInitiative(int initiativeId, CancellationToken ct = default)
     {
-        // Get only enabled entities
-        var query = entityRepository.GetQueryable();
-        query = query.Where(e => e.Enabled);
+        var dataListEntity = await entityRepository.ListAsync(InitiativeLocationSpec.InitiativeIdSpec(initiativeId), ct);
 
-        return await GetOdataListByQuery(query, queryOptions, ct);
+        var dataListDto = dataListEntity
+            .Select(mapper.Map);
+
+        return new()
+        {
+            ResponseBody = dataListDto,
+        };
     }
 
     /// <summary>
@@ -77,7 +75,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Add(InitiativeDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> Add(InitiativeLocationDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("Create"), ct);
@@ -92,49 +90,40 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             };
         }
 
+        // Validate initiative
+        var initiativeId = entityData.InitiativeId ?? 0;
+        var initiativeExists = await entityRepository.AnyAsync(new InitiativeLocationSpec(initiativeId), ct);
+
+        if (!initiativeExists)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Initiative not found",
+            };
+        }
+
+        // Validate location
+        var locationId = entityData.LocationId ?? 0;
+        var locationExists = await locationRepository.AnyAsync(new LocationSpec(locationId), ct);
+
+        if (!locationExists)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Location not found",
+            };
+        }
+
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyAsync(new InitiativeSpec(entityData.Name), ct);
+        var hasDuplicatedEntities = await entityRepository.AnyAsync(InitiativeLocationSpec.LocationIdAndLocalitySpec(initiativeId, locationId, entityData.Locality), ct);
 
         if (hasDuplicatedEntities)
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already an initiative with the same name",
+                Message = "The location already belongs to the initiative",
             };
         }
-
-        // Validate users data
-        var leaderCount = entityData.InitiativeUsers
-            .Select(u => u.Level.Id == (int)InitiativeUserLevelEnum.Leader)
-            .Count();
-
-        if (leaderCount > MaxLeadersByInitiative)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = $"The number of leaders per initiative should be between 1 and 3",
-            };
-        }
-
-        // Validate locations data
-        var locationsIds = entityData.InitiativeLocations
-            .Select(l => l.LocationId);
-
-        var initiativeLocationQuery = locationRepository
-            .GetQueryable()
-            .Where(l => locationsIds.Contains(l.Id));
-
-        var locationsDb = await locationRepository.QueryToListAsync(initiativeLocationQuery, ct);
-
-        if (locationsIds.Count() != locationsDb.Count)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = $"Invalid initiative locations data",
-            };
-        }
-
-        // TODO: Add external users data validation!
 
         // Build entity data
         var entity = mapper.Map(entityData);
@@ -147,7 +136,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         logger
             .ForContext("CustomRecord", true)
             .ForContext("Type", (int)LogType.Create)
-            .Information("Added initiative: {@entityData}", entityData);
+            .Information("Added initiative location: {@entityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -162,7 +151,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Update(int id, InitiativeDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> Update(int id, InitiativeLocationDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -177,17 +166,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             };
         }
 
-        // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyAsync(InitiativeSpec.GetDuplicatesSpec(id, entityData.Name), ct);
-
-        if (hasDuplicatedEntities)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = "There is already an initiative with the same name",
-            };
-        }
-
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -199,9 +177,32 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             };
         }
 
+        // Validate location
+        var locationId = entityData.LocationId ?? 0;
+        var locationExists = await locationRepository.AnyAsync(new LocationSpec(locationId), ct);
+
+        if (!locationExists)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Location not found",
+            };
+        }
+
+        // Validate duplicated entities
+        var hasDuplicatedEntities = await entityRepository.AnyAsync(InitiativeLocationSpec.LocationIdAndLocalitySpec(id, entity.InitiativeId, locationId, entityData.Locality), ct);
+
+        if (hasDuplicatedEntities)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "The location already belongs to the initiative",
+            };
+        }
+
         // Update entity data
-        entity.Name = entityData.Name;
-        entity.Description = entityData.Description;
+        entity.LocationId = entityData.LocationId ?? 0;
+        entity.Locality = entityData.Locality;
 
         await entityRepository.UpdateAsync(entity, ct);
 
@@ -210,7 +211,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         logger
             .ForContext("CustomRecord", true)
             .ForContext("Type", (int)LogType.Update)
-            .Information("Updated initiative: {@entityData}", entityData);
+            .Information("Updated initiative location: {@entityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -219,14 +220,14 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     }
 
     /// <summary>
-    /// Disable or enable element.
+    /// Delete element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
-    /// <param name="disable">Disable flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Disable(int id, bool disable, CancellationToken ct = default)
+    public async Task<CustomWebResponse> Delete(int id, CancellationToken ct = default)
     {
+        // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
         if (entity == null)
@@ -237,18 +238,26 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             };
         }
 
-        entity.Enabled = !disable;
-        await entityRepository.UpdateAsync(entity, ct);
+        // Validate number of locations
+        var totalLocations = await entityRepository.CountAsync(InitiativeLocationSpec.InitiativeIdSpec(entity.InitiativeId), ct);
+
+        if (totalLocations is <= 1)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = $"At least one location is required per initiative",
+            };
+        }
+
+        await entityRepository.DeleteAsync(entity, ct);
 
         var entityData = mapper.Map(entity);
+
         logger
             .ForContext("CustomRecord", true)
-            .ForContext("Type", (int)LogType.Update)
-            .Information((disable ? "Disabled" : "Enabled") + " initiative: {@entityData}", entityData);
+            .ForContext("Type", (int)LogType.Delete)
+            .Information("Deleted initiative location: {@entityData}", entityData);
 
-        return new CustomWebResponse()
-        {
-            ResponseBody = entityData,
-        };
+        return new CustomWebResponse();
     }
 }

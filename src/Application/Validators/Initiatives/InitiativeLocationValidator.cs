@@ -18,11 +18,18 @@ public class InitiativeLocationValidator : AbstractValidator<InitiativeLocationD
             .NotNull()
                 .WithMessage("Entity data cannot be null");
 
-        RuleFor(o => o.Location)
+        RuleFor(dto => dto.LocationId)
             .NotNull()
-                .WithMessage("Location cannot be null");
+                .WithMessage("Location identifier is required");
 
         RuleFor(o => o.Locality)
             .MaximumLength(300);
+
+        RuleSet("Create", () =>
+        {
+            RuleFor(dto => dto.InitiativeId)
+                .NotNull()
+                    .WithMessage("Initiative identifier is required");
+        });
     }
 }

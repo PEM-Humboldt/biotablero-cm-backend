@@ -21,8 +21,9 @@ public static class ConfigAppServices
     {
         services.AddScoped<ILogService, LogService>();
         services.AddScoped<ILocationService, LocationService>();
-        services.AddScoped<IInitiativeService, InitiativeService>();
         services.AddScoped<IInitiativeContactService, InitiativeContactService>();
+        services.AddScoped<IInitiativeLocationService, InitiativeLocationService>();
+        services.AddScoped<IInitiativeService, InitiativeService>();
         services.AddScoped<IInitiativeUserService, InitiativeUserService>();
 
         return services;

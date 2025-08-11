@@ -23,7 +23,7 @@ public class InitiativeAddRequestExample : IExamplesProvider<InitiativeDto>
         InitiativeLocations = [
             new()
             {
-                Location = new() { Id = 1 },
+                LocationId = 1,
                 Locality = "Locality example",
             }
         ],
