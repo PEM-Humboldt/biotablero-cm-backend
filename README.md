@@ -20,6 +20,15 @@ Generate a `.env` file with the project parameters. You can generate the file ba
 docker compose -f docker-compose-dev.yml up
 ```
 
+> **Note:** When running this command for the first time, it's recommended to verify that the project bucket was built correctly with the `docker logs bt-cm-localstack` command. If you encounter an execution permission error, run these commands:
+
+```sh
+# Add execution permissions to custom script
+docker exec bt-cm-localstack chmod +x /etc/localstack/init/ready.d/script.sh
+# Restart localstack container
+docker restart bt-cm-localstack
+```
+
 ### Install dependencies
 
 ```sh
