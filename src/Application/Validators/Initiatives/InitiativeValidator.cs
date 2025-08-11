@@ -31,24 +31,24 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.InitiativeLocations)
-            .NotEmpty()
-                .WithMessage("At least one location is required");
+                .NotEmpty()
+                    .WithMessage("At least one location is required");
 
-            RuleForEach(x => x.InitiativeLocations)
+            RuleForEach(dto => dto.InitiativeLocations)
                 .SetValidator(new InitiativeLocationValidator(), "default");
 
             RuleFor(dto => dto.InitiativeContacts)
                 .NotEmpty()
                     .WithMessage("At least one contact is required");
 
-            RuleForEach(x => x.InitiativeContacts)
+            RuleForEach(dto => dto.InitiativeContacts)
                 .SetValidator(new InitiativeContactValidator(), "default");
 
             RuleFor(dto => dto.InitiativeUsers)
                 .NotEmpty()
                     .WithMessage("At least one user is required");
 
-            RuleForEach(x => x.InitiativeUsers)
+            RuleForEach(dto => dto.InitiativeUsers)
                 .SetValidator(new InitiativeUserValidator(), "default");
         });
     }

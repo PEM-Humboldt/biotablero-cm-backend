@@ -22,7 +22,7 @@ public class InitiativeLocationValidator : AbstractValidator<InitiativeLocationD
             .NotNull()
                 .WithMessage("Location identifier is required");
 
-        RuleFor(o => o.Locality)
+        RuleFor(dto => dto.Locality)
             .MaximumLength(300);
 
         RuleSet("Create", () =>

@@ -19,14 +19,15 @@ public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto
             .NotNull()
                 .WithMessage("Entity data cannot be null");
 
-        RuleFor(o => o.Email)
+        RuleFor(dto => dto.Email)
             .NotEmpty()
                 .WithMessage("Email is required")
             .EmailAddress()
             .MaximumLength(100);
 
-        RuleFor(o => o.Phone)
+        RuleFor(dto => dto.Phone)
             .Matches(RegExprConstants.Phone)
+            .MinimumLength(7)
             .MaximumLength(15);
 
         RuleSet("Create", () =>

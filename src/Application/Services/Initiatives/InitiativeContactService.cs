@@ -73,7 +73,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     public async Task<CustomWebResponse> Add(InitiativeContactDto entityData, CancellationToken ct = default)
     {
         // Validate data
-        var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("Create"), ct);
+        var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
 
         if (!validationResult.IsValid)
         {

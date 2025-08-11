@@ -78,7 +78,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     public async Task<CustomWebResponse> Add(InitiativeLocationDto entityData, CancellationToken ct = default)
     {
         // Validate data
-        var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("Create"), ct);
+        var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
 
         if (!validationResult.IsValid)
         {
