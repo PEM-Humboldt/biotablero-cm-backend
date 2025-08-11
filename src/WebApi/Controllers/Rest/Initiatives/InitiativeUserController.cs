@@ -106,10 +106,8 @@ public class InitiativeUserController(
     /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [SwaggerRequestExample(typeof(InitiativeUserDto), typeof(InitiativeUserEditRequestExample))]
-    [ProducesResponseType(typeof(InitiativeUserDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserDto))]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
         var response = await entityService.Delete(id, ct);

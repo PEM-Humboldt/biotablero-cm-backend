@@ -98,9 +98,9 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         }
 
         // Validate duplicated entities
-        var hasDuplicatedInitiatives = await entityRepository.AnyAsync(InitiativeContactSpec.EmailOrPhoneSpec(initiativeId, entityData.Email, entityData.Phone), ct);
+        var hasDuplicatedEntities = await entityRepository.AnyAsync(InitiativeContactSpec.EmailOrPhoneSpec(initiativeId, entityData.Email, entityData.Phone), ct);
 
-        if (hasDuplicatedInitiatives)
+        if (hasDuplicatedEntities)
         {
             return new CustomWebResponse(true)
             {
@@ -161,10 +161,10 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         }
 
         // Validate duplicated entities
-        var hasDuplicatedInitiatives = await entityRepository
+        var hasDuplicatedEntities = await entityRepository
             .AnyAsync(InitiativeContactSpec.EmailOrPhoneSpec(id, entity.InitiativeId, entityData.Email, entityData.Phone), ct);
 
-        if (hasDuplicatedInitiatives)
+        if (hasDuplicatedEntities)
         {
             return new CustomWebResponse(true)
             {

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
-using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -102,9 +101,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         }
 
         // Validate duplicated entities
-        var hasDuplicatedInitiatives = await entityRepository.AnyAsync(InitiativeUserSpec.UserNameSpec(initiativeId, entityData.UserName), ct);
+        var hasDuplicatedEntities = await entityRepository.AnyAsync(InitiativeUserSpec.UserNameSpec(initiativeId, entityData.UserName), ct);
 
-        if (hasDuplicatedInitiatives)
+        if (hasDuplicatedEntities)
         {
             return new CustomWebResponse(true)
             {

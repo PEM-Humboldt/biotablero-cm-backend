@@ -93,9 +93,9 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         }
 
         // Validate duplicated entities
-        var hasDuplicatedInitiatives = await entityRepository.AnyAsync(new InitiativeSpec(entityData.Name), ct);
+        var hasDuplicatedEntities = await entityRepository.AnyAsync(new InitiativeSpec(entityData.Name), ct);
 
-        if (hasDuplicatedInitiatives)
+        if (hasDuplicatedEntities)
         {
             return new CustomWebResponse(true)
             {
@@ -178,9 +178,9 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         }
 
         // Validate duplicated entities
-        var hasDuplicatedInitiatives = await entityRepository.AnyAsync(InitiativeSpec.GetDuplicatesSpec(id, entityData.Name), ct);
+        var hasDuplicatedEntities = await entityRepository.AnyAsync(InitiativeSpec.GetDuplicatesSpec(id, entityData.Name), ct);
 
-        if (hasDuplicatedInitiatives)
+        if (hasDuplicatedEntities)
         {
             return new CustomWebResponse(true)
             {
