@@ -102,26 +102,6 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     }
 
     /// <summary>
-    /// Get elements list (paginated).
-    /// </summary>
-    /// <param name="skip">Page.</param>
-    /// <param name="take">Page size.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    public virtual async Task<CustomWebResponse> GetList(int skip, int take, CancellationToken ct = default)
-    {
-        var specification = (TS)Activator.CreateInstance(typeof(TS), [skip, take]);
-        var dataListEntity = await entityRepository.ListAsync(specification, ct);
-        var dataListDto = dataListEntity
-            .Select(mapper.Map);
-
-        return new()
-        {
-            ResponseBody = dataListDto,
-        };
-    }
-
-    /// <summary>
     /// Get elements list (OData).
     /// </summary>
     /// <param name="queryOptions">OData query options.</param>

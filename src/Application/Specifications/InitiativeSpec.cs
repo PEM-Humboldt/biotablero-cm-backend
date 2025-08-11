@@ -27,21 +27,13 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     }
 
     /// <summary>
-    /// Specification for get paginated elements.
-    /// </summary>
-    /// <param name="skip">Page number.</param>
-    /// <param name="take">Page size.</param>
-    public InitiativeSpec(int skip, int take)
-        : base(skip, take)
-    {
-    }
-
-    /// <summary>
     /// Specification for get element by name.
     /// </summary>
     /// <param name="name">Element name.</param>
     public InitiativeSpec(string name)
     {
+        Query
+            .Where(e => e.Name == name);
     }
 
     /// <summary>

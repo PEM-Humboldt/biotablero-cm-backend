@@ -17,14 +17,4 @@ public class LogSpec : GeneralSpecification<Guid, LogEntity>
         : base(id)
     {
     }
-
-    /// <summary>
-    /// Specification for get paginated elements.
-    /// </summary>
-    /// <param name="skip">Page number.</param>
-    /// <param name="take">Page size.</param>
-    public LogSpec(int skip, int take)
-        : base(skip, take)
-    {
-    }
 }

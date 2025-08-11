@@ -27,16 +27,6 @@ public class LocationSpec : GeneralSpecification<int, Location>
     }
 
     /// <summary>
-    /// Specification for get paginated elements.
-    /// </summary>
-    /// <param name="skip">Page number.</param>
-    /// <param name="take">Page size.</param>
-    public LocationSpec(int skip, int take)
-        : base(skip, take)
-    {
-    }
-
-    /// <summary>
     /// Specification for get elements by parent.
     /// </summary>
     /// <param name="parentId">Parent identifier.</param>

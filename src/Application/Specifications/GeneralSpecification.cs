@@ -30,16 +30,4 @@ where TE : BaseEntity<TI>, IAggregateRoot
         Query
             .Where(e => e.Id.Equals(id));
     }
-
-    /// <summary>
-    /// Constructor for a paginated query.
-    /// </summary>
-    /// <param name="skip">Page number.</param>
-    /// <param name="take">Page size.</param>
-    protected GeneralSpecification(int skip, int take)
-    {
-        Query
-            .Skip(skip)
-            .Take(take);
-    }
 }

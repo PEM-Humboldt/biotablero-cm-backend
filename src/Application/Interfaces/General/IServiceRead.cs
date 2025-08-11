@@ -43,15 +43,6 @@ public interface IServiceRead<TE, TDto, TI>
     Task<CustomWebResponse> GetAll(CancellationToken ct = default);
 
     /// <summary>
-    /// Get elements list (paginated).
-    /// </summary>
-    /// <param name="skip">Page.</param>
-    /// <param name="take">Page size.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetList(int skip, int take, CancellationToken ct = default);
-
-    /// <summary>
     /// Get elements list (OData).
     /// </summary>
     /// <param name="queryOptions">OData query options.</param>

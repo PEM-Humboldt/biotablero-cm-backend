@@ -29,16 +29,6 @@ public class InitiativeLocationSpec : GeneralSpecification<int, InitiativeLocati
     }
 
     /// <summary>
-    /// Specification for get paginated elements.
-    /// </summary>
-    /// <param name="skip">Page number.</param>
-    /// <param name="take">Page size.</param>
-    public InitiativeLocationSpec(int skip, int take)
-        : base(skip, take)
-    {
-    }
-
-    /// <summary>
     /// Specification for get elements by initiative.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>

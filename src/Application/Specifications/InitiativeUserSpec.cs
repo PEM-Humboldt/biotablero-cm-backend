@@ -27,16 +27,6 @@ public class InitiativeUserSpec : GeneralSpecification<int, InitiativeUser>
     }
 
     /// <summary>
-    /// Specification for get paginated elements.
-    /// </summary>
-    /// <param name="skip">Page number.</param>
-    /// <param name="take">Page size.</param>
-    public InitiativeUserSpec(int skip, int take)
-        : base(skip, take)
-    {
-    }
-
-    /// <summary>
     /// Specification for get elements by initiative.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
