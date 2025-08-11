@@ -109,6 +109,10 @@ dotnet_diagnostic.CA1861.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1051
 dotnet_diagnostic.CA1051.severity = none
 
+# Properties should not return arrays
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1819
+dotnet_diagnostic.CA1819.severity = none
+
 # --------------------- #
 # Custom StyleCop rules #
 # --------------------- #
