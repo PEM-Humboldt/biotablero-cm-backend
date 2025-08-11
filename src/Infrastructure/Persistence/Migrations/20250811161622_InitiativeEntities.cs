@@ -82,8 +82,8 @@ public partial class InitiativeEntities : Migration
                 id = table.Column<int>(type: "integer", nullable: false)
                     .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                 initiative_id = table.Column<int>(type: "integer", nullable: false),
-                phone = table.Column<string>(type: "text", nullable: true),
-                email = table.Column<string>(type: "text", nullable: false),
+                phone = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: true),
+                email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
             },
             constraints: table =>
             {

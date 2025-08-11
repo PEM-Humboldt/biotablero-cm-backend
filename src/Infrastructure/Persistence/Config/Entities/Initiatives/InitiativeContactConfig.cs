@@ -29,10 +29,12 @@ public class InitiativeContactConfig : IEntityTypeConfiguration<InitiativeContac
             .IsRequired();
 
         builder.Property(i => i.Phone)
-            .HasColumnName("phone");
+            .HasColumnName("phone")
+            .HasMaxLength(15);
 
         builder.Property(i => i.Email)
             .HasColumnName("email")
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.HasOne(e => e.Initiative)
