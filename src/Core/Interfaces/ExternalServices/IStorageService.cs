@@ -1,5 +1,6 @@
-namespace IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
+﻿namespace IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +11,12 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Storage;
 /// </summary>
 public interface IStorageService
 {
+    /// <summary>
+    /// Get storage base URL.
+    /// </summary>
+    /// <returns>Storage base URL.</returns>
+    Uri BaseUrl { get; }
+
     /// <summary>
     /// Upload file.
     /// </summary>

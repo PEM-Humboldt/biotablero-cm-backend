@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 
 using System.IO;
 
@@ -7,7 +7,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using Microsoft.AspNetCore.Http;
 
 /// <summary>
-/// Form File adapter.
+/// IFormFile adapter.
 /// </summary>
 /// <param name="file">Form File data.</param>
 public class FormFileAdapter(IFormFile file) : IInputFile
@@ -17,21 +17,21 @@ public class FormFileAdapter(IFormFile file) : IInputFile
     /// <summary>
     /// File name.
     /// </summary>
-    public string Name => file.FileName;
+    public string Name => file?.FileName;
 
     /// <summary>
     /// File Content Type.
     /// </summary>
-    public string ContentType => file.ContentType;
+    public string ContentType => file?.ContentType;
 
     /// <summary>
     /// File size.
     /// </summary>
-    public long Size => file.Length;
+    public long Size => file?.Length ?? 0;
 
     /// <summary>
     /// Open File Stream.
     /// </summary>
     /// <returns>File stream.</returns>
-    public Stream OpenStream() => file.OpenReadStream();
+    public Stream OpenStream() => file?.OpenReadStream();
 }

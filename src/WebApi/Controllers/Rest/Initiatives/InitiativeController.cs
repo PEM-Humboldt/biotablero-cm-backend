@@ -7,6 +7,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Logging;
@@ -19,6 +20,8 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 using Swashbuckle.AspNetCore.Filters;
+
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
 /// Initiatives controller.
@@ -102,6 +105,34 @@ public class InitiativeController(
     public async Task<IActionResult> Post(int id, [FromBody] InitiativeDto requestData, CancellationToken ct)
     {
         var response = await entityService.Update(id, requestData, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
+    /// Upload entity image.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="formFile">Entity image.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated entity data.</returns>
+    [HttpPost("UploadImage/{id}")]
+    public async Task<IActionResult> UploadImage(int id, IFormFile formFile, CancellationToken ct)
+    {
+        var response = await entityService.UploadImage(id, new FormFileAdapter(formFile), InitiativeImageType.Image, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
+    /// Upload entity banner.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="formFile">Entity banner.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated entity data.</returns>
+    [HttpPost("UploadBanner/{id}")]
+    public async Task<IActionResult> UploadBanner(int id, IFormFile formFile, CancellationToken ct)
+    {
+        var response = await entityService.UploadImage(id, new FormFileAdapter(formFile), InitiativeImageType.Banner, ct);
         return webTools.CustomResponse(response);
     }
 

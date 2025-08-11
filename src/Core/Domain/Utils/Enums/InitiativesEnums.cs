@@ -25,4 +25,20 @@ public static class InitiativesEnums
         /// </summary>
         Reader,
     }
+
+    /// <summary>
+    /// Initiative image type.
+    /// </summary>
+    public enum InitiativeImageType
+    {
+        /// <summary>
+        /// Initiative image file type.
+        /// </summary>
+        Image,
+
+        /// <summary>
+        /// Initiative banner file type.
+        /// </summary>
+        Banner,
+    }
 }

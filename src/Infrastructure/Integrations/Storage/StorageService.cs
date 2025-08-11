@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 
 using System;
 using System.IO;
@@ -21,9 +21,11 @@ using Serilog;
 /// </summary>
 public class StorageService : IStorageService
 {
+    private const string ProjectPreffix = "bt-cm";
     private readonly ILogger logger;
     private readonly AmazonS3Client client;
-    private readonly string containerName;
+    private readonly string bucketName;
+    private readonly string endpointUrl;
 
     /// <summary>
     /// Service constructor.
@@ -32,9 +34,16 @@ public class StorageService : IStorageService
     public StorageService(ILogger logger)
     {
         this.logger = logger;
-        containerName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME");
+        bucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME");
+        endpointUrl = Environment.GetEnvironmentVariable("S3_ENDPOINT_URL");
         client = InitClient();
     }
+
+    /// <summary>
+    /// Get storage base URL.
+    /// </summary>
+    /// <returns>Storage base URL.</returns>
+    public Uri BaseUrl => new($"{endpointUrl}/{bucketName}/{ProjectPreffix}");
 
     /// <summary>
     /// Upload file.
@@ -51,8 +60,8 @@ public class StorageService : IStorageService
             var uploadRequest = new TransferUtilityUploadRequest
             {
                 InputStream = newMemoryStream,
-                Key = fileName,
-                BucketName = containerName,
+                Key = $"{ProjectPreffix}/{fileName}",
+                BucketName = bucketName,
                 ContentType = file.ContentType,
             };
 
@@ -98,8 +107,8 @@ public class StorageService : IStorageService
         {
             var request = new GetObjectRequest
             {
-                BucketName = containerName,
-                Key = fileName,
+                BucketName = bucketName,
+                Key = $"{ProjectPreffix}/{fileName}",
             };
 
             using (var response = await client.GetObjectAsync(request, ct))

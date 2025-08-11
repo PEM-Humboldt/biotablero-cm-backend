@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
