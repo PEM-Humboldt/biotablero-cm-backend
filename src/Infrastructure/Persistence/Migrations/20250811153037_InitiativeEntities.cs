@@ -183,10 +183,10 @@ public partial class InitiativeEntities : Migration
             unique: true);
 
         migrationBuilder.CreateIndex(
-            name: "IX_initiative_location_initiative_id_location_id",
+            name: "IX_initiative_location_initiative_id_location_id_locality",
             schema: "initiatives",
             table: "initiative_location",
-            columns: new[] { "initiative_id", "location_id" },
+            columns: new[] { "initiative_id", "location_id", "locality" },
             unique: true);
 
         migrationBuilder.CreateIndex(

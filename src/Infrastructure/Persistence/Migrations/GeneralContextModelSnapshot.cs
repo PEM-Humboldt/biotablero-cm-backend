@@ -157,7 +157,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.HasIndex("InitiativeId", "LocationId")
+                    b.HasIndex("InitiativeId", "LocationId", "Locality")
                         .IsUnique();
 
                     b.ToTable("initiative_location", "initiatives");

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20250808224332_InitiativeEntities")]
+    [Migration("20250811153037_InitiativeEntities")]
     partial class InitiativeEntities
     {
         /// <inheritdoc />
@@ -160,7 +160,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.HasIndex("InitiativeId", "LocationId")
+                    b.HasIndex("InitiativeId", "LocationId", "Locality")
                         .IsUnique();
 
                     b.ToTable("initiative_location", "initiatives");
