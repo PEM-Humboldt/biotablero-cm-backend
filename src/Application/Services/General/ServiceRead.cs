@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
+using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
@@ -29,7 +30,7 @@ using Microsoft.OData;
 public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityRepository, IMapper<TE, TDto> mapper) : IServiceRead<TE, TDto, TI>
     where TDto : class, IDto
     where TI : notnull
-    where TE : class, IAggregateRoot
+    where TE : BaseEntity<TI>, IAggregateRoot
     where TS : GeneralSpecification<TI, TE>
 {
     /// <summary>

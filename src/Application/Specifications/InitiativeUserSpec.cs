@@ -13,6 +13,7 @@ public class InitiativeUserSpec : GeneralSpecification<int, InitiativeUser>
     /// Constructor.
     /// </summary>
     public InitiativeUserSpec()
+        : base()
     {
     }
 
@@ -23,8 +24,6 @@ public class InitiativeUserSpec : GeneralSpecification<int, InitiativeUser>
     public InitiativeUserSpec(int id)
         : base(id)
     {
-        Query
-            .Where(e => e.Id == id);
     }
 
     /// <summary>
@@ -35,9 +34,6 @@ public class InitiativeUserSpec : GeneralSpecification<int, InitiativeUser>
     public InitiativeUserSpec(int skip, int take)
         : base(skip, take)
     {
-        Query
-            .Skip(skip)
-            .Take(take);
     }
 
     /// <summary>

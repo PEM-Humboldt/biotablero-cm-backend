@@ -13,6 +13,7 @@ public class InitiativeContactSpec : GeneralSpecification<int, InitiativeContact
     /// Constructor.
     /// </summary>
     public InitiativeContactSpec()
+        : base()
     {
     }
 
@@ -23,8 +24,6 @@ public class InitiativeContactSpec : GeneralSpecification<int, InitiativeContact
     public InitiativeContactSpec(int id)
         : base(id)
     {
-        Query
-            .Where(e => e.Id == id);
     }
 
     /// <summary>
@@ -35,9 +34,6 @@ public class InitiativeContactSpec : GeneralSpecification<int, InitiativeContact
     public InitiativeContactSpec(int skip, int take)
         : base(skip, take)
     {
-        Query
-            .Skip(skip)
-            .Take(take);
     }
 
     /// <summary>

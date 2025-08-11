@@ -13,6 +13,7 @@ public class LocationSpec : GeneralSpecification<int, Location>
     /// Constructor.
     /// </summary>
     public LocationSpec()
+        : base()
     {
     }
 
@@ -23,8 +24,6 @@ public class LocationSpec : GeneralSpecification<int, Location>
     public LocationSpec(int id)
         : base(id)
     {
-        Query
-            .Where(e => e.Id == id);
     }
 
     /// <summary>
@@ -35,9 +34,6 @@ public class LocationSpec : GeneralSpecification<int, Location>
     public LocationSpec(int skip, int take)
         : base(skip, take)
     {
-        Query
-            .Skip(skip)
-            .Take(take);
     }
 
     /// <summary>

@@ -2,6 +2,7 @@
 
 using Ardalis.Specification;
 
+using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
@@ -11,7 +12,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 /// <typeparam name="TE">Entity type.</typeparam>
 public abstract class GeneralSpecification<TI, TE> : Specification<TE>
 where TI : notnull
-where TE : class, IAggregateRoot
+where TE : BaseEntity<TI>, IAggregateRoot
 {
     /// <summary>
     /// Default constructor.
@@ -26,6 +27,8 @@ where TE : class, IAggregateRoot
     /// <param name="id">Element identifier.</param>
     protected GeneralSpecification(TI id)
     {
+        Query
+            .Where(e => e.Id.Equals(id));
     }
 
     /// <summary>
@@ -35,5 +38,8 @@ where TE : class, IAggregateRoot
     /// <param name="take">Page size.</param>
     protected GeneralSpecification(int skip, int take)
     {
+        Query
+            .Skip(skip)
+            .Take(take);
     }
 }

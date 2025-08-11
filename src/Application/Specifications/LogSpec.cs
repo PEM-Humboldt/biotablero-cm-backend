@@ -2,8 +2,6 @@
 
 using System;
 
-using Ardalis.Specification;
-
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 
 /// <summary>
@@ -18,8 +16,6 @@ public class LogSpec : GeneralSpecification<Guid, LogEntity>
     public LogSpec(Guid id)
         : base(id)
     {
-        Query
-            .Where(e => e.Id == id);
     }
 
     /// <summary>
@@ -30,8 +26,5 @@ public class LogSpec : GeneralSpecification<Guid, LogEntity>
     public LogSpec(int skip, int take)
         : base(skip, take)
     {
-        Query
-            .Skip(skip)
-            .Take(take);
     }
 }

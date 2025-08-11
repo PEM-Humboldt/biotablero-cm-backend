@@ -13,6 +13,7 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     /// Constructor.
     /// </summary>
     public InitiativeSpec()
+        : base()
     {
     }
 
@@ -23,8 +24,6 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     public InitiativeSpec(int id)
         : base(id)
     {
-        Query
-            .Where(e => e.Id == id);
     }
 
     /// <summary>
@@ -35,9 +34,6 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     public InitiativeSpec(int skip, int take)
         : base(skip, take)
     {
-        Query
-            .Skip(skip)
-            .Take(take);
     }
 
     /// <summary>
@@ -46,8 +42,6 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     /// <param name="name">Element name.</param>
     public InitiativeSpec(string name)
     {
-        Query
-            .Where(e => e.Name == name);
     }
 
     /// <summary>

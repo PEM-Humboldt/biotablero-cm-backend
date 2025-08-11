@@ -13,6 +13,7 @@ public class InitiativeLocationSpec : GeneralSpecification<int, InitiativeLocati
     /// Constructor.
     /// </summary>
     public InitiativeLocationSpec()
+        : base()
     {
     }
 
@@ -21,7 +22,6 @@ public class InitiativeLocationSpec : GeneralSpecification<int, InitiativeLocati
     /// </summary>
     /// <param name="id">Element identifier.</param>
     public InitiativeLocationSpec(int id)
-        : base(id)
     {
         Query
             .Where(e => e.Id == id)
@@ -36,9 +36,6 @@ public class InitiativeLocationSpec : GeneralSpecification<int, InitiativeLocati
     public InitiativeLocationSpec(int skip, int take)
         : base(skip, take)
     {
-        Query
-            .Skip(skip)
-            .Take(take);
     }
 
     /// <summary>
