@@ -127,6 +127,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         // Build entity data
         var entity = mapper.Map(entityData);
+        entity.Locality = entityData.Locality.Capitalize();
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
@@ -202,7 +203,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         // Update entity data
         entity.LocationId = entityData.LocationId ?? 0;
-        entity.Locality = entityData.Locality;
+        entity.Locality = entityData.Locality.Capitalize();
 
         await entityRepository.UpdateAsync(entity, ct);
 
