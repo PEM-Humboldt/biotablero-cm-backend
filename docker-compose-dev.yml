@@ -11,7 +11,7 @@ services:
     ports:
       - "${DB_PORT:-5432}:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/home/postgres/pgdata
       # Keycloak database setup
       - ./docker/keycloak/db/init-db.sql:/docker-entrypoint-initdb.d/init-keycloak-db.sql:ro
       - ./docker/keycloak/db/init-schema.sql:/docker-entrypoint-initdb.d/init-keycloak-schema.sql:ro
