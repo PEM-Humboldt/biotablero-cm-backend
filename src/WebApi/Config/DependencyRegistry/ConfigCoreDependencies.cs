@@ -10,6 +10,7 @@ using IAVH.BioTablero.CM.WebApi.Controllers.Tools;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
@@ -28,6 +29,8 @@ public static class ConfigCoreDependencies
     {
         services.AddHealthChecks();
         services.AddHttpContextAccessor(); // Required for Serilog (ASP.NET)
+
+        services.ConfigureFormOptions();
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddSingleton<IWebTools, WebTools>();
@@ -67,4 +70,16 @@ public static class ConfigCoreDependencies
 
         return services;
     }
+
+    /// <summary>
+    /// Configure Form Options (for upload files).
+    /// </summary>
+    /// <param name="services">Service descriptors collection.</param>
+    /// <returns>Service descriptors collection with custom services.</returns>
+    private static IServiceCollection ConfigureFormOptions(this IServiceCollection services) =>
+    services
+        .Configure<FormOptions>(options =>
+        {
+            options.MultipartBodyLengthLimit = 10_000_000; // 10 MB
+        });
 }
