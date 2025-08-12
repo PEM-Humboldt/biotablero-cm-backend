@@ -1,0 +1,23 @@
+services:
+
+  db:
+    image: timescale/timescaledb-ha:pg17.5-ts2.21.1-oss
+    container_name: bt-cm-db
+    restart: "no"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - bt-search-network
+
+volumes:
+  db_data:
+
+networks:
+  bt-search-network:
+    driver: bridge
