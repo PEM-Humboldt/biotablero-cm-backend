@@ -13,6 +13,7 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 using Serilog;
@@ -29,6 +30,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     private const int MaxLeadersByInitiative = 3;
     private readonly IValidator<InitiativeUserDto> entityValidator;
     private readonly ILogger logger;
+    private readonly IIamService iamService;
 
     /// <summary>
     /// Constructor.
@@ -37,15 +39,18 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
+    /// <param name="iamService">IAM service.</param>
     public InitiativeUserService(
         IRepository<InitiativeUser> entityRepository,
         IMapper<InitiativeUser, InitiativeUserDto> mapper,
         IValidator<InitiativeUserDto> entityValidator,
-        ILogger logger)
+        ILogger logger,
+        IIamService iamService)
         : base(entityRepository, mapper)
     {
         this.entityValidator = entityValidator;
         this.logger = logger;
+        this.iamService = iamService;
     }
 
     /// <summary>
@@ -125,7 +130,16 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             }
         }
 
-        // TODO: Add external user data validation!
+        // Validate user in external system
+        var userExists = await iamService.UserExists(entityData.UserName, ct);
+
+        if (!userExists)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = $"User is invalid or do not exist",
+            };
+        }
 
         // Build entity data
         var entity = mapper.Map(entityData);

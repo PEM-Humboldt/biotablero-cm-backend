@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,7 @@ public static class ConfigExternalServices
     {
         // ExternalException services
         services.AddScoped<IStorageService, StorageService>();
+        services.AddSingleton<IIamService, IamService>();
 
         return services;
     }

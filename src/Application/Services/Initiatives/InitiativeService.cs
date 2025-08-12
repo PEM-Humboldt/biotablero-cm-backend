@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -39,6 +40,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     private readonly IValidator<InitiativeDto> entityValidator;
     private readonly ILogger logger;
     private readonly IRepository<Location> locationRepository;
+    private readonly IIamService iamService;
     private readonly IStorageService storageService;
 
     /// <summary>
@@ -51,19 +53,22 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="initiativeUserRepository">Initiative User repository.</param>
     /// <param name="locationRepository">Initiative Location repository.</param>
     /// <param name="storageService">Storage service.</param>
+    /// <param name="iamService">IAM service.</param>
     public InitiativeService(
         IRepository<Initiative> entityRepository,
         IMapper<Initiative, InitiativeDto> mapper,
         IValidator<InitiativeDto> entityValidator,
         ILogger logger,
         IRepository<Location> locationRepository,
-        IStorageService storageService)
+        IStorageService storageService,
+        IIamService iamService)
         : base(entityRepository, mapper)
     {
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.locationRepository = locationRepository;
         this.storageService = storageService;
+        this.iamService = iamService;
     }
 
     /// <summary>
@@ -144,7 +149,24 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             };
         }
 
-        // TODO: Add external users data validation!
+        // Validate users in external system
+        var results = new Dictionary<string, bool>();
+        var userTasks = entityData.InitiativeUsers.Select(async user =>
+        {
+            results[user.UserName] = await iamService.UserExists(user.UserName, ct);
+        });
+
+        await Task.WhenAll(userTasks);
+
+        var invalidUsers = results.Any(r => !r.Value);
+
+        if (invalidUsers)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = $"One or more users are invalid or do not exist",
+            };
+        }
 
         // Build entity data
         var entity = mapper.Map(entityData);

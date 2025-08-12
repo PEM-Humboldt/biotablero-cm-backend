@@ -39,6 +39,7 @@ public class Program
         ConfigDbDependencies.AddDbServices(builder.Services);
 
         // Dependency injection configuration
+        builder.Services.AddHttpClient();
         builder.Services.AddCoreServices(Debugger.IsAttached);
         builder.Services.AddAppServices();
         builder.Services.AddExternalServices();

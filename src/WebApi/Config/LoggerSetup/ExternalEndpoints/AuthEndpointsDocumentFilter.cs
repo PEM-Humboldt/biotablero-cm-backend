@@ -22,7 +22,7 @@ public class AuthEndpointsDocumentFilter : IDocumentFilter
 
     private static readonly IList<OpenApiServer> Servers =
     [
-        new() { Url = Environment.GetEnvironmentVariable("KC_REALM_URL") },
+        new() { Url = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}" },
     ];
 
     private static readonly string ClientId = Environment.GetEnvironmentVariable("KC_CLIENT");

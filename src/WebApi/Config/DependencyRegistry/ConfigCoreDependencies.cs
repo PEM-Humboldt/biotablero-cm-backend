@@ -46,7 +46,7 @@ public static class ConfigCoreDependencies
     /// <returns>Service descriptors collection with authentication service.</returns>
     private static IServiceCollection AddAuthService(this IServiceCollection services, bool isDevelopment)
     {
-        var url = Environment.GetEnvironmentVariable("KC_REALM_URL");
+        var url = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}";
         var clientId = Environment.GetEnvironmentVariable("KC_CLIENT");
 
         services
