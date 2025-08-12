@@ -154,10 +154,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         entityData = mapper.Map(entity);
 
-        logger
-            .ForContext("CustomRecord", true)
-            .ForContext("Type", (int)LogType.Create)
-            .Information("Added initiative: {@entityData}", entityData);
+        logger.Add("Added initiative: {@entityData}", entityData, LogType.Create);
 
         return new CustomWebResponse()
         {
@@ -217,10 +214,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         entityData = mapper.Map(entity);
 
-        logger
-            .ForContext("CustomRecord", true)
-            .ForContext("Type", (int)LogType.Update)
-            .Information("Updated initiative: {@entityData}", entityData);
+        logger.Add("Updated initiative: {@entityData}", entityData, LogType.Update);
 
         return new CustomWebResponse()
         {
@@ -293,10 +287,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
             var entityData = mapper.Map(entity);
 
-            logger
-                .ForContext("CustomRecord", true)
-                .ForContext("Type", (int)LogType.Update)
-                .Information($"Updated initiative image (type: {imageTypeStr}): {{@entityData}}", entityData);
+            logger.Add($"Updated initiative image (type: {imageTypeStr}): {{@entityData}}", entityData, LogType.Update);
 
             return new CustomWebResponse()
             {
@@ -334,10 +325,8 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         await entityRepository.UpdateAsync(entity, ct);
 
         var entityData = mapper.Map(entity);
-        logger
-            .ForContext("CustomRecord", true)
-            .ForContext("Type", (int)LogType.Update)
-            .Information((disable ? "Disabled" : "Enabled") + " initiative: {@entityData}", entityData);
+
+        logger.Add($"{(disable ? "Disabled" : "Enabled")} initiative: {@entityData}", entityData, LogType.Update);
 
         return new CustomWebResponse()
         {

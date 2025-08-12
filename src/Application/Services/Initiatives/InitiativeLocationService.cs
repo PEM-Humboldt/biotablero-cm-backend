@@ -134,10 +134,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         entityData = mapper.Map(entity);
 
-        logger
-            .ForContext("CustomRecord", true)
-            .ForContext("Type", (int)LogType.Create)
-            .Information("Added initiative location: {@entityData}", entityData);
+        logger.Add("Added initiative location: {@entityData}", entityData, LogType.Create);
 
         return new CustomWebResponse()
         {
@@ -209,10 +206,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         entityData = mapper.Map(entity);
 
-        logger
-            .ForContext("CustomRecord", true)
-            .ForContext("Type", (int)LogType.Update)
-            .Information("Updated initiative location: {@entityData}", entityData);
+        logger.Add("Updated initiative location: {@entityData}", entityData, LogType.Update);
 
         return new CustomWebResponse()
         {
@@ -254,10 +248,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         var entityData = mapper.Map(entity);
 
-        logger
-            .ForContext("CustomRecord", true)
-            .ForContext("Type", (int)LogType.Delete)
-            .Information("Deleted initiative location: {@entityData}", entityData);
+        logger.Add("Deleted initiative location: {@entityData}", entityData, LogType.Delete);
 
         return new CustomWebResponse();
     }

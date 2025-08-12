@@ -135,10 +135,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         entityData = mapper.Map(entity);
 
-        logger
-            .ForContext("CustomRecord", true)
-            .ForContext("Type", (int)LogType.Create)
-            .Information("Added initiative user: {@entityData}", entityData);
+        logger.Add("Added initiative user: {@entityData}", entityData, LogType.Create);
 
         return new CustomWebResponse()
         {
@@ -211,10 +208,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         entityData = mapper.Map(entity);
 
-        logger
-            .ForContext("CustomRecord", true)
-            .ForContext("Type", (int)LogType.Update)
-            .Information("Updated initiative user: {@entityData}", entityData);
+        logger.Add("Updated initiative user: {@entityData}", entityData, LogType.Update);
 
         return new CustomWebResponse()
         {
@@ -259,10 +253,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         var entityData = mapper.Map(entity);
 
-        logger
-            .ForContext("CustomRecord", true)
-            .ForContext("Type", (int)LogType.Delete)
-            .Information("Deleted initiative user: {@entityData}", entityData);
+        logger.Add("Deleted initiative user: {@entityData}", entityData, LogType.Delete);
 
         return new CustomWebResponse();
     }
