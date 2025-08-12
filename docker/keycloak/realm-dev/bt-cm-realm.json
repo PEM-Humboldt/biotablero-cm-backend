@@ -3,6 +3,16 @@
     "enabled": true,
     "users": [
         {
+            "username": "service-account-bt-mc-client-backend",
+            "enabled": true,
+            "serviceAccountClientId": "bt-mc-client-backend",
+            "clientRoles": {
+                "realm-management": [
+                    "view-users"
+                ]
+            }
+        },
+        {
             "username": "general-user",
             "enabled": true,
             "firstName": "User",
