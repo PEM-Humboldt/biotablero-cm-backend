@@ -154,7 +154,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         entityData = mapper.Map(entity);
 
-        logger.Add("Added initiative: {@entityData}", entityData, LogType.Create);
+        logger.AddLog(LogType.Create, "Added initiative: {@entityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -214,7 +214,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         entityData = mapper.Map(entity);
 
-        logger.Add("Updated initiative: {@entityData}", entityData, LogType.Update);
+        logger.AddLog(LogType.Update, "Updated initiative: {@entityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -287,7 +287,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
             var entityData = mapper.Map(entity);
 
-            logger.Add($"Updated initiative image (type: {imageTypeStr}): {{@entityData}}", entityData, LogType.Update);
+            logger.AddLog(LogType.Update, $"Updated initiative image (type: {imageTypeStr}): {{@entityData}}", entityData);
 
             return new CustomWebResponse()
             {
@@ -326,7 +326,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         var entityData = mapper.Map(entity);
 
-        logger.Add($"{(disable ? "Disabled" : "Enabled")} initiative: {@entityData}", entityData, LogType.Update);
+        logger.AddLog(LogType.Update, $"{(disable ? "Disabled" : "Enabled")} initiative: {@entityData}", entityData);
 
         return new CustomWebResponse()
         {

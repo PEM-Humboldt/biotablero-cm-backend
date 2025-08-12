@@ -14,11 +14,11 @@ public static class LogUtils
     /// Add custom log message.
     /// </summary>
     /// <param name="logger">Serilog logger.</param>
+    /// <param name="logType">System log type.</param>
     /// <param name="messageTemplate">Message template.</param>
     /// <param name="propertyValues">Message property values.</param>
-    /// <param name="logType">System log type.</param>
     /// <param name="logLevel">System log level.</param>
-    public static void Add(this ILogger logger, string messageTemplate, object propertyValues, LogType logType = LogType.System, LogEventLevel logLevel = LogEventLevel.Information) =>
+    public static void AddLog(this ILogger logger, LogType logType, string messageTemplate, object propertyValues, LogEventLevel logLevel = LogEventLevel.Information) =>
         logger
             .ForContext("CustomRecord", true)
             .ForContext("Type", (int)logType)

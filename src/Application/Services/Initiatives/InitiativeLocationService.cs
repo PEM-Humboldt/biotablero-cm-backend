@@ -134,7 +134,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         entityData = mapper.Map(entity);
 
-        logger.Add("Added initiative location: {@entityData}", entityData, LogType.Create);
+        logger.AddLog(LogType.Create, "Added initiative location: {@entityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -206,7 +206,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         entityData = mapper.Map(entity);
 
-        logger.Add("Updated initiative location: {@entityData}", entityData, LogType.Update);
+        logger.AddLog(LogType.Update, "Updated initiative location: {@entityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -248,7 +248,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         var entityData = mapper.Map(entity);
 
-        logger.Add("Deleted initiative location: {@entityData}", entityData, LogType.Delete);
+        logger.AddLog(LogType.Delete, "Deleted initiative location: {@entityData}", entityData);
 
         return new CustomWebResponse();
     }
