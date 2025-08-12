@@ -63,6 +63,7 @@ public class StorageService : IStorageService
                 Key = $"{ProjectPreffix}/{fileName}",
                 BucketName = bucketName,
                 ContentType = file.ContentType,
+                DisableDefaultChecksumValidation = true,
             };
 
             using var fileTransferUtility = new TransferUtility(client);
