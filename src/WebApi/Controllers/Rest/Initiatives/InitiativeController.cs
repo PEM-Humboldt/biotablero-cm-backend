@@ -116,6 +116,7 @@ public class InitiativeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
     [HttpPost("UploadImage/{id}")]
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     public async Task<IActionResult> UploadImage(int id, IFormFile formFile, CancellationToken ct)
     {
         var response = await entityService.UploadImage(id, new FormFileAdapter(formFile), InitiativeImageType.Image, ct);
@@ -130,6 +131,7 @@ public class InitiativeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
     [HttpPost("UploadBanner/{id}")]
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     public async Task<IActionResult> UploadBanner(int id, IFormFile formFile, CancellationToken ct)
     {
         var response = await entityService.UploadImage(id, new FormFileAdapter(formFile), InitiativeImageType.Banner, ct);
