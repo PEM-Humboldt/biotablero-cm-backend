@@ -29,6 +29,7 @@ public class InitiativeMappings(
             Id = entity.Id,
             Name = entity.Name,
             Description = entity.Description,
+            CreationDate = entity.CreationDate,
             ImageUrl = entity.ImageUrl,
             BannerUrl = entity.BannerUrl,
             Enabled = entity.Enabled,
@@ -51,6 +52,7 @@ public class InitiativeMappings(
         {
             Name = dto.Name,
             Description = dto.Description,
+            CreationDate = dto.CreationDate ?? DateTime.Now,
             ImageUrl = dto.ImageUrl,
             BannerUrl = dto.BannerUrl,
             Enabled = dto?.Enabled ?? true,

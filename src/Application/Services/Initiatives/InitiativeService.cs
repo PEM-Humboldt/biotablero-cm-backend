@@ -170,6 +170,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         // Build entity data
         var entity = mapper.Map(entityData);
+        entity.CreationDate = DateTime.Now;
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);

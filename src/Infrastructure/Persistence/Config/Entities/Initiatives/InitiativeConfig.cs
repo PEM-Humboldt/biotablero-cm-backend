@@ -34,6 +34,11 @@ public class InitiativeConfig : IEntityTypeConfiguration<Initiative>
             .HasMaxLength(300)
             .IsRequired();
 
+        builder.Property(e => e.CreationDate)
+            .HasColumnName("creation_date")
+            .HasDefaultValueSql("CURRENT_TIMESTAMP")
+            .IsRequired();
+
         builder.Property(i => i.ImageUrl)
             .HasColumnName("image_url")
             .HasMaxLength(150);

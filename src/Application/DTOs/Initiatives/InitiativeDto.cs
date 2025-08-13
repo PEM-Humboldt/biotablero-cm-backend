@@ -26,6 +26,11 @@ public class InitiativeDto : IDto
     public string Description { get; set; }
 
     /// <summary>
+    /// Initiative creation date.
+    /// </summary>
+    public DateTime? CreationDate { get; set; }
+
+    /// <summary>
     /// Initiative image URL.
     /// </summary>
     public Uri ImageUrl { get; set; }
