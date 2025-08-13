@@ -116,7 +116,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <summary>
     /// Get OData list data by custom Linq query.
     /// </summary>
-    /// <param name="query">Linq SQL Query.</param>
+    /// <param name="query">Linq Query.</param>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
@@ -159,7 +159,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <summary>
     /// Add filter and order settings to OData query.
     /// </summary>
-    /// <param name="query">Linq SQL Query.</param>
+    /// <param name="query">Linq Query.</param>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="settings">OData query settings.</param>
     /// <returns>Modified Linq query.</returns>
@@ -182,7 +182,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <summary>
     /// Add pagination settings to OData query.
     /// </summary>
-    /// <param name="query">Linq SQL Query.</param>
+    /// <param name="query">Linq Query.</param>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="settings">OData query settings.</param>
     /// <returns>Modified Linq query.</returns>

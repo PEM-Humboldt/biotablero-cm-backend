@@ -1,8 +1,10 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
+using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,7 +20,10 @@ public static class ConfigExternalServices
     /// <returns>Host builder configuration.</returns>
     public static IServiceCollection AddExternalServices(this IServiceCollection services)
     {
-        // ExternalException services
+        // Custom repositories
+        services.AddScoped<IInitiativeRepository, InitiativeRepository>();
+
+        // External services
         services.AddScoped<IStorageService, StorageService>();
         services.AddSingleton<IIamService, IamService>();
 

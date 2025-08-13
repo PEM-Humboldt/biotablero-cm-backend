@@ -23,14 +23,14 @@ public class Repository<T>(GeneralContext dbContext) : RepositoryBase<T>(dbConte
     /// <summary>
     /// Get a new query.
     /// </summary>
-    /// <returns>Linq SQL Query.</returns>
+    /// <returns>Linq Query.</returns>
     public IQueryable<T> GetQueryable() =>
         dbContext.Set<T>().AsNoTracking();
 
     /// <summary>
     /// Get the number of elements in a query.
     /// </summary>
-    /// <param name="query">Linq SQL query.</param>
+    /// <param name="query">Linq Query.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Number of elements in the query.</returns>
     public async Task<int> QueryCountAsync(IQueryable<T> query, CancellationToken ct = default) => await query.CountAsync(ct);
@@ -38,7 +38,7 @@ public class Repository<T>(GeneralContext dbContext) : RepositoryBase<T>(dbConte
     /// <summary>
     /// Creates a List from a query.
     /// </summary>
-    /// <param name="query">Linq SQL query.</param>
+    /// <param name="query">Linq Query.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of elements in the query.</returns>
     public async Task<List<T>> QueryToListAsync(IQueryable<T> query, CancellationToken ct = default) => await query.ToListAsync(ct);

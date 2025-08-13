@@ -39,6 +39,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     private const string StoragePrefix = "initiatives";
     private readonly IValidator<InitiativeDto> entityValidator;
     private readonly ILogger logger;
+    private readonly IInitiativeRepository initiativeRepository;
     private readonly IRepository<Location> locationRepository;
     private readonly IIamService iamService;
     private readonly IStorageService storageService;
@@ -50,6 +51,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
+    /// <param name="initiativeRepository">Custom initiative repository.</param>
     /// <param name="initiativeUserRepository">Initiative User repository.</param>
     /// <param name="locationRepository">Initiative Location repository.</param>
     /// <param name="storageService">Storage service.</param>
@@ -59,6 +61,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         IMapper<Initiative, InitiativeDto> mapper,
         IValidator<InitiativeDto> entityValidator,
         ILogger logger,
+        IInitiativeRepository initiativeRepository,
         IRepository<Location> locationRepository,
         IStorageService storageService,
         IIamService iamService)
@@ -66,6 +69,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     {
         this.entityValidator = entityValidator;
         this.logger = logger;
+        this.initiativeRepository = initiativeRepository;
         this.locationRepository = locationRepository;
         this.storageService = storageService;
         this.iamService = iamService;
@@ -79,9 +83,9 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <returns>Process result.</returns>
     public override async Task<CustomWebResponse> GetList(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct = default)
     {
-        // Get only enabled entities
-        var query = entityRepository.GetQueryable();
-        query = query.Where(e => e.Enabled);
+        // Add joins
+        var query = initiativeRepository.GetQueryable();
+        query = initiativeRepository.IncludeOdataEntities(query);
 
         return await GetOdataListByQuery(query, queryOptions, ct);
     }
