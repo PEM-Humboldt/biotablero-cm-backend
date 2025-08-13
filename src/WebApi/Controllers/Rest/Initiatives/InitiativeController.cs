@@ -10,7 +10,6 @@ using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Logging;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Authorization;
@@ -60,7 +59,7 @@ public class InitiativeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(LogOdataResponseExample), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(InitiativeOdataResponseExample), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeOdataResponseExample))]
     public async Task<IActionResult> Get(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct)

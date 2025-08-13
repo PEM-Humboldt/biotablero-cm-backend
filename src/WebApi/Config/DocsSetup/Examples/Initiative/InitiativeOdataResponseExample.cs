@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
+using System;
 using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
@@ -20,7 +21,17 @@ public class InitiativeOdataResponseExample : IExamplesProvider<Dictionary<strin
         ["@odata.count"] = 1,
         ["value"] = new List<InitiativeDto>()
         {
-            new(),
+            new()
+            {
+                Id = 0,
+                Name = "Initiative example",
+                Description = "example",
+                CreationDate = DateTime.Now,
+                Enabled = true,
+                InitiativeLocations = null,
+                InitiativeContacts = null,
+                InitiativeUsers = null,
+            },
         },
     };
 }
