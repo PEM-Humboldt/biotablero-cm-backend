@@ -39,7 +39,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     private const string StoragePrefix = "initiatives";
     private readonly IValidator<InitiativeDto> entityValidator;
     private readonly ILogger logger;
-    private readonly IInitiativeRepository initiativeRepository;
+    private new readonly IInitiativeRepository entityRepository;
     private readonly IRepository<Location> locationRepository;
     private readonly IIamService iamService;
     private readonly IStorageService storageService;
@@ -51,25 +51,23 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="initiativeRepository">Custom initiative repository.</param>
     /// <param name="initiativeUserRepository">Initiative User repository.</param>
     /// <param name="locationRepository">Initiative Location repository.</param>
     /// <param name="storageService">Storage service.</param>
     /// <param name="iamService">IAM service.</param>
     public InitiativeService(
-        IRepository<Initiative> entityRepository,
+        IInitiativeRepository entityRepository,
         IMapper<Initiative, InitiativeDto> mapper,
         IValidator<InitiativeDto> entityValidator,
         ILogger logger,
-        IInitiativeRepository initiativeRepository,
         IRepository<Location> locationRepository,
         IStorageService storageService,
         IIamService iamService)
         : base(entityRepository, mapper)
     {
+        this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
-        this.initiativeRepository = initiativeRepository;
         this.locationRepository = locationRepository;
         this.storageService = storageService;
         this.iamService = iamService;
@@ -83,9 +81,8 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <returns>Process result.</returns>
     public override async Task<CustomWebResponse> GetList(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct = default)
     {
-        // Add joins
-        var query = initiativeRepository.GetQueryable();
-        query = initiativeRepository.IncludeOdataEntities(query);
+        var query = entityRepository.GetQueryable();
+        query = entityRepository.IncludeOdataEntities(query);
 
         return await GetOdataListByQuery(query, queryOptions, ct);
     }

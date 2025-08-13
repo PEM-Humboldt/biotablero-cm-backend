@@ -18,7 +18,8 @@ public class InitiativeRepository(GeneralContext dbContext) : Repository<Initiat
     /// </summary>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
-    public IQueryable<Initiative> IncludeOdataEntities(IQueryable<Initiative> query) => query
+    public IQueryable<Initiative> IncludeOdataEntities(IQueryable<Initiative> query) =>
+        query
             .Include(e => e.InitiativeLocations)
                 .ThenInclude(e => e.Location)
                     .ThenInclude(e => e.Parent);
