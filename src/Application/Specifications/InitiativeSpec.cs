@@ -24,6 +24,13 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     public InitiativeSpec(int id)
         : base(id)
     {
+        Query
+            .Where(e => e.Id == id)
+            .Include(e => e.InitiativeContacts)
+            .Include(e => e.InitiativeUsers)
+            .Include(e => e.InitiativeLocations)
+                .ThenInclude(e => e.Location)
+                    .ThenInclude(e => e.Parent);
     }
 
     /// <summary>
