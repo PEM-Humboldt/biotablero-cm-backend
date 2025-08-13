@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
+using System;
+
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
 using Swashbuckle.AspNetCore.Filters;
@@ -18,6 +20,7 @@ public class InitiativeResponseExample : IExamplesProvider<InitiativeDto>
         Id = 0,
         Name = "Initiative example",
         Description = "example",
+        CreationDate = DateTime.Now,
         Enabled = true,
         InitiativeLocations = null,
         InitiativeContacts = null,
