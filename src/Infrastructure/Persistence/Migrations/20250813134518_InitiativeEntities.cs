@@ -4,6 +4,8 @@
 
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations;
 
+using System;
+
 using Microsoft.EntityFrameworkCore.Migrations;
 
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -29,6 +31,7 @@ public partial class InitiativeEntities : Migration
                     .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                 name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                 description = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
+                creation_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                 image_url = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                 banner_url = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
                 enabled = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
