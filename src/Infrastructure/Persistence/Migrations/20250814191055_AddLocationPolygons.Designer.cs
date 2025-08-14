@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20250814183949_AddLocationPolygons")]
+    [Migration("20250814191055_AddLocationPolygons")]
     partial class AddLocationPolygons
     {
         /// <inheritdoc />
@@ -70,7 +70,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.Property<Geometry>("Geometry")
                         .IsRequired()
-                        .HasColumnType("geometry(Polygon, 4326)")
+                        .HasColumnType("geometry(MultiPolygon, 4326)")
                         .HasColumnName("geometry");
 
                     b.Property<string>("GeometrySimplified")

@@ -67,7 +67,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.Property<Geometry>("Geometry")
                         .IsRequired()
-                        .HasColumnType("geometry(Polygon, 4326)")
+                        .HasColumnType("geometry(MultiPolygon, 4326)")
                         .HasColumnName("geometry");
 
                     b.Property<string>("GeometrySimplified")

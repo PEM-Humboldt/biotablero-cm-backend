@@ -26,7 +26,7 @@ public class LocationPolygonConfig : IEntityTypeConfiguration<LocationPolygon>
 
         builder.Property(lp => lp.Geometry)
             .HasColumnName("geometry")
-            .HasColumnType("geometry(Polygon, 4326)")
+            .HasColumnType("geometry(MultiPolygon, 4326)")
             .IsRequired();
 
         builder.Property(lp => lp.GeometrySimplified)

@@ -21,7 +21,7 @@ public partial class AddLocationPolygons : Migration
             columns: table => new
             {
                 id = table.Column<int>(type: "integer", nullable: false),
-                geometry = table.Column<Geometry>(type: "geometry(Polygon, 4326)", nullable: false),
+                geometry = table.Column<Geometry>(type: "geometry(MultiPolygon, 4326)", nullable: false),
                 geometry_simplified = table.Column<string>(type: "text", nullable: false),
             },
             constraints: table =>
