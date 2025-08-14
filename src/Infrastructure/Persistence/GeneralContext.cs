@@ -41,9 +41,14 @@ public sealed class GeneralContext : DbContext
     #region Geographic module
 
     /// <summary>
-    /// System logs DbSet.
+    /// Locations DbSet.
     /// </summary>
     public DbSet<Location> Locations { get; set; }
+
+    /// <summary>
+    /// Location Polygons DbSet.
+    /// </summary>
+    public DbSet<LocationPolygon> LocationPolygons { get; set; }
 
     #endregion
 
