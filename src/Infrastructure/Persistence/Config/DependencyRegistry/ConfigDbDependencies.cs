@@ -20,5 +20,5 @@ public static class ConfigDbDependencies
     /// <param name="services">Application services.</param>
     public static void AddDbServices(IServiceCollection services) =>
         services.AddDbContext<GeneralContext>(c =>
-            c.UseNpgsql(ConnectionString));
+            c.UseNpgsql(ConnectionString, npgsqlOptions => npgsqlOptions.UseNetTopologySuite()));
 }
