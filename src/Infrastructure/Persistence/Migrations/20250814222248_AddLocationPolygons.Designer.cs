@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20250814191055_AddLocationPolygons")]
+    [Migration("20250814222248_AddLocationPolygons")]
     partial class AddLocationPolygons
     {
         /// <inheritdoc />
@@ -80,7 +80,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("location_polygons", "geo");
+                    b.ToTable("location_polygon", "geo");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", b =>

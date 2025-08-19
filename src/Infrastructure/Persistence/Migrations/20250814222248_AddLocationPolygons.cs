@@ -16,7 +16,7 @@ public partial class AddLocationPolygons : Migration
             .Annotation("Npgsql:PostgresExtension:postgis", ",,");
 
         migrationBuilder.CreateTable(
-            name: "location_polygons",
+            name: "location_polygon",
             schema: "geo",
             columns: table => new
             {
@@ -26,9 +26,9 @@ public partial class AddLocationPolygons : Migration
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_location_polygons", x => x.id);
+                table.PrimaryKey("PK_location_polygon", x => x.id);
                 table.ForeignKey(
-                    name: "FK_location_polygons_location_id",
+                    name: "FK_location_polygon_location_id",
                     column: x => x.id,
                     principalSchema: "geo",
                     principalTable: "location",
@@ -40,7 +40,7 @@ public partial class AddLocationPolygons : Migration
     protected override void Down(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.DropTable(
-            name: "location_polygons",
+            name: "location_polygon",
             schema: "geo");
 
         migrationBuilder.AlterDatabase()

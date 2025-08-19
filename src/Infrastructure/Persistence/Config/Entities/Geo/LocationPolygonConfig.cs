@@ -16,7 +16,7 @@ public class LocationPolygonConfig : IEntityTypeConfiguration<LocationPolygon>
     /// <param name="builder">Entity builder.</param>
     public void Configure(EntityTypeBuilder<LocationPolygon> builder)
     {
-        builder.ToTable("location_polygons", "geo");
+        builder.ToTable("location_polygon", "geo");
 
         builder?.HasKey(e => e.Id);
 
