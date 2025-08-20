@@ -17,9 +17,21 @@ using Microsoft.EntityFrameworkCore;
 /// Base repository interface.
 /// </summary>
 /// <typeparam name="T">Entity class type.</typeparam>
-public class Repository<T>(GeneralContext dbContext) : RepositoryBase<T>(dbContext), IRepository<T>
+public class Repository<T> : RepositoryBase<T>, IRepository<T>
     where T : class, IAggregateRoot
 {
+    private readonly GeneralContext dbContext;
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="dbContext">General Database Context.</param>
+    public Repository(GeneralContext dbContext)
+        : base(dbContext)
+    {
+        this.dbContext = dbContext;
+    }
+
     /// <summary>
     /// Get a new query.
     /// </summary>

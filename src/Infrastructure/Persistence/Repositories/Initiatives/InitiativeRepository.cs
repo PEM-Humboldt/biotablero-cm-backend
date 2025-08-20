@@ -14,9 +14,20 @@ using NetTopologySuite.Geometries;
 /// <summary>
 /// Custom Initiative repository.
 /// </summary>
-/// <param name="dbContext">General Database Context.</param>
-public class InitiativeRepository(GeneralContext dbContext) : Repository<Initiative>(dbContext), IInitiativeRepository
+public class InitiativeRepository : Repository<Initiative>, IInitiativeRepository
 {
+    private readonly GeneralContext dbContext;
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="dbContext">General Database Context.</param>
+    public InitiativeRepository(GeneralContext dbContext)
+        : base(dbContext)
+    {
+        this.dbContext = dbContext;
+    }
+
     /// <summary>
     /// Include OData custom entities.
     /// </summary>
