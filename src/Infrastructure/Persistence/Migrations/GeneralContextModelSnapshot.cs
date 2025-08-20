@@ -94,6 +94,11 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(150)")
                         .HasColumnName("banner_url");
 
+                    b.Property<Point>("Coordinate")
+                        .IsRequired()
+                        .HasColumnType("geometry(Point, 4326)")
+                        .HasColumnName("coordinate");
+
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
@@ -122,6 +127,10 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
+
+                    b.Property<Geometry>("Polygon")
+                        .HasColumnType("geometry(Polygon, 4326)")
+                        .HasColumnName("polygon");
 
                     b.HasKey("Id");
 

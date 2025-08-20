@@ -15,6 +15,20 @@ public partial class AddLocationPolygons : Migration
         migrationBuilder.AlterDatabase()
             .Annotation("Npgsql:PostgresExtension:postgis", ",,");
 
+        migrationBuilder.AddColumn<Point>(
+            name: "coordinate",
+            schema: "initiatives",
+            table: "initiative",
+            type: "geometry(Point, 4326)",
+            nullable: false);
+
+        migrationBuilder.AddColumn<Geometry>(
+            name: "polygon",
+            schema: "initiatives",
+            table: "initiative",
+            type: "geometry(Polygon, 4326)",
+            nullable: true);
+
         migrationBuilder.CreateTable(
             name: "location_polygon",
             schema: "geo",
@@ -42,6 +56,16 @@ public partial class AddLocationPolygons : Migration
         migrationBuilder.DropTable(
             name: "location_polygon",
             schema: "geo");
+
+        migrationBuilder.DropColumn(
+            name: "coordinate",
+            schema: "initiatives",
+            table: "initiative");
+
+        migrationBuilder.DropColumn(
+            name: "polygon",
+            schema: "initiatives",
+            table: "initiative");
 
         migrationBuilder.AlterDatabase()
             .OldAnnotation("Npgsql:PostgresExtension:postgis", ",,");
