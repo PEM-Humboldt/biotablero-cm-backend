@@ -134,7 +134,8 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         // Validate locations data
         var locationsIds = entityData.InitiativeLocations
-            .Select(l => l.LocationId);
+            .Select(l => l.LocationId ?? 0)
+            .ToArray();
 
         var initiativeLocationQuery = locationRepository
             .GetQueryable()
@@ -142,7 +143,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         var locationsDb = await locationRepository.QueryToListAsync(initiativeLocationQuery, ct);
 
-        if (locationsIds.Count() != locationsDb.Count)
+        if (locationsIds.Length != locationsDb.Count)
         {
             return new CustomWebResponse(true)
             {
@@ -172,6 +173,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         // Build entity data
         var entity = mapper.Map(entityData);
         entity.CreationDate = DateTime.Now;
+        entity.Coordinate = await entityRepository.GetCentroid(locationsIds, ct);
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
