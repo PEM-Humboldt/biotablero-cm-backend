@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
+using NetTopologySuite.Geometries;
+
 /// <summary>
 /// Initiative entity.
 /// </summary>
@@ -39,6 +41,11 @@ public class InitiativeDto : IDto
     /// Initiative banner URL.
     /// </summary>
     public Uri BannerUrl { get; set; }
+
+    /// <summary>
+    /// Initiative polygon centroid.
+    /// </summary>
+    public Point Coordinate { get; set; }
 
     /// <summary>
     /// Enabled flag.

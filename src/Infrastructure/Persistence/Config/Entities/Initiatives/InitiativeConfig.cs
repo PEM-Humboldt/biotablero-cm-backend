@@ -47,6 +47,15 @@ public class InitiativeConfig : IEntityTypeConfiguration<Initiative>
             .HasColumnName("banner_url")
             .HasMaxLength(150);
 
+        builder.Property(lp => lp.Polygon)
+            .HasColumnName("polygon")
+            .HasColumnType("geometry(Polygon, 4326)");
+
+        builder.Property(lp => lp.Coordinate)
+            .HasColumnName("coordinate")
+            .HasColumnType("geometry(Point, 4326)")
+            .IsRequired();
+
         builder.Property(i => i.Enabled)
             .HasColumnName("enabled")
             .HasDefaultValue(true)
