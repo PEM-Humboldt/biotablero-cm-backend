@@ -53,15 +53,20 @@ public class InitiativeDto : IDto
     /// <summary>
     /// Initiative Locations relationship.
     /// </summary>
-    public IEnumerable<InitiativeLocationDto> InitiativeLocations { get; init; }
+    public IEnumerable<InitiativeLocationDto> Locations { get; init; }
 
     /// <summary>
     /// Initiative Contacts relationship.
     /// </summary>
-    public IEnumerable<InitiativeContactDto> InitiativeContacts { get; init; }
+    public IEnumerable<InitiativeContactDto> Contacts { get; init; }
 
     /// <summary>
     /// Initiative Users relationship.
     /// </summary>
-    public IEnumerable<InitiativeUserDto> InitiativeUsers { get; init; }
+    public IEnumerable<InitiativeUserDto> Users { get; init; }
+
+    /// <summary>
+    /// Initiative Tags relationship.
+    /// </summary>
+    public IEnumerable<InitiativeTagDto> Tags { get; init; }
 }

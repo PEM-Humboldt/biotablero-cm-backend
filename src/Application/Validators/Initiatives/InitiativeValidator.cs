@@ -30,25 +30,25 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
 
         RuleSet("Create", () =>
         {
-            RuleFor(dto => dto.InitiativeLocations)
+            RuleFor(dto => dto.Locations)
                 .NotEmpty()
                     .WithMessage("At least one location is required");
 
-            RuleForEach(dto => dto.InitiativeLocations)
+            RuleForEach(dto => dto.Locations)
                 .SetValidator(new InitiativeLocationValidator(), "default");
 
-            RuleFor(dto => dto.InitiativeContacts)
+            RuleFor(dto => dto.Contacts)
                 .NotEmpty()
                     .WithMessage("At least one contact is required");
 
-            RuleForEach(dto => dto.InitiativeContacts)
+            RuleForEach(dto => dto.Contacts)
                 .SetValidator(new InitiativeContactValidator(), "default");
 
-            RuleFor(dto => dto.InitiativeUsers)
+            RuleFor(dto => dto.Users)
                 .NotEmpty()
                     .WithMessage("At least one user is required");
 
-            RuleForEach(dto => dto.InitiativeUsers)
+            RuleForEach(dto => dto.Users)
                 .SetValidator(new InitiativeUserValidator(), "default");
         });
     }

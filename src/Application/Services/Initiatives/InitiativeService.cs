@@ -155,7 +155,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         }
 
         // Validate users data
-        var leaderCount = entityData.InitiativeUsers
+        var leaderCount = entityData.Users
             .Select(u => u.Level.Id == (int)InitiativeUserLevelEnum.Leader)
             .Count();
 
@@ -168,7 +168,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         }
 
         // Validate locations data
-        var locationsIds = entityData.InitiativeLocations
+        var locationsIds = entityData.Locations
             .Select(l => l.LocationId ?? 0)
             .ToArray();
 
@@ -188,7 +188,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         // Validate users in external system
         var results = new Dictionary<string, bool>();
-        var userTasks = entityData.InitiativeUsers.Select(async user =>
+        var userTasks = entityData.Users.Select(async user =>
         {
             results[user.UserName] = await iamService.UserExists(user.UserName, ct);
         });

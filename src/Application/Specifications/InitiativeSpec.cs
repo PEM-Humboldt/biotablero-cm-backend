@@ -32,7 +32,9 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
             .Include(e => e.InitiativeUsers)
             .Include(e => e.InitiativeLocations)
                 .ThenInclude(e => e.Location)
-                    .ThenInclude(e => e.Parent);
+                    .ThenInclude(e => e.Parent)
+            .Include(e => e.InitiativeTagInitiatives)
+                .ThenInclude(e => e.Tag);
     }
 
     /// <summary>

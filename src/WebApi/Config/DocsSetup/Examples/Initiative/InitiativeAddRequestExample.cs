@@ -20,21 +20,21 @@ public class InitiativeAddRequestExample : IExamplesProvider<InitiativeDto>
     {
         Name = "Initiative example",
         Description = "example",
-        InitiativeLocations = [
+        Locations = [
             new()
             {
                 LocationId = 1,
                 Locality = "Locality example",
             }
         ],
-        InitiativeContacts = [
+        Contacts = [
             new()
             {
                 Phone = "3055555555",
                 Email = "example@example.com",
             }
         ],
-        InitiativeUsers = [
+        Users = [
             new()
             {
                 UserName = "Admin",

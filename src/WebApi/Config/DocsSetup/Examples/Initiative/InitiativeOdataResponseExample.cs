@@ -28,9 +28,9 @@ public class InitiativeOdataResponseExample : IExamplesProvider<Dictionary<strin
                 Description = "example",
                 CreationDate = DateTime.Now,
                 Enabled = true,
-                InitiativeLocations = null,
-                InitiativeContacts = null,
-                InitiativeUsers = null,
+                Locations = null,
+                Contacts = null,
+                Users = null,
             },
         },
     };

@@ -17,8 +17,8 @@ public class InitiativeEditRequestExample : IExamplesProvider<InitiativeDto>
     {
         Name = "Initiative example (edited)",
         Description = "example (edited)",
-        InitiativeLocations = null,
-        InitiativeContacts = null,
-        InitiativeUsers = null,
+        Locations = null,
+        Contacts = null,
+        Users = null,
     };
 }
