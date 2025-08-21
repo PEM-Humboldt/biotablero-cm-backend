@@ -21,7 +21,7 @@ using Serilog;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// InitiativeTag Tag service.
+/// Initiative Tag service.
 /// </summary>
 public class InitiativeTagService : ServiceRead<InitiativeTag, InitiativeTagDto, int, InitiativeTagSpec>, IInitiativeTagService
 {
