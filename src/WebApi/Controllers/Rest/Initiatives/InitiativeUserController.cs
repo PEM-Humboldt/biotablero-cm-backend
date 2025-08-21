@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
-/// Initiative-User controller.
+/// Initiative User controller.
 /// </summary>
 [ApiController]
 [Route("[controller]")]
