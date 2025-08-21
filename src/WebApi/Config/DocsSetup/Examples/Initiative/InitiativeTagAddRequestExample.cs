@@ -1,7 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
-using System;
-
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
@@ -21,7 +19,7 @@ public class InitiativeTagAddRequestExample : IExamplesProvider<InitiativeTagDto
     public InitiativeTagDto GetExamples() => new()
     {
         Name = "Tag example",
-        Url = new Uri("https://example.com/tag-data"),
+        Url = "https://example.com/tag-data",
         Category = new EnumEntityDto<InitiativeTagCategory>(InitiativeTagCategory.PoliticalContext),
     };
 }

@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
-using System;
 using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
@@ -28,7 +27,7 @@ public class InitiativeTagOdataResponseExample : IExamplesProvider<Dictionary<st
             {
                 Id = 0,
                 Name = "Initiative example",
-                Url = new Uri("https://example.com/tag-data"),
+                Url = "https://example.com/tag-data",
                 Category = new EnumEntityDto<InitiativeTagCategory>(InitiativeTagCategory.PoliticalContext),
             },
         },

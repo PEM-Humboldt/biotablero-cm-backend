@@ -1,7 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
-using System;
-
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
@@ -25,7 +23,7 @@ public class InitiativeTagDto : IDto
     /// <summary>
     /// Initiative Tag URL.
     /// </summary>
-    public Uri Url { get; set; }
+    public string Url { get; set; }
 
     /// <summary>
     /// Category relationship.

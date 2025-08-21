@@ -113,6 +113,10 @@ dotnet_diagnostic.CA1051.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1819
 dotnet_diagnostic.CA1819.severity = none
 
+# Change the type of property from 'string' to 'System.Uri'
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1056
+dotnet_diagnostic.CA1056.severity = none
+
 # --------------------- #
 # Custom StyleCop rules #
 # --------------------- #

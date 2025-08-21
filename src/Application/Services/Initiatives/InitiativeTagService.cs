@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -145,7 +146,7 @@ public class InitiativeTagService : ServiceRead<InitiativeTag, InitiativeTagDto,
 
         // Update entity data
         entity.Name = entityData.Name;
-        entity.Url = entityData.Url;
+        entity.Url = new Uri(entityData.Url);
         entity.CategoryId = entityData.Category.Id;
 
         await entityRepository.UpdateAsync(entity, ct);

@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
@@ -26,8 +27,8 @@ public class InitiativeTagValidator : AbstractValidator<InitiativeTagDto>
             .MaximumLength(40);
 
         RuleFor(dto => dto.Url)
-            .Must(uri => uri == null || uri.ToString().Length <= 150)
-                .WithMessage("'{PropertyName}' cannot exceed 150 characters");
+            .Matches(RegExprConstants.Url)
+            .MaximumLength(150);
 
         RuleFor(dto => dto.Category)
             .NotNull()

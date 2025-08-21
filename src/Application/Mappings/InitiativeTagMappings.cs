@@ -27,7 +27,7 @@ public class InitiativeTagMappings : IMapper<InitiativeTag, InitiativeTagDto>
         {
             Id = entity.Id,
             Name = entity.Name,
-            Url = entity.Url,
+            Url = entity.Url.ToString(),
             Category = new EnumEntityDto<InitiativeTagCategoryEnum>(entity.CategoryId),
         };
     }
@@ -44,7 +44,7 @@ public class InitiativeTagMappings : IMapper<InitiativeTag, InitiativeTagDto>
         return new()
         {
             Name = dto.Name,
-            Url = dto.Url,
+            Url = new Uri(dto.Url),
             CategoryId = dto.Category.Id,
         };
     }
