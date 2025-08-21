@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations;
 
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -76,6 +78,16 @@ public partial class AddInitiativeTags : Migration
                     principalTable: "initiative_tag",
                     principalColumn: "id",
                     onDelete: ReferentialAction.Cascade);
+            });
+
+        migrationBuilder.InsertData(
+            schema: "initiatives",
+            table: "initiative_tag_category",
+            columns: new[] { "id", "name" },
+            values: new object[,]
+            {
+                { 1, "PoliticalContext" },
+                { 2, "SocialContext" },
             });
 
         migrationBuilder.CreateIndex(

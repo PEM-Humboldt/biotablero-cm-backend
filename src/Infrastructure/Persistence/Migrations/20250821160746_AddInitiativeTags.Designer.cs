@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20250821155131_AddInitiativeTags")]
+    [Migration("20250821160746_AddInitiativeTags")]
     partial class AddInitiativeTags
     {
         /// <inheritdoc />
@@ -261,6 +261,18 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("initiative_tag_category", "initiatives");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "PoliticalContext"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "SocialContext"
+                        });
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.InitiativeTagInitiative", b =>

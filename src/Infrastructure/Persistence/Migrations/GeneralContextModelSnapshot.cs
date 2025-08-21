@@ -258,6 +258,18 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("initiative_tag_category", "initiatives");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "PoliticalContext"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "SocialContext"
+                        });
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.InitiativeTagInitiative", b =>
