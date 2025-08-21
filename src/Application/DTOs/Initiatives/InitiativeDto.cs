@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Initiative entity.
+/// Initiative dto.
 /// </summary>
 public class InitiativeDto : IDto
 {

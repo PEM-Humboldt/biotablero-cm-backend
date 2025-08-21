@@ -4,7 +4,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Initiative Location entity.
+/// Initiative Location dto.
 /// </summary>
 public class InitiativeLocationDto : IDto
 {

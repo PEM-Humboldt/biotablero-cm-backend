@@ -3,7 +3,7 @@
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Initiative Contact entity.
+/// Initiative Contact dto.
 /// </summary>
 public class InitiativeContactDto : IDto
 {
