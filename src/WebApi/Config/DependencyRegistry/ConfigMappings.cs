@@ -29,6 +29,7 @@ public static class ConfigMappings
         services.AddSingleton<IMapper<InitiativeContact, InitiativeContactDto>, InitiativeContactMappings>();
         services.AddSingleton<IMapper<InitiativeLocation, InitiativeLocationDto>, InitiativeLocationMappings>();
         services.AddSingleton<IMapper<InitiativeUser, InitiativeUserDto>, InitiativeUserMappings>();
+        services.AddSingleton<IMapper<InitiativeTag, InitiativeTagDto>, InitiativeTagMappings>();
 
         return services;
     }
