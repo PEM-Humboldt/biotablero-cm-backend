@@ -13,6 +13,8 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
+using Microsoft.AspNetCore.OData.Query;
+
 using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
@@ -51,6 +53,33 @@ public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, I
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
         this.initiativeUserRepository = initiativeUserRepository;
+    }
+
+    /// <summary>
+    /// Get elements list (OData).
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> GetList(int initiativeId, string userName, ODataQueryOptions<InitiativeJoinRequest> queryOptions, CancellationToken ct = default)
+    {
+        // Validate user level
+        var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader), ct);
+
+        if (!userIsLeader)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        var query = entityRepository.GetQueryable();
+        query = entityRepository.AddInitiativeFilter(initiativeId, query);
+
+        return await GetOdataListByQuery(query, queryOptions, ct);
     }
 
     /// <summary>

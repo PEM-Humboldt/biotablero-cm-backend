@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +11,14 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// </summary>
 public interface IInitiativeJoinRequestRepository : IRepository<InitiativeJoinRequest>
 {
+    /// <summary>
+    /// Add initiative filter.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="query">Linq Query.</param>
+    /// <returns>Modified Linq query.</returns>
+    public IQueryable<InitiativeJoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<InitiativeJoinRequest> query);
+
     /// <summary>
     /// Review request.
     /// </summary>

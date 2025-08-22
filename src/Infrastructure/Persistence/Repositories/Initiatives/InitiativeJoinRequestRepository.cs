@@ -31,6 +31,15 @@ public class InitiativeJoinRequestRepository : Repository<InitiativeJoinRequest>
     }
 
     /// <summary>
+    /// Add initiative filter.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="query">Linq Query.</param>
+    /// <returns>Modified Linq query.</returns>
+    public IQueryable<InitiativeJoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<InitiativeJoinRequest> query) => query
+            .Where(e => e.InitiativeId == initiativeId);
+
+    /// <summary>
     /// Review request.
     /// </summary>
     /// <param name="requestId">Request identifier.</param>
