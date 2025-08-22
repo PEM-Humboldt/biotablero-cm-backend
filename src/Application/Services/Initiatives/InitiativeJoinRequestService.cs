@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
-using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +18,7 @@ using Serilog;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 using InitiativeJoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeJoinRequestStatus;
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
 /// <summary>
 /// Initiative Join Request service.
@@ -28,6 +28,7 @@ public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, I
     private new readonly IInitiativeJoinRequestRepository entityRepository;
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
+    private readonly IRepository<InitiativeUser> initiativeUserRepository;
 
     /// <summary>
     /// Constructor.
@@ -37,16 +38,19 @@ public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, I
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
+    /// <param name="initiativeUserRepository">Initiative user repository.</param>
     public InitiativeJoinRequestService(
         IInitiativeJoinRequestRepository entityRepository,
         IMapper<InitiativeJoinRequest, InitiativeJoinRequestDto> mapper,
         ILogger logger,
-        IInitiativeRepository initiativeRepository)
+        IInitiativeRepository initiativeRepository,
+        IRepository<InitiativeUser> initiativeUserRepository)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
+        this.initiativeUserRepository = initiativeUserRepository;
     }
 
     /// <summary>
@@ -79,6 +83,17 @@ public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, I
             };
         }
 
+        // Validate user and initiative relationship
+        var hasUserAndInitiativeRelationship = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserNameSpec(entityData.InitiativeId, entityData.UserName), ct);
+
+        if (hasUserAndInitiativeRelationship)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "The user already belongs to the initiative",
+            };
+        }
+
         // Build entity data
         var entity = mapper.Map(entityData);
         entity.StatusId = (int)InitiativeJoinRequestStatusEnum.UnderReview;
@@ -105,6 +120,17 @@ public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, I
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> Update(int id, InitiativeJoinRequestDto entityData, CancellationToken ct = default)
     {
+        // Validate user level
+        var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(entityData.InitiativeId, entityData.ReviewerUserName, (int)InitiativeUserLevelEnum.Leader), ct);
+
+        if (!userIsLeader)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
