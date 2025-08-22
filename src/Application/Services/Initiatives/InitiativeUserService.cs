@@ -31,6 +31,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     private readonly IValidator<InitiativeUserDto> entityValidator;
     private readonly ILogger logger;
     private readonly IIamService iamService;
+    private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
     /// Constructor.
@@ -40,17 +41,20 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="iamService">IAM service.</param>
+    /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeUserService(
         IRepository<InitiativeUser> entityRepository,
         IMapper<InitiativeUser, InitiativeUserDto> mapper,
         IValidator<InitiativeUserDto> entityValidator,
         ILogger logger,
-        IIamService iamService)
+        IIamService iamService,
+        IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper)
     {
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.iamService = iamService;
+        this.initiativeRepository = initiativeRepository;
     }
 
     /// <summary>
@@ -95,7 +99,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Validate initiative
         var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeExists = await entityRepository.AnyAsync(new InitiativeUserSpec(initiativeId), ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(new InitiativeSpec(initiativeId), ct);
 
         if (!initiativeExists)
         {
