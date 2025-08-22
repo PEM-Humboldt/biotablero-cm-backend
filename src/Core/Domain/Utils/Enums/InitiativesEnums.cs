@@ -57,4 +57,25 @@ public static class InitiativesEnums
         /// </summary>
         SocialContext,
     }
+
+    /// <summary>
+    /// Initiative join request status.
+    /// </summary>
+    public enum InitiativeJoinRequestStatus
+    {
+        /// <summary>
+        /// Under review status.
+        /// </summary>
+        UnderReview = 1,
+
+        /// <summary>
+        /// Approved status.
+        /// </summary>
+        Approved,
+
+        /// <summary>
+        /// Rejected status.
+        /// </summary>
+        Rejected,
+    }
 }

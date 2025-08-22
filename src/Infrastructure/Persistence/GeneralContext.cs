@@ -11,6 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 
 using Microsoft.EntityFrameworkCore;
 
+using InitiativeJoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeJoinRequestStatus;
 using InitiativeTagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeTagCategory;
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
@@ -95,6 +96,16 @@ public sealed class GeneralContext : DbContext
     /// </summary>
     public DbSet<InitiativeTagCategory> InitiativeTagCategories { get; set; }
 
+    /// <summary>
+    /// Initiative join request DbSet.
+    /// </summary>
+    public DbSet<InitiativeJoinRequest> InitiativeJoinRequests { get; set; }
+
+    /// <summary>
+    /// Initiative join request status DbSet.
+    /// </summary>
+    public DbSet<InitiativeJoinRequestStatus> InitiativeJoinRequestsStatuses { get; set; }
+
     #endregion
 
     /// <summary>
@@ -109,6 +120,7 @@ public sealed class GeneralContext : DbContext
         // Seeding data
         modelBuilder.Entity<InitiativeUserLevel>().HasData(GetDefaultInitiativeUserLevels());
         modelBuilder.Entity<InitiativeTagCategory>().HasData(GetDefaultInitiativeTagCategories());
+        modelBuilder.Entity<InitiativeJoinRequestStatus>().HasData(GetDefaultInitiativeJoinRequestStatuses());
     }
 
     #region Seeding functions
@@ -137,6 +149,19 @@ public sealed class GeneralContext : DbContext
         var enumData = Enum.GetValues(typeof(InitiativeTagCategoryEnum))
             .Cast<InitiativeTagCategoryEnum>()
             .Select(t => new InitiativeTagCategory() { Id = (int)t, Name = t.ToString() });
+
+        return enumData;
+    }
+
+    /// <summary>
+    /// Get default initative join request statuses.
+    /// </summary>
+    /// <returns>Default initative join request statuses list.</returns>
+    private static IEnumerable<InitiativeJoinRequestStatus> GetDefaultInitiativeJoinRequestStatuses()
+    {
+        var enumData = Enum.GetValues(typeof(InitiativeJoinRequestStatusEnum))
+            .Cast<InitiativeJoinRequestStatusEnum>()
+            .Select(t => new InitiativeJoinRequestStatus() { Id = (int)t, Name = t.ToString() });
 
         return enumData;
     }
