@@ -2,6 +2,7 @@
 
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
@@ -27,6 +28,7 @@ public static class ConfigExternalServices
         // External services
         services.AddScoped<IStorageService, StorageService>();
         services.AddSingleton<IIamService, IamService>();
+        services.AddSingleton<IEmailService, EmailService>();
 
         return services;
     }
