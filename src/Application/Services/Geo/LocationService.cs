@@ -64,13 +64,13 @@ public class LocationService : ServiceRead<Location, LocationDto, int, LocationS
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> GetPolygon(int id, CancellationToken ct = default)
     {
-        var entity = await locationPolygonRepository.FirstOrDefaultAsync(LocationPolygonSpec.LocationIdSpec(id), ct);
+        var simplifiedGeometry = await locationPolygonRepository.FirstOrDefaultAsync(new LocationPolygonSimplifiedSpec(id), ct);
 
-        if (entity != null)
+        if (!string.IsNullOrEmpty(simplifiedGeometry))
         {
             return new()
             {
-                ResponseBody = JsonDocument.Parse(entity.GeometrySimplified),
+                ResponseBody = JsonDocument.Parse(simplifiedGeometry),
             };
         }
 
