@@ -20,6 +20,11 @@ public class LocationPolygon : BaseEntity<int>, IAggregateRoot
     public string GeometrySimplified { get; set; }
 
     /// <summary>
+    /// Location identifier.
+    /// </summary>
+    public int LocationId { get; set; }
+
+    /// <summary>
     /// Location relationship.
     /// </summary>
     public Location Location { get; set; }

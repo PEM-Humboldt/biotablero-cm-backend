@@ -33,9 +33,13 @@ public class LocationPolygonConfig : IEntityTypeConfiguration<LocationPolygon>
             .HasColumnName("geometry_simplified")
             .IsRequired();
 
+        builder.Property(i => i.LocationId)
+            .HasColumnName("location_id")
+            .IsRequired();
+
         builder.HasOne(lp => lp.Location)
             .WithOne(l => l.LocationPolygon)
-            .HasForeignKey<LocationPolygon>(lp => lp.Id)
+            .HasForeignKey<LocationPolygon>(lp => lp.LocationId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

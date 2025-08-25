@@ -1,8 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
-using System;
-using System.Collections.Generic;
-
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
@@ -11,27 +8,22 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 public class InitiativeTag : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Initiative Tag name.
+    /// Initiative identifier.
     /// </summary>
-    public string Name { get; set; }
+    public int InitiativeId { get; set; }
 
     /// <summary>
-    /// Initiative Tag URL.
+    /// Initiative Tag identifier.
     /// </summary>
-    public Uri Url { get; set; }
+    public int TagId { get; set; }
 
     /// <summary>
-    /// Initiative Tag Category identifier.
+    /// Initiative relationship.
     /// </summary>
-    public int CategoryId { get; set; }
+    public Initiative Initiative { get; set; }
 
     /// <summary>
-    /// Tag Category relationship.
+    /// Initiative Tag relationship.
     /// </summary>
-    public InitiativeTagCategory Category { get; set; }
-
-    /// <summary>
-    /// Initiative Tag Initiative relationship.
-    /// </summary>
-    public ICollection<InitiativeTagInitiative> InitiativeTagInitiatives { get; init; }
+    public Tag Tag { get; set; }
 }

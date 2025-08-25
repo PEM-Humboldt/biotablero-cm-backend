@@ -16,22 +16,22 @@ using Microsoft.Extensions.DependencyInjection;
 /// </summary>
 public static class ConfigMappings
 {
-    /// <summary>
-    /// Add system mappings.
-    /// </summary>
-    /// <param name="services">Application services.</param>
-    /// <returns>Host builder configuration.</returns>
-    public static IServiceCollection AddMappings(this IServiceCollection services)
-    {
-        services.AddSingleton<IMapper<LogEntity, LogDto>, LogMappings>();
-        services.AddSingleton<IMapper<Location, LocationDto>, LocationMappings>();
-        services.AddSingleton<IMapper<Initiative, InitiativeDto>, InitiativeMappings>();
-        services.AddSingleton<IMapper<InitiativeContact, InitiativeContactDto>, InitiativeContactMappings>();
-        services.AddSingleton<IMapper<InitiativeLocation, InitiativeLocationDto>, InitiativeLocationMappings>();
-        services.AddSingleton<IMapper<InitiativeUser, InitiativeUserDto>, InitiativeUserMappings>();
-        services.AddSingleton<IMapper<InitiativeTag, InitiativeTagDto>, InitiativeTagMappings>();
-        services.AddSingleton<IMapper<InitiativeJoinRequest, InitiativeJoinRequestDto>, InitiativeJoinRequestMappings>();
+        /// <summary>
+        /// Add system mappings.
+        /// </summary>
+        /// <param name="services">Application services.</param>
+        /// <returns>Host builder configuration.</returns>
+        public static IServiceCollection AddMappings(this IServiceCollection services)
+        {
+                services.AddSingleton<IMapper<LogEntity, LogDto>, LogMappings>();
+                services.AddSingleton<IMapper<Location, LocationDto>, LocationMappings>();
+                services.AddSingleton<IMapper<Initiative, InitiativeDto>, InitiativeMappings>();
+                services.AddSingleton<IMapper<InitiativeContact, InitiativeContactDto>, InitiativeContactMappings>();
+                services.AddSingleton<IMapper<InitiativeLocation, InitiativeLocationDto>, InitiativeLocationMappings>();
+                services.AddSingleton<IMapper<InitiativeUser, InitiativeUserDto>, InitiativeUserMappings>();
+                services.AddSingleton<IMapper<Tag, TagDto>, TagMappings>();
+                services.AddSingleton<IMapper<InitiativeJoinRequest, InitiativeJoinRequestDto>, InitiativeJoinRequestMappings>();
 
-        return services;
-    }
+                return services;
+        }
 }

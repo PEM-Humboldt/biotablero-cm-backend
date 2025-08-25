@@ -10,9 +10,9 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiative Tag OData response example.
+/// Tag OData response example.
 /// </summary>
-public class InitiativeTagOdataResponseExample : IExamplesProvider<Dictionary<string, object>>
+public class TagOdataResponseExample : IExamplesProvider<Dictionary<string, object>>
 {
     /// <summary>
     /// Get examples for entity.
@@ -21,14 +21,14 @@ public class InitiativeTagOdataResponseExample : IExamplesProvider<Dictionary<st
     public Dictionary<string, object> GetExamples() => new()
     {
         ["@odata.count"] = 1,
-        ["value"] = new List<InitiativeTagDto>()
+        ["value"] = new List<TagDto>()
         {
             new()
             {
                 Id = 0,
-                Name = "Initiative example",
+                Name = "Tag example",
                 Url = "https://example.com/tag-data",
-                Category = new EnumEntityDto<InitiativeTagCategory>(InitiativeTagCategory.PoliticalContext),
+                Category = new EnumEntityDto<TagCategory>(TagCategory.PoliticalContext),
             },
         },
     };

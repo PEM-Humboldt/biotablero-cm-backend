@@ -6,17 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Initiative Tag Category entity configuration.
+/// Tag entity configuration.
 /// </summary>
-public class InitiativeTagCategoryConfig : IEntityTypeConfiguration<InitiativeTagCategory>
+public class TagConfig : IEntityTypeConfiguration<Tag>
 {
     /// <summary>
     /// Configure entity.
     /// </summary>
     /// <param name="builder">Entity builder.</param>
-    public void Configure(EntityTypeBuilder<InitiativeTagCategory> builder)
+    public void Configure(EntityTypeBuilder<Tag> builder)
     {
-        builder.ToTable("initiative_tag_category", "initiatives");
+        builder.ToTable("tag", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
@@ -26,8 +26,20 @@ public class InitiativeTagCategoryConfig : IEntityTypeConfiguration<InitiativeTa
 
         builder.Property(i => i.Name)
             .HasColumnName("name")
-            .HasMaxLength(30)
+            .HasMaxLength(40)
             .IsRequired();
+
+        builder.Property(i => i.Url)
+            .HasColumnName("url")
+            .HasMaxLength(150);
+
+        builder.Property(i => i.CategoryId)
+            .HasColumnName("tag_category_id")
+            .IsRequired();
+
+        builder.HasOne(e => e.Category)
+            .WithMany(p => p.Tags)
+            .HasForeignKey(e => e.CategoryId);
 
         builder
             .HasIndex(e => e.Name)

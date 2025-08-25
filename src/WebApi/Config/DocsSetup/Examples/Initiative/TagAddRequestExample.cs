@@ -8,19 +8,18 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiative Tag response example.
+/// Tag add request example.
 /// </summary>
-public class InitiativeTagResponseExample : IExamplesProvider<InitiativeTagDto>
+public class TagAddRequestExample : IExamplesProvider<TagDto>
 {
     /// <summary>
     /// Get examples for entity.
     /// </summary>
     /// <returns>Entity examples.</returns>
-    public InitiativeTagDto GetExamples() => new()
+    public TagDto GetExamples() => new()
     {
-        Id = 0,
         Name = "Tag example",
         Url = "https://example.com/tag-data",
-        Category = new EnumEntityDto<InitiativeTagCategory>(InitiativeTagCategory.PoliticalContext),
+        Category = new EnumEntityDto<TagCategory>(TagCategory.PoliticalContext),
     };
 }

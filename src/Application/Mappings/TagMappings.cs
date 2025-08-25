@@ -7,19 +7,19 @@ using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
-using InitiativeTagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeTagCategory;
+using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.TagCategory;
 
 /// <summary>
-/// Initiative tag mappings.
+/// Tag mappings.
 /// </summary>
-public class InitiativeTagMappings : IMapper<InitiativeTag, InitiativeTagDto>
+public class TagMappings : IMapper<Tag, TagDto>
 {
     /// <summary>
     /// Map from entity to DTO.
     /// </summary>
     /// <param name="entity">Entity data.</param>
     /// <returns>DTO data.</returns>
-    public InitiativeTagDto Map(InitiativeTag entity)
+    public TagDto Map(Tag entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -28,7 +28,7 @@ public class InitiativeTagMappings : IMapper<InitiativeTag, InitiativeTagDto>
             Id = entity.Id,
             Name = entity.Name,
             Url = entity.Url.ToString(),
-            Category = new EnumEntityDto<InitiativeTagCategoryEnum>(entity.CategoryId),
+            Category = new EnumEntityDto<TagCategoryEnum>(entity.CategoryId),
         };
     }
 
@@ -37,7 +37,7 @@ public class InitiativeTagMappings : IMapper<InitiativeTag, InitiativeTagDto>
     /// </summary>
     /// <param name="dto">DTO data.</param>
     /// <returns>Entity data.</returns>
-    public InitiativeTag Map(InitiativeTagDto dto)
+    public Tag Map(TagDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 

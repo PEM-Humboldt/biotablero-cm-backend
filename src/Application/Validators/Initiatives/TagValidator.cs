@@ -8,14 +8,14 @@ using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiative Tag validator.
+/// Tag validator.
 /// </summary>
-public class InitiativeTagValidator : AbstractValidator<InitiativeTagDto>
+public class TagValidator : AbstractValidator<TagDto>
 {
     /// <summary>
     /// Constructor.
     /// </summary>
-    public InitiativeTagValidator()
+    public TagValidator()
     {
         RuleFor(dto => dto)
             .NotNull()
@@ -36,7 +36,7 @@ public class InitiativeTagValidator : AbstractValidator<InitiativeTagDto>
             .ChildRules(level =>
             {
                 level.RuleFor(tagEnumDto => tagEnumDto.Name)
-                    .IsEnumName(typeof(InitiativeTagCategory), caseSensitive: false)
+                    .IsEnumName(typeof(TagCategory), caseSensitive: false)
                         .WithMessage("Tag category invalid");
             });
     }

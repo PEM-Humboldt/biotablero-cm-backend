@@ -6,9 +6,9 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiative Tag dto.
+/// Tag dto.
 /// </summary>
-public class InitiativeTagDto : IDto
+public class TagDto : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -16,17 +16,17 @@ public class InitiativeTagDto : IDto
     public int? Id { get; set; }
 
     /// <summary>
-    /// Initiative Tag name.
+    /// Tag name.
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    /// Initiative Tag URL.
+    /// Tag URL.
     /// </summary>
     public string Url { get; set; }
 
     /// <summary>
-    /// Category relationship.
+    /// Tag Category relationship.
     /// </summary>
-    public EnumEntityDto<InitiativeTagCategory> Category { get; set; }
+    public EnumEntityDto<TagCategory> Category { get; set; }
 }
