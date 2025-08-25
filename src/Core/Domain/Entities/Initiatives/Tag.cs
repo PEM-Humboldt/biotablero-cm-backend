@@ -23,12 +23,12 @@ public class Tag : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Tag Category identifier.
     /// </summary>
-    public int TagCategoryId { get; set; }
+    public int CategoryId { get; set; }
 
     /// <summary>
     /// Tag Category relationship.
     /// </summary>
-    public TagCategory TagCategory { get; set; }
+    public TagCategory Category { get; set; }
 
     /// <summary>
     /// Tag Initiative relationship.

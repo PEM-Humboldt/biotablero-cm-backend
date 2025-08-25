@@ -28,7 +28,7 @@ public class TagMappings : IMapper<Tag, TagDto>
             Id = entity.Id,
             Name = entity.Name,
             Url = entity.Url.ToString(),
-            Category = new EnumEntityDto<TagCategoryEnum>(entity.TagCategoryId),
+            Category = new EnumEntityDto<TagCategoryEnum>(entity.CategoryId),
         };
     }
 
@@ -45,7 +45,7 @@ public class TagMappings : IMapper<Tag, TagDto>
         {
             Name = dto.Name,
             Url = new Uri(dto.Url),
-            TagCategoryId = dto.Category.Id,
+            CategoryId = dto.Category.Id,
         };
     }
 }

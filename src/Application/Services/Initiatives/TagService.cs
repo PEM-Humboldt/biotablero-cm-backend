@@ -147,7 +147,7 @@ public class TagService : ServiceRead<Tag, TagDto, int, TagSpec>, ITagService
         // Update entity data
         entity.Name = entityData.Name;
         entity.Url = new Uri(entityData.Url);
-        entity.TagCategoryId = entityData.Category.Id;
+        entity.CategoryId = entityData.Category.Id;
 
         await entityRepository.UpdateAsync(entity, ct);
 

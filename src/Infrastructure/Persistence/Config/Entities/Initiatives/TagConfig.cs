@@ -33,13 +33,13 @@ public class TagConfig : IEntityTypeConfiguration<Tag>
             .HasColumnName("url")
             .HasMaxLength(150);
 
-        builder.Property(i => i.TagCategoryId)
+        builder.Property(i => i.CategoryId)
             .HasColumnName("tag_category_id")
             .IsRequired();
 
-        builder.HasOne(e => e.TagCategory)
+        builder.HasOne(e => e.Category)
             .WithMany(p => p.Tags)
-            .HasForeignKey(e => e.TagCategoryId);
+            .HasForeignKey(e => e.CategoryId);
 
         builder
             .HasIndex(e => e.Name)
