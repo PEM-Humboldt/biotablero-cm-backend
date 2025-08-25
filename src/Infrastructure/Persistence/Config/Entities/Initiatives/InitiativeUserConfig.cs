@@ -34,7 +34,7 @@ public class InitiativeUserConfig : IEntityTypeConfiguration<InitiativeUser>
             .IsRequired();
 
         builder.Property(i => i.LevelId)
-            .HasColumnName("level_id")
+            .HasColumnName("initiative_user_level_id")
             .IsRequired();
 
         builder.HasOne(e => e.Initiative)
