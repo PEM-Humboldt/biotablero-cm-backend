@@ -17,7 +17,7 @@ public partial class AddInitiativeJoinRequests : Migration
     protected override void Up(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.CreateTable(
-            name: "initiative_join_request_status",
+            name: "join_request_status",
             schema: "initiatives",
             columns: table => new
             {
@@ -27,11 +27,11 @@ public partial class AddInitiativeJoinRequests : Migration
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_initiative_join_request_status", x => x.id);
+                table.PrimaryKey("PK_join_request_status", x => x.id);
             });
 
         migrationBuilder.CreateTable(
-            name: "initiative_join_request",
+            name: "join_request",
             schema: "initiatives",
             columns: table => new
             {
@@ -42,30 +42,30 @@ public partial class AddInitiativeJoinRequests : Migration
                 creation_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                 response_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                 initiative_id = table.Column<int>(type: "integer", nullable: false),
-                status_id = table.Column<int>(type: "integer", nullable: false),
+                join_request_status_id = table.Column<int>(type: "integer", nullable: false),
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_initiative_join_request", x => x.id);
+                table.PrimaryKey("PK_join_request", x => x.id);
                 table.ForeignKey(
-                    name: "FK_initiative_join_request_initiative_initiative_id",
+                    name: "FK_join_request_initiative_initiative_id",
                     column: x => x.initiative_id,
                     principalSchema: "initiatives",
                     principalTable: "initiative",
                     principalColumn: "id",
                     onDelete: ReferentialAction.Cascade);
                 table.ForeignKey(
-                    name: "FK_initiative_join_request_initiative_join_request_status_stat~",
-                    column: x => x.status_id,
+                    name: "FK_join_request_join_request_status_join_request_status_id",
+                    column: x => x.join_request_status_id,
                     principalSchema: "initiatives",
-                    principalTable: "initiative_join_request_status",
+                    principalTable: "join_request_status",
                     principalColumn: "id",
                     onDelete: ReferentialAction.Cascade);
             });
 
         migrationBuilder.InsertData(
             schema: "initiatives",
-            table: "initiative_join_request_status",
+            table: "join_request_status",
             columns: new[] { "id", "name" },
             values: new object[,]
             {
@@ -75,21 +75,21 @@ public partial class AddInitiativeJoinRequests : Migration
             });
 
         migrationBuilder.CreateIndex(
-            name: "IX_initiative_join_request_initiative_id",
+            name: "IX_join_request_initiative_id",
             schema: "initiatives",
-            table: "initiative_join_request",
+            table: "join_request",
             column: "initiative_id");
 
         migrationBuilder.CreateIndex(
-            name: "IX_initiative_join_request_status_id",
+            name: "IX_join_request_join_request_status_id",
             schema: "initiatives",
-            table: "initiative_join_request",
-            column: "status_id");
+            table: "join_request",
+            column: "join_request_status_id");
 
         migrationBuilder.CreateIndex(
-            name: "IX_initiative_join_request_status_name",
+            name: "IX_join_request_status_name",
             schema: "initiatives",
-            table: "initiative_join_request_status",
+            table: "join_request_status",
             column: "name",
             unique: true);
     }
@@ -98,11 +98,11 @@ public partial class AddInitiativeJoinRequests : Migration
     protected override void Down(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.DropTable(
-            name: "initiative_join_request",
+            name: "join_request",
             schema: "initiatives");
 
         migrationBuilder.DropTable(
-            name: "initiative_join_request_status",
+            name: "join_request_status",
             schema: "initiatives");
     }
 }
