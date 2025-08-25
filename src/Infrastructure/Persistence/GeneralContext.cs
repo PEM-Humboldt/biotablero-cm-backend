@@ -81,19 +81,19 @@ public sealed class GeneralContext : DbContext
     public DbSet<InitiativeUserLevel> InitiativeUserLevels { get; set; }
 
     /// <summary>
-    /// Initiative tag initiatives DbSet.
-    /// </summary>
-    public DbSet<InitiativeTag> InitiativeTagInitiatives { get; set; }
-
-    /// <summary>
     /// Initiative tags DbSet.
     /// </summary>
-    public DbSet<Tag> InitiativeTags { get; set; }
+    public DbSet<InitiativeTag> InitiativeTags { get; set; }
 
     /// <summary>
-    /// Initiative tag categories DbSet.
+    /// Tags DbSet.
     /// </summary>
-    public DbSet<TagCategory> InitiativeTagCategories { get; set; }
+    public DbSet<Tag> Tags { get; set; }
+
+    /// <summary>
+    /// Tag categories DbSet.
+    /// </summary>
+    public DbSet<TagCategory> TagCategories { get; set; }
 
     #endregion
 
