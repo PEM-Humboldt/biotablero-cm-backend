@@ -11,9 +11,9 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiative Join Request OData response example.
+/// Join Request OData response example.
 /// </summary>
-public class InitiativeJoinRequestOdataResponseExample : IExamplesProvider<Dictionary<string, object>>
+public class JoinRequestOdataResponseExample : IExamplesProvider<Dictionary<string, object>>
 {
     /// <summary>
     /// Get examples for entity.
@@ -22,7 +22,7 @@ public class InitiativeJoinRequestOdataResponseExample : IExamplesProvider<Dicti
     public Dictionary<string, object> GetExamples() => new()
     {
         ["@odata.count"] = 1,
-        ["value"] = new List<InitiativeJoinRequestDto>()
+        ["value"] = new List<JoinRequestDto>()
         {
             new()
             {
@@ -31,7 +31,7 @@ public class InitiativeJoinRequestOdataResponseExample : IExamplesProvider<Dicti
                 ReviewerUserName = "ReviewerExample",
                 CreationDate = DateTime.Now,
                 ResponseDate = DateTime.Now,
-                Status = new EnumEntityDto<InitiativeJoinRequestStatus>(InitiativeJoinRequestStatus.Rejected),
+                Status = new EnumEntityDto<JoinRequestStatus>(JoinRequestStatus.Rejected),
             },
         },
     };

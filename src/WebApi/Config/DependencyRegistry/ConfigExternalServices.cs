@@ -23,7 +23,7 @@ public static class ConfigExternalServices
     {
         // Custom repositories
         services.AddScoped<IInitiativeRepository, InitiativeRepository>();
-        services.AddScoped<IInitiativeJoinRequestRepository, InitiativeJoinRequestRepository>();
+        services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
 
         // External services
         services.AddScoped<IStorageService, StorageService>();

@@ -11,9 +11,9 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using Microsoft.AspNetCore.OData.Query;
 
 /// <summary>
-/// Initiative Join request service interface.
+/// Join request service interface.
 /// </summary>
-public interface IInitiativeJoinRequestService : IServiceRead<InitiativeJoinRequest, InitiativeJoinRequestDto, int>, IServiceAdd<InitiativeJoinRequestDto>, IServiceUpdate<InitiativeJoinRequestDto, int>
+public interface IJoinRequestService : IServiceRead<JoinRequest, JoinRequestDto, int>, IServiceAdd<JoinRequestDto>, IServiceUpdate<JoinRequestDto, int>
 {
     /// <summary>
     /// Get elements list (OData).
@@ -23,5 +23,5 @@ public interface IInitiativeJoinRequestService : IServiceRead<InitiativeJoinRequ
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetList(int initiativeId, string userName, ODataQueryOptions<InitiativeJoinRequest> queryOptions, CancellationToken ct = default);
+    Task<CustomWebResponse> GetList(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default);
 }

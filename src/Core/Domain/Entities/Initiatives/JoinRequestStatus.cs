@@ -6,17 +6,17 @@ using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Initiative Join Request Status entity.
+/// Join Request Status entity.
 /// </summary>
-public class InitiativeJoinRequestStatus : BaseEntity<int>, IAggregateRoot
+public class JoinRequestStatus : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Initiative Join Request Status name.
+    /// Join Request Status name.
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    /// Initiative Join request relationship.
+    /// Join request relationship.
     /// </summary>
-    public ICollection<InitiativeJoinRequest> InitiativeJoinRequests { get; init; }
+    public ICollection<JoinRequest> JoinRequests { get; init; }
 }

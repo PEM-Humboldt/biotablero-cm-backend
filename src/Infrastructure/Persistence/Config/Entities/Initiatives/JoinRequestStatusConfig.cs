@@ -6,17 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Initiative Join Request Status entity configuration.
+/// Join Request Status entity configuration.
 /// </summary>
-public class InitiativeJoinRequestStatusConfig : IEntityTypeConfiguration<InitiativeJoinRequestStatus>
+public class JoinRequestStatusConfig : IEntityTypeConfiguration<JoinRequestStatus>
 {
     /// <summary>
     /// Configure entity.
     /// </summary>
     /// <param name="builder">Entity builder.</param>
-    public void Configure(EntityTypeBuilder<InitiativeJoinRequestStatus> builder)
+    public void Configure(EntityTypeBuilder<JoinRequestStatus> builder)
     {
-        builder.ToTable("initiative_join_request_status", "initiatives");
+        builder.ToTable("join_request_status", "initiatives");
 
         builder?.HasKey(e => e.Id);
 

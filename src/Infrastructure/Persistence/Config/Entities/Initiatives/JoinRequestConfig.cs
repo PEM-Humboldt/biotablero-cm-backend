@@ -6,17 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Initiative Join Request entity configuration.
+/// Join Request entity configuration.
 /// </summary>
-public class InitiativeJoinRequestConfig : IEntityTypeConfiguration<InitiativeJoinRequest>
+public class JoinRequestConfig : IEntityTypeConfiguration<JoinRequest>
 {
     /// <summary>
     /// Configure entity.
     /// </summary>
     /// <param name="builder">Entity builder.</param>
-    public void Configure(EntityTypeBuilder<InitiativeJoinRequest> builder)
+    public void Configure(EntityTypeBuilder<JoinRequest> builder)
     {
-        builder.ToTable("initiative_join_request", "initiatives");
+        builder.ToTable("join_request", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
@@ -46,15 +46,15 @@ public class InitiativeJoinRequestConfig : IEntityTypeConfiguration<InitiativeJo
             .IsRequired();
 
         builder.Property(i => i.StatusId)
-            .HasColumnName("status_id")
+            .HasColumnName("join_request_status_id")
             .IsRequired();
 
         builder.HasOne(e => e.Initiative)
-            .WithMany(p => p.InitiativeJoinRequests)
+            .WithMany(p => p.JoinRequests)
             .HasForeignKey(e => e.InitiativeId);
 
         builder.HasOne(e => e.Status)
-            .WithMany(p => p.InitiativeJoinRequests)
+            .WithMany(p => p.JoinRequests)
             .HasForeignKey(e => e.StatusId);
     }
 }

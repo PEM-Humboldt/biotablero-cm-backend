@@ -4,17 +4,17 @@ using Ardalis.Specification;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
-using InitiativeJoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeJoinRequestStatus;
+using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
 /// <summary>
-/// Initiative Join Request ardalis specifications.
+/// Join Request ardalis specifications.
 /// </summary>
-public class InitiativeJoinRequestSpec : GeneralSpecification<int, InitiativeJoinRequest>
+public class JoinRequestSpec : GeneralSpecification<int, JoinRequest>
 {
     /// <summary>
     /// Constructor.
     /// </summary>
-    public InitiativeJoinRequestSpec()
+    public JoinRequestSpec()
         : base()
     {
     }
@@ -23,7 +23,7 @@ public class InitiativeJoinRequestSpec : GeneralSpecification<int, InitiativeJoi
     /// Specification for get element by identifier.
     /// </summary>
     /// <param name="id">Element identifier.</param>
-    public InitiativeJoinRequestSpec(int id)
+    public JoinRequestSpec(int id)
         : base(id)
     {
     }
@@ -34,11 +34,11 @@ public class InitiativeJoinRequestSpec : GeneralSpecification<int, InitiativeJoi
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="userName">User name.</param>
     /// <returns>Custom specification.</returns>
-    public static InitiativeJoinRequestSpec PendingRequests(int initiativeId, string userName)
+    public static JoinRequestSpec PendingRequests(int initiativeId, string userName)
     {
-        var spec = new InitiativeJoinRequestSpec();
+        var spec = new JoinRequestSpec();
         spec.Query
-            .Where(e => e.InitiativeId == initiativeId && e.UserName == userName && e.StatusId == (int)InitiativeJoinRequestStatusEnum.UnderReview);
+            .Where(e => e.InitiativeId == initiativeId && e.UserName == userName && e.StatusId == (int)JoinRequestStatusEnum.UnderReview);
 
         return spec;
     }

@@ -18,17 +18,17 @@ using Microsoft.AspNetCore.OData.Query;
 
 using Swashbuckle.AspNetCore.Filters;
 
-using InitiativeJoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeJoinRequestStatus;
+using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
 /// <summary>
-/// Initiative Join Request controller.
+/// Join Request controller.
 /// </summary>
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
-public class InitiativeJoinRequestController(
+public class JoinRequestController(
     IWebTools webTools,
-    IInitiativeJoinRequestService entityService) : ControllerBase
+    IJoinRequestService entityService) : ControllerBase
 {
     /// <summary>
     /// Get entities (paginated).
@@ -39,10 +39,10 @@ public class InitiativeJoinRequestController(
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [Authorize]
-    [ProducesResponseType(typeof(InitiativeJoinRequestOdataResponseExample), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(JoinRequestOdataResponseExample), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeJoinRequestOdataResponseExample))]
-    public async Task<IActionResult> Get(int initiativeId, ODataQueryOptions<InitiativeJoinRequest> queryOptions, CancellationToken ct)
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestOdataResponseExample))]
+    public async Task<IActionResult> Get(int initiativeId, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetList(initiativeId, HttpContext.GetUserName(), queryOptions, ct);
         return webTools.CustomResponse(response);
@@ -56,12 +56,12 @@ public class InitiativeJoinRequestController(
     /// <returns>Added entity data.</returns>
     [HttpPut]
     [Consumes("application/json")]
-    [ProducesResponseType(typeof(InitiativeJoinRequestDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(JoinRequestDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeJoinRequestDto))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestDto))]
     public async Task<IActionResult> Put(int initiativeId, CancellationToken ct)
     {
-        var requestData = new InitiativeJoinRequestDto()
+        var requestData = new JoinRequestDto()
         {
             InitiativeId = initiativeId,
             UserName = HttpContext.GetUserName(),
@@ -81,14 +81,14 @@ public class InitiativeJoinRequestController(
     [HttpPost("{id}")]
     [Consumes("application/json")]
     [Authorize]
-    [ProducesResponseType(typeof(InitiativeJoinRequestDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(JoinRequestDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeJoinRequestDto))]
-    public async Task<IActionResult> Post(int id, InitiativeJoinRequestStatusEnum requestStatus, CancellationToken ct)
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestDto))]
+    public async Task<IActionResult> Post(int id, JoinRequestStatusEnum requestStatus, CancellationToken ct)
     {
-        var requestData = new InitiativeJoinRequestDto()
+        var requestData = new JoinRequestDto()
         {
-            Status = new EnumEntityDto<InitiativeJoinRequestStatusEnum>(requestStatus),
+            Status = new EnumEntityDto<JoinRequestStatusEnum>(requestStatus),
             ReviewerUserName = HttpContext.GetUserName(),
         };
 

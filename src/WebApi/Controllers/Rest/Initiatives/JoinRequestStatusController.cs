@@ -13,24 +13,24 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiative Join Request Status controller.
+/// Join Request Status controller.
 /// </summary>
 /// <param name="webTools">General web tools.</param>
 /// <param name="entityService">Entity service.</param>
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
-public class InitiativeJoinRequestStatusController(IWebTools webTools,
-    IServiceReadEnumeration<InitiativeJoinRequestStatus> entityService) : ControllerBase
+public class JoinRequestStatusController(IWebTools webTools,
+    IServiceReadEnumeration<JoinRequestStatus> entityService) : ControllerBase
 {
     /// <summary>
     /// Get all entities.
     /// </summary>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(InitiativeJoinRequestStatusResponseExample), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(JoinRequestStatusResponseExample), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeJoinRequestStatusResponseExample))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestStatusResponseExample))]
     public IActionResult Get()
     {
         var response = entityService.GetAll();

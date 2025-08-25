@@ -6,27 +6,27 @@ using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Initiative Join Request entity.
+/// Join Request entity.
 /// </summary>
-public class InitiativeJoinRequest : BaseEntity<int>, IAggregateRoot
+public class JoinRequest : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Initiative Join Request user name.
+    /// Join Request user name.
     /// </summary>
     public string UserName { get; set; }
 
     /// <summary>
-    /// Initiative Join Request reviewer user name.
+    /// Join Request reviewer user name.
     /// </summary>
     public string ReviewerUserName { get; set; }
 
     /// <summary>
-    /// Initiative Join Request creation date.
+    /// Join Request creation date.
     /// </summary>
     public DateTime CreationDate { get; set; }
 
     /// <summary>
-    /// Initiative Join Request creation date.
+    /// Join Request creation date.
     /// </summary>
     public DateTime ResponseDate { get; set; }
 
@@ -36,7 +36,7 @@ public class InitiativeJoinRequest : BaseEntity<int>, IAggregateRoot
     public int InitiativeId { get; set; }
 
     /// <summary>
-    /// Initiative Join Request Status identifier.
+    /// Join Request Status identifier.
     /// </summary>
     public int StatusId { get; set; }
 
@@ -46,7 +46,7 @@ public class InitiativeJoinRequest : BaseEntity<int>, IAggregateRoot
     public Initiative Initiative { get; set; }
 
     /// <summary>
-    /// Initiative Join request Status relationship.
+    /// Join request Status relationship.
     /// </summary>
-    public InitiativeJoinRequestStatus Status { get; set; }
+    public JoinRequestStatus Status { get; set; }
 }

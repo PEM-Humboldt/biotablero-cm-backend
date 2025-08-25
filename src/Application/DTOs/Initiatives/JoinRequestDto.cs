@@ -9,9 +9,9 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiative Join Request dto.
+/// Join Request dto.
 /// </summary>
-public class InitiativeJoinRequestDto : IDto
+public class JoinRequestDto : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -19,22 +19,22 @@ public class InitiativeJoinRequestDto : IDto
     public int? Id { get; set; }
 
     /// <summary>
-    /// Initiative Join Request user name.
+    /// Join Request user name.
     /// </summary>
     public string UserName { get; set; }
 
     /// <summary>
-    /// Initiative Join Request reviewer user name.
+    /// Join Request reviewer user name.
     /// </summary>
     public string ReviewerUserName { get; set; }
 
     /// <summary>
-    /// Initiative Join Request creation date.
+    /// Join Request creation date.
     /// </summary>
     public DateTime CreationDate { get; set; }
 
     /// <summary>
-    /// Initiative Join Request creation date.
+    /// Join Request creation date.
     /// </summary>
     public DateTime ResponseDate { get; set; }
 
@@ -44,7 +44,7 @@ public class InitiativeJoinRequestDto : IDto
     public int InitiativeId { get; set; }
 
     /// <summary>
-    /// Initiative Join Request Status relationship.
+    /// Join Request Status relationship.
     /// </summary>
-    public EnumEntityDto<InitiativeJoinRequestStatus> Status { get; set; }
+    public EnumEntityDto<JoinRequestStatus> Status { get; set; }
 }

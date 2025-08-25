@@ -7,19 +7,19 @@ using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
-using InitiativeJoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeJoinRequestStatus;
+using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
 /// <summary>
-/// Initiative Join Request mappings.
+/// Join Request mappings.
 /// </summary>
-public class InitiativeJoinRequestMappings() : IMapper<InitiativeJoinRequest, InitiativeJoinRequestDto>
+public class JoinRequestMappings() : IMapper<JoinRequest, JoinRequestDto>
 {
     /// <summary>
     /// Map from entity to DTO.
     /// </summary>
     /// <param name="entity">Entity data.</param>
     /// <returns>DTO data.</returns>
-    public InitiativeJoinRequestDto Map(InitiativeJoinRequest entity)
+    public JoinRequestDto Map(JoinRequest entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -31,7 +31,7 @@ public class InitiativeJoinRequestMappings() : IMapper<InitiativeJoinRequest, In
             CreationDate = entity.CreationDate,
             ResponseDate = entity.ResponseDate,
             InitiativeId = entity.InitiativeId,
-            Status = new EnumEntityDto<InitiativeJoinRequestStatusEnum>(entity.StatusId),
+            Status = new EnumEntityDto<JoinRequestStatusEnum>(entity.StatusId),
         };
     }
 
@@ -40,7 +40,7 @@ public class InitiativeJoinRequestMappings() : IMapper<InitiativeJoinRequest, In
     /// </summary>
     /// <param name="dto">DTO data.</param>
     /// <returns>Entity data.</returns>
-    public InitiativeJoinRequest Map(InitiativeJoinRequestDto dto)
+    public JoinRequest Map(JoinRequestDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 

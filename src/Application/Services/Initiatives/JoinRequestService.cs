@@ -19,15 +19,15 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using InitiativeJoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeJoinRequestStatus;
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
 /// <summary>
-/// Initiative Join Request service.
+/// Join Request service.
 /// </summary>
-public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, InitiativeJoinRequestDto, int, InitiativeJoinRequestSpec>, IInitiativeJoinRequestService
+public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, JoinRequestSpec>, IJoinRequestService
 {
-    private new readonly IInitiativeJoinRequestRepository entityRepository;
+    private new readonly IJoinRequestRepository entityRepository;
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly IRepository<InitiativeUser> initiativeUserRepository;
@@ -41,9 +41,9 @@ public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, I
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="initiativeUserRepository">Initiative user repository.</param>
-    public InitiativeJoinRequestService(
-        IInitiativeJoinRequestRepository entityRepository,
-        IMapper<InitiativeJoinRequest, InitiativeJoinRequestDto> mapper,
+    public JoinRequestService(
+        IJoinRequestRepository entityRepository,
+        IMapper<JoinRequest, JoinRequestDto> mapper,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
         IRepository<InitiativeUser> initiativeUserRepository)
@@ -63,7 +63,7 @@ public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, I
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> GetList(int initiativeId, string userName, ODataQueryOptions<InitiativeJoinRequest> queryOptions, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetList(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default)
     {
         // Validate user level
         var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader), ct);
@@ -88,7 +88,7 @@ public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, I
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Add(InitiativeJoinRequestDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> Add(JoinRequestDto entityData, CancellationToken ct = default)
     {
         // Validate initiative
         var initiativeExists = await initiativeRepository.AnyAsync(new InitiativeSpec(entityData.InitiativeId), ct);
@@ -102,7 +102,7 @@ public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, I
         }
 
         // Validate pending requests
-        var hasPendingRequests = await entityRepository.AnyAsync(InitiativeJoinRequestSpec.PendingRequests(entityData.InitiativeId, entityData.UserName), ct);
+        var hasPendingRequests = await entityRepository.AnyAsync(JoinRequestSpec.PendingRequests(entityData.InitiativeId, entityData.UserName), ct);
 
         if (hasPendingRequests)
         {
@@ -125,7 +125,7 @@ public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, I
 
         // Build entity data
         var entity = mapper.Map(entityData);
-        entity.StatusId = (int)InitiativeJoinRequestStatusEnum.UnderReview;
+        entity.StatusId = (int)JoinRequestStatusEnum.UnderReview;
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
@@ -147,7 +147,7 @@ public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, I
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Update(int id, InitiativeJoinRequestDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> Update(int id, JoinRequestDto entityData, CancellationToken ct = default)
     {
         // Validate user level
         var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(entityData.InitiativeId, entityData.ReviewerUserName, (int)InitiativeUserLevelEnum.Leader), ct);
@@ -171,7 +171,7 @@ public class InitiativeJoinRequestService : ServiceRead<InitiativeJoinRequest, I
             };
         }
 
-        if (entity.StatusId != (int)InitiativeJoinRequestStatusEnum.UnderReview)
+        if (entity.StatusId != (int)JoinRequestStatusEnum.UnderReview)
         {
             return new CustomWebResponse(true)
             {

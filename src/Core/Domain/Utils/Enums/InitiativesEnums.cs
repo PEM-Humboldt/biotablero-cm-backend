@@ -61,7 +61,7 @@ public static class InitiativesEnums
     /// <summary>
     /// Initiative join request status.
     /// </summary>
-    public enum InitiativeJoinRequestStatus
+    public enum JoinRequestStatus
     {
         /// <summary>
         /// Under review status.

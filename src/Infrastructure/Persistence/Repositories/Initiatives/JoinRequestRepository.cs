@@ -10,13 +10,13 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 using Microsoft.EntityFrameworkCore;
 
-using InitiativeJoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeJoinRequestStatus;
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
 /// <summary>
-/// Custom Initiative Join Request repository.
+/// Custom Join Request repository.
 /// </summary>
-public class InitiativeJoinRequestRepository : Repository<InitiativeJoinRequest>, IInitiativeJoinRequestRepository
+public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestRepository
 {
     private readonly GeneralContext dbContext;
 
@@ -24,7 +24,7 @@ public class InitiativeJoinRequestRepository : Repository<InitiativeJoinRequest>
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public InitiativeJoinRequestRepository(GeneralContext dbContext)
+    public JoinRequestRepository(GeneralContext dbContext)
         : base(dbContext)
     {
         this.dbContext = dbContext;
@@ -36,7 +36,7 @@ public class InitiativeJoinRequestRepository : Repository<InitiativeJoinRequest>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
-    public IQueryable<InitiativeJoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<InitiativeJoinRequest> query) => query
+    public IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query) => query
             .Where(e => e.InitiativeId == initiativeId);
 
     /// <summary>
@@ -47,23 +47,23 @@ public class InitiativeJoinRequestRepository : Repository<InitiativeJoinRequest>
     /// <param name="requestStatusId">Request status identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    public async Task<InitiativeJoinRequest> ReviewRequest(int requestId, string reviewerUserName, int requestStatusId, CancellationToken ct = default)
+    public async Task<JoinRequest> ReviewRequest(int requestId, string reviewerUserName, int requestStatusId, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
         try
         {
-            var entity = await dbContext.InitiativeJoinRequests
+            var entity = await dbContext.JoinRequests
                 .Where(e => e.Id == requestId)
                 .FirstOrDefaultAsync(ct);
 
             // Ignore transaction for empty or reviewed entities or empty reviewer user name
-            if (entity == null || entity.StatusId != (int)InitiativeJoinRequestStatusEnum.UnderReview || string.IsNullOrEmpty(reviewerUserName))
+            if (entity == null || entity.StatusId != (int)JoinRequestStatusEnum.UnderReview || string.IsNullOrEmpty(reviewerUserName))
             {
                 return entity;
             }
 
-            if (requestStatusId == (int)InitiativeJoinRequestStatusEnum.Approved)
+            if (requestStatusId == (int)JoinRequestStatusEnum.Approved)
             {
                 // Update initiative and user relationship
                 var userBelongsToinitiative = await dbContext.InitiativeUsers

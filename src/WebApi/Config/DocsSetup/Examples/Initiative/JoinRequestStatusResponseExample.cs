@@ -10,10 +10,10 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiative Join Request Status response example.
+/// Join Request Status response example.
 /// </summary>
 /// <param name="entityService">General enumeration service.</param>
-public class InitiativeJoinRequestStatusResponseExample(IServiceReadEnumeration<InitiativeUserLevel> entityService) : IExamplesProvider<IEnumerable<EnumEntityDto<InitiativeUserLevel>>>
+public class JoinRequestStatusResponseExample(IServiceReadEnumeration<InitiativeUserLevel> entityService) : IExamplesProvider<IEnumerable<EnumEntityDto<InitiativeUserLevel>>>
 {
     /// <summary>
     /// Get examples for entity.
