@@ -20,17 +20,17 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
-public class InitiativeTagCategoryController(IWebTools webTools,
-    IServiceReadEnumeration<InitiativeTagCategory> entityService) : ControllerBase
+public class TagCategoryController(IWebTools webTools,
+    IServiceReadEnumeration<TagCategory> entityService) : ControllerBase
 {
     /// <summary>
     /// Get all entities.
     /// </summary>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(InitiativeTagCategoryResponseExample), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(TagCategoryResponseExample), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeTagCategoryResponseExample))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TagCategoryResponseExample))]
     public IActionResult Get()
     {
         var response = entityService.GetAll();

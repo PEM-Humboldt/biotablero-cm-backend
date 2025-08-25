@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Specifications;
 
+using System.Linq;
+
 using Ardalis.Specification;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
@@ -27,25 +29,17 @@ public class InitiativeTagSpec : GeneralSpecification<int, InitiativeTag>
     }
 
     /// <summary>
-    /// Specification for get elements by name.
+    /// Specification for get duplicated entities.
     /// </summary>
-    /// <param name="name">Entity name.</param>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="tagId">Tag identifier.</param>
     /// <returns>Custom specification.</returns>
-    public InitiativeTagSpec(string name)
+    public static InitiativeTagSpec GetDuplicatesSpec(int initiativeId, int tagId)
     {
-        Query
-            .Where(e => e.Name == name);
-    }
+        var spec = new InitiativeTagSpec();
+        spec.Query
+            .Where(e => e.InitiativeId == initiativeId && e.TagId == tagId);
 
-    /// <summary>
-    /// Specification for get elements by name.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="name">Entity name.</param>
-    /// <returns>Custom specification.</returns>
-    public InitiativeTagSpec(int id, string name)
-    {
-        Query
-            .Where(e => e.Id != id && e.Name == name);
+        return spec;
     }
 }

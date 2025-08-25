@@ -14,7 +14,7 @@ public class InitiativeMappings(
     IMapper<InitiativeContact, InitiativeContactDto> initiativeContactMappings,
     IMapper<InitiativeLocation, InitiativeLocationDto> initiativeLocationMappings,
     IMapper<InitiativeUser, InitiativeUserDto> initiativeUserMappings,
-    IMapper<InitiativeTag, InitiativeTagDto> initiativeTagMappings) : IMapper<Initiative, InitiativeDto>
+    IMapper<Tag, TagDto> tagMappings) : IMapper<Initiative, InitiativeDto>
 {
     /// <summary>
     /// Map from entity to DTO.
@@ -38,7 +38,7 @@ public class InitiativeMappings(
             Contacts = entity.InitiativeContacts?.Select(initiativeContactMappings.Map),
             Locations = entity.InitiativeLocations?.Select(initiativeLocationMappings.Map),
             Users = entity.InitiativeUsers?.Select(initiativeUserMappings.Map),
-            Tags = entity.InitiativeTagInitiatives?.Select(e => initiativeTagMappings.Map(e.Tag)),
+            Tags = entity.InitiativeTags?.Select(e => tagMappings.Map(e.Tag)),
         };
     }
 

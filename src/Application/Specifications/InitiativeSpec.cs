@@ -33,7 +33,7 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
             .Include(e => e.InitiativeLocations)
                 .ThenInclude(e => e.Location)
                     .ThenInclude(e => e.Parent)
-            .Include(e => e.InitiativeTagInitiatives)
+            .Include(e => e.InitiativeTags)
                 .ThenInclude(e => e.Tag);
     }
 
@@ -71,7 +71,7 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     {
         var spec = new InitiativeSpec();
         spec.Query
-            .Where(e => e.InitiativeTagInitiatives
+            .Where(e => e.InitiativeTags
                 .Any(e => e.TagId == id));
 
         return spec;

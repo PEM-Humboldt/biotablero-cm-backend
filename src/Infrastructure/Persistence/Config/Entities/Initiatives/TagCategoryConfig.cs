@@ -6,17 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Initiative Tag Category entity configuration.
+/// Tag Category entity configuration.
 /// </summary>
-public class InitiativeTagCategoryConfig : IEntityTypeConfiguration<InitiativeTagCategory>
+public class TagCategoryConfig : IEntityTypeConfiguration<TagCategory>
 {
     /// <summary>
     /// Configure entity.
     /// </summary>
     /// <param name="builder">Entity builder.</param>
-    public void Configure(EntityTypeBuilder<InitiativeTagCategory> builder)
+    public void Configure(EntityTypeBuilder<TagCategory> builder)
     {
-        builder.ToTable("initiative_tag_category", "initiatives");
+        builder.ToTable("tag_category", "initiatives");
 
         builder?.HasKey(e => e.Id);
 

@@ -66,7 +66,7 @@ public class InitiativeDto : IDto
     public IEnumerable<InitiativeUserDto> Users { get; init; }
 
     /// <summary>
-    /// Initiative Tags relationship.
+    /// Tags relationship.
     /// </summary>
-    public IEnumerable<InitiativeTagDto> Tags { get; init; }
+    public IEnumerable<TagDto> Tags { get; init; }
 }

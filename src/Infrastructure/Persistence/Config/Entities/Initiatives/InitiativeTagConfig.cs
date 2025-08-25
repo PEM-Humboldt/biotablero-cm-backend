@@ -24,25 +24,20 @@ public class InitiativeTagConfig : IEntityTypeConfiguration<InitiativeTag>
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.Name)
-            .HasColumnName("name")
-            .HasMaxLength(40)
+        builder.Property(i => i.TagId)
+            .HasColumnName("tag_id")
             .IsRequired();
 
-        builder.Property(i => i.Url)
-            .HasColumnName("url")
-            .HasMaxLength(150);
-
-        builder.Property(i => i.CategoryId)
-            .HasColumnName("category_id")
+        builder.Property(i => i.InitiativeId)
+            .HasColumnName("initiative_id")
             .IsRequired();
 
-        builder.HasOne(e => e.Category)
+        builder.HasOne(e => e.Tag)
+            .WithMany(p => p.TagInitiatives)
+            .HasForeignKey(e => e.TagId);
+
+        builder.HasOne(e => e.Initiative)
             .WithMany(p => p.InitiativeTags)
-            .HasForeignKey(e => e.CategoryId);
-
-        builder
-            .HasIndex(e => e.Name)
-            .IsUnique();
+            .HasForeignKey(e => e.InitiativeId);
     }
 }

@@ -5,17 +5,17 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Initiative Tag Category entity.
+/// Tag Category entity.
 /// </summary>
-public class InitiativeTagCategory : BaseEntity<int>, IAggregateRoot
+public class TagCategory : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Initiative Tag Category name.
+    /// Tag Category name.
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    /// Initiative Tags relationship.
+    /// Tags relationship.
     /// </summary>
-    public ICollection<InitiativeTag> InitiativeTags { get; init; }
+    public ICollection<Tag> Tags { get; init; }
 }

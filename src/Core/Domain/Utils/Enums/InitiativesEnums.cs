@@ -45,7 +45,7 @@ public static class InitiativesEnums
     /// <summary>
     /// Initiative tag category.
     /// </summary>
-    public enum InitiativeTagCategory
+    public enum TagCategory
     {
         /// <summary>
         /// Political context category.
