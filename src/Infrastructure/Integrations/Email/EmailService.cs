@@ -18,6 +18,7 @@ public class EmailService : IEmailService
     private readonly string smtpFrom;
     private readonly string smtpUser;
     private readonly string smtpPass;
+    private readonly bool smtpEnableSsl;
 
     /// <summary>
     /// Constructor.
@@ -31,9 +32,15 @@ public class EmailService : IEmailService
         smtpPass = Environment.GetEnvironmentVariable("SMTP_PASS");
 
         var smtpStr = Environment.GetEnvironmentVariable("SMTP_PORT");
-        if (int.TryParse(smtpStr, out smtpPort))
+        if (!int.TryParse(smtpStr, out smtpPort))
         {
             throw new InvalidCastException($"Invalid SMTP port value: '{smtpStr}'");
+        }
+
+        var smtpEnableSslStr = Environment.GetEnvironmentVariable("SMTP_ENABLED_SSL");
+        if (!bool.TryParse(smtpEnableSslStr, out smtpEnableSsl))
+        {
+            smtpEnableSsl = true;
         }
     }
 
@@ -50,7 +57,7 @@ public class EmailService : IEmailService
     {
         using var client = new SmtpClient(smtpHost, smtpPort);
         client.Credentials = new NetworkCredential(smtpUser, smtpPass);
-        client.EnableSsl = true;
+        client.EnableSsl = smtpEnableSsl;
 
         using var mail = new MailMessage
         {
