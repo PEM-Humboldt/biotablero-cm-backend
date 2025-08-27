@@ -24,8 +24,9 @@ public interface IJoinRequestRepository : IRepository<JoinRequest>
     /// </summary>
     /// <param name="requestId">Request identifier.</param>
     /// <param name="reviewerUserName">Reviewer user name.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="requestStatusId">Request status identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    public Task<JoinRequest> ReviewRequest(int requestId, string reviewerUserName, int requestStatusId, CancellationToken ct = default);
+    public Task<JoinRequest> ReviewRequest(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default);
 }

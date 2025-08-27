@@ -49,11 +49,12 @@ public class EmailService : IEmailService
     /// </summary>
     /// <param name="subject">Email subject.</param>
     /// <param name="receivers">Email receivers list.</param>
+    /// <param name="hiddenReceivers">Email hidden receivers list.</param>
     /// <param name="body">Email body.</param>
     /// <param name="isHtml">Email body HTML format flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task SendEmail(string subject, MailAddress[] receivers, string body, bool isHtml = true, CancellationToken ct = default)
+    public async Task SendEmail(string subject, MailAddress[] receivers, MailAddress[] hiddenReceivers, string body, bool isHtml = true, CancellationToken ct = default)
     {
         using var client = new SmtpClient(smtpHost, smtpPort);
         client.Credentials = new NetworkCredential(smtpUser, smtpPass);
@@ -70,6 +71,11 @@ public class EmailService : IEmailService
         foreach (var receiver in receivers)
         {
             mail.To.Add(receiver);
+        }
+
+        foreach (var receiver in hiddenReceivers)
+        {
+            mail.Bcc.Add(receiver);
         }
 
         await client.SendMailAsync(mail, ct);

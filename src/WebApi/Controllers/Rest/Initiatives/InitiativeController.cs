@@ -89,7 +89,8 @@ public class InitiativeController(
     /// <returns>Added entity data.</returns>
     [HttpPut]
     [Consumes("application/json")]
-    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+
+    // [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeDto), typeof(InitiativeAddRequestExample))]
     [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]

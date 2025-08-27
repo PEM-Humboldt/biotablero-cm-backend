@@ -1,16 +1,22 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
+using System.Globalization;
+using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Email;
+using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 using Microsoft.AspNetCore.OData.Query;
@@ -31,6 +37,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly IRepository<InitiativeUser> initiativeUserRepository;
+    private readonly IWebViewTools webViewTools;
+    private readonly IEmailService emailService;
+    private readonly IIamService iamService;
 
     /// <summary>
     /// Constructor.
@@ -41,18 +50,27 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="initiativeUserRepository">Initiative user repository.</param>
+    /// <param name="webViewTools">Web View Tools.</param>
+    /// <param name="emailService">Email service.</param>
+    /// <param name="iamService">IAM service.</param>
     public JoinRequestService(
         IJoinRequestRepository entityRepository,
         IMapper<JoinRequest, JoinRequestDto> mapper,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
-        IRepository<InitiativeUser> initiativeUserRepository)
+        IRepository<InitiativeUser> initiativeUserRepository,
+        IWebViewTools webViewTools,
+        IEmailService emailService,
+        IIamService iamService)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
         this.initiativeUserRepository = initiativeUserRepository;
+        this.webViewTools = webViewTools;
+        this.emailService = emailService;
+        this.iamService = iamService;
     }
 
     /// <summary>
@@ -91,9 +109,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     public async Task<CustomWebResponse> Add(JoinRequestDto entityData, CancellationToken ct = default)
     {
         // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(new InitiativeSpec(entityData.InitiativeId), ct);
+        var initiative = await initiativeRepository.GetByIdAsync(entityData.InitiativeId, ct);
 
-        if (!initiativeExists)
+        if (initiative == null)
         {
             return new CustomWebResponse(true)
             {
@@ -123,12 +141,34 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
             };
         }
 
+        // Get user data from external system
+        var userData = await iamService.GetUserData(entityData.UserName, ct);
+
+        if (userData == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "User is invalid or do not exist",
+            };
+        }
+
         // Build entity data
+        entityData.Status = new EnumEntityDto<JoinRequestStatusEnum>(JoinRequestStatusEnum.UnderReview);
         var entity = mapper.Map(entityData);
-        entity.StatusId = (int)JoinRequestStatusEnum.UnderReview;
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
+
+        // Send email
+        var emailObject = new DefaultEmailData()
+        {
+            Name = $"{userData.FirstName} {userData.LastName}",
+            Email = userData.Email,
+            Subject = string.Format(CultureInfo.InvariantCulture, "Solicitud de ingreso a '{0}'", initiative.Name),
+            Content = string.Format(CultureInfo.InvariantCulture, "El usuario '{0}' ha realizado una solicitud de acceso para la iniciativa '{1}'", userData.Username, initiative.Name),
+        };
+
+        SendEmail(entityData.InitiativeId, emailObject, ct);
 
         entityData = mapper.Map(entity);
 
@@ -149,8 +189,19 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> Update(int id, JoinRequestDto entityData, CancellationToken ct = default)
     {
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Not found",
+            };
+        }
+
         // Validate user level
-        var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(entityData.InitiativeId, entityData.ReviewerUserName, (int)InitiativeUserLevelEnum.Leader), ct);
+        var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(entity.InitiativeId, entityData.ReviewerUserName, (int)InitiativeUserLevelEnum.Leader), ct);
 
         if (!userIsLeader)
         {
@@ -160,14 +211,11 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
             };
         }
 
-        // Validate entity
-        var entity = await entityRepository.GetByIdAsync(id, ct);
-
-        if (entity == null)
+        if (entityData.Status.Id == (int)JoinRequestStatusEnum.UnderReview)
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = "Invalid selected status",
             };
         }
 
@@ -180,7 +228,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         }
 
         // Update entity data
-        entity = await entityRepository.ReviewRequest(id, entityData.ReviewerUserName, entityData.Status.Id, ct);
+        entity = await entityRepository.ReviewRequest(id, entityData.ReviewerUserName, entity.UserName, entityData.Status.Id, ct);
 
         if (entity == null)
         {
@@ -193,6 +241,29 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
 
         entityData = mapper.Map(entity);
 
+        // Send email
+        var userData = await iamService.GetUserData(entityData.UserName, ct);
+        var initiative = await initiativeRepository.GetByIdAsync(entityData.InitiativeId, ct);
+
+        var emailObject = new DefaultEmailData()
+        {
+            Name = $"{userData.FirstName} {userData.LastName}",
+            Email = userData.Email,
+        };
+
+        if (entity.StatusId == (int)JoinRequestStatusEnum.Approved)
+        {
+            emailObject.Subject = string.Format(CultureInfo.InvariantCulture, "Solicitud de ingreso a '{0}' aprobada", initiative.Name);
+            emailObject.Content = string.Format(CultureInfo.InvariantCulture, "Bienvenido a '{0}'.<br /> Ya puedes aportar al estado de la biodiversidad de nuestro territorio.", initiative.Name);
+        }
+        else
+        {
+            emailObject.Subject = string.Format(CultureInfo.InvariantCulture, "Solicitud de ingreso a '{0}' rechazada", initiative.Name);
+            emailObject.Content = "Tu solicitud ha sido rechazada. Si consideras que se trata de un error solicita de nuevo.";
+        }
+
+        SendEmail(entityData.InitiativeId, emailObject, ct);
+
         logger.AddLog(LogType.Update, "Updated initiative join request: {@entityData}", entityData);
 
         return new CustomWebResponse()
@@ -200,4 +271,40 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
             ResponseBody = entityData,
         };
     }
+
+    /// <summary>
+    /// Send join request email.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="emailData">Email data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    private void SendEmail(int initiativeId, DefaultEmailData emailData, CancellationToken ct = default) => _ = Task.Run(
+        async () =>
+        {
+            var leaders = await initiativeUserRepository.ListAsync(InitiativeUserSpec.LevelSpec(initiativeId, (int)InitiativeUserLevelEnum.Leader), ct);
+
+            if (leaders?.Count > 0)
+            {
+                var leadersUserNames = leaders
+                    .Select(e => e.UserName)
+                    .ToArray();
+
+                var leadersData = await iamService.GetUsersData(leadersUserNames, ct);
+
+                var hiddenReceivers = leadersData
+                    .Select(e => new MailAddress(e.Email, $"{e.FirstName} {e.LastName}"))
+                    .ToArray();
+
+                var receivers = new MailAddress[] { new(emailData.Email, emailData.Name) };
+
+                var emailObject = new DefaultEmailData()
+                {
+                    Content = emailData.Content,
+                };
+                var htmlBody = await webViewTools.RenderViewToString("Default", emailObject);
+
+                await emailService.SendEmail(emailData.Subject, receivers, hiddenReceivers, htmlBody, true, ct);
+            }
+        },
+        ct);
 }

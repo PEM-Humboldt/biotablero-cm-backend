@@ -44,10 +44,11 @@ public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestReposi
     /// </summary>
     /// <param name="requestId">Request identifier.</param>
     /// <param name="reviewerUserName">Reviewer user name.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="requestStatusId">Request status identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    public async Task<JoinRequest> ReviewRequest(int requestId, string reviewerUserName, int requestStatusId, CancellationToken ct = default)
+    public async Task<JoinRequest> ReviewRequest(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
@@ -75,6 +76,7 @@ public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestReposi
                     var initiativeUserEntity = new InitiativeUser()
                     {
                         InitiativeId = entity.InitiativeId,
+                        UserName = userName,
                         LevelId = (int)InitiativeUserLevelEnum.Member,
                     };
 
@@ -93,7 +95,7 @@ public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestReposi
 
             return entity;
         }
-        catch
+        catch (DbUpdateException)
         {
             await transaction.RollbackAsync(ct);
             return null;
