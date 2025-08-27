@@ -3,6 +3,7 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories;
@@ -30,10 +31,14 @@ public static class ConfigCoreDependencies
         services.AddHealthChecks();
         services.AddHttpContextAccessor(); // Required for Serilog (ASP.NET)
 
+        // Enabled MVC without routing
+        services.AddMvc(options => options.EnableEndpointRouting = false);
+
         services.ConfigureFormOptions();
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddSingleton<IWebTools, WebTools>();
+        services.AddSingleton<IWebViewTools, WebViewTools>();
         services.AddSingleton(typeof(IServiceReadEnumeration<>), typeof(ServiceReadEnumeration<>));
 
         services.AddAuthService(isDevelopment);

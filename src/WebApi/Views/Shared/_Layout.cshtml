@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+</head>
+
+<body style="text-align: center;color: #505050;font-family: 'Open Sans',Arial,sans-serif;background-color: #F1F3F5">
+    <div class="header">
+        <b style="color: #e84a5f;font-size: 30px;">BioTablero</b>
+    </div>
+    <div class="container">
+        <main role="main">
+            <br>
+            @RenderBody()
+            <br>
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        Instituto de Investigación de Recursos Biológicos
+        <br />
+        <b>Alexander von Humboldt</b>
+        <br />
+        @(DateTime.Now.Year)
+    </footer>
+</body>
+
+</html>
