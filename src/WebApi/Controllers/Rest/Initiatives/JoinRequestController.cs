@@ -55,7 +55,7 @@ public class JoinRequestController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
     [HttpPut]
-    [Consumes("application/json")]
+    [Authorize]
     [ProducesResponseType(typeof(JoinRequestDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestDto))]
