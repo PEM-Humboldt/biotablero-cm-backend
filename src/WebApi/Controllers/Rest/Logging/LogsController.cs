@@ -45,7 +45,7 @@ public class LogsController(IWebTools webTools,
     [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(NotFoundResponseExample))]
     public async Task<IActionResult> Get(Guid id, CancellationToken ct)
     {
-        var response = await entityService.GetItem(id, ct);
+        var response = await entityService.GetItemAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -61,7 +61,7 @@ public class LogsController(IWebTools webTools,
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LogOdataResponseExample))]
     public async Task<IActionResult> Get(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct)
     {
-        var response = await entityService.GetList(queryOptions, ct);
+        var response = await entityService.GetListAsync(queryOptions, ct);
         return webTools.CustomResponse(response);
     }
 }

@@ -41,7 +41,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <param name="id">Element identifier</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public virtual async Task<bool> Exists(TI id, CancellationToken ct = default)
+    public virtual async Task<bool> ExistsAsync(TI id, CancellationToken ct = default)
     {
         var specification = (TS)Activator.CreateInstance(typeof(TS), [id]);
         return await entityRepository.AnyAsync(specification, ct);
@@ -53,7 +53,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <param name="id">Element identifier</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public virtual async Task<CustomWebResponse> GetItem(TI id, CancellationToken ct = default)
+    public virtual async Task<CustomWebResponse> GetItemAsync(TI id, CancellationToken ct = default)
     {
         var specification = (TS)Activator.CreateInstance(typeof(TS), [id]);
         var dataEntity = await entityRepository.FirstOrDefaultAsync(specification, ct);
@@ -81,7 +81,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// </summary>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public virtual async Task<CustomWebResponse> GetAll(CancellationToken ct = default)
+    public virtual async Task<CustomWebResponse> GetAllAsync(CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.ListAsync(ct);
         var dataListDto = dataListEntity
@@ -100,7 +100,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <param name="take">Page size</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public virtual async Task<CustomWebResponse> GetList(int skip, int take, CancellationToken ct = default)
+    public virtual async Task<CustomWebResponse> GetListAsync(int skip, int take, CancellationToken ct = default)
     {
         var specification = (TS)Activator.CreateInstance(typeof(TS), [skip, take]);
         var dataListEntity = await entityRepository.ListAsync(specification, ct);
@@ -119,7 +119,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <param name="queryOptions">OData query options</param>
     /// <param name="ct">Cancellation token</param>
     /// <returns>Process result</returns>
-    public virtual async Task<CustomWebResponse> GetList(ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
+    public virtual async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();
         return await GetOdataListByQuery(query, queryOptions, ct);
