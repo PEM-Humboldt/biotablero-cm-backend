@@ -37,7 +37,7 @@ public static class CustomApiConventions
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
-    [ProducesResponseType(typeof(Dictionary<string, object>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     public static void Get(
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] ODataQueryOptions<object> queryOptions,
