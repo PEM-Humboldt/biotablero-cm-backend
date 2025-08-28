@@ -9,12 +9,12 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 using Microsoft.AspNetCore.OData.Query;
 
 /// <summary>
-/// Read data service interface
+/// Read data interface (for services)
 /// </summary>
 /// <typeparam name="TE">Entity type</typeparam>
 /// <typeparam name="TDto">DTO class type</typeparam>
 /// <typeparam name="TI">Entity identifier type</typeparam>
-public interface IServiceRead<TE, TDto, TI>
+public interface IRead<TE, TDto, TI>
     where TE : class, IAggregateRoot
     where TDto : class, IDto
     where TI : notnull

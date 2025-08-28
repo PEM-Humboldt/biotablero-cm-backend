@@ -13,7 +13,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// Log type response example
 /// </summary>
 /// <param name="entityService">General enumeration service</param>
-public class LogTypeResponseExample(IServiceReadEnumeration<LogType> entityService) : IExamplesProvider<IEnumerable<EnumEntityDto<LogType>>>
+public class LogTypeResponseExample(IReadEnumeration<LogType> entityService) : IExamplesProvider<IEnumerable<EnumEntityDto<LogType>>>
 {
     /// <summary>
     /// Get examples for entity

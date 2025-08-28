@@ -20,7 +20,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 [Route("[controller]")]
 [Produces("application/json")]
 public class LogTypeController(IWebTools webTools,
-    IServiceReadEnumeration<LogType> entityService) : ControllerBase
+    IReadEnumeration<LogType> entityService) : ControllerBase
 {
     /// <summary>
     /// Get all entities
