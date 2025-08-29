@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.ExternalEndpoints;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -43,11 +44,51 @@ public static class SwaggerConfig
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
         // Add custom filters
-        options.OperationFilter<CustomODataQueryOptions>();
+        options.OperationFilter<CustomODataQueryFilter>();
 
         // Enable example filters
         options.ExampleFilters();
 
+        // Enable default security
+        options.ConfigDefaultSecurity();
+
+        // Add custom endpoints docs
+        options.DocumentFilter<AuthEndpointsDocumentFilter>();
+
         return options;
+    }
+
+    /// <summary>
+    /// Default OpenAPI security
+    /// </summary>
+    /// <param name="options">Swagger options</param>
+    private static void ConfigDefaultSecurity(this SwaggerGenOptions options)
+    {
+        const string securityDefinitionName = "Bearer";
+
+        options.AddSecurityDefinition(securityDefinitionName, new OpenApiSecurityScheme
+        {
+            In = ParameterLocation.Header,
+            Description = "Please enter a valid token",
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            Scheme = "bearer",
+        });
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = securityDefinitionName,
+                    },
+                },
+                Array.Empty<string>()
+            },
+        });
     }
 }

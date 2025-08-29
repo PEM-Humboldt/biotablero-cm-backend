@@ -101,6 +101,10 @@ dotnet_diagnostic.ca1052.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1062
 dotnet_diagnostic.CA1062.severity = none
 
+# Avoid constant arrays as arguments
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1861
+dotnet_diagnostic.CA1861.severity = none
+
 # --------------------- #
 # Custom StyleCop rules #
 # --------------------- #
@@ -136,3 +140,11 @@ dotnet_diagnostic.SA1124.severity = none
 # The property's documentation summary text should begin with: 'Gets'
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1623.md
 dotnet_diagnostic.SA1623.severity = none
+
+# Field should be private
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1401.md
+dotnet_diagnostic.SA1401.severity = none
+
+# Static members should appear before non-static members
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1204.md
+dotnet_diagnostic.SA1204.severity = none

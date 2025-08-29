@@ -1,0 +1,133 @@
+{
+    "realm": "bt-cm",
+    "enabled": true,
+    "users": [
+        {
+            "username": "general-user",
+            "enabled": true,
+            "firstName": "User",
+            "lastName": "Example",
+            "email": "user@example.com",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "pass"
+                }
+            ],
+            "realmRoles": [
+                "User"
+            ]
+        },
+        {
+            "username": "general-admin",
+            "enabled": true,
+            "firstName": "Admin",
+            "lastName": "Example",
+            "email": "admin@example.com",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "pass"
+                }
+            ],
+            "realmRoles": [
+                "Admin"
+            ]
+        }
+    ],
+    "roles": {
+        "realm": [
+            {
+                "name": "Admin",
+                "description": "Admin role"
+            },
+            {
+                "name": "User",
+                "description": "User role"
+            }
+        ]
+    },
+    "clientScopes": [
+        {
+            "name": "aud-bt-mc-client",
+            "protocol": "openid-connect",
+            "attributes": {
+                "include.in.token.scope": "true",
+                "display.on.consent.screen": "false"
+            },
+            "protocolMappers": [
+                {
+                    "name": "audience-mapper",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-audience-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "included.client.audience": "bt-mc-client",
+                        "id.token.claim": "false",
+                        "access.token.claim": "true"
+                    }
+                },
+                {
+                    "name": "preferred_username",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-property-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "user.attribute": "username",
+                        "claim.name": "username",
+                        "jsonType.label": "String",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true"
+                    }
+                },
+                {
+                    "name": "email",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-property-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "user.attribute": "email",
+                        "claim.name": "email",
+                        "jsonType.label": "String",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true"
+                    }
+                },
+                {
+                    "name": "realm roles",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-realm-role-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "claim.name": "roles",
+                        "jsonType.label": "String",
+                        "multivalued": "true",
+                        "access.token.claim": "true",
+                        "id.token.claim": "true"
+                    }
+                }
+            ]
+        }
+    ],
+    "clients": [
+        {
+            "clientId": "bt-mc-client",
+            "enabled": true,
+            "publicClient": true,
+            "redirectUris": [
+                "*"
+            ],
+            "protocol": "openid-connect",
+            "standardFlowEnabled": true,
+            "directAccessGrantsEnabled": true,
+            "serviceAccountsEnabled": true,
+            "defaultClientScopes": [
+                "aud-bt-mc-client"
+            ],
+            "webOrigins": [
+                "http://localhost:3000",
+                "http://localhost:8001"
+            ]
+        }
+    ]
+}

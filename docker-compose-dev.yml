@@ -5,13 +5,42 @@ services:
     container_name: bt-cm-db
     restart: "no"
     environment:
+      POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
     ports:
       - "${DB_PORT:-5432}:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/home/postgres/pgdata
+      # Keycloak database setup
+      - ./docker/keycloak/db/init-db.sql:/docker-entrypoint-initdb.d/init-keycloak-db.sql:ro
+      - ./docker/keycloak/db/init-schema.sql:/docker-entrypoint-initdb.d/init-keycloak-schema.sql:ro
+    networks:
+      - bt-search-network
+
+  keycloak:
+    image: keycloak/keycloak:26.3
+    container_name: bt-cm-auth
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: bt-cm-db
+      KC_DB_URL_DATABASE: ${KC_DB_NAME}
+      KC_DB_USERNAME: ${KC_DB_USER}
+      KC_DB_PASSWORD: ${KC_DB_PASS}
+      KC_HOSTNAME: localhost
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    command:
+      - "start-dev"
+      - "--import-realm"
+      - "--verbose"
+    volumes:
+      - ./docker/keycloak/realm-dev:/opt/keycloak/data/import:ro
+    depends_on:
+      - db
     networks:
       - bt-search-network
 

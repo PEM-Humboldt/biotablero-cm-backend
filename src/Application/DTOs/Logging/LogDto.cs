@@ -29,7 +29,7 @@ public class LogDto : IDto
     /// <summary>
     /// Custom log type
     /// </summary>
-    public LogType? Type { get; set; }
+    public LogType Type { get; set; }
 
     /// <summary>
     /// Log message

@@ -25,7 +25,7 @@ public class LogEntity : BaseEntity<Guid>, IAggregateRoot
     /// <summary>
     /// Custom log type
     /// </summary>
-    public LogType? Type { get; set; }
+    public LogType Type { get; set; }
 
     /// <summary>
     /// Log message

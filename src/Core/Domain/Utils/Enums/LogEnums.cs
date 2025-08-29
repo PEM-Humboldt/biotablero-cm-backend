@@ -47,9 +47,14 @@ public static class LogEnums
     public enum LogType
     {
         /// <summary>
+        /// Internal system event
+        /// </summary>
+        System = 1,
+
+        /// <summary>
         /// Create event
         /// </summary>
-        Create = 1,
+        Create,
 
         /// <summary>
         /// Read event
