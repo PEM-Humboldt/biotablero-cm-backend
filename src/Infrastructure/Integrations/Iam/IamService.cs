@@ -67,7 +67,7 @@ public class IamService : IIamService
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var url = new Uri($"{baseUrlAdmin}/users?username={Uri.EscapeDataString(username)}");
+        var url = new Uri($"{baseUrlAdmin}/users?exact=true&username={Uri.EscapeDataString(username)}");
 
         var response = await httpClient.GetAsync(url, ct);
 
