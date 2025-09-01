@@ -93,7 +93,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Add(InitiativeDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(InitiativeDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
@@ -193,7 +193,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Update(int id, InitiativeDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, InitiativeDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -333,7 +333,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="disable">Disable flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Disable(int id, bool disable, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DisableAsync(int id, bool disable, CancellationToken ct = default)
     {
         var entity = await entityRepository.GetByIdAsync(id, ct);
 

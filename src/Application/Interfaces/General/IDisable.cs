@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Utils;
 
 /// <summary>
-/// Delete service interface.
+/// Enable/Disable data interface (for services).
 /// </summary>
-/// <typeparam name="TEntityType">Entity identifier type.</typeparam>
-public interface IServiceDelete<TEntityType>
-    where TEntityType : notnull
+/// <typeparam name="TEntityId">Entity identifier type.</typeparam>
+public interface IDisable<TEntityId>
+    where TEntityId : notnull
 {
     /// <summary>
-    /// Delete element.
+    /// Disable or enable element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
+    /// <param name="disable">Disable flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> Delete(TEntityType id, CancellationToken ct = default);
+    Task<CustomWebResponse> DisableAsync(TEntityId id, bool disable, CancellationToken ct = default);
 }

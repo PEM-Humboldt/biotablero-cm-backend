@@ -78,7 +78,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Add(InitiativeUserDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(InitiativeUserDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
@@ -164,7 +164,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Update(int id, InitiativeUserDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, InitiativeUserDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -236,7 +236,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Delete(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
     {
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);

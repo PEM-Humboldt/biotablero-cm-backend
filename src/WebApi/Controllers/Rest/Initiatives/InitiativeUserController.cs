@@ -72,7 +72,7 @@ public class InitiativeUserController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserDto))]
     public async Task<IActionResult> Put([FromBody] InitiativeUserDto requestData, CancellationToken ct)
     {
-        var response = await entityService.Add(requestData, ct);
+        var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -92,7 +92,7 @@ public class InitiativeUserController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserDto))]
     public async Task<IActionResult> Post(int id, [FromBody] InitiativeUserDto requestData, CancellationToken ct)
     {
-        var response = await entityService.Update(id, requestData, ct);
+        var response = await entityService.UpdateAsync(id, requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -108,7 +108,7 @@ public class InitiativeUserController(
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var response = await entityService.Delete(id, ct);
+        var response = await entityService.DeleteAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 }

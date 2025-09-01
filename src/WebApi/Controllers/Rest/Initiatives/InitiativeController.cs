@@ -81,7 +81,7 @@ public class InitiativeController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Put([FromBody] InitiativeDto requestData, CancellationToken ct)
     {
-        var response = await entityService.Add(requestData, ct);
+        var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -101,7 +101,7 @@ public class InitiativeController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Post(int id, [FromBody] InitiativeDto requestData, CancellationToken ct)
     {
-        var response = await entityService.Update(id, requestData, ct);
+        var response = await entityService.UpdateAsync(id, requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -148,7 +148,7 @@ public class InitiativeController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Enable(int id, CancellationToken ct)
     {
-        var response = await entityService.Disable(id, false, ct);
+        var response = await entityService.DisableAsync(id, false, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -165,7 +165,7 @@ public class InitiativeController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Disable(int id, CancellationToken ct)
     {
-        var response = await entityService.Disable(id, true, ct);
+        var response = await entityService.DisableAsync(id, true, ct);
         return webTools.CustomResponse(response);
     }
 }
