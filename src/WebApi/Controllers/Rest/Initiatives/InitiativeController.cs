@@ -148,7 +148,7 @@ public class InitiativeController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Enable(int id, CancellationToken ct)
     {
-        var response = await entityService.DisableAsync(id, false, ct);
+        var response = await entityService.EnableAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -165,7 +165,7 @@ public class InitiativeController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Disable(int id, CancellationToken ct)
     {
-        var response = await entityService.DisableAsync(id, true, ct);
+        var response = await entityService.DisableAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 }

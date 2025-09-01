@@ -327,13 +327,29 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     }
 
     /// <summary>
+    /// Enable element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> EnableAsync(int id, CancellationToken ct = default) => await DisableOrEnableAsync(id, false, ct);
+
+    /// <summary>
+    /// Disable element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> DisableAsync(int id, CancellationToken ct = default) => await DisableOrEnableAsync(id, true, ct);
+
+    /// <summary>
     /// Disable or enable element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
     /// <param name="disable">Disable flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> DisableAsync(int id, bool disable, CancellationToken ct = default)
+    private async Task<CustomWebResponse> DisableOrEnableAsync(int id, bool disable, CancellationToken ct = default)
     {
         var entity = await entityRepository.GetByIdAsync(id, ct);
 

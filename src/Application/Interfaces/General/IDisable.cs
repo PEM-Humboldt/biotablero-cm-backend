@@ -13,11 +13,18 @@ public interface IDisable<TEntityId>
     where TEntityId : notnull
 {
     /// <summary>
-    /// Disable or enable element.
+    /// Enable element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
-    /// <param name="disable">Disable flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DisableAsync(TEntityId id, bool disable, CancellationToken ct = default);
+    Task<CustomWebResponse> EnableAsync(TEntityId id, CancellationToken ct = default);
+
+    /// <summary>
+    /// Disable element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> DisableAsync(TEntityId id, CancellationToken ct = default);
 }
