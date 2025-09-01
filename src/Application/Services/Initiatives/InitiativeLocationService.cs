@@ -56,7 +56,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> GetByInitiative(int initiativeId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.ListAsync(InitiativeLocationSpec.InitiativeIdSpec(initiativeId), ct);
 

@@ -52,7 +52,7 @@ public class StorageService : IStorageService
     /// <param name="file">Upload file data.</param>
     /// <param name="ct">Cancellation token (optional).</param>
     /// <returns>True if the process is successful. False otherwise.</returns>
-    public async Task<bool> UploadFile(string fileName, IInputFile file, CancellationToken ct = default)
+    public async Task<bool> UploadFileAsync(string fileName, IInputFile file, CancellationToken ct = default)
     {
         try
         {
@@ -99,7 +99,7 @@ public class StorageService : IStorageService
     /// <param name="fileName">File name.</param>
     /// <param name="ct">Cancellation token (optional).</param>
     /// <returns>Downloaded file data. Null otherwise.</returns>
-    public async Task<FileData> DownloadFile(string fileName, CancellationToken ct = default)
+    public async Task<FileData> DownloadFileAsync(string fileName, CancellationToken ct = default)
     {
         MemoryStream ms = null;
         var fileData = new FileData();

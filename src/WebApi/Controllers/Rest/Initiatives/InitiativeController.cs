@@ -116,7 +116,7 @@ public class InitiativeController(
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     public async Task<IActionResult> UploadImage(int id, IFormFile formFile, CancellationToken ct)
     {
-        var response = await entityService.UploadImage(id, new FormFileAdapter(formFile), InitiativeImageType.Image, ct);
+        var response = await entityService.UploadImageAsync(id, new FormFileAdapter(formFile), InitiativeImageType.Image, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -131,7 +131,7 @@ public class InitiativeController(
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     public async Task<IActionResult> UploadBanner(int id, IFormFile formFile, CancellationToken ct)
     {
-        var response = await entityService.UploadImage(id, new FormFileAdapter(formFile), InitiativeImageType.Banner, ct);
+        var response = await entityService.UploadImageAsync(id, new FormFileAdapter(formFile), InitiativeImageType.Banner, ct);
         return webTools.CustomResponse(response);
     }
 

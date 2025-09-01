@@ -110,7 +110,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     public virtual async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();
-        return await GetOdataListByQuery(query, queryOptions, ct);
+        return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    private protected async Task<CustomWebResponse> GetOdataListByQuery(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
+    private protected async Task<CustomWebResponse> GetOdataListByQueryAsync(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
         var defaultSettings = new ODataQuerySettings()
         {

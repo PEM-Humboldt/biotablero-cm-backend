@@ -59,7 +59,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> GetByInitiative(int initiativeId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.ListAsync(InitiativeUserSpec.InitiativeIdSpec(initiativeId), ct);
 
@@ -131,7 +131,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         }
 
         // Validate user in external system
-        var userExists = await iamService.UserExists(entityData.UserName, ct);
+        var userExists = await iamService.UserExistsAsync(entityData.UserName, ct);
 
         if (!userExists)
         {

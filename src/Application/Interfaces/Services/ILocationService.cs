@@ -19,5 +19,5 @@ public interface ILocationService : IRead<Location, LocationDto, int>
     /// <param name="parentId">Parent identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByParent(int? parentId, CancellationToken ct = default);
+    Task<CustomWebResponse> GetByParentAsync(int? parentId, CancellationToken ct = default);
 }

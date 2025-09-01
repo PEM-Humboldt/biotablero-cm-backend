@@ -19,5 +19,5 @@ public interface IInitiativeUserService : IRead<InitiativeUser, InitiativeUserDt
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByInitiative(int initiativeId, CancellationToken ct = default);
+    Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 }

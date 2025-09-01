@@ -53,7 +53,7 @@ public class InitiativeUserController(
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetByInitiative(int initiativeId, CancellationToken ct)
     {
-        var response = await entityService.GetByInitiative(initiativeId, ct);
+        var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
         return webTools.CustomResponse(response);
     }
 

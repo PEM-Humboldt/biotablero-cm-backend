@@ -84,7 +84,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         var query = entityRepository.GetQueryable();
         query = entityRepository.IncludeOdataEntities(query);
 
-        return await GetOdataListByQuery(query, queryOptions, ct);
+        return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 
     /// <summary>
@@ -154,7 +154,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         var results = new Dictionary<string, bool>();
         var userTasks = entityData.InitiativeUsers.Select(async user =>
         {
-            results[user.UserName] = await iamService.UserExists(user.UserName, ct);
+            results[user.UserName] = await iamService.UserExistsAsync(user.UserName, ct);
         });
 
         await Task.WhenAll(userTasks);
@@ -254,7 +254,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="imageType">Initiative image type.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> UploadImage(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct)
+    public async Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct)
     {
         if (formFile.IsEmpty())
         {
@@ -287,7 +287,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         var imageTypeStr = imageType.ToString("G").ToLower(CultureInfo.CurrentCulture);
         var fileName = $"{StoragePrefix}/{id}/{imageTypeStr}";
         var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-        var uploadSuccessful = await storageService.UploadFile(fileName, formFile, ct);
+        var uploadSuccessful = await storageService.UploadFileAsync(fileName, formFile, ct);
 
         if (uploadSuccessful)
         {

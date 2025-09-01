@@ -24,5 +24,5 @@ public interface IInitiativeService : IRead<Initiative, InitiativeDto, int>, IAd
     /// <param name="imageType">Initiative image type.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UploadImage(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct);
+    Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct);
 }

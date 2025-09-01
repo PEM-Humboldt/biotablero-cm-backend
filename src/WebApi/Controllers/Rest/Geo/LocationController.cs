@@ -50,7 +50,7 @@ public class LocationController(IWebTools webTools,
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Get(int? parentId, CancellationToken ct)
     {
-        var response = await entityService.GetByParent(parentId, ct);
+        var response = await entityService.GetByParentAsync(parentId, ct);
         return webTools.CustomResponse(response);
     }
 }
