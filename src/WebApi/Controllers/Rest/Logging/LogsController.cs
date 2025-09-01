@@ -39,6 +39,7 @@ public class LogsController(IWebTools webTools,
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LogResponseExample))]
     public async Task<IActionResult> GetItem(Guid id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);

@@ -34,6 +34,7 @@ public class InitiativeUserController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -47,6 +48,7 @@ public class InitiativeUserController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByInitiative/{initiativeId}")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserListResponseExample))]
     public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
     {
         var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
@@ -63,7 +65,7 @@ public class InitiativeUserController(
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeUserDto), typeof(InitiativeUserAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserDto))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserResponseExample))]
     public async Task<IActionResult> Put([FromBody] InitiativeUserDto requestData, CancellationToken ct)
     {
         var response = await entityService.AddAsync(requestData, ct);
@@ -81,7 +83,7 @@ public class InitiativeUserController(
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeUserDto), typeof(InitiativeUserEditRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserDto))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserResponseExample))]
     public async Task<IActionResult> Post(int id, [FromBody] InitiativeUserDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);

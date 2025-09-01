@@ -34,6 +34,7 @@ public class InitiativeContactController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -47,6 +48,7 @@ public class InitiativeContactController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByInitiative/{initiativeId}")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactListResponseExample))]
     public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
     {
         var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
@@ -63,7 +65,7 @@ public class InitiativeContactController(
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeContactDto), typeof(InitiativeContactAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactDto))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactResponseExample))]
     public async Task<IActionResult> Put([FromBody] InitiativeContactDto requestData, CancellationToken ct)
     {
         var response = await entityService.AddAsync(requestData, ct);
@@ -81,7 +83,7 @@ public class InitiativeContactController(
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeContactDto), typeof(InitiativeContactEditRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactDto))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactResponseExample))]
     public async Task<IActionResult> Post(int id, [FromBody] InitiativeContactDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);
