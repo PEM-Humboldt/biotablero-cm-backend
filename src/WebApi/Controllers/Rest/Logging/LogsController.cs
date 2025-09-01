@@ -22,9 +22,9 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 /// <param name="entityService">Entity service.</param>
 [Authorize(Roles = IamConstants.RoleModuleAdmin)]
 [ApiController]
-[ApiConventionType(typeof(CustomApiConventions))]
 [Route("[controller]")]
 [Produces("application/json")]
+[ApiConventionType(typeof(CustomApiConventions))]
 public class LogsController(IWebTools webTools,
     ILogService entityService) : ODataController
 {
@@ -35,7 +35,7 @@ public class LogsController(IWebTools webTools,
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(Guid id, CancellationToken ct)
+    public async Task<IActionResult> GetItem(Guid id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
         return webTools.CustomResponse(response);
@@ -48,7 +48,7 @@ public class LogsController(IWebTools webTools,
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    public async Task<IActionResult> Get(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct)
+    public async Task<IActionResult> GetOdataList(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);
         return webTools.CustomResponse(response);

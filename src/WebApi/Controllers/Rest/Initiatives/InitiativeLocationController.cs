@@ -1,12 +1,12 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Initiatives;
 
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
@@ -22,6 +22,7 @@ using Swashbuckle.AspNetCore.Filters;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
+[ApiConventionType(typeof(CustomApiConventions))]
 public class InitiativeLocationController(
     IWebTools webTools,
     IInitiativeLocationService entityService) : ControllerBase
@@ -33,10 +34,7 @@ public class InitiativeLocationController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(InitiativeLocationDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Get(int id, CancellationToken ct)
+    public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
         return webTools.CustomResponse(response);
@@ -49,9 +47,7 @@ public class InitiativeLocationController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByInitiative/{initiativeId}")]
-    [ProducesResponseType(typeof(IEnumerable<InitiativeLocationDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> GetByInitiative(int initiativeId, CancellationToken ct)
+    public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
     {
         var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
         return webTools.CustomResponse(response);
@@ -67,8 +63,6 @@ public class InitiativeLocationController(
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeLocationDto), typeof(InitiativeLocationAddRequestExample))]
-    [ProducesResponseType(typeof(InitiativeLocationDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeLocationDto))]
     public async Task<IActionResult> Put([FromBody] InitiativeLocationDto requestData, CancellationToken ct)
     {
@@ -87,8 +81,6 @@ public class InitiativeLocationController(
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeLocationDto), typeof(InitiativeLocationEditRequestExample))]
-    [ProducesResponseType(typeof(InitiativeLocationDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeLocationDto))]
     public async Task<IActionResult> Post(int id, [FromBody] InitiativeLocationDto requestData, CancellationToken ct)
     {
@@ -104,8 +96,6 @@ public class InitiativeLocationController(
     /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
         var response = await entityService.DeleteAsync(id, ct);

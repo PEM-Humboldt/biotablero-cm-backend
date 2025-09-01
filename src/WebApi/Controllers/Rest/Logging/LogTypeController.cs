@@ -14,9 +14,9 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <param name="webTools">General web tools.</param>
 /// <param name="entityService">Entity service.</param>
 [ApiController]
-[ApiConventionType(typeof(CustomApiConventions))]
 [Route("[controller]")]
 [Produces("application/json")]
+[ApiConventionType(typeof(CustomApiConventions))]
 public class LogTypeController(IWebTools webTools,
     IReadEnumeration<LogType> entityService) : ControllerBase
 {
