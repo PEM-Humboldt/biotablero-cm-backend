@@ -8,12 +8,16 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Logging;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
+
+using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Logs controller.
@@ -48,6 +52,7 @@ public class LogsController(IWebTools webTools,
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LogOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);

@@ -55,6 +55,7 @@ public class InitiativeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);
