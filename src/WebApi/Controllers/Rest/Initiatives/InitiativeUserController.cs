@@ -7,7 +7,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.InitiativeUser;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Authorization;

@@ -1,13 +1,13 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.InitiativeLocation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
 using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
-/// Initiative Location edit request example.
+/// Initiative Location add request example.
 /// </summary>
-public class InitiativeLocationEditRequestExample : IExamplesProvider<InitiativeLocationDto>
+public class InitiativeLocationAddRequestExample : IExamplesProvider<InitiativeLocationDto>
 {
     /// <summary>
     /// Get examples for entity.
@@ -15,7 +15,8 @@ public class InitiativeLocationEditRequestExample : IExamplesProvider<Initiative
     /// <returns>Entity examples.</returns>
     public InitiativeLocationDto GetExamples() => new()
     {
+        InitiativeId = 1,
         LocationId = 1,
-        Locality = "Locality example (edited)",
+        Locality = "Locality example",
     };
 }
