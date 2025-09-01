@@ -9,6 +9,6 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 /// <summary>
 /// System logs service interface.
 /// </summary>
-public interface ILogService : IServiceRead<LogEntity, LogDto, Guid>
+public interface ILogService : IRead<LogEntity, LogDto, Guid>
 {
 }
