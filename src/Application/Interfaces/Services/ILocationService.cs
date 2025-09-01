@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 /// <summary>
 /// Location service interface.
 /// </summary>
-public interface ILocationService : IServiceRead<Location, LocationDto, int>
+public interface ILocationService : IRead<Location, LocationDto, int>
 {
     /// <summary>
     /// Get locations by parent.

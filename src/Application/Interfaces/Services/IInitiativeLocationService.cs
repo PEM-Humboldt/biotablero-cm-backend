@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// <summary>
 /// Initiative Location service interface.
 /// </summary>
-public interface IInitiativeLocationService : IServiceRead<InitiativeLocation, InitiativeLocationDto, int>, IServiceAdd<InitiativeLocationDto>, IServiceUpdate<InitiativeLocationDto, int>, IServiceDelete<int>
+public interface IInitiativeLocationService : IRead<InitiativeLocation, InitiativeLocationDto, int>, IServiceAdd<InitiativeLocationDto>, IServiceUpdate<InitiativeLocationDto, int>, IServiceDelete<int>
 {
     /// <summary>
     /// Get entities by initiative.

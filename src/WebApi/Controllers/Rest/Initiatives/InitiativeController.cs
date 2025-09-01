@@ -8,7 +8,6 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
@@ -44,11 +43,10 @@ public class InitiativeController(
     [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(NotFoundResponseExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Get(int id, CancellationToken ct)
     {
-        var response = await entityService.GetItem(id, ct);
+        var response = await entityService.GetItemAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -64,7 +62,7 @@ public class InitiativeController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeOdataResponseExample))]
     public async Task<IActionResult> Get(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct)
     {
-        var response = await entityService.GetList(queryOptions, ct);
+        var response = await entityService.GetListAsync(queryOptions, ct);
         return webTools.CustomResponse(response);
     }
 

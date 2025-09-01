@@ -21,7 +21,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 [Route("[controller]")]
 [Produces("application/json")]
 public class InitiativeUserLevelController(IWebTools webTools,
-    IServiceReadEnumeration<InitiativeUserLevel> entityService) : ControllerBase
+    IReadEnumeration<InitiativeUserLevel> entityService) : ControllerBase
 {
     /// <summary>
     /// Get all entities.

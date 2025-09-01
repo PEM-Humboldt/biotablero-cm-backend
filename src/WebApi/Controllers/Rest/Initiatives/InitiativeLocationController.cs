@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
@@ -37,10 +36,9 @@ public class InitiativeLocationController(
     [ProducesResponseType(typeof(InitiativeLocationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(NotFoundResponseExample))]
     public async Task<IActionResult> Get(int id, CancellationToken ct)
     {
-        var response = await entityService.GetItem(id, ct);
+        var response = await entityService.GetItemAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 

@@ -13,7 +13,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// Log type response example.
 /// </summary>
 /// <param name="entityService">General enumeration service.</param>
-public class InitiativeUserLevelResponseExample(IServiceReadEnumeration<InitiativeUserLevel> entityService) : IExamplesProvider<IEnumerable<EnumEntityDto<InitiativeUserLevel>>>
+public class InitiativeUserLevelResponseExample(IReadEnumeration<InitiativeUserLevel> entityService) : IExamplesProvider<IEnumerable<EnumEntityDto<InitiativeUserLevel>>>
 {
     /// <summary>
     /// Get examples for entity.
