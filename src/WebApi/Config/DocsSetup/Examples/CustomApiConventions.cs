@@ -76,7 +76,6 @@ public static class CustomApiConventions
     /// <summary>
     /// Add item.
     /// </summary>
-    /// <param name="id">Item identifier.</param>
     /// <param name="requestData">Request data.</param>
     /// <param name="ct">Cancellation token.</param>
     [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
@@ -84,7 +83,6 @@ public static class CustomApiConventions
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public static void Put(
-        [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object requestData,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
