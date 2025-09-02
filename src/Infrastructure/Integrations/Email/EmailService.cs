@@ -1,12 +1,17 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
 
 using System;
-using System.Net;
-using System.Net.Mail;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Core.Domain.Utils.Email;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
+
+using MailKit.Net.Smtp;
+using MailKit.Security;
+
+using MimeKit;
 
 /// <summary>
 /// Email service interface.
@@ -16,6 +21,7 @@ public class EmailService : IEmailService
     private readonly string smtpHost;
     private readonly int smtpPort;
     private readonly string smtpFrom;
+    private readonly string smtpFromName;
     private readonly string smtpUser;
     private readonly string smtpPass;
     private readonly bool smtpEnableSsl;
@@ -27,9 +33,10 @@ public class EmailService : IEmailService
     public EmailService()
     {
         smtpHost = Environment.GetEnvironmentVariable("SMTP_HOST");
-        smtpFrom = Environment.GetEnvironmentVariable("SMTP_FROM");
         smtpUser = Environment.GetEnvironmentVariable("SMTP_USER");
         smtpPass = Environment.GetEnvironmentVariable("SMTP_PASS");
+        smtpFrom = Environment.GetEnvironmentVariable("SMTP_FROM");
+        smtpFromName = Environment.GetEnvironmentVariable("SMTP_FROM_NAME");
 
         var smtpStr = Environment.GetEnvironmentVariable("SMTP_PORT");
         if (!int.TryParse(smtpStr, out smtpPort))
@@ -51,33 +58,42 @@ public class EmailService : IEmailService
     /// <param name="receivers">Email receivers list.</param>
     /// <param name="hiddenReceivers">Email hidden receivers list.</param>
     /// <param name="body">Email body.</param>
-    /// <param name="isHtml">Email body HTML format flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task SendEmail(string subject, MailAddress[] receivers, MailAddress[] hiddenReceivers, string body, bool isHtml = true, CancellationToken ct = default)
+    public async Task<string> SendEmail(string subject, CustomEmailAddress[] receivers, CustomEmailAddress[] hiddenReceivers, string body, CancellationToken ct = default)
     {
-        using var client = new SmtpClient(smtpHost, smtpPort);
-        client.Credentials = new NetworkCredential(smtpUser, smtpPass);
-        client.EnableSsl = smtpEnableSsl;
+        var options = SecureSocketOptions.StartTls;
 
-        using var mail = new MailMessage
+        if (!smtpEnableSsl)
         {
-            From = new MailAddress(smtpFrom),
-            Subject = subject,
-            Body = body,
-            IsBodyHtml = isHtml,
+            options = SecureSocketOptions.None;
+        }
+
+        using var client = new SmtpClient();
+
+        await client.ConnectAsync(smtpHost, smtpPort, options, ct);
+
+        if (!string.IsNullOrEmpty(smtpUser))
+        {
+            await client.AuthenticateAsync(smtpUser, smtpPass, ct);
+        }
+
+        var builder = new BodyBuilder
+        {
+            HtmlBody = body,
         };
 
-        foreach (var receiver in receivers)
+        using var mail = new MimeMessage()
         {
-            mail.To.Add(receiver);
-        }
+            Subject = subject,
+            Body = builder.ToMessageBody(),
+        };
+        mail.From.Add(new MailboxAddress(smtpFromName, smtpFrom));
+        mail.Body = builder.ToMessageBody();
 
-        foreach (var receiver in hiddenReceivers)
-        {
-            mail.Bcc.Add(receiver);
-        }
+        mail.Cc.AddRange(receivers.Select(r => new MailboxAddress(r.Name, r.Email)));
+        mail.Bcc.AddRange(hiddenReceivers.Select(r => new MailboxAddress(r.Name, r.Email)));
 
-        await client.SendMailAsync(mail, ct);
+        return await client.SendAsync(mail, ct);
     }
 }

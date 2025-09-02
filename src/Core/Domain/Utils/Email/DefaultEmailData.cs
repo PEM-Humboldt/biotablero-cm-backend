@@ -6,14 +6,9 @@
 public class DefaultEmailData
 {
     /// <summary>
-    /// Receiver name.
+    /// Email address.
     /// </summary>
-    public string Name { get; set; }
-
-    /// <summary>
-    /// Receiver email.
-    /// </summary>
-    public string Email { get; set; }
+    public CustomEmailAddress Address { get; set; }
 
     /// <summary>
     /// Email subject.

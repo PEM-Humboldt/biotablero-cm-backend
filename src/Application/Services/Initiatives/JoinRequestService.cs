@@ -3,7 +3,6 @@
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -162,8 +161,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         // Send email
         var emailObject = new DefaultEmailData()
         {
-            Name = $"{userData.FirstName} {userData.LastName}",
-            Email = userData.Email,
+            Address = new($"{userData.FirstName} {userData.LastName}", userData.Email),
             Subject = string.Format(CultureInfo.InvariantCulture, "Solicitud de ingreso a '{0}'", initiative.Name),
             Content = string.Format(CultureInfo.InvariantCulture, "El usuario '{0}' ha realizado una solicitud de acceso para la iniciativa '{1}'", userData.Username, initiative.Name),
         };
@@ -247,8 +245,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
 
         var emailObject = new DefaultEmailData()
         {
-            Name = $"{userData.FirstName} {userData.LastName}",
-            Email = userData.Email,
+            Address = new($"{userData.FirstName} {userData.LastName}", userData.Email),
         };
 
         if (entity.StatusId == (int)JoinRequestStatusEnum.Approved)
@@ -292,10 +289,10 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
                 var leadersData = await iamService.GetUsersData(leadersUserNames, ct);
 
                 var hiddenReceivers = leadersData
-                    .Select(e => new MailAddress(e.Email, $"{e.FirstName} {e.LastName}"))
+                    .Select(e => new CustomEmailAddress($"{e.FirstName} {e.LastName}", e.Email))
                     .ToArray();
 
-                var receivers = new MailAddress[] { new(emailData.Email, emailData.Name) };
+                var receivers = new CustomEmailAddress[] { emailData.Address };
 
                 var emailObject = new DefaultEmailData()
                 {
@@ -303,7 +300,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
                 };
                 var htmlBody = await webViewTools.RenderViewToString("Default", emailObject);
 
-                await emailService.SendEmail(emailData.Subject, receivers, hiddenReceivers, htmlBody, true, ct);
+                await emailService.SendEmail(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
             }
         },
         ct);
