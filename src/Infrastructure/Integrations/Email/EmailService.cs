@@ -13,11 +13,16 @@ using MailKit.Security;
 
 using MimeKit;
 
+using Serilog;
+
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
+
 /// <summary>
 /// Email service interface.
 /// </summary>
 public class EmailService : IEmailService
 {
+    private readonly ILogger logger;
     private readonly string smtpHost;
     private readonly int smtpPort;
     private readonly string smtpFrom;
@@ -29,9 +34,11 @@ public class EmailService : IEmailService
     /// <summary>
     /// Constructor.
     /// </summary>
+    /// <param name="logger">System logger.</param>
     /// <exception cref="InvalidCastException">SMTP Port cast exception.</exception>
-    public EmailService()
+    public EmailService(ILogger logger)
     {
+        this.logger = logger;
         smtpHost = Environment.GetEnvironmentVariable("SMTP_HOST");
         smtpUser = Environment.GetEnvironmentVariable("SMTP_USER");
         smtpPass = Environment.GetEnvironmentVariable("SMTP_PASS");
@@ -89,11 +96,26 @@ public class EmailService : IEmailService
             Body = builder.ToMessageBody(),
         };
         mail.From.Add(new MailboxAddress(smtpFromName, smtpFrom));
-        mail.Body = builder.ToMessageBody();
-
         mail.Cc.AddRange(receivers.Select(r => new MailboxAddress(r.Name, r.Email)));
         mail.Bcc.AddRange(hiddenReceivers.Select(r => new MailboxAddress(r.Name, r.Email)));
 
-        return await client.SendAsync(mail, ct);
+        var serverResponse = await client.SendAsync(mail, ct);
+
+        var emailData = new
+        {
+            Subject = subject,
+            From = smtpFrom,
+            Body = body,
+            Cc = receivers,
+            Bcc = hiddenReceivers,
+            ServerResponse = serverResponse,
+        };
+
+        logger
+            .ForContext("CustomRecord", true)
+            .ForContext("Type", (int)LogType.System)
+            .Information("Sended email: {@emailData}", emailData);
+
+        return serverResponse;
     }
 }
