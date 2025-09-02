@@ -333,7 +333,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("initiative_id");
 
-                    b.Property<DateTime>("ResponseDate")
+                    b.Property<DateTime?>("ResponseDate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("response_date");
 

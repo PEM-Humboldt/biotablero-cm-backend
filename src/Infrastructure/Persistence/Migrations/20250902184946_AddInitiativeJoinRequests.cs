@@ -40,7 +40,7 @@ public partial class AddInitiativeJoinRequests : Migration
                 user_name = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: false),
                 reviewer_user_name = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: true),
                 creation_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                response_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                response_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                 initiative_id = table.Column<int>(type: "integer", nullable: false),
                 join_request_status_id = table.Column<int>(type: "integer", nullable: false),
             },

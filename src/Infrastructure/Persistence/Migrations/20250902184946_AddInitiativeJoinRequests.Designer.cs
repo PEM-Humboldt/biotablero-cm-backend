@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20250825223051_AddInitiativeJoinRequests")]
+    [Migration("20250902184946_AddInitiativeJoinRequests")]
     partial class AddInitiativeJoinRequests
     {
         /// <inheritdoc />
@@ -336,7 +336,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("initiative_id");
 
-                    b.Property<DateTime>("ResponseDate")
+                    b.Property<DateTime?>("ResponseDate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("response_date");
 
