@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -154,6 +155,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         // Build entity data
         entityData.Status = new EnumEntityDto<JoinRequestStatusEnum>(JoinRequestStatusEnum.UnderReview);
         var entity = mapper.Map(entityData);
+        entity.CreationDate = DateTime.Now;
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);

@@ -28,7 +28,7 @@ public class JoinRequest : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Join Request creation date.
     /// </summary>
-    public DateTime ResponseDate { get; set; }
+    public DateTime? ResponseDate { get; set; }
 
     /// <summary>
     /// Initiative identifier.
