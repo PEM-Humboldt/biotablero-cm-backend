@@ -29,7 +29,7 @@ public class PendingJoinRequestsTask(
 {
     private const string TaskName = "Old pending requests";
     private readonly IServiceScopeFactory serviceScopeFactory = serviceScopeFactory;
-    private readonly CronExpression cronExpression = CronExpression.Parse("0 8 1 * *"); // At 08:00 AM, on day 1 of the month
+    private readonly CronExpression cronExpression = CronExpression.Parse("0 8 * * MON"); // At 08:00 AM, only on Monday
     private readonly TimeZoneInfo timeZone = TimeZoneInfo.Local;
     private readonly ILogger logger = logger;
 
