@@ -62,7 +62,7 @@ public class LocationController(IWebTools webTools,
     [HttpGet("Polygon/{id}")]
     public async Task<IActionResult> GetPolygon(int id, CancellationToken ct)
     {
-        var response = await entityService.GetPolygon(id, ct);
+        var response = await entityService.GetPolygonAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 }

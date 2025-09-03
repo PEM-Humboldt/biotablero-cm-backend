@@ -27,5 +27,5 @@ public interface ILocationService : IRead<Location, LocationDto, int>
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetPolygon(int id, CancellationToken ct = default);
+    Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default);
 }

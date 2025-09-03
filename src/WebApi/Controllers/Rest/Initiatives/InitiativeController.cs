@@ -72,7 +72,7 @@ public class InitiativeController(
     [HttpGet("Polygon/{id}")]
     public async Task<IActionResult> GetPolygon(int id, CancellationToken ct)
     {
-        var response = await entityService.GetPolygon(id, ct);
+        var response = await entityService.GetPolygonAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -127,7 +127,7 @@ public class InitiativeController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> UpdatePolygon(int id, [FromBody] string request, CancellationToken ct)
     {
-        var response = await entityService.UpdatePolygon(id, request, ct);
+        var response = await entityService.UpdatePolygonAsync(id, request, ct);
         return webTools.CustomResponse(response);
     }
 

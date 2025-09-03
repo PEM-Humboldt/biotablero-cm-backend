@@ -62,7 +62,7 @@ public class LocationService : ServiceRead<Location, LocationDto, int, LocationS
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> GetPolygon(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default)
     {
         var simplifiedGeometry = await locationPolygonRepository.FirstOrDefaultAsync(new LocationPolygonSimplifiedSpec(id), ct);
 

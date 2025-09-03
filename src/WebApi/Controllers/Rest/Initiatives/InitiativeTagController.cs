@@ -37,7 +37,7 @@ public class InitiativeTagController(
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Put(int initiativeId, int tagId, CancellationToken ct)
     {
-        var response = await entityService.Add(initiativeId, tagId, ct);
+        var response = await entityService.AddAsync(initiativeId, tagId, ct);
         return webTools.CustomResponse(response);
     }
 

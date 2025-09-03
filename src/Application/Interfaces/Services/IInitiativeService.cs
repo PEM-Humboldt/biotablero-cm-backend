@@ -32,7 +32,7 @@ public interface IInitiativeService : IRead<Initiative, InitiativeDto, int>, IAd
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetPolygon(int id, CancellationToken ct = default);
+    Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default);
 
     /// <summary>
     /// Update entity polygon.
@@ -41,5 +41,5 @@ public interface IInitiativeService : IRead<Initiative, InitiativeDto, int>, IAd
     /// <param name="geoJsonString">Polygon data (string).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdatePolygon(int id, string geoJsonString, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdatePolygonAsync(int id, string geoJsonString, CancellationToken ct = default);
 }

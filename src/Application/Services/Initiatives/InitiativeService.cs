@@ -102,7 +102,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> GetPolygon(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default)
     {
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -370,7 +370,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="geoJsonString">Polygon data (string).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> UpdatePolygon(int id, string geoJsonString, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdatePolygonAsync(int id, string geoJsonString, CancellationToken ct = default)
     {
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
