@@ -23,12 +23,12 @@ public interface IJoinRequestService : IRead<JoinRequest, JoinRequestDto, int>, 
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetList(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default);
+    Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default);
 
     /// <summary>
     /// Send notifications for old pending join requests.
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task SendNotificationsOldPendingRequests(CancellationToken ct = default);
+    Task SendNotificationsOldPendingRequestsAsync(CancellationToken ct = default);
 }

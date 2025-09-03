@@ -83,7 +83,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> GetList(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default)
     {
         // Validate user level
         var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader), ct);
@@ -144,7 +144,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         }
 
         // Get user data from external system
-        var userData = await iamService.GetUserData(entityData.UserName, ct);
+        var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
 
         if (userData == null)
         {
@@ -230,7 +230,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         }
 
         // Update entity data
-        entity = await entityRepository.ReviewRequest(id, entityData.ReviewerUserName, entity.UserName, entityData.Status.Id, ct);
+        entity = await entityRepository.ReviewRequestAsync(id, entityData.ReviewerUserName, entity.UserName, entityData.Status.Id, ct);
 
         if (entity == null)
         {
@@ -244,7 +244,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         entityData = mapper.Map(entity);
 
         // Send email
-        var userData = await iamService.GetUserData(entityData.UserName, ct);
+        var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
         var initiative = await initiativeRepository.GetByIdAsync(entityData.InitiativeId, ct);
 
         var emailObject = new DefaultEmailData()
@@ -278,11 +278,11 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task SendNotificationsOldPendingRequests(CancellationToken ct = default)
+    public async Task SendNotificationsOldPendingRequestsAsync(CancellationToken ct = default)
     {
         const int oldPendingRequestsDays = 30;
 
-        var pendingOldRequests = await entityRepository.GetPendingOldRequests(oldPendingRequestsDays, ct);
+        var pendingOldRequests = await entityRepository.GetPendingOldRequestsAsync(oldPendingRequestsDays, ct);
 
         if (pendingOldRequests?.Count > 0)
         {
@@ -290,7 +290,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
                 .Select(e => e.Key)
                 .ToArray();
 
-            var leadersData = await iamService.GetUsersData(leadersUserNames, ct);
+            var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
 
             var notificationsData = pendingOldRequests
                 .Join(leadersData, por => por.Key, ld => ld.Username, (por, ld) => new { por, ld });
@@ -298,7 +298,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
             var results = new List<bool>();
             var emailTasks = notificationsData.Select(async data =>
             {
-                results.Add(await SendNotificationOldPendingRequests(data.ld, data.por.Value, ct));
+                results.Add(await SendNotificationOldPendingRequestsAsync(data.ld, data.por.Value, ct));
             });
 
             await Task.WhenAll(emailTasks);
@@ -322,7 +322,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
                     .Select(e => e.UserName)
                     .ToArray();
 
-                var leadersData = await iamService.GetUsersData(leadersUserNames, ct);
+                var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
 
                 var hiddenReceivers = leadersData
                     .Select(e => new CustomEmailAddress($"{e.FirstName} {e.LastName}", e.Email))
@@ -334,9 +334,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
                 {
                     Content = emailData.Content,
                 };
-                var htmlBody = await webViewTools.RenderViewToString("Default", emailObject);
+                var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailObject);
 
-                await emailService.SendEmail(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
+                await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
             }
         },
         ct);
@@ -346,7 +346,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    private async Task<bool> SendNotificationOldPendingRequests(ExternalUser leaderData, int pendingRequests, CancellationToken ct = default)
+    private async Task<bool> SendNotificationOldPendingRequestsAsync(ExternalUser leaderData, int pendingRequests, CancellationToken ct = default)
     {
         var emailData = new DefaultEmailData
         {
@@ -356,9 +356,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         };
 
         var receivers = new CustomEmailAddress[] { emailData.Address };
-        var htmlBody = await webViewTools.RenderViewToString("Default", emailData);
+        var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailData);
 
-        await emailService.SendEmail(emailData.Subject, receivers, null, htmlBody, ct);
+        await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
 
         return true;
     }

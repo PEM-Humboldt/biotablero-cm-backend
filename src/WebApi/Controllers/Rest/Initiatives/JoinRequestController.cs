@@ -44,7 +44,7 @@ public class JoinRequestController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestOdataResponseExample))]
     public async Task<IActionResult> Get(int initiativeId, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct)
     {
-        var response = await entityService.GetList(initiativeId, HttpContext.GetUserName(), queryOptions, ct);
+        var response = await entityService.GetListAsync(initiativeId, HttpContext.GetUserName(), queryOptions, ct);
         return webTools.CustomResponse(response);
     }
 

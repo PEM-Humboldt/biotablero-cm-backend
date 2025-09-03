@@ -51,7 +51,7 @@ public class IamService : IIamService
     /// <returns>True if user exists. False otherwise.</returns>
     public async Task<bool> UserExistsAsync(string username, CancellationToken ct = default)
     {
-        var user = await GetUserData(username, ct);
+        var user = await GetUserDataAsync(username, ct);
         return user != null;
     }
 
@@ -61,7 +61,7 @@ public class IamService : IIamService
     /// <param name="username">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>User data.</returns>
-    public async Task<ExternalUser> GetUserData(string username, CancellationToken ct = default)
+    public async Task<ExternalUser> GetUserDataAsync(string username, CancellationToken ct = default)
     {
         var token = await GetAdminTokenAsync(ct);
 
@@ -91,12 +91,12 @@ public class IamService : IIamService
     /// <param name="usernames">User name list.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Users data.</returns>
-    public async Task<IEnumerable<ExternalUser>> GetUsersData(string[] usernames, CancellationToken ct = default)
+    public async Task<IEnumerable<ExternalUser>> GetUsersDataAsync(string[] usernames, CancellationToken ct = default)
     {
         var results = new List<ExternalUser>();
         var userTasks = usernames.Select(async username =>
         {
-            results.Add(await GetUserData(username, ct));
+            results.Add(await GetUserDataAsync(username, ct));
         });
 
         await Task.WhenAll(userTasks);

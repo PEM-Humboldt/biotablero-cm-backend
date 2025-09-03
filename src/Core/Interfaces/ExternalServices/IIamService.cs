@@ -25,7 +25,7 @@ public interface IIamService
     /// <param name="username">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>User data.</returns>
-    Task<ExternalUser> GetUserData(string username, CancellationToken ct = default);
+    Task<ExternalUser> GetUserDataAsync(string username, CancellationToken ct = default);
 
     /// <summary>
     /// Get users data.
@@ -33,5 +33,5 @@ public interface IIamService
     /// <param name="usernames">User name list.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Users data.</returns>
-    Task<IEnumerable<ExternalUser>> GetUsersData(string[] usernames, CancellationToken ct = default);
+    Task<IEnumerable<ExternalUser>> GetUsersDataAsync(string[] usernames, CancellationToken ct = default);
 }

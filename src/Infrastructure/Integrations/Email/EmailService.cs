@@ -67,7 +67,7 @@ public class EmailService : IEmailService
     /// <param name="body">Email body.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<string> SendEmail(string subject, CustomEmailAddress[] receivers, CustomEmailAddress[] hiddenReceivers, string body, CancellationToken ct = default)
+    public async Task<string> SendEmailAsync(string subject, CustomEmailAddress[] receivers, CustomEmailAddress[] hiddenReceivers, string body, CancellationToken ct = default)
     {
         var options = SecureSocketOptions.StartTls;
 

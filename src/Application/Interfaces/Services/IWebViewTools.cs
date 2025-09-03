@@ -14,5 +14,5 @@ public interface IWebViewTools
     /// <param name="model">View model data.</param>
     /// <param name="isPartial">Partial view flag.</param>
     /// <returns>Web view as HTML string.</returns>
-    Task<string> RenderViewToString(string viewName, object model, bool isPartial = false);
+    Task<string> RenderViewToStringAsync(string viewName, object model, bool isPartial = false);
 }

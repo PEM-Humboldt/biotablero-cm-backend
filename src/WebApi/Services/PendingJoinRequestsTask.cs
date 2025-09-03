@@ -61,7 +61,7 @@ public class PendingJoinRequestsTask(
 
             if (!stoppingToken.IsCancellationRequested)
             {
-                await joinRequestService.SendNotificationsOldPendingRequests(stoppingToken);
+                await joinRequestService.SendNotificationsOldPendingRequestsAsync(stoppingToken);
                 logger.AddLog(LogType.System, "Executed task: {@task}", TaskName);
             }
         }

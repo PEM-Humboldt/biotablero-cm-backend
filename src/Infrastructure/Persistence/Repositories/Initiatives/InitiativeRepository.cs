@@ -45,7 +45,7 @@ public class InitiativeRepository : Repository<Initiative>, IInitiativeRepositor
     /// <param name="locationIds">Location identifiers.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Polygon centroid.</returns>
-    public async Task<Point> GetCentroid(int[] locationIds, CancellationToken ct = default)
+    public async Task<Point> GetCentroidAsync(int[] locationIds, CancellationToken ct = default)
     {
         var geometries = await dbContext.LocationPolygons
             .Where(lp => locationIds.Contains(lp.Id))

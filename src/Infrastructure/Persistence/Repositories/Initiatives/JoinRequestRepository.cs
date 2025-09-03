@@ -49,7 +49,7 @@ public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestReposi
     /// <param name="requestStatusId">Request status identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    public async Task<JoinRequest> ReviewRequest(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default)
+    public async Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
@@ -109,7 +109,7 @@ public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestReposi
     /// <param name="daysOld">Requests days old.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Pending requests grouped by leader user name.</returns>
-    public async Task<Dictionary<string, int>> GetPendingOldRequests(int daysOld, CancellationToken ct = default)
+    public async Task<Dictionary<string, int>> GetPendingOldRequestsAsync(int daysOld, CancellationToken ct = default)
     {
         var since = DateTime.UtcNow.AddDays(-daysOld);
 

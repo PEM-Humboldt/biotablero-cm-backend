@@ -29,7 +29,7 @@ public interface IJoinRequestRepository : IRepository<JoinRequest>
     /// <param name="requestStatusId">Request status identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    public Task<JoinRequest> ReviewRequest(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default);
+    public Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default);
 
     /// <summary>
     /// Get pending old requests.
@@ -37,5 +37,5 @@ public interface IJoinRequestRepository : IRepository<JoinRequest>
     /// <param name="daysOld">Requests days old.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    public Task<Dictionary<string, int>> GetPendingOldRequests(int daysOld, CancellationToken ct = default);
+    public Task<Dictionary<string, int>> GetPendingOldRequestsAsync(int daysOld, CancellationToken ct = default);
 }

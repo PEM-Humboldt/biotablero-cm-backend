@@ -37,7 +37,7 @@ public class WebViewTools(
     /// <param name="model">View model data.</param>
     /// <param name="isPartial">Partial view flag.</param>
     /// <returns>Web view as HTML string.</returns>
-    public async Task<string> RenderViewToString(
+    public async Task<string> RenderViewToStringAsync(
         string viewName,
         object model,
         bool isPartial = false)

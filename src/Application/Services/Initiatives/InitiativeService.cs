@@ -208,7 +208,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         // Build entity data
         var entity = mapper.Map(entityData);
         entity.CreationDate = DateTime.Now;
-        entity.Coordinate = await entityRepository.GetCentroid(locationsIds, ct);
+        entity.Coordinate = await entityRepository.GetCentroidAsync(locationsIds, ct);
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
