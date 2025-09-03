@@ -21,7 +21,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 [Route("[controller]")]
 [Produces("application/json")]
 public class TagCategoryController(IWebTools webTools,
-    IServiceReadEnumeration<TagCategory> entityService) : ControllerBase
+    IReadEnumeration<TagCategory> entityService) : ControllerBase
 {
     /// <summary>
     /// Get all entities.

@@ -13,7 +13,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// Tag Category response example.
 /// </summary>
 /// <param name="entityService">General enumeration service.</param>
-public class TagCategoryResponseExample(IServiceReadEnumeration<TagCategory> entityService) : IExamplesProvider<IEnumerable<EnumEntityDto<TagCategory>>>
+public class TagCategoryResponseExample(IReadEnumeration<TagCategory> entityService) : IExamplesProvider<IEnumerable<EnumEntityDto<TagCategory>>>
 {
     /// <summary>
     /// Get examples for entity.

@@ -53,7 +53,7 @@ public class InitiativeTagController(
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var response = await entityService.Delete(id, ct);
+        var response = await entityService.DeleteAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 }
