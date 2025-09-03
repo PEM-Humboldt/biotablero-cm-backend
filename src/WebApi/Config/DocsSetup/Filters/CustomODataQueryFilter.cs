@@ -10,15 +10,15 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 /// <summary>
-/// Custom ODataQuery filter for Swashbuckle
+/// Custom ODataQuery filter for Swashbuckle.
 /// </summary>
 public class CustomODataQueryFilter : IOperationFilter
 {
     /// <summary>
-    /// Apply custom Swashbuckle settings
+    /// Apply custom Swashbuckle settings.
     /// </summary>
-    /// <param name="operation">OpenAPi operation</param>
-    /// <param name="context">Swashbuckle operation filter context</param>
+    /// <param name="operation">OpenAPi operation.</param>
+    /// <param name="context">Swashbuckle operation filter context.</param>
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
         // Remove odata params

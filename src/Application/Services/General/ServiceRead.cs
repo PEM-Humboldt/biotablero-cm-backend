@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
+using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
@@ -17,30 +18,37 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.OData;
 
 /// <summary>
-/// General service for only read functions
+/// General service for only read functions.
 /// </summary>
-/// <typeparam name="TE">Entity type</typeparam>
-/// <typeparam name="TDto">DTO class type</typeparam>
-/// <typeparam name="TI">Entity identifier type</typeparam>
-/// <typeparam name="TS">General Specification type</typeparam>
+/// <typeparam name="TE">Entity type.</typeparam>
+/// <typeparam name="TDto">DTO class type.</typeparam>
+/// <typeparam name="TI">Entity identifier type.</typeparam>
+/// <typeparam name="TS">General Specification type.</typeparam>
 /// <remarks>
-/// Initialize service
+/// Initialize service.
 /// </remarks>
 public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityRepository, IMapper<TE, TDto> mapper) : IRead<TE, TDto, TI>
     where TDto : class, IDto
     where TI : notnull
-    where TE : class, IAggregateRoot
+    where TE : BaseEntity<TI>, IAggregateRoot
     where TS : GeneralSpecification<TI, TE>
 {
-    private readonly IRepository<TE> entityRepository = entityRepository;
-    private readonly IMapper<TE, TDto> mapper = mapper;
+    /// <summary>
+    /// Entity repository.
+    /// </summary>
+    private protected readonly IRepository<TE> entityRepository = entityRepository;
 
     /// <summary>
-    /// Check if element exists
+    /// Entity mapper.
     /// </summary>
-    /// <param name="id">Element identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    private protected readonly IMapper<TE, TDto> mapper = mapper;
+
+    /// <summary>
+    /// Check if element exists.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public virtual async Task<bool> ExistsAsync(TI id, CancellationToken ct = default)
     {
         var specification = (TS)Activator.CreateInstance(typeof(TS), [id]);
@@ -48,11 +56,11 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     }
 
     /// <summary>
-    /// Get element
+    /// Get element.
     /// </summary>
-    /// <param name="id">Element identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public virtual async Task<CustomWebResponse> GetItemAsync(TI id, CancellationToken ct = default)
     {
         var specification = (TS)Activator.CreateInstance(typeof(TS), [id]);
@@ -77,10 +85,10 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     }
 
     /// <summary>
-    /// Get all elements
+    /// Get all elements.
     /// </summary>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public virtual async Task<CustomWebResponse> GetAllAsync(CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.ListAsync(ct);
@@ -94,45 +102,25 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     }
 
     /// <summary>
-    /// Get elements list (paginated)
+    /// Get elements list (OData).
     /// </summary>
-    /// <param name="skip">Page</param>
-    /// <param name="take">Page size</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
-    public virtual async Task<CustomWebResponse> GetListAsync(int skip, int take, CancellationToken ct = default)
-    {
-        var specification = (TS)Activator.CreateInstance(typeof(TS), [skip, take]);
-        var dataListEntity = await entityRepository.ListAsync(specification, ct);
-        var dataListDto = dataListEntity
-            .Select(mapper.Map);
-
-        return new()
-        {
-            ResponseBody = dataListDto,
-        };
-    }
-
-    /// <summary>
-    /// Get elements list (OData)
-    /// </summary>
-    /// <param name="queryOptions">OData query options</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     public virtual async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();
-        return await GetOdataListByQuery(query, queryOptions, ct);
+        return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 
     /// <summary>
     /// Get OData list data by custom Linq query.
     /// </summary>
-    /// <param name="query">Linq SQL Query.</param>
+    /// <param name="query">Linq Query.</param>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    private protected async Task<CustomWebResponse> GetOdataListByQuery(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
+    private protected async Task<CustomWebResponse> GetOdataListByQueryAsync(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
         var defaultSettings = new ODataQuerySettings()
         {
@@ -163,7 +151,6 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
         {
             return new(true)
             {
-                StatusCode = HttpStatusCode.BadRequest,
                 Message = $"Invalid filter: {ex.Message}",
             };
         }
@@ -172,7 +159,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <summary>
     /// Add filter and order settings to OData query.
     /// </summary>
-    /// <param name="query">Linq SQL Query.</param>
+    /// <param name="query">Linq Query.</param>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="settings">OData query settings.</param>
     /// <returns>Modified Linq query.</returns>
@@ -195,7 +182,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <summary>
     /// Add pagination settings to OData query.
     /// </summary>
-    /// <param name="query">Linq SQL Query.</param>
+    /// <param name="query">Linq Query.</param>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="settings">OData query settings.</param>
     /// <returns>Modified Linq query.</returns>

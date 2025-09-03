@@ -1,14 +1,14 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities;
 
 /// <summary>
-/// Generic base entity
+/// Generic base entity.
 /// </summary>
-/// <typeparam name="T">Identifier type</typeparam>
-public abstract class BaseEntity<T>
-    where T : notnull
+/// <typeparam name="TI">Entity identifier type.</typeparam>
+public abstract class BaseEntity<TI>
+    where TI : notnull
 {
     /// <summary>
-    /// Base entity identifier
+    /// Base entity identifier.
     /// </summary>
-    public virtual T Id { get; init; }
+    public virtual TI Id { get; init; }
 }

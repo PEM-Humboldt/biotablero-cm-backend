@@ -20,6 +20,15 @@ Generate a `.env` file with the project parameters. You can generate the file ba
 docker compose -f docker-compose-dev.yml up
 ```
 
+> **Note:** When running this command for the first time, it's recommended to verify that the project bucket was built correctly with the `docker logs bt-cm-localstack` command. If you encounter an execution permission error, run these commands:
+
+```sh
+# Add execution permissions to custom script
+docker exec bt-cm-localstack chmod +x /etc/localstack/init/ready.d/script.sh
+# Restart localstack container
+docker restart bt-cm-localstack
+```
+
 ### Install dependencies
 
 ```sh
@@ -68,12 +77,16 @@ dotnet build --no-incremental -warnaserror
 
 > Check the format of the generated code before uploading it to the repository
 
+> Replace the `MIGRATION_NAME` variable with a short description in **Pascal Case**
+
 ```sh
 # Generate migration
 dotnet ef migrations add $MIGRATION_NAME --startup-project src/WebApi --project src/Infrastructure --output-dir Persistence/Migrations --context GeneralContext
 # Apply format rules in Infrastructure project
 dotnet format src/Infrastructure
 ```
+
+If you need to remove the last generated migration, you can do so with the command: `dotnet ef migrations remove --startup-project src/WebApi --project src/Infrastructure --context GeneralContext`.
 
 ## Docker
 

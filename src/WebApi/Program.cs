@@ -20,14 +20,14 @@ using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
-/// Main program class
+/// Main program class.
 /// </summary>
 public class Program
 {
     /// <summary>
-    /// Main function
+    /// Main function.
     /// </summary>
-    /// <param name="args">System arguments</param>
+    /// <param name="args">System arguments.</param>
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -39,9 +39,12 @@ public class Program
         ConfigDbDependencies.AddDbServices(builder.Services);
 
         // Dependency injection configuration
+        builder.Services.AddHttpClient();
         builder.Services.AddCoreServices(Debugger.IsAttached);
         builder.Services.AddAppServices();
+        builder.Services.AddExternalServices();
         builder.Services.AddMappings();
+        builder.Services.AddValidators();
 
         // Add services to the container.
         builder.Services.AddControllers()
@@ -49,6 +52,9 @@ public class Program
             {
                 // Serialize enums as strings in API responses
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
+                // Ignore null values
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             })
             .AddOData(options =>
             {

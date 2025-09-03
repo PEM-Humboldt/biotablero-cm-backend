@@ -105,6 +105,14 @@ dotnet_diagnostic.CA1062.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1861
 dotnet_diagnostic.CA1861.severity = none
 
+# Do not declare visible instance fields
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1051
+dotnet_diagnostic.CA1051.severity = none
+
+# Properties should not return arrays
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1819
+dotnet_diagnostic.CA1819.severity = none
+
 # --------------------- #
 # Custom StyleCop rules #
 # --------------------- #
@@ -116,10 +124,6 @@ dotnet_diagnostic.SA0001.severity = none
 # A C# code file is missing a standard file header.
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1633.md
 dotnet_diagnostic.SA1633.severity = none
-
-# Documentation text should end with a period
-# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1629.md
-dotnet_diagnostic.SA1629.severity = none
 
 # Two or more attributes appeared within the same set of square brackets.
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1133.md

@@ -19,16 +19,16 @@ using Serilog.Sinks.PostgreSQL;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// Logger configuration
+/// Logger configuration.
 /// </summary>
 public static class ConfigLogProperties
 {
     /// <summary>
-    /// System log configuration
+    /// System log configuration.
     /// </summary>
-    /// <param name="host">Host builder</param>
-    /// <param name="services">Application services</param>
-    /// <returns>Host builder configuration</returns>
+    /// <param name="host">Host builder.</param>
+    /// <param name="services">Application services.</param>
+    /// <returns>Host builder configuration.</returns>
     public static ConfigureHostBuilder AddLogConfig(this ConfigureHostBuilder host, IServiceCollection services)
     {
         var columnWriters = new Dictionary<string, ColumnWriterBase>
@@ -82,10 +82,10 @@ public static class ConfigLogProperties
     }
 
     /// <summary>
-    /// Serilog configuration for ASP.NET module
+    /// Serilog configuration for ASP.NET module.
     /// </summary>
-    /// <param name="diagnosticContext">Serilog diagnostic information</param>
-    /// <param name="httpContext">HTTP Context</param>
+    /// <param name="diagnosticContext">Serilog diagnostic information.</param>
+    /// <param name="httpContext">HTTP Context.</param>
     public static void PushProperties(IDiagnosticContext diagnosticContext, HttpContext httpContext) =>
 
         // Add HTTP host

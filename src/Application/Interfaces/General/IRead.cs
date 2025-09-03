@@ -9,53 +9,44 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 using Microsoft.AspNetCore.OData.Query;
 
 /// <summary>
-/// Read data interface (for services)
+/// Read data interface (for services).
 /// </summary>
-/// <typeparam name="TE">Entity type</typeparam>
-/// <typeparam name="TDto">DTO class type</typeparam>
-/// <typeparam name="TI">Entity identifier type</typeparam>
+/// <typeparam name="TE">Entity type.</typeparam>
+/// <typeparam name="TDto">DTO class type.</typeparam>
+/// <typeparam name="TI">Entity identifier type.</typeparam>
 public interface IRead<TE, TDto, TI>
     where TE : class, IAggregateRoot
     where TDto : class, IDto
     where TI : notnull
 {
     /// <summary>
-    /// Check if element exists
+    /// Check if element exists.
     /// </summary>
-    /// <param name="id">Element identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     Task<bool> ExistsAsync(TI id, CancellationToken ct = default);
 
     /// <summary>
-    /// Get element
+    /// Get element.
     /// </summary>
-    /// <param name="id">Element identifier</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     Task<CustomWebResponse> GetItemAsync(TI id, CancellationToken ct = default);
 
     /// <summary>
-    /// Get all elements
+    /// Get all elements.
     /// </summary>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     Task<CustomWebResponse> GetAllAsync(CancellationToken ct = default);
 
     /// <summary>
-    /// Get elements list (paginated)
+    /// Get elements list (OData).
     /// </summary>
-    /// <param name="skip">Page</param>
-    /// <param name="take">Page size</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
-    Task<CustomWebResponse> GetListAsync(int skip, int take, CancellationToken ct = default);
-
-    /// <summary>
-    /// Get elements list (OData)
-    /// </summary>
-    /// <param name="queryOptions">OData query options</param>
-    /// <param name="ct">Cancellation token</param>
-    /// <returns>Process result</returns>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
     Task<CustomWebResponse> GetListAsync(ODataQueryOptions<TE> queryOptions, CancellationToken ct = default);
 }

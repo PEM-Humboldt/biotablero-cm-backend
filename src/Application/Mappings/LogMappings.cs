@@ -7,15 +7,15 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 
 /// <summary>
-/// System logs mappings
+/// System logs mappings.
 /// </summary>
 public class LogMappings : IMapper<LogEntity, LogDto>
 {
     /// <summary>
-    /// Map from entity to DTO
+    /// Map from entity to DTO.
     /// </summary>
-    /// <param name="entity">Entity data</param>
-    /// <returns>DTO data</returns>
+    /// <param name="entity">Entity data.</param>
+    /// <returns>DTO data.</returns>
     public LogDto Map(LogEntity entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -36,10 +36,10 @@ public class LogMappings : IMapper<LogEntity, LogDto>
     }
 
     /// <summary>
-    /// Map from DTO to entity
+    /// Map from DTO to entity.
     /// </summary>
-    /// <param name="dto">DTO data</param>
-    /// <returns>Entity data</returns>
+    /// <param name="dto">DTO data.</param>
+    /// <returns>Entity data.</returns>
     public LogEntity Map(LogDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);

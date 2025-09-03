@@ -1,37 +1,37 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Utils.Enums;
 
 /// <summary>
-/// Logs enumerations
+/// Logs enumerations.
 /// </summary>
 public static class LogEnums
 {
     /// <summary>
-    /// Serilog log levels
+    /// Serilog log levels.
     /// </summary>
     public enum LogLevel
     {
         /// <summary>
-        /// Level for extremely detailed tracing
+        /// Level for extremely detailed tracing.
         /// </summary>
         Verbose,
 
         /// <summary>
-        /// Level for debugging purposes
+        /// Level for debugging purposes.
         /// </summary>
         Debug,
 
         /// <summary>
-        /// Level for information about application operations and events
+        /// Level for information about application operations and events.
         /// </summary>
         Information,
 
         /// <summary>
-        /// Level for potential issues or unexpected behavior that may require attention
+        /// Level for potential issues or unexpected behavior that may require attention.
         /// </summary>
         Warning,
 
         /// <summary>
-        /// Level for errors that have occurred within the application
+        /// Level for errors that have occurred within the application.
         /// </summary>
         Error,
 
@@ -42,32 +42,32 @@ public static class LogEnums
     }
 
     /// <summary>
-    /// Log system type
+    /// Log system type.
     /// </summary>
     public enum LogType
     {
         /// <summary>
-        /// Internal system event
+        /// Internal system event.
         /// </summary>
         System = 1,
 
         /// <summary>
-        /// Create event
+        /// Create event.
         /// </summary>
         Create,
 
         /// <summary>
-        /// Read event
+        /// Read event.
         /// </summary>
         Read,
 
         /// <summary>
-        /// Update event
+        /// Update event.
         /// </summary>
         Update,
 
         /// <summary>
-        /// Delete event
+        /// Delete event.
         /// </summary>
         Delete,
     }

@@ -3,6 +3,16 @@
     "enabled": true,
     "users": [
         {
+            "username": "service-account-bt-mc-client-backend",
+            "enabled": true,
+            "serviceAccountClientId": "bt-mc-client-backend",
+            "clientRoles": {
+                "realm-management": [
+                    "view-users"
+                ]
+            }
+        },
+        {
             "username": "general-user",
             "enabled": true,
             "firstName": "User",
@@ -128,6 +138,15 @@
                 "http://localhost:3000",
                 "http://localhost:8001"
             ]
+        },
+        {
+            "clientId": "bt-mc-client-backend",
+            "enabled": true,
+            "protocol": "openid-connect",
+            "publicClient": false,
+            "secret": "BACK3ND-S3CR3T-K3Y",
+            "serviceAccountsEnabled": true,
+            "clientAuthenticatorType": "client-secret"
         }
     ]
 }

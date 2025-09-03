@@ -10,24 +10,27 @@ using IAVH.BioTablero.CM.WebApi.Controllers.Tools;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
 /// <summary>
-/// Core dependencies registry
+/// Core dependencies registry.
 /// </summary>
 public static class ConfigCoreDependencies
 {
     /// <summary>
-    /// Add core services
+    /// Add core services.
     /// </summary>
-    /// <param name="services">Service descriptors collection</param>
-    /// <param name="isDevelopment">Check if development environment is enabled</param>
-    /// <returns>Service descriptors collection with custom services</returns>
+    /// <param name="services">Service descriptors collection.</param>
+    /// <param name="isDevelopment">Check if development environment is enabled.</param>
+    /// <returns>Service descriptors collection with custom services.</returns>
     public static IServiceCollection AddCoreServices(this IServiceCollection services, bool isDevelopment = false)
     {
         services.AddHealthChecks();
         services.AddHttpContextAccessor(); // Required for Serilog (ASP.NET)
+
+        services.ConfigureFormOptions();
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddSingleton<IWebTools, WebTools>();
@@ -39,14 +42,14 @@ public static class ConfigCoreDependencies
     }
 
     /// <summary>
-    /// Add authentication service
+    /// Add authentication service.
     /// </summary>
-    /// <param name="services">Service descriptors collection</param>
-    /// <param name="isDevelopment">Check if development environment is enabled</param>
-    /// <returns>Service descriptors collection with authentication service</returns>
+    /// <param name="services">Service descriptors collection.</param>
+    /// <param name="isDevelopment">Check if development environment is enabled.</param>
+    /// <returns>Service descriptors collection with authentication service.</returns>
     private static IServiceCollection AddAuthService(this IServiceCollection services, bool isDevelopment)
     {
-        var url = Environment.GetEnvironmentVariable("KC_REALM_URL");
+        var url = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}";
         var clientId = Environment.GetEnvironmentVariable("KC_CLIENT");
 
         services
@@ -67,4 +70,16 @@ public static class ConfigCoreDependencies
 
         return services;
     }
+
+    /// <summary>
+    /// Configure Form Options (for upload files).
+    /// </summary>
+    /// <param name="services">Service descriptors collection.</param>
+    /// <returns>Service descriptors collection with custom services.</returns>
+    private static IServiceCollection ConfigureFormOptions(this IServiceCollection services) =>
+    services
+        .Configure<FormOptions>(options =>
+        {
+            options.MultipartBodyLengthLimit = 10_000_000; // 10 MB
+        });
 }

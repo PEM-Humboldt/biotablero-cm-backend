@@ -9,21 +9,21 @@ using Microsoft.AspNetCore.Mvc;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// Log type controller
+/// Log type controller.
 /// </summary>
-/// <param name="webTools">General web tools</param>
-/// <param name="entityService">Entity service</param>
+/// <param name="webTools">General web tools.</param>
+/// <param name="entityService">Entity service.</param>
 [ApiController]
-[ApiConventionType(typeof(CustomApiConventions))]
 [Route("[controller]")]
 [Produces("application/json")]
+[ApiConventionType(typeof(CustomApiConventions))]
 public class LogTypeController(IWebTools webTools,
     IReadEnumeration<LogType> entityService) : ControllerBase
 {
     /// <summary>
-    /// Get all entities
+    /// Get all entities.
     /// </summary>
-    /// <returns>Entities list from parameters</returns>
+    /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     public IActionResult GetEnumList()
     {

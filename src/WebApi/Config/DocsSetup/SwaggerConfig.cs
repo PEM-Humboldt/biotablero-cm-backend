@@ -14,15 +14,15 @@ using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 /// <summary>
-/// OpenAPI and Swagger UI configuration
+/// OpenAPI and Swagger UI configuration.
 /// </summary>
 public static class SwaggerConfig
 {
     /// <summary>
-    /// Add OpenAPI and Swagger UI custom options
+    /// Add OpenAPI and Swagger UI custom options.
     /// </summary>
-    /// <param name="options">Default SwaggerGen options</param>
-    /// <returns>Custom SwaggerGen options</returns>
+    /// <param name="options">Default SwaggerGen options.</param>
+    /// <returns>Custom SwaggerGen options.</returns>
     public static SwaggerGenOptions AddCustomOptions(this SwaggerGenOptions options)
     {
         // Add general options
@@ -59,9 +59,9 @@ public static class SwaggerConfig
     }
 
     /// <summary>
-    /// Default OpenAPI security
+    /// Default OpenAPI security.
     /// </summary>
-    /// <param name="options">Swagger options</param>
+    /// <param name="options">Swagger options.</param>
     private static void ConfigDefaultSecurity(this SwaggerGenOptions options)
     {
         const string securityDefinitionName = "Bearer";

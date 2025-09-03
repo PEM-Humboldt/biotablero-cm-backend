@@ -7,21 +7,21 @@ using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Utils;
 
 /// <summary>
-/// Read enum interface (for services)
+/// Read enum interface (for services).
 /// </summary>
-/// <typeparam name="TEnum">Enum type</typeparam>
+/// <typeparam name="TEnum">Enum type.</typeparam>
 public interface IReadEnumeration<TEnum>
     where TEnum : Enum
 {
     /// <summary>
-    /// Get all elements as IEnumerable
+    /// Get all elements as IEnumerable.
     /// </summary>
-    /// <returns>IEnumerable list</returns>
+    /// <returns>IEnumerable list.</returns>
     IEnumerable<EnumEntityDto<TEnum>> GetEnumerable();
 
     /// <summary>
-    /// Get all elements
+    /// Get all elements.
     /// </summary>
-    /// <returns>Process result</returns>
+    /// <returns>Process result.</returns>
     CustomWebResponse GetAll();
 }

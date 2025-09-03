@@ -8,7 +8,7 @@ using Serilog.Core;
 using Serilog.Events;
 
 /// <summary>
-/// Serilog custom user name enricher
+/// Serilog custom user name enricher.
 /// </summary>
 public class UserEnricher(IHttpContextAccessor httpContextAccessor) : ILogEventEnricher
 {
@@ -19,10 +19,10 @@ public class UserEnricher(IHttpContextAccessor httpContextAccessor) : ILogEventE
     private readonly IHttpContextAccessor httpContextAccessor = httpContextAccessor;
 
     /// <summary>
-    /// Enrich logs with current user name
+    /// Enrich logs with current user name.
     /// </summary>
-    /// <param name="logEvent">Serilog log event</param>
-    /// <param name="propertyFactory">Serilog property factory</param>
+    /// <param name="logEvent">Serilog log event.</param>
+    /// <param name="propertyFactory">Serilog property factory.</param>
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
         var httpContext = httpContextAccessor.HttpContext;

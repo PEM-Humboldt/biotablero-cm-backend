@@ -17,69 +17,87 @@ using Microsoft.AspNetCore.OData.Query;
 public static class CustomApiConventions
 {
     /// <summary>
-    /// Get entity.
+    /// Get item.
     /// </summary>
-    /// <param name="id">Entity identifier.</param>
+    /// <param name="id">Identifier filter.</param>
     /// <param name="ct">Cancellation token.</param>
     [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
     [ProducesResponseType(typeof(IDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-    public static void Get(
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public static void GetItem(
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
     }
 
     /// <summary>
-    /// Get entities (OData).
+    /// Get items (OData).
     /// </summary>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    public static void Get(
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public static void GetOdataList(
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] ODataQueryOptions<object> queryOptions,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
     }
 
     /// <summary>
-    /// Get entities (enum).
+    /// Get items.
+    /// </summary>
+    /// <param name="id">Identifier filter.</param>
+    /// <param name="ct">Cancellation token.</param>
+    [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
+    [ProducesResponseType(typeof(List<IDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public static void GetList(
+        [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
+        [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
+    {
+    }
+
+    /// <summary>
+    /// Get items (enum).
     /// </summary>
     [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Exact)]
     [ProducesResponseType(typeof(List<EnumEntityDto<Enum>>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public static void GetEnumList()
     {
     }
 
     /// <summary>
-    /// Add entity.
+    /// Add item.
     /// </summary>
-    /// <param name="id">Entity identifier.</param>
     /// <param name="requestData">Request data.</param>
     /// <param name="ct">Cancellation token.</param>
     [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
     [ProducesResponseType(typeof(IDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public static void Put(
-        [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object requestData,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
     }
 
     /// <summary>
-    /// Edit entity.
+    /// Edit item.
     /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="requestData">Entity data.</param>
+    /// <param name="id">Item identifier.</param>
+    /// <param name="requestData">Item data.</param>
     /// <param name="ct">Cancellation token.</param>
     [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
     [ProducesResponseType(typeof(IDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public static void Post(
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object requestData,
@@ -88,13 +106,31 @@ public static class CustomApiConventions
     }
 
     /// <summary>
-    /// Enable entity.
+    /// Upload file or data.
     /// </summary>
-    /// <param name="id">Entity identifier.</param>
+    /// <param name="id">Item identifier.</param>
+    /// <param name="formFile">Form file.</param>
     /// <param name="ct">Cancellation token.</param>
     [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public static void Upload(
+        [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
+        [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object formFile,
+        [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
+    {
+    }
+
+    /// <summary>
+    /// Enable item.
+    /// </summary>
+    /// <param name="id">Item identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public static void Enable(
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
@@ -102,13 +138,14 @@ public static class CustomApiConventions
     }
 
     /// <summary>
-    /// Disable entity.
+    /// Disable item.
     /// </summary>
-    /// <param name="id">Entity identifier.</param>
+    /// <param name="id">Item identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public static void Disable(
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
@@ -116,13 +153,14 @@ public static class CustomApiConventions
     }
 
     /// <summary>
-    /// Delete entity.
+    /// Delete item.
     /// </summary>
-    /// <param name="id">Entity identifier.</param>
+    /// <param name="id">Item identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public static void Delete(
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)

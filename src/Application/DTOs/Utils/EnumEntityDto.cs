@@ -5,32 +5,32 @@ using System;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// General entity for Enum values
+/// General entity for Enum values.
 /// </summary>
-/// <typeparam name="TEnum">Enum</typeparam>
+/// <typeparam name="TEnum">Enum.</typeparam>
 public class EnumEntityDto<TEnum> : IDto
     where TEnum : Enum
 {
     /// <summary>
-    /// Constructor
+    /// Constructor.
     /// </summary>
     public EnumEntityDto()
     {
     }
 
     /// <summary>
-    /// Constructor
+    /// Constructor.
     /// </summary>
-    /// <param name="typeEnum">Enum value</param>
+    /// <param name="typeEnum">Enum value.</param>
     public EnumEntityDto(TEnum typeEnum)
     {
         TypeEnum = typeEnum;
     }
 
     /// <summary>
-    /// Constructor
+    /// Constructor.
     /// </summary>
-    /// <param name="id">Numeric enum value</param>
+    /// <param name="id">Numeric enum value.</param>
     public EnumEntityDto(int id)
     {
         if (!typeof(TEnum).IsEnumDefined(id))
@@ -42,7 +42,7 @@ public class EnumEntityDto<TEnum> : IDto
     }
 
     /// <summary>
-    /// Enum value as integer
+    /// Enum value as integer.
     /// </summary>
     public int Id
     {
@@ -52,16 +52,17 @@ public class EnumEntityDto<TEnum> : IDto
             var successfulCast = int.TryParse(valueStr, out var value);
             return successfulCast ? value : 0;
         }
+        set => TypeEnum = (TEnum)Enum.ToObject(typeof(TEnum), value);
     }
 
     /// <summary>
-    /// Enum value as string
+    /// Enum value as string.
     /// </summary>
     public string Name =>
             TypeEnum.ToString("G");
 
     /// <summary>
-    /// Enum value
+    /// Enum value.
     /// </summary>
     private TEnum TypeEnum { get; set; }
 }
