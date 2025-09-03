@@ -97,7 +97,11 @@ public class EmailService : IEmailService
         };
         mail.From.Add(new MailboxAddress(smtpFromName, smtpFrom));
         mail.Cc.AddRange(receivers.Select(r => new MailboxAddress(r.Name, r.Email)));
-        mail.Bcc.AddRange(hiddenReceivers.Select(r => new MailboxAddress(r.Name, r.Email)));
+
+        if (hiddenReceivers?.Length > 0)
+        {
+            mail.Bcc.AddRange(hiddenReceivers.Select(r => new MailboxAddress(r.Name, r.Email)));
+        }
 
         var serverResponse = await client.SendAsync(mail, ct);
 
