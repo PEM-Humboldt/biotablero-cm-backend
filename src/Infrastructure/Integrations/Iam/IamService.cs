@@ -41,7 +41,7 @@ public class IamService : IIamService
     /// <param name="username">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if user exists. False otherwise.</returns>
-    public async Task<bool> UserExists(string username, CancellationToken ct = default)
+    public async Task<bool> UserExistsAsync(string username, CancellationToken ct = default)
     {
         var token = await GetAdminTokenAsync(ct);
 

@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.InitiativeUser;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
@@ -8,9 +8,9 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiative User edit request example.
+/// Initiative User response example.
 /// </summary>
-public class InitiativeUserEditRequestExample : IExamplesProvider<InitiativeUserDto>
+public class InitiativeUserResponseExample : IExamplesProvider<InitiativeUserDto>
 {
     /// <summary>
     /// Get examples for entity.
@@ -18,6 +18,7 @@ public class InitiativeUserEditRequestExample : IExamplesProvider<InitiativeUser
     /// <returns>Entity examples.</returns>
     public InitiativeUserDto GetExamples() => new()
     {
+        Id = 0,
         UserName = "Example",
         Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Leader),
     };

@@ -1,13 +1,11 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Geo;
 
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
-
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Location;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Http;
@@ -23,6 +21,7 @@ using Swashbuckle.AspNetCore.Filters;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
+[ApiConventionType(typeof(CustomApiConventions))]
 public class LocationController(IWebTools webTools,
     ILocationService entityService) : ControllerBase
 {
@@ -33,13 +32,10 @@ public class LocationController(IWebTools webTools,
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(LocationDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(NotFoundResponseExample))]
-    public async Task<IActionResult> Get(int id, CancellationToken ct)
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LocationResponseExample))]
+    public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
-        var response = await entityService.GetItem(id, ct);
+        var response = await entityService.GetItemAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -50,11 +46,10 @@ public class LocationController(IWebTools webTools,
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<LocationDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Get(int? parentId, CancellationToken ct)
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LocationListResponseExample))]
+    public async Task<IActionResult> GetList(int? parentId, CancellationToken ct)
     {
-        var response = await entityService.GetByParent(parentId, ct);
+        var response = await entityService.GetByParentAsync(parentId, ct);
         return webTools.CustomResponse(response);
     }
 

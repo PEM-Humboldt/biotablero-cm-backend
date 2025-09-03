@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Application.Utils;
 /// Read enum service.
 /// </summary>
 /// <typeparam name="TEnum">Enum type.</typeparam>
-public class ServiceReadEnumeration<TEnum> : IServiceReadEnumeration<TEnum>
+public class ServiceReadEnumeration<TEnum> : IReadEnumeration<TEnum>
     where TEnum : Enum
 {
     /// <summary>

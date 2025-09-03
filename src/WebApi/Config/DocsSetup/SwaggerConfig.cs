@@ -44,7 +44,7 @@ public static class SwaggerConfig
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
         // Add custom filters
-        options.OperationFilter<CustomODataQueryOptions>();
+        options.OperationFilter<CustomODataQueryFilter>();
 
         // Enable example filters
         options.ExampleFilters();

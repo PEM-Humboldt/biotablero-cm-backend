@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
@@ -30,6 +30,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
+[ApiConventionType(typeof(CustomApiConventions))]
 public class InitiativeController(
     IWebTools webTools,
     IInitiativeService entityService) : ODataController
@@ -41,14 +42,10 @@ public class InitiativeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(NotFoundResponseExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
-    public async Task<IActionResult> Get(int id, CancellationToken ct)
+    public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
-        var response = await entityService.GetItem(id, ct);
+        var response = await entityService.GetItemAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -59,12 +56,10 @@ public class InitiativeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(InitiativeOdataResponseExample), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeOdataResponseExample))]
-    public async Task<IActionResult> Get(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct)
+    public async Task<IActionResult> GetOdataList(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct)
     {
-        var response = await entityService.GetList(queryOptions, ct);
+        var response = await entityService.GetListAsync(queryOptions, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -91,12 +86,10 @@ public class InitiativeController(
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeDto), typeof(InitiativeAddRequestExample))]
-    [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Put([FromBody] InitiativeDto requestData, CancellationToken ct)
     {
-        var response = await entityService.Add(requestData, ct);
+        var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -111,12 +104,10 @@ public class InitiativeController(
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeDto), typeof(InitiativeEditRequestExample))]
-    [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Post(int id, [FromBody] InitiativeDto requestData, CancellationToken ct)
     {
-        var response = await entityService.Update(id, requestData, ct);
+        var response = await entityService.UpdateAsync(id, requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -151,7 +142,7 @@ public class InitiativeController(
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     public async Task<IActionResult> UploadImage(int id, IFormFile formFile, CancellationToken ct)
     {
-        var response = await entityService.UploadImage(id, new FormFileAdapter(formFile), InitiativeImageType.Image, ct);
+        var response = await entityService.UploadImageAsync(id, new FormFileAdapter(formFile), InitiativeImageType.Image, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -166,7 +157,7 @@ public class InitiativeController(
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     public async Task<IActionResult> UploadBanner(int id, IFormFile formFile, CancellationToken ct)
     {
-        var response = await entityService.UploadImage(id, new FormFileAdapter(formFile), InitiativeImageType.Banner, ct);
+        var response = await entityService.UploadImageAsync(id, new FormFileAdapter(formFile), InitiativeImageType.Banner, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -178,12 +169,9 @@ public class InitiativeController(
     /// <returns>Process result.</returns>
     [HttpPost("Enable/{id}")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Enable(int id, CancellationToken ct)
     {
-        var response = await entityService.Disable(id, false, ct);
+        var response = await entityService.EnableAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -195,12 +183,9 @@ public class InitiativeController(
     /// <returns>Process result.</returns>
     [HttpDelete("Disable/{id}")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [ProducesResponseType(typeof(InitiativeDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Disable(int id, CancellationToken ct)
     {
-        var response = await entityService.Disable(id, true, ct);
+        var response = await entityService.DisableAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 }

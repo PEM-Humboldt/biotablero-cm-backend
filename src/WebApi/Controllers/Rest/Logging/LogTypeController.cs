@@ -1,13 +1,10 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Logging;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Logging;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using Swashbuckle.AspNetCore.Filters;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
@@ -19,18 +16,16 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
+[ApiConventionType(typeof(CustomApiConventions))]
 public class LogTypeController(IWebTools webTools,
-    IServiceReadEnumeration<LogType> entityService) : ControllerBase
+    IReadEnumeration<LogType> entityService) : ControllerBase
 {
     /// <summary>
     /// Get all entities.
     /// </summary>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(LogTypeResponseExample), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LogTypeResponseExample))]
-    public IActionResult Get()
+    public IActionResult GetEnumList()
     {
         var response = entityService.GetAll();
         return webTools.CustomResponse(response);

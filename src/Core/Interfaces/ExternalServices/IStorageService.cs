@@ -24,7 +24,7 @@ public interface IStorageService
     /// <param name="file">Upload file data.</param>
     /// <param name="ct">Cancellation token (optional).</param>
     /// <returns>True if the process is successful. False otherwise.</returns>
-    Task<bool> UploadFile(string fileName, IInputFile file, CancellationToken ct = default);
+    Task<bool> UploadFileAsync(string fileName, IInputFile file, CancellationToken ct = default);
 
     /// <summary>
     /// Download file.
@@ -32,5 +32,5 @@ public interface IStorageService
     /// <param name="fileName">File name.</param>
     /// <param name="ct">Cancellation token (optional).</param>
     /// <returns>Downloaded file data. Null otherwise.</returns>
-    Task<FileData> DownloadFile(string fileName, CancellationToken ct = default);
+    Task<FileData> DownloadFileAsync(string fileName, CancellationToken ct = default);
 }

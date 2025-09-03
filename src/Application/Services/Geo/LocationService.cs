@@ -43,7 +43,7 @@ public class LocationService : ServiceRead<Location, LocationDto, int, LocationS
     /// <param name="parentId">Parent identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> GetByParent(int? parentId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByParentAsync(int? parentId, CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.ListAsync(LocationSpec.ParentIdSpec(parentId), ct);
 
