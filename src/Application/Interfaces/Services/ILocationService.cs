@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 /// <summary>
 /// Location service interface.
 /// </summary>
-public interface ILocationService : IServiceRead<Location, LocationDto, int>
+public interface ILocationService : IRead<Location, LocationDto, int>
 {
     /// <summary>
     /// Get locations by parent.
@@ -19,7 +19,7 @@ public interface ILocationService : IServiceRead<Location, LocationDto, int>
     /// <param name="parentId">Parent identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByParent(int? parentId, CancellationToken ct = default);
+    Task<CustomWebResponse> GetByParentAsync(int? parentId, CancellationToken ct = default);
 
     /// <summary>
     /// Get entity polygon (simplified).
@@ -27,5 +27,5 @@ public interface ILocationService : IServiceRead<Location, LocationDto, int>
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetPolygon(int id, CancellationToken ct = default);
+    Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default);
 }

@@ -55,7 +55,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> GetByInitiative(int initiativeId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.ListAsync(InitiativeContactSpec.InitiativeIdSpec(initiativeId), ct);
 
@@ -74,7 +74,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Add(InitiativeContactDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(InitiativeContactDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
@@ -135,7 +135,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Update(int id, InitiativeContactDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, InitiativeContactDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -195,7 +195,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Delete(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
     {
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);

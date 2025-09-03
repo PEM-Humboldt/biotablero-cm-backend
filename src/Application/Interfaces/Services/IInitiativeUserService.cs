@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// <summary>
 /// Initiative User service interface.
 /// </summary>
-public interface IInitiativeUserService : IServiceRead<InitiativeUser, InitiativeUserDto, int>, IServiceAdd<InitiativeUserDto>, IServiceUpdate<InitiativeUserDto, int>, IServiceDelete<int>
+public interface IInitiativeUserService : IRead<InitiativeUser, InitiativeUserDto, int>, IAdd<InitiativeUserDto>, IUpdate<InitiativeUserDto, int>, IDelete<int>
 {
     /// <summary>
     /// Get entities by initiative.
@@ -19,5 +19,5 @@ public interface IInitiativeUserService : IServiceRead<InitiativeUser, Initiativ
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByInitiative(int initiativeId, CancellationToken ct = default);
+    Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 }

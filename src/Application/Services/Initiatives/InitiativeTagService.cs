@@ -49,7 +49,7 @@ public class InitiativeTagService : IInitiativeTagService
     /// <param name="tagId">Initiative tag identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Add(int initiativeId, int tagId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(int initiativeId, int tagId, CancellationToken ct = default)
     {
         // Validate initiative
         var initiativeExists = await initiativeRepository.AnyAsync(new InitiativeSpec(initiativeId), ct);
@@ -105,7 +105,7 @@ public class InitiativeTagService : IInitiativeTagService
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Delete(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
     {
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);

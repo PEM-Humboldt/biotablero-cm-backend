@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Utils;
 
 /// <summary>
-/// Add service interface.
+/// Add data interface (for services).
 /// </summary>
 /// <typeparam name="TDto">DTO class type.</typeparam>
-public interface IServiceAdd<TDto>
+public interface IAdd<TDto>
     where TDto : class, IDto
 {
     /// <summary>
@@ -18,5 +18,5 @@ public interface IServiceAdd<TDto>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> Add(TDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> AddAsync(TDto entityData, CancellationToken ct = default);
 }

@@ -7,8 +7,8 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.General;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Tag;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Authorization;
@@ -27,6 +27,7 @@ using Swashbuckle.AspNetCore.Filters;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
+[ApiConventionType(typeof(CustomApiConventions))]
 public class TagController(
     IWebTools webTools,
     ITagService entityService) : ODataController
@@ -38,14 +39,10 @@ public class TagController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(TagDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status404NotFound, typeof(NotFoundResponseExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TagResponseExample))]
-    public async Task<IActionResult> Get(int id, CancellationToken ct)
+    public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
-        var response = await entityService.GetItem(id, ct);
+        var response = await entityService.GetItemAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -56,12 +53,10 @@ public class TagController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [ProducesResponseType(typeof(TagOdataResponseExample), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TagOdataResponseExample))]
-    public async Task<IActionResult> Get(ODataQueryOptions<Tag> queryOptions, CancellationToken ct)
+    public async Task<IActionResult> GetOdataList(ODataQueryOptions<Tag> queryOptions, CancellationToken ct)
     {
-        var response = await entityService.GetList(queryOptions, ct);
+        var response = await entityService.GetListAsync(queryOptions, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -75,12 +70,10 @@ public class TagController(
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(TagDto), typeof(TagAddRequestExample))]
-    [ProducesResponseType(typeof(TagDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TagResponseExample))]
     public async Task<IActionResult> Put([FromBody] TagDto requestData, CancellationToken ct)
     {
-        var response = await entityService.Add(requestData, ct);
+        var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -95,12 +88,10 @@ public class TagController(
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(TagDto), typeof(TagResponseExample))]
-    [ProducesResponseType(typeof(TagDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TagResponseExample))]
     public async Task<IActionResult> Post(int id, [FromBody] TagDto requestData, CancellationToken ct)
     {
-        var response = await entityService.Update(id, requestData, ct);
+        var response = await entityService.UpdateAsync(id, requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -112,11 +103,9 @@ public class TagController(
     /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var response = await entityService.Delete(id, ct);
+        var response = await entityService.DeleteAsync(id, ct);
         return webTools.CustomResponse(response);
     }
 }

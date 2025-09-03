@@ -56,7 +56,7 @@ public class TagService : ServiceRead<Tag, TagDto, int, TagSpec>, ITagService
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Add(TagDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(TagDto entityData, CancellationToken ct = default)
     {
         // Validate data
         entityData.Name = entityData.Name.Capitalize();
@@ -106,7 +106,7 @@ public class TagService : ServiceRead<Tag, TagDto, int, TagSpec>, ITagService
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Update(int id, TagDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, TagDto entityData, CancellationToken ct = default)
     {
         // Validate data
         entityData.Name = entityData.Name.Capitalize();
@@ -167,7 +167,7 @@ public class TagService : ServiceRead<Tag, TagDto, int, TagSpec>, ITagService
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Delete(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
     {
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);

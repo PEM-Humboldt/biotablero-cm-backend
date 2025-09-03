@@ -17,7 +17,7 @@ public interface IIamService
     /// <param name="username">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if user exists. False otherwise.</returns>
-    Task<bool> UserExists(string username, CancellationToken ct = default);
+    Task<bool> UserExistsAsync(string username, CancellationToken ct = default);
 
     /// <summary>
     /// Get user data.

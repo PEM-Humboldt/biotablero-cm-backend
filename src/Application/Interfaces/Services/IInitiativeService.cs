@@ -14,7 +14,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// <summary>
 /// Initiative service interface.
 /// </summary>
-public interface IInitiativeService : IServiceRead<Initiative, InitiativeDto, int>, IServiceAdd<InitiativeDto>, IServiceUpdate<InitiativeDto, int>, IServiceDisable<int>
+public interface IInitiativeService : IRead<Initiative, InitiativeDto, int>, IAdd<InitiativeDto>, IUpdate<InitiativeDto, int>, IDisable<int>
 {
     /// <summary>
     /// Upload image.
@@ -24,7 +24,7 @@ public interface IInitiativeService : IServiceRead<Initiative, InitiativeDto, in
     /// <param name="imageType">Initiative image type.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UploadImage(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct);
+    Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct);
 
     /// <summary>
     /// Get entity polygon.
@@ -32,7 +32,7 @@ public interface IInitiativeService : IServiceRead<Initiative, InitiativeDto, in
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetPolygon(int id, CancellationToken ct = default);
+    Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default);
 
     /// <summary>
     /// Update entity polygon.
@@ -41,5 +41,5 @@ public interface IInitiativeService : IServiceRead<Initiative, InitiativeDto, in
     /// <param name="geoJsonString">Polygon data (string).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdatePolygon(int id, string geoJsonString, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdatePolygonAsync(int id, string geoJsonString, CancellationToken ct = default);
 }

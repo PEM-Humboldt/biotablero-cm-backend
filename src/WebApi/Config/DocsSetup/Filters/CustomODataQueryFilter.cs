@@ -1,16 +1,18 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Filters;
 
+using System.Collections.Generic;
 using System.Linq;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.OpenApi.Models;
 
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 /// <summary>
-/// Custom ODataQueryOptions parameters for Swashbuckle.
+/// Custom ODataQuery filter for Swashbuckle.
 /// </summary>
-public class CustomODataQueryOptions : IOperationFilter
+public class CustomODataQueryFilter : IOperationFilter
 {
     /// <summary>
     /// Apply custom Swashbuckle settings.
@@ -34,11 +36,13 @@ public class CustomODataQueryOptions : IOperationFilter
             }
         }
 
-        // Add custom params
-        if (context.MethodInfo.GetParameters()
+        var isOdataEndpoint = context.MethodInfo.GetParameters()
             .Any(p => p.ParameterType.IsGenericType &&
-                      p.ParameterType.GetGenericTypeDefinition() == typeof(ODataQueryOptions<>)))
+                      p.ParameterType.GetGenericTypeDefinition() == typeof(ODataQueryOptions<>));
+
+        if (isOdataEndpoint)
         {
+            // Add custom params
             operation?.Parameters.Add(new OpenApiParameter
             {
                 Name = "$filter",
@@ -74,6 +78,53 @@ public class CustomODataQueryOptions : IOperationFilter
                 Required = false,
                 Schema = new OpenApiSchema { Type = "integer", Format = "int32" },
             });
+
+            // Add custom response
+            context.SchemaRepository.TryLookupByType(typeof(Dictionary<string, object>), out var schema);
+
+            if (schema == null)
+            {
+                schema = context.SchemaGenerator.GenerateSchema(typeof(Dictionary<string, object>), context.SchemaRepository);
+                schema.AdditionalPropertiesAllowed = false;
+                schema.Properties = new Dictionary<string, OpenApiSchema>()
+                {
+                    {
+                        "@odata.count",
+                        new OpenApiSchema
+                        {
+                            Type = "integer",
+                            Format = "int32",
+                            Default = OpenApiAnyFactory.CreateFromJson("1"),
+                        }
+                    },
+                    {
+                        "value",
+                        new OpenApiSchema
+                        {
+                            Type = "array",
+                            Items = new OpenApiSchema()
+                            {
+                                Type = "object",
+                                Default = OpenApiAnyFactory.CreateFromJson("{\"id\":1,\"name\":\"string\"}"),
+                            },
+                        }
+                    },
+                };
+            }
+
+            var content = new Dictionary<string, OpenApiMediaType>()
+            {
+                {
+                    "application/json",
+                    new OpenApiMediaType
+                    {
+                        Schema = schema,
+                    }
+                },
+            };
+
+            operation.Responses.Remove($"{StatusCodes.Status200OK}");
+            operation.Responses.Add($"{StatusCodes.Status200OK}", new OpenApiResponse { Content = content });
         }
     }
 }

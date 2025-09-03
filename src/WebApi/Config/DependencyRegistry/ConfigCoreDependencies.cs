@@ -39,7 +39,7 @@ public static class ConfigCoreDependencies
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddSingleton<IWebTools, WebTools>();
         services.AddSingleton<IWebViewTools, WebViewTools>();
-        services.AddSingleton(typeof(IServiceReadEnumeration<>), typeof(ServiceReadEnumeration<>));
+        services.AddSingleton(typeof(IReadEnumeration<>), typeof(ServiceReadEnumeration<>));
 
         services.AddAuthService(isDevelopment);
 

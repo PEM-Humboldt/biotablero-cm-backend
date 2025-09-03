@@ -9,7 +9,7 @@ using IAVH.BioTablero.CM.Application.Utils;
 /// <summary>
 /// Initiative Tag service interface.
 /// </summary>
-public interface IInitiativeTagService : IServiceDelete<int>
+public interface IInitiativeTagService : IDelete<int>
 {
     /// <summary>
     /// Add element.
@@ -18,5 +18,5 @@ public interface IInitiativeTagService : IServiceDelete<int>
     /// <param name="tagId">Initiative tag identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> Add(int initiativeId, int tagId, CancellationToken ct = default);
+    Task<CustomWebResponse> AddAsync(int initiativeId, int tagId, CancellationToken ct = default);
 }

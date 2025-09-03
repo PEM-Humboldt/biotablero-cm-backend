@@ -88,12 +88,12 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public override async Task<CustomWebResponse> GetList(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct = default)
+    public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();
         query = entityRepository.IncludeOdataEntities(query);
 
-        return await GetOdataListByQuery(query, queryOptions, ct);
+        return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 
     /// <summary>
@@ -102,7 +102,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> GetPolygon(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default)
     {
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -128,7 +128,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Add(InitiativeDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(InitiativeDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
@@ -190,7 +190,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         var results = new Dictionary<string, bool>();
         var userTasks = entityData.Users.Select(async user =>
         {
-            results[user.UserName] = await iamService.UserExists(user.UserName, ct);
+            results[user.UserName] = await iamService.UserExistsAsync(user.UserName, ct);
         });
 
         await Task.WhenAll(userTasks);
@@ -230,7 +230,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Update(int id, InitiativeDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, InitiativeDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -291,7 +291,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="imageType">Initiative image type.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> UploadImage(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct)
+    public async Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct)
     {
         if (formFile.IsEmpty())
         {
@@ -324,7 +324,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         var imageTypeStr = imageType.ToString("G").ToLower(CultureInfo.CurrentCulture);
         var fileName = $"{StoragePrefix}/{id}/{imageTypeStr}";
         var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-        var uploadSuccessful = await storageService.UploadFile(fileName, formFile, ct);
+        var uploadSuccessful = await storageService.UploadFileAsync(fileName, formFile, ct);
 
         if (uploadSuccessful)
         {
@@ -370,7 +370,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="geoJsonString">Polygon data (string).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> UpdatePolygon(int id, string geoJsonString, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdatePolygonAsync(int id, string geoJsonString, CancellationToken ct = default)
     {
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
@@ -427,13 +427,29 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     }
 
     /// <summary>
+    /// Enable element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> EnableAsync(int id, CancellationToken ct = default) => await DisableOrEnableAsync(id, false, ct);
+
+    /// <summary>
+    /// Disable element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> DisableAsync(int id, CancellationToken ct = default) => await DisableOrEnableAsync(id, true, ct);
+
+    /// <summary>
     /// Disable or enable element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
     /// <param name="disable">Disable flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Disable(int id, bool disable, CancellationToken ct = default)
+    private async Task<CustomWebResponse> DisableOrEnableAsync(int id, bool disable, CancellationToken ct = default)
     {
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
