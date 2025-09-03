@@ -99,7 +99,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         var query = entityRepository.GetQueryable();
         query = entityRepository.AddInitiativeFilter(initiativeId, query);
 
-        return await GetOdataListByQuery(query, queryOptions, ct);
+        return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Add(JoinRequestDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(JoinRequestDto entityData, CancellationToken ct = default)
     {
         // Validate initiative
         var initiative = await initiativeRepository.GetByIdAsync(entityData.InitiativeId, ct);
@@ -189,7 +189,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> Update(int id, JoinRequestDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, JoinRequestDto entityData, CancellationToken ct = default)
     {
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);

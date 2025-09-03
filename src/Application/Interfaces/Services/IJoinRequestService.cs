@@ -7,14 +7,13 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Iam;
 
 using Microsoft.AspNetCore.OData.Query;
 
 /// <summary>
 /// Join request service interface.
 /// </summary>
-public interface IJoinRequestService : IServiceRead<JoinRequest, JoinRequestDto, int>, IServiceAdd<JoinRequestDto>, IServiceUpdate<JoinRequestDto, int>
+public interface IJoinRequestService : IRead<JoinRequest, JoinRequestDto, int>, IAdd<JoinRequestDto>, IUpdate<JoinRequestDto, int>
 {
     /// <summary>
     /// Get elements list (OData).

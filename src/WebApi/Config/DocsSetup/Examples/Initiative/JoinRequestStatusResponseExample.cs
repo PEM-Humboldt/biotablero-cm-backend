@@ -13,7 +13,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// Join Request Status response example.
 /// </summary>
 /// <param name="entityService">General enumeration service.</param>
-public class JoinRequestStatusResponseExample(IServiceReadEnumeration<InitiativeUserLevel> entityService) : IExamplesProvider<IEnumerable<EnumEntityDto<InitiativeUserLevel>>>
+public class JoinRequestStatusResponseExample(IReadEnumeration<InitiativeUserLevel> entityService) : IExamplesProvider<IEnumerable<EnumEntityDto<InitiativeUserLevel>>>
 {
     /// <summary>
     /// Get examples for entity.

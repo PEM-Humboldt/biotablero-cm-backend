@@ -21,7 +21,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 [Route("[controller]")]
 [Produces("application/json")]
 public class JoinRequestStatusController(IWebTools webTools,
-    IServiceReadEnumeration<JoinRequestStatus> entityService) : ControllerBase
+    IReadEnumeration<JoinRequestStatus> entityService) : ControllerBase
 {
     /// <summary>
     /// Get all entities.

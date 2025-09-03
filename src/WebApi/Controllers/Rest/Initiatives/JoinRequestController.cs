@@ -67,7 +67,7 @@ public class JoinRequestController(
             UserName = HttpContext.GetUserName(),
         };
 
-        var response = await entityService.Add(requestData, ct);
+        var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -92,7 +92,7 @@ public class JoinRequestController(
             ReviewerUserName = HttpContext.GetUserName(),
         };
 
-        var response = await entityService.Update(id, requestData, ct);
+        var response = await entityService.UpdateAsync(id, requestData, ct);
         return webTools.CustomResponse(response);
     }
 }
