@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -100,5 +101,36 @@ public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestReposi
             await transaction.RollbackAsync(ct);
             return null;
         }
+    }
+
+    /// <summary>
+    /// Get pending old requests.
+    /// </summary>
+    /// <param name="daysOld">Requests days old.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Pending requests grouped by leader user name.</returns>
+    public async Task<Dictionary<string, int>> GetPendingOldRequests(int daysOld, CancellationToken ct = default)
+    {
+        var since = DateTime.UtcNow.AddDays(-daysOld);
+
+        var pendingRequestsByLeaders = dbContext.InitiativeUsers
+            .Where(iu => iu.LevelId == (int)InitiativeUserLevelEnum.Leader)
+            .Join(
+                dbContext.Initiatives,
+                iu => iu.InitiativeId,
+                i => i.Id,
+                (iu, i) => new { iu, i })
+            .Join(
+                dbContext.JoinRequests,
+                join => join.i.Id,
+                jr => jr.InitiativeId,
+                (join, jr) => new { join.iu, join.i, jr })
+            .Where(join =>
+                join.jr.StatusId == (int)JoinRequestStatusEnum.UnderReview &&
+                join.jr.CreationDate >= since)
+            .GroupBy(join => join.iu.UserName)
+            .ToDictionaryAsync(group => group.Key, group => group.Count(), ct);
+
+        return await pendingRequestsByLeaders;
     }
 }

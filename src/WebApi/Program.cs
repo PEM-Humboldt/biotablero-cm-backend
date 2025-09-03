@@ -45,6 +45,7 @@ public class Program
         builder.Services.AddExternalServices();
         builder.Services.AddMappings();
         builder.Services.AddValidators();
+        builder.Services.AddTasks();
 
         // Add services to the container.
         builder.Services.AddControllers()

@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,4 +30,12 @@ public interface IJoinRequestRepository : IRepository<JoinRequest>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
     public Task<JoinRequest> ReviewRequest(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get pending old requests.
+    /// </summary>
+    /// <param name="daysOld">Requests days old.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated request data.</returns>
+    public Task<Dictionary<string, int>> GetPendingOldRequests(int daysOld, CancellationToken ct = default);
 }
