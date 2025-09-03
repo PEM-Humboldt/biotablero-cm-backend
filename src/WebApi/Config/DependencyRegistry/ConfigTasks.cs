@@ -16,7 +16,7 @@ public static class ConfigTasks
     /// <returns>Host builder configuration.</returns>
     public static IServiceCollection AddTasks(this IServiceCollection services)
     {
-        services.AddHostedService<JoinRequestTasks>();
+        services.AddHostedService<PendingJoinRequestsTask>();
 
         return services;
     }

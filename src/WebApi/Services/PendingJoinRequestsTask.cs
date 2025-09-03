@@ -1,12 +1,12 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Services;
 
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Cronos;
 
+using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
@@ -23,12 +23,13 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// </summary>
 /// <param name="serviceScopeFactory">Service scope factory.</param>
 /// <param name="logger">System logger.</param>
-public class JoinRequestTasks(
+public class PendingJoinRequestsTask(
     IServiceScopeFactory serviceScopeFactory,
     ILogger logger) : BackgroundService
 {
+    private const string TaskName = "Old pending requests";
     private readonly IServiceScopeFactory serviceScopeFactory = serviceScopeFactory;
-    private readonly CronExpression cronExpression = CronExpression.Parse("*/1 * * * *");
+    private readonly CronExpression cronExpression = CronExpression.Parse("0 8 1 * *"); // At 08:00 AM, on day 1 of the month
     private readonly TimeZoneInfo timeZone = TimeZoneInfo.Local;
     private readonly ILogger logger = logger;
 
@@ -40,6 +41,7 @@ public class JoinRequestTasks(
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         using var scope = serviceScopeFactory.CreateScope();
+        var joinRequestService = scope.ServiceProvider.GetRequiredService<IJoinRequestService>();
         var entityRepository = scope.ServiceProvider.GetRequiredService<IJoinRequestRepository>();
         var iamService = scope.ServiceProvider.GetRequiredService<IIamService>();
 
@@ -59,20 +61,8 @@ public class JoinRequestTasks(
 
             if (!stoppingToken.IsCancellationRequested)
             {
-                logger.AddLog(LogType.System, "Executed task: {@task}", "Old pending requests");
-
-                var pendingOldRequests = await entityRepository.GetPendingOldRequests(30, stoppingToken);
-
-                if (pendingOldRequests?.Count > 0)
-                {
-                    var leadersUserNames = pendingOldRequests
-                        .Select(e => e.Key)
-                        .ToArray();
-
-                    var leadersData = await iamService.GetUsersData(leadersUserNames, stoppingToken);
-
-                    return;
-                }
+                await joinRequestService.SendNotificationsOldPendingRequests(stoppingToken);
+                logger.AddLog(LogType.System, "Executed task: {@task}", TaskName);
             }
         }
     }

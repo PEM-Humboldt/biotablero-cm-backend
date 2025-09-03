@@ -127,9 +127,14 @@ public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestReposi
                 (join, jr) => new { join.iu, join.i, jr })
             .Where(join =>
                 join.jr.StatusId == (int)JoinRequestStatusEnum.UnderReview &&
-                join.jr.CreationDate >= since)
+                join.jr.CreationDate <= since)
             .GroupBy(join => join.iu.UserName)
-            .ToDictionaryAsync(group => group.Key, group => group.Count(), ct);
+            .Select(g => new
+            {
+                UserName = g.Key,
+                Count = g.Count(),
+            })
+            .ToDictionaryAsync(group => group.UserName, group => group.Count, ct);
 
         return await pendingRequestsByLeaders;
     }

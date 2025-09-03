@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -16,6 +17,7 @@ using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Email;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Iam;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
@@ -168,7 +170,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
             Content = string.Format(CultureInfo.InvariantCulture, "El usuario '{0}' ha realizado una solicitud de acceso para la iniciativa '{1}'", userData.Username, initiative.Name),
         };
 
-        SendEmail(entityData.InitiativeId, emailObject, ct);
+        SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
 
         entityData = mapper.Map(entity);
 
@@ -261,7 +263,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
             emailObject.Content = "Tu solicitud ha sido rechazada. Si consideras que se trata de un error solicita de nuevo.";
         }
 
-        SendEmail(entityData.InitiativeId, emailObject, ct);
+        SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
 
         logger.AddLog(LogType.Update, "Updated initiative join request: {@entityData}", entityData);
 
@@ -272,12 +274,44 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     }
 
     /// <summary>
-    /// Send join request email.
+    /// Send notifications for old pending join requests.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task SendNotificationsOldPendingRequests(CancellationToken ct = default)
+    {
+        const int oldPendingRequestsDays = 30;
+
+        var pendingOldRequests = await entityRepository.GetPendingOldRequests(oldPendingRequestsDays, ct);
+
+        if (pendingOldRequests?.Count > 0)
+        {
+            var leadersUserNames = pendingOldRequests
+                .Select(e => e.Key)
+                .ToArray();
+
+            var leadersData = await iamService.GetUsersData(leadersUserNames, ct);
+
+            var notificationsData = pendingOldRequests
+                .Join(leadersData, por => por.Key, ld => ld.Username, (por, ld) => new { por, ld });
+
+            var results = new List<bool>();
+            var emailTasks = notificationsData.Select(async data =>
+            {
+                results.Add(await SendNotificationOldPendingRequests(data.ld, data.por.Value, ct));
+            });
+
+            await Task.WhenAll(emailTasks);
+        }
+    }
+
+    /// <summary>
+    /// Send join request notification.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="emailData">Email data.</param>
     /// <param name="ct">Cancellation token.</param>
-    private void SendEmail(int initiativeId, DefaultEmailData emailData, CancellationToken ct = default) => _ = Task.Run(
+    private void SendNotificationJoinRequest(int initiativeId, DefaultEmailData emailData, CancellationToken ct = default) => _ = Task.Run(
         async () =>
         {
             var leaders = await initiativeUserRepository.ListAsync(InitiativeUserSpec.LevelSpec(initiativeId, (int)InitiativeUserLevelEnum.Leader), ct);
@@ -306,4 +340,26 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
             }
         },
         ct);
+
+    /// <summary>
+    /// Send notifications for old pending join requests.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    private async Task<bool> SendNotificationOldPendingRequests(ExternalUser leaderData, int pendingRequests, CancellationToken ct = default)
+    {
+        var emailData = new DefaultEmailData
+        {
+            Address = new($"{leaderData.FirstName} {leaderData.LastName}", leaderData.Email),
+            Subject = "Tienes solicitudes de ingreso pendientes de revisión",
+            Content = string.Format(CultureInfo.InvariantCulture, "Tienes <b>{0}</b> solicitudes de ingreso que necesitan tu revisión.", pendingRequests),
+        };
+
+        var receivers = new CustomEmailAddress[] { emailData.Address };
+        var htmlBody = await webViewTools.RenderViewToString("Default", emailData);
+
+        await emailService.SendEmail(emailData.Subject, receivers, null, htmlBody, ct);
+
+        return true;
+    }
 }

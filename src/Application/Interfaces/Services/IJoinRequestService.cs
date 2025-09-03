@@ -7,6 +7,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Iam;
 
 using Microsoft.AspNetCore.OData.Query;
 
@@ -24,4 +25,11 @@ public interface IJoinRequestService : IServiceRead<JoinRequest, JoinRequestDto,
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<CustomWebResponse> GetList(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default);
+
+    /// <summary>
+    /// Send notifications for old pending join requests.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task SendNotificationsOldPendingRequests(CancellationToken ct = default);
 }
