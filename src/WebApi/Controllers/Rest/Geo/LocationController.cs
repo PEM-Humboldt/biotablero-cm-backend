@@ -52,4 +52,17 @@ public class LocationController(IWebTools webTools,
         var response = await entityService.GetByParentAsync(parentId, ct);
         return webTools.CustomResponse(response);
     }
+
+    /// <summary>
+    /// Get entity polygon (simplified).
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Polygon entity.</returns>
+    [HttpGet("Polygon/{id}")]
+    public async Task<IActionResult> GetPolygon(int id, CancellationToken ct)
+    {
+        var response = await entityService.GetPolygonAsync(id, ct);
+        return webTools.CustomResponse(response);
+    }
 }

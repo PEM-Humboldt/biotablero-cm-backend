@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
+using NetTopologySuite.Geometries;
+
 /// <summary>
 /// Initiative entity.
 /// </summary>
@@ -37,6 +39,16 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     public Uri BannerUrl { get; set; }
 
     /// <summary>
+    /// Initiative polygon.
+    /// </summary>
+    public Geometry Polygon { get; set; }
+
+    /// <summary>
+    /// Initiative polygon centroid.
+    /// </summary>
+    public Point Coordinate { get; set; }
+
+    /// <summary>
     /// Enabled flag.
     /// </summary>
     public bool Enabled { get; set; }
@@ -55,4 +67,9 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     /// Initiative Users relationship.
     /// </summary>
     public ICollection<InitiativeUser> InitiativeUsers { get; init; }
+
+    /// <summary>
+    /// Initiative Tag relationship.
+    /// </summary>
+    public ICollection<InitiativeTag> InitiativeTags { get; init; }
 }

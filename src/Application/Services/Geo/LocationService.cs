@@ -1,6 +1,8 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Geo;
 
 using System.Linq;
+using System.Net;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,16 +20,21 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 /// </summary>
 public class LocationService : ServiceRead<Location, LocationDto, int, LocationSpec>, ILocationService
 {
+    private readonly IRepository<LocationPolygon> locationPolygonRepository;
+
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="locationPolygonRepository">Location Polygon repository.</param>
     public LocationService(
         IRepository<Location> entityRepository,
-        IMapper<Location, LocationDto> mapper)
+        IMapper<Location, LocationDto> mapper,
+        IRepository<LocationPolygon> locationPolygonRepository)
         : base(entityRepository, mapper)
     {
+        this.locationPolygonRepository = locationPolygonRepository;
     }
 
     /// <summary>
@@ -46,6 +53,30 @@ public class LocationService : ServiceRead<Location, LocationDto, int, LocationS
         return new()
         {
             ResponseBody = dataListDto,
+        };
+    }
+
+    /// <summary>
+    /// Get entity polygon (simplified).
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default)
+    {
+        var simplifiedGeometry = await locationPolygonRepository.FirstOrDefaultAsync(new LocationPolygonSimplifiedSpec(id), ct);
+
+        if (!string.IsNullOrEmpty(simplifiedGeometry))
+        {
+            return new()
+            {
+                ResponseBody = JsonDocument.Parse(simplifiedGeometry),
+            };
+        }
+
+        return new(true)
+        {
+            StatusCode = HttpStatusCode.NotFound,
         };
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,12 +17,14 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
-using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 using Microsoft.AspNetCore.OData.Query;
+
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
 
 using Serilog;
 
@@ -29,6 +32,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+using LocationEntity = IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location;
 
 /// <summary>
 /// Initiative service.
@@ -40,9 +44,11 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     private readonly IValidator<InitiativeDto> entityValidator;
     private readonly ILogger logger;
     private new readonly IInitiativeRepository entityRepository;
-    private readonly IRepository<Location> locationRepository;
+    private readonly IRepository<LocationEntity> locationRepository;
     private readonly IIamService iamService;
     private readonly IStorageService storageService;
+    private readonly GeoJsonWriter geoJsonWriter;
+    private readonly GeoJsonReader geoJsonReader;
 
     /// <summary>
     /// Constructor.
@@ -60,7 +66,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         IMapper<Initiative, InitiativeDto> mapper,
         IValidator<InitiativeDto> entityValidator,
         ILogger logger,
-        IRepository<Location> locationRepository,
+        IRepository<LocationEntity> locationRepository,
         IStorageService storageService,
         IIamService iamService)
         : base(entityRepository, mapper)
@@ -71,6 +77,9 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         this.locationRepository = locationRepository;
         this.storageService = storageService;
         this.iamService = iamService;
+
+        geoJsonWriter = new GeoJsonWriter();
+        geoJsonReader = new GeoJsonReader();
     }
 
     /// <summary>
@@ -85,6 +94,32 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         query = entityRepository.IncludeOdataEntities(query);
 
         return await GetOdataListByQueryAsync(query, queryOptions, ct);
+    }
+
+    /// <summary>
+    /// Get entity polygon.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default)
+    {
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity?.Polygon != null)
+        {
+            return new()
+            {
+                ResponseBody = JsonSerializer.Deserialize<object>(geoJsonWriter.Write(entity.Polygon))!,
+            };
+        }
+        else
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.NotFound,
+            };
+        }
     }
 
     /// <summary>
@@ -120,7 +155,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         }
 
         // Validate users data
-        var leaderCount = entityData.InitiativeUsers
+        var leaderCount = entityData.Users
             .Select(u => u.Level.Id == (int)InitiativeUserLevelEnum.Leader)
             .Count();
 
@@ -133,8 +168,9 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         }
 
         // Validate locations data
-        var locationsIds = entityData.InitiativeLocations
-            .Select(l => l.LocationId);
+        var locationsIds = entityData.Locations
+            .Select(l => l.LocationId ?? 0)
+            .ToArray();
 
         var initiativeLocationQuery = locationRepository
             .GetQueryable()
@@ -142,7 +178,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         var locationsDb = await locationRepository.QueryToListAsync(initiativeLocationQuery, ct);
 
-        if (locationsIds.Count() != locationsDb.Count)
+        if (locationsIds.Length != locationsDb.Count)
         {
             return new CustomWebResponse(true)
             {
@@ -152,7 +188,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         // Validate users in external system
         var results = new Dictionary<string, bool>();
-        var userTasks = entityData.InitiativeUsers.Select(async user =>
+        var userTasks = entityData.Users.Select(async user =>
         {
             results[user.UserName] = await iamService.UserExistsAsync(user.UserName, ct);
         });
@@ -172,6 +208,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         // Build entity data
         var entity = mapper.Map(entityData);
         entity.CreationDate = DateTime.Now;
+        entity.Coordinate = await entityRepository.GetCentroid(locationsIds, ct);
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
@@ -323,6 +360,69 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         {
             StatusCode = HttpStatusCode.InternalServerError,
             Message = "Storage server error",
+        };
+    }
+
+    /// <summary>
+    /// Update entity polygon.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="geoJsonString">Polygon data (string).</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> UpdatePolygonAsync(int id, string geoJsonString, CancellationToken ct = default)
+    {
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Not found",
+            };
+        }
+
+        Geometry geometry;
+
+        try
+        {
+            // Read the GeoJSON and convert it to geometry
+            geometry = geoJsonReader.Read<Geometry>(geoJsonString);
+        }
+        catch (Newtonsoft.Json.JsonReaderException)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Invalid JSON object",
+            };
+        }
+
+        // Validate polygon
+        if (geometry is not Polygon polygon)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "GeoJSON type should be 'Polygon'",
+            };
+        }
+
+        // Check SRID
+        polygon.SRID = 4326;
+
+        // Update entity
+        entity.Polygon = polygon;
+        entity.Coordinate = polygon.Centroid;
+
+        await entityRepository.UpdateAsync(entity, ct);
+
+        var entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Update, $"Updated initiative polygon ({{@entityData}}", entityData);
+
+        return new CustomWebResponse()
+        {
+            ResponseBody = entityData,
         };
     }
 

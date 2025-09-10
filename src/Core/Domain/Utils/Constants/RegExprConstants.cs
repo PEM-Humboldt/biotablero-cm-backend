@@ -14,5 +14,15 @@ public static class RegExprConstants
     /// - 7785555
     /// </example>
     /// </summary>
-    public const string Phone = "^(([0-9]{7})|([36]{1}[0-9]{9}))$";
+    public const string Phone = @"^(([0-9]{7})|([36]{1}[0-9]{9}))$";
+
+    /// <summary>
+    /// Regular expression for urls.
+    /// <example>
+    /// Valid urls:
+    /// - http://example.com/example
+    /// - https://example.com/example
+    /// </example>
+    /// </summary>
+    public const string Url = @"^(https?:\/\/)([\da-z\.-]+\.[a-z\.]{2,6}|[\d\.]+)([\/:?=&#]{1}[\da-z\.-]+)*[\/\?]?$";
 }

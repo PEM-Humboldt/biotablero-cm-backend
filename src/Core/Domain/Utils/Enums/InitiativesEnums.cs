@@ -41,4 +41,20 @@ public static class InitiativesEnums
         /// </summary>
         Banner,
     }
+
+    /// <summary>
+    /// Initiative tag category.
+    /// </summary>
+    public enum TagCategory
+    {
+        /// <summary>
+        /// Political context category.
+        /// </summary>
+        PoliticalContext = 1,
+
+        /// <summary>
+        /// Social context category.
+        /// </summary>
+        SocialContext,
+    }
 }

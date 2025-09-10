@@ -12,6 +12,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using Microsoft.EntityFrameworkCore;
 
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.TagCategory;
 
 /// <summary>
 /// General database context.
@@ -41,9 +42,14 @@ public sealed class GeneralContext : DbContext
     #region Geographic module
 
     /// <summary>
-    /// System logs DbSet.
+    /// Locations DbSet.
     /// </summary>
     public DbSet<Location> Locations { get; set; }
+
+    /// <summary>
+    /// Location Polygons DbSet.
+    /// </summary>
+    public DbSet<LocationPolygon> LocationPolygons { get; set; }
 
     #endregion
 
@@ -74,6 +80,21 @@ public sealed class GeneralContext : DbContext
     /// </summary>
     public DbSet<InitiativeUserLevel> InitiativeUserLevels { get; set; }
 
+    /// <summary>
+    /// Initiative tags DbSet.
+    /// </summary>
+    public DbSet<InitiativeTag> InitiativeTags { get; set; }
+
+    /// <summary>
+    /// Tags DbSet.
+    /// </summary>
+    public DbSet<Tag> Tags { get; set; }
+
+    /// <summary>
+    /// Tag categories DbSet.
+    /// </summary>
+    public DbSet<TagCategory> TagCategories { get; set; }
+
     #endregion
 
     /// <summary>
@@ -87,11 +108,12 @@ public sealed class GeneralContext : DbContext
 
         // Seeding data
         modelBuilder.Entity<InitiativeUserLevel>().HasData(GetDefaultInitiativeUserLevels());
+        modelBuilder.Entity<TagCategory>().HasData(GetDefaultInitiativeTagCategories());
     }
 
     #region Seeding functions
 
-    #region Initiatives user level data
+    #region Initiatives data
 
     /// <summary>
     /// Get default initative user levels.
@@ -102,6 +124,19 @@ public sealed class GeneralContext : DbContext
         var enumData = Enum.GetValues(typeof(InitiativeUserLevelEnum))
             .Cast<InitiativeUserLevelEnum>()
             .Select(t => new InitiativeUserLevel() { Id = (int)t, Name = t.ToString() });
+
+        return enumData;
+    }
+
+    /// <summary>
+    /// Get default initative tag categories.
+    /// </summary>
+    /// <returns>Default initative tag categories list.</returns>
+    private static IEnumerable<TagCategory> GetDefaultInitiativeTagCategories()
+    {
+        var enumData = Enum.GetValues(typeof(TagCategoryEnum))
+            .Cast<TagCategoryEnum>()
+            .Select(t => new TagCategory() { Id = (int)t, Name = t.ToString() });
 
         return enumData;
     }

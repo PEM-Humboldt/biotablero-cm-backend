@@ -32,6 +32,11 @@ public class Location : BaseEntity<int>, IAggregateRoot
     public Location Parent { get; set; }
 
     /// <summary>
+    /// Location polygon relationship.
+    /// </summary>
+    public LocationPolygon LocationPolygon { get; set; }
+
+    /// <summary>
     /// Child locations relationship.
     /// </summary>
     public ICollection<Location> Children { get; } = [];

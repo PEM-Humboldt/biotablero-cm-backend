@@ -25,4 +25,21 @@ public interface IInitiativeService : IRead<Initiative, InitiativeDto, int>, IAd
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct);
+
+    /// <summary>
+    /// Get entity polygon.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default);
+
+    /// <summary>
+    /// Update entity polygon.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="geoJsonString">Polygon data (string).</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> UpdatePolygonAsync(int id, string geoJsonString, CancellationToken ct = default);
 }

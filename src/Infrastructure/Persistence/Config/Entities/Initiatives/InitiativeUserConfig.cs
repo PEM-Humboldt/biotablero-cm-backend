@@ -34,12 +34,16 @@ public class InitiativeUserConfig : IEntityTypeConfiguration<InitiativeUser>
             .IsRequired();
 
         builder.Property(i => i.LevelId)
-            .HasColumnName("level_id")
+            .HasColumnName("initiative_user_level_id")
             .IsRequired();
 
         builder.HasOne(e => e.Initiative)
             .WithMany(p => p.InitiativeUsers)
             .HasForeignKey(e => e.InitiativeId);
+
+        builder.HasOne(e => e.Level)
+            .WithMany(p => p.InitiativeUsers)
+            .HasForeignKey(e => e.LevelId);
 
         builder
             .HasIndex(e => new { e.UserName, e.InitiativeId })

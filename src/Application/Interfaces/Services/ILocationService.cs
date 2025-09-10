@@ -20,4 +20,12 @@ public interface ILocationService : IRead<Location, LocationDto, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<CustomWebResponse> GetByParentAsync(int? parentId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get entity polygon (simplified).
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default);
 }

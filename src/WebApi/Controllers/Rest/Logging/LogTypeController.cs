@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// Log type controller.
+/// Log Type controller.
 /// </summary>
 /// <param name="webTools">General web tools.</param>
 /// <param name="entityService">Entity service.</param>

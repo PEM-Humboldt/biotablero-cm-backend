@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Specifications;
 
+using System.Linq;
+
 using Ardalis.Specification;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
@@ -30,7 +32,9 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
             .Include(e => e.InitiativeUsers)
             .Include(e => e.InitiativeLocations)
                 .ThenInclude(e => e.Location)
-                    .ThenInclude(e => e.Parent);
+                    .ThenInclude(e => e.Parent)
+            .Include(e => e.InitiativeTags)
+                .ThenInclude(e => e.Tag);
     }
 
     /// <summary>
@@ -54,6 +58,21 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
         var spec = new InitiativeSpec();
         spec.Query
             .Where(e => e.Id != id && e.Name == name);
+
+        return spec;
+    }
+
+    /// <summary>
+    /// Specification for get elements by tag.
+    /// </summary>
+    /// <param name="id">Tag identifier.</param>
+    /// <returns>Custom specification.</returns>
+    public static InitiativeSpec GetByTagSpec(int id)
+    {
+        var spec = new InitiativeSpec();
+        spec.Query
+            .Where(e => e.InitiativeTags
+                .Any(e => e.TagId == id));
 
         return spec;
     }

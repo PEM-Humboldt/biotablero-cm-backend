@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
-/// Initiative-Location controller.
+/// Initiative Location controller.
 /// </summary>
 [ApiController]
 [Route("[controller]")]

@@ -13,7 +13,8 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 public class InitiativeMappings(
     IMapper<InitiativeContact, InitiativeContactDto> initiativeContactMappings,
     IMapper<InitiativeLocation, InitiativeLocationDto> initiativeLocationMappings,
-    IMapper<InitiativeUser, InitiativeUserDto> initiativeUserMappings) : IMapper<Initiative, InitiativeDto>
+    IMapper<InitiativeUser, InitiativeUserDto> initiativeUserMappings,
+    IMapper<Tag, TagDto> tagMappings) : IMapper<Initiative, InitiativeDto>
 {
     /// <summary>
     /// Map from entity to DTO.
@@ -33,9 +34,11 @@ public class InitiativeMappings(
             ImageUrl = entity.ImageUrl,
             BannerUrl = entity.BannerUrl,
             Enabled = entity.Enabled,
-            InitiativeContacts = entity.InitiativeContacts?.Select(initiativeContactMappings.Map),
-            InitiativeLocations = entity.InitiativeLocations?.Select(initiativeLocationMappings.Map),
-            InitiativeUsers = entity.InitiativeUsers?.Select(initiativeUserMappings.Map),
+            Coordinate = [entity.Coordinate.X, entity.Coordinate.Y],
+            Contacts = entity.InitiativeContacts?.Select(initiativeContactMappings.Map),
+            Locations = entity.InitiativeLocations?.Select(initiativeLocationMappings.Map),
+            Users = entity.InitiativeUsers?.Select(initiativeUserMappings.Map),
+            Tags = entity.InitiativeTags?.Select(e => tagMappings.Map(e.Tag)),
         };
     }
 
@@ -56,9 +59,9 @@ public class InitiativeMappings(
             ImageUrl = dto.ImageUrl,
             BannerUrl = dto.BannerUrl,
             Enabled = dto?.Enabled ?? true,
-            InitiativeContacts = [.. dto.InitiativeContacts?.Select(initiativeContactMappings.Map)],
-            InitiativeLocations = [.. dto.InitiativeLocations?.Select(initiativeLocationMappings.Map)],
-            InitiativeUsers = [.. dto.InitiativeUsers?.Select(initiativeUserMappings.Map)],
+            InitiativeContacts = [.. dto.Contacts?.Select(initiativeContactMappings.Map)],
+            InitiativeLocations = [.. dto.Locations?.Select(initiativeLocationMappings.Map)],
+            InitiativeUsers = [.. dto.Users?.Select(initiativeUserMappings.Map)],
         };
     }
 }

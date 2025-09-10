@@ -25,6 +25,8 @@ public static class ConfigAppServices
         services.AddScoped<IInitiativeLocationService, InitiativeLocationService>();
         services.AddScoped<IInitiativeService, InitiativeService>();
         services.AddScoped<IInitiativeUserService, InitiativeUserService>();
+        services.AddScoped<ITagService, TagService>();
+        services.AddScoped<IInitiativeTagService, InitiativeTagService>();
 
         return services;
     }

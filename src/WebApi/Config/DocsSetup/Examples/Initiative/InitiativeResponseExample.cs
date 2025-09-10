@@ -22,8 +22,8 @@ public class InitiativeResponseExample : IExamplesProvider<InitiativeDto>
         Description = "example",
         CreationDate = DateTime.Now,
         Enabled = true,
-        InitiativeLocations = null,
-        InitiativeContacts = null,
-        InitiativeUsers = null,
+        Locations = null,
+        Contacts = null,
+        Users = null,
     };
 }

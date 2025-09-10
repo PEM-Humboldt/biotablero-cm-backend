@@ -23,7 +23,7 @@ using Swashbuckle.AspNetCore.Filters;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
-/// Initiatives controller.
+/// Initiative controller.
 /// </summary>
 /// <param name="webTools">General web tools.</param>
 /// <param name="entityService">Entity service.</param>
@@ -64,6 +64,19 @@ public class InitiativeController(
     }
 
     /// <summary>
+    /// Get entity polygon.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Polygon entity.</returns>
+    [HttpGet("Polygon/{id}")]
+    public async Task<IActionResult> GetPolygon(int id, CancellationToken ct)
+    {
+        var response = await entityService.GetPolygonAsync(id, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
     /// Add entity.
     /// </summary>
     /// <param name="requestData">Request data.</param>
@@ -95,6 +108,26 @@ public class InitiativeController(
     public async Task<IActionResult> Post(int id, [FromBody] InitiativeDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
+    /// Update entity polygon.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="request">Polygon request.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated entity data.</returns>
+    [HttpPost("Polygon/{id}")]
+    [Consumes("text/json")]
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [SwaggerRequestExample(typeof(string), typeof(InitiativePolygonEditRequestExample))]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
+    public async Task<IActionResult> UpdatePolygon(int id, [FromBody] string request, CancellationToken ct)
+    {
+        var response = await entityService.UpdatePolygonAsync(id, request, ct);
         return webTools.CustomResponse(response);
     }
 
