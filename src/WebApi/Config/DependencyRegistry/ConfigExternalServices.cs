@@ -1,6 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
-using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam;
