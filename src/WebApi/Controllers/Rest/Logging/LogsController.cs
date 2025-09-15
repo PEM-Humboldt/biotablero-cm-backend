@@ -69,11 +69,16 @@ public class LogsController(IWebTools webTools,
     [HttpGet("xlsx")]
     public async Task<IActionResult> GetReportExcel(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct)
     {
-        var fileBytes = await entityService.GenerateExcel(queryOptions, ct);
+        var response = await entityService.GenerateExcel(queryOptions, ct);
+
+        if (!response.Success)
+        {
+            return webTools.CustomResponse(response);
+        }
 
         return File(
-            fileBytes,
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "report.xlsx");
+                (byte[])response.ResponseBody,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "report.xlsx");
     }
 }

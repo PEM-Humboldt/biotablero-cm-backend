@@ -26,24 +26,22 @@ public class LogsReportExcelService : IReportService<LogDto>
         // Encabezados
         worksheet.Cell(1, 1).Value = "Id";
         worksheet.Cell(1, 2).Value = "Fecha de creación";
-        worksheet.Cell(1, 3).Value = "Tipo";
-        worksheet.Cell(1, 4).Value = "Mensaje";
-        worksheet.Cell(1, 5).Value = "Usuario";
-        worksheet.Cell(1, 6).Value = "IP origen";
-        worksheet.Cell(1, 7).Value = "Navegador";
-        worksheet.Cell(1, 8).Value = "Detalles";
+        worksheet.Cell(1, 3).Value = "Usuario";
+        worksheet.Cell(1, 4).Value = "IP origen";
+        worksheet.Cell(1, 5).Value = "Navegador";
+        worksheet.Cell(1, 6).Value = "Tipo";
+        worksheet.Cell(1, 7).Value = "Mensaje";
 
         int row = 2;
         foreach (var item in dataList)
         {
             worksheet.Cell(row, 1).Value = item.Id.ToString();
             worksheet.Cell(row, 2).Value = item.TimeStamp;
-            worksheet.Cell(row, 3).Value = item.Type.ToString();
-            worksheet.Cell(row, 4).Value = item.Message;
-            worksheet.Cell(row, 5).Value = item.UserName;
-            worksheet.Cell(row, 6).Value = item.ClientIp;
-            worksheet.Cell(row, 7).Value = item.ClientAgent;
-            worksheet.Cell(row, 8).Value = item.Properties;
+            worksheet.Cell(row, 3).Value = item.UserName;
+            worksheet.Cell(row, 4).Value = item.ClientIp;
+            worksheet.Cell(row, 5).Value = item.ClientAgent;
+            worksheet.Cell(row, 6).Value = item.Type.ToString();
+            worksheet.Cell(row, 7).Value = item.Message;
             row++;
         }
 

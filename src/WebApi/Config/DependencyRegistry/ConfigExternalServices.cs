@@ -8,6 +8,7 @@ using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
+using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Logging;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,6 +25,7 @@ public static class ConfigExternalServices
     public static IServiceCollection AddExternalServices(this IServiceCollection services)
     {
         // Custom repositories
+        services.AddScoped<ILogRepository, LogRepository>();
         services.AddScoped<IInitiativeRepository, InitiativeRepository>();
         services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
 

@@ -11,6 +11,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
+using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
@@ -20,30 +21,71 @@ using Microsoft.OData;
 /// <summary>
 /// System logs service.
 /// </summary>
-public class LogService(IRepository<LogEntity> entityRepository,
-    IMapper<LogEntity, LogDto> mapper,
-    IReportService<LogDto> entityReportService) : ServiceRead<LogEntity, LogDto, Guid, LogSpec>(entityRepository, mapper), ILogService
+public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogService
 {
+    private const int ReportMaxRows = 10000;
+    private new readonly ILogRepository entityRepository;
+    private readonly IReportService<LogDto> entityReportService;
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="entityRepository">Entity repository.</param>
+    /// <param name="mapper">Entity mapper.</param>
+    /// <param name="entityReportService">Entity report service.</param>
+    public LogService(
+        ILogRepository entityRepository,
+        IMapper<LogEntity, LogDto> mapper,
+        IReportService<LogDto> entityReportService)
+        : base(entityRepository, mapper)
+    {
+        this.entityRepository = entityRepository;
+        this.entityReportService = entityReportService;
+    }
+
+    /// <summary>
+    /// Get elements list (OData).
+    /// </summary>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct = default)
+    {
+        var query = entityRepository.GetQueryable();
+        query = entityRepository.IncludeOdataFilters(query);
+
+        return await GetOdataListByQueryAsync(query, queryOptions, ct);
+    }
+
     /// <summary>
     /// Generate Excel report.
     /// </summary>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<byte[]> GenerateExcel(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct)
+    public async Task<CustomWebResponse> GenerateExcel(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct)
     {
-        var query = entityRepository.GetQueryable();
-
         var defaultSettings = new ODataQuerySettings()
         {
             HandleNullPropagation = HandleNullPropagationOption.True,
         };
+
+        var query = entityRepository.GetQueryable();
+        query = entityRepository.IncludeOdataFilters(query);
 
         try
         {
             query = AddOdataQueryFilterAndOrder(query, queryOptions, defaultSettings);
 
             var totalItems = await entityRepository.QueryCountAsync(query, ct);
+
+            if (totalItems > ReportMaxRows)
+            {
+                return new(true)
+                {
+                    Message = $"The parameters generate a file with more than {ReportMaxRows} records.",
+                };
+            }
 
             // Get result
             var dataList = await entityRepository.QueryToListAsync(query, ct);
@@ -53,7 +95,10 @@ public class LogService(IRepository<LogEntity> entityRepository,
                 .Select(mapper.Map)
                 .ToList();
 
-            return entityReportService.GenerateReport(dataListDto);
+            return new()
+            {
+                ResponseBody = entityReportService.GenerateReport(dataListDto),
+            };
         }
         catch (ODataException)
         {
