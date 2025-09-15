@@ -59,4 +59,21 @@ public class LogsController(IWebTools webTools,
         var response = await entityService.GetListAsync(queryOptions, ct);
         return webTools.CustomResponse(response);
     }
+
+    /// <summary>
+    /// Download report in Excel format.
+    /// </summary>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Report file.</returns>
+    [HttpGet("xlsx")]
+    public async Task<IActionResult> GetReportExcel(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct)
+    {
+        var fileBytes = await entityService.GenerateExcel(queryOptions, ct);
+
+        return File(
+            fileBytes,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "report.xlsx");
+    }
 }
