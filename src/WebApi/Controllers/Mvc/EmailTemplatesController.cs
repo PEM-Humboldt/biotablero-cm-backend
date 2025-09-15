@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 /// Email Templates controller.
 /// </summary>
 [Route("Email")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class EmailTemplatesController : Controller
 {
     /// <summary>
