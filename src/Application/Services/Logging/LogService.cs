@@ -65,17 +65,12 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogSer
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> GenerateExcel(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct)
     {
-        var defaultSettings = new ODataQuerySettings()
-        {
-            HandleNullPropagation = HandleNullPropagationOption.True,
-        };
-
         var query = entityRepository.GetQueryable();
         query = entityRepository.IncludeOdataFilters(query);
 
         try
         {
-            query = AddOdataQueryFilterAndOrder(query, queryOptions, defaultSettings);
+            query = AddOdataQueryFilterAndOrder(query, queryOptions, DefaultOdataQuerySettings);
 
             var totalItems = await entityRepository.QueryCountAsync(query, ct);
 
@@ -100,9 +95,12 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogSer
                 ResponseBody = entityReportService.GenerateReport(dataListDto),
             };
         }
-        catch (ODataException)
+        catch (ODataException ex)
         {
-            return null;
+            return new(true)
+            {
+                Message = $"Invalid filter: {ex.Message}",
+            };
         }
     }
 }

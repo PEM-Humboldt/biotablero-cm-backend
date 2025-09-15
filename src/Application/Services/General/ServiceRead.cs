@@ -34,6 +34,14 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     where TS : GeneralSpecification<TI, TE>
 {
     /// <summary>
+    /// Default OData query settings.
+    /// </summary>
+    protected static readonly ODataQuerySettings DefaultOdataQuerySettings = new()
+    {
+        HandleNullPropagation = HandleNullPropagationOption.True,
+    };
+
+    /// <summary>
     /// Entity repository.
     /// </summary>
     private protected readonly IRepository<TE> entityRepository = entityRepository;
@@ -122,18 +130,13 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <returns>Process result.</returns>
     private protected async Task<CustomWebResponse> GetOdataListByQueryAsync(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
-        var defaultSettings = new ODataQuerySettings()
-        {
-            HandleNullPropagation = HandleNullPropagationOption.True,
-        };
-
         try
         {
-            query = AddOdataQueryFilterAndOrder(query, queryOptions, defaultSettings);
+            query = AddOdataQueryFilterAndOrder(query, queryOptions, DefaultOdataQuerySettings);
 
             var totalItems = await entityRepository.QueryCountAsync(query, ct);
 
-            query = AddOdataQueryPagination(query, queryOptions, defaultSettings);
+            query = AddOdataQueryPagination(query, queryOptions, DefaultOdataQuerySettings);
 
             // Get result
             var dataList = await entityRepository.QueryToListAsync(query, ct);
