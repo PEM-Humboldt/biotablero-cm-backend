@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Application.DTOs.Reports;
+﻿namespace IAVH.BioTablero.CM.Application.DTOs.Reports;
 
 /// <summary>
 /// Report column configuration.

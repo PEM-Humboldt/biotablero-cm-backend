@@ -1,7 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 
-using System.Collections.Generic;
-
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
@@ -17,5 +15,5 @@ public interface IReportService<TDto>
     /// <param name="dataList">DTO object list.</param>
     /// <param name="sheetName">Sheet name.</param>
     /// <returns>Report data.</returns>
-    byte[] GenerateReport(IEnumerable<TDto> dataList, string sheetName = "report");
+    byte[] GenerateReport(TDto[] dataList, string sheetName = "report");
 }

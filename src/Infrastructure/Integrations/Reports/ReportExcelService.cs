@@ -18,15 +18,11 @@ using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Interfaces;
 /// Logs report service interface (Excel).
 /// </summary>
 /// <typeparam name="TDto">DTO class type.</typeparam>
-public class ReportExcelService<TDto> : IReportService<TDto>
+/// <param name="serviceProvider">Service provider.</param>
+public class ReportExcelService<TDto>(IServiceProvider serviceProvider) : IReportService<TDto>
     where TDto : class, IDto
 {
-    private readonly IServiceProvider serviceProvider;
-
-    public ReportExcelService(IServiceProvider serviceProvider)
-    {
-        this.serviceProvider = serviceProvider;
-    }
+    private readonly IServiceProvider serviceProvider = serviceProvider;
 
     /// <summary>
     /// Generate report.
@@ -34,7 +30,7 @@ public class ReportExcelService<TDto> : IReportService<TDto>
     /// <param name="dataList">DTO object list.</param>
     /// <param name="sheetName">Sheet name.</param>
     /// <returns>Report data.</returns>
-    public byte[] GenerateReport(IEnumerable<TDto> dataList, string sheetName = "report")
+    public byte[] GenerateReport(TDto[] dataList, string sheetName = "report")
     {
         using var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add(sheetName);
@@ -106,7 +102,7 @@ public class ReportExcelService<TDto> : IReportService<TDto>
         }
 
         // Create table
-        var lastRow = Math.Max(1, 1 + dataList.Count());
+        var lastRow = Math.Max(1, 1 + dataList.Length);
         var tableRange = worksheet.Range(1, 1, lastRow, mappings.Count);
         tableRange.CreateTable();
 

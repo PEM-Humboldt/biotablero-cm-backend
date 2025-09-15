@@ -88,7 +88,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogSer
             // Map DTO list
             var dataListDto = dataList
                 .Select(mapper.Map)
-                .ToList();
+                .ToArray();
 
             return new()
             {
