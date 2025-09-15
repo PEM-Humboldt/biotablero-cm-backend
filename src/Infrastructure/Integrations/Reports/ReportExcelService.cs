@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,6 +11,8 @@ using ClosedXML.Excel;
 
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Config.General;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Interfaces;
 
 /// <summary>
 /// Logs report service interface (Excel).
@@ -18,6 +21,13 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 public class ReportExcelService<TDto> : IReportService<TDto>
     where TDto : class, IDto
 {
+    private readonly IServiceProvider serviceProvider;
+
+    public ReportExcelService(IServiceProvider serviceProvider)
+    {
+        this.serviceProvider = serviceProvider;
+    }
+
     /// <summary>
     /// Generate report.
     /// </summary>
@@ -29,20 +39,75 @@ public class ReportExcelService<TDto> : IReportService<TDto>
         using var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add(sheetName);
 
+        // Get config mappings
+        var map = serviceProvider.GetService(typeof(IReportConfig<TDto>)) as IReportConfig<TDto>;
+        var builder = new ReportMapBuilder<TDto>();
+        map?.Configure(builder);
+        var mappings = builder.GetMappings();
+
         var properties = typeof(TDto).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
+        var orderedProps = properties
+            .OrderBy(p => mappings.ContainsKey(p.Name) ? mappings[p.Name].Index : int.MaxValue)
+            .ToList();
+
         // Add headers
-        for (int col = 0; col < properties.Length; col++)
+        int col = 1;
+        foreach (var prop in orderedProps)
         {
-            worksheet.Cell(1, col + 1).Value = properties[col].Name;
+            if (mappings.ContainsKey(prop.Name) && mappings[prop.Name].Visible)
+            {
+                var header = mappings.ContainsKey(prop.Name)
+                    ? mappings[prop.Name].Header
+                    : prop.Name;
+
+                worksheet.Cell(1, col).Value = header;
+                col++;
+            }
         }
 
         // Insert data
-        worksheet.Cell(2, 1).InsertData(dataList);
+        int row = 2;
+        foreach (var item in dataList)
+        {
+            col = 1;
+            foreach (var prop in orderedProps)
+            {
+                if (mappings.ContainsKey(prop.Name) && mappings[prop.Name].Visible)
+                {
+                    var value = prop.GetValue(item);
+
+                    if (value == null)
+                    {
+                        worksheet.Cell(row, col).Value = string.Empty;
+                    }
+                    else if (value is DateTime dt)
+                    {
+                        worksheet.Cell(row, col).Value = dt;
+                    }
+                    else if (value is bool b)
+                    {
+                        worksheet.Cell(row, col).Value = b;
+                    }
+                    else if (value is int or long or double or decimal or float)
+                    {
+                        worksheet.Cell(row, col).Value = Convert.ToDouble(value, CultureInfo.CurrentCulture);
+                    }
+                    else
+                    {
+                        worksheet.Cell(row, col).Value = value.ToString();
+                    }
+
+                    col++;
+                }
+            }
+
+            row++;
+        }
 
         // Create table
         var lastRow = Math.Max(1, 1 + dataList.Count());
-        var tableRange = worksheet.Range(1, 1, lastRow, properties.Length);
+        var tableRange = worksheet.Range(1, 1, lastRow, mappings.Count);
         tableRange.CreateTable();
 
         worksheet.Columns().AdjustToContents();
