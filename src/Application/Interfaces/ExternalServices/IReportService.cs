@@ -15,6 +15,7 @@ public interface IReportService<TDto>
     /// Generate report.
     /// </summary>
     /// <param name="dataList">DTO object list.</param>
+    /// <param name="sheetName">Sheet name.</param>
     /// <returns>Report data.</returns>
-    byte[] GenerateReport(IEnumerable<TDto> dataList);
+    byte[] GenerateReport(IEnumerable<TDto> dataList, string sheetName = "report");
 }

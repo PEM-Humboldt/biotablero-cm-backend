@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
-using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
@@ -30,10 +29,10 @@ public static class ConfigExternalServices
         services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
 
         // External services
+        services.AddScoped(typeof(IReportService<>), typeof(ReportExcelService<>));
         services.AddScoped<IStorageService, StorageService>();
         services.AddSingleton<IIamService, IamService>();
         services.AddSingleton<IEmailService, EmailService>();
-        services.AddScoped<IReportService<LogDto>, LogsReportExcelService>();
 
         return services;
     }
