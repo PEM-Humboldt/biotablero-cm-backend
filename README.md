@@ -38,6 +38,8 @@ dotnet tool install --global dotnet-ef --version 8.0.18
 dotnet restore
 ```
 
+> **Note:** After installing `dotnet-ef`, verify that the command works and is correctly configured in the `PATH` variable.
+
 ### Run database migrations
 
 ```sh
