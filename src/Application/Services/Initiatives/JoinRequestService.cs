@@ -48,7 +48,6 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
-    /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="initiativeUserRepository">Initiative user repository.</param>
