@@ -8,9 +8,14 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 public class JoinInvitationGuestDto : IDto
 {
     /// <summary>
+    /// Item identifier.
+    /// </summary>
+    public int? Id { get; set; }
+
+    /// <summary>
     /// Join Invitation identifier.
     /// </summary>
-    public int JoinInvitationId { get; set; }
+    public int? JoinInvitationId { get; set; }
 
     /// <summary>
     /// Guest Email.

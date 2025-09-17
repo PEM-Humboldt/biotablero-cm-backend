@@ -23,7 +23,7 @@ public class JoinInvitationDto : IDto
     /// <summary>
     /// Creator user identifier.
     /// </summary>
-    public string CreatorUserName { get; set; }
+    public string Creator { get; set; }
 
     /// <summary>
     /// Join Invitation message.
