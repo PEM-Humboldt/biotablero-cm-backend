@@ -34,4 +34,20 @@ public interface IIamService
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Users data.</returns>
     Task<IEnumerable<ExternalUser>> GetUsersDataAsync(string[] usernames, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get user data by email.
+    /// </summary>
+    /// <param name="email">User email.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>User data.</returns>
+    Task<ExternalUser> GetUserDataByEmailAsync(string email, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get users data by emails.
+    /// </summary>
+    /// <param name="emails">User emails list.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Users data.</returns>
+    Task<IEnumerable<ExternalUser>> GetUsersDataByEmailsAsync(string[] emails, CancellationToken ct = default);
 }
