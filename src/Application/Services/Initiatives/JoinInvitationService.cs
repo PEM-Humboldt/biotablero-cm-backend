@@ -88,11 +88,10 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// <summary>
     /// Add element.
     /// </summary>
-    /// <param name="userName">Creator user name.</param>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> AddAsync(string userName, JoinInvitationDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(JoinInvitationDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
@@ -139,7 +138,6 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
         // Build entity data
         var entity = mapper.Map(entityData);
-        entity.Creator = userName;
         entity.CreationDate = DateTime.Now;
 
         // Save data
