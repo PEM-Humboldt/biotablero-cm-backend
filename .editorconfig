@@ -117,6 +117,10 @@ dotnet_diagnostic.CA1819.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1056
 dotnet_diagnostic.CA1056.severity = none
 
+# Normalize strings to uppercase
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1308
+dotnet_diagnostic.CA1308.severity = none
+
 # --------------------- #
 # Custom StyleCop rules #
 # --------------------- #
