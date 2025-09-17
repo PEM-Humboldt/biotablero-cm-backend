@@ -31,6 +31,8 @@ public static class ConfigMappings
         services.AddSingleton<IMapper<InitiativeUser, InitiativeUserDto>, InitiativeUserMappings>();
         services.AddSingleton<IMapper<Tag, TagDto>, TagMappings>();
         services.AddSingleton<IMapper<JoinRequest, JoinRequestDto>, JoinRequestMappings>();
+        services.AddSingleton<IMapper<JoinInvitation, JoinInvitationDto>, JoinInvitationMappings>();
+        services.AddSingleton<IMapper<JoinInvitationGuest, JoinInvitationGuestDto>, JoinInvitationGuestMappings>();
 
         return services;
     }

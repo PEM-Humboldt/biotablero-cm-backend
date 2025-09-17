@@ -18,7 +18,7 @@ public class JoinInvitationDto : IDto
     /// <summary>
     /// Initiative identifier.
     /// </summary>
-    public int? InitiativeId { get; set; }
+    public int InitiativeId { get; set; }
 
     /// <summary>
     /// Creator user identifier.

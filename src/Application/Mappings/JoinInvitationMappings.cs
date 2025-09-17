@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Application.Mappings;
+﻿namespace IAVH.BioTablero.CM.Application.Mappings;
 
 using System;
 using System.Linq;
@@ -44,7 +44,7 @@ public class JoinInvitationMappings(
 
         return new()
         {
-            InitiativeId = dto?.InitiativeId ?? 0,
+            InitiativeId = dto.InitiativeId,
             Creator = dto.Creator,
             Message = dto.Message,
             CreationDate = dto.CreationDate,
