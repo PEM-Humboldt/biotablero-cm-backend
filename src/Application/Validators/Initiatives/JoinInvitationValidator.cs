@@ -18,11 +18,6 @@ public class JoinInvitationValidator : AbstractValidator<JoinInvitationDto>
             .NotNull()
                 .WithMessage("Entity data cannot be null");
 
-        RuleFor(dto => dto.Creator)
-            .NotEmpty()
-                .WithMessage("Creator user name is required")
-            .MaximumLength(75);
-
         RuleFor(dto => dto.Message)
             .MaximumLength(200);
 

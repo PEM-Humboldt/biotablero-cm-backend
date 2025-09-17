@@ -1,0 +1,25 @@
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
+
+using System.Linq;
+
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+
+using Microsoft.EntityFrameworkCore;
+
+/// <summary>
+/// Custom Join Invitation repository.
+/// </summary>
+/// <param name="dbContext">General Database Context.</param>
+public class JoinInvitationRepository(GeneralContext dbContext) : Repository<JoinInvitation>(dbContext), IJoinInvitationRepository
+{
+    /// <summary>
+    /// Include OData custom entities.
+    /// </summary>
+    /// <param name="query">Linq Query.</param>
+    /// <returns>Modified Linq query.</returns>
+    public IQueryable<JoinInvitation> IncludeOdataEntities(IQueryable<JoinInvitation> query) =>
+        query
+            .Include(e => e.Initiative)
+            .Include(e => e.Guests);
+}

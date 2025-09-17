@@ -30,6 +30,7 @@ public static class ConfigExternalServices
         services.AddScoped<ILogRepository, LogRepository>();
         services.AddScoped<IInitiativeRepository, InitiativeRepository>();
         services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
+        services.AddScoped<IJoinInvitationRepository, JoinInvitationRepository>();
 
         // External services
         services.AddScoped(typeof(IReportService<>), typeof(ReportExcelService<>));

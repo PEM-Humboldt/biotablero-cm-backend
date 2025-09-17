@@ -28,6 +28,7 @@ public static class ConfigAppServices
         services.AddScoped<ITagService, TagService>();
         services.AddScoped<IInitiativeTagService, InitiativeTagService>();
         services.AddScoped<IJoinRequestService, JoinRequestService>();
+        services.AddScoped<IJoinInvitationService, JoinInvitationService>();
 
         return services;
     }
