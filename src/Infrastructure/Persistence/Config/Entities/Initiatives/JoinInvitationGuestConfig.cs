@@ -34,7 +34,7 @@ public class JoinInvitationGuestConfig : IEntityTypeConfiguration<JoinInvitation
             .IsRequired();
 
         builder.HasOne(e => e.JoinInvitation)
-            .WithMany(p => p.JoinInvitationGuests)
+            .WithMany(p => p.Guests)
             .HasForeignKey(e => e.JoinInvitationId);
 
         builder

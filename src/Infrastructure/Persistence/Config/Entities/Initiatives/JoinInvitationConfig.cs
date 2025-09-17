@@ -28,7 +28,7 @@ public class JoinInvitationConfig : IEntityTypeConfiguration<JoinInvitation>
             .HasColumnName("initiative_id")
             .IsRequired();
 
-        builder.Property(i => i.CreatorUserName)
+        builder.Property(i => i.Creator)
             .HasColumnName("creator_user_name")
             .HasMaxLength(75)
             .IsRequired();

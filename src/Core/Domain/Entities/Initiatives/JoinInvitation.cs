@@ -19,7 +19,7 @@ public class JoinInvitation : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Creator user identifier.
     /// </summary>
-    public string CreatorUserName { get; set; }
+    public string Creator { get; set; }
 
     /// <summary>
     /// Join Invitation message.
@@ -39,5 +39,5 @@ public class JoinInvitation : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Join Invitation Guests relationship.
     /// </summary>
-    public ICollection<JoinInvitationGuest> JoinInvitationGuests { get; init; }
+    public ICollection<JoinInvitationGuest> Guests { get; init; }
 }
