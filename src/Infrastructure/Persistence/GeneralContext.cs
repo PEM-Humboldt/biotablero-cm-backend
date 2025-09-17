@@ -106,6 +106,16 @@ public sealed class GeneralContext : DbContext
     /// </summary>
     public DbSet<JoinRequestStatus> JoinRequestsStatuses { get; set; }
 
+    /// <summary>
+    /// Join invitations DbSet.
+    /// </summary>
+    public DbSet<JoinInvitation> JoinInvitations { get; set; }
+
+    /// <summary>
+    /// Join invitation guests DbSet.
+    /// </summary>
+    public DbSet<JoinInvitationGuest> JoinInvitationGuests { get; set; }
+
     #endregion
 
     /// <summary>
