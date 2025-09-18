@@ -11,6 +11,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
@@ -79,7 +80,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
             return new(true)
             {
                 StatusCode = HttpStatusCode.NotFound,
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
     }

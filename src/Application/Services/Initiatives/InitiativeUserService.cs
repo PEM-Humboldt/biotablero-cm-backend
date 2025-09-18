@@ -13,6 +13,7 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
@@ -190,7 +191,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -243,7 +244,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
