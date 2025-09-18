@@ -3,6 +3,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -136,20 +137,51 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
             };
         }
 
-        // Build entity data
-        var entity = mapper.Map(entityData);
-        entity.CreationDate = DateTime.Now;
+        // Send invitation emails
+        var result = await SendNotificationJoinInvitation(emails, initiative, entityData.Message, ct);
 
-        // Save data
-        entity = await entityRepository.AddAsync(entity, ct);
-
-        entityData = mapper.Map(entity);
-
-        logger.AddLog(LogType.Create, "Added initiative join invitation: {@entityData}", entityData);
-
-        return new CustomWebResponse()
+        if (result)
         {
-            ResponseBody = entityData,
+            // Build entity data
+            var entity = mapper.Map(entityData);
+            entity.CreationDate = DateTime.Now;
+
+            // Save data
+            entity = await entityRepository.AddAsync(entity, ct);
+
+            entityData = mapper.Map(entity);
+
+            logger.AddLog(LogType.Create, "Added initiative join invitation: {@entityData}", entityData);
+
+            return new CustomWebResponse()
+            {
+                ResponseBody = entityData,
+            };
+        }
+
+        return new CustomWebResponse(true)
+        {
+            Message = "Failed emails sending.",
+            StatusCode = HttpStatusCode.InternalServerError,
         };
+    }
+
+    private async Task<bool> SendNotificationJoinInvitation(string[] emails, Initiative initiative, string emailMessage, CancellationToken ct = default)
+    {
+        var emailData = new DefaultEmailData
+        {
+            Subject = string.Format(CultureInfo.InvariantCulture, "Invitación a unirse a {0}", initiative.Name),
+            Content = string.Format(CultureInfo.InvariantCulture, "Has sido invitado a unirte a la iniciativa '{0}'.<br /> {1}.", initiative.Name, emailMessage),
+        };
+
+        var receivers = emails
+            .Select(e => new CustomEmailAddress(e))
+            .ToArray();
+
+        var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailData);
+
+        var response = await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
+
+        return !string.IsNullOrEmpty(response);
     }
 }
