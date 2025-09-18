@@ -7,6 +7,6 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// <summary>
 /// Tag service interface.
 /// </summary>
-public interface ITagService : IRead<Tag, TagDto, int>, IAdd<TagDto>, IUpdate<TagDto, int>, IDelete<int>
+public interface ITagService : IRead<Tag, int>, IAdd<TagDto>, IUpdate<TagDto, int>, IDelete<int>
 {
 }
