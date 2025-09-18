@@ -467,7 +467,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, $"{(disable ? "Disabled" : "Enabled")} initiative: {@EntityData}", entityData);
+        logger.AddLog(LogType.Update, string.Concat($"{(disable ? "Disabled" : "Enabled")}", "initiative: {@EntityData}"), entityData);
 
         return new CustomWebResponse()
         {
