@@ -25,9 +25,6 @@ using Microsoft.OData;
 /// <typeparam name="TDto">DTO class type.</typeparam>
 /// <typeparam name="TI">Entity identifier type.</typeparam>
 /// <typeparam name="TS">General Specification type.</typeparam>
-/// <remarks>
-/// Initialize service.
-/// </remarks>
 public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityRepository, IMapper<TE, TDto> mapper) : IRead<TE, TI>
     where TDto : class, IDto
     where TI : notnull
