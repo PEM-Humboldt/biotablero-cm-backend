@@ -24,12 +24,9 @@ public class IntegerColumnWriter(string propertyName, NpgsqlDbType dbType = Npgs
     /// <returns>Scalar property value.</returns>
     public override object GetValue(LogEvent logEvent, IFormatProvider formatProvider = null)
     {
-        if (logEvent != null && logEvent.Properties.TryGetValue(propertyName, out var value))
+        if (logEvent != null && logEvent.Properties.TryGetValue(propertyName, out var value) && value is ScalarValue scalar && scalar.Value is int intValue)
         {
-            if (value is ScalarValue scalar && scalar.Value is int intValue)
-            {
-                return intValue;
-            }
+            return intValue;
         }
 
         throw new InvalidCastException("Property is missing or not a Integer.");

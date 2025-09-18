@@ -1,14 +1,22 @@
+# Ignore GIT folder and files
 .git/
 .gitignore
 .gitattributes
+
+# Ignore docker files
 .dockerignore
-.vscode/
-docs/
-scripts/
 Dockerfile*
-README.md
+docker-compose*
+
+# Ignore some project files
 **/[b|B]in/
 **/[O|o]bj/
 **/*.env
+**/*.md
+LICENSE
+
+# Ignore folders with external data
 .github/
-.docker/
+.sonarqube/
+.vscode/
+docker/

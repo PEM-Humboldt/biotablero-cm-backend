@@ -14,7 +14,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// <summary>
 /// Initiative service interface.
 /// </summary>
-public interface IInitiativeService : IRead<Initiative, InitiativeDto, int>, IAdd<InitiativeDto>, IUpdate<InitiativeDto, int>, IDisable<int>
+public interface IInitiativeService : IRead<Initiative, int>, IAdd<InitiativeDto>, IUpdate<InitiativeDto, int>, IDisable<int>
 {
     /// <summary>
     /// Upload image.

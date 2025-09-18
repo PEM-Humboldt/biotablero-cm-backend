@@ -17,6 +17,7 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Email;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Iam;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
@@ -174,7 +175,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Create, "Added initiative join request: {@entityData}", entityData);
+        logger.AddLog(LogType.Create, "Added initiative join request: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -198,7 +199,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -265,7 +266,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
 
         SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
 
-        logger.AddLog(LogType.Update, "Updated initiative join request: {@entityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated initiative join request: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {

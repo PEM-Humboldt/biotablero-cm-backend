@@ -684,3 +684,5 @@ FodyWeavers.xsd
 .vscode
 # Local environment variables file
 .env
+# SonarQube
+.sonarqube
