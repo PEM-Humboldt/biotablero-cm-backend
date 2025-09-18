@@ -27,7 +27,7 @@ using Microsoft.OData;
 /// <remarks>
 /// Initialize service.
 /// </remarks>
-public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityRepository, IMapper<TE, TDto> mapper) : IRead<TE, TDto, TI>
+public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityRepository, IMapper<TE, TDto> mapper) : IRead<TE, TI>
     where TDto : class, IDto
     where TI : notnull
     where TE : BaseEntity<TI>, IAggregateRoot
