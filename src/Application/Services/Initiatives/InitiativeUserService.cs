@@ -197,26 +197,20 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         // Validate number of leaders
         var totalUserLeaders = await entityRepository.CountAsync(InitiativeUserSpec.LevelSpec(id, entity.InitiativeId, (int)InitiativeUserLevelEnum.Leader), ct);
 
-        if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader)
+        if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader && totalUserLeaders is < 1)
         {
-            if (totalUserLeaders is < 1)
+            return new CustomWebResponse(true)
             {
-                return new CustomWebResponse(true)
-                {
-                    Message = $"At least one leader is required per initiative",
-                };
-            }
+                Message = $"At least one leader is required per initiative",
+            };
         }
 
-        if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader)
+        if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader && totalUserLeaders >= MaxLeadersByInitiative)
         {
-            if (totalUserLeaders >= MaxLeadersByInitiative)
+            return new CustomWebResponse(true)
             {
-                return new CustomWebResponse(true)
-                {
-                    Message = $"Initiatives cannot have more than {MaxLeadersByInitiative} leaders",
-                };
-            }
+                Message = $"Initiatives cannot have more than {MaxLeadersByInitiative} leaders",
+            };
         }
 
         // Update entity data
