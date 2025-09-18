@@ -154,7 +154,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Create, "Added initiative user: {@entityData}", entityData);
+        logger.AddLog(LogType.Create, "Added initiative user: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -221,7 +221,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, "Updated initiative user: {@entityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated initiative user: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -266,7 +266,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Delete, "Deleted initiative user: {@entityData}", entityData);
+        logger.AddLog(LogType.Delete, "Deleted initiative user: {@EntityData}", entityData);
 
         return new CustomWebResponse();
     }

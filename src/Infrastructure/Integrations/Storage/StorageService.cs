@@ -126,7 +126,7 @@ public class StorageService : IStorageService
 
             if (ms is null || ms.ToArray().Length < 1)
             {
-                logger.Error("Error: Document {@docName} not found", fileName);
+                logger.Error("Error: Document {@DocName} not found", fileName);
                 return null;
             }
 

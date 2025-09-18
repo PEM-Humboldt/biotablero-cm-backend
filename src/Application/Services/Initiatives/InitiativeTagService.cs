@@ -95,7 +95,7 @@ public class InitiativeTagService : IInitiativeTagService
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
 
-        logger.AddLog(LogType.Create, "Added initiative tag relationship: {@entityData}", entity);
+        logger.AddLog(LogType.Create, "Added initiative tag relationship: {@EntityData}", entity);
 
         return new CustomWebResponse();
     }
@@ -121,7 +121,7 @@ public class InitiativeTagService : IInitiativeTagService
 
         await entityRepository.DeleteAsync(entity, ct);
 
-        logger.AddLog(LogType.Delete, "Deleted initiative tag relationship: {@entityData}", entity);
+        logger.AddLog(LogType.Delete, "Deleted initiative tag relationship: {@EntityData}", entity);
 
         return new CustomWebResponse();
     }
