@@ -3,7 +3,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
@@ -11,7 +10,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 /// <summary>
 /// Location service interface.
 /// </summary>
-public interface ILocationService : IRead<Location, LocationDto, int>
+public interface ILocationService : IRead<Location, int>
 {
     /// <summary>
     /// Get locations by parent.

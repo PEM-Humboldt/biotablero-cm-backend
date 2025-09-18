@@ -118,7 +118,7 @@ public class EmailService : IEmailService
         logger
             .ForContext("CustomRecord", true)
             .ForContext("Type", (int)LogType.System)
-            .Information("Sended email: {@emailData}", emailData);
+            .Information("Sended email: {@EmailData}", emailData);
 
         return serverResponse;
     }

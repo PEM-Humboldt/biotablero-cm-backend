@@ -12,6 +12,9 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 /// </summary>
 public class AuthEndpointsDocumentFilter : IDocumentFilter
 {
+    private const string SwaggerStringType = "string";
+    private const string SwaggerPropertyClientId = "client_id";
+    private const string SwaggerPropertyGrantType = "grant_type";
     private static readonly IList<OpenApiTag> OperationTags = [new() { Name = "Auth server" }];
 
     private static readonly OpenApiResponses DefaultResponses = new()
@@ -56,12 +59,12 @@ public class AuthEndpointsDocumentFilter : IDocumentFilter
                                     Type = "object",
                                     Properties = new Dictionary<string, OpenApiSchema>
                                     {
-                                        ["username"] = new() { Type = "string", Default = new Microsoft.OpenApi.Any.OpenApiString(string.Empty) },
-                                        ["password"] = new() { Type = "string", Default = new Microsoft.OpenApi.Any.OpenApiString(string.Empty) },
-                                        ["client_id"] = new() { Type = "string", Default = new Microsoft.OpenApi.Any.OpenApiString(ClientId) },
-                                        ["grant_type"] = new() { Type = "string", Default = new Microsoft.OpenApi.Any.OpenApiString("password") },
+                                        ["username"] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString(string.Empty) },
+                                        ["password"] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString(string.Empty) },
+                                        [SwaggerPropertyClientId] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString(ClientId) },
+                                        [SwaggerPropertyGrantType] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString("password") },
                                     },
-                                    Required = new HashSet<string> { "username", "password", "client_id", "grant_type" },
+                                    Required = new HashSet<string> { "username", "password", SwaggerPropertyClientId, SwaggerPropertyGrantType },
                                 },
                             },
                         },
@@ -93,11 +96,11 @@ public class AuthEndpointsDocumentFilter : IDocumentFilter
                                     Type = "object",
                                     Properties = new Dictionary<string, OpenApiSchema>
                                     {
-                                        ["refresh_token"] = new() { Type = "string", Default = new Microsoft.OpenApi.Any.OpenApiString(string.Empty) },
-                                        ["client_id"] = new() { Type = "string", Default = new Microsoft.OpenApi.Any.OpenApiString(ClientId) },
-                                        ["grant_type"] = new() { Type = "string", Default = new Microsoft.OpenApi.Any.OpenApiString("refresh_token") },
+                                        ["refresh_token"] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString(string.Empty) },
+                                        [SwaggerPropertyClientId] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString(ClientId) },
+                                        [SwaggerPropertyGrantType] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString("refresh_token") },
                                     },
-                                    Required = new HashSet<string> { "refresh_token", "client_id", "grant_type" },
+                                    Required = new HashSet<string> { "refresh_token", SwaggerPropertyClientId, SwaggerPropertyGrantType },
                                 },
                             },
                         },

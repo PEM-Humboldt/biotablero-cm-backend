@@ -8,8 +8,6 @@ using Cronos;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Utils;
-using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -42,8 +40,6 @@ public class PendingJoinRequestsTask(
     {
         using var scope = serviceScopeFactory.CreateScope();
         var joinRequestService = scope.ServiceProvider.GetRequiredService<IJoinRequestService>();
-        var entityRepository = scope.ServiceProvider.GetRequiredService<IJoinRequestRepository>();
-        var iamService = scope.ServiceProvider.GetRequiredService<IIamService>();
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -62,7 +58,7 @@ public class PendingJoinRequestsTask(
             if (!stoppingToken.IsCancellationRequested)
             {
                 await joinRequestService.SendNotificationsOldPendingRequestsAsync(stoppingToken);
-                logger.AddLog(LogType.System, "Executed task: {@task}", TaskName);
+                logger.AddLog(LogType.System, "Executed task: {@Task}", TaskName);
             }
         }
     }

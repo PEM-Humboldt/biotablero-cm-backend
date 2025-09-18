@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.OData.Query;
 /// <summary>
 /// Join request service interface.
 /// </summary>
-public interface IJoinRequestService : IRead<JoinRequest, JoinRequestDto, int>, IAdd<JoinRequestDto>, IUpdate<JoinRequestDto, int>
+public interface IJoinRequestService : IRead<JoinRequest, int>, IAdd<JoinRequestDto>, IUpdate<JoinRequestDto, int>
 {
     /// <summary>
     /// Get elements list (OData).

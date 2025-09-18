@@ -58,7 +58,7 @@ public class WebViewTools(
 
         if (viewResult?.View == null)
         {
-            logger.Error("Razor view render error: {@viewName} view not found", viewName);
+            logger.Error("Razor view render error: {@ViewName} view not found", viewName);
             throw new ArgumentException($"{viewName} does not match any available view");
         }
 
