@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// <summary>
 /// Initiative User service interface.
 /// </summary>
-public interface IInitiativeUserService : IRead<InitiativeUser, int>, IAdd<InitiativeUserDto>, IUpdate<InitiativeUserDto, int>, IDelete<int>
+public interface IInitiativeUserService : IRead<InitiativeUser, int>, IAdd<InitiativeUserDto>, IDelete<int>
 {
     /// <summary>
     /// Get entities by initiative.
