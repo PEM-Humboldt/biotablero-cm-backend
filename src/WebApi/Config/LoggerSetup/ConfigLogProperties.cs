@@ -23,6 +23,8 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// </summary>
 public static class ConfigLogProperties
 {
+    private const string SourceContextName = "SourceContext";
+
     /// <summary>
     /// System log configuration.
     /// </summary>
@@ -61,12 +63,12 @@ public static class ConfigLogProperties
 
                         // Discard SQL Command logs
                         .Filter.ByExcluding(
-                            e => e.Properties.ContainsKey("SourceContext") && e.Properties["SourceContext"].ToString()
+                            e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
                                 .Contains("Microsoft.EntityFrameworkCore.Database.Command", StringComparison.CurrentCultureIgnoreCase))
 
                         // Discard HTTP Requests logs
                         .Filter.ByExcluding(
-                            e => e.Properties.ContainsKey("SourceContext") && e.Properties["SourceContext"].ToString()
+                            e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
                                 .Contains("Serilog.AspNetCore.RequestLoggingMiddleware", StringComparison.CurrentCultureIgnoreCase))
 
                         .WriteTo.PostgreSQL(
