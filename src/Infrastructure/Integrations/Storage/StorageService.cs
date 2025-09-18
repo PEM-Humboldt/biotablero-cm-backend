@@ -82,7 +82,6 @@ public class StorageService : IStorageService
         catch (OperationCanceledException)
         {
             logger.Warning("Upload of file {FileName} was canceled", fileName);
-            throw;
         }
         catch (Exception ex)
         {
