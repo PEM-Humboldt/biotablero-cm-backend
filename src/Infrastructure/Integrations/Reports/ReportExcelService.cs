@@ -42,19 +42,19 @@ public class ReportExcelService<TDto>(IServiceProvider serviceProvider) : IRepor
 
         var properties = typeof(TDto).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-        var orderedProps = properties
+        var orderedProperties = properties
             .OrderBy(p => mappings.ContainsKey(p.Name) ? mappings[p.Name].Index : int.MaxValue)
             .ToList();
 
         // Add headers
         int col = 1;
-        foreach (var prop in orderedProps)
+        foreach (var propertyName in orderedProperties.Select(prop => prop.Name))
         {
-            if (mappings.ContainsKey(prop.Name) && mappings[prop.Name].Visible)
+            if (mappings.ContainsKey(propertyName) && mappings[propertyName].Visible)
             {
-                var header = mappings.ContainsKey(prop.Name)
-                    ? mappings[prop.Name].Header
-                    : prop.Name;
+                var header = mappings.ContainsKey(propertyName)
+                    ? mappings[propertyName].Header
+                    : propertyName;
 
                 worksheet.Cell(1, col).Value = header;
                 col++;
@@ -66,7 +66,7 @@ public class ReportExcelService<TDto>(IServiceProvider serviceProvider) : IRepor
         foreach (var item in dataList)
         {
             col = 1;
-            foreach (var prop in orderedProps)
+            foreach (var prop in orderedProperties)
             {
                 if (mappings.ContainsKey(prop.Name) && mappings[prop.Name].Visible)
                 {
