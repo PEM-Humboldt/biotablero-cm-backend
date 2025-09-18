@@ -24,12 +24,9 @@ public class GuidColumnWriter(string propertyName, NpgsqlDbType dbType = NpgsqlD
     /// <returns>Scalar property value.</returns>
     public override object GetValue(LogEvent logEvent, IFormatProvider formatProvider = null)
     {
-        if (logEvent != null && logEvent.Properties.TryGetValue(propertyName, out var value))
+        if (logEvent != null && logEvent.Properties.TryGetValue(propertyName, out var value) && value is ScalarValue scalar && scalar.Value is Guid guidValue)
         {
-            if (value is ScalarValue scalar && scalar.Value is Guid guidValue)
-            {
-                return guidValue;
-            }
+            return guidValue;
         }
 
         throw new InvalidCastException("Property is missing or not a Guid.");

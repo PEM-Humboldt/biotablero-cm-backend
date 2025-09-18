@@ -6,7 +6,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 /// Report service interface.
 /// </summary>
 /// <typeparam name="TDto">DTO class type.</typeparam>
-public interface IReportService<TDto>
+public interface IReportService<in TDto>
     where TDto : class, IDto
 {
     /// <summary>

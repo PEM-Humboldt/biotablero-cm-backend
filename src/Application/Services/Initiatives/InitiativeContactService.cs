@@ -13,6 +13,7 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 using Serilog;
@@ -120,7 +121,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Create, "Added initiative contact: {@entityData}", entityData);
+        logger.AddLog(LogType.Create, "Added initiative contact: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -157,7 +158,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -181,7 +182,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, "Updated initiative contact: {@entityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated initiative contact: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -204,7 +205,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -212,7 +213,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Delete, "Deleted initiative contact: {@entityData}", entityData);
+        logger.AddLog(LogType.Delete, "Deleted initiative contact: {@EntityData}", entityData);
 
         return new CustomWebResponse();
     }

@@ -80,15 +80,9 @@ public class StorageService : IStorageService
         {
             logger.Error(ex, "I/O error while uploading file {FileName}", fileName);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException ex)
         {
-            logger.Warning("Upload of file {FileName} was canceled", fileName);
-            throw;
-        }
-        catch (Exception ex)
-        {
-            logger.Fatal(ex, "Unexpected error while uploading file {FileName}", fileName);
-            throw;
+            logger.Warning(ex, "Upload of file {FileName} was canceled", fileName);
         }
 
         return false;
@@ -127,7 +121,7 @@ public class StorageService : IStorageService
 
             if (ms is null || ms.ToArray().Length < 1)
             {
-                logger.Error("Error: Document {@docName} not found", fileName);
+                logger.Error("Error: Document {@DocName} not found", fileName);
                 return null;
             }
 
@@ -142,15 +136,9 @@ public class StorageService : IStorageService
         {
             logger.Error(ex, "I/O error while uploading file {FileName}", fileName);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException ex)
         {
-            logger.Warning("Upload of file {FileName} was canceled", fileName);
-            throw;
-        }
-        catch (Exception ex)
-        {
-            logger.Fatal(ex, "Unexpected error while uploading file {FileName}", fileName);
-            throw;
+            logger.Warning(ex, "Upload of file {FileName} was canceled", fileName);
         }
 
         return null;

@@ -19,6 +19,7 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
@@ -215,7 +216,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Create, "Added initiative: {@entityData}", entityData);
+        logger.AddLog(LogType.Create, "Added initiative: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -263,7 +264,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -275,7 +276,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, "Updated initiative: {@entityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated initiative: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -316,7 +317,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -348,7 +349,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
             var entityData = mapper.Map(entity);
 
-            logger.AddLog(LogType.Update, $"Updated initiative image (type: {imageTypeStr}): {{@entityData}}", entityData);
+            logger.AddLog(LogType.Update, $"Updated initiative image (type: {imageTypeStr}): {{@EntityData}}", entityData);
 
             return new CustomWebResponse()
             {
@@ -379,7 +380,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -418,7 +419,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, $"Updated initiative polygon ({{@entityData}}", entityData);
+        logger.AddLog(LogType.Update, $"Updated initiative polygon ({{@EntityData}}", entityData);
 
         return new CustomWebResponse()
         {
@@ -457,7 +458,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -466,7 +467,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, $"{(disable ? "Disabled" : "Enabled")} initiative: {@entityData}", entityData);
+        logger.AddLog(LogType.Update, string.Concat($"{(disable ? "Disabled" : "Enabled")}", "initiative: {@EntityData}"), entityData);
 
         return new CustomWebResponse()
         {
