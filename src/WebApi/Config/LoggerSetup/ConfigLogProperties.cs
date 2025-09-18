@@ -77,7 +77,7 @@ public static class ConfigLogProperties
                             tableName: LogConstants.DefaultTableName,
                             needAutoCreateTable: false,
                             columnOptions: columnWriters,
-                            formatProvider: new CultureInfo("es-CO")));
+                            formatProvider: CultureInfo.CurrentCulture));
             });
 
         return host;
