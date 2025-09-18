@@ -7,6 +7,6 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// <summary>
 /// Join invitation service interface.
 /// </summary>
-public interface IJoinInvitationService : IRead<JoinInvitation, JoinInvitationDto, int>, IAdd<JoinInvitationDto>
+public interface IJoinInvitationService : IRead<JoinInvitation, int>, IAdd<JoinInvitationDto>
 {
 }
