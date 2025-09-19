@@ -118,7 +118,20 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
             };
         }
 
-        // Validate emails
+        // Validate duplicate emails
+        bool hasDuplicateEmails = entityData.Guests
+            .GroupBy(e => e.Email)
+            .Any(g => g.Count() > 1);
+
+        if (hasDuplicateEmails)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "There are duplicate emails",
+            };
+        }
+
+        // Validate emails in IAM service
         var emails = entityData.Guests
             .Select(e => e.Email)
             .ToArray();
