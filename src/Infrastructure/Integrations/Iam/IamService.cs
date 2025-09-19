@@ -76,7 +76,12 @@ public class IamService : IIamService
         var results = new List<ExternalUser>();
         var userTasks = usernames.Select(async username =>
         {
-            results.Add(await GetUserData(UserVariable.Username, username, ct));
+            var userData = await GetUserData(UserVariable.Username, username, ct);
+
+            if (userData != null)
+            {
+                results.Add(userData);
+            }
         });
 
         await Task.WhenAll(userTasks);
@@ -103,7 +108,12 @@ public class IamService : IIamService
         var results = new List<ExternalUser>();
         var userTasks = emails.Select(async username =>
         {
-            results.Add(await GetUserData(UserVariable.Email, username, ct));
+            var userData = await GetUserData(UserVariable.Email, username, ct);
+
+            if (userData != null)
+            {
+                results.Add(userData);
+            }
         });
 
         await Task.WhenAll(userTasks);
