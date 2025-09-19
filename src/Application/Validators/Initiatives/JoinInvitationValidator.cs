@@ -24,7 +24,7 @@ public class JoinInvitationValidator : AbstractValidator<JoinInvitationDto>
             .MaximumLength(75);
 
         RuleFor(dto => dto.Message)
-            .MaximumLength(200);
+            .MaximumLength(350);
 
         RuleSet("Create", () =>
         {

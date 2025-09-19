@@ -35,7 +35,7 @@ public class JoinInvitationConfig : IEntityTypeConfiguration<JoinInvitation>
 
         builder.Property(i => i.Message)
             .HasColumnName("message")
-            .HasMaxLength(200);
+            .HasMaxLength(350);
 
         builder.Property(e => e.CreationDate)
             .HasColumnName("creation_date")
