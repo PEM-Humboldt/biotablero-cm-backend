@@ -110,6 +110,17 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> AddAsync(JoinRequestDto entityData, CancellationToken ct = default)
     {
+        // Validate user role and initiative relationship
+        var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(entityData.InitiativeId, entityData.ReviewerUserName, (int)InitiativeUserLevelEnum.Leader), ct);
+
+        if (!userIsLeader)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate initiative
         var initiative = await initiativeRepository.GetByIdAsync(entityData.InitiativeId, ct);
 
