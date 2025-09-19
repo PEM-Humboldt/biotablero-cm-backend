@@ -84,7 +84,8 @@ dotnet build --no-incremental -warnaserror
 ```sh
 # Generate migration
 dotnet ef migrations add $MIGRATION_NAME --startup-project src/WebApi --project src/Infrastructure --output-dir Persistence/Migrations --context GeneralContext
-# Apply format rules in Infrastructure project
+# Apply format rules in Infrastructure project (twice)
+dotnet format src/Infrastructure
 dotnet format src/Infrastructure
 ```
 
