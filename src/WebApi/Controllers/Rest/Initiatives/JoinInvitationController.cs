@@ -7,6 +7,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.JoinInvitation;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 using IAVH.BioTablero.CM.WebApi.Utils;
 
@@ -15,9 +16,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
+using Swashbuckle.AspNetCore.Filters;
+
 /// <summary>
 /// Join Invitation controller.
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
@@ -33,7 +37,7 @@ public class JoinInvitationController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [Authorize]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinInvitationOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);
@@ -47,7 +51,9 @@ public class JoinInvitationController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
     [HttpPut]
-    [Authorize]
+    [Consumes("application/json")]
+    [SwaggerRequestExample(typeof(JoinInvitationDto), typeof(JoinInvitationAddRequestExample))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinInvitationResponseExample))]
     public async Task<IActionResult> Put([FromBody] JoinInvitationDto requestData, CancellationToken ct)
     {
         requestData.Creator = HttpContext.GetUserName();
