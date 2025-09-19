@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
-using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
@@ -27,6 +26,8 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+
 /// <summary>
 /// Join Invitation service.
 /// </summary>
@@ -36,6 +37,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     private readonly IValidator<JoinInvitationDto> entityValidator;
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
+    private readonly IRepository<InitiativeUser> initiativeUserRepository;
     private readonly IWebViewTools webViewTools;
     private readonly IEmailService emailService;
     private readonly IIamService iamService;
@@ -58,6 +60,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         IValidator<JoinInvitationDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
+        IRepository<InitiativeUser> initiativeUserRepository,
         IWebViewTools webViewTools,
         IEmailService emailService,
         IIamService iamService)
@@ -67,6 +70,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
+        this.initiativeUserRepository = initiativeUserRepository;
         this.webViewTools = webViewTools;
         this.emailService = emailService;
         this.iamService = iamService;
@@ -75,12 +79,26 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// <summary>
     /// Get elements list (OData).
     /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct = default)
     {
+        // Validate user level
+        var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader), ct);
+
+        if (!userIsLeader)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         var query = entityRepository.GetQueryable();
+        query = entityRepository.AddInitiativeFilter(initiativeId, query);
         query = entityRepository.IncludeOdataEntities(query);
 
         return await GetOdataListByQueryAsync(query, queryOptions, ct);
@@ -94,6 +112,17 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> AddAsync(JoinInvitationDto entityData, CancellationToken ct = default)
     {
+        // Validate user role and initiative relationship
+        var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(entityData.InitiativeId, entityData.Creator, (int)InitiativeUserLevelEnum.Leader), ct);
+
+        if (!userIsLeader)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
 

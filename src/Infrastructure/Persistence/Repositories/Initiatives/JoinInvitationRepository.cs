@@ -14,6 +14,15 @@ using Microsoft.EntityFrameworkCore;
 public class JoinInvitationRepository(GeneralContext dbContext) : Repository<JoinInvitation>(dbContext), IJoinInvitationRepository
 {
     /// <summary>
+    /// Add initiative filter.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="query">Linq Query.</param>
+    /// <returns>Modified Linq query.</returns>
+    public IQueryable<JoinInvitation> AddInitiativeFilter(int initiativeId, IQueryable<JoinInvitation> query) => query
+            .Where(e => e.InitiativeId == initiativeId);
+
+    /// <summary>
     /// Include OData custom entities.
     /// </summary>
     /// <param name="query">Linq Query.</param>

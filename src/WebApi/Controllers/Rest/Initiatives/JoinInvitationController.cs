@@ -33,14 +33,15 @@ public class JoinInvitationController(
     /// <summary>
     /// Get entities (paginated).
     /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinInvitationOdataResponseExample))]
-    public async Task<IActionResult> GetOdataList(ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct)
+    public async Task<IActionResult> GetOdataList(int initiativeId, ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct)
     {
-        var response = await entityService.GetListAsync(queryOptions, ct);
+        var response = await entityService.GetListAsync(initiativeId, HttpContext.GetUserName(), queryOptions, ct);
         return webTools.CustomResponse(response);
     }
 
