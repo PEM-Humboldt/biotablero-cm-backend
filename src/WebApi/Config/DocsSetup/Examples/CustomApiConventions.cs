@@ -30,6 +30,7 @@ public static class CustomApiConventions
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
+        // Do nothing
     }
 
     /// <summary>
@@ -45,6 +46,7 @@ public static class CustomApiConventions
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] ODataQueryOptions<object> queryOptions,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
+        // Do nothing
     }
 
     /// <summary>
@@ -60,6 +62,7 @@ public static class CustomApiConventions
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
+        // Do nothing
     }
 
     /// <summary>
@@ -71,6 +74,7 @@ public static class CustomApiConventions
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public static void GetEnumList()
     {
+        // Do nothing
     }
 
     /// <summary>
@@ -101,6 +105,7 @@ public static class CustomApiConventions
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object requestData,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
+        // Do nothing
     }
 
     /// <summary>
@@ -118,6 +123,7 @@ public static class CustomApiConventions
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object requestData,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
+        // Do nothing
     }
 
     /// <summary>
@@ -135,6 +141,7 @@ public static class CustomApiConventions
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object formFile,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
+        // Do nothing
     }
 
     /// <summary>
@@ -150,6 +157,7 @@ public static class CustomApiConventions
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
+        // Do nothing
     }
 
     /// <summary>
@@ -165,6 +173,7 @@ public static class CustomApiConventions
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
+        // Do nothing
     }
 
     /// <summary>
@@ -180,5 +189,6 @@ public static class CustomApiConventions
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object id,
         [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
     {
+        // Do nothing
     }
 }
