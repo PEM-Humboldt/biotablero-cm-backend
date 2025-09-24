@@ -38,6 +38,11 @@ public class ExternalUser
     public string LastName { get; set; }
 
     /// <summary>
+    /// User full name.
+    /// </summary>
+    public string FullName => $"{FirstName} {LastName}";
+
+    /// <summary>
     /// User creation date.
     /// </summary>
     public DateTime? CreationDate { get; set; }

@@ -166,7 +166,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         // Send email
         var emailObject = new DefaultEmailData()
         {
-            Address = new($"{userData.FirstName} {userData.LastName}", userData.Email),
+            Address = new(userData.FullName, userData.Email),
             Subject = string.Format(CultureInfo.InvariantCulture, "Solicitud de ingreso a '{0}'", initiative.Name),
             Content = string.Format(CultureInfo.InvariantCulture, "El usuario '{0}' ha realizado una solicitud de acceso para la iniciativa '{1}'", userData.Username, initiative.Name),
         };
@@ -250,7 +250,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
 
         var emailObject = new DefaultEmailData()
         {
-            Address = new($"{userData.FirstName} {userData.LastName}", userData.Email),
+            Address = new(userData.FullName, userData.Email),
         };
 
         if (entity.StatusId == (int)JoinRequestStatusEnum.Approved)
@@ -326,7 +326,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
                 var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
 
                 var hiddenReceivers = leadersData
-                    .Select(e => new CustomEmailAddress($"{e.FirstName} {e.LastName}", e.Email))
+                    .Select(e => new CustomEmailAddress(e.FullName, e.Email))
                     .ToArray();
 
                 var receivers = new CustomEmailAddress[] { emailData.Address };
@@ -351,7 +351,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     {
         var emailData = new DefaultEmailData
         {
-            Address = new($"{leaderData.FirstName} {leaderData.LastName}", leaderData.Email),
+            Address = new(leaderData.FullName, leaderData.Email),
             Subject = "Tienes solicitudes de ingreso pendientes de revisión",
             Content = string.Format(CultureInfo.InvariantCulture, "Tienes <b>{0}</b> solicitudes de ingreso que necesitan tu revisión.", pendingRequests),
         };

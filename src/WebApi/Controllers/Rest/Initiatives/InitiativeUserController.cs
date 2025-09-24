@@ -9,6 +9,7 @@ using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.InitiativeUser;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
+using IAVH.BioTablero.CM.WebApi.Utils;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -86,7 +87,8 @@ public class InitiativeUserController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserResponseExample))]
     public async Task<IActionResult> Post(int id, [FromBody] InitiativeUserDto requestData, CancellationToken ct)
     {
-        var response = await entityService.UpdateAsync(id, requestData, ct);
+        var reviewerUserName = HttpContext.GetUserName();
+        var response = await entityService.UpdateAsync(id, reviewerUserName, requestData, ct);
         return webTools.CustomResponse(response);
     }
 
