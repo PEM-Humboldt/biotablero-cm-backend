@@ -72,4 +72,9 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     /// Initiative Tag relationship.
     /// </summary>
     public ICollection<InitiativeTag> InitiativeTags { get; init; }
+
+    /// <summary>
+    /// Initiative Join Request relationship.
+    /// </summary>
+    public ICollection<JoinRequest> JoinRequests { get; init; }
 }

@@ -13,6 +13,7 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 using Serilog;
@@ -26,6 +27,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 {
     private readonly IValidator<InitiativeContactDto> entityValidator;
     private readonly ILogger logger;
+    private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
     /// Constructor.
@@ -34,15 +36,18 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
+    /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeContactService(
         IRepository<InitiativeContact> entityRepository,
         IMapper<InitiativeContact, InitiativeContactDto> mapper,
         IValidator<InitiativeContactDto> entityValidator,
-        ILogger logger)
+        ILogger logger,
+        IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper)
     {
         this.entityValidator = entityValidator;
         this.logger = logger;
+        this.initiativeRepository = initiativeRepository;
     }
 
     /// <summary>
@@ -87,7 +92,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         // Validate initiative
         var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeExists = await entityRepository.AnyAsync(new InitiativeContactSpec(initiativeId), ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(new InitiativeSpec(initiativeId), ct);
 
         if (!initiativeExists)
         {
@@ -116,7 +121,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Create, "Added initiative contact: {@entityData}", entityData);
+        logger.AddLog(LogType.Create, "Added initiative contact: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -153,7 +158,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -177,7 +182,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, "Updated initiative contact: {@entityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated initiative contact: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -200,7 +205,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -208,7 +213,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Delete, "Deleted initiative contact: {@entityData}", entityData);
+        logger.AddLog(LogType.Delete, "Deleted initiative contact: {@EntityData}", entityData);
 
         return new CustomWebResponse();
     }

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,6 +10,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Core.Domain.Utils.Iam;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
 /// <summary>
@@ -21,6 +23,7 @@ public class IamService : IIamService
     private readonly string baseUrlAdmin;
     private readonly string clientId;
     private readonly string clientSecret;
+    private readonly JsonSerializerOptions jsonSerializerOptions;
 
     /// <summary>
     /// Constructor.
@@ -33,6 +36,11 @@ public class IamService : IIamService
         baseUrlAdmin = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/admin/realms/{Environment.GetEnvironmentVariable("KC_REALM")}";
         clientId = Environment.GetEnvironmentVariable("KC_CLIENT_BACKEND");
         clientSecret = Environment.GetEnvironmentVariable("KC_CLIENT_BACKEND_PASS");
+
+        jsonSerializerOptions = new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true,
+        };
     }
 
     /// <summary>
@@ -43,25 +51,57 @@ public class IamService : IIamService
     /// <returns>True if user exists. False otherwise.</returns>
     public async Task<bool> UserExistsAsync(string username, CancellationToken ct = default)
     {
+        var user = await GetUserDataAsync(username, ct);
+        return user != null;
+    }
+
+    /// <summary>
+    /// Get user data.
+    /// </summary>
+    /// <param name="username">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>User data.</returns>
+    public async Task<ExternalUser> GetUserDataAsync(string username, CancellationToken ct = default)
+    {
         var token = await GetAdminTokenAsync(ct);
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var url = new Uri($"{baseUrlAdmin}/users?username={Uri.EscapeDataString(username)}");
+        var url = new Uri($"{baseUrlAdmin}/users?exact=true&username={Uri.EscapeDataString(username)}");
 
         var response = await httpClient.GetAsync(url, ct);
 
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
-            return false;
+            return null;
         }
 
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync(ct);
-        var users = JsonSerializer.Deserialize<List<JsonElement>>(content);
 
-        return users != null && users.Count > 0;
+        var users = JsonSerializer.Deserialize<List<ExternalUser>>(content, jsonSerializerOptions);
+
+        return users.FirstOrDefault();
+    }
+
+    /// <summary>
+    /// Get users data.
+    /// </summary>
+    /// <param name="usernames">User name list.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Users data.</returns>
+    public async Task<IEnumerable<ExternalUser>> GetUsersDataAsync(string[] usernames, CancellationToken ct = default)
+    {
+        var results = new List<ExternalUser>();
+        var userTasks = usernames.Select(async username =>
+        {
+            results.Add(await GetUserDataAsync(username, ct));
+        });
+
+        await Task.WhenAll(userTasks);
+
+        return results;
     }
 
     /// <summary>

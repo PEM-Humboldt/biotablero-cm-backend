@@ -60,10 +60,28 @@ services:
       - ./docker/aws/configs/cors.json:/etc/localstack/cors.json:ro
     networks:
       - bt-search-network
+  
+  smtp-server:
+    image: mailhog/mailhog:v1.0.1
+    container_name: bt-cm-smtp
+    restart: "no"
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      MH_STORAGE: maildir
+      MH_MAILDIR_PATH: maildir
+    ports:
+      - 1025:1025
+      - 8025:8025
+    volumes:
+      - smtp_data:/home/mailhog
+    networks:
+      - bt-search-network
 
 volumes:
   db_data:
   localstack_data:
+  smtp_data:
 
 networks:
   bt-search-network:

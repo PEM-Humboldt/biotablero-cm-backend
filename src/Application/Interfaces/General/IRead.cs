@@ -12,11 +12,9 @@ using Microsoft.AspNetCore.OData.Query;
 /// Read data interface (for services).
 /// </summary>
 /// <typeparam name="TE">Entity type.</typeparam>
-/// <typeparam name="TDto">DTO class type.</typeparam>
 /// <typeparam name="TI">Entity identifier type.</typeparam>
-public interface IRead<TE, TDto, TI>
+public interface IRead<TE, TI>
     where TE : class, IAggregateRoot
-    where TDto : class, IDto
     where TI : notnull
 {
     /// <summary>

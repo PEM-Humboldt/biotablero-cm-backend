@@ -314,6 +314,93 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("creation_date")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("InitiativeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("initiative_id");
+
+                    b.Property<DateTime?>("ResponseDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("response_date");
+
+                    b.Property<string>("ReviewerUserName")
+                        .HasMaxLength(75)
+                        .HasColumnType("character varying(75)")
+                        .HasColumnName("reviewer_user_name");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("integer")
+                        .HasColumnName("join_request_status_id");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("character varying(75)")
+                        .HasColumnName("user_name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InitiativeId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("join_request", "initiatives");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinRequestStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("join_request_status", "initiatives");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "UnderReview"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Approved"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Rejected"
+                        });
+                });
+
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Tag", b =>
                 {
                     b.Property<int>("Id")
@@ -527,6 +614,25 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("Level");
                 });
 
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinRequest", b =>
+                {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", "Initiative")
+                        .WithMany("JoinRequests")
+                        .HasForeignKey("InitiativeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinRequestStatus", "Status")
+                        .WithMany("JoinRequests")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Initiative");
+
+                    b.Navigation("Status");
+                });
+
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Tag", b =>
                 {
                     b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.TagCategory", "Category")
@@ -556,11 +662,18 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("InitiativeTags");
 
                     b.Navigation("InitiativeUsers");
+
+                    b.Navigation("JoinRequests");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.InitiativeUserLevel", b =>
                 {
                     b.Navigation("InitiativeUsers");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinRequestStatus", b =>
+                {
+                    b.Navigation("JoinRequests");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Tag", b =>

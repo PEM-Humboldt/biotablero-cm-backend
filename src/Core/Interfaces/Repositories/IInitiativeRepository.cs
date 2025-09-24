@@ -26,5 +26,5 @@ public interface IInitiativeRepository : IRepository<Initiative>
     /// <param name="locationIds">Location identifiers.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Polygon centroid.</returns>
-    public Task<Point> GetCentroid(int[] locationIds, CancellationToken ct = default);
+    public Task<Point> GetCentroidAsync(int[] locationIds, CancellationToken ct = default);
 }

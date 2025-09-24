@@ -12,6 +12,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using Microsoft.EntityFrameworkCore;
 
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.TagCategory;
 
 /// <summary>
@@ -95,6 +96,16 @@ public sealed class GeneralContext : DbContext
     /// </summary>
     public DbSet<TagCategory> TagCategories { get; set; }
 
+    /// <summary>
+    /// Join requests DbSet.
+    /// </summary>
+    public DbSet<JoinRequest> JoinRequests { get; set; }
+
+    /// <summary>
+    /// Join request statuses DbSet.
+    /// </summary>
+    public DbSet<JoinRequestStatus> JoinRequestsStatuses { get; set; }
+
     #endregion
 
     /// <summary>
@@ -109,6 +120,7 @@ public sealed class GeneralContext : DbContext
         // Seeding data
         modelBuilder.Entity<InitiativeUserLevel>().HasData(GetDefaultInitiativeUserLevels());
         modelBuilder.Entity<TagCategory>().HasData(GetDefaultInitiativeTagCategories());
+        modelBuilder.Entity<JoinRequestStatus>().HasData(GetDefaultJoinRequestStatuses());
     }
 
     #region Seeding functions
@@ -137,6 +149,19 @@ public sealed class GeneralContext : DbContext
         var enumData = Enum.GetValues(typeof(TagCategoryEnum))
             .Cast<TagCategoryEnum>()
             .Select(t => new TagCategory() { Id = (int)t, Name = t.ToString() });
+
+        return enumData;
+    }
+
+    /// <summary>
+    /// Get default join request statuses.
+    /// </summary>
+    /// <returns>Default join request statuses list.</returns>
+    private static IEnumerable<JoinRequestStatus> GetDefaultJoinRequestStatuses()
+    {
+        var enumData = Enum.GetValues(typeof(JoinRequestStatusEnum))
+            .Cast<JoinRequestStatusEnum>()
+            .Select(t => new JoinRequestStatus() { Id = (int)t, Name = t.ToString() });
 
         return enumData;
     }

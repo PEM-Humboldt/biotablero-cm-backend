@@ -14,6 +14,7 @@ using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 using Serilog;
@@ -28,6 +29,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     private readonly IValidator<InitiativeLocationDto> entityValidator;
     private readonly ILogger logger;
     private readonly IRepository<Location> locationRepository;
+    private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
     /// Constructor.
@@ -37,17 +39,20 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="locationRepository">Location repository.</param>
+    /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeLocationService(
         IRepository<InitiativeLocation> entityRepository,
         IMapper<InitiativeLocation, InitiativeLocationDto> mapper,
         IValidator<InitiativeLocationDto> entityValidator,
         ILogger logger,
-        IRepository<Location> locationRepository)
+        IRepository<Location> locationRepository,
+        IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper)
     {
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.locationRepository = locationRepository;
+        this.initiativeRepository = initiativeRepository;
     }
 
     /// <summary>
@@ -92,7 +97,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         // Validate initiative
         var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeExists = await entityRepository.AnyAsync(new InitiativeLocationSpec(initiativeId), ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(new InitiativeSpec(initiativeId), ct);
 
         if (!initiativeExists)
         {
@@ -134,7 +139,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Create, "Added initiative location: {@entityData}", entityData);
+        logger.AddLog(LogType.Create, "Added initiative location: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -171,7 +176,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -206,7 +211,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, "Updated initiative location: {@entityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated initiative location: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -229,7 +234,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -248,7 +253,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Delete, "Deleted initiative location: {@entityData}", entityData);
+        logger.AddLog(LogType.Delete, "Deleted initiative location: {@EntityData}", entityData);
 
         return new CustomWebResponse();
     }

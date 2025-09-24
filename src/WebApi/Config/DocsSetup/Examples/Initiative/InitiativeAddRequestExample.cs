@@ -37,7 +37,7 @@ public class InitiativeAddRequestExample : IExamplesProvider<InitiativeDto>
         Users = [
             new()
             {
-                UserName = "Admin",
+                UserName = "general-admin",
                 Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Leader),
             }
         ],

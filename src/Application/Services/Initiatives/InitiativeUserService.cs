@@ -13,6 +13,7 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
@@ -31,6 +32,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     private readonly IValidator<InitiativeUserDto> entityValidator;
     private readonly ILogger logger;
     private readonly IIamService iamService;
+    private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
     /// Constructor.
@@ -40,17 +42,20 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="iamService">IAM service.</param>
+    /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeUserService(
         IRepository<InitiativeUser> entityRepository,
         IMapper<InitiativeUser, InitiativeUserDto> mapper,
         IValidator<InitiativeUserDto> entityValidator,
         ILogger logger,
-        IIamService iamService)
+        IIamService iamService,
+        IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper)
     {
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.iamService = iamService;
+        this.initiativeRepository = initiativeRepository;
     }
 
     /// <summary>
@@ -95,7 +100,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Validate initiative
         var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeExists = await entityRepository.AnyAsync(new InitiativeUserSpec(initiativeId), ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(new InitiativeSpec(initiativeId), ct);
 
         if (!initiativeExists)
         {
@@ -149,7 +154,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Create, "Added initiative user: {@entityData}", entityData);
+        logger.AddLog(LogType.Create, "Added initiative user: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -186,33 +191,27 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
         // Validate number of leaders
         var totalUserLeaders = await entityRepository.CountAsync(InitiativeUserSpec.LevelSpec(id, entity.InitiativeId, (int)InitiativeUserLevelEnum.Leader), ct);
 
-        if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader)
+        if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader && totalUserLeaders is < 1)
         {
-            if (totalUserLeaders is < 1)
+            return new CustomWebResponse(true)
             {
-                return new CustomWebResponse(true)
-                {
-                    Message = $"At least one leader is required per initiative",
-                };
-            }
+                Message = $"At least one leader is required per initiative",
+            };
         }
 
-        if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader)
+        if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader && totalUserLeaders >= MaxLeadersByInitiative)
         {
-            if (totalUserLeaders >= MaxLeadersByInitiative)
+            return new CustomWebResponse(true)
             {
-                return new CustomWebResponse(true)
-                {
-                    Message = $"Initiatives cannot have more than {MaxLeadersByInitiative} leaders",
-                };
-            }
+                Message = $"Initiatives cannot have more than {MaxLeadersByInitiative} leaders",
+            };
         }
 
         // Update entity data
@@ -222,7 +221,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, "Updated initiative user: {@entityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated initiative user: {@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -245,7 +244,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = "Not found",
+                Message = MessageConstants.NotFound,
             };
         }
 
@@ -267,7 +266,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Delete, "Deleted initiative user: {@entityData}", entityData);
+        logger.AddLog(LogType.Delete, "Deleted initiative user: {@EntityData}", entityData);
 
         return new CustomWebResponse();
     }

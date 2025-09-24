@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// <summary>
 /// Initiative Contact service interface.
 /// </summary>
-public interface IInitiativeContactService : IRead<InitiativeContact, InitiativeContactDto, int>, IAdd<InitiativeContactDto>, IUpdate<InitiativeContactDto, int>, IDelete<int>
+public interface IInitiativeContactService : IRead<InitiativeContact, int>, IAdd<InitiativeContactDto>, IUpdate<InitiativeContactDto, int>, IDelete<int>
 {
     /// <summary>
     /// Get entities by initiative.
