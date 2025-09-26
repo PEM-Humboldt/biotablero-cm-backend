@@ -41,6 +41,20 @@ public class InitiativeUserSpec : GeneralSpecification<int, InitiativeUser>
     }
 
     /// <summary>
+    /// Specification for get elements by user name.
+    /// </summary>
+    /// <param name="userName">Usre name.</param>
+    /// <returns>Custom specification.</returns>
+    public static InitiativeUserSpec UserNameSpec(string userName)
+    {
+        var spec = new InitiativeUserSpec();
+        spec.Query
+            .Where(e => e.UserName == userName);
+
+        return spec;
+    }
+
+    /// <summary>
     /// Specification for get duplicated entities.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>

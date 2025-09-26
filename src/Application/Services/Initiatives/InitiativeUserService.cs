@@ -90,6 +90,25 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     }
 
     /// <summary>
+    /// Get entities by user name.
+    /// </summary>
+    /// <param name="userName">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default)
+    {
+        var dataListEntity = await entityRepository.ListAsync(InitiativeUserSpec.UserNameSpec(userName), ct);
+
+        var dataListDto = dataListEntity
+            .Select(mapper.Map);
+
+        return new()
+        {
+            ResponseBody = dataListDto,
+        };
+    }
+
+    /// <summary>
     /// Add element.
     /// </summary>
     /// <param name="entityData">Entity data.</param>
