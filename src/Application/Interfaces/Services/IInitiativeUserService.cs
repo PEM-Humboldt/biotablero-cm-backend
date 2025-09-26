@@ -22,14 +22,6 @@ public interface IInitiativeUserService : IRead<InitiativeUser, int>, IAdd<Initi
     Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
-    /// Get entities by user name.
-    /// </summary>
-    /// <param name="userName">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default);
-
-    /// <summary>
     /// Update element.
     /// </summary>
     /// <param name="id">Element identifier.</param>

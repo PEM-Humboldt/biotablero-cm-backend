@@ -17,6 +17,14 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 public interface IInitiativeService : IRead<Initiative, int>, IAdd<InitiativeDto>, IUpdate<InitiativeDto, int>, IDisable<int>
 {
     /// <summary>
+    /// Get entities by user name.
+    /// </summary>
+    /// <param name="userName">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default);
+
+    /// <summary>
     /// Upload image.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
