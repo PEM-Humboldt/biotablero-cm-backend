@@ -66,6 +66,20 @@ public static class CustomApiConventions
     }
 
     /// <summary>
+    /// Get all items.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
+    [ProducesResponseType(typeof(List<IDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public static void GetList(
+        [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
+    {
+        // Do nothing
+    }
+
+    /// <summary>
     /// Get items (enum).
     /// </summary>
     [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Exact)]

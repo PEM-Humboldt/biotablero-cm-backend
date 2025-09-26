@@ -35,7 +35,7 @@ public class AuthController(IWebTools webTools,
     [Authorize]
     [HttpGet("InitiativesData")]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeLoggedUserDataResponseExample))]
-    public async Task<IActionResult> GetInitiativesData(CancellationToken ct)
+    public async Task<IActionResult> GetListInitiativesData(CancellationToken ct)
     {
         var response = await initiativeService.GetByUserNameAsync(HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
