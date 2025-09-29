@@ -1,10 +1,11 @@
-﻿namespace IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Storage;
+using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
 /// <summary>
 /// File Storage service interface.

@@ -11,6 +11,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Storage;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 

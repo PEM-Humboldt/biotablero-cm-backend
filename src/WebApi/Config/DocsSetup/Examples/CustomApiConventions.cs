@@ -78,6 +78,21 @@ public static class CustomApiConventions
     }
 
     /// <summary>
+    /// Get report.
+    /// </summary>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Prefix)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public static void GetReport(
+        [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Suffix)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] ODataQueryOptions<object> queryOptions,
+        [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)][ApiConventionTypeMatch(ApiConventionTypeMatchBehavior.Any)] object ct)
+    {
+    }
+
+    /// <summary>
     /// Add item.
     /// </summary>
     /// <param name="requestData">Request data.</param>

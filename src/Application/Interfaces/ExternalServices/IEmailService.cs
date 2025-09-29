@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 
 using System.Threading;
 using System.Threading.Tasks;

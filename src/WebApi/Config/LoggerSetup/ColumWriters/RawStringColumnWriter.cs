@@ -10,9 +10,6 @@ using Serilog.Sinks.PostgreSQL;
 /// <summary>
 /// Custom Serilog column writer for strings.
 /// </summary>
-/// <remarks>
-/// Constructor.
-/// </remarks>
 /// <param name="propertyName">Serilog property name.</param>
 /// <param name="dbType">Column database type.</param>
 public class RawStringColumnWriter(string propertyName, NpgsqlDbType dbType = NpgsqlDbType.Text) : ColumnWriterBase(dbType)

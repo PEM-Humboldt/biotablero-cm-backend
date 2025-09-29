@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi;
 
-using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 using DotNetEnv;
@@ -40,7 +39,7 @@ public class Program
 
         // Dependency injection configuration
         builder.Services.AddHttpClient();
-        builder.Services.AddCoreServices(Debugger.IsAttached);
+        builder.Services.AddCoreServices(builder.Environment.IsDevelopment());
         builder.Services.AddAppServices();
         builder.Services.AddExternalServices();
         builder.Services.AddMappings();

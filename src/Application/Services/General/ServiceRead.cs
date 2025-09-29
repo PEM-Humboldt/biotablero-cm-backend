@@ -25,15 +25,20 @@ using Microsoft.OData;
 /// <typeparam name="TDto">DTO class type.</typeparam>
 /// <typeparam name="TI">Entity identifier type.</typeparam>
 /// <typeparam name="TS">General Specification type.</typeparam>
-/// <remarks>
-/// Initialize service.
-/// </remarks>
 public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityRepository, IMapper<TE, TDto> mapper) : IRead<TE, TI>
     where TDto : class, IDto
     where TI : notnull
     where TE : BaseEntity<TI>, IAggregateRoot
     where TS : GeneralSpecification<TI, TE>
 {
+    /// <summary>
+    /// Default OData query settings.
+    /// </summary>
+    protected static readonly ODataQuerySettings DefaultOdataQuerySettings = new()
+    {
+        HandleNullPropagation = HandleNullPropagationOption.True,
+    };
+
     /// <summary>
     /// Entity repository.
     /// </summary>
@@ -123,18 +128,13 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <returns>Process result.</returns>
     private protected async Task<CustomWebResponse> GetOdataListByQueryAsync(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
-        var defaultSettings = new ODataQuerySettings()
-        {
-            HandleNullPropagation = HandleNullPropagationOption.True,
-        };
-
         try
         {
-            query = AddOdataQueryFilterAndOrder(query, queryOptions, defaultSettings);
+            query = AddOdataQueryFilterAndOrder(query, queryOptions, DefaultOdataQuerySettings);
 
             var totalItems = await entityRepository.QueryCountAsync(query, ct);
 
-            query = AddOdataQueryPagination(query, queryOptions, defaultSettings);
+            query = AddOdataQueryPagination(query, queryOptions, DefaultOdataQuerySettings);
 
             // Get result
             var dataList = await entityRepository.QueryToListAsync(query, ct);

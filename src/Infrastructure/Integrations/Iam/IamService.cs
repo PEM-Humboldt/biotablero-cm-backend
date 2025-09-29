@@ -10,8 +10,8 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Iam;
-using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
 /// <summary>
 /// Identity and Access Management service.

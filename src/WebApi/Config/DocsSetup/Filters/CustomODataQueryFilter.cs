@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Filters;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -40,7 +41,10 @@ public class CustomODataQueryFilter : IOperationFilter
             .Any(p => p.ParameterType.IsGenericType &&
                       p.ParameterType.GetGenericTypeDefinition() == typeof(ODataQueryOptions<>));
 
-        if (isOdataEndpoint)
+        var isReportEndpoint = context.MethodInfo.Name
+            .Contains("Report", StringComparison.InvariantCultureIgnoreCase);
+
+        if (isOdataEndpoint && !isReportEndpoint)
         {
             // Add custom params
             operation?.Parameters.Add(new OpenApiParameter
