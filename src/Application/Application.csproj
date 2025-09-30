@@ -2,9 +2,6 @@
 
   <PropertyGroup>
     <RootNamespace>IAVH.BioTablero.CM.Application</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

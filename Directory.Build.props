@@ -1,10 +1,13 @@
 <Project>
   <PropertyGroup>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>    
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>Recommended</AnalysisMode>
+    <AnalysisLevel>8.0</AnalysisLevel>
   </PropertyGroup>
 
   <ItemGroup>

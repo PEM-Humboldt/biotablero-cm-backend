@@ -2,9 +2,6 @@
 
   <PropertyGroup>
     <RootNamespace>IAVH.BioTablero.CM.WebApi</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>disable</Nullable>
-    <ImplicitUsings>disable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
