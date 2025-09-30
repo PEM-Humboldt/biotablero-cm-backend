@@ -121,10 +121,6 @@ dotnet_diagnostic.CA1056.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1308
 dotnet_diagnostic.CA1308.severity = none
 
-# Consider making public types internal
-# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1515
-dotnet_diagnostic.CA1515.severity = none
-
 # --------------------- #
 # Custom StyleCop rules #
 # --------------------- #
