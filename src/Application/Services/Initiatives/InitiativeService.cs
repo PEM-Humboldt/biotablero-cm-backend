@@ -49,6 +49,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     private readonly IRepository<LocationEntity> locationRepository;
     private readonly IIamService iamService;
     private readonly IStorageService storageService;
+    private readonly ILocationAreaService locationAreaService;
     private readonly GeoJsonWriter geoJsonWriter;
     private readonly GeoJsonReader geoJsonReader;
 
@@ -62,6 +63,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="locationRepository">Initiative Location repository.</param>
     /// <param name="storageService">Storage service.</param>
     /// <param name="iamService">IAM service.</param>
+    /// <param name="locationAreaService">Location area service.</param>
     public InitiativeService(
         IInitiativeRepository entityRepository,
         IMapper<Initiative, InitiativeDto> mapper,
@@ -69,7 +71,8 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         ILogger logger,
         IRepository<LocationEntity> locationRepository,
         IStorageService storageService,
-        IIamService iamService)
+        IIamService iamService,
+        ILocationAreaService locationAreaService)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
@@ -78,6 +81,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         this.locationRepository = locationRepository;
         this.storageService = storageService;
         this.iamService = iamService;
+        this.locationAreaService = locationAreaService;
 
         geoJsonWriter = new GeoJsonWriter();
         geoJsonReader = new GeoJsonReader();
@@ -211,6 +215,9 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         entity.CreationDate = DateTime.Now;
         entity.Coordinate = await entityRepository.GetCentroidAsync(locationsIds, ct);
 
+        // Calculate polygon area
+        entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
+
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
 
@@ -271,6 +278,9 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         // Update entity data
         entity.Name = entityData.Name;
         entity.Description = entityData.Description;
+
+        // Recalculate polygon area if locations might have changed
+        entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
 
         await entityRepository.UpdateAsync(entity, ct);
 
@@ -414,6 +424,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         // Update entity
         entity.Polygon = polygon;
         entity.Coordinate = polygon.Centroid;
+        entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
 
         await entityRepository.UpdateAsync(entity, ct);
 
@@ -442,6 +453,37 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> DisableAsync(int id, CancellationToken ct = default) => await DisableOrEnableAsync(id, true, ct);
+
+    /// <summary>
+    /// Calculate polygon area for an initiative.
+    /// </summary>
+    /// <param name="entity">Initiative entity.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Area in square kilometers.</returns>
+    private async Task<double> CalculatePolygonAreaAsync(Initiative entity, CancellationToken ct = default)
+    {
+        // If initiative has a polygon, calculate its area
+        if (entity.Polygon != null && !entity.Polygon.IsEmpty)
+        {
+            return GeometryUtils.CalculatePolygonAreaInSquareKilometers(entity.Polygon as Polygon);
+        }
+
+        // If no polygon, calculate area from locations
+        if (entity.InitiativeLocations != null && entity.InitiativeLocations.Count > 0)
+        {
+            var locationIds = entity.InitiativeLocations
+                .Where(il => il.LocationId > 0)
+                .Select(il => il.LocationId)
+                .ToList();
+
+            if (locationIds.Count > 0)
+            {
+                return await locationAreaService.CalculateTotalAreaForLocationsAsync(locationIds, ct);
+            }
+        }
+
+        return 0;
+    }
 
     /// <summary>
     /// Disable or enable element.

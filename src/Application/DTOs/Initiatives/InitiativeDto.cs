@@ -46,6 +46,11 @@ public class InitiativeDto : IDto
     public double[] Coordinate { get; set; }
 
     /// <summary>
+    /// Initiative polygon area in square kilometers.
+    /// </summary>
+    public double? PolygonArea { get; set; }
+
+    /// <summary>
     /// Enabled flag.
     /// </summary>
     public bool? Enabled { get; set; }
