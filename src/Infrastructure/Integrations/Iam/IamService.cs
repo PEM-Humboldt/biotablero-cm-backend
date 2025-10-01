@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Iam;
 
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IamEnums;
+
 /// <summary>
 /// Identity and Access Management service.
 /// </summary>
@@ -51,7 +53,7 @@ public class IamService : IIamService
     /// <returns>True if user exists. False otherwise.</returns>
     public async Task<bool> UserExistsAsync(string username, CancellationToken ct = default)
     {
-        var user = await GetUserDataAsync(username, ct);
+        var user = await GetUserData(UserVariable.Username, username, ct);
         return user != null;
     }
 
@@ -61,13 +63,78 @@ public class IamService : IIamService
     /// <param name="username">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>User data.</returns>
-    public async Task<ExternalUser> GetUserDataAsync(string username, CancellationToken ct = default)
+    public async Task<ExternalUser> GetUserDataAsync(string username, CancellationToken ct = default) => await GetUserData(UserVariable.Username, username, ct);
+
+    /// <summary>
+    /// Get users data.
+    /// </summary>
+    /// <param name="usernames">User name list.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Users data.</returns>
+    public async Task<IEnumerable<ExternalUser>> GetUsersDataAsync(string[] usernames, CancellationToken ct = default)
+    {
+        var results = new List<ExternalUser>();
+        var userTasks = usernames.Select(async username =>
+        {
+            var userData = await GetUserData(UserVariable.Username, username, ct);
+
+            if (userData != null)
+            {
+                results.Add(userData);
+            }
+        });
+
+        await Task.WhenAll(userTasks);
+
+        return results;
+    }
+
+    /// <summary>
+    /// Get user data by email.
+    /// </summary>
+    /// <param name="email">User email.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>User data.</returns>
+    public async Task<ExternalUser> GetUserDataByEmailAsync(string email, CancellationToken ct = default) => await GetUserData(UserVariable.Email, email, ct);
+
+    /// <summary>
+    /// Get users data by emails.
+    /// </summary>
+    /// <param name="emails">User emails list.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Users data.</returns>
+    public async Task<IEnumerable<ExternalUser>> GetUsersDataByEmailsAsync(string[] emails, CancellationToken ct = default)
+    {
+        var results = new List<ExternalUser>();
+        var userTasks = emails.Select(async username =>
+        {
+            var userData = await GetUserData(UserVariable.Email, username, ct);
+
+            if (userData != null)
+            {
+                results.Add(userData);
+            }
+        });
+
+        await Task.WhenAll(userTasks);
+
+        return results;
+    }
+
+    /// <summary>
+    /// Get user data.
+    /// </summary>
+    /// <param name="userVariableName">User variable name.</param>
+    /// <param name="userVariableValue">User variable value.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>User data.</returns>
+    private async Task<ExternalUser> GetUserData(UserVariable userVariableName, string userVariableValue, CancellationToken ct = default)
     {
         var token = await GetAdminTokenAsync(ct);
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var url = new Uri($"{baseUrlAdmin}/users?exact=true&username={Uri.EscapeDataString(username)}");
+        var url = new Uri($"{baseUrlAdmin}/users?exact=true&{userVariableName.ToString().ToLowerInvariant()}={Uri.EscapeDataString(userVariableValue)}");
 
         var response = await httpClient.GetAsync(url, ct);
 
@@ -83,25 +150,6 @@ public class IamService : IIamService
         var users = JsonSerializer.Deserialize<List<ExternalUser>>(content, jsonSerializerOptions);
 
         return users.FirstOrDefault();
-    }
-
-    /// <summary>
-    /// Get users data.
-    /// </summary>
-    /// <param name="usernames">User name list.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Users data.</returns>
-    public async Task<IEnumerable<ExternalUser>> GetUsersDataAsync(string[] usernames, CancellationToken ct = default)
-    {
-        var results = new List<ExternalUser>();
-        var userTasks = usernames.Select(async username =>
-        {
-            results.Add(await GetUserDataAsync(username, ct));
-        });
-
-        await Task.WhenAll(userTasks);
-
-        return results;
     }
 
     /// <summary>
