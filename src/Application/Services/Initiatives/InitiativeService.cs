@@ -401,7 +401,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
             // Read the GeoJSON and convert it to geometry
             geometry = geoJsonReader.Read<Geometry>(geoJsonString);
         }
-        catch (Newtonsoft.Json.JsonReaderException)
+        catch (JsonException)
         {
             return new CustomWebResponse(true)
             {
@@ -430,7 +430,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, $"Updated initiative polygon ({{@EntityData}}", entityData);
+        logger.AddLog(LogType.Update, $"Updated initiative polygon: {{@EntityData}}", entityData);
 
         return new CustomWebResponse()
         {

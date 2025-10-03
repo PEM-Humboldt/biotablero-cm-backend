@@ -142,6 +142,10 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("geometry(Polygon, 4326)")
                         .HasColumnName("polygon");
 
+                    b.Property<double>("PolygonArea")
+                        .HasColumnType("decimal(15,6)")
+                        .HasColumnName("polygon_area");
+
                     b.HasKey("Id");
 
                     b.ToTable("initiative", "initiatives");

@@ -1,4 +1,4 @@
-#nullable disable
+﻿#nullable disable
 
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations;
 
@@ -24,5 +24,3 @@ public partial class AddPolygonAreaToInitiative : Migration
             schema: "initiatives",
             table: "initiative");
 }
-
-

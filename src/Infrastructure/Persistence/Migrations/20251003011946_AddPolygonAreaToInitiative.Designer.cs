@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20250919140408_AddInitiativeJoinInvitations")]
-    partial class AddInitiativeJoinInvitations
+    [Migration("20251003011946_AddPolygonAreaToInitiative")]
+    partial class AddPolygonAreaToInitiative
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -144,6 +144,10 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Property<Geometry>("Polygon")
                         .HasColumnType("geometry(Polygon, 4326)")
                         .HasColumnName("polygon");
+
+                    b.Property<double>("PolygonArea")
+                        .HasColumnType("decimal(15,6)")
+                        .HasColumnName("polygon_area");
 
                     b.HasKey("Id");
 

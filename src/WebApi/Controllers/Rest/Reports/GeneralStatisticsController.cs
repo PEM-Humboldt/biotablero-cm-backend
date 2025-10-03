@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Reports;
+﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Reports;
 
 using System.Threading;
 using System.Threading.Tasks;
