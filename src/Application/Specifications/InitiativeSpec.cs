@@ -80,7 +80,7 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
     /// <summary>
     /// Specification for get elements by user name.
     /// </summary>
-    /// <param name="userName">Usre name.</param>
+    /// <param name="userName">User name.</param>
     /// <returns>Custom specification.</returns>
     public static InitiativeSpec UserNameSpec(string userName)
     {

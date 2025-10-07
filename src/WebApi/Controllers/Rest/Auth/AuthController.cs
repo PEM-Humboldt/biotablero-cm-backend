@@ -28,7 +28,7 @@ public class AuthController(IWebTools webTools,
     IInitiativeService initiativeService) : ControllerBase
 {
     /// <summary>
-    /// Get inititives data from authenticated user.
+    /// Get initiatives data from authenticated user.
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>

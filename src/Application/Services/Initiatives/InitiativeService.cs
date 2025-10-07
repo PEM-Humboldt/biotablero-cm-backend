@@ -100,7 +100,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <summary>
     /// Get entities by user name.
     /// </summary>
-    /// <param name="userName">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default)
