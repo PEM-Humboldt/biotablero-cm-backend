@@ -142,7 +142,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("geometry(Polygon, 4326)")
                         .HasColumnName("polygon");
 
-                    b.Property<double>("PolygonArea")
+                    b.Property<decimal>("PolygonArea")
                         .HasColumnType("decimal(15,6)")
                         .HasColumnName("polygon_area");
 
@@ -318,69 +318,6 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinInvitation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("creation_date")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<string>("Creator")
-                        .IsRequired()
-                        .HasMaxLength(75)
-                        .HasColumnType("character varying(75)")
-                        .HasColumnName("creator_user_name");
-
-                    b.Property<int>("InitiativeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("initiative_id");
-
-                    b.Property<string>("Message")
-                        .HasMaxLength(350)
-                        .HasColumnType("character varying(350)")
-                        .HasColumnName("message");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InitiativeId");
-
-                    b.ToTable("join_invitation", "initiatives");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinInvitationGuest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("email");
-
-                    b.Property<int>("JoinInvitationId")
-                        .HasColumnType("integer")
-                        .HasColumnName("join_invitation_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JoinInvitationId", "Email")
-                        .IsUnique();
-
-                    b.ToTable("join_invitation_guest", "initiatives");
-                });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinRequest", b =>
                 {
@@ -682,27 +619,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("Level");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinInvitation", b =>
-                {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", "Initiative")
-                        .WithMany("JoinInvitations")
-                        .HasForeignKey("InitiativeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
-                    b.Navigation("Initiative");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinInvitationGuest", b =>
-                {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinInvitation", "JoinInvitation")
-                        .WithMany("Guests")
-                        .HasForeignKey("JoinInvitationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("JoinInvitation");
-                });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinRequest", b =>
                 {
@@ -753,7 +670,6 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.Navigation("InitiativeUsers");
 
-                    b.Navigation("JoinInvitations");
 
                     b.Navigation("JoinRequests");
                 });
@@ -763,10 +679,6 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("InitiativeUsers");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinInvitation", b =>
-                {
-                    b.Navigation("Guests");
-                });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.JoinRequestStatus", b =>
                 {

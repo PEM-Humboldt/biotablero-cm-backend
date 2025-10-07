@@ -11,27 +11,20 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
-using Microsoft.EntityFrameworkCore;
-
 /// <summary>
 /// General statistics service implementation.
 /// </summary>
 public class GeneralStatisticsService : IGeneralStatisticsService
 {
-    private readonly IRepository<Initiative> initiativeRepository;
-    private readonly IRepository<InitiativeUser> initiativeUserRepository;
+    private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="initiativeRepository">Initiative repository.</param>
-    /// <param name="initiativeUserRepository">Initiative user repository.</param>
-    public GeneralStatisticsService(
-        IRepository<Initiative> initiativeRepository,
-        IRepository<InitiativeUser> initiativeUserRepository)
+    public GeneralStatisticsService(IInitiativeRepository initiativeRepository)
     {
         this.initiativeRepository = initiativeRepository;
-        this.initiativeUserRepository = initiativeUserRepository;
     }
 
     /// <summary>
@@ -41,44 +34,75 @@ public class GeneralStatisticsService : IGeneralStatisticsService
     /// <returns>General statistics data.</returns>
     public async Task<CustomWebResponse> GetGeneralStatisticsAsync(CancellationToken ct = default)
     {
-        try
-        {
-            var statistics = new GeneralStatisticsDto();
+        // Calculate statistics using private methods
+        var totalActiveInitiatives = await GetTotalActiveInitiativesCountAsync(ct);
+        var totalPeopleInvolved = await GetTotalPeopleInvolvedCountAsync(ct);
+        var totalAreaInHectares = await GetTotalAreaInHectaresAsync(ct);
 
-            // Get active initiatives query
-            var activeInitiativesQuery = initiativeRepository.GetQueryable().Where(i => i.Enabled);
-
-            // 1. Número total de iniciativas activas en la plataforma
-            var activeInitiatives = await initiativeRepository.QueryToListAsync(activeInitiativesQuery, ct);
-            statistics.TotalActiveInitiatives = activeInitiatives.Count;
-
-            // 2. Número de personas involucradas en iniciativas activas
-            var activeInitiativeIds = activeInitiatives.Select(i => i.Id).ToList();
-            var peopleInActiveInitiativesQuery = initiativeUserRepository.GetQueryable()
-                .Where(iu => activeInitiativeIds.Contains(iu.InitiativeId));
-            var peopleInActiveInitiatives = await initiativeUserRepository.QueryToListAsync(peopleInActiveInitiativesQuery, ct);
-            statistics.TotalPeopleInvolved = peopleInActiveInitiatives.Count;
-
-            // 3. Área total de las iniciativas activas en hectáreas
-            var totalAreaQuery = activeInitiativesQuery.Where(i => i.PolygonArea > 0);
-            var initiativesWithArea = await initiativeRepository.QueryToListAsync(totalAreaQuery, ct);
-            var totalAreaInSquareKm = initiativesWithArea.Sum(i => i.PolygonArea);
-
-            // Convertir de km² a hectáreas (1 km² = 100 hectáreas)
-            statistics.TotalAreaInHectares = Math.Round(totalAreaInSquareKm * 100, 2);
-
-            return new CustomWebResponse
-            {
-                ResponseBody = statistics,
-            };
-        }
-        catch (Exception ex)
+        // Validate data integrity
+        if (totalActiveInitiatives < 0)
         {
             return new CustomWebResponse(true)
             {
-                Message = $"Error al obtener las estadísticas generales: {ex.Message}",
-                StatusCode = System.Net.HttpStatusCode.InternalServerError,
+                Message = "Invalid data: negative initiative count",
             };
         }
+
+        if (totalPeopleInvolved < 0)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Invalid data: negative people count",
+            };
+        }
+
+        if (totalAreaInHectares < 0)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Invalid data: negative area value",
+            };
+        }
+
+        var statistics = new GeneralStatisticsDto
+        {
+            TotalActiveInitiatives = totalActiveInitiatives,
+            TotalPeopleInvolved = totalPeopleInvolved,
+            TotalAreaInHectares = totalAreaInHectares,
+        };
+
+        return new CustomWebResponse
+        {
+            ResponseBody = statistics,
+        };
+    }
+
+    /// <summary>
+    /// Get total count of active initiatives.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Count of active initiatives.</returns>
+    private async Task<int> GetTotalActiveInitiativesCountAsync(CancellationToken ct = default) =>
+        await initiativeRepository.GetActiveInitiativesCountAsync(ct);
+
+    /// <summary>
+    /// Get total count of people involved in active initiatives.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Count of people involved.</returns>
+    private async Task<int> GetTotalPeopleInvolvedCountAsync(CancellationToken ct = default) =>
+        await initiativeRepository.GetPeopleInvolvedInActiveInitiativesCountAsync(ct);
+
+    /// <summary>
+    /// Get total area of active initiatives in hectares.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Total area in hectares.</returns>
+    private async Task<double> GetTotalAreaInHectaresAsync(CancellationToken ct = default)
+    {
+        var totalAreaInSquareKm = await initiativeRepository.GetTotalAreaOfActiveInitiativesAsync(ct);
+
+        // Convert from km² to hectares (1 km² = 100 hectares)
+        return Math.Round(totalAreaInSquareKm * 100, 2);
     }
 }

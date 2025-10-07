@@ -58,7 +58,7 @@ public class InitiativeConfig : IEntityTypeConfiguration<Initiative>
 
         builder.Property(i => i.PolygonArea)
             .HasColumnName("polygon_area")
-            .HasColumnType("decimal(15,6)")
+            .HasDefaultValue(0m)
             .IsRequired();
 
         builder.Property(i => i.Enabled)

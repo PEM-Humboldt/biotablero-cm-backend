@@ -6,17 +6,17 @@
 public class GeneralStatisticsDto
 {
     /// <summary>
-    /// Número total de iniciativas activas en la plataforma.
+    /// Total number of active initiatives in the platform.
     /// </summary>
     public int TotalActiveInitiatives { get; set; }
 
     /// <summary>
-    /// Número de personas involucradas en iniciativas activas.
+    /// Number of people involved in active initiatives.
     /// </summary>
     public int TotalPeopleInvolved { get; set; }
 
     /// <summary>
-    /// Área total de las iniciativas activas en hectáreas.
+    /// Total area of active initiatives in hectares.
     /// </summary>
     public double TotalAreaInHectares { get; set; }
 }
