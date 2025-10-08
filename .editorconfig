@@ -160,3 +160,51 @@ dotnet_diagnostic.SA1401.severity = none
 # Static members should appear before non-static members
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1204.md
 dotnet_diagnostic.SA1204.severity = none
+
+# ------------------- #
+# Unused Code Detection #
+# ------------------- #
+
+# Remove unused private members
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1822
+dotnet_diagnostic.CA1822.severity = warning
+
+# Remove unused private fields
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1823
+dotnet_diagnostic.CA1823.severity = warning
+
+# Remove unused local variables
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1804
+dotnet_diagnostic.CA1804.severity = warning
+
+# Remove unused parameters
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1801
+dotnet_diagnostic.CA1801.severity = warning
+
+# Remove unused using directives
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0005
+dotnet_diagnostic.IDE0005.severity = warning
+
+# Remove unnecessary usings
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0005
+dotnet_diagnostic.IDE0005.severity = warning
+
+# Remove unused using directives
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0005
+dotnet_diagnostic.IDE0005.severity = warning
+
+# Remove unused private members
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1822
+dotnet_diagnostic.CA1822.severity = warning
+
+# Remove unused private fields
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1823
+dotnet_diagnostic.CA1823.severity = warning
+
+# Remove unused local variables
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1804
+dotnet_diagnostic.CA1804.severity = warning
+
+# Remove unused parameters
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1801
+dotnet_diagnostic.CA1801.severity = warning

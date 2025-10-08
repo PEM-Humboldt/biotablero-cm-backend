@@ -49,7 +49,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     private readonly IRepository<LocationEntity> locationRepository;
     private readonly IIamService iamService;
     private readonly IStorageService storageService;
-    private readonly ILocationAreaService locationAreaService;
+    private readonly ILocationService locationService;
     private readonly GeoJsonWriter geoJsonWriter;
     private readonly GeoJsonReader geoJsonReader;
 
@@ -63,7 +63,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <param name="locationRepository">Initiative Location repository.</param>
     /// <param name="storageService">Storage service.</param>
     /// <param name="iamService">IAM service.</param>
-    /// <param name="locationAreaService">Location area service.</param>
+    /// <param name="locationService">Location service.</param>
     public InitiativeService(
         IInitiativeRepository entityRepository,
         IMapper<Initiative, InitiativeDto> mapper,
@@ -72,7 +72,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         IRepository<LocationEntity> locationRepository,
         IStorageService storageService,
         IIamService iamService,
-        ILocationAreaService locationAreaService)
+        ILocationService locationService)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
@@ -81,7 +81,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         this.locationRepository = locationRepository;
         this.storageService = storageService;
         this.iamService = iamService;
-        this.locationAreaService = locationAreaService;
+        this.locationService = locationService;
 
         geoJsonWriter = new GeoJsonWriter();
         geoJsonReader = new GeoJsonReader();
@@ -478,7 +478,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
             if (locationIds.Count > 0)
             {
-                return await locationAreaService.CalculateTotalAreaForLocationsAsync(locationIds, ct);
+                return await locationService.CalculateTotalAreaForLocationsAsync(locationIds, ct);
             }
         }
 

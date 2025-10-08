@@ -1,14 +1,12 @@
-﻿namespace IAVH.BioTablero.CM.Application.Services;
+﻿namespace IAVH.BioTablero.CM.Application.Services.Statistics;
 
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Utils;
-using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
 /// <summary>

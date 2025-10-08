@@ -1,7 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Utils;
 
 using System;
-using System.Linq;
 
 using NetTopologySuite.Geometries;
 
