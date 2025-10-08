@@ -50,28 +50,4 @@ public static class GeometryUtils
 
         return CalculateAreaInSquareKilometers(polygon);
     }
-
-    /// <summary>
-    /// Calculate area of multiple geometries combined.
-    /// </summary>
-    /// <param name="geometries">Collection of geometries.</param>
-    /// <returns>Total area in square kilometers.</returns>
-    public static double CalculateTotalAreaInSquareKilometers(params Geometry[] geometries)
-    {
-        if (geometries == null || geometries.Length == 0)
-        {
-            return 0;
-        }
-
-        var totalArea = 0.0;
-        foreach (var geometry in geometries)
-        {
-            if (geometry != null && !geometry.IsEmpty)
-            {
-                totalArea += CalculateAreaInSquareKilometers(geometry);
-            }
-        }
-
-        return Math.Round(totalArea, 6);
-    }
 }
