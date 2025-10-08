@@ -355,6 +355,8 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// <summary>
     /// Send notifications for old pending join requests.
     /// </summary>
+    /// <param name="leaderData">Leader user data.</param>
+    /// <param name="pendingRequests">Number of pending requests.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     private async Task<bool> SendNotificationOldPendingRequestsAsync(ExternalUser leaderData, int pendingRequests, CancellationToken ct = default)
