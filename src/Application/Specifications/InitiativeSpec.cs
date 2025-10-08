@@ -76,4 +76,20 @@ public class InitiativeSpec : GeneralSpecification<int, Initiative>
 
         return spec;
     }
+
+    /// <summary>
+    /// Specification for get elements by user name.
+    /// </summary>
+    /// <param name="userName">User name.</param>
+    /// <returns>Custom specification.</returns>
+    public static InitiativeSpec UserNameSpec(string userName)
+    {
+        var spec = new InitiativeSpec();
+        spec.Query
+            .Where(e => e.InitiativeUsers
+                .Any(e => e.UserName == userName))
+            .Include(e => e.InitiativeUsers);
+
+        return spec;
+    }
 }
