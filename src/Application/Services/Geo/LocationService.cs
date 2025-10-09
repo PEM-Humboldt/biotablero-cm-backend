@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Geo;
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
@@ -78,5 +80,36 @@ public class LocationService : ServiceRead<Location, LocationDto, int, LocationS
         {
             StatusCode = HttpStatusCode.NotFound,
         };
+    }
+
+    /// <summary>
+    /// Calculate total area for a collection of location IDs.
+    /// </summary>
+    /// <param name="locationIds">Collection of location IDs.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Total area in square kilometers.</returns>
+    public async Task<double> CalculateTotalAreaForLocationsAsync(IEnumerable<int> locationIds, CancellationToken ct = default)
+    {
+        if (locationIds == null || !locationIds.Any())
+        {
+            return 0;
+        }
+
+        var locationIdsList = locationIds.ToList();
+        var totalArea = 0.0;
+
+        // Get all location polygons for the specified locations
+        var locationPolygonsQuery = locationPolygonRepository.GetQueryable()
+            .Where(lp => locationIdsList.Contains(lp.LocationId) && lp.Geometry != null);
+
+        var locationPolygons = await locationPolygonRepository.QueryToListAsync(locationPolygonsQuery, ct);
+
+        // Calculate area for each polygon
+        totalArea = locationPolygons
+            .Where(lp => lp.Geometry != null && !lp.Geometry.IsEmpty)
+            .Select(lp => GeometryUtils.CalculateAreaInSquareKilometers(lp.Geometry))
+            .Sum();
+
+        return Math.Round(totalArea, 6);
     }
 }

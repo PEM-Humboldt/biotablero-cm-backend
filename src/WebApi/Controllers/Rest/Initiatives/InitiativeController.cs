@@ -119,15 +119,16 @@ public class InitiativeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
     [HttpPost("Polygon/{id}")]
-    [Consumes("text/json")]
+    [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(string), typeof(InitiativePolygonEditRequestExample))]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
-    public async Task<IActionResult> UpdatePolygon(int id, [FromBody] string request, CancellationToken ct)
+    public async Task<IActionResult> UpdatePolygon(int id, [FromBody] object request, CancellationToken ct)
     {
-        var response = await entityService.UpdatePolygonAsync(id, request, ct);
+        var geoJsonString = System.Text.Json.JsonSerializer.Serialize(request);
+        var response = await entityService.UpdatePolygonAsync(id, geoJsonString, ct);
         return webTools.CustomResponse(response);
     }
 

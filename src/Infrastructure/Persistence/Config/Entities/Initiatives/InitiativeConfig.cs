@@ -56,6 +56,11 @@ public class InitiativeConfig : IEntityTypeConfiguration<Initiative>
             .HasColumnType("geometry(Point, 4326)")
             .IsRequired();
 
+        builder.Property(i => i.PolygonArea)
+            .HasColumnName("polygon_area")
+            .HasDefaultValue(0m)
+            .IsRequired();
+
         builder.Property(i => i.Enabled)
             .HasColumnName("enabled")
             .HasDefaultValue(true)
