@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <RootNamespace>IAVH.BioTablero.CM.Core</RootNamespace>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
