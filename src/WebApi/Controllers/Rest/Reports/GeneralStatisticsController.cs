@@ -38,4 +38,32 @@ public class GeneralStatisticsController(
         var response = await generalStatisticsService.GetGeneralStatisticsAsync(ct);
         return webTools.CustomResponse(response);
     }
+
+    /// <summary>
+    /// Get general statistics filtered by department.
+    /// </summary>
+    /// <param name="departmentId">Department identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>General statistics data for the specified department.</returns>
+    [HttpGet("department/{departmentId}")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GeneralStatisticsResponseExample))]
+    public async Task<IActionResult> GetGeneralStatisticsByDepartment(int departmentId, CancellationToken ct = default)
+    {
+        var response = await generalStatisticsService.GetGeneralStatisticsByDepartmentAsync(departmentId, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
+    /// Get general statistics filtered by initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>General statistics data for the specified initiative.</returns>
+    [HttpGet("initiative/{initiativeId}")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GeneralStatisticsResponseExample))]
+    public async Task<IActionResult> GetGeneralStatisticsByInitiative(int initiativeId, CancellationToken ct = default)
+    {
+        var response = await generalStatisticsService.GetGeneralStatisticsByInitiativeAsync(initiativeId, ct);
+        return webTools.CustomResponse(response);
+    }
 }

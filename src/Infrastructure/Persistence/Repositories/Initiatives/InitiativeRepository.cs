@@ -86,4 +86,70 @@ public class InitiativeRepository : Repository<Initiative>, IInitiativeRepositor
         await dbContext.InitiativeUsers
             .Where(iu => iu.Initiative.Enabled)
             .CountAsync(ct);
+
+    /// <summary>
+    /// Get count of active initiatives by department.
+    /// </summary>
+    /// <param name="departmentId">Department identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Count of active initiatives in the department.</returns>
+    public async Task<int> GetActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Where(i => i.Enabled && i.InitiativeLocations.Any(il => il.LocationId == departmentId))
+            .CountAsync(ct);
+
+    /// <summary>
+    /// Get total area of active initiatives by department.
+    /// </summary>
+    /// <param name="departmentId">Department identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Total area in square kilometers for the department.</returns>
+    public async Task<double> GetTotalAreaOfActiveInitiativesByDepartmentAsync(int departmentId, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Where(i => i.Enabled && i.PolygonArea > 0 && i.InitiativeLocations.Any(il => il.LocationId == departmentId))
+            .SumAsync(i => i.PolygonArea, ct);
+
+    /// <summary>
+    /// Get count of people involved in active initiatives by department.
+    /// </summary>
+    /// <param name="departmentId">Department identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Count of people involved in active initiatives in the department.</returns>
+    public async Task<int> GetPeopleInvolvedInActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default) =>
+        await dbContext.InitiativeUsers
+            .Where(iu => iu.Initiative.Enabled && iu.Initiative.InitiativeLocations.Any(il => il.LocationId == departmentId))
+            .CountAsync(ct);
+
+    /// <summary>
+    /// Get count of active initiatives by specific initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Count of active initiatives (should be 1 or 0).</returns>
+    public async Task<int> GetActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Where(i => i.Enabled && i.Id == initiativeId)
+            .CountAsync(ct);
+
+    /// <summary>
+    /// Get total area of active initiatives by specific initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Total area in square kilometers for the initiative.</returns>
+    public async Task<double> GetTotalAreaOfActiveInitiativesByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Where(i => i.Enabled && i.PolygonArea > 0 && i.Id == initiativeId)
+            .SumAsync(i => i.PolygonArea, ct);
+
+    /// <summary>
+    /// Get count of people involved in active initiatives by specific initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Count of people involved in the specific initiative.</returns>
+    public async Task<int> GetPeopleInvolvedInActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
+        await dbContext.InitiativeUsers
+            .Where(iu => iu.Initiative.Enabled && iu.InitiativeId == initiativeId)
+            .CountAsync(ct);
 }
