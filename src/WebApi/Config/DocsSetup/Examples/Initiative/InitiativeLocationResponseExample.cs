@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
+namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
 using System.Collections.Generic;
 
@@ -26,7 +26,7 @@ public class InitiativeLocationResponseExample : IExamplesProvider<List<Initiati
         new()
         {
             InitiativeId = 2,
-            InitiativeName = "Conservación Amazonas",
+            InitiativeName = "Conservacion Amazonas",
             Coordinate = new double[] { -74.04999999999998, 4.6499999999999995 },
         },
         new()
