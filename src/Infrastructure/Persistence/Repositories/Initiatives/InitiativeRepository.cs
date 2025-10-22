@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -152,4 +153,37 @@ public class InitiativeRepository : Repository<Initiative>, IInitiativeRepositor
         await dbContext.InitiativeUsers
             .Where(iu => iu.Initiative.Enabled && iu.InitiativeId == initiativeId)
             .CountAsync(ct);
+
+    /// <summary>
+    /// Get active initiatives with coordinates by location.
+    /// </summary>
+    /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>List of initiatives with coordinates.</returns>
+    public async Task<IEnumerable<(int Id, string Name, double[] Coordinate)>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default)
+    {
+        var query = dbContext.Initiatives
+            .Where(i => i.Enabled && i.Coordinate != null);
+
+        // Filter by location if provided
+        if (locationId.HasValue)
+        {
+            query = query.Where(i => i.InitiativeLocations.Any(il => il.LocationId == locationId.Value));
+        }
+
+        var results = await query
+            .Select(i => new
+            {
+                i.Id,
+                i.Name,
+                i.Coordinate,
+            })
+            .ToListAsync(ct);
+
+        return results.Select(r => (
+            r.Id,
+            r.Name,
+            r.Coordinate != null ? new double[] { r.Coordinate.X, r.Coordinate.Y } : System.Array.Empty<double>()
+        ));
+    }
 }

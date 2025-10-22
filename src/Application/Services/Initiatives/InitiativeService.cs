@@ -474,6 +474,39 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     public async Task<CustomWebResponse> DisableAsync(int id, CancellationToken ct = default) => await DisableOrEnableAsync(id, true, ct);
 
     /// <summary>
+    /// Get active initiatives with coordinates by location.
+    /// </summary>
+    /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> GetByLocationAsync(int? locationId = null, CancellationToken ct = default)
+    {
+        try
+        {
+            var initiatives = await entityRepository.GetActiveInitiativesWithCoordinatesByLocationAsync(locationId, ct);
+            var result = initiatives.Select(i => new InitiativeCoordinatesDto
+            {
+                InitiativeId = i.Id,
+                InitiativeName = i.Name,
+                Coordinate = i.Coordinate,
+            }).ToList();
+
+            return new CustomWebResponse
+            {
+                ResponseBody = result,
+            };
+        }
+        catch (Exception ex)
+        {
+            logger.AddLog(LogType.System, "Error getting initiatives by location. LocationId: {LocationId}. Error: {Error}", locationId, ex.Message);
+            return new CustomWebResponse(true)
+            {
+                Message = "Error retrieving initiatives by location",
+            };
+        }
+    }
+
+    /// <summary>
     /// Calculate polygon area for an initiative.
     /// </summary>
     /// <param name="entity">Initiative entity.</param>
