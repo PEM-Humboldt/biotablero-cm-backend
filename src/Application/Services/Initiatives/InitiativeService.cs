@@ -496,9 +496,9 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
                 ResponseBody = result,
             };
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            logger.AddLog(LogType.System, "Error getting initiatives by location. LocationId: {LocationId}. Error: {Error}", locationId, ex.Message);
+            logger.AddLog(LogType.System, "Error getting initiatives by location. LocationId: {LocationId}", locationId);
             return new CustomWebResponse(true)
             {
                 Message = "Error retrieving initiatives by location",

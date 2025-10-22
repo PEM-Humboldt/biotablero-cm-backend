@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
 using System.Collections.Generic;
 
@@ -37,4 +37,3 @@ public class InitiativeLocationResponseExample : IExamplesProvider<List<Initiati
         },
     };
 }
-

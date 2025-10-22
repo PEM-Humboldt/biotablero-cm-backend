@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
+namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -183,7 +183,6 @@ public class InitiativeRepository : Repository<Initiative>, IInitiativeRepositor
         return results.Select(r => (
             r.Id,
             r.Name,
-            r.Coordinate != null ? new double[] { r.Coordinate.X, r.Coordinate.Y } : System.Array.Empty<double>()
-        ));
+            r.Coordinate != null ? new double[] { r.Coordinate.X, r.Coordinate.Y } : System.Array.Empty<double>()));
     }
 }
