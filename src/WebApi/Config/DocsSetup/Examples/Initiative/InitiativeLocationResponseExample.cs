@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
 using System.Collections.Generic;
 
@@ -15,25 +15,24 @@ public class InitiativeLocationResponseExample : IExamplesProvider<List<Initiati
     /// Get examples.
     /// </summary>
     /// <returns>Examples.</returns>
-    public List<InitiativeCoordinatesDto> GetExamples() => new List<InitiativeCoordinatesDto>
-    {
+    public List<InitiativeCoordinatesDto> GetExamples() => [
         new()
         {
             InitiativeId = 1,
             InitiativeName = "Iniciativa de Prueba",
-            Coordinate = new double[] { -74.09423914807002, 4.645238678888821 },
+            Coordinate = [-74.09423914807002, 4.645238678888821],
         },
         new()
         {
             InitiativeId = 2,
             InitiativeName = "Conservacion Amazonas",
-            Coordinate = new double[] { -74.04999999999998, 4.6499999999999995 },
+            Coordinate = [-74.04999999999998, 4.6499999999999995],
         },
         new()
         {
             InitiativeId = 3,
             InitiativeName = "Reserva Natural Circular",
-            Coordinate = new double[] { -74.15, 4.6499999999999995 },
+            Coordinate = [-74.15, 4.6499999999999995],
         },
-    };
+    ];
 }
