@@ -481,29 +481,18 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> GetByLocationAsync(int? locationId = null, CancellationToken ct = default)
     {
-        try
+        var initiatives = await entityRepository.GetActiveInitiativesWithCoordinatesByLocationAsync(locationId, ct);
+        var result = initiatives.Select(i => new InitiativeCoordinatesDto
         {
-            var initiatives = await entityRepository.GetActiveInitiativesWithCoordinatesByLocationAsync(locationId, ct);
-            var result = initiatives.Select(i => new InitiativeCoordinatesDto
-            {
-                InitiativeId = i.Id,
-                InitiativeName = i.Name,
-                Coordinate = i.Coordinate,
-            }).ToList();
+            InitiativeId = i.Id,
+            InitiativeName = i.Name,
+            Coordinate = i.Coordinate,
+        }).ToList();
 
-            return new CustomWebResponse
-            {
-                ResponseBody = result,
-            };
-        }
-        catch (Exception)
+        return new CustomWebResponse
         {
-            logger.AddLog(LogType.System, "Error getting initiatives by location. LocationId: {LocationId}", locationId);
-            return new CustomWebResponse(true)
-            {
-                Message = "Error retrieving initiatives by location",
-            };
-        }
+            ResponseBody = result,
+        };
     }
 
     /// <summary>

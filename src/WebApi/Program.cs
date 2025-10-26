@@ -8,6 +8,7 @@ using IAVH.BioTablero.CM.Infrastructure.Persistence.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup;
 using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup;
+using IAVH.BioTablero.CM.WebApi.Middleware;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.OData;
@@ -97,6 +98,9 @@ public class Program
 
         // Add support to logging request with Serilog
         app.UseSerilogRequestLogging();
+
+        // Add global exception handling middleware
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.UseAuthentication();
         app.UseAuthorization();
