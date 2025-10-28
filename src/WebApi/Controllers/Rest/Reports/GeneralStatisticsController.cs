@@ -3,6 +3,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Application.DTOs.Reports;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Reports;
@@ -32,7 +33,10 @@ public class GeneralStatisticsController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>General statistics data including initiatives, users, join requests, and recent activity.</returns>
     [HttpGet]
+    [ProducesResponseType(typeof(GeneralStatisticsDto), StatusCodes.Status200OK)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GeneralStatisticsResponseExample))]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetGeneralStatistics(CancellationToken ct = default)
     {
         var response = await generalStatisticsService.GetGeneralStatisticsAsync(ct);
@@ -46,7 +50,10 @@ public class GeneralStatisticsController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>General statistics data for the specified department.</returns>
     [HttpGet("department/{departmentId}")]
+    [ProducesResponseType(typeof(GeneralStatisticsDto), StatusCodes.Status200OK)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GeneralStatisticsResponseExample))]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetGeneralStatisticsByDepartment(int departmentId, CancellationToken ct = default)
     {
         var response = await generalStatisticsService.GetGeneralStatisticsByDepartmentAsync(departmentId, ct);
@@ -60,7 +67,10 @@ public class GeneralStatisticsController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>General statistics data for the specified initiative.</returns>
     [HttpGet("initiative/{initiativeId}")]
+    [ProducesResponseType(typeof(GeneralStatisticsDto), StatusCodes.Status200OK)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GeneralStatisticsResponseExample))]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetGeneralStatisticsByInitiative(int initiativeId, CancellationToken ct = default)
     {
         var response = await generalStatisticsService.GetGeneralStatisticsByInitiativeAsync(initiativeId, ct);
