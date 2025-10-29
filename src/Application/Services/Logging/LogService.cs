@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Logging;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
+using IAVH.BioTablero.CM.Application.Mappings;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -28,6 +30,11 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogSer
     private readonly IReportService<LogDto> entityReportService;
 
     /// <summary>
+    /// Entity mapper.
+    /// </summary>
+    private readonly IMapper<LogEntity, LogBaseDto> odataMapper;
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
@@ -41,6 +48,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogSer
     {
         this.entityRepository = entityRepository;
         this.entityReportService = entityReportService;
+        odataMapper = new LogOdataMappings();
     }
 
     /// <summary>
@@ -54,7 +62,26 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogSer
         var query = entityRepository.GetQueryable();
         query = entityRepository.IncludeOdataFilters(query);
 
-        return await GetOdataListByQueryAsync(query, queryOptions, ct);
+        try
+        {
+            var oDataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
+
+            return new()
+            {
+                ResponseBody = new Dictionary<string, object>()
+                {
+                    ["@odata.count"] = oDataResponse.TotalItems,
+                    ["value"] = oDataResponse.DataList.Select(odataMapper.Map),
+                },
+            };
+        }
+        catch (ODataException ex)
+        {
+            return new(true)
+            {
+                Message = $"Invalid filter: {ex.Message}",
+            };
+        }
     }
 
     /// <summary>

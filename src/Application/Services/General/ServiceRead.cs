@@ -120,6 +120,31 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     }
 
     /// <summary>
+    /// Get OData object by custom Linq query.
+    /// </summary>
+    /// <param name="query">Linq Query.</param>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Object with total items and data list.</returns>
+    private protected async Task<ODataResponse<TE>> GetOdataDtoListByQueryAsync(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
+    {
+        query = AddOdataQueryFilterAndOrder(query, queryOptions, DefaultOdataQuerySettings);
+
+        var totalItems = await entityRepository.QueryCountAsync(query, ct);
+
+        query = AddOdataQueryPagination(query, queryOptions, DefaultOdataQuerySettings);
+
+        // Get result
+        var dataList = await entityRepository.QueryToListAsync(query, ct);
+
+        return new()
+        {
+            TotalItems = totalItems,
+            DataList = dataList,
+        };
+    }
+
+    /// <summary>
     /// Get OData list data by custom Linq query.
     /// </summary>
     /// <param name="query">Linq Query.</param>
@@ -130,21 +155,14 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     {
         try
         {
-            query = AddOdataQueryFilterAndOrder(query, queryOptions, DefaultOdataQuerySettings);
-
-            var totalItems = await entityRepository.QueryCountAsync(query, ct);
-
-            query = AddOdataQueryPagination(query, queryOptions, DefaultOdataQuerySettings);
-
-            // Get result
-            var dataList = await entityRepository.QueryToListAsync(query, ct);
+            var oDataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
 
             return new()
             {
                 ResponseBody = new Dictionary<string, object>()
                 {
-                    ["@odata.count"] = totalItems,
-                    ["value"] = dataList.Select(mapper.Map),
+                    ["@odata.count"] = oDataResponse.TotalItems,
+                    ["value"] = oDataResponse.DataList.Select(mapper.Map),
                 },
             };
         }
