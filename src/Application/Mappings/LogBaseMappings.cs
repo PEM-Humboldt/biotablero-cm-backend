@@ -9,7 +9,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 /// <summary>
 /// System logs mappings for OData.
 /// </summary>
-public class LogOdataMappings : IMapper<LogEntity, LogBaseDto>
+public class LogBaseMappings : IMapper<LogEntity, LogBaseDto>
 {
     /// <summary>
     /// Map from entity to DTO.

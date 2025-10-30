@@ -48,7 +48,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogSer
     {
         this.entityRepository = entityRepository;
         this.entityReportService = entityReportService;
-        odataMapper = new LogOdataMappings();
+        odataMapper = new LogBaseMappings();
     }
 
     /// <summary>
