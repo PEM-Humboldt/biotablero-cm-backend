@@ -27,9 +27,9 @@ public class LogBaseDto : IDto
     public LogType Type { get; set; }
 
     /// <summary>
-    /// Log message.
+    /// Log short message.
     /// </summary>
-    public string Message { get; set; }
+    public string ShortMessage { get; set; }
 
     /// <summary>
     /// Event user name.

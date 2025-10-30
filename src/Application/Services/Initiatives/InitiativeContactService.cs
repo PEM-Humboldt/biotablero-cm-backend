@@ -121,7 +121,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Create, "Added initiative contact: {@EntityData}", entityData);
+        logger.AddLog(LogType.Create, "Added initiative contact", "{@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -182,7 +182,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, "Updated initiative contact: {@EntityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated initiative contact", "{@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -213,7 +213,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Delete, "Deleted initiative contact: {@EntityData}", entityData);
+        logger.AddLog(LogType.Delete, "Deleted initiative contact", "{@EntityData}", entityData);
 
         return new CustomWebResponse();
     }

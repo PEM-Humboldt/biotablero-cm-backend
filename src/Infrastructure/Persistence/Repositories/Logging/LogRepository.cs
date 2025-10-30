@@ -24,7 +24,7 @@ public class LogRepository(GeneralContext dbContext) : Repository<LogEntity>(dbC
                 Id = e.Id,
                 TimeStamp = e.TimeStamp,
                 Type = e.Type,
-                Message = e.Message,
+                ShortMessage = e.ShortMessage,
                 UserName = e.UserName,
                 ClientAgent = e.ClientAgent,
                 ClientIp = e.ClientIp,

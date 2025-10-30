@@ -185,7 +185,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Create, "Added initiative join request: {@EntityData}", entityData);
+        logger.AddLog(LogType.Create, "Added initiative join request", "{@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -276,7 +276,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
 
         SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
 
-        logger.AddLog(LogType.Update, "Updated initiative join request: {@EntityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated initiative join request", "{@EntityData}", entityData);
 
         return new CustomWebResponse()
         {

@@ -26,7 +26,7 @@ public class LogBaseMappings : IMapper<LogEntity, LogBaseDto>
             Type = entity.Type,
             TimeStamp = entity.TimeStamp,
             UserName = entity.UserName,
-            Message = entity.Message,
+            ShortMessage = entity.ShortMessage,
         };
     }
 
@@ -45,7 +45,7 @@ public class LogBaseMappings : IMapper<LogEntity, LogBaseDto>
             Type = dto.Type,
             TimeStamp = dto.TimeStamp,
             UserName = dto.UserName,
-            Message = dto.Message,
+            ShortMessage = dto.ShortMessage,
         };
     }
 }

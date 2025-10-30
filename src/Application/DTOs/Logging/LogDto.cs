@@ -15,6 +15,11 @@ public class LogDto : LogBaseDto, IDto
     public LogLevel Level { get; set; }
 
     /// <summary>
+    /// Log message.
+    /// </summary>
+    public string Message { get; set; }
+
+    /// <summary>
     /// Indicates whether the record was created manually or not.
     /// </summary>
     public bool CustomRecord { get; set; }
