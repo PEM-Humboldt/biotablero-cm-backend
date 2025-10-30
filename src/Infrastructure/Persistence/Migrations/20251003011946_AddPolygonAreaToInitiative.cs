@@ -9,13 +9,13 @@ public partial class AddPolygonAreaToInitiative : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder) =>
-        migrationBuilder.AddColumn<decimal>(
+        migrationBuilder.AddColumn<double>(
             name: "polygon_area",
             schema: "initiatives",
             table: "initiative",
-            type: "decimal(15,6)",
+            type: "double precision",
             nullable: false,
-            defaultValue: 0m);
+            defaultValue: 0.0);
 
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder) =>
