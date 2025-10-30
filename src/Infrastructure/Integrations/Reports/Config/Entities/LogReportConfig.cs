@@ -34,6 +34,9 @@ public class LogReportConfig : IReportConfig<LogDto>
             .Property(x => x.ClientAgent, index: 6, visible: true, header: "Navegador");
 
         builder
-            .Property(x => x.Message, index: 7, visible: true, header: "Descripción");
+            .Property(x => x.ShortMessage, index: 7, visible: true, header: "Descripción corta");
+
+        builder
+            .Property(x => x.Message, index: 8, visible: true, header: "Descripción");
     }
 }
