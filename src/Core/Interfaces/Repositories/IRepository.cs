@@ -32,7 +32,7 @@ public interface IRepository<TE, TI> : IDisposable
     /// <param name="id">The value of the primary key for the entity to be found.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<bool> ExistsAsync(TI id, CancellationToken ct = default);
+    Task<bool> ExistsByIdAsync(TI id, CancellationToken ct = default);
 
     /// <summary>
     /// Finds all entities of <typeparamref name="TE" /> from the database.

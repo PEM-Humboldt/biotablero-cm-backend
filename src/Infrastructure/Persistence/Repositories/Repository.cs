@@ -54,7 +54,7 @@ public class Repository<TE, TI> : IRepository<TE, TI>
     /// <param name="id">The value of the primary key for the entity to be found.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<bool> ExistsAsync(TI id, CancellationToken ct = default)
+    public async Task<bool> ExistsByIdAsync(TI id, CancellationToken ct = default)
     {
         var parameter = Expression.Parameter(typeof(TE), "e");
         var property = Expression.Property(parameter, "Id");

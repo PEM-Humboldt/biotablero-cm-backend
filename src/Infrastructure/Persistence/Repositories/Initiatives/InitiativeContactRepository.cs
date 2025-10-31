@@ -29,7 +29,7 @@ public class InitiativeContactRepository : Repository<InitiativeContact, int>, I
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Contacts by selected initiative.</returns>
+    /// <returns>Entities by selected initiative.</returns>
     public async Task<IEnumerable<InitiativeContact>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
         await dbContext.InitiativeContacts
             .Where(e => e.InitiativeId == initiativeId)

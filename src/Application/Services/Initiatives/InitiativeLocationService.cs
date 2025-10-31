@@ -10,9 +10,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
-using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
-using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
@@ -24,11 +22,12 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <summary>
 /// Initiative Location service.
 /// </summary>
-public class InitiativeLocationService : ServiceRead<InitiativeLocation, InitiativeLocationDto, int, InitiativeLocationSpec>, IInitiativeLocationService
+public class InitiativeLocationService : ServiceRead<InitiativeLocation, InitiativeLocationDto, int>, IInitiativeLocationService
 {
+    private new readonly IInitiativeLocationRepository entityRepository;
     private readonly IValidator<InitiativeLocationDto> entityValidator;
     private readonly ILogger logger;
-    private readonly IRepository<Location> locationRepository;
+    private readonly ILocationRepository locationRepository;
     private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
@@ -41,14 +40,15 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     /// <param name="locationRepository">Location repository.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeLocationService(
-        IRepository<InitiativeLocation> entityRepository,
+        IInitiativeLocationRepository entityRepository,
         IMapper<InitiativeLocation, InitiativeLocationDto> mapper,
         IValidator<InitiativeLocationDto> entityValidator,
         ILogger logger,
-        IRepository<Location> locationRepository,
+        ILocationRepository locationRepository,
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper)
     {
+        this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.locationRepository = locationRepository;
@@ -63,7 +63,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default)
     {
-        var dataListEntity = await entityRepository.ListAsync(InitiativeLocationSpec.InitiativeIdSpec(initiativeId), ct);
+        var dataListEntity = await entityRepository.GetByInitiativeAsync(initiativeId, ct);
 
         var dataListDto = dataListEntity
             .Select(mapper.Map);
@@ -97,7 +97,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         // Validate initiative
         var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeExists = await initiativeRepository.AnyAsync(new InitiativeSpec(initiativeId), ct);
+        var initiativeExists = await initiativeRepository.ExistsByIdAsync(initiativeId, ct);
 
         if (!initiativeExists)
         {
@@ -109,7 +109,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         // Validate location
         var locationId = entityData.LocationId ?? 0;
-        var locationExists = await locationRepository.AnyAsync(new LocationSpec(locationId), ct);
+        var locationExists = await locationRepository.ExistsByIdAsync(locationId, ct);
 
         if (!locationExists)
         {
@@ -120,7 +120,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyAsync(InitiativeLocationSpec.LocationIdAndLocalitySpec(initiativeId, locationId, entityData.Locality), ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(initiativeId, locationId, entityData.Locality, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -182,7 +182,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         // Validate location
         var locationId = entityData.LocationId ?? 0;
-        var locationExists = await locationRepository.AnyAsync(new LocationSpec(locationId), ct);
+        var locationExists = await locationRepository.ExistsByIdAsync(locationId, ct);
 
         if (!locationExists)
         {
@@ -193,7 +193,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyAsync(InitiativeLocationSpec.LocationIdAndLocalitySpec(id, entity.InitiativeId, locationId, entityData.Locality), ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.InitiativeId, locationId, entityData.Locality, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -239,7 +239,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         }
 
         // Validate number of locations
-        var totalLocations = await entityRepository.CountAsync(InitiativeLocationSpec.InitiativeIdSpec(entity.InitiativeId), ct);
+        var totalLocations = await entityRepository.CountByInitiativeAsync(entity.InitiativeId, ct);
 
         if (totalLocations is <= 1)
         {

@@ -93,7 +93,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         // Validate initiative
         var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeExists = (await initiativeRepository.GetByIdAsync(initiativeId, ct)) != null;
+        var initiativeExists = await initiativeRepository.ExistsByIdAsync(initiativeId, ct);
 
         if (!initiativeExists)
         {
