@@ -16,6 +16,12 @@ using Microsoft.EntityFrameworkCore;
 /// <param name="dbContext">General Database Context.</param>
 public class LocationRepository(GeneralContext dbContext) : Repository<Location, int>(dbContext), ILocationRepository
 {
+    /// <summary>
+    /// Get elements by parent identifier.
+    /// </summary>
+    /// <param name="parentId">Parent identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>List of elements by specified parent.</returns>
     public async Task<IEnumerable<Location>> GetByParentIdAsync(int? parentId, CancellationToken ct = default) =>
         await dbContext.Locations
             .Where(i => i.ParentId == parentId)
