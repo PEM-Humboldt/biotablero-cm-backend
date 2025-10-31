@@ -166,7 +166,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyByName(entityData.Name, ct);
+        var hasDuplicatedEntities = await entityRepository.AnyByNameAsync(entityData.Name, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -271,7 +271,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicated(id, entityData.Name, ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entityData.Name, ct);
 
         if (hasDuplicatedEntities)
         {

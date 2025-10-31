@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
 /// <summary>
-/// Custom Initiative repository.
+/// Initiative repository.
 /// </summary>
 public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepository
 {
@@ -55,7 +55,7 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     /// <param name="name">Initiative name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
-    public async Task<bool> AnyByName(string name, CancellationToken ct = default) =>
+    public async Task<bool> AnyByNameAsync(string name, CancellationToken ct = default) =>
         await dbContext.Initiatives
             .Where(e => e.Name == name)
             .AnyAsync(ct);
@@ -67,9 +67,20 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     /// <param name="name">Initiative name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
-    public async Task<bool> IsDuplicated(int id, string name, CancellationToken ct = default) =>
+    public async Task<bool> IsDuplicatedAsync(int id, string name, CancellationToken ct = default) =>
         await dbContext.Initiatives
             .Where(e => e.Id != id && e.Name == name)
+            .AnyAsync(ct);
+
+    /// <summary>
+    /// Get if elements exists by tag.
+    /// </summary>
+    /// <param name="tagId">Tag identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    public async Task<bool> AnyByTagAsync(int tagId, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Where(e => e.InitiativeTags.Any(e => e.TagId == tagId))
             .AnyAsync(ct);
 
     /// <summary>
