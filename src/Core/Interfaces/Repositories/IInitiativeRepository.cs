@@ -48,4 +48,52 @@ public interface IInitiativeRepository : IRepository<Initiative>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Count of people involved in active initiatives.</returns>
     public Task<int> GetPeopleInvolvedInActiveInitiativesCountAsync(CancellationToken ct = default);
+
+    /// <summary>
+    /// Get count of active initiatives by department.
+    /// </summary>
+    /// <param name="departmentId">Department identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Count of active initiatives in the department.</returns>
+    public Task<int> GetActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get total area of active initiatives by department.
+    /// </summary>
+    /// <param name="departmentId">Department identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Total area in square kilometers for the department.</returns>
+    public Task<double> GetTotalAreaOfActiveInitiativesByDepartmentAsync(int departmentId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get count of people involved in active initiatives by department.
+    /// </summary>
+    /// <param name="departmentId">Department identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Count of people involved in active initiatives in the department.</returns>
+    public Task<int> GetPeopleInvolvedInActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get count of active initiatives by specific initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Count of active initiatives (should be 1 or 0).</returns>
+    public Task<int> GetActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get total area of active initiatives by specific initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Total area in square kilometers for the initiative.</returns>
+    public Task<double> GetTotalAreaOfActiveInitiativesByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get count of people involved in active initiatives by specific initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Count of people involved in the specific initiative.</returns>
+    public Task<int> GetPeopleInvolvedInActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 }
