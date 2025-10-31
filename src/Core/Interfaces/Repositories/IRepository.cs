@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
@@ -14,7 +15,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 /// <typeparam name="TE">Entity class type.</typeparam>
 /// <typeparam name="TI">Entity identifier type.</typeparam>
 public interface IRepository<TE, TI> : IDisposable
-    where TE : class, IAggregateRoot
+    where TE : BaseEntity<TI>, IAggregateRoot
     where TI : notnull
 {
     /// <summary>
@@ -24,6 +25,14 @@ public interface IRepository<TE, TI> : IDisposable
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<TE> GetByIdAsync(TI id, CancellationToken ct = default);
+
+    /// <summary>
+    /// Checks if entity with the given primary key value exists.
+    /// </summary>
+    /// <param name="id">The value of the primary key for the entity to be found.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<bool> ExistsAsync(TI id, CancellationToken ct = default);
 
     /// <summary>
     /// Finds all entities of <typeparamref name="TE" /> from the database.

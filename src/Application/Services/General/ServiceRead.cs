@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.General;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -8,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
@@ -24,12 +22,10 @@ using Microsoft.OData;
 /// <typeparam name="TE">Entity type.</typeparam>
 /// <typeparam name="TDto">DTO class type.</typeparam>
 /// <typeparam name="TI">Entity identifier type.</typeparam>
-/// <typeparam name="TS">General Specification type.</typeparam>
-public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityRepository, IMapper<TE, TDto> mapper) : IRead<TE, TI>
+public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityRepository, IMapper<TE, TDto> mapper) : IRead<TE, TI>
     where TDto : class, IDto
     where TI : notnull
     where TE : BaseEntity<TI>, IAggregateRoot
-    where TS : GeneralSpecification<TI, TE>
 {
     /// <summary>
     /// Default OData query settings.
@@ -42,7 +38,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <summary>
     /// Entity repository.
     /// </summary>
-    private protected readonly IRepository<TE> entityRepository = entityRepository;
+    private protected readonly IRepository<TE, TI> entityRepository = entityRepository;
 
     /// <summary>
     /// Entity mapper.
@@ -55,11 +51,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public virtual async Task<bool> ExistsAsync(TI id, CancellationToken ct = default)
-    {
-        var specification = (TS)Activator.CreateInstance(typeof(TS), [id]);
-        return await entityRepository.AnyAsync(specification, ct);
-    }
+    public virtual async Task<bool> ExistsAsync(TI id, CancellationToken ct = default) => await entityRepository.ExistsAsync(id, ct);
 
     /// <summary>
     /// Get element.
@@ -69,8 +61,7 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     /// <returns>Process result.</returns>
     public virtual async Task<CustomWebResponse> GetItemAsync(TI id, CancellationToken ct = default)
     {
-        var specification = (TS)Activator.CreateInstance(typeof(TS), [id]);
-        var dataEntity = await entityRepository.FirstOrDefaultAsync(specification, ct);
+        var dataEntity = await entityRepository.GetByIdAsync(id, ct);
 
         if (dataEntity != null)
         {

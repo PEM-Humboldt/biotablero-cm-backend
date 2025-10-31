@@ -3,9 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Infrastructure.Persistence;
@@ -18,10 +20,14 @@ using Microsoft.EntityFrameworkCore;
 /// <typeparam name="TE">Entity class type.</typeparam>
 /// <typeparam name="TI">Entity identifier type.</typeparam>
 public class Repository<TE, TI> : IRepository<TE, TI>
-    where TE : class, IAggregateRoot
+    where TE : BaseEntity<TI>, IAggregateRoot
     where TI : notnull
 {
+    /// <summary>
+    /// General Database context.
+    /// </summary>
     private protected readonly GeneralContext dbContext;
+
     private bool disposedValue;
 
     /// <summary>
@@ -30,8 +36,8 @@ public class Repository<TE, TI> : IRepository<TE, TI>
     /// <param name="dbContext">General Database Context.</param>
     public Repository(GeneralContext dbContext)
     {
-        disposedValue = false;
         this.dbContext = dbContext;
+        disposedValue = false;
     }
 
     /// <summary>
@@ -41,6 +47,24 @@ public class Repository<TE, TI> : IRepository<TE, TI>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     public async Task<TE> GetByIdAsync(TI id, CancellationToken ct = default) => await dbContext.Set<TE>().FindAsync([id], ct);
+
+    /// <summary>
+    /// Checks if entity with the given primary key value exists.
+    /// </summary>
+    /// <param name="id">The value of the primary key for the entity to be found.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<bool> ExistsAsync(TI id, CancellationToken ct = default)
+    {
+        var parameter = Expression.Parameter(typeof(TE), "e");
+        var property = Expression.Property(parameter, "Id");
+        var constant = Expression.Constant(id);
+        var body = Expression.Equal(property, constant);
+
+        var predicate = Expression.Lambda<Func<TE, bool>>(body, parameter);
+
+        return await dbContext.Set<TE>().AnyAsync(predicate, ct);
+    }
 
     /// <summary>
     /// Finds all entities of <typeparamref name="TE" /> from the database.
