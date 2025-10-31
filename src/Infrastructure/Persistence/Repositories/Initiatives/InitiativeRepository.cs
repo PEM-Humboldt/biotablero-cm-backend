@@ -79,7 +79,7 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .AnyAsync(ct);
 
     /// <summary>
-    /// Get if element is duplicated.
+    /// Check if element is duplicated.
     /// </summary>
     /// <param name="id">Initiative identifier.</param>
     /// <param name="name">Initiative name.</param>

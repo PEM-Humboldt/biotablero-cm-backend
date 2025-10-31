@@ -10,7 +10,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using NetTopologySuite.Geometries;
 
 /// <summary>
-/// Custom Initiative repository interface.
+/// Initiative repository interface.
 /// </summary>
 public interface IInitiativeRepository : IRepository<Initiative, int>
 {
@@ -38,7 +38,7 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     public Task<bool> AnyByNameAsync(string name, CancellationToken ct = default);
 
     /// <summary>
-    /// Get if element is duplicated.
+    /// Check if element is duplicated.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
     /// <param name="name">Entity name.</param>
