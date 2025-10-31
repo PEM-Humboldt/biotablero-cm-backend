@@ -145,6 +145,23 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     }
 
     /// <summary>
+    /// Generate OData web response.
+    /// </summary>
+    /// <typeparam name="TDtoM">DTO class type (for mappings).</typeparam>
+    /// <param name="odataResponse">OData response data.</param>
+    /// <param name="responseMapper">Mapper for response.</param>
+    /// <returns>Custom OData web response.</returns>
+    private protected static CustomWebResponse GetOdataWebResponse<TDtoM>(ODataResponse<TE> odataResponse, IMapper<TE, TDtoM> responseMapper)
+        where TDtoM : class, IDto => new()
+        {
+            ResponseBody = new Dictionary<string, object>()
+            {
+                ["@odata.count"] = odataResponse.TotalItems,
+                ["value"] = odataResponse.DataList.Select(responseMapper.Map),
+            },
+        };
+
+    /// <summary>
     /// Get OData list data by custom Linq query.
     /// </summary>
     /// <param name="query">Linq Query.</param>
@@ -155,16 +172,8 @@ public abstract class ServiceRead<TE, TDto, TI, TS>(IRepository<TE> entityReposi
     {
         try
         {
-            var oDataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
-
-            return new()
-            {
-                ResponseBody = new Dictionary<string, object>()
-                {
-                    ["@odata.count"] = oDataResponse.TotalItems,
-                    ["value"] = oDataResponse.DataList.Select(mapper.Map),
-                },
-            };
+            var odataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
+            return GetOdataWebResponse(odataResponse, mapper);
         }
         catch (ODataException ex)
         {

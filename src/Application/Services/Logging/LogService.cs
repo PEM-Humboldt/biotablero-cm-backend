@@ -1,7 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Logging;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -64,16 +63,8 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogSer
 
         try
         {
-            var oDataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
-
-            return new()
-            {
-                ResponseBody = new Dictionary<string, object>()
-                {
-                    ["@odata.count"] = oDataResponse.TotalItems,
-                    ["value"] = oDataResponse.DataList.Select(odataMapper.Map),
-                },
-            };
+            var odataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
+            return GetOdataWebResponse(odataResponse, odataMapper);
         }
         catch (ODataException ex)
         {
