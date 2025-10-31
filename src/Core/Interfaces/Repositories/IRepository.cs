@@ -5,8 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Ardalis.Specification;
-
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
