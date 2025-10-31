@@ -27,6 +27,24 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     }
 
     /// <summary>
+    /// Finds an entity with the given primary key value.
+    /// </summary>
+    /// <param name="id">The value of the primary key for the entity to be found.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public new async Task<Initiative> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Include(e => e.InitiativeContacts)
+            .Include(e => e.InitiativeUsers)
+            .Include(e => e.InitiativeLocations)
+                .ThenInclude(e => e.Location)
+                    .ThenInclude(e => e.Parent)
+            .Include(e => e.InitiativeTags)
+                .ThenInclude(e => e.Tag)
+            .Where(e => e.Id == id)
+            .FirstOrDefaultAsync(ct);
+
+    /// <summary>
     /// Include OData custom entities.
     /// </summary>
     /// <param name="query">Linq Query.</param>
