@@ -17,10 +17,8 @@ using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initiat
 /// <summary>
 /// Custom Join Request repository.
 /// </summary>
-public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestRepository
+public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestRepository
 {
-    private readonly GeneralContext dbContext;
-
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -28,7 +26,6 @@ public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestReposi
     public JoinRequestRepository(GeneralContext dbContext)
         : base(dbContext)
     {
-        this.dbContext = dbContext;
     }
 
     /// <summary>

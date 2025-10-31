@@ -7,7 +7,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// <summary>
 /// Custom Join Invitation repository interface.
 /// </summary>
-public interface IJoinInvitationRepository : IRepository<JoinInvitation>
+public interface IJoinInvitationRepository : IRepository<JoinInvitation, int>
 {
     /// <summary>
     /// Add initiative filter.

@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Logging;
 
+using System;
 using System.Linq;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
@@ -9,7 +10,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 /// Custom Log repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
-public class LogRepository(GeneralContext dbContext) : Repository<LogEntity>(dbContext), ILogRepository
+public class LogRepository(GeneralContext dbContext) : Repository<LogEntity, Guid>(dbContext), ILogRepository
 {
     /// <summary>
     /// Include OData custom filters.

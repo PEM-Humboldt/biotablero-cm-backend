@@ -14,10 +14,8 @@ using NetTopologySuite.Geometries;
 /// <summary>
 /// Custom Initiative repository.
 /// </summary>
-public class InitiativeRepository : Repository<Initiative>, IInitiativeRepository
+public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepository
 {
-    private readonly GeneralContext dbContext;
-
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -25,7 +23,6 @@ public class InitiativeRepository : Repository<Initiative>, IInitiativeRepositor
     public InitiativeRepository(GeneralContext dbContext)
         : base(dbContext)
     {
-        this.dbContext = dbContext;
     }
 
     /// <summary>

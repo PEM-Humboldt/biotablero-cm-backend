@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 /// Custom Join Invitation repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
-public class JoinInvitationRepository(GeneralContext dbContext) : Repository<JoinInvitation>(dbContext), IJoinInvitationRepository
+public class JoinInvitationRepository(GeneralContext dbContext) : Repository<JoinInvitation, int>(dbContext), IJoinInvitationRepository
 {
     /// <summary>
     /// Add initiative filter.

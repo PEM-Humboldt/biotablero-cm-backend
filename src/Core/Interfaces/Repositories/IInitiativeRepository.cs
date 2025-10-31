@@ -11,7 +11,7 @@ using NetTopologySuite.Geometries;
 /// <summary>
 /// Custom Initiative repository interface.
 /// </summary>
-public interface IInitiativeRepository : IRepository<Initiative>
+public interface IInitiativeRepository : IRepository<Initiative, int>
 {
     /// <summary>
     /// Include OData custom entities.
