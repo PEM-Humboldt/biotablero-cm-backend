@@ -26,14 +26,6 @@ public interface IRepository<TE, TI> : IDisposable
     Task<TE> GetByIdAsync(TI id, CancellationToken ct = default);
 
     /// <summary>
-    /// Checks if entity with the given primary key value exists.
-    /// </summary>
-    /// <param name="id">The value of the primary key for the entity to be found.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    Task<bool> AnyAsync(TI id, CancellationToken ct = default);
-
-    /// <summary>
     /// Finds all entities of <typeparamref name="TE" /> from the database.
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
@@ -46,6 +38,14 @@ public interface IRepository<TE, TI> : IDisposable
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<int> CountAsync(CancellationToken ct = default);
+
+    /// <summary>
+    /// Checks if entity with the given primary key value exists.
+    /// </summary>
+    /// <param name="id">The value of the primary key for the entity to be found.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<bool> AnyAsync(TI id, CancellationToken ct = default);
 
     /// <summary>
     /// Returns a boolean whether any entity exists or not.

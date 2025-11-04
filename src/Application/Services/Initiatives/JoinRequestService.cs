@@ -326,7 +326,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             var leaders = await initiativeUserRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
 
-            if (leaders?.Count() > 0)
+            if (leaders?.Any() ?? false)
             {
                 var leadersUserNames = leaders
                     .Select(e => e.UserName)

@@ -328,7 +328,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             CustomEmailAddress[] hiddenReceivers = null;
             var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailData);
 
-            if (leaders?.Count() > 0)
+            if (leaders?.Any() ?? false)
             {
                 var leadersUserNames = leaders
                     .Select(e => e.UserName)
@@ -365,7 +365,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             CustomEmailAddress[] hiddenReceivers = null;
             var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailData);
 
-            if (leaders?.Count() > 0)
+            if (leaders?.Any() ?? false)
             {
                 var leadersUserNames = leaders
                     .Select(e => e.UserName)

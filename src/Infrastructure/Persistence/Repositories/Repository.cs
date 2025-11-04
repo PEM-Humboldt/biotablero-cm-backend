@@ -48,24 +48,6 @@ public class Repository<TE, TI> : IRepository<TE, TI>
     public async Task<TE> GetByIdAsync(TI id, CancellationToken ct = default) => await dbContext.Set<TE>().FindAsync([id], ct);
 
     /// <summary>
-    /// Checks if entity with the given primary key value exists.
-    /// </summary>
-    /// <param name="id">The value of the primary key for the entity to be found.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    public async Task<bool> AnyAsync(TI id, CancellationToken ct = default)
-    {
-        var parameter = Expression.Parameter(typeof(TE), "e");
-        var property = Expression.Property(parameter, "Id");
-        var constant = Expression.Constant(id);
-        var body = Expression.Equal(property, constant);
-
-        var predicate = Expression.Lambda<Func<TE, bool>>(body, parameter);
-
-        return await dbContext.Set<TE>().AnyAsync(predicate, ct);
-    }
-
-    /// <summary>
     /// Finds all entities of <typeparamref name="TE" /> from the database.
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
@@ -85,6 +67,24 @@ public class Repository<TE, TI> : IRepository<TE, TI>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     public async Task<bool> AnyAsync(CancellationToken ct = default) => await dbContext.Set<TE>().AnyAsync(ct);
+
+    /// <summary>
+    /// Checks if entity with the given primary key value exists.
+    /// </summary>
+    /// <param name="id">The value of the primary key for the entity to be found.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<bool> AnyAsync(TI id, CancellationToken ct = default)
+    {
+        var parameter = Expression.Parameter(typeof(TE), "e");
+        var property = Expression.Property(parameter, "Id");
+        var constant = Expression.Constant(id);
+        var body = Expression.Equal(property, constant);
+
+        var predicate = Expression.Lambda<Func<TE, bool>>(body, parameter);
+
+        return await dbContext.Set<TE>().AnyAsync(predicate, ct);
+    }
 
     /// <summary>
     /// Adds an entity in the database.
