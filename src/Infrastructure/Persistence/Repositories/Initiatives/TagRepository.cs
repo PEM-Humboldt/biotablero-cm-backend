@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 
 using System.Linq;
 using System.Threading;

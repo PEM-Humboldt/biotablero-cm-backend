@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Locations;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Locations;
 
 using System.Collections.Generic;
 using System.Linq;

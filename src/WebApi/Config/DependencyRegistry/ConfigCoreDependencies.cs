@@ -5,8 +5,6 @@ using System;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
-using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories;
 using IAVH.BioTablero.CM.WebApi.Controllers.Tools;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
