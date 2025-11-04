@@ -19,7 +19,8 @@ public class JoinInvitationRepository(GeneralContext dbContext) : Repository<Joi
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
-    public IQueryable<JoinInvitation> AddInitiativeFilter(int initiativeId, IQueryable<JoinInvitation> query) => query
+    public IQueryable<JoinInvitation> AddInitiativeFilter(int initiativeId, IQueryable<JoinInvitation> query) =>
+        query
             .Where(e => e.InitiativeId == initiativeId);
 
     /// <summary>
