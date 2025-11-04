@@ -52,7 +52,7 @@ public class InitiativeTagService : IInitiativeTagService
     public async Task<CustomWebResponse> AddAsync(int initiativeId, int tagId, CancellationToken ct = default)
     {
         // Validate initiative
-        var initiativeExists = await initiativeRepository.ExistsByIdAsync(initiativeId, ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
 
         if (!initiativeExists)
         {
@@ -63,7 +63,7 @@ public class InitiativeTagService : IInitiativeTagService
         }
 
         // Validate initiative tag
-        var tagExists = await tagRepository.ExistsByIdAsync(tagId, ct);
+        var tagExists = await tagRepository.AnyAsync(tagId, ct);
 
         if (!tagExists)
         {

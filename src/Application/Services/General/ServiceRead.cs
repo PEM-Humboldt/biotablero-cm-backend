@@ -50,7 +50,7 @@ public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityReposi
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public virtual async Task<bool> ExistsAsync(TI id, CancellationToken ct = default) => await entityRepository.ExistsByIdAsync(id, ct);
+    public virtual async Task<bool> AnyAsync(TI id, CancellationToken ct = default) => await entityRepository.AnyAsync(id, ct);
 
     /// <summary>
     /// Get element.

@@ -113,7 +113,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Validate initiative
         var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeExists = await initiativeRepository.ExistsByIdAsync(initiativeId, ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
 
         if (!initiativeExists)
         {

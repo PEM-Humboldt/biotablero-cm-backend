@@ -98,7 +98,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         // Validate initiative
         var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeExists = await initiativeRepository.ExistsByIdAsync(initiativeId, ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
 
         if (!initiativeExists)
         {
@@ -110,7 +110,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         // Validate location
         var locationId = entityData.LocationId ?? 0;
-        var locationExists = await locationRepository.ExistsByIdAsync(locationId, ct);
+        var locationExists = await locationRepository.AnyAsync(locationId, ct);
 
         if (!locationExists)
         {
@@ -183,7 +183,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         // Validate location
         var locationId = entityData.LocationId ?? 0;
-        var locationExists = await locationRepository.ExistsByIdAsync(locationId, ct);
+        var locationExists = await locationRepository.AnyAsync(locationId, ct);
 
         if (!locationExists)
         {
