@@ -193,7 +193,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
             entityData = mapper.Map(entity);
 
-            logger.AddLog(LogType.Create, "Added initiative join invitation: {@entityData}", entityData);
+            logger.AddLog(LogType.Create, "Added initiative join invitation", "{@entityData}", entityData);
 
             return new CustomWebResponse()
             {

@@ -242,7 +242,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Create, "Added initiative: {@EntityData}", entityData);
+        logger.AddLog(LogType.Create, "Added initiative", "{@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -305,7 +305,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, "Updated initiative: {@EntityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated initiative", "{@EntityData}", entityData);
 
         return new CustomWebResponse()
         {
@@ -378,7 +378,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
             var entityData = mapper.Map(entity);
 
-            logger.AddLog(LogType.Update, $"Updated initiative image (type: {imageTypeStr}): {{@EntityData}}", entityData);
+            logger.AddLog(LogType.Update, "Updated initiative image", $"(type: {imageTypeStr}): {{@EntityData}}", entityData);
 
             return new CustomWebResponse()
             {
@@ -449,7 +449,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, $"Updated initiative polygon: {{@EntityData}}", entityData);
+        logger.AddLog(LogType.Update, $"Updated initiative polygon", "{{@EntityData}}", entityData);
 
         return new CustomWebResponse()
         {
@@ -528,7 +528,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
 
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, string.Concat($"{(disable ? "Disabled" : "Enabled")}", "initiative: {@EntityData}"), entityData);
+        logger.AddLog(LogType.Update, $"{(disable ? "Disabled" : "Enabled")} initiative", "{@EntityData}", entityData);
 
         return new CustomWebResponse()
         {

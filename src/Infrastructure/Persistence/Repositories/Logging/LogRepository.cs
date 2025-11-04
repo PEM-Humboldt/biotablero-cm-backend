@@ -18,5 +18,16 @@ public class LogRepository(GeneralContext dbContext) : Repository<LogEntity>(dbC
     /// <returns>Modified Linq query.</returns>
     public IQueryable<LogEntity> IncludeOdataFilters(IQueryable<LogEntity> query) =>
         query
-            .Where(e => e.CustomRecord);
+            .Where(e => e.CustomRecord)
+            .Select(e => new LogEntity()
+            {
+                Id = e.Id,
+                TimeStamp = e.TimeStamp,
+                Type = e.Type,
+                ShortMessage = e.ShortMessage,
+                Message = e.Message,
+                UserName = e.UserName,
+                ClientAgent = e.ClientAgent,
+                ClientIp = e.ClientIp,
+            });
 }

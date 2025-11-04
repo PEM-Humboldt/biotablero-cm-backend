@@ -40,6 +40,7 @@ public static class ConfigLogProperties
             { "level", new LevelColumnWriter() },
             { "type", new IntegerColumnWriter("Type") },
             { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
+            { "short_message", new RawStringColumnWriter("ShortMessage") },
             { "user_name", new RawStringColumnWriter("UserName") },
             { "custom_record", new BoolColumnWriter("CustomRecord") },
             { "client_ip", new RawStringColumnWriter("ClientIp") },
@@ -82,14 +83,4 @@ public static class ConfigLogProperties
 
         return host;
     }
-
-    /// <summary>
-    /// Serilog configuration for ASP.NET module.
-    /// </summary>
-    /// <param name="diagnosticContext">Serilog diagnostic information.</param>
-    /// <param name="httpContext">HTTP Context.</param>
-    public static void PushProperties(IDiagnosticContext diagnosticContext, HttpContext httpContext) =>
-
-        // Add HTTP host
-        diagnosticContext?.Set("HttpHost", $"{httpContext?.Request.Host}{httpContext.Request.PathBase}");
 }
