@@ -10,6 +10,7 @@ using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Config.Entities;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Interfaces;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
+using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Locations;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Logging;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -26,19 +27,30 @@ public static class ConfigExternalServices
     /// <returns>Host builder configuration.</returns>
     public static IServiceCollection AddExternalServices(this IServiceCollection services)
     {
-        // Custom repositories
+        // Repositories
+
+        //// Logs
         services.AddScoped<ILogRepository, LogRepository>();
+
+        // Locations
+        services.AddScoped<ILocationPolygonRepository, LocationPolygonRepository>();
+        services.AddScoped<ILocationRepository, LocationRepository>();
+
+        //// Initiatives
         services.AddScoped<IInitiativeRepository, InitiativeRepository>();
-        services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
+        services.AddScoped<IInitiativeContactRepository, InitiativeContactRepository>();
+        services.AddScoped<IInitiativeLocationRepository, InitiativeLocationRepository>();
+        services.AddScoped<IInitiativeTagRepository, InitiativeTagRepository>();
+        services.AddScoped<IInitiativeUserRepository, InitiativeUserRepository>();
         services.AddScoped<IJoinInvitationRepository, JoinInvitationRepository>();
+        services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
+        services.AddScoped<ITagRepository, TagRepository>();
 
         // External services
         services.AddScoped(typeof(IReportService<>), typeof(ReportExcelService<>));
         services.AddScoped<IStorageService, StorageService>();
         services.AddSingleton<IIamService, IamService>();
         services.AddSingleton<IEmailService, EmailService>();
-
-        // External services (reports)
         services.AddScoped<IReportConfig<LogDto>, LogReportConfig>();
 
         return services;
