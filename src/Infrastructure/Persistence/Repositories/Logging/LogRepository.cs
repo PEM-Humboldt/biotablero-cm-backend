@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
 
 /// <summary>
 /// Custom Log repository.

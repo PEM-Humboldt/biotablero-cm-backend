@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
-/// Custom Join Request repository interface.
+/// Join Request repository interface.
 /// </summary>
 public interface IJoinRequestRepository : IRepository<JoinRequest, int>
 {

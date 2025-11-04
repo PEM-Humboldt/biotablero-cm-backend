@@ -13,7 +13,7 @@ using IAVH.BioTablero.CM.Application.Mappings;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
 
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.OData;
