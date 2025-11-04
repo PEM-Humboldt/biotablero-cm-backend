@@ -14,7 +14,6 @@ using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
-using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Email;
@@ -31,13 +30,13 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 /// <summary>
 /// Join Invitation service.
 /// </summary>
-public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationDto, int, JoinInvitationSpec>, IJoinInvitationService
+public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationDto, int>, IJoinInvitationService
 {
     private new readonly IJoinInvitationRepository entityRepository;
     private readonly IValidator<JoinInvitationDto> entityValidator;
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
-    private readonly IRepository<InitiativeUser> initiativeUserRepository;
+    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IWebViewTools webViewTools;
     private readonly IEmailService emailService;
     private readonly IIamService iamService;
@@ -60,7 +59,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         IValidator<JoinInvitationDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
-        IRepository<InitiativeUser> initiativeUserRepository,
+        IInitiativeUserRepository initiativeUserRepository,
         IWebViewTools webViewTools,
         IEmailService emailService,
         IIamService iamService)
@@ -87,7 +86,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     public async Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct = default)
     {
         // Validate user level
-        var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader), ct);
+        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
 
         if (!userIsLeader)
         {
@@ -113,7 +112,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     public async Task<CustomWebResponse> AddAsync(JoinInvitationDto entityData, CancellationToken ct = default)
     {
         // Validate user role and initiative relationship
-        var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(entityData.InitiativeId, entityData.Creator, (int)InitiativeUserLevelEnum.Leader), ct);
+        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId, entityData.Creator, (int)InitiativeUserLevelEnum.Leader, ct);
 
         if (!userIsLeader)
         {
