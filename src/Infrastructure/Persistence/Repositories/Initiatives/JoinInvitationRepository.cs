@@ -1,6 +1,8 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
@@ -10,9 +12,29 @@ using Microsoft.EntityFrameworkCore;
 /// <summary>
 /// Join Invitation repository.
 /// </summary>
-/// <param name="dbContext">General Database Context.</param>
-public class JoinInvitationRepository(GeneralContext dbContext) : Repository<JoinInvitation, int>(dbContext), IJoinInvitationRepository
+public class JoinInvitationRepository : Repository<JoinInvitation, int>, IJoinInvitationRepository
 {
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="dbContext">General Database Context.</param>
+    public JoinInvitationRepository(GeneralContext dbContext)
+        : base(dbContext)
+    {
+    }
+
+    /// <summary>
+    /// Finds an entity with the given primary key value.
+    /// </summary>
+    /// <param name="id">The value of the primary key for the entity to be found.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public new async Task<JoinInvitation> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await dbContext.JoinInvitations
+            .Include(e => e.Guests)
+            .Where(e => e.Id == id)
+            .FirstOrDefaultAsync(ct);
+
     /// <summary>
     /// Add initiative filter.
     /// </summary>

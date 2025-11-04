@@ -25,6 +25,18 @@ public class InitiativeLocationRepository : Repository<InitiativeLocation, int>,
     }
 
     /// <summary>
+    /// Finds an entity with the given primary key value.
+    /// </summary>
+    /// <param name="id">The value of the primary key for the entity to be found.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public new async Task<InitiativeLocation> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await dbContext.InitiativeLocations
+            .Include(e => e.Location)
+            .Where(e => e.Id == id)
+            .FirstOrDefaultAsync(ct);
+
+    /// <summary>
     /// Get elements by initiative.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
