@@ -46,6 +46,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper)
     {
+        this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;

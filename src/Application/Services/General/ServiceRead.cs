@@ -24,7 +24,6 @@ using Microsoft.OData;
 /// <typeparam name="TI">Entity identifier type.</typeparam>
 public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityRepository, IMapper<TE, TDto> mapper) : IRead<TE, TI>
     where TDto : class, IDto
-    where TI : notnull
     where TE : BaseEntity<TI>, IAggregateRoot
 {
     /// <summary>

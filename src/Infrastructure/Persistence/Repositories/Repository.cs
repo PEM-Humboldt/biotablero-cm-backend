@@ -21,7 +21,6 @@ using Microsoft.EntityFrameworkCore;
 /// <typeparam name="TI">Entity identifier type.</typeparam>
 public class Repository<TE, TI> : IRepository<TE, TI>
     where TE : BaseEntity<TI>, IAggregateRoot
-    where TI : notnull
 {
     /// <summary>
     /// General Database context.

@@ -16,7 +16,6 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 /// <typeparam name="TI">Entity identifier type.</typeparam>
 public interface IRepository<TE, TI> : IDisposable
     where TE : BaseEntity<TI>, IAggregateRoot
-    where TI : notnull
 {
     /// <summary>
     /// Finds an entity with the given primary key value.
