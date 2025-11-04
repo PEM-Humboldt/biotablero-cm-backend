@@ -29,12 +29,25 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
     }
 
     /// <summary>
+    /// Get pending requests.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    public async Task<bool> AnyPendingRequests(int initiativeId, string userName, CancellationToken ct = default) =>
+        await dbContext.JoinRequests
+            .Where(e => e.InitiativeId == initiativeId && e.UserName == userName && e.StatusId == (int)JoinRequestStatusEnum.UnderReview)
+            .AnyAsync(ct);
+
+    /// <summary>
     /// Add initiative filter.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
-    public IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query) => query
+    public IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query) =>
+        query
             .Where(e => e.InitiativeId == initiativeId);
 
     /// <summary>

@@ -21,6 +21,15 @@ public interface IJoinRequestRepository : IRepository<JoinRequest, int>
     public IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query);
 
     /// <summary>
+    /// Get pending requests.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    public Task<bool> AnyPendingRequests(int initiativeId, string userName, CancellationToken ct = default);
+
+    /// <summary>
     /// Review request.
     /// </summary>
     /// <param name="requestId">Request identifier.</param>
