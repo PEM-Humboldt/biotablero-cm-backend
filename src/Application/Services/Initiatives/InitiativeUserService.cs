@@ -13,7 +13,6 @@ using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
-using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
@@ -30,9 +29,10 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 /// <summary>
 /// Initiative User service.
 /// </summary>
-public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserDto, int, InitiativeUserSpec>, IInitiativeUserService
+public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserDto, int>, IInitiativeUserService
 {
     private const int MaxLeadersByInitiative = 3;
+    private new readonly IInitiativeUserRepository entityRepository;
     private readonly IValidator<InitiativeUserDto> entityValidator;
     private readonly ILogger logger;
     private readonly IIamService iamService;
@@ -52,7 +52,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="webViewTools">Web View Tools.</param>
     /// <param name="emailService">Email service.</param>
     public InitiativeUserService(
-        IRepository<InitiativeUser> entityRepository,
+        IInitiativeUserRepository entityRepository,
         IMapper<InitiativeUser, InitiativeUserDto> mapper,
         IValidator<InitiativeUserDto> entityValidator,
         ILogger logger,
@@ -62,6 +62,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         IEmailService emailService)
         : base(entityRepository, mapper)
     {
+        this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.iamService = iamService;
@@ -78,7 +79,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default)
     {
-        var dataListEntity = await entityRepository.ListAsync(InitiativeUserSpec.InitiativeIdSpec(initiativeId), ct);
+        var dataListEntity = await entityRepository.GetByInitiativeAsync(initiativeId, ct);
 
         var dataListDto = dataListEntity
             .Select(mapper.Map);
@@ -112,7 +113,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Validate initiative
         var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeExists = await initiativeRepository.AnyAsync(new InitiativeSpec(initiativeId), ct);
+        var initiativeExists = await initiativeRepository.ExistsByIdAsync(initiativeId, ct);
 
         if (!initiativeExists)
         {
@@ -123,7 +124,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyAsync(InitiativeUserSpec.UserNameSpec(initiativeId, entityData.UserName), ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(initiativeId, entityData.UserName, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -136,9 +137,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         // Validate number of leaders
         if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader)
         {
-            var totalUserLeaders = await entityRepository.CountAsync(InitiativeUserSpec.LevelSpec(initiativeId, (int)InitiativeUserLevelEnum.Leader), ct);
+            var leaders = await entityRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
 
-            if (totalUserLeaders >= MaxLeadersByInitiative)
+            if (leaders.Count() >= MaxLeadersByInitiative)
             {
                 return new CustomWebResponse(true)
                 {
@@ -209,9 +210,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         }
 
         // Validate number of leaders
-        var leaders = await entityRepository.ListAsync(InitiativeUserSpec.LevelSpec(id, entity.InitiativeId, (int)InitiativeUserLevelEnum.Leader), ct);
+        var leaders = await entityRepository.GetByInitiativeAndLevelAsync(id, entity.InitiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
 
-        if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader && leaders.Count is < 1)
+        if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader && !leaders.Any())
         {
             return new CustomWebResponse(true)
             {
@@ -219,7 +220,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             };
         }
 
-        if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader && leaders.Count >= MaxLeadersByInitiative)
+        if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader && leaders.Count() >= MaxLeadersByInitiative)
         {
             return new CustomWebResponse(true)
             {
@@ -267,12 +268,12 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         }
 
         // Validate number of leaders
-        List<InitiativeUser> leaders = null;
+        IEnumerable<InitiativeUser> leaders = null;
         if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader)
         {
-            leaders = await entityRepository.ListAsync(InitiativeUserSpec.LevelSpec(entity.InitiativeId, (int)InitiativeUserLevelEnum.Leader), ct);
+            leaders = await entityRepository.GetByInitiativeAndLevelAsync(entity.InitiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
 
-            if (leaders.Count is <= 1)
+            if (leaders.Count() is <= 1)
             {
                 return new CustomWebResponse(true)
                 {
@@ -304,7 +305,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="reviewerUserName">Reviewer user name.</param>
     /// <param name="leaders">Initiative leaders list.</param>
     /// <param name="ct">Cancellation token.</param>
-    private void SendNotificationChangedLevel(ExternalUser userData, Initiative initiative, InitiativeUserLevelEnum level, string reviewerUserName, List<InitiativeUser> leaders, CancellationToken ct = default) => Task.Run(
+    private void SendNotificationChangedLevel(ExternalUser userData, Initiative initiative, InitiativeUserLevelEnum level, string reviewerUserName, IEnumerable<InitiativeUser> leaders, CancellationToken ct = default) => Task.Run(
         async () =>
         {
             var newLevelName = string.Empty;
@@ -327,7 +328,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             CustomEmailAddress[] hiddenReceivers = null;
             var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailData);
 
-            if (leaders?.Count > 0)
+            if (leaders?.Count() > 0)
             {
                 var leadersUserNames = leaders
                     .Select(e => e.UserName)
@@ -350,7 +351,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="initiative">Initiative data.</param>
     /// <param name="leaders">Initiative leaders list.</param>
     /// <param name="ct">Cancellation token.</param>
-    private void SendNotificationUserBanned(ExternalUser userData, Initiative initiative, List<InitiativeUser> leaders, CancellationToken ct = default) => Task.Run(
+    private void SendNotificationUserBanned(ExternalUser userData, Initiative initiative, IEnumerable<InitiativeUser> leaders, CancellationToken ct = default) => Task.Run(
         async () =>
         {
             var emailData = new DefaultEmailData
@@ -364,7 +365,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             CustomEmailAddress[] hiddenReceivers = null;
             var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailData);
 
-            if (leaders?.Count > 0)
+            if (leaders?.Count() > 0)
             {
                 var leadersUserNames = leaders
                     .Select(e => e.UserName)
