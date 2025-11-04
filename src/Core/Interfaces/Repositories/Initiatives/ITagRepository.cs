@@ -16,7 +16,7 @@ public interface ITagRepository : IRepository<Tag, int>
     /// <param name="name">Entity name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
-    public Task<bool> AnyByName(string name, CancellationToken ct = default);
+    Task<bool> AnyByName(string name, CancellationToken ct = default);
 
     /// <summary>
     /// Get if element is duplicated.
@@ -25,5 +25,5 @@ public interface ITagRepository : IRepository<Tag, int>
     /// <param name="name">Entity name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
-    public Task<bool> IsDuplicated(int id, string name, CancellationToken ct = default);
+    Task<bool> IsDuplicated(int id, string name, CancellationToken ct = default);
 }

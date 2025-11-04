@@ -18,7 +18,7 @@ public interface IJoinRequestRepository : IRepository<JoinRequest, int>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
-    public IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query);
+    IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query);
 
     /// <summary>
     /// Get pending requests.
@@ -27,7 +27,7 @@ public interface IJoinRequestRepository : IRepository<JoinRequest, int>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
-    public Task<bool> AnyPendingRequests(int initiativeId, string userName, CancellationToken ct = default);
+    Task<bool> AnyPendingRequests(int initiativeId, string userName, CancellationToken ct = default);
 
     /// <summary>
     /// Review request.
@@ -38,7 +38,7 @@ public interface IJoinRequestRepository : IRepository<JoinRequest, int>
     /// <param name="requestStatusId">Request status identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    public Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default);
+    Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default);
 
     /// <summary>
     /// Get pending old requests.
@@ -46,5 +46,5 @@ public interface IJoinRequestRepository : IRepository<JoinRequest, int>
     /// <param name="daysOld">Requests days old.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    public Task<Dictionary<string, int>> GetPendingOldRequestsAsync(int daysOld, CancellationToken ct = default);
+    Task<Dictionary<string, int>> GetPendingOldRequestsAsync(int daysOld, CancellationToken ct = default);
 }

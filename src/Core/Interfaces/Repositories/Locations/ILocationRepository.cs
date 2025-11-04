@@ -17,5 +17,5 @@ public interface ILocationRepository : IRepository<Location, int>
     /// <param name="parentId">Parent identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of elements by specified parent.</returns>
-    public Task<IEnumerable<Location>> GetByParentIdAsync(int? parentId, CancellationToken ct = default);
+    Task<IEnumerable<Location>> GetByParentIdAsync(int? parentId, CancellationToken ct = default);
 }

@@ -15,5 +15,5 @@ public interface ILogRepository : IRepository<LogEntity, Guid>
     /// </summary>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
-    public IQueryable<LogEntity> IncludeOdataFilters(IQueryable<LogEntity> query);
+    IQueryable<LogEntity> IncludeOdataFilters(IQueryable<LogEntity> query);
 }

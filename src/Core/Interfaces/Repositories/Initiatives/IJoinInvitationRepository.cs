@@ -15,12 +15,12 @@ public interface IJoinInvitationRepository : IRepository<JoinInvitation, int>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
-    public IQueryable<JoinInvitation> AddInitiativeFilter(int initiativeId, IQueryable<JoinInvitation> query);
+    IQueryable<JoinInvitation> AddInitiativeFilter(int initiativeId, IQueryable<JoinInvitation> query);
 
     /// <summary>
     /// Include OData custom entities.
     /// </summary>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
-    public IQueryable<JoinInvitation> IncludeOdataEntities(IQueryable<JoinInvitation> query);
+    IQueryable<JoinInvitation> IncludeOdataEntities(IQueryable<JoinInvitation> query);
 }

@@ -16,5 +16,5 @@ public interface ILocationPolygonRepository : IRepository<LocationPolygon, int>
     /// <param name="locationId">Location identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected simplified polygon.</returns>
-    public Task<string> GetSimplifiedByLocationAsync(int locationId, CancellationToken ct = default);
+    Task<string> GetSimplifiedByLocationAsync(int locationId, CancellationToken ct = default);
 }

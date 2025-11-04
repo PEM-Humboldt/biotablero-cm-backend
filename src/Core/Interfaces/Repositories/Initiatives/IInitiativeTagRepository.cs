@@ -17,5 +17,5 @@ public interface IInitiativeTagRepository : IRepository<InitiativeTag, int>
     /// <param name="tagId">Tag identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
-    public Task<bool> IsDuplicatedAsync(int initiativeId, int tagId, CancellationToken ct = default);
+    Task<bool> IsDuplicatedAsync(int initiativeId, int tagId, CancellationToken ct = default);
 }
