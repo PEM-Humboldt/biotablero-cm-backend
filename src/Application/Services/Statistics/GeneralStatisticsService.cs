@@ -30,12 +30,62 @@ public class GeneralStatisticsService : IGeneralStatisticsService
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>General statistics data.</returns>
-    public async Task<CustomWebResponse> GetGeneralStatisticsAsync(CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetGeneralStatisticsAsync(CancellationToken ct = default) =>
+        await GetGeneralStatisticsInternalAsync(null, null, ct);
+
+    /// <summary>
+    /// Get general statistics filtered by department.
+    /// </summary>
+    /// <param name="departmentId">Department identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>General statistics data for the department.</returns>
+    public async Task<CustomWebResponse> GetGeneralStatisticsByDepartmentAsync(int departmentId, CancellationToken ct = default) =>
+        await GetGeneralStatisticsInternalAsync(departmentId, null, ct);
+
+    /// <summary>
+    /// Get general statistics filtered by initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>General statistics data for the initiative.</returns>
+    public async Task<CustomWebResponse> GetGeneralStatisticsByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
+        await GetGeneralStatisticsInternalAsync(null, initiativeId, ct);
+
+    /// <summary>
+    /// Internal method to get general statistics with optional filters.
+    /// </summary>
+    /// <param name="departmentId">Department identifier (optional).</param>
+    /// <param name="initiativeId">Initiative identifier (optional).</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>General statistics data.</returns>
+    private async Task<CustomWebResponse> GetGeneralStatisticsInternalAsync(int? departmentId, int? initiativeId, CancellationToken ct = default)
     {
-        // Calculate statistics using private methods
-        var totalActiveInitiatives = await GetTotalActiveInitiativesCountAsync(ct);
-        var totalPeopleInvolved = await GetTotalPeopleInvolvedCountAsync(ct);
-        var totalAreaInHectares = await GetTotalAreaInHectaresAsync(ct);
+        // Calculate statistics based on filters
+        int totalActiveInitiatives;
+        int totalPeopleInvolved;
+        double totalAreaInHectares;
+
+        if (departmentId.HasValue)
+        {
+            totalActiveInitiatives = await initiativeRepository.GetActiveInitiativesCountByDepartmentAsync(departmentId.Value, ct);
+            totalPeopleInvolved = await initiativeRepository.GetPeopleInvolvedInActiveInitiativesCountByDepartmentAsync(departmentId.Value, ct);
+            var totalAreaInSquareKm = await initiativeRepository.GetTotalAreaOfActiveInitiativesByDepartmentAsync(departmentId.Value, ct);
+            totalAreaInHectares = Math.Round(totalAreaInSquareKm * 100, 2); // Convert from km² to hectares
+        }
+        else if (initiativeId.HasValue)
+        {
+            totalActiveInitiatives = await initiativeRepository.GetActiveInitiativesCountByInitiativeAsync(initiativeId.Value, ct);
+            totalPeopleInvolved = await initiativeRepository.GetPeopleInvolvedInActiveInitiativesCountByInitiativeAsync(initiativeId.Value, ct);
+            var totalAreaInSquareKm = await initiativeRepository.GetTotalAreaOfActiveInitiativesByInitiativeAsync(initiativeId.Value, ct);
+            totalAreaInHectares = Math.Round(totalAreaInSquareKm * 100, 2); // Convert from km² to hectares
+        }
+        else
+        {
+            totalActiveInitiatives = await initiativeRepository.GetActiveInitiativesCountAsync(ct);
+            totalPeopleInvolved = await initiativeRepository.GetPeopleInvolvedInActiveInitiativesCountAsync(ct);
+            var totalAreaInSquareKm = await initiativeRepository.GetTotalAreaOfActiveInitiativesAsync(ct);
+            totalAreaInHectares = Math.Round(totalAreaInSquareKm * 100, 2); // Convert from km² to hectares
+        }
 
         // Validate data integrity
         if (totalActiveInitiatives < 0)
@@ -73,34 +123,5 @@ public class GeneralStatisticsService : IGeneralStatisticsService
         {
             ResponseBody = statistics,
         };
-    }
-
-    /// <summary>
-    /// Get total count of active initiatives.
-    /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Count of active initiatives.</returns>
-    private async Task<int> GetTotalActiveInitiativesCountAsync(CancellationToken ct = default) =>
-        await initiativeRepository.GetActiveInitiativesCountAsync(ct);
-
-    /// <summary>
-    /// Get total count of people involved in active initiatives.
-    /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Count of people involved.</returns>
-    private async Task<int> GetTotalPeopleInvolvedCountAsync(CancellationToken ct = default) =>
-        await initiativeRepository.GetPeopleInvolvedInActiveInitiativesCountAsync(ct);
-
-    /// <summary>
-    /// Get total area of active initiatives in hectares.
-    /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Total area in hectares.</returns>
-    private async Task<double> GetTotalAreaInHectaresAsync(CancellationToken ct = default)
-    {
-        var totalAreaInSquareKm = await initiativeRepository.GetTotalAreaOfActiveInitiativesAsync(ct);
-
-        // Convert from km² to hectares (1 km² = 100 hectares)
-        return Math.Round(totalAreaInSquareKm * 100, 2);
     }
 }
