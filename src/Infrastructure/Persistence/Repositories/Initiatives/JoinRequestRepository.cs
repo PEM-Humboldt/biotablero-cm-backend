@@ -15,7 +15,7 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
 /// <summary>
-/// Custom Join Request repository.
+/// Join Request repository.
 /// </summary>
 public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestRepository
 {
@@ -29,6 +29,16 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
     }
 
     /// <summary>
+    /// Add initiative filter.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="query">Linq Query.</param>
+    /// <returns>Modified Linq query.</returns>
+    public IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query) =>
+        query
+            .Where(e => e.InitiativeId == initiativeId);
+
+    /// <summary>
     /// Get pending requests.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
@@ -39,16 +49,6 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
         await dbContext.JoinRequests
             .Where(e => e.InitiativeId == initiativeId && e.UserName == userName && e.StatusId == (int)JoinRequestStatusEnum.UnderReview)
             .AnyAsync(ct);
-
-    /// <summary>
-    /// Add initiative filter.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="query">Linq Query.</param>
-    /// <returns>Modified Linq query.</returns>
-    public IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query) =>
-        query
-            .Where(e => e.InitiativeId == initiativeId);
 
     /// <summary>
     /// Review request.

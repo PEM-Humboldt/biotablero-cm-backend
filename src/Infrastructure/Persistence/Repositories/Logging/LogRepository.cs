@@ -7,7 +7,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
 
 /// <summary>
-/// Custom Log repository.
+/// Log repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
 public class LogRepository(GeneralContext dbContext) : Repository<LogEntity, Guid>(dbContext), ILogRepository

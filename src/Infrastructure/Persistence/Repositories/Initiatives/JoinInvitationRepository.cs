@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using Microsoft.EntityFrameworkCore;
 
 /// <summary>
-/// Custom Join Invitation repository.
+/// Join Invitation repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
 public class JoinInvitationRepository(GeneralContext dbContext) : Repository<JoinInvitation, int>(dbContext), IJoinInvitationRepository
