@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
+namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
 using System.Collections.Generic;
 
@@ -7,9 +7,9 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
-/// Initiative location response example.
+/// Initiative geo data response example.
 /// </summary>
-public class InitiativeLocationResponseExample : IExamplesProvider<List<InitiativeCoordinatesDto>>
+public class InitiativeGeoDataResponseExample : IExamplesProvider<List<InitiativeCoordinatesDto>>
 {
     /// <summary>
     /// Get examples.

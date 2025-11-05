@@ -484,8 +484,8 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         var initiatives = await entityRepository.GetActiveInitiativesWithCoordinatesByLocationAsync(locationId, ct);
         var result = initiatives.Select(i => new InitiativeCoordinatesDto
         {
-            InitiativeId = i.Id,
-            InitiativeName = i.Name,
+            InitiativeId = i.InitiativeId,
+            InitiativeName = i.InitiativeName,
             Coordinate = i.Coordinate,
         }).ToList();
 

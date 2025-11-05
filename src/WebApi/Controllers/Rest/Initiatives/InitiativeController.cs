@@ -197,7 +197,7 @@ public class InitiativeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of initiatives with coordinates.</returns>
     [HttpGet("GetByLocation")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeLocationResponseExample))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeGeoDataResponseExample))]
     public async Task<IActionResult> GetByLocation([FromQuery] int? locationId = null, CancellationToken ct = default)
     {
         var response = await entityService.GetByLocationAsync(locationId, ct);

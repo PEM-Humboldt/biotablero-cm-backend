@@ -104,5 +104,5 @@ public interface IInitiativeRepository : IRepository<Initiative>
     /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of initiatives with coordinates.</returns>
-    public Task<IEnumerable<(int Id, string Name, double[] Coordinate)>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default);
+    public Task<IEnumerable<InitiativeGeoData>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default);
 }

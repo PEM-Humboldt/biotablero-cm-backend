@@ -160,7 +160,7 @@ public class InitiativeRepository : Repository<Initiative>, IInitiativeRepositor
     /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of initiatives with coordinates.</returns>
-    public async Task<IEnumerable<(int Id, string Name, double[] Coordinate)>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default)
+    public async Task<IEnumerable<InitiativeGeoData>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default)
     {
         var query = dbContext.Initiatives
             .Where(i => i.Enabled && i.Coordinate != null);
@@ -172,17 +172,14 @@ public class InitiativeRepository : Repository<Initiative>, IInitiativeRepositor
         }
 
         var results = await query
-            .Select(i => new
+            .Select(i => new InitiativeGeoData
             {
-                i.Id,
-                i.Name,
-                i.Coordinate,
+                InitiativeId = i.Id,
+                InitiativeName = i.Name,
+                Coordinate = new double[] { i.Coordinate.X, i.Coordinate.Y },
             })
             .ToListAsync(ct);
 
-        return results.Select(r => (
-            r.Id,
-            r.Name,
-            r.Coordinate != null ? new double[] { r.Coordinate.X, r.Coordinate.Y } : System.Array.Empty<double>()));
+        return results;
     }
 }
