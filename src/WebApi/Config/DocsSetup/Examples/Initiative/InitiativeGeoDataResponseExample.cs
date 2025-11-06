@@ -2,20 +2,20 @@
 
 using System.Collections.Generic;
 
-using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Initiative geo data response example.
 /// </summary>
-public class InitiativeGeoDataResponseExample : IExamplesProvider<List<InitiativeCoordinatesDto>>
+public class InitiativeGeoDataResponseExample : IExamplesProvider<List<InitiativeGeoData>>
 {
     /// <summary>
     /// Get examples.
     /// </summary>
     /// <returns>Examples.</returns>
-    public List<InitiativeCoordinatesDto> GetExamples() => [
+    public List<InitiativeGeoData> GetExamples() => [
         new()
         {
             InitiativeId = 1,

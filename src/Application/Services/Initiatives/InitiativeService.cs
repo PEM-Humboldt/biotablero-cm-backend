@@ -482,7 +482,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     public async Task<CustomWebResponse> GetByLocationAsync(int? locationId = null, CancellationToken ct = default)
     {
         var initiatives = await entityRepository.GetActiveInitiativesWithCoordinatesByLocationAsync(locationId, ct);
-        var result = initiatives.Select(i => new InitiativeCoordinatesDto
+        var result = initiatives.Select(i => new InitiativeGeoData
         {
             InitiativeId = i.InitiativeId,
             InitiativeName = i.InitiativeName,

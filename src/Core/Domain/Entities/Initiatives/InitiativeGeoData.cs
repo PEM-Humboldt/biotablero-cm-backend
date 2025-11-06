@@ -1,7 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
-using System;
-
 /// <summary>
 /// Initiative geo data.
 /// </summary>
@@ -20,5 +18,5 @@ public class InitiativeGeoData
     /// <summary>
     /// Initiative coordinates [longitude, latitude].
     /// </summary>
-    public double[] Coordinate { get; set; } = Array.Empty<double>();
+    public double[] Coordinate { get; set; } = [];
 }
