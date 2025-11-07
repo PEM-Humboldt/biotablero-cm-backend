@@ -50,7 +50,7 @@ public class JoinRequestMappings() : IMapper<JoinRequest, JoinRequestDto>
         {
             UserName = dto.UserName,
             ReviewerUserName = dto.ReviewerUserName,
-            CreationDate = dto.CreationDate,
+            CreationDate = dto.CreationDate ?? DateTime.Now,
             ResponseDate = dto.ResponseDate,
             InitiativeId = dto.InitiativeId,
             LevelId = dto.Level.Id,

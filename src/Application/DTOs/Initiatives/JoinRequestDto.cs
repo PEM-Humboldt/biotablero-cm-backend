@@ -31,7 +31,7 @@ public class JoinRequestDto : IDto
     /// <summary>
     /// Join Request creation date.
     /// </summary>
-    public DateTime CreationDate { get; set; }
+    public DateTime? CreationDate { get; set; }
 
     /// <summary>
     /// Join Request creation date.
