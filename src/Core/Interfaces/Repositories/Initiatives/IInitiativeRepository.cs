@@ -89,7 +89,7 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="departmentId">Department identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Count of active initiatives in the department.</returns>
-    public Task<int> GetActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default);
+    Task<int> GetActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default);
 
     /// <summary>
     /// Get total area of active initiatives by department.
@@ -97,7 +97,7 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="departmentId">Department identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Total area in square kilometers for the department.</returns>
-    public Task<double> GetTotalAreaOfActiveInitiativesByDepartmentAsync(int departmentId, CancellationToken ct = default);
+    Task<double> GetTotalAreaOfActiveInitiativesByDepartmentAsync(int departmentId, CancellationToken ct = default);
 
     /// <summary>
     /// Get count of people involved in active initiatives by department.
@@ -105,7 +105,7 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="departmentId">Department identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Count of people involved in active initiatives in the department.</returns>
-    public Task<int> GetPeopleInvolvedInActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default);
+    Task<int> GetPeopleInvolvedInActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default);
 
     /// <summary>
     /// Get count of active initiatives by specific initiative.
@@ -113,7 +113,7 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Count of active initiatives (should be 1 or 0).</returns>
-    public Task<int> GetActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+    Task<int> GetActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
     /// Get total area of active initiatives by specific initiative.
@@ -121,7 +121,7 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Total area in square kilometers for the initiative.</returns>
-    public Task<double> GetTotalAreaOfActiveInitiativesByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+    Task<double> GetTotalAreaOfActiveInitiativesByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
     /// Get count of people involved in active initiatives by specific initiative.
@@ -129,5 +129,13 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Count of people involved in the specific initiative.</returns>
-    public Task<int> GetPeopleInvolvedInActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+    Task<int> GetPeopleInvolvedInActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get active initiatives with coordinates by location.
+    /// </summary>
+    /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>List of initiatives with coordinates.</returns>
+    Task<IEnumerable<InitiativeGeoData>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default);
 }
