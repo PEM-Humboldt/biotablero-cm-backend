@@ -189,4 +189,18 @@ public class InitiativeController(
         var response = await entityService.DisableAsync(id, ct);
         return webTools.CustomResponse(response);
     }
+
+    /// <summary>
+    /// Get active initiatives with coordinates by location.
+    /// </summary>
+    /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>List of initiatives with coordinates.</returns>
+    [HttpGet("GetByLocation")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeGeoDataResponseExample))]
+    public async Task<IActionResult> GetByLocation([FromQuery] int? locationId = null, CancellationToken ct = default)
+    {
+        var response = await entityService.GetByLocationAsync(locationId, ct);
+        return webTools.CustomResponse(response);
+    }
 }

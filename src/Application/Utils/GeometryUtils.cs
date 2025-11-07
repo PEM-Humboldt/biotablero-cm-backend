@@ -50,4 +50,12 @@ public static class GeometryUtils
 
         return CalculateAreaInSquareKilometers(polygon);
     }
+
+    /// <summary>
+    /// Convert from km² to hectares.
+    /// </summary>
+    /// <param name="areaInSquareKilometers">Area in square kilometers.</param>
+    /// <returns>Area in hectares rounded to 2 decimal places.</returns>
+    public static double ConvertSquareKilometersToHectares(double areaInSquareKilometers) =>
+        Math.Round(areaInSquareKilometers * 100, 2);
 }

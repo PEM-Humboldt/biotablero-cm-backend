@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -96,4 +97,12 @@ public interface IInitiativeRepository : IRepository<Initiative>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Count of people involved in the specific initiative.</returns>
     public Task<int> GetPeopleInvolvedInActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get active initiatives with coordinates by location.
+    /// </summary>
+    /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>List of initiatives with coordinates.</returns>
+    public Task<IEnumerable<InitiativeGeoData>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default);
 }
