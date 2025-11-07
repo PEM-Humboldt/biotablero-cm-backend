@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -14,7 +13,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 /// </summary>
 /// <typeparam name="TE">Entity class type.</typeparam>
 /// <typeparam name="TI">Entity identifier type.</typeparam>
-public interface IRepository<TE, TI> : IDisposable
+public interface IRepository<TE, TI>
     where TE : BaseEntity<TI>, IAggregateRoot
 {
     /// <summary>
