@@ -34,11 +34,10 @@ public interface IJoinRequestRepository : IRepository<JoinRequest, int>
     /// </summary>
     /// <param name="requestId">Request identifier.</param>
     /// <param name="reviewerUserName">Reviewer user name.</param>
-    /// <param name="userName">User name.</param>
     /// <param name="requestStatusId">Request status identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default);
+    Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, int requestStatusId, CancellationToken ct = default);
 
     /// <summary>
     /// Get pending old requests.
