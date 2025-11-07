@@ -7,6 +7,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
 /// <summary>
@@ -31,6 +32,7 @@ public class JoinRequestMappings() : IMapper<JoinRequest, JoinRequestDto>
             CreationDate = entity.CreationDate,
             ResponseDate = entity.ResponseDate,
             InitiativeId = entity.InitiativeId,
+            Level = new EnumEntityDto<InitiativeUserLevelEnum>(entity.LevelId),
             Status = new EnumEntityDto<JoinRequestStatusEnum>(entity.StatusId),
         };
     }
@@ -51,6 +53,7 @@ public class JoinRequestMappings() : IMapper<JoinRequest, JoinRequestDto>
             CreationDate = dto.CreationDate,
             ResponseDate = dto.ResponseDate,
             InitiativeId = dto.InitiativeId,
+            LevelId = dto.Level.Id,
             StatusId = dto.Status.Id,
         };
     }

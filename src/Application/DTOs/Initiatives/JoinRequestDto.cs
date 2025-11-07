@@ -44,6 +44,11 @@ public class JoinRequestDto : IDto
     public int InitiativeId { get; set; }
 
     /// <summary>
+    /// Level relationship.
+    /// </summary>
+    public EnumEntityDto<InitiativeUserLevel> Level { get; set; }
+
+    /// <summary>
     /// Join Request Status relationship.
     /// </summary>
     public EnumEntityDto<JoinRequestStatus> Status { get; set; }
