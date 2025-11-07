@@ -82,11 +82,12 @@ dotnet build --no-incremental -warnaserror
 > Replace the `MIGRATION_NAME` variable with a short description in **Pascal Case**
 
 ```sh
+# List all migrations
+dotnet ef migrations list --startup-project src/WebApi --project src/Infrastructure --context GeneralContext
 # Generate migration
 dotnet ef migrations add $MIGRATION_NAME --startup-project src/WebApi --project src/Infrastructure --output-dir Persistence/Migrations --context GeneralContext
 # Apply format rules in Infrastructure project (twice)
-dotnet format src/Infrastructure
-dotnet format src/Infrastructure
+dotnet format src/Infrastructure && dotnet format src/Infrastructure
 ```
 
 If you need to remove the last generated migration, you can do so with the command: `dotnet ef migrations remove --startup-project src/WebApi --project src/Infrastructure --context GeneralContext`.

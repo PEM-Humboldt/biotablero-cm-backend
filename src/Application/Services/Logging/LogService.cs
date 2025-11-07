@@ -9,6 +9,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
+using IAVH.BioTablero.CM.Application.Mappings;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -28,6 +29,11 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogSer
     private readonly IReportService<LogDto> entityReportService;
 
     /// <summary>
+    /// Entity mapper.
+    /// </summary>
+    private readonly IMapper<LogEntity, LogBaseDto> odataMapper;
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
@@ -41,6 +47,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogSer
     {
         this.entityRepository = entityRepository;
         this.entityReportService = entityReportService;
+        odataMapper = new LogBaseMappings();
     }
 
     /// <summary>
@@ -54,7 +61,18 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogSer
         var query = entityRepository.GetQueryable();
         query = entityRepository.IncludeOdataFilters(query);
 
-        return await GetOdataListByQueryAsync(query, queryOptions, ct);
+        try
+        {
+            var odataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
+            return GetOdataWebResponse(odataResponse, odataMapper);
+        }
+        catch (ODataException ex)
+        {
+            return new(true)
+            {
+                Message = $"Invalid filter: {ex.Message}",
+            };
+        }
     }
 
     /// <summary>

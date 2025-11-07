@@ -28,6 +28,11 @@ public class LogEntity : BaseEntity<Guid>, IAggregateRoot
     public LogType Type { get; set; }
 
     /// <summary>
+    /// Log short message.
+    /// </summary>
+    public string ShortMessage { get; set; }
+
+    /// <summary>
     /// Log message.
     /// </summary>
     public string Message { get; set; }

@@ -15,12 +15,31 @@ public static class LogUtils
     /// </summary>
     /// <param name="logger">Serilog logger.</param>
     /// <param name="logType">System log type.</param>
+    /// <param name="shortMessage">Short log message.</param>
     /// <param name="messageTemplate">Message template.</param>
     /// <param name="propertyValues">Message property values.</param>
     /// <param name="logLevel">System log level.</param>
-    public static void AddLog(this ILogger logger, LogType logType, string messageTemplate, object propertyValues, LogEventLevel logLevel = LogEventLevel.Information) =>
+    public static void AddLog(this ILogger logger, LogType logType, string shortMessage, string messageTemplate = null, object propertyValues = null, LogEventLevel logLevel = LogEventLevel.Information)
+    {
+        string finalMessageTemplate;
+
+        if (string.IsNullOrEmpty(shortMessage))
+        {
+            finalMessageTemplate = messageTemplate;
+        }
+        else if (string.IsNullOrEmpty(messageTemplate))
+        {
+            finalMessageTemplate = shortMessage;
+        }
+        else
+        {
+            finalMessageTemplate = $"{shortMessage}: {messageTemplate}";
+        }
+
         logger
             .ForContext("CustomRecord", true)
             .ForContext("Type", (int)logType)
-            .Write(logLevel, messageTemplate, propertyValues);
+            .ForContext("ShortMessage", shortMessage)
+            .Write(logLevel, finalMessageTemplate, propertyValues);
+    }
 }
