@@ -27,8 +27,6 @@ public class Repository<TE, TI> : IRepository<TE, TI>
     /// </summary>
     private protected readonly GeneralContext dbContext;
 
-    private bool disposedValue;
-
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -36,7 +34,6 @@ public class Repository<TE, TI> : IRepository<TE, TI>
     public Repository(GeneralContext dbContext)
     {
         this.dbContext = dbContext;
-        disposedValue = false;
     }
 
     /// <summary>
@@ -197,30 +194,4 @@ public class Repository<TE, TI> : IRepository<TE, TI>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of elements in the query.</returns>
     public async Task<List<TE>> QueryToListAsync(IQueryable<TE> query, CancellationToken ct = default) => await query.ToListAsync(ct);
-
-    /// <summary>
-    /// Dispose method.
-    /// </summary>
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
-    /// Dispose method.
-    /// </summary>
-    /// <param name="disposing">Disposing flag.</param>
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
-        {
-            if (disposing)
-            {
-                dbContext.Dispose();
-            }
-
-            disposedValue = true;
-        }
-    }
 }
