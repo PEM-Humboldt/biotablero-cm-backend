@@ -36,6 +36,11 @@ public class JoinRequest : BaseEntity<int>, IAggregateRoot
     public int InitiativeId { get; set; }
 
     /// <summary>
+    /// Level identifier.
+    /// </summary>
+    public int LevelId { get; set; }
+
+    /// <summary>
     /// Join Request Status identifier.
     /// </summary>
     public int StatusId { get; set; }
@@ -44,6 +49,11 @@ public class JoinRequest : BaseEntity<int>, IAggregateRoot
     /// Initiative relationship.
     /// </summary>
     public Initiative Initiative { get; set; }
+
+    /// <summary>
+    /// Level relationship.
+    /// </summary>
+    public InitiativeUserLevel Level { get; set; }
 
     /// <summary>
     /// Join request Status relationship.
