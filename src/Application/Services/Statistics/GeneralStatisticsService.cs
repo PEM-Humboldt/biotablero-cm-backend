@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Statistics;
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -70,21 +69,21 @@ public class GeneralStatisticsService : IGeneralStatisticsService
             totalActiveInitiatives = await initiativeRepository.GetActiveInitiativesCountByDepartmentAsync(departmentId.Value, ct);
             totalPeopleInvolved = await initiativeRepository.GetPeopleInvolvedInActiveInitiativesCountByDepartmentAsync(departmentId.Value, ct);
             var totalAreaInSquareKm = await initiativeRepository.GetTotalAreaOfActiveInitiativesByDepartmentAsync(departmentId.Value, ct);
-            totalAreaInHectares = Math.Round(totalAreaInSquareKm * 100, 2); // Convert from km² to hectares
+            totalAreaInHectares = GeometryUtils.ConvertSquareKilometersToHectares(totalAreaInSquareKm);
         }
         else if (initiativeId.HasValue)
         {
             totalActiveInitiatives = await initiativeRepository.GetActiveInitiativesCountByInitiativeAsync(initiativeId.Value, ct);
             totalPeopleInvolved = await initiativeRepository.GetPeopleInvolvedInActiveInitiativesCountByInitiativeAsync(initiativeId.Value, ct);
             var totalAreaInSquareKm = await initiativeRepository.GetTotalAreaOfActiveInitiativesByInitiativeAsync(initiativeId.Value, ct);
-            totalAreaInHectares = Math.Round(totalAreaInSquareKm * 100, 2); // Convert from km² to hectares
+            totalAreaInHectares = GeometryUtils.ConvertSquareKilometersToHectares(totalAreaInSquareKm);
         }
         else
         {
             totalActiveInitiatives = await initiativeRepository.GetActiveInitiativesCountAsync(ct);
             totalPeopleInvolved = await initiativeRepository.GetPeopleInvolvedInActiveInitiativesCountAsync(ct);
             var totalAreaInSquareKm = await initiativeRepository.GetTotalAreaOfActiveInitiativesAsync(ct);
-            totalAreaInHectares = Math.Round(totalAreaInSquareKm * 100, 2); // Convert from km² to hectares
+            totalAreaInHectares = GeometryUtils.ConvertSquareKilometersToHectares(totalAreaInSquareKm);
         }
 
         // Validate data integrity

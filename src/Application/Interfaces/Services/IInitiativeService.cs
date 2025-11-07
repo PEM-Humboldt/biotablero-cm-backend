@@ -50,4 +50,12 @@ public interface IInitiativeService : IRead<Initiative, int>, IAdd<InitiativeDto
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<CustomWebResponse> UpdatePolygonAsync(int id, string geoJsonString, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get active initiatives with coordinates by location.
+    /// </summary>
+    /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> GetByLocationAsync(int? locationId = null, CancellationToken ct = default);
 }
