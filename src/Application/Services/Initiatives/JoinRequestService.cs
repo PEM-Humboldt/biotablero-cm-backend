@@ -345,7 +345,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
                 {
                     Content = emailData.Content,
                 };
-                var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailObject);
+                var htmlBody = await webViewTools.RenderViewToStringAsync("JoinRequest", emailObject);
 
                 await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
             }
@@ -369,7 +369,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         };
 
         var receivers = new CustomEmailAddress[] { emailData.Address };
-        var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailData);
+        var htmlBody = await webViewTools.RenderViewToStringAsync("PendingRequestsReminder", emailData);
 
         await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
 

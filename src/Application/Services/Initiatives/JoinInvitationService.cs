@@ -220,7 +220,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
             .Select(e => new CustomEmailAddress(e))
             .ToArray();
 
-        var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailData);
+        var htmlBody = await webViewTools.RenderViewToStringAsync("JoinInvitation", emailData);
 
         var response = await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
 

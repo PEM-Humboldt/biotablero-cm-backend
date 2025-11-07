@@ -325,7 +325,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
             var receivers = new CustomEmailAddress[] { emailData.Address };
             CustomEmailAddress[] hiddenReceivers = null;
-            var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailData);
+            var htmlBody = await webViewTools.RenderViewToStringAsync("RoleAssignment", emailData);
 
             if (leaders?.Count > 0)
             {
@@ -362,7 +362,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
             var receivers = new CustomEmailAddress[] { emailData.Address };
             CustomEmailAddress[] hiddenReceivers = null;
-            var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailData);
+            var htmlBody = await webViewTools.RenderViewToStringAsync("UserRemoval", emailData);
 
             if (leaders?.Count > 0)
             {
