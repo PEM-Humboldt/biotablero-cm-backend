@@ -30,6 +30,14 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     }
 
     /// <summary>
+    /// Get entities by initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default) => throw new System.NotImplementedException();
+
+    /// <summary>
     /// Add element.
     /// </summary>
     /// <param name="entityData">Entity data.</param>
