@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities;
+using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 using NetTopologySuite.Geometries;
@@ -87,4 +88,9 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     /// Initiative Join Invitations relationship.
     /// </summary>
     public ICollection<JoinInvitation> JoinInvitations { get; init; }
+
+    /// <summary>
+    /// Initiative Territory Stories relationship.
+    /// </summary>
+    public ICollection<TerritoryStory> TerritoryStories { get; init; }
 }
