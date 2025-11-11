@@ -8,6 +8,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
+using IAVH.BioTablero.CM.WebApi.Utils;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -64,6 +65,7 @@ public class TerritoryStoryController(
     [Authorize]
     public async Task<IActionResult> Put([FromBody] TerritoryStoryDto requestData, CancellationToken ct)
     {
+        requestData.AuthorUserName = HttpContext.GetUserName();
         var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }

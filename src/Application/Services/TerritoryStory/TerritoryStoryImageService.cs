@@ -13,7 +13,6 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
 using Serilog;
@@ -28,7 +27,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     private new readonly ITerritoryStoryImageRepository entityRepository;
     private readonly IValidator<TerritoryStoryImageDto> entityValidator;
     private readonly ILogger logger;
-    private readonly IRepository<TerritoryStory, int> territoryStoryRepository;
+    private readonly ITerritoryStoryRepository territoryStoryRepository;
 
     /// <summary>
     /// Constructor.
@@ -37,16 +36,16 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="territoryStoryRepository">TerritoryStoryRepository.</param>
+    /// <param name="territoryStoryRepository">Territory Story repository.</param>
     public TerritoryStoryImageService(
         ITerritoryStoryImageRepository entityRepository,
-        IMapper<TerritoryStoryImage,
-        TerritoryStoryImageDto> mapper,
+        IMapper<TerritoryStoryImage, TerritoryStoryImageDto> mapper,
         IValidator<TerritoryStoryImageDto> entityValidator,
         ILogger logger,
-        IRepository<TerritoryStory, int> territoryStoryRepository)
+        ITerritoryStoryRepository territoryStoryRepository)
         : base(entityRepository, mapper)
     {
+        this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.territoryStoryRepository = territoryStoryRepository;
