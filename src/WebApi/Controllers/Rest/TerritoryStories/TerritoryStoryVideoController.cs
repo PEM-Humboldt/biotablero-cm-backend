@@ -39,15 +39,15 @@ public class TerritoryStoryVideoController(
     }
 
     /// <summary>
-    /// Get entities by Initiative.
+    /// Get entities by Territory Story.
     /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="territoryStoryId">Territory Story identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
-    [HttpGet("GetByInitiative/{initiativeId}")]
-    public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
+    [HttpGet("GetByTerritoryStory/{territoryStoryId}")]
+    public async Task<IActionResult> GetByTerritoryStory(int territoryStoryId, CancellationToken ct)
     {
-        var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
+        var response = await entityService.GetByTerritoryStoryAsync(territoryStoryId, ct);
         return webTools.CustomResponse(response);
     }
 
