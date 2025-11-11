@@ -14,10 +14,10 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 public interface ITerritoryStoryImageService : IRead<TerritoryStoryImage, int>, IAdd<TerritoryStoryImageDto>, IUpdate<TerritoryStoryImageDto, int>, IDelete<int>
 {
     /// <summary>
-    /// Get entities by initiative.
+    /// Get elements by territory story.
     /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="territoryStoryId">Territory Story identifier.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+    /// <returns>Entities by selected territory story.</returns>
+    Task<CustomWebResponse> GetByTerritoryStoryAsync(int territoryStoryId, CancellationToken ct = default);
 }
