@@ -10,11 +10,10 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
-using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Serilog;
 
@@ -23,8 +22,9 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <summary>
 /// Initiative Contact service.
 /// </summary>
-public class InitiativeContactService : ServiceRead<InitiativeContact, InitiativeContactDto, int, InitiativeContactSpec>, IInitiativeContactService
+public class InitiativeContactService : ServiceRead<InitiativeContact, InitiativeContactDto, int>, IInitiativeContactService
 {
+    private new readonly IInitiativeContactRepository entityRepository;
     private readonly IValidator<InitiativeContactDto> entityValidator;
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
@@ -38,13 +38,14 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeContactService(
-        IRepository<InitiativeContact> entityRepository,
+        IInitiativeContactRepository entityRepository,
         IMapper<InitiativeContact, InitiativeContactDto> mapper,
         IValidator<InitiativeContactDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper)
     {
+        this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
@@ -58,7 +59,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default)
     {
-        var dataListEntity = await entityRepository.ListAsync(InitiativeContactSpec.InitiativeIdSpec(initiativeId), ct);
+        var dataListEntity = await entityRepository.GetByInitiativeAsync(initiativeId, ct);
 
         var dataListDto = dataListEntity
             .Select(mapper.Map);
@@ -92,7 +93,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         // Validate initiative
         var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeExists = await initiativeRepository.AnyAsync(new InitiativeSpec(initiativeId), ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
 
         if (!initiativeExists)
         {
@@ -103,7 +104,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyAsync(InitiativeContactSpec.EmailOrPhoneSpec(initiativeId, entityData.Email, entityData.Phone), ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(initiativeId, entityData.Email, entityData.Phone, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -163,8 +164,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository
-            .AnyAsync(InitiativeContactSpec.EmailOrPhoneSpec(id, entity.InitiativeId, entityData.Email, entityData.Phone), ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.InitiativeId, entityData.Email, entityData.Phone, ct);
 
         if (hasDuplicatedEntities)
         {

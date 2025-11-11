@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
-/// Custom Join Request repository interface.
+/// Join Request repository interface.
 /// </summary>
-public interface IJoinRequestRepository : IRepository<JoinRequest>
+public interface IJoinRequestRepository : IRepository<JoinRequest, int>
 {
     /// <summary>
     /// Add initiative filter.
@@ -18,7 +18,16 @@ public interface IJoinRequestRepository : IRepository<JoinRequest>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
-    public IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query);
+    IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query);
+
+    /// <summary>
+    /// Get pending requests.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    Task<bool> AnyPendingRequests(int initiativeId, string userName, CancellationToken ct = default);
 
     /// <summary>
     /// Review request.
@@ -29,7 +38,7 @@ public interface IJoinRequestRepository : IRepository<JoinRequest>
     /// <param name="requestStatusId">Request status identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    public Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default);
+    Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default);
 
     /// <summary>
     /// Get pending old requests.
@@ -37,5 +46,5 @@ public interface IJoinRequestRepository : IRepository<JoinRequest>
     /// <param name="daysOld">Requests days old.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    public Task<Dictionary<string, int>> GetPendingOldRequestsAsync(int daysOld, CancellationToken ct = default);
+    Task<Dictionary<string, int>> GetPendingOldRequestsAsync(int daysOld, CancellationToken ct = default);
 }

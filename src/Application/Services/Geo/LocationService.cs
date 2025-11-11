@@ -12,17 +12,17 @@ using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
-using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
 /// <summary>
 /// Location service.
 /// </summary>
-public class LocationService : ServiceRead<Location, LocationDto, int, LocationSpec>, ILocationService
+public class LocationService : ServiceRead<Location, LocationDto, int>, ILocationService
 {
-    private readonly IRepository<LocationPolygon> locationPolygonRepository;
+    private new readonly ILocationRepository entityRepository;
+    private readonly ILocationPolygonRepository locationPolygonRepository;
 
     /// <summary>
     /// Constructor.
@@ -31,11 +31,12 @@ public class LocationService : ServiceRead<Location, LocationDto, int, LocationS
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="locationPolygonRepository">Location Polygon repository.</param>
     public LocationService(
-        IRepository<Location> entityRepository,
+        ILocationRepository entityRepository,
         IMapper<Location, LocationDto> mapper,
-        IRepository<LocationPolygon> locationPolygonRepository)
+        ILocationPolygonRepository locationPolygonRepository)
         : base(entityRepository, mapper)
     {
+        this.entityRepository = entityRepository;
         this.locationPolygonRepository = locationPolygonRepository;
     }
 
@@ -47,7 +48,7 @@ public class LocationService : ServiceRead<Location, LocationDto, int, LocationS
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> GetByParentAsync(int? parentId, CancellationToken ct = default)
     {
-        var dataListEntity = await entityRepository.ListAsync(LocationSpec.ParentIdSpec(parentId), ct);
+        var dataListEntity = await entityRepository.GetByParentIdAsync(parentId, ct);
 
         var dataListDto = dataListEntity
             .Select(mapper.Map);
@@ -66,7 +67,7 @@ public class LocationService : ServiceRead<Location, LocationDto, int, LocationS
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default)
     {
-        var simplifiedGeometry = await locationPolygonRepository.FirstOrDefaultAsync(new LocationPolygonSimplifiedSpec(id), ct);
+        var simplifiedGeometry = await locationPolygonRepository.GetSimplifiedByLocationAsync(id, ct);
 
         if (!string.IsNullOrEmpty(simplifiedGeometry))
         {

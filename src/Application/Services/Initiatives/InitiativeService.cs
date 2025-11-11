@@ -16,12 +16,12 @@ using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
-using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
 using Microsoft.AspNetCore.OData.Query;
 
@@ -34,19 +34,18 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
-using LocationEntity = IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location;
 
 /// <summary>
 /// Initiative service.
 /// </summary>
-public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, InitiativeSpec>, IInitiativeService
+public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, IInitiativeService
 {
     private const int MaxLeadersByInitiative = 3;
     private const string StoragePrefix = "initiatives";
     private readonly IValidator<InitiativeDto> entityValidator;
     private readonly ILogger logger;
     private new readonly IInitiativeRepository entityRepository;
-    private readonly IRepository<LocationEntity> locationRepository;
+    private readonly ILocationRepository locationRepository;
     private readonly IIamService iamService;
     private readonly IStorageService storageService;
     private readonly ILocationService locationService;
@@ -69,7 +68,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         IMapper<Initiative, InitiativeDto> mapper,
         IValidator<InitiativeDto> entityValidator,
         ILogger logger,
-        IRepository<LocationEntity> locationRepository,
+        ILocationRepository locationRepository,
         IStorageService storageService,
         IIamService iamService,
         ILocationService locationService)
@@ -109,7 +108,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default)
     {
-        var dataListEntity = await entityRepository.ListAsync(InitiativeSpec.UserNameSpec(userName), ct);
+        var dataListEntity = await entityRepository.GetByUserNameAsync(userName, ct);
 
         var dataListDto = dataListEntity
             .Select(mapper.Map);
@@ -168,7 +167,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyAsync(new InitiativeSpec(entityData.Name), ct);
+        var hasDuplicatedEntities = await entityRepository.AnyByNameAsync(entityData.Name, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -273,7 +272,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int, Ini
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyAsync(InitiativeSpec.GetDuplicatesSpec(id, entityData.Name), ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entityData.Name, ct);
 
         if (hasDuplicatedEntities)
         {

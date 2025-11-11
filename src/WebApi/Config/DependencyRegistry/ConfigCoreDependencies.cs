@@ -36,7 +36,7 @@ public static class ConfigCoreDependencies
 
         services.ConfigureFormOptions();
 
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
         services.AddSingleton<IWebTools, WebTools>();
         services.AddSingleton<IWebViewTools, WebViewTools>();
         services.AddSingleton(typeof(IReadEnumeration<>), typeof(ServiceReadEnumeration<>));

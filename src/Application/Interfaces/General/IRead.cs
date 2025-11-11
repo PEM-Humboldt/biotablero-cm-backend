@@ -23,7 +23,7 @@ public interface IRead<TE, TI>
     /// <param name="id">Element identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<bool> ExistsAsync(TI id, CancellationToken ct = default);
+    Task<bool> AnyAsync(TI id, CancellationToken ct = default);
 
     /// <summary>
     /// Get element.

@@ -6,19 +6,17 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.EntityFrameworkCore;
 
 using NetTopologySuite.Geometries;
 
 /// <summary>
-/// Custom Initiative repository.
+/// Initiative repository.
 /// </summary>
-public class InitiativeRepository : Repository<Initiative>, IInitiativeRepository
+public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepository
 {
-    private readonly GeneralContext dbContext;
-
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -26,8 +24,25 @@ public class InitiativeRepository : Repository<Initiative>, IInitiativeRepositor
     public InitiativeRepository(GeneralContext dbContext)
         : base(dbContext)
     {
-        this.dbContext = dbContext;
     }
+
+    /// <summary>
+    /// Finds an entity with the given primary key value.
+    /// </summary>
+    /// <param name="id">The value of the primary key for the entity to be found.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public new async Task<Initiative> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Include(e => e.InitiativeContacts)
+            .Include(e => e.InitiativeUsers)
+            .Include(e => e.InitiativeLocations)
+                .ThenInclude(e => e.Location)
+                    .ThenInclude(e => e.Parent)
+            .Include(e => e.InitiativeTags)
+                .ThenInclude(e => e.Tag)
+            .Where(e => e.Id == id)
+            .FirstOrDefaultAsync(ct);
 
     /// <summary>
     /// Include OData custom entities.
@@ -39,6 +54,52 @@ public class InitiativeRepository : Repository<Initiative>, IInitiativeRepositor
             .Include(e => e.InitiativeLocations)
                 .ThenInclude(e => e.Location)
                     .ThenInclude(e => e.Parent);
+
+    /// <summary>
+    /// Get elements by user name.
+    /// </summary>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Elements list.</returns>
+    public async Task<IEnumerable<Initiative>> GetByUserNameAsync(string userName, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Include(e => e.InitiativeUsers)
+            .Where(e => e.InitiativeUsers.Any(e => e.UserName == userName))
+            .ToListAsync(ct);
+
+    /// <summary>
+    /// Get if elements exists by name.
+    /// </summary>
+    /// <param name="name">Initiative name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    public async Task<bool> AnyByNameAsync(string name, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Where(e => e.Name == name)
+            .AnyAsync(ct);
+
+    /// <summary>
+    /// Check if element is duplicated.
+    /// </summary>
+    /// <param name="id">Initiative identifier.</param>
+    /// <param name="name">Initiative name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    public async Task<bool> IsDuplicatedAsync(int id, string name, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Where(e => e.Id != id && e.Name == name)
+            .AnyAsync(ct);
+
+    /// <summary>
+    /// Get if elements exists by tag.
+    /// </summary>
+    /// <param name="tagId">Tag identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    public async Task<bool> AnyByTagAsync(int tagId, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Where(e => e.InitiativeTags.Any(e => e.TagId == tagId))
+            .AnyAsync(ct);
 
     /// <summary>
     /// Get polygon centroid.

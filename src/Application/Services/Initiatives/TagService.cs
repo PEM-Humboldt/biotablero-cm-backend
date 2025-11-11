@@ -11,11 +11,10 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
-using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Serilog;
 
@@ -24,8 +23,9 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <summary>
 /// Tag service.
 /// </summary>
-public class TagService : ServiceRead<Tag, TagDto, int, TagSpec>, ITagService
+public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 {
+    private new readonly ITagRepository entityRepository;
     private readonly IValidator<TagDto> entityValidator;
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
@@ -39,13 +39,14 @@ public class TagService : ServiceRead<Tag, TagDto, int, TagSpec>, ITagService
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     public TagService(
-        IRepository<Tag> entityRepository,
+        ITagRepository entityRepository,
         IMapper<Tag, TagDto> mapper,
         IValidator<TagDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper)
     {
+        this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
@@ -74,7 +75,7 @@ public class TagService : ServiceRead<Tag, TagDto, int, TagSpec>, ITagService
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyAsync(new TagSpec(entityData.Name), ct);
+        var hasDuplicatedEntities = await entityRepository.AnyByName(entityData.Name, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -135,7 +136,7 @@ public class TagService : ServiceRead<Tag, TagDto, int, TagSpec>, ITagService
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyAsync(new TagSpec(id, entityData.Name), ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicated(id, entityData.Name, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -182,7 +183,7 @@ public class TagService : ServiceRead<Tag, TagDto, int, TagSpec>, ITagService
         }
 
         // Validate relationships
-        var hasRelationships = await initiativeRepository.AnyAsync(InitiativeSpec.GetByTagSpec(id), ct);
+        var hasRelationships = await initiativeRepository.AnyByTagAsync(id, ct);
 
         if (hasRelationships)
         {

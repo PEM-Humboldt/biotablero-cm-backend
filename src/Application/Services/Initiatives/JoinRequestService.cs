@@ -14,13 +14,12 @@ using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
-using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Email;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Iam;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.AspNetCore.OData.Query;
 
@@ -34,12 +33,12 @@ using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initiat
 /// <summary>
 /// Join Request service.
 /// </summary>
-public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, JoinRequestSpec>, IJoinRequestService
+public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>, IJoinRequestService
 {
     private new readonly IJoinRequestRepository entityRepository;
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
-    private readonly IRepository<InitiativeUser> initiativeUserRepository;
+    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IWebViewTools webViewTools;
     private readonly IEmailService emailService;
     private readonly IIamService iamService;
@@ -60,7 +59,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         IMapper<JoinRequest, JoinRequestDto> mapper,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
-        IRepository<InitiativeUser> initiativeUserRepository,
+        IInitiativeUserRepository initiativeUserRepository,
         IWebViewTools webViewTools,
         IEmailService emailService,
         IIamService iamService)
@@ -86,7 +85,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     public async Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default)
     {
         // Validate user level
-        var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader), ct);
+        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
 
         if (!userIsLeader)
         {
@@ -110,17 +109,6 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> AddAsync(JoinRequestDto entityData, CancellationToken ct = default)
     {
-        // Validate user role and initiative relationship
-        var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(entityData.InitiativeId, entityData.ReviewerUserName, (int)InitiativeUserLevelEnum.Leader), ct);
-
-        if (!userIsLeader)
-        {
-            return new CustomWebResponse(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
-        }
-
         // Validate initiative
         var initiative = await initiativeRepository.GetByIdAsync(entityData.InitiativeId, ct);
 
@@ -133,7 +121,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         }
 
         // Validate pending requests
-        var hasPendingRequests = await entityRepository.AnyAsync(JoinRequestSpec.PendingRequests(entityData.InitiativeId, entityData.UserName), ct);
+        var hasPendingRequests = await entityRepository.AnyPendingRequests(entityData.InitiativeId, entityData.UserName, ct);
 
         if (hasPendingRequests)
         {
@@ -144,7 +132,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         }
 
         // Validate user and initiative relationship
-        var hasUserAndInitiativeRelationship = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserNameSpec(entityData.InitiativeId, entityData.UserName), ct);
+        var hasUserAndInitiativeRelationship = await initiativeUserRepository.IsDuplicatedAsync(entityData.InitiativeId, entityData.UserName, ct);
 
         if (hasUserAndInitiativeRelationship)
         {
@@ -214,7 +202,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         }
 
         // Validate user level
-        var userIsLeader = await initiativeUserRepository.AnyAsync(InitiativeUserSpec.UserLevelSpec(entity.InitiativeId, entityData.ReviewerUserName, (int)InitiativeUserLevelEnum.Leader), ct);
+        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, entityData.ReviewerUserName, (int)InitiativeUserLevelEnum.Leader, ct);
 
         if (!userIsLeader)
         {
@@ -325,9 +313,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     private void SendNotificationJoinRequest(int initiativeId, DefaultEmailData emailData, CancellationToken ct = default) => _ = Task.Run(
         async () =>
         {
-            var leaders = await initiativeUserRepository.ListAsync(InitiativeUserSpec.LevelSpec(initiativeId, (int)InitiativeUserLevelEnum.Leader), ct);
+            var leaders = await initiativeUserRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
 
-            if (leaders?.Count > 0)
+            if (leaders?.Any() ?? false)
             {
                 var leadersUserNames = leaders
                     .Select(e => e.UserName)

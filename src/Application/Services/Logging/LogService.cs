@@ -11,10 +11,9 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Mappings;
 using IAVH.BioTablero.CM.Application.Services.General;
-using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
 
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.OData;
@@ -22,7 +21,7 @@ using Microsoft.OData;
 /// <summary>
 /// System logs service.
 /// </summary>
-public class LogService : ServiceRead<LogEntity, LogDto, Guid, LogSpec>, ILogService
+public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
 {
     private const int ReportMaxRows = 10000;
     private new readonly ILogRepository entityRepository;

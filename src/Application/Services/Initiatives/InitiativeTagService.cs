@@ -4,11 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
-using IAVH.BioTablero.CM.Application.Specifications;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Serilog;
 
@@ -19,10 +18,10 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// </summary>
 public class InitiativeTagService : IInitiativeTagService
 {
-    private readonly IRepository<InitiativeTag> entityRepository;
+    private readonly IInitiativeTagRepository entityRepository;
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
-    private readonly IRepository<Tag> tagRepository;
+    private readonly ITagRepository tagRepository;
 
     /// <summary>
     /// Constructor.
@@ -32,10 +31,10 @@ public class InitiativeTagService : IInitiativeTagService
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="tagRepository">Initiative Tag repository.</param>
     public InitiativeTagService(
-        IRepository<InitiativeTag> entityRepository,
+        IInitiativeTagRepository entityRepository,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
-        IRepository<Tag> tagRepository)
+        ITagRepository tagRepository)
     {
         this.entityRepository = entityRepository;
         this.logger = logger;
@@ -53,7 +52,7 @@ public class InitiativeTagService : IInitiativeTagService
     public async Task<CustomWebResponse> AddAsync(int initiativeId, int tagId, CancellationToken ct = default)
     {
         // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(new InitiativeSpec(initiativeId), ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
 
         if (!initiativeExists)
         {
@@ -64,7 +63,7 @@ public class InitiativeTagService : IInitiativeTagService
         }
 
         // Validate initiative tag
-        var tagExists = await tagRepository.AnyAsync(new TagSpec(tagId), ct);
+        var tagExists = await tagRepository.AnyAsync(tagId, ct);
 
         if (!tagExists)
         {
@@ -75,7 +74,7 @@ public class InitiativeTagService : IInitiativeTagService
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyAsync(InitiativeTagSpec.GetDuplicatesSpec(initiativeId, tagId), ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(initiativeId, tagId, ct);
 
         if (hasDuplicatedEntities)
         {

@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -15,12 +15,10 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
 /// <summary>
-/// Custom Join Request repository.
+/// Join Request repository.
 /// </summary>
-public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestRepository
+public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestRepository
 {
-    private readonly GeneralContext dbContext;
-
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -28,7 +26,6 @@ public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestReposi
     public JoinRequestRepository(GeneralContext dbContext)
         : base(dbContext)
     {
-        this.dbContext = dbContext;
     }
 
     /// <summary>
@@ -37,8 +34,21 @@ public class JoinRequestRepository : Repository<JoinRequest>, IJoinRequestReposi
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
-    public IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query) => query
+    public IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query) =>
+        query
             .Where(e => e.InitiativeId == initiativeId);
+
+    /// <summary>
+    /// Get pending requests.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    public async Task<bool> AnyPendingRequests(int initiativeId, string userName, CancellationToken ct = default) =>
+        await dbContext.JoinRequests
+            .Where(e => e.InitiativeId == initiativeId && e.UserName == userName && e.StatusId == (int)JoinRequestStatusEnum.UnderReview)
+            .AnyAsync(ct);
 
     /// <summary>
     /// Review request.
