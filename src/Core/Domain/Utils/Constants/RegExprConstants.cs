@@ -25,4 +25,15 @@ public static class RegExprConstants
     /// </example>
     /// </summary>
     public const string Url = @"^(https?:\/\/)([\da-z\.-]+\.[a-z\.]{2,6}|[\d\.]+)([\/:?=&#]{1}[\da-z\.-]+)*[\/\?]?$";
+
+    /// <summary>
+    /// Regular expression for keyword list.
+    /// <example>
+    /// Valid keyword list:
+    /// - Naturaleza,Colibrí
+    /// - Champiñón,Guanábana,Ñame
+    /// - COP16,G20
+    /// </example>
+    /// </summary>
+    public const string Keywords = @"^([A-Z\u00d1ÁÉÍÓÚ]+[a-z0-9\u00f1áéíóú]+(,){1})*([A-Z\u00d1ÁÉÍÓÚ]+[a-z0-9\u00f1áéíóú]+)$";
 }
