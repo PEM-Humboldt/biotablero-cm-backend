@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Mvc;
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -120,24 +119,6 @@ public class EmailTemplatesController : Controller
     }
 
     /// <summary>
-    /// Get SMTP configuration (for debugging).
-    /// </summary>
-    /// <returns>SMTP configuration.</returns>
-    [HttpGet]
-    [Route("Config")]
-    [Produces("application/json")]
-    public IActionResult GetSmtpConfig() => Json(new
-    {
-        smtpHost = Environment.GetEnvironmentVariable("SMTP_HOST"),
-        smtpPort = Environment.GetEnvironmentVariable("SMTP_PORT"),
-        smtpEnabledSsl = Environment.GetEnvironmentVariable("SMTP_ENABLED_SSL"),
-        smtpFrom = Environment.GetEnvironmentVariable("SMTP_FROM"),
-        smtpFromName = Environment.GetEnvironmentVariable("SMTP_FROM_NAME"),
-        smtpUser = string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SMTP_USER")) ? "empty" : "set",
-        smtpPass = string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SMTP_PASS")) ? "empty" : "set",
-    });
-
-    /// <summary>
     /// Test email sending with a specific template.
     /// </summary>
     /// <param name="template">Template name (RoleAssignment, UserRemoval, JoinInvitation, JoinRequest, PendingRequestsReminder).</param>
@@ -169,10 +150,8 @@ public class EmailTemplatesController : Controller
 
         try
         {
-            // Renderizar la plantilla
             var htmlBody = await webViewTools.RenderViewToStringAsync(template, emailData);
 
-            // Enviar el correo
             var receivers = new CustomEmailAddress[] { emailData.Address };
             var response = await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody);
 

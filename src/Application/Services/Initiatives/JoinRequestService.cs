@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -177,8 +176,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         var emailObject = new DefaultEmailData()
         {
             Address = new(userData.FullName, userData.Email),
-            Subject = string.Format(CultureInfo.InvariantCulture, "Solicitud de ingreso a '{0}'", initiative.Name),
-            Content = string.Format(CultureInfo.InvariantCulture, "El usuario '{0}' ha realizado una solicitud de acceso para la iniciativa '{1}'", userData.Username, initiative.Name),
+            InitiativeName = initiative.Name,
+            UserName = userData.Username,
+            JoinRequestStatus = "Created",
         };
 
         SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
@@ -261,18 +261,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         var emailObject = new DefaultEmailData()
         {
             Address = new(userData.FullName, userData.Email),
+            InitiativeName = initiative.Name,
+            JoinRequestStatus = entity.StatusId == (int)JoinRequestStatusEnum.Approved ? "Approved" : "Rejected",
         };
-
-        if (entity.StatusId == (int)JoinRequestStatusEnum.Approved)
-        {
-            emailObject.Subject = string.Format(CultureInfo.InvariantCulture, "Solicitud de ingreso a '{0}' aprobada", initiative.Name);
-            emailObject.Content = string.Format(CultureInfo.InvariantCulture, "Bienvenido a '{0}'.<br /> Ya puedes aportar al estado de la biodiversidad de nuestro territorio.", initiative.Name);
-        }
-        else
-        {
-            emailObject.Subject = string.Format(CultureInfo.InvariantCulture, "Solicitud de ingreso a '{0}' rechazada", initiative.Name);
-            emailObject.Content = "Tu solicitud ha sido rechazada. Si consideras que se trata de un error solicita de nuevo.";
-        }
 
         SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
 
@@ -341,11 +332,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
 
                 var receivers = new CustomEmailAddress[] { emailData.Address };
 
-                var emailObject = new DefaultEmailData()
-                {
-                    Content = emailData.Content,
-                };
-                var htmlBody = await webViewTools.RenderViewToStringAsync("JoinRequest", emailObject);
+                var htmlBody = await webViewTools.RenderViewToStringAsync("JoinRequest", emailData);
 
                 await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
             }
@@ -364,8 +351,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         var emailData = new DefaultEmailData
         {
             Address = new(leaderData.FullName, leaderData.Email),
-            Subject = "Tienes solicitudes de ingreso pendientes de revisión",
-            Content = string.Format(CultureInfo.InvariantCulture, "Tienes <b>{0}</b> solicitudes de ingreso que necesitan tu revisión.", pendingRequests),
+            PendingRequestsCount = pendingRequests,
         };
 
         var receivers = new CustomEmailAddress[] { emailData.Address };

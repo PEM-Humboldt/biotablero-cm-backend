@@ -1,6 +1,29 @@
 @model IAVH.BioTablero.CM.Core.Domain.Utils.Email.DefaultEmailData
+@{
+    string subject;
+    string content;
+    
+    if (Model?.JoinRequestStatus == "Created")
+    {
+        subject = $"Solicitud de ingreso a '{Model?.InitiativeName}'";
+        content = $"El usuario '{Model?.UserName}' ha realizado una solicitud de acceso para la iniciativa '{Model?.InitiativeName}'";
+    }
+    else if (Model?.JoinRequestStatus == "Approved")
+    {
+        subject = $"Solicitud de ingreso a '{Model?.InitiativeName}' aprobada";
+        content = $"Bienvenido a '{Model?.InitiativeName}'.<br /> Ya puedes aportar al estado de la biodiversidad de nuestro territorio.";
+    }
+    else
+    {
+        subject = $"Solicitud de ingreso a '{Model?.InitiativeName}' rechazada";
+        content = "Tu solicitud ha sido rechazada. Si consideras que se trata de un error solicita de nuevo.";
+    }
+    
+    Model.Subject = subject;
+    Model.Content = content;
+}
 
 <div style="margin: auto;width: 20rem;">
     <h2 style="color: #e84a5f;">Solicitud de Ingreso</h2>
-    <p>@Html.Raw(Model?.Content)</p>
+    <p>@Html.Raw(content)</p>
 </div>

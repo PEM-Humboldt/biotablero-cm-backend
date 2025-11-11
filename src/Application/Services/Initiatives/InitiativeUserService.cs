@@ -1,7 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -319,8 +318,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             var emailData = new DefaultEmailData
             {
                 Address = new(userData.FullName, userData.Email),
-                Subject = string.Format(CultureInfo.InvariantCulture, "Ahora eres {0} de {1}", newLevelName, initiative.Name),
-                Content = string.Format(CultureInfo.InvariantCulture, "Se te ha asignado el rol de {0} en la iniciativa '{1}' por el usuario '{2}'.", newLevelName, initiative.Name, reviewerUserName),
+                InitiativeName = initiative.Name,
+                LevelName = newLevelName,
+                ReviewerUserName = reviewerUserName,
             };
 
             var receivers = new CustomEmailAddress[] { emailData.Address };
@@ -356,8 +356,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             var emailData = new DefaultEmailData
             {
                 Address = new(userData.FullName, userData.Email),
-                Subject = string.Format(CultureInfo.InvariantCulture, "Has sido retirado de {0}", initiative.Name),
-                Content = string.Format(CultureInfo.InvariantCulture, "Tu membresía en la iniciativa '{0}' ha sido revocada. Si consideras que se trata de un error solicita unirte de nuevo.", initiative.Name),
+                InitiativeName = initiative.Name,
             };
 
             var receivers = new CustomEmailAddress[] { emailData.Address };
