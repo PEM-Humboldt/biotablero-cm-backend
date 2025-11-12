@@ -99,7 +99,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Territory Image not found",
+                Message = "Territory Story not found",
             };
         }
 

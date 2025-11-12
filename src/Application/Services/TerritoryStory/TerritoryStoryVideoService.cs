@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.TerritoryStory;
 
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -104,7 +105,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(entityData.FileUrl, ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(new Uri(entityData.FileUrl), ct);
 
         if (hasDuplicatedEntities)
         {
@@ -175,7 +176,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         }
 
         // Update entity data
-        entity.FileUrl = entityData.FileUrl;
+        entity.FileUrl = new Uri(entityData.FileUrl);
 
         await entityRepository.UpdateAsync(entity, ct);
 
