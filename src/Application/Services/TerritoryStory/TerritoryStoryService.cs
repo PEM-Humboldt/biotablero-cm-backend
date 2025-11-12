@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -29,7 +30,9 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     private new readonly ITerritoryStoryRepository entityRepository;
     private readonly IValidator<TerritoryStoryDto> entityValidator;
     private readonly ILogger logger;
+    private readonly IIamService iamService;
     private readonly IInitiativeRepository initiativeRepository;
+    private readonly ITerritoryStoryLikeRepository territoryStoryLikeRepository;
 
     /// <summary>
     /// Constructor.
@@ -38,19 +41,25 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
+    /// <param name="iamService">IAM service.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
+    /// <param name="territoryStoryLikeRepository">Territory Story Like repository.</param>
     public TerritoryStoryService(
         ITerritoryStoryRepository entityRepository,
         IMapper<TerritoryStory, TerritoryStoryDto> mapper,
         IValidator<TerritoryStoryDto> entityValidator,
         ILogger logger,
-        IInitiativeRepository initiativeRepository)
+        IIamService iamService,
+        IInitiativeRepository initiativeRepository,
+        ITerritoryStoryLikeRepository territoryStoryLikeRepository)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
+        this.iamService = iamService;
         this.initiativeRepository = initiativeRepository;
+        this.territoryStoryLikeRepository = territoryStoryLikeRepository;
     }
 
     /// <summary>
@@ -113,6 +122,17 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             return new CustomWebResponse(true)
             {
                 Message = "There is already a territory story with the same title",
+            };
+        }
+
+        // Validate user in external system
+        var userExists = await iamService.UserExistsAsync(entityData.AuthorUserName, ct);
+
+        if (!userExists)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = $"User is invalid or does not exist",
             };
         }
 
@@ -193,6 +213,48 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             ResponseBody = entityData,
         };
+    }
+
+    /// <summary>
+    /// Like button action.
+    /// </summary>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> LikeActionAsync(TerritoryStoryLikeDto entityData, CancellationToken ct)
+    {
+        var territoryStory = await entityRepository.GetByIdAsync(entityData.TerritoryStoryId, ct);
+
+        if (territoryStory == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story not found",
+            };
+        }
+
+        var hasDuplicatedEntities = await territoryStoryLikeRepository.IsDuplicatedAsync(entityData.TerritoryStoryId, entityData.UserName, ct);
+
+        if (hasDuplicatedEntities)
+        {
+            var entity = await territoryStoryLikeRepository.GetByTerritoryStoryAndUserNameAsync(entityData.TerritoryStoryId, entityData.UserName, ct);
+            await territoryStoryLikeRepository.DeleteAsync(entity, ct);
+            logger.AddLog(LogType.Delete, $"Unliked territory story", "{@EntityData}", entityData);
+        }
+        else
+        {
+            var entity = new TerritoryStoryLike()
+            {
+                CreationDate = DateTime.Now,
+                TerritoryStoryId = entityData.TerritoryStoryId,
+                UserName = entityData.UserName,
+            };
+
+            await territoryStoryLikeRepository.AddAsync(entity, ct);
+            logger.AddLog(LogType.Create, $"Liked territory story", "{@EntityData}", entityData);
+        }
+
+        return new CustomWebResponse();
     }
 
     /// <summary>

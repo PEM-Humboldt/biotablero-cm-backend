@@ -87,6 +87,25 @@ public class TerritoryStoryController(
     }
 
     /// <summary>
+    /// Like action button.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    [HttpPost("Like/{id}")]
+    [Authorize]
+    public async Task<IActionResult> Like(int id, CancellationToken ct)
+    {
+        var requestData = new TerritoryStoryLikeDto()
+        {
+            TerritoryStoryId = id,
+            UserName = HttpContext.GetUserName(),
+        };
+        var response = await entityService.LikeActionAsync(requestData, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
     /// Enable entity.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
