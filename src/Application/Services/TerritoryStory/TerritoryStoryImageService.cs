@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.TerritoryStory;
 
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -183,6 +184,49 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         entityData = mapper.Map(entity);
 
         logger.AddLog(LogType.Update, "Updated territory story image", "{@EntityData}", entityData);
+
+        return new CustomWebResponse()
+        {
+            ResponseBody = entityData,
+        };
+    }
+
+    /// <summary>
+    /// Featured content action.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, CancellationToken ct = default)
+    {
+        // Validate Territory Story Image
+        var territoryStoryExists = await entityRepository.AnyAsync(id, ct);
+
+        if (!territoryStoryExists)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story Image not found",
+            };
+        }
+
+        // TODO: Validate user role and profile
+
+        // Mark territory story image as featured content
+        var entity = await entityRepository.MarkAsFeaturedContent(id, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.InternalServerError,
+                Message = "Database error",
+            };
+        }
+
+        var entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Update, "Marked territory story image as featured content", "{@EntityData}", entityData);
 
         return new CustomWebResponse()
         {

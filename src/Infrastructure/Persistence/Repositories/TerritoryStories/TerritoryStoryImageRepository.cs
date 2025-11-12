@@ -11,18 +11,26 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 /// <summary>
 /// Territory Story Image repository.
 /// </summary>
 public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int>, ITerritoryStoryImageRepository
 {
+    private readonly ILogger logger;
+
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public TerritoryStoryImageRepository(GeneralContext dbContext)
+    /// <param name="logger">Logger.</param>
+    public TerritoryStoryImageRepository(
+        GeneralContext dbContext,
+        ILogger logger)
         : base(dbContext)
     {
+        this.logger = logger;
     }
 
     /// <summary>
@@ -58,4 +66,52 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
         await dbContext.TerritoryStoryVideos
             .Where(e => e.Id != id && e.FileUrl == fileUrl)
             .AnyAsync(ct);
+
+    /// <summary>
+    /// Mark as featured content.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated territory story data.</returns>
+    public async Task<TerritoryStoryImage> MarkAsFeaturedContent(int id, CancellationToken ct = default)
+    {
+        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
+
+        try
+        {
+            var entity = await dbContext.TerritoryStoryImages
+                .Where(e => e.Id == id)
+                .FirstOrDefaultAsync(ct);
+
+            if (entity == null)
+            {
+                return entity;
+            }
+
+            if (!entity.FeaturedContent)
+            {
+                entity.FeaturedContent = true;
+            }
+
+            var imagesFromSameStory = await dbContext.TerritoryStoryImages
+                .Where(e => e.Id != entity.Id && e.TerritoryStoryId == entity.TerritoryStoryId)
+                .ToListAsync(ct);
+
+            foreach (var image in imagesFromSameStory)
+            {
+                image.FeaturedContent = false;
+            }
+
+            await dbContext.SaveChangesAsync(ct);
+            await transaction.CommitAsync(ct);
+
+            return entity;
+        }
+        catch (DbUpdateException ex)
+        {
+            await transaction.RollbackAsync(ct);
+            logger.Error(ex, "Territory Story Image transaction error");
+            return null;
+        }
+    }
 }

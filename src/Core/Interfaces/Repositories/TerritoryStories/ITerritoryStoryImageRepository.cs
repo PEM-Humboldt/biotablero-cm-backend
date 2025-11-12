@@ -36,4 +36,12 @@ public interface ITerritoryStoryImageRepository : IRepository<TerritoryStoryImag
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
     Task<bool> IsDuplicatedAsync(int id, Uri fileUrl, CancellationToken ct = default);
+
+    /// <summary>
+    /// Mark as featured content.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated territory story data.</returns>
+    Task<TerritoryStoryImage> MarkAsFeaturedContent(int id, CancellationToken ct = default);
 }
