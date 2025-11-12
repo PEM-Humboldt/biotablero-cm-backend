@@ -29,6 +29,10 @@ public class TerritoryStoryValidator : AbstractValidator<TerritoryStoryDto>
                 .WithMessage("Text is required")
             .MaximumLength(2000);
 
+        RuleFor(dto => dto.Restricted)
+            .NotNull()
+                .WithMessage("Restricted flag is required");
+
         RuleFor(dto => dto.Keywords)
             .Matches(RegExprConstants.Keywords)
             .MaximumLength(75);

@@ -1,7 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 
-using System;
-
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
@@ -22,5 +20,5 @@ public class TerritoryStoryVideoDto : IDto
     /// <summary>
     /// File URL.
     /// </summary>
-    public Uri FileUrl { get; set; }
+    public string FileUrl { get; set; }
 }

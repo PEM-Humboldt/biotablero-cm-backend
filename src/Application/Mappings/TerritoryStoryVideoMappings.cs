@@ -24,7 +24,7 @@ public class TerritoryStoryVideoMappings : IMapper<TerritoryStoryVideo, Territor
         {
             Id = entity.Id,
             TerritoryStoryId = entity.TerritoryStoryId,
-            FileUrl = entity.FileUrl,
+            FileUrl = entity.FileUrl.ToString(),
         };
     }
 
@@ -41,7 +41,7 @@ public class TerritoryStoryVideoMappings : IMapper<TerritoryStoryVideo, Territor
         {
             Id = dto.Id ?? 0,
             TerritoryStoryId = dto.TerritoryStoryId ?? 0,
-            FileUrl = dto.FileUrl,
+            FileUrl = new Uri(dto.FileUrl),
         };
     }
 }

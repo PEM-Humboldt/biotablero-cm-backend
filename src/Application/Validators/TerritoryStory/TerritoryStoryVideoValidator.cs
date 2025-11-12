@@ -20,7 +20,8 @@ public class TerritoryStoryVideoValidator : AbstractValidator<TerritoryStoryVide
 
         RuleFor(dto => dto.FileUrl)
             .NotEmpty()
-                .WithMessage("File url is required");
+                .WithMessage("File url is required")
+            .MaximumLength(150);
 
         RuleSet("Create", () =>
         {

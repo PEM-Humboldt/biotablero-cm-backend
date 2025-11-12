@@ -43,27 +43,27 @@ public class TerritoryStoryDto : IDto
     /// <summary>
     /// Entity creation date.
     /// </summary>
-    public DateTime CreationDate { get; set; }
+    public DateTime? CreationDate { get; set; }
 
     /// <summary>
     /// Restricted flag.
     /// </summary>
-    public bool Restricted { get; set; }
+    public bool? Restricted { get; set; }
 
     /// <summary>
     /// Enabled flag.
     /// </summary>
-    public bool Enabled { get; set; }
+    public bool? Enabled { get; set; }
 
     /// <summary>
     /// Featured Content flag.
     /// </summary>
-    public bool FeaturedContent { get; set; }
+    public bool? FeaturedContent { get; set; }
 
     /// <summary>
     /// Total of territory story likes.
     /// </summary>
-    public int Likes { get; set; }
+    public int? Likes { get; set; }
 
     /// <summary>
     /// Territory Story Image relationship.
