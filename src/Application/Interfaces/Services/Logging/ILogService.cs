@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services;
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.Logging;
 
 using System;
 using System.Threading;

@@ -1,6 +1,9 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
-using IAVH.BioTablero.CM.Application.Interfaces.Services;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Geo;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Logging;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Statistics;
 using IAVH.BioTablero.CM.Application.Services.Geo;
 using IAVH.BioTablero.CM.Application.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.Logging;

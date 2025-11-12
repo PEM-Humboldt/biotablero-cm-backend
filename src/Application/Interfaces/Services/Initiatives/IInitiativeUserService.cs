@@ -1,17 +1,17 @@
-﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services;
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
+using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Utils;
-using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
-/// Territory Story service interface.
+/// Initiative User service interface.
 /// </summary>
-public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<TerritoryStoryDto>, IUpdate<TerritoryStoryDto, int>, IDisable<int>
+public interface IInitiativeUserService : IRead<InitiativeUser, int>, IAdd<InitiativeUserDto>, IDelete<int>
 {
     /// <summary>
     /// Get entities by initiative.
@@ -22,10 +22,12 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
-    /// Like button action.
+    /// Update element.
     /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="reviewerUserName">Reviewer user name.</param>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> LikeActionAsync(TerritoryStoryLikeDto entityData, CancellationToken ct);
+    Task<CustomWebResponse> UpdateAsync(int id, string reviewerUserName, InitiativeUserDto entityData, CancellationToken ct = default);
 }
