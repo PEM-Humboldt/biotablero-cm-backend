@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Mappings;
+﻿namespace IAVH.BioTablero.CM.Application.Mappings.Initiatives;
 
 using System;
 using System.Linq;

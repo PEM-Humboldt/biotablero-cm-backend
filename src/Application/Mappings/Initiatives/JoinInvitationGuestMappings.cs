@@ -1,34 +1,30 @@
-﻿namespace IAVH.BioTablero.CM.Application.Mappings;
+﻿namespace IAVH.BioTablero.CM.Application.Mappings.Initiatives;
 
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
-using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
-
 /// <summary>
-/// Initiative contact mappings.
+/// Join invitation guest mappings.
 /// </summary>
-public class InitiativeUserMappings : IMapper<InitiativeUser, InitiativeUserDto>
+public class JoinInvitationGuestMappings : IMapper<JoinInvitationGuest, JoinInvitationGuestDto>
 {
     /// <summary>
     /// Map from entity to DTO.
     /// </summary>
     /// <param name="entity">Entity data.</param>
     /// <returns>DTO data.</returns>
-    public InitiativeUserDto Map(InitiativeUser entity)
+    public JoinInvitationGuestDto Map(JoinInvitationGuest entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         return new()
         {
             Id = entity.Id,
-            InitiativeId = entity.InitiativeId,
-            UserName = entity.UserName,
-            Level = new EnumEntityDto<InitiativeUserLevelEnum>(entity.LevelId),
+            JoinInvitationId = entity.JoinInvitationId,
+            Email = entity.Email,
         };
     }
 
@@ -37,15 +33,14 @@ public class InitiativeUserMappings : IMapper<InitiativeUser, InitiativeUserDto>
     /// </summary>
     /// <param name="dto">DTO data.</param>
     /// <returns>Entity data.</returns>
-    public InitiativeUser Map(InitiativeUserDto dto)
+    public JoinInvitationGuest Map(JoinInvitationGuestDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 
         return new()
         {
-            InitiativeId = dto?.InitiativeId ?? 0,
-            UserName = dto.UserName,
-            LevelId = dto.Level.Id,
+            JoinInvitationId = dto.JoinInvitationId ?? 0,
+            Email = dto.Email,
         };
     }
 }

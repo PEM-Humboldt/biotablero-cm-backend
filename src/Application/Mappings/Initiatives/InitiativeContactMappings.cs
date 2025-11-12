@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Mappings;
+﻿namespace IAVH.BioTablero.CM.Application.Mappings.Initiatives;
 
 using System;
 
@@ -7,23 +7,24 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
-/// Join invitation guest mappings.
+/// Initiative contact mappings.
 /// </summary>
-public class JoinInvitationGuestMappings : IMapper<JoinInvitationGuest, JoinInvitationGuestDto>
+public class InitiativeContactMappings : IMapper<InitiativeContact, InitiativeContactDto>
 {
     /// <summary>
     /// Map from entity to DTO.
     /// </summary>
     /// <param name="entity">Entity data.</param>
     /// <returns>DTO data.</returns>
-    public JoinInvitationGuestDto Map(JoinInvitationGuest entity)
+    public InitiativeContactDto Map(InitiativeContact entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         return new()
         {
             Id = entity.Id,
-            JoinInvitationId = entity.JoinInvitationId,
+            InitiativeId = entity.InitiativeId,
+            Phone = entity.Phone,
             Email = entity.Email,
         };
     }
@@ -33,13 +34,14 @@ public class JoinInvitationGuestMappings : IMapper<JoinInvitationGuest, JoinInvi
     /// </summary>
     /// <param name="dto">DTO data.</param>
     /// <returns>Entity data.</returns>
-    public JoinInvitationGuest Map(JoinInvitationGuestDto dto)
+    public InitiativeContact Map(InitiativeContactDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 
         return new()
         {
-            JoinInvitationId = dto.JoinInvitationId ?? 0,
+            InitiativeId = dto?.InitiativeId ?? 0,
+            Phone = dto.Phone,
             Email = dto.Email,
         };
     }

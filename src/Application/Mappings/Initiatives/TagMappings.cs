@@ -1,22 +1,25 @@
-﻿namespace IAVH.BioTablero.CM.Application.Mappings;
+﻿namespace IAVH.BioTablero.CM.Application.Mappings.Initiatives;
 
 using System;
 
-using IAVH.BioTablero.CM.Application.DTOs.Geo;
+using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+
+using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.TagCategory;
 
 /// <summary>
-/// Initiative mappings.
+/// Tag mappings.
 /// </summary>
-public class LocationMappings : IMapper<Location, LocationDto>
+public class TagMappings : IMapper<Tag, TagDto>
 {
     /// <summary>
     /// Map from entity to DTO.
     /// </summary>
     /// <param name="entity">Entity data.</param>
     /// <returns>DTO data.</returns>
-    public LocationDto Map(Location entity)
+    public TagDto Map(Tag entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -24,8 +27,8 @@ public class LocationMappings : IMapper<Location, LocationDto>
         {
             Id = entity.Id,
             Name = entity.Name,
-            Code = entity.Code,
-            ParentId = entity.ParentId,
+            Url = entity.Url.ToString(),
+            Category = new EnumEntityDto<TagCategoryEnum>(entity.CategoryId),
         };
     }
 
@@ -34,15 +37,15 @@ public class LocationMappings : IMapper<Location, LocationDto>
     /// </summary>
     /// <param name="dto">DTO data.</param>
     /// <returns>Entity data.</returns>
-    public Location Map(LocationDto dto)
+    public Tag Map(TagDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 
         return new()
         {
             Name = dto.Name,
-            Code = dto.Code,
-            ParentId = dto.ParentId,
+            Url = new Uri(dto.Url),
+            CategoryId = dto.Category.Id,
         };
     }
 }

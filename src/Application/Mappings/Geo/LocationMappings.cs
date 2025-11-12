@@ -1,31 +1,31 @@
-﻿namespace IAVH.BioTablero.CM.Application.Mappings;
+﻿namespace IAVH.BioTablero.CM.Application.Mappings.Geo;
 
 using System;
 
-using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 
 /// <summary>
-/// Initiative contact mappings.
+/// Initiative mappings.
 /// </summary>
-public class InitiativeContactMappings : IMapper<InitiativeContact, InitiativeContactDto>
+public class LocationMappings : IMapper<Location, LocationDto>
 {
     /// <summary>
     /// Map from entity to DTO.
     /// </summary>
     /// <param name="entity">Entity data.</param>
     /// <returns>DTO data.</returns>
-    public InitiativeContactDto Map(InitiativeContact entity)
+    public LocationDto Map(Location entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         return new()
         {
             Id = entity.Id,
-            InitiativeId = entity.InitiativeId,
-            Phone = entity.Phone,
-            Email = entity.Email,
+            Name = entity.Name,
+            Code = entity.Code,
+            ParentId = entity.ParentId,
         };
     }
 
@@ -34,15 +34,15 @@ public class InitiativeContactMappings : IMapper<InitiativeContact, InitiativeCo
     /// </summary>
     /// <param name="dto">DTO data.</param>
     /// <returns>Entity data.</returns>
-    public InitiativeContact Map(InitiativeContactDto dto)
+    public Location Map(LocationDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 
         return new()
         {
-            InitiativeId = dto?.InitiativeId ?? 0,
-            Phone = dto.Phone,
-            Email = dto.Email,
+            Name = dto.Name,
+            Code = dto.Code,
+            ParentId = dto.ParentId,
         };
     }
 }

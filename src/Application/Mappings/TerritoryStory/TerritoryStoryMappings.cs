@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Mappings;
+﻿namespace IAVH.BioTablero.CM.Application.Mappings.TerritoryStory;
 
 using System;
 using System.Linq;
