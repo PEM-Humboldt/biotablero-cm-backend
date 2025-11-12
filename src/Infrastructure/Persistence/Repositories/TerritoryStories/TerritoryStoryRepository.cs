@@ -72,7 +72,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     /// <param name="id">Entity identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated territory story data.</returns>
-    public async Task<TerritoryStory> MarkAsFeaturedContent(int id, CancellationToken ct)
+    public async Task<TerritoryStory> MarkAsFeaturedContent(int id, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 

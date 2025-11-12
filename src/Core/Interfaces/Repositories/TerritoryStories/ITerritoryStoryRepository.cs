@@ -42,5 +42,5 @@ public interface ITerritoryStoryRepository : IRepository<TerritoryStory, int>
     /// <param name="id">Entity identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated territory story data.</returns>
-    Task<TerritoryStory> MarkAsFeaturedContent(int id, CancellationToken ct);
+    Task<TerritoryStory> MarkAsFeaturedContent(int id, CancellationToken ct = default);
 }

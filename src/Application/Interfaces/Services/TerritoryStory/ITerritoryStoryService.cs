@@ -27,7 +27,7 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> LikeActionAsync(TerritoryStoryLikeDto entityData, CancellationToken ct);
+    Task<CustomWebResponse> LikeActionAsync(TerritoryStoryLikeDto entityData, CancellationToken ct = default);
 
     /// <summary>
     /// Featured content action.
@@ -35,5 +35,5 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     /// <param name="id">Entity identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> FeaturedContentActionAsync(int id, CancellationToken ct);
+    Task<CustomWebResponse> FeaturedContentActionAsync(int id, CancellationToken ct = default);
 }

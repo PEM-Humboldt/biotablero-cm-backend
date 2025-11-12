@@ -222,7 +222,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> LikeActionAsync(TerritoryStoryLikeDto entityData, CancellationToken ct)
+    public async Task<CustomWebResponse> LikeActionAsync(TerritoryStoryLikeDto entityData, CancellationToken ct = default)
     {
         // Validate Territory Story
         var territoryStory = await entityRepository.GetByIdAsync(entityData.TerritoryStoryId, ct);
@@ -265,7 +265,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <param name="id">Entity identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, CancellationToken ct)
+    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, CancellationToken ct = default)
     {
         // Validate Territory Story
         var territoryStoryExists = await entityRepository.AnyAsync(id, ct);
