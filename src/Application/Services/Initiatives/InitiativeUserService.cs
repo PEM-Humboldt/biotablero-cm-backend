@@ -155,7 +155,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = $"User is invalid or do not exist",
+                Message = $"User is invalid or does not exist",
             };
         }
 

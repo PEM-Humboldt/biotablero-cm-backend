@@ -45,6 +45,10 @@ public class JoinRequestConfig : IEntityTypeConfiguration<JoinRequest>
             .HasColumnName("initiative_id")
             .IsRequired();
 
+        builder.Property(i => i.LevelId)
+            .HasColumnName("initiative_user_level_id")
+            .IsRequired();
+
         builder.Property(i => i.StatusId)
             .HasColumnName("join_request_status_id")
             .IsRequired();
@@ -52,6 +56,10 @@ public class JoinRequestConfig : IEntityTypeConfiguration<JoinRequest>
         builder.HasOne(e => e.Initiative)
             .WithMany(p => p.JoinRequests)
             .HasForeignKey(e => e.InitiativeId);
+
+        builder.HasOne(e => e.Level)
+            .WithMany(p => p.JoinRequests)
+            .HasForeignKey(e => e.LevelId);
 
         builder.HasOne(e => e.Status)
             .WithMany(p => p.JoinRequests)

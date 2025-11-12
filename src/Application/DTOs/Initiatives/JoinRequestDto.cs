@@ -31,7 +31,7 @@ public class JoinRequestDto : IDto
     /// <summary>
     /// Join Request creation date.
     /// </summary>
-    public DateTime CreationDate { get; set; }
+    public DateTime? CreationDate { get; set; }
 
     /// <summary>
     /// Join Request creation date.
@@ -42,6 +42,11 @@ public class JoinRequestDto : IDto
     /// Initiative identifier.
     /// </summary>
     public int InitiativeId { get; set; }
+
+    /// <summary>
+    /// Level relationship.
+    /// </summary>
+    public EnumEntityDto<InitiativeUserLevel> Level { get; set; }
 
     /// <summary>
     /// Join Request Status relationship.

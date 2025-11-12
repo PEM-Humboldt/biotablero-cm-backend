@@ -51,20 +51,17 @@ public class JoinRequestController(
     /// <summary>
     /// Add entity.
     /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="requestData">Request data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
     [HttpPut]
+    [Consumes("application/json")]
     [Authorize]
+    [SwaggerRequestExample(typeof(JoinRequestDto), typeof(JoinRequestAddRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
-    public async Task<IActionResult> Put(int initiativeId, CancellationToken ct)
+    public async Task<IActionResult> Put([FromBody] JoinRequestDto requestData, CancellationToken ct)
     {
-        var requestData = new JoinRequestDto()
-        {
-            InitiativeId = initiativeId,
-            UserName = HttpContext.GetUserName(),
-        };
-
+        requestData.UserName = HttpContext.GetUserName();
         var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }
@@ -77,7 +74,6 @@ public class JoinRequestController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
     [HttpPost("{id}")]
-    [Consumes("application/json")]
     [Authorize]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
     public async Task<IActionResult> Post(int id, JoinRequestStatusEnum requestStatus, CancellationToken ct)

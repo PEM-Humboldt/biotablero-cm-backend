@@ -11,6 +11,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
@@ -19,13 +21,19 @@ using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initiat
 /// </summary>
 public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestRepository
 {
+    private readonly ILogger logger;
+
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public JoinRequestRepository(GeneralContext dbContext)
+    /// <param name="logger">Logger.</param>
+    public JoinRequestRepository(
+        GeneralContext dbContext,
+        ILogger logger)
         : base(dbContext)
     {
+        this.logger = logger;
     }
 
     /// <summary>
@@ -55,11 +63,10 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
     /// </summary>
     /// <param name="requestId">Request identifier.</param>
     /// <param name="reviewerUserName">Reviewer user name.</param>
-    /// <param name="userName">User name.</param>
     /// <param name="requestStatusId">Request status identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    public async Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, string userName, int requestStatusId, CancellationToken ct = default)
+    public async Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, int requestStatusId, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
@@ -87,8 +94,8 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
                     var initiativeUserEntity = new InitiativeUser()
                     {
                         InitiativeId = entity.InitiativeId,
-                        UserName = userName,
-                        LevelId = (int)InitiativeUserLevelEnum.Member,
+                        UserName = entity.UserName,
+                        LevelId = entity.LevelId,
                     };
 
                     await dbContext.InitiativeUsers.AddAsync(initiativeUserEntity, ct);
@@ -106,9 +113,10 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
 
             return entity;
         }
-        catch (DbUpdateException)
+        catch (DbUpdateException ex)
         {
             await transaction.RollbackAsync(ct);
+            logger.Error(ex, "Join request review transaction error {FileName}");
             return null;
         }
     }
