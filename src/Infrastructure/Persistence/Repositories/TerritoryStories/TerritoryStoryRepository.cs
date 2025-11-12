@@ -10,18 +10,26 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 /// <summary>
 /// Territory Story repository.
 /// </summary>
 public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerritoryStoryRepository
 {
+    private readonly ILogger logger;
+
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public TerritoryStoryRepository(GeneralContext dbContext)
+    /// <param name="logger">Logger.</param>
+    public TerritoryStoryRepository(
+        GeneralContext dbContext,
+        ILogger logger)
         : base(dbContext)
     {
+        this.logger = logger;
     }
 
     /// <summary>
@@ -57,4 +65,52 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
         await dbContext.TerritoryStories
             .Where(e => e.Id != id && e.Title == title)
             .AnyAsync(ct);
+
+    /// <summary>
+    /// Mark as featured content.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated territory story data.</returns>
+    public async Task<TerritoryStory> MarkAsFeaturedContent(int id, CancellationToken ct)
+    {
+        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
+
+        try
+        {
+            var entity = await dbContext.TerritoryStories
+                .Where(e => e.Id == id)
+                .FirstOrDefaultAsync(ct);
+
+            if (entity == null)
+            {
+                return entity;
+            }
+
+            if (!entity.FeaturedContent)
+            {
+                entity.FeaturedContent = true;
+            }
+
+            var storiesFromSameinitiative = await dbContext.TerritoryStories
+                .Where(e => e.Id != entity.Id && e.InitiativeId == entity.InitiativeId)
+                .ToListAsync(ct);
+
+            foreach (var territoryStory in storiesFromSameinitiative)
+            {
+                territoryStory.FeaturedContent = false;
+            }
+
+            await dbContext.SaveChangesAsync(ct);
+            await transaction.CommitAsync(ct);
+
+            return entity;
+        }
+        catch (DbUpdateException ex)
+        {
+            await transaction.RollbackAsync(ct);
+            logger.Error(ex, "Territory Story transaction error");
+            return null;
+        }
+    }
 }

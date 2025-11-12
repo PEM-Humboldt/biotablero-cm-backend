@@ -22,10 +22,18 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
-    /// Like button action.
+    /// Like action.
     /// </summary>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<CustomWebResponse> LikeActionAsync(TerritoryStoryLikeDto entityData, CancellationToken ct);
+
+    /// <summary>
+    /// Featured content action.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> FeaturedContentActionAsync(int id, CancellationToken ct);
 }

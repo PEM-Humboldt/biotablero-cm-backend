@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -223,6 +224,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> LikeActionAsync(TerritoryStoryLikeDto entityData, CancellationToken ct)
     {
+        // Validate Territory Story
         var territoryStory = await entityRepository.GetByIdAsync(entityData.TerritoryStoryId, ct);
 
         if (territoryStory == null)
@@ -255,6 +257,49 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         }
 
         return new CustomWebResponse();
+    }
+
+    /// <summary>
+    /// Featured content action.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, CancellationToken ct)
+    {
+        // Validate Territory Story
+        var territoryStoryExists = await entityRepository.AnyAsync(id, ct);
+
+        if (!territoryStoryExists)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story not found",
+            };
+        }
+
+        // TODO: Validate user role and profile
+
+        // Mark territory story as featured content
+        var entity = await entityRepository.MarkAsFeaturedContent(id, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.InternalServerError,
+                Message = "Database error",
+            };
+        }
+
+        var entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Update, "Marked territory story as featured content", "{@EntityData}", entityData);
+
+        return new CustomWebResponse()
+        {
+            ResponseBody = entityData,
+        };
     }
 
     /// <summary>
