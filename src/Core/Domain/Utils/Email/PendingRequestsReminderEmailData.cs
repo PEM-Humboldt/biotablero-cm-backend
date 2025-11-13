@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Core.Domain.Utils.Email;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Utils.Email;
 
 /// <summary>
 /// Pending requests reminder email data.
