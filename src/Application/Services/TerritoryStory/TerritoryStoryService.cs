@@ -19,6 +19,8 @@ using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
+using Microsoft.AspNetCore.OData.Query;
+
 using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
@@ -61,6 +63,20 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         this.iamService = iamService;
         this.initiativeRepository = initiativeRepository;
         this.territoryStoryLikeRepository = territoryStoryLikeRepository;
+    }
+
+    /// <summary>
+    /// Get elements list (OData).
+    /// </summary>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct = default)
+    {
+        var query = entityRepository.GetQueryable();
+        query = entityRepository.IncludeOdataEntities(query);
+
+        return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 
     /// <summary>

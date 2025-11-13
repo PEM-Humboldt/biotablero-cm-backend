@@ -33,6 +33,29 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     }
 
     /// <summary>
+    /// Finds an entity with the given primary key value.
+    /// </summary>
+    /// <param name="id">The value of the primary key for the entity to be found.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public new async Task<TerritoryStory> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await dbContext.TerritoryStories
+            .Include(e => e.Images)
+            .Include(e => e.Videos)
+            .Where(e => e.Id == id)
+            .FirstOrDefaultAsync(ct);
+
+    /// <summary>
+    /// Include OData custom entities.
+    /// </summary>
+    /// <param name="query">Linq Query.</param>
+    /// <returns>Modified Linq query.</returns>
+    public IQueryable<TerritoryStory> IncludeOdataEntities(IQueryable<TerritoryStory> query) =>
+        query
+            .Include(e => e.Images)
+            .Include(e => e.Videos);
+
+    /// <summary>
     /// Get elements by initiative.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>

@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,6 +12,13 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 /// </summary>
 public interface ITerritoryStoryRepository : IRepository<TerritoryStory, int>
 {
+    /// <summary>
+    /// Include OData custom entities.
+    /// </summary>
+    /// <param name="query">Linq Query.</param>
+    /// <returns>Modified Linq query.</returns>
+    IQueryable<TerritoryStory> IncludeOdataEntities(IQueryable<TerritoryStory> query);
+
     /// <summary>
     /// Get elements by initiative.
     /// </summary>
