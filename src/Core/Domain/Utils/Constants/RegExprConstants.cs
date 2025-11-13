@@ -42,8 +42,7 @@ public static class RegExprConstants
     /// <example>
     /// Valid video urls:
     /// - https://www.youtube.com/watch?v=Dhu8ee6Dzx4
-    /// - https://youtu.be/Dhu8ee6Dzx4
     /// </example>
     /// </summary>
-    public const string YouTubeVideoUrl = @"^(?:(?:https:\/\/)(?:www)?\.?(?:youtu\.?be)(?:\.com)?\/(?:.*[=/])*)([^= &?/\r\n]{8,11})$";
+    public const string YouTubeVideoUrl = @"^(https:\/\/www\.youtube\.com\/watch\?v=([a-z]|[A-Z]|[0-9]){8,11})(&.*)*$";
 }
