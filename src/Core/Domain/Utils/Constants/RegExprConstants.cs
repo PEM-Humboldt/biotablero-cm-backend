@@ -36,4 +36,14 @@ public static class RegExprConstants
     /// </example>
     /// </summary>
     public const string Keywords = @"^([A-Z\u00d1ÁÉÍÓÚ]+[a-z0-9\u00f1áéíóú]+(,){1})*([A-Z\u00d1ÁÉÍÓÚ]+[a-z0-9\u00f1áéíóú]+)$";
+
+    /// <summary>
+    /// Regular expression for YouTube video Url.
+    /// <example>
+    /// Valid video urls:
+    /// - https://www.youtube.com/watch?v=Dhu8ee6Dzx4
+    /// - https://youtu.be/Dhu8ee6Dzx4
+    /// </example>
+    /// </summary>
+    public const string YouTubeVideoUrl = @"^(?:(?:https:\/\/)(?:www)?\.?(?:youtu\.?be)(?:\.com)?\/(?:.*[=/])*)([^= &?/\r\n]{8,11})$";
 }

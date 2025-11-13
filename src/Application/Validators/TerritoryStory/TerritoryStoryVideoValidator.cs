@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 /// <summary>
 /// Territory story video validator.
@@ -21,6 +22,7 @@ public class TerritoryStoryVideoValidator : AbstractValidator<TerritoryStoryVide
         RuleFor(dto => dto.FileUrl)
             .NotEmpty()
                 .WithMessage("File url is required")
+            .Matches(RegExprConstants.YouTubeVideoUrl)
             .MaximumLength(150);
 
         RuleSet("Create", () =>
