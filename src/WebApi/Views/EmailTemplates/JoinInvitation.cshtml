@@ -1,4 +1,4 @@
-@model IAVH.BioTablero.CM.Core.Domain.Utils.Email.DefaultEmailData
+@model IAVH.BioTablero.CM.Core.Domain.Utils.Email.JoinInvitationEmailData
 @{
     var subject = $"Invitación a unirse a {Model?.InitiativeName}";
     var content = $"Has sido invitado a unirte a la iniciativa '{Model?.InitiativeName}'.<br /> {Model?.EmailMessage}.";

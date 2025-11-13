@@ -209,7 +209,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
     private async Task<bool> SendNotificationJoinInvitation(string[] emails, Initiative initiative, string emailMessage, CancellationToken ct = default)
     {
-        var emailData = new DefaultEmailData
+        var emailData = new JoinInvitationEmailData
         {
             InitiativeName = initiative.Name,
             EmailMessage = emailMessage,

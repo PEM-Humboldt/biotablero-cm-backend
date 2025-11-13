@@ -173,7 +173,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         entity = await entityRepository.AddAsync(entity, ct);
 
         // Send email
-        var emailObject = new DefaultEmailData()
+        var emailObject = new JoinRequestEmailData()
         {
             Address = new(userData.FullName, userData.Email),
             InitiativeName = initiative.Name,
@@ -258,7 +258,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
         var initiative = await initiativeRepository.GetByIdAsync(entityData.InitiativeId, ct);
 
-        var emailObject = new DefaultEmailData()
+        var emailObject = new JoinRequestEmailData()
         {
             Address = new(userData.FullName, userData.Email),
             InitiativeName = initiative.Name,
@@ -313,7 +313,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="emailData">Email data.</param>
     /// <param name="ct">Cancellation token.</param>
-    private void SendNotificationJoinRequest(int initiativeId, DefaultEmailData emailData, CancellationToken ct = default) => _ = Task.Run(
+    private void SendNotificationJoinRequest(int initiativeId, JoinRequestEmailData emailData, CancellationToken ct = default) => _ = Task.Run(
         async () =>
         {
             var leaders = await initiativeUserRepository.ListAsync(InitiativeUserSpec.LevelSpec(initiativeId, (int)InitiativeUserLevelEnum.Leader), ct);
@@ -348,7 +348,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int, 
     /// <returns>Process result.</returns>
     private async Task<bool> SendNotificationOldPendingRequestsAsync(ExternalUser leaderData, int pendingRequests, CancellationToken ct = default)
     {
-        var emailData = new DefaultEmailData
+        var emailData = new PendingRequestsReminderEmailData
         {
             Address = new(leaderData.FullName, leaderData.Email),
             PendingRequestsCount = pendingRequests,

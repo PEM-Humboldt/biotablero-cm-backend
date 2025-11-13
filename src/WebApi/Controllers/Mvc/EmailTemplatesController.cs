@@ -1,8 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Mvc;
 
-using System.Linq;
-using System.Threading.Tasks;
-
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Email;
@@ -48,7 +45,7 @@ public class EmailTemplatesController : Controller
     public IActionResult RoleAssignment(string content = null)
     {
         var model = !string.IsNullOrEmpty(content)
-            ? new DefaultEmailData { Content = content }
+            ? new RoleAssignmentEmailData { Content = content }
             : null;
 
         return View(model);
@@ -64,7 +61,7 @@ public class EmailTemplatesController : Controller
     public IActionResult UserRemoval(string content = null)
     {
         var model = !string.IsNullOrEmpty(content)
-            ? new DefaultEmailData { Content = content }
+            ? new UserRemovalEmailData { Content = content }
             : null;
 
         return View(model);
@@ -80,7 +77,7 @@ public class EmailTemplatesController : Controller
     public IActionResult JoinInvitation(string content = null)
     {
         var model = !string.IsNullOrEmpty(content)
-            ? new DefaultEmailData { Content = content }
+            ? new JoinInvitationEmailData { Content = content }
             : null;
 
         return View(model);
@@ -96,7 +93,7 @@ public class EmailTemplatesController : Controller
     public IActionResult JoinRequest(string content = null)
     {
         var model = !string.IsNullOrEmpty(content)
-            ? new DefaultEmailData { Content = content }
+            ? new JoinRequestEmailData { Content = content }
             : null;
 
         return View(model);
@@ -112,69 +109,9 @@ public class EmailTemplatesController : Controller
     public IActionResult PendingRequestsReminder(string content = null)
     {
         var model = !string.IsNullOrEmpty(content)
-            ? new DefaultEmailData { Content = content }
+            ? new PendingRequestsReminderEmailData { Content = content }
             : null;
 
         return View(model);
-    }
-
-    /// <summary>
-    /// Test email sending with a specific template.
-    /// </summary>
-    /// <param name="template">Template name (RoleAssignment, UserRemoval, JoinInvitation, JoinRequest, PendingRequestsReminder).</param>
-    /// <param name="email">Email address to send test email.</param>
-    /// <param name="content">Email content (HTML format).</param>
-    /// <param name="subject">Email subject.</param>
-    /// <returns>Test result.</returns>
-    [HttpPost]
-    [Route("Test/{template}")]
-    public async Task<IActionResult> TestEmail(string template, string email, string content = null, string subject = null)
-    {
-        if (string.IsNullOrEmpty(email))
-        {
-            return BadRequest(new { error = "Email address is required" });
-        }
-
-        var validTemplates = new[] { "RoleAssignment", "UserRemoval", "JoinInvitation", "JoinRequest", "PendingRequestsReminder" };
-        if (!validTemplates.Contains(template))
-        {
-            return BadRequest(new { error = $"Invalid template. Valid templates: {string.Join(", ", validTemplates)}" });
-        }
-
-        var emailData = new DefaultEmailData
-        {
-            Address = new CustomEmailAddress("Usuario de Prueba", email),
-            Subject = subject ?? $"Prueba de plantilla: {template}",
-            Content = content ?? $"<p>Este es un correo de prueba para la plantilla <b>{template}</b>.</p>",
-        };
-
-        try
-        {
-            var htmlBody = await webViewTools.RenderViewToStringAsync(template, emailData);
-
-            var receivers = new CustomEmailAddress[] { emailData.Address };
-            var response = await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody);
-
-            return Json(new
-            {
-                success = true,
-                message = "Email sent successfully",
-                template = template,
-                email = email,
-                serverResponse = response,
-                htmlBodyLength = htmlBody.Length,
-            });
-        }
-        catch (System.Exception ex)
-        {
-            return StatusCode(500, Json(new
-            {
-                success = false,
-                error = ex.Message,
-                stackTrace = ex.StackTrace,
-                template = template,
-                email = email,
-            }));
-        }
     }
 }

@@ -1,4 +1,4 @@
-@model IAVH.BioTablero.CM.Core.Domain.Utils.Email.DefaultEmailData
+@model IAVH.BioTablero.CM.Core.Domain.Utils.Email.RoleAssignmentEmailData
 @{
     var subject = $"Ahora eres {Model?.LevelName} de {Model?.InitiativeName}";
     var content = $"Se te ha asignado el rol de {Model?.LevelName} en la iniciativa '{Model?.InitiativeName}' por el usuario '{Model?.ReviewerUserName}'.";

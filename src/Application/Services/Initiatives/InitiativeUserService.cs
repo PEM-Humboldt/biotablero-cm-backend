@@ -315,7 +315,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
                 _ => "miembro",
             };
 
-            var emailData = new DefaultEmailData
+            var emailData = new RoleAssignmentEmailData
             {
                 Address = new(userData.FullName, userData.Email),
                 InitiativeName = initiative.Name,
@@ -353,7 +353,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     private void SendNotificationUserBanned(ExternalUser userData, Initiative initiative, List<InitiativeUser> leaders, CancellationToken ct = default) => Task.Run(
         async () =>
         {
-            var emailData = new DefaultEmailData
+            var emailData = new UserRemovalEmailData
             {
                 Address = new(userData.FullName, userData.Email),
                 InitiativeName = initiative.Name,
