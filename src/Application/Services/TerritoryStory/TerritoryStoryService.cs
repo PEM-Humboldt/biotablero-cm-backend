@@ -24,6 +24,8 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+
 /// <summary>
 /// Territory Story service.
 /// </summary>
@@ -34,6 +36,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ITerritoryStoryLikeRepository territoryStoryLikeRepository;
+    private readonly IInitiativeUserRepository initiativeUserRepository;
 
     /// <summary>
     /// Constructor.
@@ -44,13 +47,15 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="territoryStoryLikeRepository">Territory Story Like repository.</param>
+    /// <param name="initiativeUserRepository">Initiative User repository.</param>
     public TerritoryStoryService(
         ITerritoryStoryRepository entityRepository,
         IMapper<TerritoryStory, TerritoryStoryDto> mapper,
         IValidator<TerritoryStoryDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
-        ITerritoryStoryLikeRepository territoryStoryLikeRepository)
+        ITerritoryStoryLikeRepository territoryStoryLikeRepository,
+        IInitiativeUserRepository initiativeUserRepository)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
@@ -58,6 +63,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
         this.territoryStoryLikeRepository = territoryStoryLikeRepository;
+        this.initiativeUserRepository = initiativeUserRepository;
     }
 
     /// <summary>
@@ -101,6 +107,19 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> AddAsync(TerritoryStoryDto entityData, CancellationToken ct = default)
     {
+        // Validate user level and permissions
+        var initiativeId = entityData.InitiativeId ?? 0;
+        var initiativeUser = await initiativeUserRepository.GetByInitiativeAndUserNameAsync(initiativeId, entityData.AuthorUserName, ct);
+        var userIsLeaderOrMember = initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader or (int)InitiativeUserLevelEnum.Member;
+
+        if (!userIsLeaderOrMember)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
 
@@ -115,7 +134,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         }
 
         // Validate initiative
-        var initiativeId = entityData.InitiativeId ?? 0;
         var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
 
         if (!initiativeExists)
@@ -159,10 +177,11 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// Update element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> UpdateAsync(int id, TerritoryStoryDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -185,6 +204,18 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate user level and permissions
+        var initiativeUser = await initiativeUserRepository.GetByInitiativeAndUserNameAsync(entity.InitiativeId, userName, ct);
+        var userIsLeader = initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader;
+
+        if (!userIsLeader || userName != entity.AuthorUserName)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -263,14 +294,15 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// Featured content action.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate Territory Story
-        var territoryStoryExists = await entityRepository.AnyAsync(id, ct);
+        var territoryStory = await entityRepository.GetByIdAsync(id, ct);
 
-        if (!territoryStoryExists)
+        if (territoryStory != null)
         {
             return new CustomWebResponse(true)
             {
@@ -278,7 +310,17 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             };
         }
 
-        // TODO: Validate user role and profile
+        // Validate user level and permissions
+        var initiativeUser = await initiativeUserRepository.GetByInitiativeAndUserNameAsync(territoryStory.InitiativeId, userName, ct);
+        var userIsLeader = initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader;
+
+        if (!userIsLeader)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
 
         // Mark territory story as featured content
         var entity = await entityRepository.MarkAsFeaturedContent(id, ct);
@@ -306,26 +348,29 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// Enable element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> EnableAsync(int id, CancellationToken ct = default) => await DisableOrEnableAsync(id, false, ct);
+    public async Task<CustomWebResponse> EnableAsync(int id, string userName, CancellationToken ct = default) => await DisableOrEnableAsync(id, userName, false, ct);
 
     /// <summary>
     /// Disable element.initiativeId.
     /// </summary>
     /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> DisableAsync(int id, CancellationToken ct = default) => await DisableOrEnableAsync(id, false, ct);
+    public async Task<CustomWebResponse> DisableAsync(int id, string userName, CancellationToken ct = default) => await DisableOrEnableAsync(id, userName, false, ct);
 
     /// <summary>
     /// Disable or enable element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="disable">Disable flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    private async Task<CustomWebResponse> DisableOrEnableAsync(int id, bool disable, CancellationToken ct = default)
+    private async Task<CustomWebResponse> DisableOrEnableAsync(int id, string userName, bool disable, CancellationToken ct = default)
     {
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -334,6 +379,18 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate user level and permissions
+        var initiativeUser = await initiativeUserRepository.GetByInitiativeAndUserNameAsync(entity.InitiativeId, userName, ct);
+        var userIsLeader = initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader;
+
+        if (!userIsLeader || userName != entity.AuthorUserName)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 

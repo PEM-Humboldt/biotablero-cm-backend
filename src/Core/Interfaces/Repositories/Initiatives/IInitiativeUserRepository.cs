@@ -31,6 +31,15 @@ public interface IInitiativeUserRepository : IRepository<InitiativeUser, int>
     Task<bool> AnyByInitiativeUserAndLevelAsync(int initiativeId, string userName, int levelId, CancellationToken ct = default);
 
     /// <summary>
+    /// Get by initiative and username.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities by selected parameters.</returns>
+    Task<InitiativeUser> GetByInitiativeAndUserNameAsync(int initiativeId, string userName, CancellationToken ct = default);
+
+    /// <summary>
     /// Get elements by initiative.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>

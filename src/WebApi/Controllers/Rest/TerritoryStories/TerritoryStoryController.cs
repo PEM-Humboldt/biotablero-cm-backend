@@ -106,7 +106,7 @@ public class TerritoryStoryController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
     public async Task<IActionResult> Post(int id, [FromBody] TerritoryStoryDto requestData, CancellationToken ct)
     {
-        var response = await entityService.UpdateAsync(id, requestData, ct);
+        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -140,7 +140,7 @@ public class TerritoryStoryController(
     [Authorize]
     public async Task<IActionResult> FeaturedContent(int id, CancellationToken ct)
     {
-        var response = await entityService.FeaturedContentActionAsync(id, ct);
+        var response = await entityService.FeaturedContentActionAsync(id, HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
     }
 
@@ -154,7 +154,7 @@ public class TerritoryStoryController(
     [Authorize]
     public async Task<IActionResult> Enable(int id, CancellationToken ct)
     {
-        var response = await entityService.EnableAsync(id, ct);
+        var response = await entityService.EnableAsync(id, HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
     }
 
@@ -168,7 +168,7 @@ public class TerritoryStoryController(
     [Authorize]
     public async Task<IActionResult> Disable(int id, CancellationToken ct)
     {
-        var response = await entityService.DisableAsync(id, ct);
+        var response = await entityService.DisableAsync(id, HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
     }
 }
