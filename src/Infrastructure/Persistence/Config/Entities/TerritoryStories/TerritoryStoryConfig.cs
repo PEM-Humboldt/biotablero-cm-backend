@@ -66,6 +66,8 @@ public class TerritoryStoryConfig : IEntityTypeConfiguration<TerritoryStory>
             .HasDefaultValue(false)
             .IsRequired();
 
+        builder.Ignore(i => i.TotalLikes);
+
         builder.HasOne(e => e.Initiative)
             .WithMany(p => p.TerritoryStories)
             .HasForeignKey(e => e.InitiativeId);

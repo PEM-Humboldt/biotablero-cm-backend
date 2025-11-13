@@ -58,6 +58,11 @@ public class TerritoryStory : BaseEntity<int>, IAggregateRoot
     public bool FeaturedContent { get; set; }
 
     /// <summary>
+    /// Total of territory story likes.
+    /// </summary>
+    public int TotalLikes => Likes?.Count ?? 0;
+
+    /// <summary>
     /// Initiative relationship.
     /// </summary>
     public Initiative Initiative { get; set; }

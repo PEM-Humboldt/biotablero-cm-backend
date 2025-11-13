@@ -42,6 +42,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
         await dbContext.TerritoryStories
             .Include(e => e.Images)
             .Include(e => e.Videos)
+            .Include(e => e.Likes)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
@@ -53,7 +54,8 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     public IQueryable<TerritoryStory> IncludeOdataEntities(IQueryable<TerritoryStory> query) =>
         query
             .Include(e => e.Images)
-            .Include(e => e.Videos);
+            .Include(e => e.Videos)
+            .Include(e => e.Likes);
 
     /// <summary>
     /// Get elements by initiative.

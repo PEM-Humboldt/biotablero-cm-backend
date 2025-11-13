@@ -63,7 +63,7 @@ public class TerritoryStoryDto : IDto
     /// <summary>
     /// Total of territory story likes.
     /// </summary>
-    public int? Likes { get; set; }
+    public int Likes { get; set; }
 
     /// <summary>
     /// Territory Story Image relationship.
