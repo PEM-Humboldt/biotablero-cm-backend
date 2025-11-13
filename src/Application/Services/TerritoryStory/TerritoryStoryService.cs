@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -33,7 +32,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     private new readonly ITerritoryStoryRepository entityRepository;
     private readonly IValidator<TerritoryStoryDto> entityValidator;
     private readonly ILogger logger;
-    private readonly IIamService iamService;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ITerritoryStoryLikeRepository territoryStoryLikeRepository;
 
@@ -44,7 +42,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="iamService">IAM service.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="territoryStoryLikeRepository">Territory Story Like repository.</param>
     public TerritoryStoryService(
@@ -52,7 +49,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         IMapper<TerritoryStory, TerritoryStoryDto> mapper,
         IValidator<TerritoryStoryDto> entityValidator,
         ILogger logger,
-        IIamService iamService,
         IInitiativeRepository initiativeRepository,
         ITerritoryStoryLikeRepository territoryStoryLikeRepository)
         : base(entityRepository, mapper)
@@ -60,7 +56,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
-        this.iamService = iamService;
         this.initiativeRepository = initiativeRepository;
         this.territoryStoryLikeRepository = territoryStoryLikeRepository;
     }
@@ -139,17 +134,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             return new CustomWebResponse(true)
             {
                 Message = "There is already a territory story with the same title",
-            };
-        }
-
-        // Validate user in external system
-        var userExists = await iamService.UserExistsAsync(entityData.AuthorUserName, ct);
-
-        if (!userExists)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = $"User is invalid or does not exist",
             };
         }
 
