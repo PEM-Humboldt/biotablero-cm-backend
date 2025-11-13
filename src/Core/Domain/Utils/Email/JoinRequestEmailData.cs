@@ -20,4 +20,3 @@ public class JoinRequestEmailData : DefaultEmailData
     /// </summary>
     public string JoinRequestStatus { get; set; }
 }
-

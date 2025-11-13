@@ -15,4 +15,3 @@ public class JoinInvitationEmailData : DefaultEmailData
     /// </summary>
     public string EmailMessage { get; set; }
 }
-

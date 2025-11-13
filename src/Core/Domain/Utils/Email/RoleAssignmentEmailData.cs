@@ -20,4 +20,3 @@ public class RoleAssignmentEmailData : DefaultEmailData
     /// </summary>
     public string ReviewerUserName { get; set; }
 }
-

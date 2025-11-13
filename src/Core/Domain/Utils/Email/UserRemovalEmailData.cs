@@ -10,4 +10,3 @@ public class UserRemovalEmailData : DefaultEmailData
     /// </summary>
     public string InitiativeName { get; set; }
 }
-

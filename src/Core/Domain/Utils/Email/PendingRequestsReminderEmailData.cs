@@ -10,4 +10,3 @@ public class PendingRequestsReminderEmailData : DefaultEmailData
     /// </summary>
     public int PendingRequestsCount { get; set; }
 }
-
