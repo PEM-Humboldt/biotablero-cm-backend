@@ -65,6 +65,9 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     /// <returns>Entities by selected initiative.</returns>
     public async Task<IEnumerable<TerritoryStory>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
         await dbContext.TerritoryStories
+            .Include(e => e.Images)
+            .Include(e => e.Videos)
+            .Include(e => e.Likes)
             .Where(e => e.InitiativeId == initiativeId)
             .ToListAsync(ct);
 

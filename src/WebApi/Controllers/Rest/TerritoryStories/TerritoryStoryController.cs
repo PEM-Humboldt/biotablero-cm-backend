@@ -7,13 +7,17 @@ using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.TerritoryStory;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 using IAVH.BioTablero.CM.WebApi.Utils;
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
+
+using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Territory Story controller.
@@ -35,6 +39,7 @@ public class TerritoryStoryController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -48,9 +53,24 @@ public class TerritoryStoryController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
+    /// Get entities by Initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities list from parameters.</returns>
+    [HttpGet("GetByInitiative/{initiativeId}")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryListResponseExample))]
+    public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
+    {
+        var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -63,6 +83,8 @@ public class TerritoryStoryController(
     [HttpPut]
     [Consumes("application/json")]
     [Authorize]
+    [SwaggerRequestExample(typeof(TerritoryStoryDto), typeof(TerritoryStoryAddRequestExample))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
     public async Task<IActionResult> Put([FromBody] TerritoryStoryDto requestData, CancellationToken ct)
     {
         requestData.AuthorUserName = HttpContext.GetUserName();
@@ -80,6 +102,8 @@ public class TerritoryStoryController(
     [HttpPost("{id}")]
     [Consumes("application/json")]
     [Authorize]
+    [SwaggerRequestExample(typeof(TerritoryStoryDto), typeof(TerritoryStoryEditRequestExample))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
     public async Task<IActionResult> Post(int id, [FromBody] TerritoryStoryDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);
