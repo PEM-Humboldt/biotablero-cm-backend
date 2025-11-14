@@ -75,7 +75,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
     public async Task<bool> IsDuplicatedAsync(Uri fileUrl, CancellationToken ct = default) =>
-        await dbContext.TerritoryStoryVideos
+        await dbContext.TerritoryStoryImages
             .Where(e => e.FileUrl == fileUrl)
             .AnyAsync(ct);
 
@@ -87,7 +87,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
     public async Task<bool> IsDuplicatedAsync(int id, Uri fileUrl, CancellationToken ct = default) =>
-        await dbContext.TerritoryStoryVideos
+        await dbContext.TerritoryStoryImages
             .Where(e => e.Id != id && e.FileUrl == fileUrl)
             .AnyAsync(ct);
 
