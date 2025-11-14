@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -30,6 +31,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     private readonly IValidator<TerritoryStoryVideoDto> entityValidator;
     private readonly ILogger logger;
     private readonly ITerritoryStoryRepository territoryStoryRepository;
+    private readonly IVideoHelperService videoHelperService;
 
     /// <summary>
     /// Constructor.
@@ -39,18 +41,21 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="territoryStoryRepository">Territory Story repository.</param>
+    /// <param name="videoHelperService">Video Helper service.</param>
     public TerritoryStoryVideoService(
         ITerritoryStoryVideoRepository entityRepository,
         IMapper<TerritoryStoryVideo, TerritoryStoryVideoDto> mapper,
         IValidator<TerritoryStoryVideoDto> entityValidator,
         ILogger logger,
-        ITerritoryStoryRepository territoryStoryRepository)
+        ITerritoryStoryRepository territoryStoryRepository,
+        IVideoHelperService videoHelperService)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.territoryStoryRepository = territoryStoryRepository;
+        this.videoHelperService = videoHelperService;
     }
 
     /// <summary>
@@ -125,6 +130,17 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
             return new CustomWebResponse(true)
             {
                 Message = "There is already a video with the same URL",
+            };
+        }
+
+        // Validate if the video exists
+        var videoExists = await videoHelperService.VideoExistsAsync(entityData.FileUrl, ct);
+
+        if (!videoExists)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "The video URL does not exist",
             };
         }
 
