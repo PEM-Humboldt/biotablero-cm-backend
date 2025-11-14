@@ -21,8 +21,6 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
-
 /// <summary>
 /// Territory Story Image service.
 /// </summary>
@@ -81,10 +79,11 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <summary>
     /// Add element.
     /// </summary>
+    /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> AddAsync(TerritoryStoryImageDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryImageDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
@@ -96,6 +95,17 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
                 Message = "Validation errors",
                 ResponseBody = validationResult.Errors
                     .Select(error => error.ErrorMessage),
+            };
+        }
+
+        // Validate user level and permissions
+        var authorizedUserAction = await territoryStoryRepository.AuthorizedUserAction(entityData.TerritoryStoryId, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -142,11 +152,23 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// Update element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> UpdateAsync(int id, TerritoryStoryImageDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, CancellationToken ct = default)
     {
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
@@ -207,27 +229,25 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate Territory Story Image
-        var territoryStoryImage = await entityRepository.GetByIdAsync(id, ct);
-
-        if (territoryStoryImage == null)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = "Territory Story Image not found",
-            };
-        }
-
         // Validate user level and permissions
-        var territoryStory = await territoryStoryRepository.GetByIdAsync(territoryStoryImage.TerritoryStoryId, ct);
-        var initiativeUser = await initiativeUserRepository.GetByInitiativeAndUserNameAsync(territoryStory.InitiativeId, userName, ct);
-        var userIsLeader = initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader;
+        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
 
-        if (!userIsLeader)
+        if (!authorizedUserAction)
         {
             return new CustomWebResponse(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate Territory Story Image
+        var territoryStoryImageExists = await entityRepository.AnyAsync(id, ct);
+
+        if (!territoryStoryImageExists)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story Image not found",
             };
         }
 
@@ -257,10 +277,22 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// Delete element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 

@@ -13,6 +13,15 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 public interface ITerritoryStoryImageRepository : IRepository<TerritoryStoryImage, int>
 {
     /// <summary>
+    /// Check authorized user action.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities by selected territory story.</returns>
+    Task<bool> AuthorizedUserAction(int id, string userName, CancellationToken ct = default);
+
+    /// <summary>
     /// Get elements by territory story.
     /// </summary>
     /// <param name="territoryStoryId">Territory Story identifier.</param>

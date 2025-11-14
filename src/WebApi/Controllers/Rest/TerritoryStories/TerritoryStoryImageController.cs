@@ -63,7 +63,7 @@ public class TerritoryStoryImageController(
     [Authorize]
     public async Task<IActionResult> Put([FromBody] TerritoryStoryImageDto requestData, CancellationToken ct)
     {
-        var response = await entityService.AddAsync(requestData, ct);
+        var response = await entityService.AddAsync(HttpContext.GetUserName(), requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -79,7 +79,7 @@ public class TerritoryStoryImageController(
     [Authorize]
     public async Task<IActionResult> Post(int id, [FromBody] TerritoryStoryImageDto requestData, CancellationToken ct)
     {
-        var response = await entityService.UpdateAsync(id, requestData, ct);
+        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -107,7 +107,7 @@ public class TerritoryStoryImageController(
     [Authorize]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var response = await entityService.DeleteAsync(id, ct);
+        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
     }
 }
