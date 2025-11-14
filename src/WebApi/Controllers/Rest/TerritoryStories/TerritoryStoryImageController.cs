@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 using IAVH.BioTablero.CM.WebApi.Utils;
+using IAVH.BioTablero.CM.WebApi.Utils.Requests;
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
@@ -59,11 +62,15 @@ public class TerritoryStoryImageController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
     [HttpPut]
-    [Consumes("application/json")]
     [Authorize]
-    public async Task<IActionResult> Put([FromBody] TerritoryStoryImageDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Put([FromForm] TerritoryStoryImageRequest requestData, CancellationToken ct)
     {
-        var response = await entityService.AddAsync(HttpContext.GetUserName(), requestData, ct);
+        var requestDataDto = new TerritoryStoryImageDto()
+        {
+            TerritoryStoryId = requestData.TerritoryStoryId,
+            Description = requestData.Description,
+        };
+        var response = await entityService.AddAsync(HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
         return webTools.CustomResponse(response);
     }
 

@@ -3,6 +3,7 @@
 using System.Linq;
 using System.Net.Mime;
 
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
 /// <summary>
@@ -31,4 +32,11 @@ public static class FileUtils
         };
         return validImageMimeTypes.Contains(file?.ContentType);
     }
+
+    /// <summary>
+    /// Check if file has valid size (Territory Story Image).
+    /// </summary>
+    /// <param name="file">Input file.</param>
+    /// <returns>True if has valid size. False otherwise.</returns>
+    public static bool HasTerritoryStoryImageValidSize(this IInputFile file) => file?.Size <= FileConstants.TerritoryStoryImageSizeLimit;
 }
