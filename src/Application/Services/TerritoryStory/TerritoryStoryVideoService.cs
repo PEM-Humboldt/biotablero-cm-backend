@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -74,10 +75,11 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     /// <summary>
     /// Add element.
     /// </summary>
+    /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> AddAsync(TerritoryStoryVideoDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
@@ -89,6 +91,17 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
                 Message = "Validation errors",
                 ResponseBody = validationResult.Errors
                     .Select(error => error.ErrorMessage),
+            };
+        }
+
+        // Validate user level and permissions
+        var authorizedUserAction = await territoryStoryRepository.AuthorizedUserAction(entityData.TerritoryStoryId, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -135,10 +148,11 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     /// Update element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> UpdateAsync(int id, TerritoryStoryVideoDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -150,6 +164,17 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
                 Message = "Validation errors",
                 ResponseBody = validationResult.Errors
                     .Select(error => error.ErrorMessage),
+            };
+        }
+
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -194,10 +219,22 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     /// Delete element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 

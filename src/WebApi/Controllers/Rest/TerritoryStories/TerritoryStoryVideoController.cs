@@ -7,6 +7,7 @@ using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
+using IAVH.BioTablero.CM.WebApi.Utils;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -62,7 +63,7 @@ public class TerritoryStoryVideoController(
     [Authorize]
     public async Task<IActionResult> Put([FromBody] TerritoryStoryVideoDto requestData, CancellationToken ct)
     {
-        var response = await entityService.AddAsync(requestData, ct);
+        var response = await entityService.AddAsync(HttpContext.GetUserName(), requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -78,7 +79,7 @@ public class TerritoryStoryVideoController(
     [Authorize]
     public async Task<IActionResult> Post(int id, [FromBody] TerritoryStoryVideoDto requestData, CancellationToken ct)
     {
-        var response = await entityService.UpdateAsync(id, requestData, ct);
+        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -92,7 +93,7 @@ public class TerritoryStoryVideoController(
     [Authorize]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var response = await entityService.DeleteAsync(id, ct);
+        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
     }
 }

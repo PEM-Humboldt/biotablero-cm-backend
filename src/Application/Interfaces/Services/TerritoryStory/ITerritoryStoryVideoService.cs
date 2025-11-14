@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 /// <summary>
 /// Territory Story Video service interface.
 /// </summary>
-public interface ITerritoryStoryVideoService : IRead<TerritoryStoryVideo, int>, IAdd<TerritoryStoryVideoDto>, IUpdate<TerritoryStoryVideoDto, int>, IDelete<int>
+public interface ITerritoryStoryVideoService : IRead<TerritoryStoryVideo, int>
 {
     /// <summary>
     /// Get elements by territory story.
@@ -20,4 +20,32 @@ public interface ITerritoryStoryVideoService : IRead<TerritoryStoryVideo, int>, 
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities by selected territory story.</returns>
     Task<CustomWebResponse> GetByTerritoryStoryAsync(int territoryStoryId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Add element.
+    /// </summary>
+    /// <param name="userName">User name.</param>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default);
+
+    /// <summary>
+    /// Update element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default);
+
+    /// <summary>
+    /// Delete element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default);
 }
