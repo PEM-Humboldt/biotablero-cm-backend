@@ -1,7 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Mvc;
 
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.Services;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Email;
 
 using Microsoft.AspNetCore.Mvc;
@@ -13,20 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class EmailTemplatesController : Controller
 {
-    private readonly IWebViewTools webViewTools;
-    private readonly IEmailService emailService;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="EmailTemplatesController"/> class.
-    /// </summary>
-    /// <param name="webViewTools">Web view tools service.</param>
-    /// <param name="emailService">Email service.</param>
-    public EmailTemplatesController(IWebViewTools webViewTools, IEmailService emailService)
-    {
-        this.webViewTools = webViewTools;
-        this.emailService = emailService;
-    }
-
     /// <summary>
     /// Get default view.
     /// </summary>
