@@ -187,4 +187,42 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             return null;
         }
     }
+
+    /// <summary>
+    /// Update an entity in the database and upload the image in the storage service.
+    /// </summary>
+    /// <param name="entity">The entity to add.</param>
+    /// <param name="formFile">Image data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<TerritoryStoryImage> UpdateAsync(TerritoryStoryImage entity, IInputFile formFile, CancellationToken ct = default)
+    {
+        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
+
+        try
+        {
+            // Upload/Overwrite image
+            var fileName = $"{StoragePrefix}/{entity.Id}";
+            var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
+            var uploadSuccessful = await storageService.UploadFileAsync(fileName, formFile, ct);
+
+            if (!uploadSuccessful)
+            {
+                throw new StorageException("Territory Story Image upload error");
+            }
+
+            entity.FileUrl = fileUri;
+
+            await dbContext.SaveChangesAsync(ct);
+            await transaction.CommitAsync(ct);
+
+            return entity;
+        }
+        catch (DbUpdateException ex)
+        {
+            await transaction.RollbackAsync(ct);
+            logger.Error(ex, "Territory Story Image transaction error");
+            return null;
+        }
+    }
 }

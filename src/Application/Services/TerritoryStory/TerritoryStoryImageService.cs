@@ -187,9 +187,10 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <param name="id">Element identifier.</param>
     /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
+    /// <param name="formFile">Image data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
         // Validate user level and permissions
         var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
@@ -215,6 +216,27 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             };
         }
 
+        // Validate image
+        var updateHasFile = !formFile.IsEmpty();
+        if (updateHasFile)
+        {
+            if (!formFile.IsValidImage())
+            {
+                return new CustomWebResponse(true)
+                {
+                    Message = "Invalid file format",
+                };
+            }
+
+            if (!formFile.HasTerritoryStoryImageValidSize())
+            {
+                return new CustomWebResponse(true)
+                {
+                    Message = "Invalid file size",
+                };
+            }
+        }
+
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -238,10 +260,15 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         }
 
         // Update entity data
-        entity.FileUrl = entityData.FileUrl;
         entity.Description = entity.Description;
-
-        await entityRepository.UpdateAsync(entity, ct);
+        if (!updateHasFile)
+        {
+            await entityRepository.UpdateAsync(entity, ct);
+        }
+        else
+        {
+            await entityRepository.UpdateAsync(entity, formFile, ct);
+        }
 
         entityData = mapper.Map(entity);
 

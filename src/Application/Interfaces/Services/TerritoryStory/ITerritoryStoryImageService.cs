@@ -38,9 +38,10 @@ public interface ITerritoryStoryImageService : IRead<TerritoryStoryImage, int>
     /// <param name="id">Element identifier.</param>
     /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
+    /// <param name="formFile">Image data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default);
 
     /// <summary>
     /// Featured content action.

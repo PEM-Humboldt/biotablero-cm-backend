@@ -82,11 +82,14 @@ public class TerritoryStoryImageController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
     [HttpPost("{id}")]
-    [Consumes("application/json")]
     [Authorize]
-    public async Task<IActionResult> Post(int id, [FromBody] TerritoryStoryImageDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Post(int id, [FromForm] TerritoryStoryImageRequest requestData, CancellationToken ct)
     {
-        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, ct);
+        var requestDataDto = new TerritoryStoryImageDto()
+        {
+            Description = requestData.Description,
+        };
+        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
         return webTools.CustomResponse(response);
     }
 

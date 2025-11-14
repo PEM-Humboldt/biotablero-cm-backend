@@ -63,4 +63,13 @@ public interface ITerritoryStoryImageRepository : IRepository<TerritoryStoryImag
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<TerritoryStoryImage> AddAsync(TerritoryStoryImage entity, IInputFile formFile, CancellationToken ct = default);
+
+    /// <summary>
+    /// Update an entity in the database and upload the image in the storage service.
+    /// </summary>
+    /// <param name="entity">The entity to add.</param>
+    /// <param name="formFile">Image data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<TerritoryStoryImage> UpdateAsync(TerritoryStoryImage entity, IInputFile formFile, CancellationToken ct = default);
 }
