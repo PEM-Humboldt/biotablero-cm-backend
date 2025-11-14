@@ -35,6 +35,17 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     }
 
     /// <summary>
+    /// Include OData custom entities.
+    /// </summary>
+    /// <param name="query">Linq Query.</param>
+    /// <returns>Modified Linq query.</returns>
+    public IQueryable<TerritoryStory> IncludeOdataEntities(IQueryable<TerritoryStory> query) =>
+        query
+            .Include(e => e.Images)
+            .Include(e => e.Videos)
+            .Include(e => e.Likes);
+
+    /// <summary>
     /// Check authorized user action.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
@@ -78,17 +89,6 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
             .Include(e => e.Likes)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
-
-    /// <summary>
-    /// Include OData custom entities.
-    /// </summary>
-    /// <param name="query">Linq Query.</param>
-    /// <returns>Modified Linq query.</returns>
-    public IQueryable<TerritoryStory> IncludeOdataEntities(IQueryable<TerritoryStory> query) =>
-        query
-            .Include(e => e.Images)
-            .Include(e => e.Videos)
-            .Include(e => e.Likes);
 
     /// <summary>
     /// Get elements by initiative.

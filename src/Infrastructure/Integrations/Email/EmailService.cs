@@ -18,7 +18,7 @@ using Serilog;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// Email service interface.
+/// Email service.
 /// </summary>
 public class EmailService : IEmailService
 {
