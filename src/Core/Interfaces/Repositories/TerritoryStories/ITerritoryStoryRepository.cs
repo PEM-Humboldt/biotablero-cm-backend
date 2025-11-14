@@ -20,6 +20,15 @@ public interface ITerritoryStoryRepository : IRepository<TerritoryStory, int>
     IQueryable<TerritoryStory> IncludeOdataEntities(IQueryable<TerritoryStory> query);
 
     /// <summary>
+    /// Check authorized user action.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities by selected territory story.</returns>
+    Task<bool> AuthorizedUserAction(int? id, string userName, CancellationToken ct = default);
+
+    /// <summary>
     /// Get elements by initiative.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>

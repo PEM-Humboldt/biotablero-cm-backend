@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 
 using Serilog;
 
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+
 /// <summary>
 /// Territory Story repository.
 /// </summary>
@@ -30,6 +32,37 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
         : base(dbContext)
     {
         this.logger = logger;
+    }
+
+    /// <summary>
+    /// Check authorized user action.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities by selected territory story.</returns>
+    public async Task<bool> AuthorizedUserAction(int? id, string userName, CancellationToken ct = default)
+    {
+        if (!id.HasValue)
+        {
+            var initiativeUser = await dbContext.InitiativeUsers
+                .Where(e => e.UserName == userName)
+                .FirstOrDefaultAsync(ct);
+
+            return initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader or (int)InitiativeUserLevelEnum.Member;
+        }
+        else
+        {
+            var territoryStory = await dbContext.TerritoryStories
+                .Where(e => e.Id == id)
+                .FirstOrDefaultAsync(ct);
+
+            var initiativeUser = await dbContext.InitiativeUsers
+                .Where(e => e.InitiativeId == territoryStory.InitiativeId && e.UserName == userName)
+                .FirstOrDefaultAsync(ct);
+
+            return initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader || userName == territoryStory.AuthorUserName;
+        }
     }
 
     /// <summary>

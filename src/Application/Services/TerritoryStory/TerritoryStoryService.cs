@@ -108,11 +108,9 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     public async Task<CustomWebResponse> AddAsync(TerritoryStoryDto entityData, CancellationToken ct = default)
     {
         // Validate user level and permissions
-        var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeUser = await initiativeUserRepository.GetByInitiativeAndUserNameAsync(initiativeId, entityData.AuthorUserName, ct);
-        var userIsLeaderOrMember = initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader or (int)InitiativeUserLevelEnum.Member;
+        var authorizedUserAction = await entityRepository.AuthorizedUserAction(null, entityData.AuthorUserName, ct);
 
-        if (!userIsLeaderOrMember)
+        if (!authorizedUserAction)
         {
             return new CustomWebResponse(true)
             {
@@ -134,7 +132,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         }
 
         // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId.Value, ct);
 
         if (!initiativeExists)
         {
@@ -183,6 +181,17 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryDto entityData, CancellationToken ct = default)
     {
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
@@ -204,18 +213,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
-            };
-        }
-
-        // Validate user level and permissions
-        var initiativeUser = await initiativeUserRepository.GetByInitiativeAndUserNameAsync(entity.InitiativeId, userName, ct);
-        var userIsLeader = initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader;
-
-        if (!userIsLeader || userName != entity.AuthorUserName)
-        {
-            return new CustomWebResponse(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -311,8 +308,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         }
 
         // Validate user level and permissions
-        var initiativeUser = await initiativeUserRepository.GetByInitiativeAndUserNameAsync(territoryStory.InitiativeId, userName, ct);
-        var userIsLeader = initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader;
+        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(territoryStory.InitiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
 
         if (!userIsLeader)
         {
@@ -372,6 +368,18 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <returns>Process result.</returns>
     private async Task<CustomWebResponse> DisableOrEnableAsync(int id, string userName, bool disable, CancellationToken ct = default)
     {
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
         if (entity == null)
@@ -379,18 +387,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
-            };
-        }
-
-        // Validate user level and permissions
-        var initiativeUser = await initiativeUserRepository.GetByInitiativeAndUserNameAsync(entity.InitiativeId, userName, ct);
-        var userIsLeader = initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader;
-
-        if (!userIsLeader || userName != entity.AuthorUserName)
-        {
-            return new CustomWebResponse(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
