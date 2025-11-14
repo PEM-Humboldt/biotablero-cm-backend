@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.TerritoryStory;
 
-using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -29,7 +28,6 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// </summary>
 public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, TerritoryStoryImageDto, int>, ITerritoryStoryImageService
 {
-    private const string StoragePrefix = "territory-stories";
     private new readonly ITerritoryStoryImageRepository entityRepository;
     private readonly IValidator<TerritoryStoryImageDto> entityValidator;
     private readonly ILogger logger;
@@ -168,20 +166,10 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         // Build entity data
         var entity = mapper.Map(entityData);
+        entity.FeaturedContent = false;
 
         // Save data
-        entity = await entityRepository.AddAsync(entity, ct);
-
-        // Upload/Overwrite image
-        var fileName = $"{StoragePrefix}/{entity.Id}";
-        var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-        var uploadSuccessful = await storageService.UploadFileAsync(fileName, formFile, ct);
-
-        if (uploadSuccessful)
-        {
-            entity.FileUrl = fileUri;
-            await entityRepository.UpdateAsync(entity, ct);
-        }
+        entity = await entityRepository.AddAsync(entity, formFile, ct);
 
         entityData = mapper.Map(entity);
 

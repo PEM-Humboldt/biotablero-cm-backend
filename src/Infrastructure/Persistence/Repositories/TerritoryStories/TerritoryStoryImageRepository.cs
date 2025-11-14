@@ -6,8 +6,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
+using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -20,19 +23,24 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 /// </summary>
 public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int>, ITerritoryStoryImageRepository
 {
+    private const string StoragePrefix = "territory-stories";
     private readonly ILogger logger;
+    private readonly IStorageService storageService;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
     /// <param name="logger">Logger.</param>
+    /// <param name="storageService">Storage service.</param>
     public TerritoryStoryImageRepository(
         GeneralContext dbContext,
-        ILogger logger)
+        ILogger logger,
+        IStorageService storageService)
         : base(dbContext)
     {
         this.logger = logger;
+        this.storageService = storageService;
     }
 
     /// <summary>
@@ -125,6 +133,47 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             {
                 image.FeaturedContent = false;
             }
+
+            await dbContext.SaveChangesAsync(ct);
+            await transaction.CommitAsync(ct);
+
+            return entity;
+        }
+        catch (DbUpdateException ex)
+        {
+            await transaction.RollbackAsync(ct);
+            logger.Error(ex, "Territory Story Image transaction error");
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Adds an entity in the database and upload the image in the storage service.
+    /// </summary>
+    /// <param name="entity">The entity to add.</param>
+    /// <param name="formFile">Image data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public async Task<TerritoryStoryImage> AddAsync(TerritoryStoryImage entity, IInputFile formFile, CancellationToken ct = default)
+    {
+        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
+
+        try
+        {
+            await dbContext.TerritoryStoryImages.AddAsync(entity, ct);
+            await dbContext.SaveChangesAsync(ct);
+
+            // Upload/Overwrite image
+            var fileName = $"{StoragePrefix}/{entity.Id}";
+            var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
+            var uploadSuccessful = await storageService.UploadFileAsync(fileName, formFile, ct);
+
+            if (!uploadSuccessful)
+            {
+                throw new StorageException("Territory Story Image upload error");
+            }
+
+            entity.FileUrl = fileUri;
 
             await dbContext.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
+using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
 /// <summary>
 /// Territory Story Image repository interface.
@@ -53,4 +54,13 @@ public interface ITerritoryStoryImageRepository : IRepository<TerritoryStoryImag
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated territory story data.</returns>
     Task<TerritoryStoryImage> MarkAsFeaturedContent(int id, CancellationToken ct = default);
+
+    /// <summary>
+    /// Adds an entity in the database and upload the image in the storage service.
+    /// </summary>
+    /// <param name="entity">The entity to add.</param>
+    /// <param name="formFile">Image data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<TerritoryStoryImage> AddAsync(TerritoryStoryImage entity, IInputFile formFile, CancellationToken ct = default);
 }
