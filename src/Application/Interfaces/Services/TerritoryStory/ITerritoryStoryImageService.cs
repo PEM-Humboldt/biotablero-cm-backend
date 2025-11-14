@@ -25,7 +25,8 @@ public interface ITerritoryStoryImageService : IRead<TerritoryStoryImage, int>, 
     /// Featured content action.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> FeaturedContentActionAsync(int id, CancellationToken ct = default);
+    Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default);
 }

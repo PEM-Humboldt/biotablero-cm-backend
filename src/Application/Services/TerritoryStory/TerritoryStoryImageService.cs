@@ -14,11 +14,14 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
 using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
+
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
 /// <summary>
 /// Territory Story Image service.
@@ -29,6 +32,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     private readonly IValidator<TerritoryStoryImageDto> entityValidator;
     private readonly ILogger logger;
     private readonly ITerritoryStoryRepository territoryStoryRepository;
+    private readonly IInitiativeUserRepository initiativeUserRepository;
 
     /// <summary>
     /// Constructor.
@@ -38,18 +42,21 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="territoryStoryRepository">Territory Story repository.</param>
+    /// <param name="initiativeUserRepository">Initiative User repository.</param>
     public TerritoryStoryImageService(
         ITerritoryStoryImageRepository entityRepository,
         IMapper<TerritoryStoryImage, TerritoryStoryImageDto> mapper,
         IValidator<TerritoryStoryImageDto> entityValidator,
         ILogger logger,
-        ITerritoryStoryRepository territoryStoryRepository)
+        ITerritoryStoryRepository territoryStoryRepository,
+        IInitiativeUserRepository initiativeUserRepository)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.territoryStoryRepository = territoryStoryRepository;
+        this.initiativeUserRepository = initiativeUserRepository;
     }
 
     /// <summary>
@@ -195,14 +202,15 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// Featured content action.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate Territory Story Image
-        var territoryStoryExists = await entityRepository.AnyAsync(id, ct);
+        var territoryStoryImage = await entityRepository.GetByIdAsync(id, ct);
 
-        if (!territoryStoryExists)
+        if (territoryStoryImage == null)
         {
             return new CustomWebResponse(true)
             {
@@ -210,7 +218,18 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             };
         }
 
-        // TODO: Validate user role and profile
+        // Validate user level and permissions
+        var territoryStory = await territoryStoryRepository.GetByIdAsync(territoryStoryImage.TerritoryStoryId, ct);
+        var initiativeUser = await initiativeUserRepository.GetByInitiativeAndUserNameAsync(territoryStory.InitiativeId, userName, ct);
+        var userIsLeader = initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader;
+
+        if (!userIsLeader)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
 
         // Mark territory story image as featured content
         var entity = await entityRepository.MarkAsFeaturedContent(id, ct);
