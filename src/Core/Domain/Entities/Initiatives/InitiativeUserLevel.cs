@@ -19,4 +19,9 @@ public class InitiativeUserLevel : BaseEntity<int>, IAggregateRoot
     /// Initiative Users relationship.
     /// </summary>
     public ICollection<InitiativeUser> InitiativeUsers { get; init; }
+
+    /// <summary>
+    /// Join requests relationship.
+    /// </summary>
+    public ICollection<JoinRequest> JoinRequests { get; init; }
 }

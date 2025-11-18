@@ -8,6 +8,8 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
+using FluentValidation;
+
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
@@ -36,6 +38,7 @@ using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initiat
 public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>, IJoinRequestService
 {
     private new readonly IJoinRequestRepository entityRepository;
+    private readonly IValidator<JoinRequestDto> entityValidator;
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly IInitiativeUserRepository initiativeUserRepository;
@@ -48,6 +51,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="initiativeUserRepository">Initiative user repository.</param>
@@ -57,6 +61,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     public JoinRequestService(
         IJoinRequestRepository entityRepository,
         IMapper<JoinRequest, JoinRequestDto> mapper,
+        IValidator<JoinRequestDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
         IInitiativeUserRepository initiativeUserRepository,
@@ -66,6 +71,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
         this.initiativeUserRepository = initiativeUserRepository;
@@ -109,6 +115,19 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> AddAsync(JoinRequestDto entityData, CancellationToken ct = default)
     {
+        // Validate data
+        var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
+
+        if (!validationResult.IsValid)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Validation errors",
+                ResponseBody = validationResult.Errors
+                    .Select(error => error.ErrorMessage),
+            };
+        }
+
         // Validate initiative
         var initiative = await initiativeRepository.GetByIdAsync(entityData.InitiativeId, ct);
 
@@ -149,7 +168,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new CustomWebResponse(true)
             {
-                Message = "User is invalid or do not exist",
+                Message = "User is invalid or does not exist",
             };
         }
 
@@ -190,6 +209,19 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> UpdateAsync(int id, JoinRequestDto entityData, CancellationToken ct = default)
     {
+        // Validate data
+        var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Update"), ct);
+
+        if (!validationResult.IsValid)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Validation errors",
+                ResponseBody = validationResult.Errors
+                    .Select(error => error.ErrorMessage),
+            };
+        }
+
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -212,14 +244,6 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             };
         }
 
-        if (entityData.Status.Id == (int)JoinRequestStatusEnum.UnderReview)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = "Invalid selected status",
-            };
-        }
-
         if (entity.StatusId != (int)JoinRequestStatusEnum.UnderReview)
         {
             return new CustomWebResponse(true)
@@ -229,7 +253,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         }
 
         // Update entity data
-        entity = await entityRepository.ReviewRequestAsync(id, entityData.ReviewerUserName, entity.UserName, entityData.Status.Id, ct);
+        entity = await entityRepository.ReviewRequestAsync(id, entityData.ReviewerUserName, entityData.Status.Id, ct);
 
         if (entity == null)
         {
