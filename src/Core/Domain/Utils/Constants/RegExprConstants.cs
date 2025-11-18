@@ -42,7 +42,8 @@ public static class RegExprConstants
     /// <example>
     /// Valid video urls:
     /// - https://www.youtube.com/watch?v=Dhu8ee6Dzx4
+    /// - https://www.youtube.com/watch?v=yBLdQ1a4-JI
     /// </example>
     /// </summary>
-    public const string YouTubeVideoUrl = @"^(https:\/\/www\.youtube\.com\/watch\?v=([a-z]|[A-Z]|[0-9]){8,11})(&.*)*$";
+    public const string YouTubeVideoUrl = @"^(https:\/\/www\.youtube\.com\/watch\?v=([a-z]|[A-Z]|[0-9]|-){8,11})(&.*)*$";
 }
