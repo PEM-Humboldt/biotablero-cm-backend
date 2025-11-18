@@ -62,8 +62,8 @@ public class TerritoryStoryMappings(
             Enabled = dto.Enabled ?? true,
             FeaturedContent = dto.FeaturedContent ?? false,
             Restricted = dto.Restricted ?? false,
-            Images = [.. dto.Images?.Select(territoryStoryImageMappings.Map)],
-            Videos = [.. dto.Videos?.Select(territoryStoryVideoMappings.Map)],
+            Images = dto.Images?.Select(territoryStoryImageMappings.Map).ToList(),
+            Videos = dto.Videos?.Select(territoryStoryVideoMappings.Map).ToList(),
         };
     }
 }

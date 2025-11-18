@@ -1,7 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.TerritoryStory;
 
-using System;
-
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 
 using Swashbuckle.AspNetCore.Filters;
@@ -22,20 +20,11 @@ public class TerritoryStoryAddRequestExample : IExamplesProvider<TerritoryStoryD
         Text = "Territory Story text example",
         Keywords = "Champiñón,Guanábana,Ñame",
         Restricted = false,
-        Images =
-        [
-            new()
-            {
-                FileUrl = new Uri("/url/example"),
-                Description = "Territory image example",
-                FeaturedContent = false,
-            },
-        ],
         Videos =
         [
             new()
             {
-                FileUrl = "/url/example",
+                FileUrl = "https://www.youtube.com/watch?v=Dhu8ee6Dzx4",
             },
         ],
     };
