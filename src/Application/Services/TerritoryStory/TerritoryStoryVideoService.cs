@@ -183,17 +183,6 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
             };
         }
 
-        // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new CustomWebResponse(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
-        }
-
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -202,6 +191,17 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 

@@ -192,17 +192,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <returns>Process result.</returns>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
-        // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new CustomWebResponse(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
-        }
-
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
@@ -245,6 +234,17 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 

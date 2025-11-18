@@ -41,7 +41,7 @@ public class TerritoryStoryResponseExample : IExamplesProvider<TerritoryStoryDto
             new()
             {
                 Id = 0,
-                FileUrl = "url/example",
+                FileUrl = "https://www.youtube.com/watch?v=Dhu8ee6Dzx4",
             },
         ],
     };

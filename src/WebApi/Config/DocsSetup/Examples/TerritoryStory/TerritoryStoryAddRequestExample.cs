@@ -5,7 +5,7 @@ using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
-/// Initiative Contact add request example.
+/// Territory Story add request example.
 /// </summary>
 public class TerritoryStoryAddRequestExample : IExamplesProvider<TerritoryStoryDto>
 {
