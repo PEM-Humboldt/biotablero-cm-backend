@@ -231,6 +231,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         entity.Title = entityData.Title;
         entity.Text = entityData.Text;
         entity.Keywords = entityData.Keywords;
+        entity.Restricted = entityData.Restricted ?? entity.Restricted;
 
         await entityRepository.UpdateAsync(entity, ct);
 
@@ -299,7 +300,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         // Validate Territory Story
         var territoryStory = await entityRepository.GetByIdAsync(id, ct);
 
-        if (territoryStory != null)
+        if (territoryStory == null)
         {
             return new CustomWebResponse(true)
             {
@@ -356,7 +357,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> DisableAsync(int id, string userName, CancellationToken ct = default) => await DisableOrEnableAsync(id, userName, false, ct);
+    public async Task<CustomWebResponse> DisableAsync(int id, string userName, CancellationToken ct = default) => await DisableOrEnableAsync(id, userName, true, ct);
 
     /// <summary>
     /// Disable or enable element.

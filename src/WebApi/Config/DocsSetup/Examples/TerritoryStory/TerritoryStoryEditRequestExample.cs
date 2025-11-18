@@ -15,7 +15,6 @@ public class TerritoryStoryEditRequestExample : IExamplesProvider<TerritoryStory
     /// <returns>Entity examples.</returns>
     public TerritoryStoryDto GetExamples() => new()
     {
-        InitiativeId = 1,
         Title = "Territory Story example",
         Text = "Territory Story text example",
         Keywords = "Champiñón,Guanábana,Ñame",
