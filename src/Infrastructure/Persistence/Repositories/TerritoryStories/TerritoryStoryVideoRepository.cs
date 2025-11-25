@@ -27,6 +27,33 @@ public class TerritoryStoryVideoRepository : Repository<TerritoryStoryVideo, int
     {
     }
 
+    /// <inheritdoc/>
+    public async Task<bool> AuthorizedEntityReadAsync(int id, string userName, CancellationToken ct = default)
+    {
+        var initiative = await dbContext.Initiatives
+            .Include(e => e.InitiativeUsers)
+            .Include(e => e.TerritoryStories)
+                .ThenInclude(e => e.Videos)
+            .Where(e => e.TerritoryStories.Any(e => e.Videos.Any(e => e.Id == id)))
+            .FirstOrDefaultAsync(ct);
+
+        var userBelongsToInitiative = await dbContext.InitiativeUsers
+            .Where(e => e.UserName == userName && e.InitiativeId == initiative.Id)
+            .AnyAsync(ct);
+
+        if (userBelongsToInitiative)
+        {
+            return await dbContext.TerritoryStoryVideos
+                .Where(e => e.Id == id)
+                .AnyAsync(ct);
+        }
+
+        return await dbContext.TerritoryStoryVideos
+            .Include(e => e.TerritoryStory)
+            .Where(e => e.Id == id && !e.TerritoryStory.Restricted)
+            .AnyAsync(ct);
+    }
+
     /// <summary>
     /// Check authorized user action.
     /// </summary>
@@ -34,7 +61,7 @@ public class TerritoryStoryVideoRepository : Repository<TerritoryStoryVideo, int
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities by selected territory story.</returns>
-    public async Task<bool> AuthorizedUserAction(int id, string userName, CancellationToken ct = default)
+    public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default)
     {
         var territoryStory = await dbContext.TerritoryStoryVideos
             .Include(e => e.TerritoryStory)

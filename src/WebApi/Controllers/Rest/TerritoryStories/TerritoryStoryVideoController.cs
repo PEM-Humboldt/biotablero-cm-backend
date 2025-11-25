@@ -40,7 +40,7 @@ public class TerritoryStoryVideoController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryVideoResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
-        var response = await entityService.GetItemAsync(id, ct);
+        var response = await entityService.GetItemAsync(id, HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
     }
 

@@ -14,12 +14,22 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<TerritoryStoryDto>
 {
     /// <summary>
+    /// Get element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default);
+
+    /// <summary>
     /// Get entities by initiative.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+    Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.

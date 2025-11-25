@@ -63,6 +63,23 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         this.storageService = storageService;
     }
 
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
+    {
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityReadAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        return await GetItemAsync(id, ct);
+    }
+
     /// <summary>
     /// Get elements by territory story.
     /// </summary>
@@ -106,7 +123,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         }
 
         // Validate user level and permissions
-        var authorizedUserAction = await territoryStoryRepository.AuthorizedUserAction(entityData.TerritoryStoryId, userName, ct);
+        var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(entityData.TerritoryStoryId, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -238,7 +255,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         }
 
         // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -290,7 +307,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -312,7 +329,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         }
 
         // Mark territory story image as featured content
-        var entity = await entityRepository.MarkAsFeaturedContent(id, ct);
+        var entity = await entityRepository.MarkAsFeaturedContentAsync(id, ct);
 
         if (entity == null)
         {
@@ -343,7 +360,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)
         {

@@ -58,6 +58,23 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         this.videoHelperService = videoHelperService;
     }
 
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
+    {
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityReadAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        return await GetItemAsync(id, ct);
+    }
+
     /// <summary>
     /// Get elements by territory story.
     /// </summary>
@@ -100,7 +117,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         }
 
         // Validate user level and permissions
-        var authorizedUserAction = await territoryStoryRepository.AuthorizedUserAction(entityData.TerritoryStoryId, userName, ct);
+        var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(entityData.TerritoryStoryId, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -195,7 +212,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         }
 
         // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -241,7 +258,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)
         {

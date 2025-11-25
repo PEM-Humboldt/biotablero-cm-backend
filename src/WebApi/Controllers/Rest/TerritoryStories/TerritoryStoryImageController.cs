@@ -38,7 +38,7 @@ public class TerritoryStoryImageController(
     [HttpGet("{id}")]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
-        var response = await entityService.GetItemAsync(id, ct);
+        var response = await entityService.GetItemAsync(id, HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
     }
 

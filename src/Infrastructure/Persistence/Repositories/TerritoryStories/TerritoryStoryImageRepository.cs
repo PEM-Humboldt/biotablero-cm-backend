@@ -43,6 +43,33 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
         this.storageService = storageService;
     }
 
+    /// <inheritdoc/>
+    public async Task<bool> AuthorizedEntityReadAsync(int id, string userName, CancellationToken ct = default)
+    {
+        var initiative = await dbContext.Initiatives
+            .Include(e => e.InitiativeUsers)
+            .Include(e => e.TerritoryStories)
+                .ThenInclude(e => e.Images)
+            .Where(e => e.TerritoryStories.Any(e => e.Images.Any(e => e.Id == id)))
+            .FirstOrDefaultAsync(ct);
+
+        var userBelongsToInitiative = await dbContext.InitiativeUsers
+            .Where(e => e.UserName == userName && e.InitiativeId == initiative.Id)
+            .AnyAsync(ct);
+
+        if (userBelongsToInitiative)
+        {
+            return await dbContext.TerritoryStoryImages
+                .Where(e => e.Id == id)
+                .AnyAsync(ct);
+        }
+
+        return await dbContext.TerritoryStoryImages
+            .Include(e => e.TerritoryStory)
+            .Where(e => e.Id == id && !e.TerritoryStory.Restricted)
+            .AnyAsync(ct);
+    }
+
     /// <summary>
     /// Check authorized user action.
     /// </summary>
@@ -50,7 +77,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities by selected territory story.</returns>
-    public async Task<bool> AuthorizedUserAction(int id, string userName, CancellationToken ct = default)
+    public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default)
     {
         var territoryStory = await dbContext.TerritoryStoryImages
             .Include(e => e.TerritoryStory)
@@ -105,7 +132,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
     /// <param name="id">Entity identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated territory story data.</returns>
-    public async Task<TerritoryStoryImage> MarkAsFeaturedContent(int id, CancellationToken ct = default)
+    public async Task<TerritoryStoryImage> MarkAsFeaturedContentAsync(int id, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 

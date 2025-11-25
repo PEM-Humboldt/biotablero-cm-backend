@@ -13,13 +13,22 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 public interface ITerritoryStoryVideoRepository : IRepository<TerritoryStoryVideo, int>
 {
     /// <summary>
-    /// Check authorized user action.
+    /// Check authorized entity reading.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Entities by selected territory story.</returns>
-    Task<bool> AuthorizedUserAction(int id, string userName, CancellationToken ct = default);
+    /// <returns>True if the reading is authorized. False otherwise.</returns>
+    Task<bool> AuthorizedEntityReadAsync(int id, string userName, CancellationToken ct = default);
+
+    /// <summary>
+    /// Check authorized entity modification.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if the modification is authorized. False otherwise.</returns>
+    Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default);
 
     /// <summary>
     /// Get elements by territory story.

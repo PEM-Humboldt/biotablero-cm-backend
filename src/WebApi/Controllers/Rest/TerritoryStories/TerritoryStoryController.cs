@@ -40,7 +40,7 @@ public class TerritoryStoryController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
-        var response = await entityService.GetItemAsync(id, ct);
+        var response = await entityService.GetItemAsync(id, HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
     }
 
@@ -54,7 +54,7 @@ public class TerritoryStoryController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryListResponseExample))]
     public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
     {
-        var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
+        var response = await entityService.GetByInitiativeAsync(initiativeId, HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
     }
 

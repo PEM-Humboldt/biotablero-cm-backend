@@ -18,8 +18,6 @@ using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
-using Microsoft.AspNetCore.OData.Query;
-
 using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
@@ -66,29 +64,27 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         this.initiativeUserRepository = initiativeUserRepository;
     }
 
-    /// <summary>
-    /// Get elements list (OData).
-    /// </summary>
-    /// <param name="queryOptions">OData query options.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct = default)
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
     {
-        var query = entityRepository.GetQueryable();
-        query = entityRepository.IncludeOdataEntities(query);
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityReadAsync(id, userName, ct);
 
-        return await GetOdataListByQueryAsync(query, queryOptions, ct);
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        return await GetItemAsync(id, ct);
     }
 
-    /// <summary>
-    /// Get entities by initiative.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default)
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, CancellationToken ct = default)
     {
-        var dataListEntity = await entityRepository.GetByInitiativeAsync(initiativeId, ct);
+        var dataListEntity = await entityRepository.GetByInitiativeAndUserNameAsync(initiativeId, userName, ct);
 
         var dataListDto = dataListEntity
             .Select(mapper.Map);
@@ -108,7 +104,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     public async Task<CustomWebResponse> AddAsync(TerritoryStoryDto entityData, CancellationToken ct = default)
     {
         // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedUserAction(null, entityData.AuthorUserName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(null, entityData.AuthorUserName, ct);
 
         if (!authorizedUserAction)
         {
@@ -182,7 +178,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryDto entityData, CancellationToken ct = default)
     {
         // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -320,7 +316,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         }
 
         // Mark territory story as featured content
-        var entity = await entityRepository.MarkAsFeaturedContent(id, ct);
+        var entity = await entityRepository.MarkAsFeaturedContentAsync(id, ct);
 
         if (entity == null)
         {
@@ -370,7 +366,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     private async Task<CustomWebResponse> DisableOrEnableAsync(int id, string userName, bool disable, CancellationToken ct = default)
     {
         // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedUserAction(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)
         {

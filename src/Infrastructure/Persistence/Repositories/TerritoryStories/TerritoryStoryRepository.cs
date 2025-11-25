@@ -35,24 +35,39 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     }
 
     /// <summary>
-    /// Include OData custom entities.
+    /// Finds an entity with the given primary key value.
     /// </summary>
-    /// <param name="query">Linq Query.</param>
-    /// <returns>Modified Linq query.</returns>
-    public IQueryable<TerritoryStory> IncludeOdataEntities(IQueryable<TerritoryStory> query) =>
-        query
-            .Include(e => e.Images)
-            .Include(e => e.Videos)
-            .Include(e => e.Likes);
-
-    /// <summary>
-    /// Check authorized user action.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="userName">User name.</param>
+    /// <param name="id">The value of the primary key for the entity to be found.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Entities by selected territory story.</returns>
-    public async Task<bool> AuthorizedUserAction(int? id, string userName, CancellationToken ct = default)
+    /// <returns>Process result.</returns>
+    public new async Task<TerritoryStory> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await IncludeCustomEntities()
+            .Where(e => e.Id == id)
+            .FirstOrDefaultAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<bool> AuthorizedEntityReadAsync(int id, string userName, CancellationToken ct = default)
+    {
+        var userBelongsToInitiative = await dbContext.InitiativeUsers
+            .Include(e => e.Initiative)
+                .ThenInclude(e => e.TerritoryStories)
+            .Where(e => e.UserName == userName && e.Initiative.TerritoryStories.Any(e => e.Id == id))
+            .AnyAsync(ct);
+
+        if (userBelongsToInitiative)
+        {
+            return await dbContext.TerritoryStories
+                .Where(e => e.Id == id)
+                .AnyAsync(ct);
+        }
+
+        return await dbContext.TerritoryStories
+            .Where(e => e.Id == id && !e.Restricted)
+            .AnyAsync(ct);
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> AuthorizedEntityModifyAsync(int? id, string userName, CancellationToken ct = default)
     {
         if (!id.HasValue)
         {
@@ -76,33 +91,24 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
         }
     }
 
-    /// <summary>
-    /// Finds an entity with the given primary key value.
-    /// </summary>
-    /// <param name="id">The value of the primary key for the entity to be found.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    public new async Task<TerritoryStory> GetByIdAsync(int id, CancellationToken ct = default) =>
-        await dbContext.TerritoryStories
-            .Include(e => e.Images)
-            .Include(e => e.Videos)
-            .Include(e => e.Likes)
-            .Where(e => e.Id == id)
-            .FirstOrDefaultAsync(ct);
+    /// <inheritdoc/>
+    public async Task<IEnumerable<TerritoryStory>> GetByInitiativeAndUserNameAsync(int initiativeId, string userName, CancellationToken ct = default)
+    {
+        var userBelongsToInitiative = await dbContext.InitiativeUsers
+            .Where(e => e.UserName == userName && e.InitiativeId == initiativeId)
+            .AnyAsync(ct);
 
-    /// <summary>
-    /// Get elements by initiative.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Entities by selected initiative.</returns>
-    public async Task<IEnumerable<TerritoryStory>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
-        await dbContext.TerritoryStories
-            .Include(e => e.Images)
-            .Include(e => e.Videos)
-            .Include(e => e.Likes)
-            .Where(e => e.InitiativeId == initiativeId)
+        if (userBelongsToInitiative)
+        {
+            return await IncludeCustomEntities()
+                .Where(e => e.InitiativeId == initiativeId)
+                .ToListAsync(ct);
+        }
+
+        return await IncludeCustomEntities()
+            .Where(e => e.InitiativeId == initiativeId && !e.Restricted)
             .ToListAsync(ct);
+    }
 
     /// <summary>
     /// Check if element is duplicated.
@@ -133,7 +139,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     /// <param name="id">Entity identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated territory story data.</returns>
-    public async Task<TerritoryStory> MarkAsFeaturedContent(int id, CancellationToken ct = default)
+    public async Task<TerritoryStory> MarkAsFeaturedContentAsync(int id, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
@@ -174,4 +180,14 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
             return null;
         }
     }
+
+    /// <summary>
+    /// Include custom entities.
+    /// </summary>
+    /// <returns>Modified Linq query.</returns>
+    private IQueryable<TerritoryStory> IncludeCustomEntities() =>
+        dbContext.TerritoryStories
+            .Include(e => e.Images)
+            .Include(e => e.Videos)
+            .Include(e => e.Likes);
 }

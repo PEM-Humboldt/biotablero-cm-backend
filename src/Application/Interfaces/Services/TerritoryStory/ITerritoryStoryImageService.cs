@@ -15,6 +15,15 @@ using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 public interface ITerritoryStoryImageService : IRead<TerritoryStoryImage, int>
 {
     /// <summary>
+    /// Get element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default);
+
+    /// <summary>
     /// Get elements by territory story.
     /// </summary>
     /// <param name="territoryStoryId">Territory Story identifier.</param>
