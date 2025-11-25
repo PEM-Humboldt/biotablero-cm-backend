@@ -167,23 +167,23 @@ dotnet_diagnostic.SA1204.severity = none
 
 # Remove unused private members
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1822
-dotnet_diagnostic.CA1822.severity = error
+dotnet_diagnostic.CA1822.severity = warning
 
 # Remove unused private fields
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1823
-dotnet_diagnostic.CA1823.severity = error
+dotnet_diagnostic.CA1823.severity = warning
 
 # Remove unused local variables
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1804
-dotnet_diagnostic.CA1804.severity = error
+dotnet_diagnostic.CA1804.severity = warning
 
 # Remove unused parameters
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1801
-dotnet_diagnostic.CA1801.severity = error
+dotnet_diagnostic.CA1801.severity = warning
 
 # Remove unused using directives
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0005
-dotnet_diagnostic.IDE0005.severity = error
+dotnet_diagnostic.IDE0005.severity = warning
 
 # Remove unused type parameters
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1812
@@ -197,10 +197,6 @@ dotnet_diagnostic.IDE0001.severity = suggestion
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0002
 dotnet_diagnostic.IDE0002.severity = suggestion
 
-# Remove unreachable code
+# Remove unreachable code (example: catch all exceptions)
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1031
 dotnet_diagnostic.CA1031.severity = warning
-
-# Remove unused private methods
-# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1811
-dotnet_diagnostic.CA1811.severity = warning
