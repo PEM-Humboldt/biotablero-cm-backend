@@ -32,7 +32,7 @@ public interface IInitiativeService : IRead<Initiative, int>, IAdd<InitiativeDto
     /// <param name="imageType">Initiative image type.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct);
+    Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct = default);
 
     /// <summary>
     /// Get entity polygon.

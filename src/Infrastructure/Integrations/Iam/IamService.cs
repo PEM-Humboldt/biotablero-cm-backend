@@ -157,7 +157,7 @@ public class IamService : IIamService
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>JWT value.</returns>
-    private async Task<string> GetAdminTokenAsync(CancellationToken ct)
+    private async Task<string> GetAdminTokenAsync(CancellationToken ct = default)
     {
         var tokenUrl = new Uri($"{baseUrl}/protocol/openid-connect/token");
 
