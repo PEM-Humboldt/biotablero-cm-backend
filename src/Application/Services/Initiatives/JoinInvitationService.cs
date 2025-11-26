@@ -1,7 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -210,17 +209,17 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
     private async Task<bool> SendNotificationJoinInvitation(string[] emails, Initiative initiative, string emailMessage, CancellationToken ct = default)
     {
-        var emailData = new DefaultEmailData
+        var emailData = new JoinInvitationEmailData
         {
-            Subject = string.Format(CultureInfo.InvariantCulture, "Invitación a unirse a {0}", initiative.Name),
-            Content = string.Format(CultureInfo.InvariantCulture, "Has sido invitado a unirte a la iniciativa '{0}'.<br /> {1}.", initiative.Name, emailMessage),
+            InitiativeName = initiative.Name,
+            EmailMessage = emailMessage,
         };
 
         var receivers = emails
             .Select(e => new CustomEmailAddress(e))
             .ToArray();
 
-        var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailData);
+        var htmlBody = await webViewTools.RenderViewToStringAsync("JoinInvitation", emailData);
 
         var response = await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
 

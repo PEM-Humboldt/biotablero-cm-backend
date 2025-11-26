@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -182,11 +181,12 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         entity = await entityRepository.AddAsync(entity, ct);
 
         // Send email
-        var emailObject = new DefaultEmailData()
+        var emailObject = new JoinRequestEmailData()
         {
             Address = new(userData.FullName, userData.Email),
-            Subject = string.Format(CultureInfo.InvariantCulture, "Solicitud de ingreso a '{0}'", initiative.Name),
-            Content = string.Format(CultureInfo.InvariantCulture, "El usuario '{0}' ha realizado una solicitud de acceso para la iniciativa '{1}'", userData.Username, initiative.Name),
+            InitiativeName = initiative.Name,
+            UserName = userData.Username,
+            JoinRequestStatus = "Created",
         };
 
         SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
@@ -271,21 +271,12 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
         var initiative = await initiativeRepository.GetByIdAsync(entityData.InitiativeId, ct);
 
-        var emailObject = new DefaultEmailData()
+        var emailObject = new JoinRequestEmailData()
         {
             Address = new(userData.FullName, userData.Email),
+            InitiativeName = initiative.Name,
+            JoinRequestStatus = entity.StatusId == (int)JoinRequestStatusEnum.Approved ? "Approved" : "Rejected",
         };
-
-        if (entity.StatusId == (int)JoinRequestStatusEnum.Approved)
-        {
-            emailObject.Subject = string.Format(CultureInfo.InvariantCulture, "Solicitud de ingreso a '{0}' aprobada", initiative.Name);
-            emailObject.Content = string.Format(CultureInfo.InvariantCulture, "Bienvenido a '{0}'.<br /> Ya puedes aportar al estado de la biodiversidad de nuestro territorio.", initiative.Name);
-        }
-        else
-        {
-            emailObject.Subject = string.Format(CultureInfo.InvariantCulture, "Solicitud de ingreso a '{0}' rechazada", initiative.Name);
-            emailObject.Content = "Tu solicitud ha sido rechazada. Si consideras que se trata de un error solicita de nuevo.";
-        }
 
         SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
 
@@ -335,7 +326,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="emailData">Email data.</param>
     /// <param name="ct">Cancellation token.</param>
-    private void SendNotificationJoinRequest(int initiativeId, DefaultEmailData emailData, CancellationToken ct = default) => _ = Task.Run(
+    private void SendNotificationJoinRequest(int initiativeId, JoinRequestEmailData emailData, CancellationToken ct = default) => _ = Task.Run(
         async () =>
         {
             var leaders = await initiativeUserRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
@@ -354,11 +345,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
                 var receivers = new CustomEmailAddress[] { emailData.Address };
 
-                var emailObject = new DefaultEmailData()
-                {
-                    Content = emailData.Content,
-                };
-                var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailObject);
+                var htmlBody = await webViewTools.RenderViewToStringAsync("JoinRequest", emailData);
 
                 await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
             }
@@ -374,15 +361,14 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <returns>Process result.</returns>
     private async Task<bool> SendNotificationOldPendingRequestsAsync(ExternalUser leaderData, int pendingRequests, CancellationToken ct = default)
     {
-        var emailData = new DefaultEmailData
+        var emailData = new PendingRequestsReminderEmailData
         {
             Address = new(leaderData.FullName, leaderData.Email),
-            Subject = "Tienes solicitudes de ingreso pendientes de revisión",
-            Content = string.Format(CultureInfo.InvariantCulture, "Tienes <b>{0}</b> solicitudes de ingreso que necesitan tu revisión.", pendingRequests),
+            PendingRequestsCount = pendingRequests,
         };
 
         var receivers = new CustomEmailAddress[] { emailData.Address };
-        var htmlBody = await webViewTools.RenderViewToStringAsync("Default", emailData);
+        var htmlBody = await webViewTools.RenderViewToStringAsync("PendingRequestsReminder", emailData);
 
         await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
 
