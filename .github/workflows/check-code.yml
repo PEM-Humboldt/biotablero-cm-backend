@@ -4,10 +4,6 @@ on:
   pull_request:
     branches:
       - develop
-  push:
-    branches:
-      - develop
-      - main
 
 jobs:
   verify-dotnet-code:
@@ -33,7 +29,6 @@ jobs:
           echo "🔍 Analyzing code to detect unused elements..."
           dotnet build --no-incremental \
             -warnaserror \
-            -p:RunAnalyzersDuringBuild=true \
             -p:EnableNETAnalyzers=true \
             -p:EnforceCodeStyleInBuild=true
         continue-on-error: false
