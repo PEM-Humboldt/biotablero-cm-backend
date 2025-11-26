@@ -184,3 +184,19 @@ dotnet_diagnostic.CA1801.severity = warning
 # Remove unused using directives
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0005
 dotnet_diagnostic.IDE0005.severity = warning
+
+# Remove unused type parameters
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1812
+dotnet_diagnostic.CA1812.severity = warning
+
+# Simplify names (remove unnecessary usings)
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0001
+dotnet_diagnostic.IDE0001.severity = suggestion
+
+# Simplify member access
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0002
+dotnet_diagnostic.IDE0002.severity = suggestion
+
+# Remove unreachable code (example: catch all exceptions)
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1031
+dotnet_diagnostic.CA1031.severity = warning
