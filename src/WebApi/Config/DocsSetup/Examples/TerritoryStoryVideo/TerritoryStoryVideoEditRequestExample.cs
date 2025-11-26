@@ -15,6 +15,6 @@ public class TerritoryStoryVideoEditRequestExample : IExamplesProvider<Territory
     /// <returns>Entity examples.</returns>
     public TerritoryStoryVideoDto GetExamples() => new()
     {
-        FileUrl = "https://www.youtube.com/watch?v=yBLdQ1a4-JI",
+        FileUrl = "https://www.youtube.com/watch?v=B8lUy-dJ0zY",
     };
 }

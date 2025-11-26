@@ -41,8 +41,8 @@ public static class RegExprConstants
     /// Regular expression for YouTube video Url.
     /// <example>
     /// Valid video urls:
-    /// - https://www.youtube.com/watch?v=Dhu8ee6Dzx4
-    /// - https://www.youtube.com/watch?v=yBLdQ1a4-JI
+    /// - https://www.youtube.com/watch?v=I2Rz6cHdoHY
+    /// - https://www.youtube.com/watch?v=B8lUy-dJ0zY
     /// </example>
     /// </summary>
     public const string YouTubeVideoUrl = @"^(https:\/\/www\.youtube\.com\/watch\?v=([a-z]|[A-Z]|[0-9]|-){8,11})(&.*)*$";

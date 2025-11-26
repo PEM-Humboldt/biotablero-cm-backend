@@ -24,7 +24,7 @@ public class TerritoryStoryAddRequestExample : IExamplesProvider<TerritoryStoryD
         [
             new()
             {
-                FileUrl = "https://www.youtube.com/watch?v=Dhu8ee6Dzx4",
+                FileUrl = "https://www.youtube.com/watch?v=I2Rz6cHdoHY",
             },
         ],
     };

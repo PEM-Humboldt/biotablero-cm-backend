@@ -16,6 +16,6 @@ public class TerritoryStoryVideoAddRequestExample : IExamplesProvider<TerritoryS
     public TerritoryStoryVideoDto GetExamples() => new()
     {
         TerritoryStoryId = 1,
-        FileUrl = "https://www.youtube.com/watch?v=Dhu8ee6Dzx4",
+        FileUrl = "https://www.youtube.com/watch?v=I2Rz6cHdoHY",
     };
 }

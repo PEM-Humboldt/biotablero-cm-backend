@@ -21,7 +21,7 @@ public class TerritoryStoryVideoListResponseExample : IExamplesProvider<List<Ter
         {
             Id = 0,
             TerritoryStoryId = 0,
-            FileUrl = "https://www.youtube.com/watch?v=Dhu8ee6Dzx4",
+            FileUrl = "https://www.youtube.com/watch?v=I2Rz6cHdoHY",
         },
     ];
 }
