@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Video;
 
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,7 +38,19 @@ public class VideoHelperService : IVideoHelperService
             var response = await httpClient.GetAsync(oembedUrl, ct);
             return response.IsSuccessStatusCode;
         }
-        catch
+        catch (InvalidOperationException)
+        {
+            return false;
+        }
+        catch (HttpRequestException)
+        {
+            return false;
+        }
+        catch (TaskCanceledException)
+        {
+            return false;
+        }
+        catch (UriFormatException)
         {
             return false;
         }
