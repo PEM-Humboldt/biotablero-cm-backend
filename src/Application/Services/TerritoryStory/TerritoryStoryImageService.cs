@@ -80,12 +80,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         return await GetItemAsync(id, ct);
     }
 
-    /// <summary>
-    /// Get elements by territory story.
-    /// </summary>
-    /// <param name="territoryStoryId">Territory Story identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Entities by selected territory story.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetByTerritoryStoryAsync(int territoryStoryId, CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.GetByTerritoryStoryAsync(territoryStoryId, ct);
@@ -99,14 +94,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         };
     }
 
-    /// <summary>
-    /// Add element.
-    /// </summary>
-    /// <param name="userName">User name.</param>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="formFile">Image data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
         // Validate data
@@ -198,15 +186,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         };
     }
 
-    /// <summary>
-    /// Update element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="formFile">Image data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
         // Validate data
@@ -297,13 +277,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         };
     }
 
-    /// <summary>
-    /// Featured content action.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate user level and permissions
@@ -350,13 +324,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         };
     }
 
-    /// <summary>
-    /// Delete element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate user level and permissions

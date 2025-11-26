@@ -75,12 +75,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         return await GetItemAsync(id, ct);
     }
 
-    /// <summary>
-    /// Get elements by territory story.
-    /// </summary>
-    /// <param name="territoryStoryId">Territory Story identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Entities by selected territory story.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetByTerritoryStoryAsync(int territoryStoryId, CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.GetByTerritoryStoryAsync(territoryStoryId, ct);
@@ -94,13 +89,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         };
     }
 
-    /// <summary>
-    /// Add element.
-    /// </summary>
-    /// <param name="userName">User name.</param>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -177,14 +166,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         };
     }
 
-    /// <summary>
-    /// Update element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -248,13 +230,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         };
     }
 
-    /// <summary>
-    /// Delete element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate user level and permissions

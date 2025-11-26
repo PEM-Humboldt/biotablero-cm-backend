@@ -22,12 +22,7 @@ public class VideoHelperService : IVideoHelperService
         this.httpClient = httpClient;
     }
 
-    /// <summary>
-    /// Check if video exists.
-    /// </summary>
-    /// <param name="videoUrl">Video URL.</param>
-    /// <param name="ct">Cancellation token (optional).</param>
-    /// <returns>True if video exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> VideoExistsAsync(string videoUrl, CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(videoUrl))

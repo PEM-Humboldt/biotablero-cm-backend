@@ -11,11 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 /// </summary>
 public class TerritoryStoryImageMappings : IMapper<TerritoryStoryImage, TerritoryStoryImageDto>
 {
-    /// <summary>
-    /// Map from entity to DTO.
-    /// </summary>
-    /// <param name="entity">Entity data.</param>
-    /// <returns>DTO data.</returns>
+    /// <inheritdoc/>
     public TerritoryStoryImageDto Map(TerritoryStoryImage entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -30,11 +26,7 @@ public class TerritoryStoryImageMappings : IMapper<TerritoryStoryImage, Territor
         };
     }
 
-    /// <summary>
-    /// Map from DTO to entity.
-    /// </summary>
-    /// <param name="dto">DTO data.</param>
-    /// <returns>Entity data.</returns>
+    /// <inheritdoc/>
     public TerritoryStoryImage Map(TerritoryStoryImageDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);

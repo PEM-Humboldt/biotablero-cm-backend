@@ -7,27 +7,18 @@ using System;
 /// </summary>
 public class StorageException : Exception
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
+    /// <inheritdoc/>
     public StorageException()
     {
     }
 
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="message">Exception message.</param>
+    /// <inheritdoc/>
     public StorageException(string message)
         : base(message)
     {
     }
 
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="message">Exception message.</param>
-    /// <param name="innerException">Inner exception.</param>
+    /// <inheritdoc/>
     public StorageException(string message, Exception innerException)
         : base(message, innerException)
     {

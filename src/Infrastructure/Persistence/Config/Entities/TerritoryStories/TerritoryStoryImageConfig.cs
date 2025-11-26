@@ -10,10 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// </summary>
 public class TerritoryStoryImageConfig : IEntityTypeConfiguration<TerritoryStoryImage>
 {
-    /// <summary>
-    /// Configure entity.
-    /// </summary>
-    /// <param name="builder">Entity builder.</param>
+    /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<TerritoryStoryImage> builder)
     {
         builder.ToTable("territory_story_image", "initiatives");

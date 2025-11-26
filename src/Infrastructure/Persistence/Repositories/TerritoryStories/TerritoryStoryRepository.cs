@@ -34,12 +34,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
         this.logger = logger;
     }
 
-    /// <summary>
-    /// Finds an entity with the given primary key value.
-    /// </summary>
-    /// <param name="id">The value of the primary key for the entity to be found.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public new async Task<TerritoryStory> GetByIdAsync(int id, CancellationToken ct = default) =>
         await IncludeCustomEntities()
             .Where(e => e.Id == id)
@@ -110,35 +105,19 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
             .ToListAsync(ct);
     }
 
-    /// <summary>
-    /// Check if element is duplicated.
-    /// </summary>
-    /// <param name="title">Entity title.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(string title, CancellationToken ct = default) =>
         await dbContext.TerritoryStories
             .Where(e => e.Title == title)
             .AnyAsync(ct);
 
-    /// <summary>
-    /// Check if element is duplicated.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="title">Entity title.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int id, string title, CancellationToken ct = default) =>
         await dbContext.TerritoryStories
             .Where(e => e.Id != id && e.Title == title)
             .AnyAsync(ct);
 
-    /// <summary>
-    /// Mark as featured content.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Updated territory story data.</returns>
+    /// <inheritdoc/>
     public async Task<TerritoryStory> MarkAsFeaturedContentAsync(int id, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);

@@ -70,13 +70,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             .AnyAsync(ct);
     }
 
-    /// <summary>
-    /// Check authorized user action.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Entities by selected territory story.</returns>
+    /// <inheritdoc/>
     public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default)
     {
         var territoryStory = await dbContext.TerritoryStoryImages
@@ -92,46 +86,25 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
         return initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader || userName == territoryStory.AuthorUserName;
     }
 
-    /// <summary>
-    /// Get elements by territory story.
-    /// </summary>
-    /// <param name="territoryStoryId">Territory Story identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Entities by selected territory story.</returns>
+    /// <inheritdoc/>
     public async Task<IEnumerable<TerritoryStoryImage>> GetByTerritoryStoryAsync(int territoryStoryId, CancellationToken ct = default) =>
         await dbContext.TerritoryStoryImages
             .Where(e => e.TerritoryStoryId == territoryStoryId)
             .ToListAsync(ct);
 
-    /// <summary>
-    /// Check if element is duplicated.
-    /// </summary>
-    /// <param name="fileUrl">File URL.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(Uri fileUrl, CancellationToken ct = default) =>
         await dbContext.TerritoryStoryImages
             .Where(e => e.FileUrl == fileUrl)
             .AnyAsync(ct);
 
-    /// <summary>
-    /// Check if element is duplicated.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="fileUrl">File URL.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int id, Uri fileUrl, CancellationToken ct = default) =>
         await dbContext.TerritoryStoryImages
             .Where(e => e.Id != id && e.FileUrl == fileUrl)
             .AnyAsync(ct);
 
-    /// <summary>
-    /// Mark as featured content.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Updated territory story data.</returns>
+    /// <inheritdoc/>
     public async Task<TerritoryStoryImage> MarkAsFeaturedContentAsync(int id, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
@@ -174,13 +147,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
         }
     }
 
-    /// <summary>
-    /// Adds an entity in the database and upload the image in the storage service.
-    /// </summary>
-    /// <param name="entity">The entity to add.</param>
-    /// <param name="formFile">Image data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<TerritoryStoryImage> AddAsync(TerritoryStoryImage entity, IInputFile formFile, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
@@ -215,13 +182,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
         }
     }
 
-    /// <summary>
-    /// Update an entity in the database and upload the image in the storage service.
-    /// </summary>
-    /// <param name="entity">The entity to add.</param>
-    /// <param name="formFile">Image data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<TerritoryStoryImage> UpdateAsync(TerritoryStoryImage entity, IInputFile formFile, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);

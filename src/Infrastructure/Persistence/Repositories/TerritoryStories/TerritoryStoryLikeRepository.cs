@@ -23,25 +23,13 @@ public class TerritoryStoryLikeRepository : Repository<TerritoryStoryLike, int>,
     {
     }
 
-    /// <summary>
-    /// Check if element is duplicated.
-    /// </summary>
-    /// <param name="territoryStoryId">Territory Story identifier.</param>
-    /// <param name="username">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int territoryStoryId, string username, CancellationToken ct = default) =>
         await dbContext.TerritoryStoryLikes
             .Where(e => e.TerritoryStoryId == territoryStoryId && e.UserName == username)
             .AnyAsync(ct);
 
-    /// <summary>
-    /// Finds an entity by territory story and user name.
-    /// </summary>
-    /// <param name="territoryStoryId">Territory Story identifier.</param>
-    /// <param name="username">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<TerritoryStoryLike> GetByTerritoryStoryAndUserNameAsync(int territoryStoryId, string username, CancellationToken ct = default) =>
         await dbContext.TerritoryStoryLikes
             .Where(e => e.TerritoryStoryId == territoryStoryId && e.UserName == username)

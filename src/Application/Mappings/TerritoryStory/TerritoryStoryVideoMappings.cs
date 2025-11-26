@@ -11,11 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 /// </summary>
 public class TerritoryStoryVideoMappings : IMapper<TerritoryStoryVideo, TerritoryStoryVideoDto>
 {
-    /// <summary>
-    /// Map from entity to DTO.
-    /// </summary>
-    /// <param name="entity">Entity data.</param>
-    /// <returns>DTO data.</returns>
+    /// <inheritdoc/>
     public TerritoryStoryVideoDto Map(TerritoryStoryVideo entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -28,11 +24,7 @@ public class TerritoryStoryVideoMappings : IMapper<TerritoryStoryVideo, Territor
         };
     }
 
-    /// <summary>
-    /// Map from DTO to entity.
-    /// </summary>
-    /// <param name="dto">DTO data.</param>
-    /// <returns>Entity data.</returns>
+    /// <inheritdoc/>
     public TerritoryStoryVideo Map(TerritoryStoryVideoDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);

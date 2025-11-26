@@ -54,13 +54,7 @@ public class TerritoryStoryVideoRepository : Repository<TerritoryStoryVideo, int
             .AnyAsync(ct);
     }
 
-    /// <summary>
-    /// Check authorized user action.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Entities by selected territory story.</returns>
+    /// <inheritdoc/>
     public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default)
     {
         var territoryStory = await dbContext.TerritoryStoryVideos
@@ -76,35 +70,19 @@ public class TerritoryStoryVideoRepository : Repository<TerritoryStoryVideo, int
         return initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader || userName == territoryStory.AuthorUserName;
     }
 
-    /// <summary>
-    /// Get elements by territory story.
-    /// </summary>
-    /// <param name="territoryStoryId">Territory Story identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Entities by selected territory story.</returns>
+    /// <inheritdoc/>
     public async Task<IEnumerable<TerritoryStoryVideo>> GetByTerritoryStoryAsync(int territoryStoryId, CancellationToken ct = default) =>
         await dbContext.TerritoryStoryVideos
             .Where(e => e.TerritoryStoryId == territoryStoryId)
             .ToListAsync(ct);
 
-    /// <summary>
-    /// Check if element is duplicated.
-    /// </summary>
-    /// <param name="fileUrl">File URL.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(Uri fileUrl, CancellationToken ct = default) =>
         await dbContext.TerritoryStoryVideos
             .Where(e => e.FileUrl == fileUrl)
             .AnyAsync(ct);
 
-    /// <summary>
-    /// Check if element is duplicated.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="fileUrl">File URL.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int id, Uri fileUrl, CancellationToken ct = default) =>
         await dbContext.TerritoryStoryVideos
             .Where(e => e.Id != id && e.FileUrl == fileUrl)

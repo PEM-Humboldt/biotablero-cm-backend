@@ -14,11 +14,7 @@ public class TerritoryStoryMappings(
     IMapper<TerritoryStoryImage, TerritoryStoryImageDto> territoryStoryImageMappings,
     IMapper<TerritoryStoryVideo, TerritoryStoryVideoDto> territoryStoryVideoMappings) : IMapper<TerritoryStory, TerritoryStoryDto>
 {
-    /// <summary>
-    /// Map from entity to DTO.
-    /// </summary>
-    /// <param name="entity">Entity data.</param>
-    /// <returns>DTO data.</returns>
+    /// <inheritdoc/>
     public TerritoryStoryDto Map(TerritoryStory entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -41,11 +37,7 @@ public class TerritoryStoryMappings(
         };
     }
 
-    /// <summary>
-    /// Map from DTO to entity.
-    /// </summary>
-    /// <param name="dto">DTO data.</param>
-    /// <returns>Entity data.</returns>
+    /// <inheritdoc/>
     public TerritoryStory Map(TerritoryStoryDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);

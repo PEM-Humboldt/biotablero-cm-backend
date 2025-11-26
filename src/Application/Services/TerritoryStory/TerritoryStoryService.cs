@@ -95,12 +95,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         };
     }
 
-    /// <summary>
-    /// Add element.
-    /// </summary>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(TerritoryStoryDto entityData, CancellationToken ct = default)
     {
         // Validate user level and permissions
@@ -167,14 +162,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         };
     }
 
-    /// <summary>
-    /// Update element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryDto entityData, CancellationToken ct = default)
     {
         // Validate user level and permissions
@@ -241,12 +229,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         };
     }
 
-    /// <summary>
-    /// Like button action.
-    /// </summary>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> LikeActionAsync(TerritoryStoryLikeDto entityData, CancellationToken ct = default)
     {
         // Validate Territory Story
@@ -284,13 +267,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         return new CustomWebResponse();
     }
 
-    /// <summary>
-    /// Featured content action.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate Territory Story
@@ -337,22 +314,10 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         };
     }
 
-    /// <summary>
-    /// Enable element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> EnableAsync(int id, string userName, CancellationToken ct = default) => await DisableOrEnableAsync(id, userName, false, ct);
 
-    /// <summary>
-    /// Disable element.initiativeId.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> DisableAsync(int id, string userName, CancellationToken ct = default) => await DisableOrEnableAsync(id, userName, true, ct);
 
     /// <summary>
