@@ -7,6 +7,7 @@ using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.TerritoryStoryImage;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 using IAVH.BioTablero.CM.WebApi.Utils;
 using IAVH.BioTablero.CM.WebApi.Utils.Requests;
@@ -15,6 +16,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
+
+using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Territory Story Image controller.
@@ -36,6 +39,7 @@ public class TerritoryStoryImageController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryImageResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, HttpContext.GetUserName(), ct);
@@ -49,7 +53,8 @@ public class TerritoryStoryImageController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByTerritoryStory/{territoryStoryId}")]
-    public async Task<IActionResult> GetByTerritoryStory(int territoryStoryId, CancellationToken ct)
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryImageListResponseExample))]
+    public async Task<IActionResult> GetListByTerritoryStory(int territoryStoryId, CancellationToken ct)
     {
         var response = await entityService.GetByTerritoryStoryAsync(territoryStoryId, ct);
         return webTools.CustomResponse(response);
@@ -63,6 +68,7 @@ public class TerritoryStoryImageController(
     /// <returns>Added entity data.</returns>
     [HttpPut]
     [Authorize]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryImageResponseExample))]
     public async Task<IActionResult> Put([FromForm] TerritoryStoryImageRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new TerritoryStoryImageDto()
@@ -83,6 +89,7 @@ public class TerritoryStoryImageController(
     /// <returns>Updated entity data.</returns>
     [HttpPost("{id}")]
     [Authorize]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryImageResponseExample))]
     public async Task<IActionResult> Post(int id, [FromForm] TerritoryStoryImageRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new TerritoryStoryImageDto()

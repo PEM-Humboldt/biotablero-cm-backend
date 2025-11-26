@@ -52,7 +52,7 @@ public class TerritoryStoryVideoController(
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByTerritoryStory/{territoryStoryId}")]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryVideoListResponseExample))]
-    public async Task<IActionResult> GetByTerritoryStory(int territoryStoryId, CancellationToken ct)
+    public async Task<IActionResult> GetListByTerritoryStory(int territoryStoryId, CancellationToken ct)
     {
         var response = await entityService.GetByTerritoryStoryAsync(territoryStoryId, ct);
         return webTools.CustomResponse(response);
