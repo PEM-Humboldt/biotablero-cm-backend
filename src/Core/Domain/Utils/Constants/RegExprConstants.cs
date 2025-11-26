@@ -31,11 +31,12 @@ public static class RegExprConstants
     /// <example>
     /// Valid keyword list:
     /// - Naturaleza,Colibrí
-    /// - Champiñón,Guanábana,Ñame
+    /// - Champiñón,Guanábana,Ñame,Guayaba,Plátano
     /// - COP16,G20
+    /// - Yuca
     /// </example>
     /// </summary>
-    public const string Keywords = @"^([A-Z\u00d1ÁÉÍÓÚ]+[a-z0-9\u00f1áéíóú]+(,){1})*([A-Z\u00d1ÁÉÍÓÚ]+[a-z0-9\u00f1áéíóú]+)$";
+    public const string Keywords = @"^([A-Z\u00d1ÁÉÍÓÚ]+[a-z0-9\u00f1áéíóú]*(,){1}){0,4}([A-Z\u00d1ÁÉÍÓÚ]+[a-z0-9\u00f1áéíóú]*){1}$";
 
     /// <summary>
     /// Regular expression for YouTube video Url.

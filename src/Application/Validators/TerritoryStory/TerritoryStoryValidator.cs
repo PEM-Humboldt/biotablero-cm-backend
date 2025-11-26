@@ -35,6 +35,7 @@ public class TerritoryStoryValidator : AbstractValidator<TerritoryStoryDto>
 
         RuleFor(dto => dto.Keywords)
             .Matches(RegExprConstants.Keywords)
+                .WithMessage("Invalid format. Keywords must be separated by commas. Spaces and special characters are not allowed. Only up to 5 keywords are allowed.")
             .MaximumLength(75);
 
         RuleSet("Create", () =>
