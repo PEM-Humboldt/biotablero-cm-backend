@@ -10,7 +10,7 @@ using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.TerritoryStoryImage;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 using IAVH.BioTablero.CM.WebApi.Utils;
-using IAVH.BioTablero.CM.WebApi.Utils.Requests;
+using IAVH.BioTablero.CM.WebApi.Utils.Requests.TerritoryStoryImage;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -69,13 +69,14 @@ public class TerritoryStoryImageController(
     [HttpPut]
     [Authorize]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryImageResponseExample))]
-    public async Task<IActionResult> Put([FromForm] TerritoryStoryImageRequest requestData, CancellationToken ct)
+    public async Task<IActionResult> Put([FromForm] TerritoryStoryImageAddRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new TerritoryStoryImageDto()
         {
             TerritoryStoryId = requestData.TerritoryStoryId,
             Description = requestData.Description,
         };
+
         var response = await entityService.AddAsync(HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
         return webTools.CustomResponse(response);
     }
@@ -90,12 +91,13 @@ public class TerritoryStoryImageController(
     [HttpPost("{id}")]
     [Authorize]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryImageResponseExample))]
-    public async Task<IActionResult> Post(int id, [FromForm] TerritoryStoryImageRequest requestData, CancellationToken ct)
+    public async Task<IActionResult> Post(int id, [FromForm] TerritoryStoryImageEditRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new TerritoryStoryImageDto()
         {
             Description = requestData.Description,
         };
+
         var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
         return webTools.CustomResponse(response);
     }

@@ -1,17 +1,12 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Utils.Requests;
+﻿namespace IAVH.BioTablero.CM.WebApi.Utils.Requests.TerritoryStoryImage;
 
 using Microsoft.AspNetCore.Http;
 
 /// <summary>
-/// Territory Story Image request.
+/// Territory Story Image edit request.
 /// </summary>
-public class TerritoryStoryImageRequest
+public class TerritoryStoryImageEditRequest
 {
-    /// <summary>
-    /// Territory Story identifier.
-    /// </summary>
-    public int TerritoryStoryId { get; set; }
-
     /// <summary>
     /// File description.
     /// </summary>

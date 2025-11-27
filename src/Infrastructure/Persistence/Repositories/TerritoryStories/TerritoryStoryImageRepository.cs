@@ -159,7 +159,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             await dbContext.SaveChangesAsync(ct);
 
             // Upload/Overwrite image
-            var fileName = $"{StoragePrefix}/{entity.Id}";
+            var fileName = $"{StoragePrefix}/{entity.Id}{formFile.Extension}";
             var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
             var uploadSuccessful = await storageService.UploadFileAsync(fileName, formFile, ct);
 
@@ -190,8 +190,10 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
 
         try
         {
+            var oldFileUri = entity.FileUrl;
+
             // Upload/Overwrite image
-            var fileName = $"{StoragePrefix}/{entity.Id}";
+            var fileName = $"{StoragePrefix}/{entity.Id}{formFile.Extension}";
             var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
             var uploadSuccessful = await storageService.UploadFileAsync(fileName, formFile, ct);
 
@@ -204,6 +206,11 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
 
             await dbContext.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
+
+            if (oldFileUri != entity.FileUrl)
+            {
+                await storageService.DeleteFileAsync(oldFileUri.ToString(), ct);
+            }
 
             return entity;
         }
