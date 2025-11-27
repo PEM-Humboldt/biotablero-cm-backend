@@ -166,17 +166,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             };
         }
 
-        // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(entityData.FileUrl, ct);
-
-        if (hasDuplicatedEntities)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = "There is already an image with the same URL",
-            };
-        }
-
         // Build entity data
         var entity = mapper.Map(entityData);
         entity.FeaturedContent = false;
@@ -261,17 +250,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             return new CustomWebResponse(true)
             {
                 Message = "Territory Story disabled",
-            };
-        }
-
-        // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.FileUrl, ct);
-
-        if (hasDuplicatedEntities)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = "There is already an image with the same URL",
             };
         }
 

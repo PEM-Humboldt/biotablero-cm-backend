@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,23 +37,6 @@ public interface ITerritoryStoryImageRepository : IRepository<TerritoryStoryImag
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities by selected territory story.</returns>
     Task<IEnumerable<TerritoryStoryImage>> GetByTerritoryStoryAsync(int territoryStoryId, CancellationToken ct = default);
-
-    /// <summary>
-    /// Check if element is duplicated.
-    /// </summary>
-    /// <param name="fileUrl">File URL.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
-    Task<bool> IsDuplicatedAsync(Uri fileUrl, CancellationToken ct = default);
-
-    /// <summary>
-    /// Check if element is duplicated.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="fileUrl">File URL.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
-    Task<bool> IsDuplicatedAsync(int id, Uri fileUrl, CancellationToken ct = default);
 
     /// <summary>
     /// Mark as featured content.

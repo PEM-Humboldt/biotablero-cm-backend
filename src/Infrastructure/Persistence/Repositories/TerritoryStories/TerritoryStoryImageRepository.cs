@@ -93,18 +93,6 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<bool> IsDuplicatedAsync(Uri fileUrl, CancellationToken ct = default) =>
-        await dbContext.TerritoryStoryImages
-            .Where(e => e.FileUrl == fileUrl)
-            .AnyAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<bool> IsDuplicatedAsync(int id, Uri fileUrl, CancellationToken ct = default) =>
-        await dbContext.TerritoryStoryImages
-            .Where(e => e.Id != id && e.FileUrl == fileUrl)
-            .AnyAsync(ct);
-
-    /// <inheritdoc/>
     public async Task<TerritoryStoryImage> MarkAsFeaturedContentAsync(int id, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);

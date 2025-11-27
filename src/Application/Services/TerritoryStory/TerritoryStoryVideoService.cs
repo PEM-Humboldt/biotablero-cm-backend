@@ -229,7 +229,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.FileUrl, ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, new Uri(entityData.FileUrl), ct);
 
         if (hasDuplicatedEntities)
         {
