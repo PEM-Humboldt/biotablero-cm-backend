@@ -16,7 +16,6 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
 using Serilog;
@@ -32,7 +31,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     private readonly IValidator<TerritoryStoryImageDto> entityValidator;
     private readonly ILogger logger;
     private readonly ITerritoryStoryRepository territoryStoryRepository;
-    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IStorageService storageService;
 
     /// <summary>
@@ -43,7 +41,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="territoryStoryRepository">Territory Story repository.</param>
-    /// <param name="initiativeUserRepository">Initiative User repository.</param>
     /// <param name="storageService">Storage service.</param>
     public TerritoryStoryImageService(
         ITerritoryStoryImageRepository entityRepository,
@@ -51,7 +48,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         IValidator<TerritoryStoryImageDto> entityValidator,
         ILogger logger,
         ITerritoryStoryRepository territoryStoryRepository,
-        IInitiativeUserRepository initiativeUserRepository,
         IStorageService storageService)
         : base(entityRepository, mapper)
     {
@@ -59,7 +55,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.territoryStoryRepository = territoryStoryRepository;
-        this.initiativeUserRepository = initiativeUserRepository;
         this.storageService = storageService;
     }
 
@@ -115,6 +110,26 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             };
         }
 
+        // Validate territory story
+        var territoryStoryId = entityData.TerritoryStoryId ?? 0;
+        var territoryStory = await territoryStoryRepository.GetByIdAsync(territoryStoryId, ct);
+
+        if (territoryStory == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story not found",
+            };
+        }
+
+        if (!territoryStory.Enabled)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story disabled",
+            };
+        }
+
         // Validate user level and permissions
         var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(entityData.TerritoryStoryId, userName, ct);
 
@@ -148,18 +163,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             return new CustomWebResponse(true)
             {
                 Message = "Invalid file size",
-            };
-        }
-
-        // Validate territory story
-        var territoryStoryId = entityData.TerritoryStoryId ?? 0;
-        var territoryStoryExists = await territoryStoryRepository.AnyAsync(territoryStoryId, ct);
-
-        if (!territoryStoryExists)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = "Territory Story not found",
             };
         }
 
@@ -250,6 +253,17 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             };
         }
 
+        // Validate territory story
+        var territoryStory = await territoryStoryRepository.GetByIdAsync(entity.TerritoryStoryId, ct);
+
+        if (!territoryStory.Enabled)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story disabled",
+            };
+        }
+
         // Validate duplicated entities
         var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.FileUrl, ct);
 
@@ -297,9 +311,9 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         }
 
         // Validate Territory Story Image
-        var territoryStoryImageExists = await entityRepository.AnyAsync(id, ct);
+        var entity = await entityRepository.GetByIdAsync(id, ct);
 
-        if (!territoryStoryImageExists)
+        if (entity == null)
         {
             return new CustomWebResponse(true)
             {
@@ -307,8 +321,19 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             };
         }
 
+        // Validate territory story
+        var territoryStory = await territoryStoryRepository.GetByIdAsync(entity.TerritoryStoryId, ct);
+
+        if (!territoryStory.Enabled)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story disabled",
+            };
+        }
+
         // Mark territory story image as featured content
-        var entity = await entityRepository.MarkAsFeaturedContentAsync(id, ct);
+        entity = await entityRepository.MarkAsFeaturedContentAsync(id, ct);
 
         if (entity == null)
         {
@@ -351,6 +376,17 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate territory story
+        var territoryStory = await territoryStoryRepository.GetByIdAsync(entity.TerritoryStoryId, ct);
+
+        if (!territoryStory.Enabled)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story disabled",
             };
         }
 

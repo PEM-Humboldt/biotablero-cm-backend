@@ -154,6 +154,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
 
         try
         {
+            entity.FileUrl = new Uri($"/temp-uri/{DateTime.Now.ToFileTime()}");
             await dbContext.TerritoryStoryImages.AddAsync(entity, ct);
             await dbContext.SaveChangesAsync(ct);
 

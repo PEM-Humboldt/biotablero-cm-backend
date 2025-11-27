@@ -18,10 +18,6 @@ public class TerritoryStoryImageValidator : AbstractValidator<TerritoryStoryImag
             .NotNull()
                 .WithMessage("Entity data cannot be null");
 
-        RuleFor(dto => dto.FileUrl)
-            .NotEmpty()
-                .WithMessage("File url is required");
-
         RuleFor(dto => dto.Description)
             .NotEmpty()
                 .WithMessage("Description is required")
