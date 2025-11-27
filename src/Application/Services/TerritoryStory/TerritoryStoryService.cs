@@ -334,7 +334,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <inheritdoc/>
     public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate Territory Story
+        // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
         if (entity == null)

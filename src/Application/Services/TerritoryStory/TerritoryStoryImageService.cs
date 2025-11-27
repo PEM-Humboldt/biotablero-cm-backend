@@ -299,6 +299,17 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
     {
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = MessageConstants.NotFound,
+            };
+        }
+
         // Validate user level and permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
@@ -307,17 +318,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             return new CustomWebResponse(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
-            };
-        }
-
-        // Validate Territory Story Image
-        var entity = await entityRepository.GetByIdAsync(id, ct);
-
-        if (entity == null)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = "Territory Story Image not found",
             };
         }
 
@@ -357,17 +357,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new CustomWebResponse(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
-        }
-
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -376,6 +365,17 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 

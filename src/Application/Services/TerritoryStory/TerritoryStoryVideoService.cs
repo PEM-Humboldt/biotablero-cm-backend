@@ -257,17 +257,6 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new CustomWebResponse(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
-        }
-
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -276,6 +265,17 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
