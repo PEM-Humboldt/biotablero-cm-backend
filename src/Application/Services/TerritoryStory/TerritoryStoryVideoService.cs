@@ -110,6 +110,26 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
             };
         }
 
+        // Validate territory story
+        var territoryStoryId = entityData.TerritoryStoryId ?? 0;
+        var territoryStory = await territoryStoryRepository.GetByIdAsync(territoryStoryId, ct);
+
+        if (territoryStory == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story not found",
+            };
+        }
+
+        if (!territoryStory.Enabled)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story disabled",
+            };
+        }
+
         // Validate user level and permissions
         var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(entityData.TerritoryStoryId, userName, ct);
 
@@ -118,18 +138,6 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
             return new CustomWebResponse(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
-            };
-        }
-
-        // Validate territory story
-        var territoryStoryId = entityData.TerritoryStoryId ?? 0;
-        var territoryStoryExists = await territoryStoryRepository.AnyAsync(territoryStoryId, ct);
-
-        if (!territoryStoryExists)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = "Territory Story not found",
             };
         }
 
@@ -209,6 +217,17 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
             };
         }
 
+        // Validate territory story
+        var territoryStory = await territoryStoryRepository.GetByIdAsync(entity.TerritoryStoryId, ct);
+
+        if (!territoryStory.Enabled)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story disabled",
+            };
+        }
+
         // Validate duplicated entities
         var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.FileUrl, ct);
 
@@ -257,6 +276,17 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate territory story
+        var territoryStory = await territoryStoryRepository.GetByIdAsync(entity.TerritoryStoryId, ct);
+
+        if (!territoryStory.Enabled)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Territory Story disabled",
             };
         }
 

@@ -248,6 +248,14 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             };
         }
 
+        if (!entity.Enabled)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = MessageConstants.DisabledElement,
+            };
+        }
+
         // Validate duplicated entities
         var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.Title, ct);
 
@@ -281,13 +289,21 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     public async Task<CustomWebResponse> LikeActionAsync(TerritoryStoryLikeDto entityData, CancellationToken ct = default)
     {
         // Validate Territory Story
-        var territoryStory = await entityRepository.GetByIdAsync(entityData.TerritoryStoryId, ct);
+        var entity = await entityRepository.GetByIdAsync(entityData.TerritoryStoryId, ct);
 
-        if (territoryStory == null)
+        if (entity == null)
         {
             return new CustomWebResponse(true)
             {
-                Message = "Territory Story not found",
+                Message = MessageConstants.NotFound,
+            };
+        }
+
+        if (!entity.Enabled)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = MessageConstants.DisabledElement,
             };
         }
 
@@ -295,20 +311,20 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (hasDuplicatedEntities)
         {
-            var entity = await territoryStoryLikeRepository.GetByTerritoryStoryAndUserNameAsync(entityData.TerritoryStoryId, entityData.UserName, ct);
-            await territoryStoryLikeRepository.DeleteAsync(entity, ct);
+            var like = await territoryStoryLikeRepository.GetByTerritoryStoryAndUserNameAsync(entityData.TerritoryStoryId, entityData.UserName, ct);
+            await territoryStoryLikeRepository.DeleteAsync(like, ct);
             logger.AddLog(LogType.Delete, $"Unliked territory story", "{@EntityData}", entityData);
         }
         else
         {
-            var entity = new TerritoryStoryLike()
+            var like = new TerritoryStoryLike()
             {
                 CreationDate = DateTime.Now,
                 TerritoryStoryId = entityData.TerritoryStoryId,
                 UserName = entityData.UserName,
             };
 
-            await territoryStoryLikeRepository.AddAsync(entity, ct);
+            await territoryStoryLikeRepository.AddAsync(like, ct);
             logger.AddLog(LogType.Create, $"Liked territory story", "{@EntityData}", entityData);
         }
 
@@ -319,18 +335,26 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate Territory Story
-        var territoryStory = await entityRepository.GetByIdAsync(id, ct);
+        var entity = await entityRepository.GetByIdAsync(id, ct);
 
-        if (territoryStory == null)
+        if (entity == null)
         {
             return new CustomWebResponse(true)
             {
-                Message = "Territory Story not found",
+                Message = MessageConstants.NotFound,
+            };
+        }
+
+        if (!entity.Enabled)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = MessageConstants.DisabledElement,
             };
         }
 
         // Validate user level and permissions
-        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(territoryStory.InitiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
 
         if (!userIsLeader)
         {
@@ -341,7 +365,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         }
 
         // Mark territory story as featured content
-        var entity = await entityRepository.MarkAsFeaturedContentAsync(id, ct);
+        entity = await entityRepository.MarkAsFeaturedContentAsync(id, ct);
 
         if (entity == null)
         {

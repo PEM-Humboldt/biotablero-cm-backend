@@ -12,5 +12,10 @@ public static class MessageConstants
     /// </summary>
     public const string NotFound = "Not found";
 
+    /// <summary>
+    /// Disabled element message.
+    /// </summary>
+    public const string DisabledElement = "Disabled element";
+
     #endregion
 }
