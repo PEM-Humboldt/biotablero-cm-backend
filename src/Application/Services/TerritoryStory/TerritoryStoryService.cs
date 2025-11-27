@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -34,6 +35,8 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ITerritoryStoryLikeRepository territoryStoryLikeRepository;
+    private readonly ITerritoryStoryVideoRepository territoryStoryVideoRepository;
+    private readonly IVideoHelperService videoHelperService;
     private readonly IInitiativeUserRepository initiativeUserRepository;
 
     /// <summary>
@@ -45,6 +48,8 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="territoryStoryLikeRepository">Territory Story Like repository.</param>
+    /// <param name="territoryStoryVideoRepository">Territory Story Video repository.</param>
+    /// <param name="videoHelperService">Video Helper service.</param>
     /// <param name="initiativeUserRepository">Initiative User repository.</param>
     public TerritoryStoryService(
         ITerritoryStoryRepository entityRepository,
@@ -53,6 +58,8 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         ILogger logger,
         IInitiativeRepository initiativeRepository,
         ITerritoryStoryLikeRepository territoryStoryLikeRepository,
+        ITerritoryStoryVideoRepository territoryStoryVideoRepository,
+        IVideoHelperService videoHelperService,
         IInitiativeUserRepository initiativeUserRepository)
         : base(entityRepository, mapper)
     {
@@ -61,6 +68,8 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
         this.territoryStoryLikeRepository = territoryStoryLikeRepository;
+        this.territoryStoryVideoRepository = territoryStoryVideoRepository;
+        this.videoHelperService = videoHelperService;
         this.initiativeUserRepository = initiativeUserRepository;
     }
 
@@ -68,14 +77,19 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityReadAsync(id, userName, ct);
+        var entityExists = await entityRepository.AnyAsync(id, ct);
 
-        if (!authorizedUserAction)
+        if (entityExists)
         {
-            return new CustomWebResponse(true)
+            var authorizedUserAction = await entityRepository.AuthorizedEntityReadAsync(id, userName, ct);
+
+            if (!authorizedUserAction)
             {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
+                return new CustomWebResponse(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
         }
 
         return await GetItemAsync(id, ct);
@@ -144,10 +158,44 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             };
         }
 
+        if (entityData.Videos.Any())
+        {
+            // Validate duplicated videos
+            var videosUrls = entityData.Videos
+                .Select(e => new Uri(e.FileUrl))
+                .ToArray();
+
+            var hasDuplicatedEntitiesVideos = await territoryStoryVideoRepository.AnyDuplicatedAsync(videosUrls, ct);
+
+            if (hasDuplicatedEntitiesVideos)
+            {
+                return new CustomWebResponse(true)
+                {
+                    Message = "There is already at least one video with the same URL",
+                };
+            }
+
+            // Validate if the videos exist
+            foreach (var videoUrl in videosUrls)
+            {
+                var videoExists = await videoHelperService.VideoExistsAsync(videoUrl.ToString(), ct);
+
+                if (!videoExists)
+                {
+                    return new CustomWebResponse(true)
+                    {
+                        Message = $"The video URL '{videoUrl}' does not exist",
+                    };
+                }
+            }
+        }
+
         // Build entity data
+        entityData.Images = null;
+        entityData.Enabled = true;
+        entityData.FeaturedContent = false;
         var entity = mapper.Map(entityData);
         entity.CreationDate = DateTime.Now;
-        entity.Enabled = true;
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);

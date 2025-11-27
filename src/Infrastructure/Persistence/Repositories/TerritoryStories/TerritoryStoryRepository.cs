@@ -57,7 +57,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
         }
 
         return await dbContext.TerritoryStories
-            .Where(e => e.Id == id && !e.Restricted)
+            .Where(e => e.Id == id && !e.Restricted && e.Enabled)
             .AnyAsync(ct);
     }
 
@@ -101,7 +101,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
         }
 
         return await IncludeCustomEntities()
-            .Where(e => e.InitiativeId == initiativeId && !e.Restricted)
+            .Where(e => e.InitiativeId == initiativeId && !e.Restricted && e.Enabled)
             .ToListAsync(ct);
     }
 

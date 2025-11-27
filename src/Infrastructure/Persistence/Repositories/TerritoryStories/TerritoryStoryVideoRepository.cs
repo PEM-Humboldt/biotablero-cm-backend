@@ -87,4 +87,10 @@ public class TerritoryStoryVideoRepository : Repository<TerritoryStoryVideo, int
         await dbContext.TerritoryStoryVideos
             .Where(e => e.Id != id && e.FileUrl == fileUrl)
             .AnyAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<bool> AnyDuplicatedAsync(Uri[] urls, CancellationToken ct = default) =>
+        await dbContext.TerritoryStoryVideos
+            .Where(e => urls.Contains(e.FileUrl))
+            .AnyAsync(ct);
 }

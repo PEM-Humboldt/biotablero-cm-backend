@@ -54,4 +54,12 @@ public interface ITerritoryStoryVideoRepository : IRepository<TerritoryStoryVide
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
     Task<bool> IsDuplicatedAsync(int id, Uri fileUrl, CancellationToken ct = default);
+
+    /// <summary>
+    /// Check if elements are duplicated.
+    /// </summary>
+    /// <param name="urls">Images URLs.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    Task<bool> AnyDuplicatedAsync(Uri[] urls, CancellationToken ct = default);
 }

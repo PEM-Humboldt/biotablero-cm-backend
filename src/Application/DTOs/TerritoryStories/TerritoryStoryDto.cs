@@ -68,10 +68,10 @@ public class TerritoryStoryDto : IDto
     /// <summary>
     /// Territory Story Image relationship.
     /// </summary>
-    public IEnumerable<TerritoryStoryImageDto> Images { get; init; }
+    public IEnumerable<TerritoryStoryImageDto> Images { get; set; }
 
     /// <summary>
     /// Territory Story Video relationship.
     /// </summary>
-    public IEnumerable<TerritoryStoryVideoDto> Videos { get; init; }
+    public IEnumerable<TerritoryStoryVideoDto> Videos { get; set; }
 }

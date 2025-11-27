@@ -49,9 +49,6 @@ public class TerritoryStoryValidator : AbstractValidator<TerritoryStoryDto>
                     .WithMessage("Author is required")
                 .MaximumLength(75);
 
-            RuleForEach(dto => dto.Images)
-                .SetValidator(new TerritoryStoryImageValidator(), "default");
-
             RuleForEach(dto => dto.Videos)
                 .SetValidator(new TerritoryStoryVideoValidator(), "default");
         });

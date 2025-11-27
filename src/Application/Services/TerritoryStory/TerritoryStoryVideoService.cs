@@ -62,14 +62,19 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityReadAsync(id, userName, ct);
+        var entityExists = await entityRepository.AnyAsync(id, ct);
 
-        if (!authorizedUserAction)
+        if (entityExists)
         {
-            return new CustomWebResponse(true)
+            var authorizedUserAction = await entityRepository.AuthorizedEntityReadAsync(id, userName, ct);
+
+            if (!authorizedUserAction)
             {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
+                return new CustomWebResponse(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
         }
 
         return await GetItemAsync(id, ct);
