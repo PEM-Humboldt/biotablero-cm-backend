@@ -276,7 +276,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         }
 
         // Update entity data
-        entity.Description = entity.Description;
+        entity.Description = entityData.Description;
         if (!updateHasFile)
         {
             await entityRepository.UpdateAsync(entity, ct);
