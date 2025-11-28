@@ -63,6 +63,11 @@ public class TerritoryStory : BaseEntity<int>, IAggregateRoot
     public int TotalLikes => Likes?.Count ?? 0;
 
     /// <summary>
+    /// Like action flag for authenticated users.
+    /// </summary>
+    public bool? ILikedIt { get; set; }
+
+    /// <summary>
     /// Initiative relationship.
     /// </summary>
     public Initiative Initiative { get; set; }

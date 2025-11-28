@@ -20,6 +20,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.OData;
 
 using Serilog;
 
@@ -94,7 +95,29 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             }
         }
 
-        return await GetItemAsync(id, ct);
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity != null)
+        {
+            if (!string.IsNullOrWhiteSpace(userName))
+            {
+                entity.ILikedIt = entity?.Likes?.Any(e => e.UserName == userName);
+            }
+
+            var dataDto = mapper.Map(entity);
+            return new()
+            {
+                ResponseBody = dataDto,
+            };
+        }
+        else
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                Message = MessageConstants.NotFound,
+            };
+        }
     }
 
     /// <inheritdoc/>
@@ -103,7 +126,27 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         var query = entityRepository.GetQueryable();
         query = await entityRepository.GetQueryWithInitiativeAndUserNameAsync(initiativeId, userName, query, ct);
 
-        return await GetOdataListByQueryAsync(query, queryOptions, ct);
+        try
+        {
+            var odataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
+
+            foreach (var entity in odataResponse.DataList)
+            {
+                if (!string.IsNullOrWhiteSpace(userName))
+                {
+                    entity.ILikedIt = entity?.Likes?.Any(e => e.UserName == userName);
+                }
+            }
+
+            return GetOdataWebResponse(odataResponse, mapper);
+        }
+        catch (ODataException ex)
+        {
+            return new(true)
+            {
+                Message = $"Invalid filter: {ex.Message}",
+            };
+        }
     }
 
     /// <inheritdoc/>

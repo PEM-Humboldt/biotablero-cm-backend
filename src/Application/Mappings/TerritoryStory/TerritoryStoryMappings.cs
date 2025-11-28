@@ -32,6 +32,7 @@ public class TerritoryStoryMappings(
             FeaturedContent = entity.FeaturedContent,
             Restricted = entity.Restricted,
             Likes = entity.TotalLikes,
+            ILikedIt = entity.ILikedIt,
             Images = entity.Images?.Select(territoryStoryImageMappings.Map),
             Videos = entity.Videos?.Select(territoryStoryVideoMappings.Map),
         };
