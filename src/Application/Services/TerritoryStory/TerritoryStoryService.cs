@@ -19,6 +19,8 @@ using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
+using Microsoft.AspNetCore.OData.Query;
+
 using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
@@ -96,17 +98,12 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct = default)
     {
-        var dataListEntity = await entityRepository.GetByInitiativeAndUserNameAsync(initiativeId, userName, ct);
+        var query = entityRepository.GetQueryable();
+        query = await entityRepository.GetQueryWithInitiativeAndUserNameAsync(initiativeId, userName, query, ct);
 
-        var dataListDto = dataListEntity
-            .Select(mapper.Map);
-
-        return new()
-        {
-            ResponseBody = dataListDto,
-        };
+        return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 
     /// <inheritdoc/>
