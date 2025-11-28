@@ -1,11 +1,11 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Storage;
-using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
 /// <summary>
 /// File Storage service interface.
@@ -21,11 +21,12 @@ public interface IStorageService
     /// <summary>
     /// Upload file.
     /// </summary>
-    /// <param name="fileName">File name.</param>
-    /// <param name="file">Upload file data.</param>
+    /// <param name="fileName">File stream.</param>
+    /// <param name="fileStream">Stream file.</param>
+    /// <param name="contentType">File content type.</param>
     /// <param name="ct">Cancellation token (optional).</param>
     /// <returns>True if the process is successful. False otherwise.</returns>
-    Task<bool> UploadFileAsync(string fileName, IInputFile file, CancellationToken ct = default);
+    Task<bool> UploadFileAsync(string fileName, Stream fileStream, string contentType, CancellationToken ct = default);
 
     /// <summary>
     /// Download file.

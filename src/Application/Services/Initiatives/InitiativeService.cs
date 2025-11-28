@@ -47,9 +47,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     private readonly ILogger logger;
     private new readonly IInitiativeRepository entityRepository;
     private readonly ILocationRepository locationRepository;
+    private readonly ILocationService locationService;
     private readonly IIamService iamService;
     private readonly IStorageService storageService;
-    private readonly ILocationService locationService;
+    private readonly IImageUtilsService imageUtilsService;
     private readonly GeoJsonWriter geoJsonWriter;
     private readonly GeoJsonReader geoJsonReader;
 
@@ -61,27 +62,30 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="locationRepository">Initiative Location repository.</param>
-    /// <param name="storageService">Storage service.</param>
-    /// <param name="iamService">IAM service.</param>
     /// <param name="locationService">Location service.</param>
+    /// <param name="iamService">IAM service.</param>
+    /// <param name="storageService">Storage service.</param>
+    /// <param name="imageUtilsService">Image utils service.</param>
     public InitiativeService(
         IInitiativeRepository entityRepository,
         IMapper<Initiative, InitiativeDto> mapper,
         IValidator<InitiativeDto> entityValidator,
         ILogger logger,
         ILocationRepository locationRepository,
-        IStorageService storageService,
+        ILocationService locationService,
         IIamService iamService,
-        ILocationService locationService)
+        IStorageService storageService,
+        IImageUtilsService imageUtilsService)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.locationRepository = locationRepository;
-        this.storageService = storageService;
-        this.iamService = iamService;
         this.locationService = locationService;
+        this.iamService = iamService;
+        this.storageService = storageService;
+        this.imageUtilsService = imageUtilsService;
 
         geoJsonWriter = new GeoJsonWriter();
         geoJsonReader = new GeoJsonReader();
@@ -350,11 +354,23 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             };
         }
 
+        // Compress and convert image to JPEG
+        using var originalImageStream = formFile.OpenStream();
+        var compressedImageStream = await imageUtilsService.CompressToJpegAsync(originalImageStream, 75, ct);
+
+        if (compressedImageStream == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Image processing error",
+            };
+        }
+
         // Upload/Overwrite image
         var imageTypeStr = imageType.ToString("G").ToLower(CultureInfo.CurrentCulture);
         var fileName = $"{StoragePrefix}/{id}/{imageTypeStr}";
         var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-        var uploadSuccessful = await storageService.UploadFileAsync(fileName, formFile, ct);
+        var uploadSuccessful = await storageService.UploadFileAsync(fileName, compressedImageStream, ContentTypes.ImageJpeg, ct);
 
         if (uploadSuccessful)
         {
