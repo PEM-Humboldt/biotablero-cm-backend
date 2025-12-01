@@ -230,6 +230,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Update entity data
         entity.LevelId = entityData.Level.Id;
+        entity.FocusArea = entityData.FocusArea;
 
         await entityRepository.UpdateAsync(entity, ct);
 

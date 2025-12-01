@@ -20,11 +20,6 @@ public class InitiativeUserValidator : AbstractValidator<InitiativeUserDto>
             .NotNull()
                 .WithMessage("Entity data cannot be null");
 
-        RuleFor(dto => dto.UserName)
-            .NotEmpty()
-                .WithMessage("User name is required")
-            .MaximumLength(75);
-
         RuleFor(dto => dto.FocusArea)
             .MaximumLength(200);
 
@@ -43,6 +38,11 @@ public class InitiativeUserValidator : AbstractValidator<InitiativeUserDto>
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
                     .WithMessage("Initiative identifier is required");
+
+            RuleFor(dto => dto.UserName)
+                .NotEmpty()
+                    .WithMessage("User name is required")
+                .MaximumLength(75);
         });
     }
 }
