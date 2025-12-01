@@ -23,10 +23,19 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
                 .WithMessage("Name is required")
             .MaximumLength(100);
 
+        RuleFor(dto => dto.ShortName)
+            .MaximumLength(120);
+
         RuleFor(dto => dto.Description)
             .NotEmpty()
                 .WithMessage("Description is required")
             .MaximumLength(300);
+
+        RuleFor(dto => dto.InfluenceArea)
+            .MaximumLength(1000);
+
+        RuleFor(dto => dto.Objective)
+            .MaximumLength(1000);
 
         RuleSet("Create", () =>
         {

@@ -25,6 +25,9 @@ public class InitiativeUserValidator : AbstractValidator<InitiativeUserDto>
                 .WithMessage("User name is required")
             .MaximumLength(75);
 
+        RuleFor(dto => dto.FocusArea)
+            .MaximumLength(200);
+
         RuleFor(dto => dto.Level)
             .NotNull()
                 .WithMessage("User level cannot be null")
