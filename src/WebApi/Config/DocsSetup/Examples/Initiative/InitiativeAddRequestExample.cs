@@ -19,7 +19,10 @@ public class InitiativeAddRequestExample : IExamplesProvider<InitiativeDto>
     public InitiativeDto GetExamples() => new()
     {
         Name = "Initiative example",
+        ShortName = "IE",
         Description = "example",
+        InfluenceArea = "Influence area example",
+        Objective = "Objective example",
         Locations = [
             new()
             {
