@@ -29,10 +29,22 @@ public class InitiativeConfig : IEntityTypeConfiguration<Initiative>
             .HasMaxLength(100)
             .IsRequired();
 
+        builder.Property(i => i.ShortName)
+            .HasColumnName("short_name")
+            .HasMaxLength(120);
+
         builder.Property(i => i.Description)
             .HasColumnName("description")
             .HasMaxLength(300)
             .IsRequired();
+
+        builder.Property(i => i.InfluenceArea)
+            .HasColumnName("influence_area")
+            .HasMaxLength(1000);
+
+        builder.Property(i => i.Objective)
+            .HasColumnName("objective")
+            .HasMaxLength(1000);
 
         builder.Property(e => e.CreationDate)
             .HasColumnName("creation_date")

@@ -33,6 +33,15 @@ public class InitiativeUserConfig : IEntityTypeConfiguration<InitiativeUser>
             .HasMaxLength(75)
             .IsRequired();
 
+        builder.Property(i => i.FocusArea)
+            .HasColumnName("focus_area")
+            .HasMaxLength(200);
+
+        builder.Property(e => e.CreationDate)
+            .HasColumnName("creation_date")
+            .HasDefaultValueSql("CURRENT_TIMESTAMP")
+            .IsRequired();
+
         builder.Property(i => i.LevelId)
             .HasColumnName("initiative_user_level_id")
             .IsRequired();

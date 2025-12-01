@@ -29,7 +29,10 @@ public class InitiativeMappings(
         {
             Id = entity.Id,
             Name = entity.Name,
+            ShortName = entity.ShortName,
             Description = entity.Description,
+            InfluenceArea = entity.InfluenceArea,
+            Objective = entity.Objective,
             CreationDate = entity.CreationDate,
             ImageUrl = entity.ImageUrl,
             BannerUrl = entity.BannerUrl,
@@ -55,7 +58,10 @@ public class InitiativeMappings(
         return new()
         {
             Name = dto.Name,
+            ShortName = dto.ShortName,
             Description = dto.Description,
+            InfluenceArea = dto.InfluenceArea,
+            Objective = dto.Objective,
             CreationDate = dto.CreationDate ?? DateTime.Now,
             ImageUrl = dto.ImageUrl,
             BannerUrl = dto.BannerUrl,

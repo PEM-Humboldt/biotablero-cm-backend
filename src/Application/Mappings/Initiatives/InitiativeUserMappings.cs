@@ -28,7 +28,9 @@ public class InitiativeUserMappings : IMapper<InitiativeUser, InitiativeUserDto>
             Id = entity.Id,
             InitiativeId = entity.InitiativeId,
             UserName = entity.UserName,
+            FocusArea = entity.FocusArea,
             Level = new EnumEntityDto<InitiativeUserLevelEnum>(entity.LevelId),
+            CreationDate = entity.CreationDate,
         };
     }
 
@@ -45,7 +47,9 @@ public class InitiativeUserMappings : IMapper<InitiativeUser, InitiativeUserDto>
         {
             InitiativeId = dto?.InitiativeId ?? 0,
             UserName = dto.UserName,
+            FocusArea = dto.FocusArea,
             LevelId = dto.Level.Id,
+            CreationDate = dto.CreationDate ?? DateTime.Now,
         };
     }
 }
