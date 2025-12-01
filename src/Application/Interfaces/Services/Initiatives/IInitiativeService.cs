@@ -58,4 +58,11 @@ public interface IInitiativeService : IRead<Initiative, int>, IAdd<InitiativeDto
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<CustomWebResponse> GetByLocationAsync(int? locationId = null, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get last created entities.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> GetLastEntitiesAsync(CancellationToken ct = default);
 }

@@ -120,6 +120,20 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         };
     }
 
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetLastEntitiesAsync(CancellationToken ct = default)
+    {
+        var lastEntities = await entityRepository.GetLastEntitiesAsync(3, ct);
+
+        var dataListDto = lastEntities
+            .Select(mapper.Map);
+
+        return new()
+        {
+            ResponseBody = dataListDto,
+        };
+    }
+
     /// <summary>
     /// Get entity polygon.
     /// </summary>

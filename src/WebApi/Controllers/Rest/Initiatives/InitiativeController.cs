@@ -64,6 +64,19 @@ public class InitiativeController(
     }
 
     /// <summary>
+    /// Get related initiatives.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities list from parameters.</returns>
+    [HttpGet("Related")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeListResponseExample))]
+    public async Task<IActionResult> GetListRelated(CancellationToken ct)
+    {
+        var response = await entityService.GetLastEntitiesAsync(ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
     /// Get entity polygon.
     /// </summary>
     /// <param name="id">Entity identifier.</param>

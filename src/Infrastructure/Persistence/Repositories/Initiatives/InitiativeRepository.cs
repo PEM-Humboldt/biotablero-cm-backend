@@ -243,4 +243,12 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
 
         return results;
     }
+
+    /// <inheritdoc/>
+    public async Task<IEnumerable<Initiative>> GetLastEntitiesAsync(int count, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Where(e => e.Enabled)
+            .OrderByDescending(e => e.CreationDate)
+            .Take(count)
+            .ToListAsync(ct);
 }
