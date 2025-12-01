@@ -16,11 +16,7 @@ public class InitiativeMappings(
     IMapper<InitiativeUser, InitiativeUserDto> initiativeUserMappings,
     IMapper<Tag, TagDto> tagMappings) : IMapper<Initiative, InitiativeDto>
 {
-    /// <summary>
-    /// Map from entity to DTO.
-    /// </summary>
-    /// <param name="entity">Entity data.</param>
-    /// <returns>DTO data.</returns>
+    /// <inheritdoc/>
     public InitiativeDto Map(Initiative entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -46,11 +42,7 @@ public class InitiativeMappings(
         };
     }
 
-    /// <summary>
-    /// Map from DTO to entity.
-    /// </summary>
-    /// <param name="dto">DTO data.</param>
-    /// <returns>Entity data.</returns>
+    /// <inheritdoc/>
     public Initiative Map(InitiativeDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
