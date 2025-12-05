@@ -214,6 +214,19 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             };
         }
 
+        var hasDepartmentsWithLocalities = entityData.Locations
+            .Join(locationsDb, il => il.LocationId, l => l.Id, (il, l) => new { il, l })
+            .Where(lil => !string.IsNullOrWhiteSpace(lil.il.Locality) && lil.l.ParentId == null)
+            .Any();
+
+        if (hasDepartmentsWithLocalities)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Locality is only available for municipalities",
+            };
+        }
+
         // Validate users in external system
         var results = new Dictionary<string, bool>();
         var userTasks = entityData.Users.Select(async user =>
