@@ -356,7 +356,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Compress and convert image to JPEG
         using var originalImageStream = formFile.OpenStream();
-        var compressedImageStream = await imageUtilsService.CompressToJpegAsync(originalImageStream, 75, ct);
+        var compressedImageStream = await imageUtilsService.CompressToWebpAsync(originalImageStream, 75, ct);
 
         if (compressedImageStream == null)
         {

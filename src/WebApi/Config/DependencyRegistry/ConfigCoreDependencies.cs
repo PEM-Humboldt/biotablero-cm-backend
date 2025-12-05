@@ -85,6 +85,6 @@ public static class ConfigCoreDependencies
     services
         .Configure<FormOptions>(options =>
         {
-            options.MultipartBodyLengthLimit = 20_000_000; // 20 MB
+            options.MultipartBodyLengthLimit = 5_242_880; // 5 MB
         });
 }

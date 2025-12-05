@@ -147,7 +147,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             await dbContext.SaveChangesAsync(ct);
 
             // Upload/Overwrite image
-            var fileName = $"{StoragePrefix}/{entity.Id}.jpeg";
+            var fileName = $"{StoragePrefix}/{entity.Id}.webp";
             var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
             var uploadSuccessful = await storageService.UploadFileAsync(fileName, imageStream, contentType, ct);
 
@@ -187,7 +187,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             var oldFileUri = entity.FileUrl;
 
             // Upload/Overwrite image
-            var fileName = $"{StoragePrefix}/{entity.Id}.jpeg";
+            var fileName = $"{StoragePrefix}/{entity.Id}.webp";
             var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
             var uploadSuccessful = await storageService.UploadFileAsync(fileName, imageStream, contentType, ct);
 
@@ -209,6 +209,12 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             return entity;
         }
         catch (DbUpdateException ex)
+        {
+            await transaction.RollbackAsync(ct);
+            logger.Error(ex, "Territory Story Image transaction error");
+            return null;
+        }
+        catch (StorageException ex)
         {
             await transaction.RollbackAsync(ct);
             logger.Error(ex, "Territory Story Image transaction error");

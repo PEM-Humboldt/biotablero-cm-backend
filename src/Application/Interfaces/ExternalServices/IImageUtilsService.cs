@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 public interface IImageUtilsService
 {
     /// <summary>
-    /// Compress image to JPEG format.
+    /// Compress image to WEBP format.
     /// </summary>
     /// <param name="input">Stream input.</param>
     /// <param name="quality">Image quality.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Compressed image format.</returns>
-    Task<Stream> CompressToJpegAsync(Stream input, int quality = 75, CancellationToken ct = default);
+    Task<Stream> CompressToWebpAsync(Stream input, int quality = 75, CancellationToken ct = default);
 }

@@ -5,11 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 using Serilog;
 
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;
 
 /// <summary>
@@ -29,7 +30,7 @@ public class ImageUtilsService : IImageUtilsService
     }
 
     /// <inheritdoc/>
-    public async Task<Stream> CompressToJpegAsync(Stream input, int quality = 75, CancellationToken ct = default)
+    public async Task<Stream> CompressToWebpAsync(Stream input, int quality = 75, CancellationToken ct = default)
     {
         try
         {
@@ -39,6 +40,12 @@ public class ImageUtilsService : IImageUtilsService
 
             using var image = await Image.LoadAsync(input, ct);
 
+            if (image.Size.Width > FileConstants.WebpMaxDimension || image.Size.Height > FileConstants.WebpMaxDimension)
+            {
+                logger.Error("Image is too large to encode WEBP format: {ImageSize}", image.Size);
+                return null;
+            }
+
             image.Mutate(x => x.Resize(new ResizeOptions
             {
                 Mode = ResizeMode.Max,
@@ -46,12 +53,12 @@ public class ImageUtilsService : IImageUtilsService
                 Sampler = KnownResamplers.Lanczos3,
             }));
 
-            var encoder = new JpegEncoder
+            var encoder = new WebpEncoder
             {
                 Quality = quality,
             };
 
-            await image.SaveAsJpegAsync(output, encoder, ct);
+            await image.SaveAsWebpAsync(output, encoder, ct);
 
             output.Position = 0;
 
@@ -60,6 +67,10 @@ public class ImageUtilsService : IImageUtilsService
         catch (UnknownImageFormatException ex)
         {
             logger.Error(ex, "Image processing error");
+        }
+        catch (ImageFormatException ex)
+        {
+            logger.Error(ex, "Image format error");
         }
 
         return null;
