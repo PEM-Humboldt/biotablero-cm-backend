@@ -183,7 +183,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         entity.FeaturedContent = false;
 
         // Save data
-        entity = await entityRepository.AddAsync(entity, compressedImageStream, ContentTypes.ImageJpeg, ct);
+        entity = await entityRepository.AddAsync(entity, compressedImageStream, ContentTypes.ImageWebp, ct);
 
         entityData = mapper.Map(entity);
 
@@ -285,7 +285,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
                 };
             }
 
-            await entityRepository.UpdateAsync(entity, compressedImageStream, ContentTypes.ImageJpeg, ct);
+            await entityRepository.UpdateAsync(entity, compressedImageStream, ContentTypes.ImageWebp, ct);
         }
 
         entityData = mapper.Map(entity);

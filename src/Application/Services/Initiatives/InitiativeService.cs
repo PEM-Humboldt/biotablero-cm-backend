@@ -370,7 +370,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         var imageTypeStr = imageType.ToString("G").ToLower(CultureInfo.CurrentCulture);
         var fileName = $"{StoragePrefix}/{id}/{imageTypeStr}";
         var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-        var uploadSuccessful = await storageService.UploadFileAsync(fileName, compressedImageStream, ContentTypes.ImageJpeg, ct);
+        var uploadSuccessful = await storageService.UploadFileAsync(fileName, compressedImageStream, ContentTypes.ImageWebp, ct);
 
         if (uploadSuccessful)
         {

@@ -6,7 +6,7 @@
 public static class ContentTypes
 {
     /// <summary>
-    /// JPEG Image content type.
+    /// Webp Image content type.
     /// </summary>
-    public const string ImageJpeg = "image/jpeg";
+    public const string ImageWebp = "image/webp";
 }
