@@ -381,7 +381,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Upload/Overwrite image
         var imageTypeStr = imageType.ToString("G").ToLower(CultureInfo.CurrentCulture);
-        var fileName = $"{StoragePrefix}/{id}/{imageTypeStr}";
+        var fileName = $"{StoragePrefix}/{id}/{imageTypeStr}.webp";
         var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
         var uploadSuccessful = await storageService.UploadFileAsync(fileName, compressedImageStream, ContentTypes.ImageWebp, ct);
 
