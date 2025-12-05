@@ -24,7 +24,6 @@ public class InitiativeAddRequestExample : IExamplesProvider<InitiativeDto>
             new()
             {
                 LocationId = 1,
-                Locality = "Locality example",
             }
         ],
         Contacts = [
