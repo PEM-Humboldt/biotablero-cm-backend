@@ -9,9 +9,8 @@ public static class FileConstants
 
     /// <summary>
     /// Webp image max dimension.
-    /// Value from here: https://github.com/SixLabors/ImageSharp/blob/main/src/ImageSharp/Formats/Webp/WebpConstants.cs.
     /// </summary>
-    public const int WebpMaxDimension = 16383;
+    public const int WebpMaxDimension = 1600;
 
     #endregion
 
