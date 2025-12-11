@@ -239,6 +239,17 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
             };
         }
 
+        // Validate if the video exists
+        var videoExists = await videoHelperService.VideoExistsAsync(entityData.FileUrl, ct);
+
+        if (!videoExists)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "The video URL does not exist",
+            };
+        }
+
         // Update entity data
         entity.FileUrl = new Uri(entityData.FileUrl);
 
