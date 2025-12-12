@@ -20,6 +20,7 @@ public class InitiativeUserAddRequestExample : IExamplesProvider<InitiativeUserD
     {
         InitiativeId = 1,
         UserName = "Example",
+        FocusArea = "Focus area example",
         Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Leader),
     };
 }

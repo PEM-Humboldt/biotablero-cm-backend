@@ -138,4 +138,12 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of initiatives with coordinates.</returns>
     Task<IEnumerable<InitiativeGeoData>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get last created entities.
+    /// </summary>
+    /// <param name="count">Number of entities.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>List of last created initiatives.</returns>
+    Task<IEnumerable<Initiative>> GetLastEntitiesAsync(int count, CancellationToken ct = default);
 }

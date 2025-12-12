@@ -16,11 +16,7 @@ public class InitiativeMappings(
     IMapper<InitiativeUser, InitiativeUserDto> initiativeUserMappings,
     IMapper<Tag, TagDto> tagMappings) : IMapper<Initiative, InitiativeDto>
 {
-    /// <summary>
-    /// Map from entity to DTO.
-    /// </summary>
-    /// <param name="entity">Entity data.</param>
-    /// <returns>DTO data.</returns>
+    /// <inheritdoc/>
     public InitiativeDto Map(Initiative entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -29,7 +25,10 @@ public class InitiativeMappings(
         {
             Id = entity.Id,
             Name = entity.Name,
+            ShortName = entity.ShortName,
             Description = entity.Description,
+            InfluenceArea = entity.InfluenceArea,
+            Objective = entity.Objective,
             CreationDate = entity.CreationDate,
             ImageUrl = entity.ImageUrl,
             BannerUrl = entity.BannerUrl,
@@ -43,11 +42,7 @@ public class InitiativeMappings(
         };
     }
 
-    /// <summary>
-    /// Map from DTO to entity.
-    /// </summary>
-    /// <param name="dto">DTO data.</param>
-    /// <returns>Entity data.</returns>
+    /// <inheritdoc/>
     public Initiative Map(InitiativeDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -55,7 +50,10 @@ public class InitiativeMappings(
         return new()
         {
             Name = dto.Name,
+            ShortName = dto.ShortName,
             Description = dto.Description,
+            InfluenceArea = dto.InfluenceArea,
+            Objective = dto.Objective,
             CreationDate = dto.CreationDate ?? DateTime.Now,
             ImageUrl = dto.ImageUrl,
             BannerUrl = dto.BannerUrl,

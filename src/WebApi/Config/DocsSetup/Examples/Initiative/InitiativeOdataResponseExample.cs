@@ -17,7 +17,10 @@ public class InitiativeOdataResponseExample : BaseOdataResponseExample<Initiativ
     {
         Id = 0,
         Name = "Initiative example",
+        ShortName = "IE",
         Description = "example",
+        InfluenceArea = "Influence area example",
+        Objective = "Objective example",
         CreationDate = DateTime.Now,
         Enabled = true,
         Locations = null,

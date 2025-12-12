@@ -14,11 +14,7 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 /// </summary>
 public class InitiativeUserMappings : IMapper<InitiativeUser, InitiativeUserDto>
 {
-    /// <summary>
-    /// Map from entity to DTO.
-    /// </summary>
-    /// <param name="entity">Entity data.</param>
-    /// <returns>DTO data.</returns>
+    /// <inheritdoc/>
     public InitiativeUserDto Map(InitiativeUser entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -28,15 +24,13 @@ public class InitiativeUserMappings : IMapper<InitiativeUser, InitiativeUserDto>
             Id = entity.Id,
             InitiativeId = entity.InitiativeId,
             UserName = entity.UserName,
+            FocusArea = entity.FocusArea,
             Level = new EnumEntityDto<InitiativeUserLevelEnum>(entity.LevelId),
+            CreationDate = entity.CreationDate,
         };
     }
 
-    /// <summary>
-    /// Map from DTO to entity.
-    /// </summary>
-    /// <param name="dto">DTO data.</param>
-    /// <returns>Entity data.</returns>
+    /// <inheritdoc/>
     public InitiativeUser Map(InitiativeUserDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -45,7 +39,9 @@ public class InitiativeUserMappings : IMapper<InitiativeUser, InitiativeUserDto>
         {
             InitiativeId = dto?.InitiativeId ?? 0,
             UserName = dto.UserName,
+            FocusArea = dto.FocusArea,
             LevelId = dto.Level.Id,
+            CreationDate = dto.CreationDate ?? DateTime.Now,
         };
     }
 }
