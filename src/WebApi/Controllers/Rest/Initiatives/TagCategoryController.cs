@@ -6,10 +6,10 @@ using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
 
-using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 
 /// <summary>
-/// Initiative Tag Category controller.
+/// Tag Category controller.
 /// </summary>
 /// <param name="webTools">General web tools.</param>
 /// <param name="entityService">Entity service.</param>

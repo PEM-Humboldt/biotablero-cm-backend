@@ -8,13 +8,14 @@ using System.Reflection;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 using Microsoft.EntityFrameworkCore;
 
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
-using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.TagCategory;
+using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums.TagCategory;
 
 /// <summary>
 /// General database context.
@@ -143,6 +144,40 @@ public sealed class GeneralContext : DbContext
 
     #endregion
 
+    #region Resource entities
+
+    /// <summary>
+    /// Resource DbSet.
+    /// </summary>
+    public DbSet<Resource> Resources { get; set; }
+
+    /// <summary>
+    /// Resource Type DbSet.
+    /// </summary>
+    public DbSet<ResourceType> ResourceTypes { get; set; }
+
+    /// <summary>
+    /// Resource File DbSet.
+    /// </summary>
+    public DbSet<ResourceFile> ResourceFiles { get; set; }
+
+    /// <summary>
+    /// Resource Link DbSet.
+    /// </summary>
+    public DbSet<ResourceLink> ResourceLinks { get; set; }
+
+    /// <summary>
+    /// Resource Tag DbSet.
+    /// </summary>
+    public DbSet<ResourceTag> ResourceTags { get; set; }
+
+    /// <summary>
+    /// Resource Like DbSet.
+    /// </summary>
+    public DbSet<ResourceLike> ResourceLikes { get; set; }
+
+    #endregion
+
     /// <summary>
     /// Configure conventions for custom DbContext.
     /// </summary>
@@ -153,12 +188,29 @@ public sealed class GeneralContext : DbContext
         modelBuilder?.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         // Seeding data
+        modelBuilder.Entity<TagCategory>().HasData(GetDefaultTagCategories());
         modelBuilder.Entity<InitiativeUserLevel>().HasData(GetDefaultInitiativeUserLevels());
-        modelBuilder.Entity<TagCategory>().HasData(GetDefaultInitiativeTagCategories());
         modelBuilder.Entity<JoinRequestStatus>().HasData(GetDefaultJoinRequestStatuses());
     }
 
     #region Seeding functions
+
+    #region Tags data
+
+    /// <summary>
+    /// Get default tag categories.
+    /// </summary>
+    /// <returns>Default tag categories list.</returns>
+    private static IEnumerable<TagCategory> GetDefaultTagCategories()
+    {
+        var enumData = Enum.GetValues(typeof(TagCategoryEnum))
+            .Cast<TagCategoryEnum>()
+            .Select(t => new TagCategory() { Id = (int)t, Name = t.ToString() });
+
+        return enumData;
+    }
+
+    #endregion
 
     #region Initiatives data
 
@@ -171,19 +223,6 @@ public sealed class GeneralContext : DbContext
         var enumData = Enum.GetValues(typeof(InitiativeUserLevelEnum))
             .Cast<InitiativeUserLevelEnum>()
             .Select(t => new InitiativeUserLevel() { Id = (int)t, Name = t.ToString() });
-
-        return enumData;
-    }
-
-    /// <summary>
-    /// Get default initative tag categories.
-    /// </summary>
-    /// <returns>Default initative tag categories list.</returns>
-    private static IEnumerable<TagCategory> GetDefaultInitiativeTagCategories()
-    {
-        var enumData = Enum.GetValues(typeof(TagCategoryEnum))
-            .Cast<TagCategoryEnum>()
-            .Select(t => new TagCategory() { Id = (int)t, Name = t.ToString() });
 
         return enumData;
     }

@@ -5,7 +5,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
-using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 
 /// <summary>
 /// Tag validator.

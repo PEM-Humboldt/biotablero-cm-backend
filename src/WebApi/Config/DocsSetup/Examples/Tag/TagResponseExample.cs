@@ -5,7 +5,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
 using Swashbuckle.AspNetCore.Filters;
 
-using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 
 /// <summary>
 /// Tag response example.
