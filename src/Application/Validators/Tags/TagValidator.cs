@@ -1,8 +1,8 @@
-﻿namespace IAVH.BioTablero.CM.Application.Validators.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Application.Validators.Tags;
 
 using FluentValidation;
 
-using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;

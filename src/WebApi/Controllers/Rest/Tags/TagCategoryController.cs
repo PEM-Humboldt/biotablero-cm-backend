@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Initiatives;
+﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Tags;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;

@@ -5,6 +5,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam;
@@ -17,6 +18,7 @@ using IAVH.BioTablero.CM.Infrastructure.Integrations.Video;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Locations;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Logging;
+using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Tags;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.TerritoryStories;
 
 using Microsoft.Extensions.DependencyInjection;

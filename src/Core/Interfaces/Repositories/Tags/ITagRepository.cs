@@ -1,9 +1,9 @@
-﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
 /// <summary>
 /// Tag repository interface.

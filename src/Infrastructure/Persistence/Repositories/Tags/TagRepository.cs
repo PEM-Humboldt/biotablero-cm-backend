@@ -1,11 +1,11 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Tags;
 
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -23,24 +23,13 @@ public class TagRepository : Repository<Tag, int>, ITagRepository
     {
     }
 
-    /// <summary>
-    /// Get if elements exists by name.
-    /// </summary>
-    /// <param name="name">Entity name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> AnyByName(string name, CancellationToken ct = default) =>
         await dbContext.Tags
             .Where(e => e.Name == name)
             .AnyAsync(ct);
 
-    /// <summary>
-    /// Get if element is duplicated.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="name">Entity name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicated(int id, string name, CancellationToken ct = default) =>
         await dbContext.Tags
             .Where(e => e.Id != id && e.Name == name)

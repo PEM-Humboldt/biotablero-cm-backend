@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 
+using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>

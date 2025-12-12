@@ -1,8 +1,8 @@
-﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.Tags;
 
-using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
 /// <summary>
 /// Tag service interface.

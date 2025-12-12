@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Validators.Initiatives;
+using IAVH.BioTablero.CM.Application.Validators.Tags;
 using IAVH.BioTablero.CM.Application.Validators.TerritoryStory;
 
 using Microsoft.Extensions.DependencyInjection;

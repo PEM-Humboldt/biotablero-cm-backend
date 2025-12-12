@@ -1,6 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Tag;
 
-using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;

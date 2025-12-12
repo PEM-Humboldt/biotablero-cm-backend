@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Application.Services.Tag;
 
 using System;
 using System.Linq;
@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 using FluentValidation;
 
-using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Tags;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
-using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 
 using Serilog;
 
@@ -52,12 +53,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         this.initiativeRepository = initiativeRepository;
     }
 
-    /// <summary>
-    /// Add element.
-    /// </summary>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(TagDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -101,13 +97,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         };
     }
 
-    /// <summary>
-    /// Update element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, TagDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -163,12 +153,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         };
     }
 
-    /// <summary>
-    /// Delete element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
     {
         // Validate entity
