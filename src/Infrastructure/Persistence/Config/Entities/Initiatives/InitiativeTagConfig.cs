@@ -39,5 +39,9 @@ public class InitiativeTagConfig : IEntityTypeConfiguration<InitiativeTag>
         builder.HasOne(e => e.Initiative)
             .WithMany(p => p.InitiativeTags)
             .HasForeignKey(e => e.InitiativeId);
+
+        builder
+            .HasIndex(e => new { e.InitiativeId, e.TagId })
+            .IsUnique();
     }
 }
