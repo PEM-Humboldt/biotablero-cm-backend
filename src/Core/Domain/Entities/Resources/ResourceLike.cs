@@ -11,9 +11,9 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 public class ResourceLike : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Territory Story identifier.
+    /// Resource identifier.
     /// </summary>
-    public int TerritoryStoryId { get; set; }
+    public int ResourceId { get; set; }
 
     /// <summary>
     /// User Name identifier.
