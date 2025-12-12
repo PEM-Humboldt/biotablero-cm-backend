@@ -22,7 +22,12 @@ public class LocationListResponseExample : IExamplesProvider<List<LocationDto>>
             Id = 0,
             Name = "Example",
             Code = "000",
-            ParentId = -1,
+            Parent = new()
+            {
+                Id = 0,
+                Name = "Example",
+                Code = "000",
+            },
         }
     ];
 }

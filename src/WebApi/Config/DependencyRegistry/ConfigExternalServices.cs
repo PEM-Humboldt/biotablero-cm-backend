@@ -8,6 +8,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.ImageUtils;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Config.Entities;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Interfaces;
@@ -64,6 +65,7 @@ public static class ConfigExternalServices
         services.AddSingleton<IEmailService, EmailService>();
         services.AddScoped<IReportConfig<LogDto>, LogReportConfig>();
         services.AddScoped<IVideoHelperService, VideoHelperService>();
+        services.AddScoped<IImageUtilsService, ImageUtilsService>();
 
         return services;
     }

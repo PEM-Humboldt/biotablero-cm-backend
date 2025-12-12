@@ -5,12 +5,21 @@
 /// </summary>
 public static class FileConstants
 {
+    #region Images
+
+    /// <summary>
+    /// Webp image max dimension.
+    /// </summary>
+    public const int WebpMaxDimension = 1600;
+
+    #endregion
+
     #region Territory Story
 
     /// <summary>
     /// Territory Story image size limit.
     /// </summary>
-    public const int TerritoryStoryImageSizeLimit = 20971520; // 20 MB
+    public const int TerritoryStoryImageSizeLimit = 5242880; // 5 MB
 
     #endregion
 }

@@ -8,6 +8,8 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
+using Microsoft.AspNetCore.OData.Query;
+
 /// <summary>
 /// Territory Story service interface.
 /// </summary>
@@ -23,13 +25,14 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default);
 
     /// <summary>
-    /// Get entities by initiative.
+    /// Get entities by initiative (OData).
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="userName">User name.</param>
+    /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.

@@ -23,7 +23,7 @@ public class LocationDto : IDto
     public string Code { get; set; }
 
     /// <summary>
-    /// Parent location identifier.
+    /// Parent location relationship.
     /// </summary>
-    public int? ParentId { get; set; }
+    public LocationDto Parent { get; set; }
 }

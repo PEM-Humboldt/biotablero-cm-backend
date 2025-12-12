@@ -1,22 +1,14 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.TerritoryStory;
 
-using System.Collections.Generic;
-
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
-
-using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Territory Story list response example.
 /// </summary>
-public class TerritoryStoryListResponseExample : IExamplesProvider<List<TerritoryStoryDto>>
+public class TerritoryStoryOdataResponseExample : BaseOdataResponseExample<TerritoryStoryDto>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
-    public List<TerritoryStoryDto> GetExamples() =>
-    [
+    /// <inheritdoc/>
+    protected override TerritoryStoryDto CreateExampleDto() =>
         new()
         {
             Id = 0,
@@ -27,6 +19,5 @@ public class TerritoryStoryListResponseExample : IExamplesProvider<List<Territor
             Enabled = true,
             FeaturedContent = false,
             Likes = 0,
-        },
-    ];
+        };
 }

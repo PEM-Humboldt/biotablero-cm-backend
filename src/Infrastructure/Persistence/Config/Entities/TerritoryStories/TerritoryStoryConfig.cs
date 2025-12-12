@@ -65,6 +65,8 @@ public class TerritoryStoryConfig : IEntityTypeConfiguration<TerritoryStory>
 
         builder.Ignore(i => i.TotalLikes);
 
+        builder.Ignore(i => i.ILikedIt);
+
         builder.HasOne(e => e.Initiative)
             .WithMany(p => p.TerritoryStories)
             .HasForeignKey(e => e.InitiativeId);

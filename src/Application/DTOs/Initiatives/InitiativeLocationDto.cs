@@ -24,7 +24,7 @@ public class InitiativeLocationDto : IDto
     public int? LocationId { get; set; }
 
     /// <summary>
-    /// Locality.
+    /// Locality name.
     /// </summary>
     public string Locality { get; set; }
 
