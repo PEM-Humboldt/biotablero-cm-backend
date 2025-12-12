@@ -14,7 +14,8 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Application.Interfaces.Services;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Geo;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
@@ -320,7 +321,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// <param name="imageType">Initiative image type.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    public async Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct)
+    public async Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct = default)
     {
         if (formFile.IsEmpty())
         {

@@ -605,6 +605,178 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.ToTable("logs", "logs");
                 });
 
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories.TerritoryStory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AuthorUserName")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("character varying(75)")
+                        .HasColumnName("author_user_name");
+
+                    b.Property<DateTime>("CreationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("creation_date")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<bool>("Enabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("enabled");
+
+                    b.Property<bool>("FeaturedContent")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("featured_content");
+
+                    b.Property<int>("InitiativeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("initiative_id");
+
+                    b.Property<string>("Keywords")
+                        .HasMaxLength(75)
+                        .HasColumnType("character varying(75)")
+                        .HasColumnName("keywords");
+
+                    b.Property<bool>("Restricted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("restricted");
+
+                    b.Property<string>("Text")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InitiativeId");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
+
+                    b.ToTable("territory_story", "initiatives");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories.TerritoryStoryImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("description");
+
+                    b.Property<bool>("FeaturedContent")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("featured_content");
+
+                    b.Property<string>("FileUrl")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("file_url");
+
+                    b.Property<int>("TerritoryStoryId")
+                        .HasColumnType("integer")
+                        .HasColumnName("territory_story_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FileUrl")
+                        .IsUnique();
+
+                    b.HasIndex("TerritoryStoryId");
+
+                    b.ToTable("territory_story_image", "initiatives");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories.TerritoryStoryLike", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("creation_date")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("TerritoryStoryId")
+                        .HasColumnType("integer")
+                        .HasColumnName("territory_story_id");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("character varying(75)")
+                        .HasColumnName("user_name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TerritoryStoryId", "UserName")
+                        .IsUnique();
+
+                    b.ToTable("territory_story_like", "initiatives");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories.TerritoryStoryVideo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FileUrl")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("file_url");
+
+                    b.Property<int>("TerritoryStoryId")
+                        .HasColumnType("integer")
+                        .HasColumnName("territory_story_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FileUrl")
+                        .IsUnique();
+
+                    b.HasIndex("TerritoryStoryId");
+
+                    b.ToTable("territory_story_video", "initiatives");
+                });
+
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location", b =>
                 {
                     b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location", "Parent")
@@ -754,6 +926,50 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories.TerritoryStory", b =>
+                {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", "Initiative")
+                        .WithMany("TerritoryStories")
+                        .HasForeignKey("InitiativeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Initiative");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories.TerritoryStoryImage", b =>
+                {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories.TerritoryStory", "TerritoryStory")
+                        .WithMany("Images")
+                        .HasForeignKey("TerritoryStoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TerritoryStory");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories.TerritoryStoryLike", b =>
+                {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories.TerritoryStory", "TerritoryStory")
+                        .WithMany("Likes")
+                        .HasForeignKey("TerritoryStoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TerritoryStory");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories.TerritoryStoryVideo", b =>
+                {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories.TerritoryStory", "TerritoryStory")
+                        .WithMany("Videos")
+                        .HasForeignKey("TerritoryStoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TerritoryStory");
+                });
+
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location", b =>
                 {
                     b.Navigation("Children");
@@ -776,6 +992,8 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("JoinInvitations");
 
                     b.Navigation("JoinRequests");
+
+                    b.Navigation("TerritoryStories");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.InitiativeUserLevel", b =>
@@ -803,6 +1021,15 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.TagCategory", b =>
                 {
                     b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories.TerritoryStory", b =>
+                {
+                    b.Navigation("Images");
+
+                    b.Navigation("Likes");
+
+                    b.Navigation("Videos");
                 });
 #pragma warning restore 612, 618
         }

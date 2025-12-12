@@ -3,11 +3,16 @@
 using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
+using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Application.Mappings;
+using IAVH.BioTablero.CM.Application.Mappings.Geo;
+using IAVH.BioTablero.CM.Application.Mappings.Initiatives;
+using IAVH.BioTablero.CM.Application.Mappings.Logging;
+using IAVH.BioTablero.CM.Application.Mappings.TerritoryStory;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
+using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,6 +38,9 @@ public static class ConfigMappings
         services.AddSingleton<IMapper<JoinRequest, JoinRequestDto>, JoinRequestMappings>();
         services.AddSingleton<IMapper<JoinInvitation, JoinInvitationDto>, JoinInvitationMappings>();
         services.AddSingleton<IMapper<JoinInvitationGuest, JoinInvitationGuestDto>, JoinInvitationGuestMappings>();
+        services.AddSingleton<IMapper<TerritoryStory, TerritoryStoryDto>, TerritoryStoryMappings>();
+        services.AddSingleton<IMapper<TerritoryStoryImage, TerritoryStoryImageDto>, TerritoryStoryImageMappings>();
+        services.AddSingleton<IMapper<TerritoryStoryVideo, TerritoryStoryVideoDto>, TerritoryStoryVideoMappings>();
 
         return services;
     }

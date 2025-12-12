@@ -25,4 +25,26 @@ public static class RegExprConstants
     /// </example>
     /// </summary>
     public const string Url = @"^(https?:\/\/)([\da-z\.-]+\.[a-z\.]{2,6}|[\d\.]+)([\/:?=&#]{1}[\da-z\.-]+)*[\/\?]?$";
+
+    /// <summary>
+    /// Regular expression for keyword list.
+    /// <example>
+    /// Valid keyword list:
+    /// - Naturaleza,Colibrí
+    /// - Champiñón,Guanábana,Ñame,Guayaba,Plátano
+    /// - COP16,G20
+    /// - Yuca
+    /// </example>
+    /// </summary>
+    public const string Keywords = @"^([A-Z\u00d1ÁÉÍÓÚ]+[a-z0-9\u00f1áéíóú]*(,){1}){0,4}([A-Z\u00d1ÁÉÍÓÚ]+[a-z0-9\u00f1áéíóú]*){1}$";
+
+    /// <summary>
+    /// Regular expression for YouTube video Url.
+    /// <example>
+    /// Valid video urls:
+    /// - https://www.youtube.com/watch?v=I2Rz6cHdoHY
+    /// - https://www.youtube.com/watch?v=B8lUy-dJ0zY
+    /// </example>
+    /// </summary>
+    public const string YouTubeVideoUrl = @"^(https:\/\/www\.youtube\.com\/watch\?v=([a-z]|[A-Z]|[0-9]|-){8,11})(&.*)*$";
 }

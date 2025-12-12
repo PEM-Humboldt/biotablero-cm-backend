@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.Interfaces.Services;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -8,6 +8,7 @@ using System.Reflection;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
+using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -115,6 +116,30 @@ public sealed class GeneralContext : DbContext
     /// Join invitation guests DbSet.
     /// </summary>
     public DbSet<JoinInvitationGuest> JoinInvitationGuests { get; set; }
+
+    #endregion
+
+    #region Territory Story entities
+
+    /// <summary>
+    /// Territory stories DbSet.
+    /// </summary>
+    public DbSet<TerritoryStory> TerritoryStories { get; set; }
+
+    /// <summary>
+    /// Territory story likes DbSet.
+    /// </summary>
+    public DbSet<TerritoryStoryLike> TerritoryStoryLikes { get; set; }
+
+    /// <summary>
+    /// Territory story images DbSet.
+    /// </summary>
+    public DbSet<TerritoryStoryImage> TerritoryStoryImages { get; set; }
+
+    /// <summary>
+    /// Territory story videos DbSet.
+    /// </summary>
+    public DbSet<TerritoryStoryVideo> TerritoryStoryVideos { get; set; }
 
     #endregion
 

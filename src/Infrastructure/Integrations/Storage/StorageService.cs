@@ -40,19 +40,10 @@ public class StorageService : IStorageService
         client = InitClient();
     }
 
-    /// <summary>
-    /// Get storage base URL.
-    /// </summary>
-    /// <returns>Storage base URL.</returns>
+    /// <inheritdoc/>
     public Uri BaseUrl => new($"{endpointUrl}/{bucketName}/{ProjectPreffix}");
 
-    /// <summary>
-    /// Upload file.
-    /// </summary>
-    /// <param name="fileName">File name.</param>
-    /// <param name="file">Upload file data.</param>
-    /// <param name="ct">Cancellation token (optional).</param>
-    /// <returns>True if the process is successful. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> UploadFileAsync(string fileName, IInputFile file, CancellationToken ct = default)
     {
         try
@@ -88,12 +79,7 @@ public class StorageService : IStorageService
         return false;
     }
 
-    /// <summary>
-    /// Download file.
-    /// </summary>
-    /// <param name="fileName">File name.</param>
-    /// <param name="ct">Cancellation token (optional).</param>
-    /// <returns>Downloaded file data. Null otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<FileData> DownloadFileAsync(string fileName, CancellationToken ct = default)
     {
         MemoryStream ms = null;
@@ -130,18 +116,48 @@ public class StorageService : IStorageService
         }
         catch (AmazonS3Exception ex)
         {
-            logger.Error(ex, "AWS S3 error while uploading file {FileName}", fileName);
+            logger.Error(ex, "AWS S3 error while downloading file {FileName}", fileName);
         }
         catch (IOException ex)
         {
-            logger.Error(ex, "I/O error while uploading file {FileName}", fileName);
+            logger.Error(ex, "I/O error while downloading file {FileName}", fileName);
         }
         catch (OperationCanceledException ex)
         {
-            logger.Warning(ex, "Upload of file {FileName} was canceled", fileName);
+            logger.Warning(ex, "Download of file {FileName} was canceled", fileName);
         }
 
         return null;
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> DeleteFileAsync(string fileName, CancellationToken ct = default)
+    {
+        var deleteObjectRequest = new DeleteObjectRequest
+        {
+            BucketName = bucketName,
+            Key = fileName.Replace($"{endpointUrl}/{bucketName}", string.Empty),
+        };
+
+        try
+        {
+            await client.DeleteObjectAsync(deleteObjectRequest, ct);
+            return true;
+        }
+        catch (AmazonS3Exception ex)
+        {
+            logger.Error(ex, "AWS S3 error while deleting file {FileName}", fileName);
+        }
+        catch (IOException ex)
+        {
+            logger.Error(ex, "I/O error while deleting file {FileName}", fileName);
+        }
+        catch (OperationCanceledException ex)
+        {
+            logger.Warning(ex, "The deletion of file {FileName} was canceled", fileName);
+        }
+
+        return false;
     }
 
     /// <summary>

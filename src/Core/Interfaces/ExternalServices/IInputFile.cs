@@ -10,7 +10,12 @@ public interface IInputFile
     /// <summary>
     /// File name.
     /// </summary>
-    string Name { get; }
+    string FileName { get; }
+
+    /// <summary>
+    /// File extension.
+    /// </summary>
+    string Extension { get; }
 
     /// <summary>
     /// File Content Type.

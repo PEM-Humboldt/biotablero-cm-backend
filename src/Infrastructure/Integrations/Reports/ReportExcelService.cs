@@ -16,7 +16,7 @@ using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Config.General;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Interfaces;
 
 /// <summary>
-/// Logs report service interface (Excel).
+/// Logs report service (Excel).
 /// </summary>
 /// <typeparam name="TDto">DTO class type.</typeparam>
 /// <param name="serviceProvider">Service provider.</param>

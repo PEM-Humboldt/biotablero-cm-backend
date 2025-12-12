@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Cronos;
 
-using IAVH.BioTablero.CM.Application.Interfaces.Services;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Utils;
 
 using Microsoft.Extensions.DependencyInjection;

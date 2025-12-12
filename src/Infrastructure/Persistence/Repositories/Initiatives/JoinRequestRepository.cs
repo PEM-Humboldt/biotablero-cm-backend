@@ -116,7 +116,7 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
         catch (DbUpdateException ex)
         {
             await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Join request review transaction error {FileName}");
+            logger.Error(ex, "Join request review transaction error");
             return null;
         }
     }

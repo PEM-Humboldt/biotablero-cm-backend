@@ -50,6 +50,18 @@ public class InitiativeUserRepository : Repository<InitiativeUser, int>, IInitia
             .AnyAsync(ct);
 
     /// <summary>
+    /// Get by initiative and username.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities by selected parameters.</returns>
+    public async Task<InitiativeUser> GetByInitiativeAndUserNameAsync(int initiativeId, string userName, CancellationToken ct = default) =>
+        await dbContext.InitiativeUsers
+            .Where(e => e.InitiativeId == initiativeId && e.UserName == userName)
+            .FirstOrDefaultAsync(ct);
+
+    /// <summary>
     /// Get elements by initiative.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>

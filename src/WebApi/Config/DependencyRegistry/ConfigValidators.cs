@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Validators.Initiatives;
+using IAVH.BioTablero.CM.Application.Validators.TerritoryStory;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,6 +24,10 @@ public static class ConfigValidators
         services.AddValidatorsFromAssemblyContaining<InitiativeUserValidator>();
         services.AddValidatorsFromAssemblyContaining<InitiativeLocationValidator>();
         services.AddValidatorsFromAssemblyContaining<TagValidator>();
+        services.AddValidatorsFromAssemblyContaining<JoinInvitationValidator>();
+        services.AddValidatorsFromAssemblyContaining<TerritoryStoryValidator>();
+        services.AddValidatorsFromAssemblyContaining<TerritoryStoryImageValidator>();
+        services.AddValidatorsFromAssemblyContaining<TerritoryStoryVideoValidator>();
 
         return services;
     }
