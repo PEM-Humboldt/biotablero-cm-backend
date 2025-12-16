@@ -30,14 +30,17 @@ public class TagValidator : AbstractValidator<TagDto>
             .Matches(RegExprConstants.Url)
             .MaximumLength(150);
 
-        RuleFor(dto => dto.Category)
-            .NotNull()
-                .WithMessage("Tag category cannot be null")
-            .ChildRules(level =>
-            {
-                level.RuleFor(tagEnumDto => tagEnumDto.Name)
-                    .IsEnumName(typeof(TagCategory), caseSensitive: false)
-                        .WithMessage("Tag category invalid");
-            });
+        RuleSet("Create", () =>
+        {
+            RuleFor(dto => dto.Category)
+                .NotNull()
+                    .WithMessage("Tag category cannot be null")
+                .ChildRules(level =>
+                {
+                    level.RuleFor(tagEnumDto => tagEnumDto.Name)
+                        .IsEnumName(typeof(TagCategory), caseSensitive: false)
+                            .WithMessage("Tag category invalid");
+                });
+        });
     }
 }

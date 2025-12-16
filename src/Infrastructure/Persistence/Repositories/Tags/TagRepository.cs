@@ -24,14 +24,14 @@ public class TagRepository : Repository<Tag, int>, ITagRepository
     }
 
     /// <inheritdoc/>
-    public async Task<bool> AnyByName(string name, CancellationToken ct = default) =>
+    public async Task<bool> AnyByNameAndCategory(string name, int categoryId, CancellationToken ct = default) =>
         await dbContext.Tags
-            .Where(e => e.Name == name)
+            .Where(e => e.Name == name && e.CategoryId == categoryId)
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<bool> IsDuplicated(int id, string name, CancellationToken ct = default) =>
+    public async Task<bool> IsDuplicated(int id, string name, int categoryId, CancellationToken ct = default) =>
         await dbContext.Tags
-            .Where(e => e.Id != id && e.Name == name)
+            .Where(e => e.Id != id && e.Name == name && e.CategoryId == categoryId)
             .AnyAsync(ct);
 }

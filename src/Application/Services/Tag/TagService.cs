@@ -71,7 +71,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.AnyByName(entityData.Name, ct);
+        var hasDuplicatedEntities = await entityRepository.AnyByNameAndCategory(entityData.Name, entityData.Category.Id, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -126,7 +126,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicated(id, entityData.Name, ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicated(id, entityData.Name, entity.CategoryId, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -138,8 +138,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         // Update entity data
         entity.Name = entityData.Name;
-        entity.Url = new Uri(entityData.Url);
-        entity.CategoryId = entityData.Category.Id;
+        entity.Url = entityData.Url != null ? new Uri(entityData.Url) : null;
 
         await entityRepository.UpdateAsync(entity, ct);
 

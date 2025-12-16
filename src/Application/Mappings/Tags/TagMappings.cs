@@ -23,7 +23,7 @@ public class TagMappings : IMapper<Tag, TagDto>
         {
             Id = entity.Id,
             Name = entity.Name,
-            Url = entity.Url.ToString(),
+            Url = entity.Url?.ToString(),
             Category = new EnumEntityDto<TagCategoryEnum>(entity.CategoryId),
         };
     }

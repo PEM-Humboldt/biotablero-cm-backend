@@ -87,7 +87,7 @@ public class TagController(
     [HttpPost("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [SwaggerRequestExample(typeof(TagDto), typeof(TagResponseExample))]
+    [SwaggerRequestExample(typeof(TagDto), typeof(TagEditRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TagResponseExample))]
     public async Task<IActionResult> Post(int id, [FromBody] TagDto requestData, CancellationToken ct)
     {
