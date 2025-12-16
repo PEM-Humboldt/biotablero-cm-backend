@@ -39,7 +39,7 @@ public class TagConfig : IEntityTypeConfiguration<Tag>
             .HasForeignKey(e => e.CategoryId);
 
         builder
-            .HasIndex(e => e.Name)
+            .HasIndex(e => new { e.Name, e.CategoryId })
             .IsUnique();
     }
 }
