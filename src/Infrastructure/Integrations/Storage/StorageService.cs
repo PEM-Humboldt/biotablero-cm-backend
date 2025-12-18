@@ -13,7 +13,6 @@ using Amazon.S3.Transfer;
 
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Storage;
-using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
 using Serilog;
 
@@ -29,7 +28,7 @@ public class StorageService : IStorageService
     private readonly string endpointUrl;
 
     /// <summary>
-    /// Service constructor.
+    /// Constructor.
     /// </summary>
     /// <param name="logger">Logger.</param>
     public StorageService(ILogger logger)
@@ -44,22 +43,22 @@ public class StorageService : IStorageService
     public Uri BaseUrl => new($"{endpointUrl}/{bucketName}/{ProjectPreffix}");
 
     /// <inheritdoc/>
-    public async Task<bool> UploadFileAsync(string fileName, IInputFile file, CancellationToken ct = default)
+    public async Task<bool> UploadFileAsync(string fileName, Stream fileStream, string contentType, CancellationToken ct = default)
     {
         try
         {
-            using var newMemoryStream = file.OpenStream();
             var uploadRequest = new TransferUtilityUploadRequest
             {
-                InputStream = newMemoryStream,
+                InputStream = fileStream,
                 Key = $"{ProjectPreffix}/{fileName}",
                 BucketName = bucketName,
-                ContentType = file.ContentType,
+                ContentType = contentType,
                 DisableDefaultChecksumValidation = true,
             };
 
             using var fileTransferUtility = new TransferUtility(client);
             await fileTransferUtility.UploadAsync(uploadRequest, ct);
+            fileStream.Dispose();
 
             return true;
         }

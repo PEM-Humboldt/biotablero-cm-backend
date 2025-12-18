@@ -19,5 +19,17 @@ public class InitiativeLocationResponseExample : IExamplesProvider<InitiativeLoc
         InitiativeId = 0,
         LocationId = 0,
         Locality = "Locality example",
+        Location = new()
+        {
+            Id = 0,
+            Name = "Example",
+            Code = "000",
+            Parent = new()
+            {
+                Id = 0,
+                Name = "Example",
+                Code = "000",
+            },
+        },
     };
 }

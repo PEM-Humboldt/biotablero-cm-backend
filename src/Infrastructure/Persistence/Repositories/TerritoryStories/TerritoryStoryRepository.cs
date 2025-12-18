@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.TerritoryStories;
 
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,6 +38,23 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
         await IncludeCustomEntities()
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<IQueryable<TerritoryStory>> GetQueryWithInitiativeAndUserNameAsync(int initiativeId, string userName, IQueryable<TerritoryStory> query, CancellationToken ct = default)
+    {
+        var userBelongsToInitiative = await dbContext.InitiativeUsers
+            .Where(e => e.UserName == userName && e.InitiativeId == initiativeId)
+            .AnyAsync(ct);
+
+        if (userBelongsToInitiative)
+        {
+            return IncludeCustomEntities(query)
+                .Where(e => e.InitiativeId == initiativeId);
+        }
+
+        return IncludeCustomEntities(query)
+            .Where(e => e.InitiativeId == initiativeId && !e.Restricted && e.Enabled);
+    }
 
     /// <inheritdoc/>
     public async Task<bool> AuthorizedEntityReadAsync(int id, string userName, CancellationToken ct = default)
@@ -84,25 +100,6 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
 
             return initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader || userName == territoryStory.AuthorUserName;
         }
-    }
-
-    /// <inheritdoc/>
-    public async Task<IEnumerable<TerritoryStory>> GetByInitiativeAndUserNameAsync(int initiativeId, string userName, CancellationToken ct = default)
-    {
-        var userBelongsToInitiative = await dbContext.InitiativeUsers
-            .Where(e => e.UserName == userName && e.InitiativeId == initiativeId)
-            .AnyAsync(ct);
-
-        if (userBelongsToInitiative)
-        {
-            return await IncludeCustomEntities()
-                .Where(e => e.InitiativeId == initiativeId)
-                .ToListAsync(ct);
-        }
-
-        return await IncludeCustomEntities()
-            .Where(e => e.InitiativeId == initiativeId && !e.Restricted && e.Enabled)
-            .ToListAsync(ct);
     }
 
     /// <inheritdoc/>
@@ -164,9 +161,13 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     /// Include custom entities.
     /// </summary>
     /// <returns>Modified Linq query.</returns>
-    private IQueryable<TerritoryStory> IncludeCustomEntities() =>
-        dbContext.TerritoryStories
+    private IQueryable<TerritoryStory> IncludeCustomEntities(IQueryable<TerritoryStory> query = null)
+    {
+        query ??= dbContext.TerritoryStories;
+
+        return query
             .Include(e => e.Images)
             .Include(e => e.Videos)
             .Include(e => e.Likes);
+    }
 }

@@ -1,11 +1,11 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
-using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
 /// <summary>
 /// Territory Story Image repository interface.
@@ -50,17 +50,19 @@ public interface ITerritoryStoryImageRepository : IRepository<TerritoryStoryImag
     /// Adds an entity in the database and upload the image in the storage service.
     /// </summary>
     /// <param name="entity">The entity to add.</param>
-    /// <param name="formFile">Image data.</param>
+    /// <param name="imageStream">Image stream.</param>
+    /// <param name="contentType">File content type.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<TerritoryStoryImage> AddAsync(TerritoryStoryImage entity, IInputFile formFile, CancellationToken ct = default);
+    Task<TerritoryStoryImage> AddAsync(TerritoryStoryImage entity, Stream imageStream, string contentType, CancellationToken ct = default);
 
     /// <summary>
     /// Update an entity in the database and upload the image in the storage service.
     /// </summary>
     /// <param name="entity">The entity to add.</param>
-    /// <param name="formFile">Image data.</param>
+    /// <param name="imageStream">Image stream.</param>
+    /// <param name="contentType">File content type.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<TerritoryStoryImage> UpdateAsync(TerritoryStoryImage entity, IInputFile formFile, CancellationToken ct = default);
+    Task<TerritoryStoryImage> UpdateAsync(TerritoryStoryImage entity, Stream imageStream, string contentType, CancellationToken ct = default);
 }

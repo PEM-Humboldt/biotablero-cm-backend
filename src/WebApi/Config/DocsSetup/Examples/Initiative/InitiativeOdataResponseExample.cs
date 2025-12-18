@@ -22,8 +22,29 @@ public class InitiativeOdataResponseExample : BaseOdataResponseExample<Initiativ
         InfluenceArea = "Influence area example",
         Objective = "Objective example",
         CreationDate = DateTime.Now,
+        Coordinate = [-75.3, 5.3],
+        PolygonArea = 62.7,
         Enabled = true,
-        Locations = null,
+        Locations = [
+            new()
+            {
+                Id = 0,
+                LocationId = 0,
+                Locality = "Locality example",
+                Location = new()
+                {
+                    Id = 0,
+                    Name = "Example",
+                    Code = "000",
+                    Parent = new()
+                    {
+                        Id = 0,
+                        Name = "Example",
+                        Code = "000",
+                    },
+                },
+            },
+        ],
         Contacts = null,
         Users = null,
     };

@@ -31,7 +31,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     private readonly IValidator<TerritoryStoryImageDto> entityValidator;
     private readonly ILogger logger;
     private readonly ITerritoryStoryRepository territoryStoryRepository;
-    private readonly IStorageService storageService;
+    private readonly IImageUtilsService imageUtilsService;
 
     /// <summary>
     /// Constructor.
@@ -41,21 +41,21 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="territoryStoryRepository">Territory Story repository.</param>
-    /// <param name="storageService">Storage service.</param>
+    /// <param name="imageUtilsService">Image Utils service.</param>
     public TerritoryStoryImageService(
         ITerritoryStoryImageRepository entityRepository,
         IMapper<TerritoryStoryImage, TerritoryStoryImageDto> mapper,
         IValidator<TerritoryStoryImageDto> entityValidator,
         ILogger logger,
         ITerritoryStoryRepository territoryStoryRepository,
-        IStorageService storageService)
+        IImageUtilsService imageUtilsService)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.territoryStoryRepository = territoryStoryRepository;
-        this.storageService = storageService;
+        this.imageUtilsService = imageUtilsService;
     }
 
     /// <inheritdoc/>
@@ -166,12 +166,24 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             };
         }
 
+        // Compress and convert image
+        using var originalImageStream = formFile.OpenStream();
+        var compressedImageStream = await imageUtilsService.CompressToWebpAsync(originalImageStream, 75, ct);
+
+        if (compressedImageStream == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Image processing error",
+            };
+        }
+
         // Build entity data
         var entity = mapper.Map(entityData);
         entity.FeaturedContent = false;
 
         // Save data
-        entity = await entityRepository.AddAsync(entity, formFile, ct);
+        entity = await entityRepository.AddAsync(entity, compressedImageStream, ContentTypes.ImageWebp, ct);
 
         entityData = mapper.Map(entity);
 
@@ -261,7 +273,19 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         }
         else
         {
-            await entityRepository.UpdateAsync(entity, formFile, ct);
+            // Compress and convert image
+            using var originalImageStream = formFile.OpenStream();
+            var compressedImageStream = await imageUtilsService.CompressToWebpAsync(originalImageStream, 75, ct);
+
+            if (compressedImageStream == null)
+            {
+                return new CustomWebResponse(true)
+                {
+                    Message = "Image processing error",
+                };
+            }
+
+            await entityRepository.UpdateAsync(entity, compressedImageStream, ContentTypes.ImageWebp, ct);
         }
 
         entityData = mapper.Map(entity);

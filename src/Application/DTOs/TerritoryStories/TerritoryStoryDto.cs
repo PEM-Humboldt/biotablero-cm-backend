@@ -66,6 +66,11 @@ public class TerritoryStoryDto : IDto
     public int? Likes { get; set; }
 
     /// <summary>
+    /// Like action flag for authenticated users.
+    /// </summary>
+    public bool? ILikedIt { get; set; }
+
+    /// <summary>
     /// Territory Story Image relationship.
     /// </summary>
     public IEnumerable<TerritoryStoryImageDto> Images { get; set; }

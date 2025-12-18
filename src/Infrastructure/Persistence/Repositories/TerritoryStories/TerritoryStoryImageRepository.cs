@@ -2,13 +2,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
-using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 
@@ -136,7 +136,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
     }
 
     /// <inheritdoc/>
-    public async Task<TerritoryStoryImage> AddAsync(TerritoryStoryImage entity, IInputFile formFile, CancellationToken ct = default)
+    public async Task<TerritoryStoryImage> AddAsync(TerritoryStoryImage entity, Stream imageStream, string contentType, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
@@ -147,9 +147,9 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             await dbContext.SaveChangesAsync(ct);
 
             // Upload/Overwrite image
-            var fileName = $"{StoragePrefix}/{entity.Id}{formFile.Extension}";
+            var fileName = $"{StoragePrefix}/{entity.Id}.webp";
             var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-            var uploadSuccessful = await storageService.UploadFileAsync(fileName, formFile, ct);
+            var uploadSuccessful = await storageService.UploadFileAsync(fileName, imageStream, contentType, ct);
 
             if (!uploadSuccessful)
             {
@@ -169,10 +169,16 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             logger.Error(ex, "Territory Story Image transaction error");
             return null;
         }
+        catch (StorageException ex)
+        {
+            await transaction.RollbackAsync(ct);
+            logger.Error(ex, "Territory Story Image transaction error");
+            return null;
+        }
     }
 
     /// <inheritdoc/>
-    public async Task<TerritoryStoryImage> UpdateAsync(TerritoryStoryImage entity, IInputFile formFile, CancellationToken ct = default)
+    public async Task<TerritoryStoryImage> UpdateAsync(TerritoryStoryImage entity, Stream imageStream, string contentType, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
@@ -181,9 +187,9 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             var oldFileUri = entity.FileUrl;
 
             // Upload/Overwrite image
-            var fileName = $"{StoragePrefix}/{entity.Id}{formFile.Extension}";
+            var fileName = $"{StoragePrefix}/{entity.Id}.webp";
             var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-            var uploadSuccessful = await storageService.UploadFileAsync(fileName, formFile, ct);
+            var uploadSuccessful = await storageService.UploadFileAsync(fileName, imageStream, contentType, ct);
 
             if (!uploadSuccessful)
             {
@@ -203,6 +209,12 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             return entity;
         }
         catch (DbUpdateException ex)
+        {
+            await transaction.RollbackAsync(ct);
+            logger.Error(ex, "Territory Story Image transaction error");
+            return null;
+        }
+        catch (StorageException ex)
         {
             await transaction.RollbackAsync(ct);
             logger.Error(ex, "Territory Story Image transaction error");

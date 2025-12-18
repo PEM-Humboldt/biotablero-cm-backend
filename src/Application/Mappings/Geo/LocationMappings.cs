@@ -25,7 +25,7 @@ public class LocationMappings : IMapper<Location, LocationDto>
             Id = entity.Id,
             Name = entity.Name,
             Code = entity.Code,
-            ParentId = entity.ParentId,
+            Parent = entity.Parent != null ? Map(entity.Parent) : null,
         };
     }
 
@@ -42,7 +42,7 @@ public class LocationMappings : IMapper<Location, LocationDto>
         {
             Name = dto.Name,
             Code = dto.Code,
-            ParentId = dto.ParentId,
+            Parent = dto.Parent != null ? Map(dto.Parent) : null,
         };
     }
 }

@@ -5,12 +5,14 @@ using System;
 using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
 /// Initiative contact mappings.
 /// </summary>
-public class InitiativeLocationMappings : IMapper<InitiativeLocation, InitiativeLocationDto>
+public class InitiativeLocationMappings(
+    IMapper<Location, LocationDto> locationMappings) : IMapper<InitiativeLocation, InitiativeLocationDto>
 {
     /// <summary>
     /// Map from entity to DTO.
@@ -26,12 +28,7 @@ public class InitiativeLocationMappings : IMapper<InitiativeLocation, Initiative
             Id = entity.Id,
             LocationId = entity.LocationId,
             Locality = entity.Locality,
-            Location = new LocationDto()
-            {
-                Id = entity.Location?.Id,
-                Code = entity.Location?.Code,
-                Name = entity.Location?.Name,
-            },
+            Location = entity.Location != null ? locationMappings.Map(entity.Location) : null,
         };
     }
 
@@ -50,6 +47,7 @@ public class InitiativeLocationMappings : IMapper<InitiativeLocation, Initiative
             InitiativeId = dto.InitiativeId ?? 0,
             LocationId = dto.LocationId ?? 0,
             Locality = dto.Locality,
+            Location = dto.Location != null ? locationMappings.Map(dto.Location) : null,
         };
     }
 }

@@ -19,6 +19,9 @@ using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.OData;
+
 using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
@@ -92,21 +95,58 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             }
         }
 
-        return await GetItemAsync(id, ct);
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity != null)
+        {
+            if (!string.IsNullOrWhiteSpace(userName))
+            {
+                entity.ILikedIt = entity.Likes?.Any(e => e.UserName == userName);
+            }
+
+            var dataDto = mapper.Map(entity);
+            return new()
+            {
+                ResponseBody = dataDto,
+            };
+        }
+        else
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                Message = MessageConstants.NotFound,
+            };
+        }
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct = default)
     {
-        var dataListEntity = await entityRepository.GetByInitiativeAndUserNameAsync(initiativeId, userName, ct);
+        var query = entityRepository.GetQueryable();
+        query = await entityRepository.GetQueryWithInitiativeAndUserNameAsync(initiativeId, userName, query, ct);
 
-        var dataListDto = dataListEntity
-            .Select(mapper.Map);
-
-        return new()
+        try
         {
-            ResponseBody = dataListDto,
-        };
+            var odataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
+
+            foreach (var entity in odataResponse.DataList)
+            {
+                if (!string.IsNullOrWhiteSpace(userName))
+                {
+                    entity.ILikedIt = entity?.Likes?.Any(e => e.UserName == userName);
+                }
+            }
+
+            return GetOdataWebResponse(odataResponse, mapper);
+        }
+        catch (ODataException ex)
+        {
+            return new(true)
+            {
+                Message = $"Invalid filter: {ex.Message}",
+            };
+        }
     }
 
     /// <inheritdoc/>

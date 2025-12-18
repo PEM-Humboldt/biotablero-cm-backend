@@ -110,13 +110,21 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         // Validate location
         var locationId = entityData.LocationId ?? 0;
-        var locationExists = await locationRepository.AnyAsync(locationId, ct);
+        var location = await locationRepository.GetByIdAsync(locationId, ct);
 
-        if (!locationExists)
+        if (location == null)
         {
             return new CustomWebResponse(true)
             {
                 Message = "Location not found",
+            };
+        }
+
+        if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.ParentId == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Locality is only available for municipalities",
             };
         }
 
@@ -184,13 +192,21 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         // Validate location
         var locationId = entityData.LocationId ?? 0;
-        var locationExists = await locationRepository.AnyAsync(locationId, ct);
+        var location = await locationRepository.GetByIdAsync(locationId, ct);
 
-        if (!locationExists)
+        if (location == null)
         {
             return new CustomWebResponse(true)
             {
                 Message = "Location not found",
+            };
+        }
+
+        if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.ParentId == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Locality is only available for municipalities",
             };
         }
 

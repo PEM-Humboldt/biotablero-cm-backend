@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
+using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.TerritoryStory;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -13,6 +14,7 @@ using IAVH.BioTablero.CM.WebApi.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 using Swashbuckle.AspNetCore.Filters;
@@ -45,16 +47,17 @@ public class TerritoryStoryController(
     }
 
     /// <summary>
-    /// Get entities by Initiative.
+    /// Get entities by Initiative (paginated).
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByInitiative/{initiativeId}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryListResponseExample))]
-    public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryOdataResponseExample))]
+    public async Task<IActionResult> GetOdataListByInitiative(int initiativeId, ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct)
     {
-        var response = await entityService.GetByInitiativeAsync(initiativeId, HttpContext.GetUserName(), ct);
+        var response = await entityService.GetByInitiativeAsync(initiativeId, HttpContext.GetUserName(), queryOptions, ct);
         return webTools.CustomResponse(response);
     }
 

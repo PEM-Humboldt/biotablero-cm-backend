@@ -20,7 +20,7 @@ public class InitiativeLocation : BaseEntity<int>, IAggregateRoot
     public int LocationId { get; set; }
 
     /// <summary>
-    /// Locality.
+    /// Locality name.
     /// </summary>
     public string Locality { get; set; }
 
