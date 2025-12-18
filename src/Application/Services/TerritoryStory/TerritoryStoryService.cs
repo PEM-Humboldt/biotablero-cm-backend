@@ -101,7 +101,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             if (!string.IsNullOrWhiteSpace(userName))
             {
-                entity.ILikedIt = entity?.Likes?.Any(e => e.UserName == userName);
+                entity.ILikedIt = entity.Likes?.Any(e => e.UserName == userName);
             }
 
             var dataDto = mapper.Map(entity);
