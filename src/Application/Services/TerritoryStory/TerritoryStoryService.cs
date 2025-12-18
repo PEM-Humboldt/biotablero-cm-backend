@@ -317,7 +317,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, "Updated territory story video", "{@EntityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated territory story", "{@EntityData}", entityData);
 
         return new CustomWebResponse()
         {

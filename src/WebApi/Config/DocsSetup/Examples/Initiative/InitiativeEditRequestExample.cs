@@ -16,7 +16,10 @@ public class InitiativeEditRequestExample : IExamplesProvider<InitiativeDto>
     public InitiativeDto GetExamples() => new()
     {
         Name = "Initiative example (edited)",
-        Description = "example (edited)",
+        ShortName = "IE",
+        Description = "example",
+        InfluenceArea = "Influence area example",
+        Objective = "Objective example",
         Locations = null,
         Contacts = null,
         Users = null,

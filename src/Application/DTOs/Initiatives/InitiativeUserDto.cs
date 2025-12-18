@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
+using System;
+
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
@@ -29,4 +31,14 @@ public class InitiativeUserDto : IDto
     /// Level relationship.
     /// </summary>
     public EnumEntityDto<InitiativeUserLevel> Level { get; set; }
+
+    /// <summary>
+    /// User focus area.
+    /// </summary>
+    public string FocusArea { get; set; }
+
+    /// <summary>
+    /// Entity creation date.
+    /// </summary>
+    public DateTime? CreationDate { get; set; }
 }

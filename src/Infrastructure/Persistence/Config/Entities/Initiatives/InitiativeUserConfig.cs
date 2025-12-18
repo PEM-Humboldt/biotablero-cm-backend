@@ -10,10 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// </summary>
 public class InitiativeUserConfig : IEntityTypeConfiguration<InitiativeUser>
 {
-    /// <summary>
-    /// Configure entity.
-    /// </summary>
-    /// <param name="builder">Entity builder.</param>
+    /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<InitiativeUser> builder)
     {
         builder.ToTable("initiative_user", "initiatives");
@@ -31,6 +28,15 @@ public class InitiativeUserConfig : IEntityTypeConfiguration<InitiativeUser>
         builder.Property(i => i.UserName)
             .HasColumnName("user_name")
             .HasMaxLength(75)
+            .IsRequired();
+
+        builder.Property(i => i.FocusArea)
+            .HasColumnName("focus_area")
+            .HasMaxLength(200);
+
+        builder.Property(e => e.CreationDate)
+            .HasColumnName("creation_date")
+            .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .IsRequired();
 
         builder.Property(i => i.LevelId)

@@ -22,7 +22,10 @@ public class InitiativeResponseExample : IExamplesProvider<InitiativeDto>
     {
         Id = 0,
         Name = "Initiative example",
+        ShortName = "IE",
         Description = "example",
+        InfluenceArea = "Influence area example",
+        Objective = "Objective example",
         CreationDate = DateTime.Now,
         Coordinate = [-75.3, 5.3],
         PolygonArea = 62.7,

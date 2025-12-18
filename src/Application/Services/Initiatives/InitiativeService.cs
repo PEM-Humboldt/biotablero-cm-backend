@@ -91,12 +91,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         geoJsonReader = new GeoJsonReader();
     }
 
-    /// <summary>
-    /// Get elements list (OData).
-    /// </summary>
-    /// <param name="queryOptions">OData query options.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();
@@ -105,12 +100,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 
-    /// <summary>
-    /// Get entities by user name.
-    /// </summary>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.GetByUserNameAsync(userName, ct);
@@ -124,12 +114,21 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         };
     }
 
-    /// <summary>
-    /// Get entity polygon.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetLastEntitiesAsync(CancellationToken ct = default)
+    {
+        var lastEntities = await entityRepository.GetLastEntitiesAsync(3, ct);
+
+        var dataListDto = lastEntities
+            .Select(mapper.Map);
+
+        return new()
+        {
+            ResponseBody = dataListDto,
+        };
+    }
+
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default)
     {
         var entity = await entityRepository.GetByIdAsync(id, ct);
@@ -150,12 +149,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
     }
 
-    /// <summary>
-    /// Add element.
-    /// </summary>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(InitiativeDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -267,13 +261,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         };
     }
 
-    /// <summary>
-    /// Update element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, InitiativeDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -330,14 +318,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         };
     }
 
-    /// <summary>
-    /// Upload image.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="formFile">Image data.</param>
-    /// <param name="imageType">Initiative image type.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct = default)
     {
         if (formFile.IsEmpty())
@@ -422,13 +403,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         };
     }
 
-    /// <summary>
-    /// Update entity polygon.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="geoJsonString">Polygon data (string).</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdatePolygonAsync(int id, string geoJsonString, CancellationToken ct = default)
     {
         // Validate entity
@@ -486,28 +461,13 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         };
     }
 
-    /// <summary>
-    /// Enable element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> EnableAsync(int id, CancellationToken ct = default) => await DisableOrEnableAsync(id, false, ct);
 
-    /// <summary>
-    /// Disable element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> DisableAsync(int id, CancellationToken ct = default) => await DisableOrEnableAsync(id, true, ct);
 
-    /// <summary>
-    /// Get active initiatives with coordinates by location.
-    /// </summary>
-    /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetByLocationAsync(int? locationId = null, CancellationToken ct = default)
     {
         var initiatives = await entityRepository.GetActiveInitiativesWithCoordinatesByLocationAsync(locationId, ct);

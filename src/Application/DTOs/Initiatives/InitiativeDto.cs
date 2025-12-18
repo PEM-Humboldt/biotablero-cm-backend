@@ -21,9 +21,24 @@ public class InitiativeDto : IDto
     public string Name { get; set; }
 
     /// <summary>
+    /// Initiative short name.
+    /// </summary>
+    public string ShortName { get; set; }
+
+    /// <summary>
     /// Initiative description.
     /// </summary>
     public string Description { get; set; }
+
+    /// <summary>
+    /// Initiative influence area.
+    /// </summary>
+    public string InfluenceArea { get; set; }
+
+    /// <summary>
+    /// Initiative objective.
+    /// </summary>
+    public string Objective { get; set; }
 
     /// <summary>
     /// Initiative creation date.

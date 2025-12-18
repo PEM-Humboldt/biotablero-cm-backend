@@ -71,12 +71,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         this.emailService = emailService;
     }
 
-    /// <summary>
-    /// Get entities by initiative.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.GetByInitiativeAsync(initiativeId, ct);
@@ -90,12 +85,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         };
     }
 
-    /// <summary>
-    /// Add element.
-    /// </summary>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(InitiativeUserDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -175,14 +165,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         };
     }
 
-    /// <summary>
-    /// Update element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="reviewerUserName">Reviewer user name.</param>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string reviewerUserName, InitiativeUserDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -230,6 +213,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Update entity data
         entity.LevelId = entityData.Level.Id;
+        entity.FocusArea = entityData.FocusArea;
 
         await entityRepository.UpdateAsync(entity, ct);
 
@@ -248,12 +232,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         };
     }
 
-    /// <summary>
-    /// Delete element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
     {
         // Validate entity
