@@ -18,7 +18,7 @@ public class ResourceFile : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Entity name.
     /// </summary>
-    public int Name { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// Entity URL.

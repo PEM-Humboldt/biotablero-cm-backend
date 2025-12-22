@@ -71,7 +71,7 @@ public partial class AddResources : Migration
                 id = table.Column<int>(type: "integer", nullable: false)
                     .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                 resource_id = table.Column<int>(type: "integer", nullable: false),
-                name = table.Column<int>(type: "integer", maxLength: 100, nullable: false),
+                name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                 url = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
             },
             constraints: table =>
@@ -117,7 +117,7 @@ public partial class AddResources : Migration
                 id = table.Column<int>(type: "integer", nullable: false)
                     .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                 resource_id = table.Column<int>(type: "integer", nullable: false),
-                name = table.Column<int>(type: "integer", maxLength: 100, nullable: false),
+                name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                 url = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
             },
             constraints: table =>
