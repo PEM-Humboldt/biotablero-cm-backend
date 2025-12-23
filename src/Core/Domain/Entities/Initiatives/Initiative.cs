@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
@@ -75,17 +76,17 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     public bool Enabled { get; set; }
 
     /// <summary>
-    /// Initiative Locations relationship.
+    /// Initiative Location relationship.
     /// </summary>
     public ICollection<InitiativeLocation> InitiativeLocations { get; init; }
 
     /// <summary>
-    /// Initiative Contacts relationship.
+    /// Initiative Contact relationship.
     /// </summary>
     public ICollection<InitiativeContact> InitiativeContacts { get; init; }
 
     /// <summary>
-    /// Initiative Users relationship.
+    /// Initiative User relationship.
     /// </summary>
     public ICollection<InitiativeUser> InitiativeUsers { get; init; }
 
@@ -95,17 +96,22 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     public ICollection<InitiativeTag> InitiativeTags { get; init; }
 
     /// <summary>
-    /// Initiative Join Request relationship.
+    /// Join Request relationship.
     /// </summary>
     public ICollection<JoinRequest> JoinRequests { get; init; }
 
     /// <summary>
-    /// Initiative Join Invitations relationship.
+    /// Join Invitation relationship.
     /// </summary>
     public ICollection<JoinInvitation> JoinInvitations { get; init; }
 
     /// <summary>
-    /// Initiative Territory Stories relationship.
+    /// Territory Story relationship.
     /// </summary>
     public ICollection<TerritoryStory> TerritoryStories { get; init; }
+
+    /// <summary>
+    /// Resource relationship.
+    /// </summary>
+    public ICollection<Resource> Resources { get; init; }
 }

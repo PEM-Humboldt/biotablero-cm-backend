@@ -1,6 +1,6 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities.Tags;
 
-using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -10,10 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// </summary>
 public class TagCategoryConfig : IEntityTypeConfiguration<TagCategory>
 {
-    /// <summary>
-    /// Configure entity.
-    /// </summary>
-    /// <param name="builder">Entity builder.</param>
+    /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<TagCategory> builder)
     {
         builder.ToTable("tag_category", "initiatives");

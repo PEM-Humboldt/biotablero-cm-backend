@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Initiatives;
+﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Tags;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
@@ -6,10 +6,10 @@ using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
 
-using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 
 /// <summary>
-/// Initiative Tag Category controller.
+/// Tag Category controller.
 /// </summary>
 /// <param name="webTools">General web tools.</param>
 /// <param name="entityService">Entity service.</param>

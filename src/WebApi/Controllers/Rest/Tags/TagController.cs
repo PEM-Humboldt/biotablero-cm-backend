@@ -1,11 +1,11 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Initiatives;
+﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Tags;
 
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
-using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Tags;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Tags;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Tag;
@@ -87,7 +87,7 @@ public class TagController(
     [HttpPost("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [SwaggerRequestExample(typeof(TagDto), typeof(TagResponseExample))]
+    [SwaggerRequestExample(typeof(TagDto), typeof(TagEditRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TagResponseExample))]
     public async Task<IActionResult> Post(int id, [FromBody] TagDto requestData, CancellationToken ct)
     {

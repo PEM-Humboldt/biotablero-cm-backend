@@ -8,6 +8,7 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 
 using Serilog;
 
@@ -42,13 +43,7 @@ public class InitiativeTagService : IInitiativeTagService
         this.tagRepository = tagRepository;
     }
 
-    /// <summary>
-    /// Add element.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="tagId">Initiative tag identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(int initiativeId, int tagId, CancellationToken ct = default)
     {
         // Validate initiative
@@ -99,12 +94,7 @@ public class InitiativeTagService : IInitiativeTagService
         return new CustomWebResponse();
     }
 
-    /// <summary>
-    /// Delete element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
     {
         // Validate entity

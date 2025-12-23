@@ -1,9 +1,9 @@
-﻿namespace IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Application.DTOs.Tags;
 
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
-using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 
 /// <summary>
 /// Tag dto.
