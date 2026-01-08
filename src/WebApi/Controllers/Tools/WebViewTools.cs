@@ -30,13 +30,7 @@ public class WebViewTools(
     private readonly ILogger logger = logger;
     private readonly IServiceProvider serviceProvider = serviceProvider;
 
-    /// <summary>
-    /// Cast Web View to string.
-    /// </summary>
-    /// <param name="viewName">View name.</param>
-    /// <param name="model">View model data.</param>
-    /// <param name="isPartial">Partial view flag.</param>
-    /// <returns>Web view as HTML string.</returns>
+    /// <inheritdoc/>
     public async Task<string> RenderViewToStringAsync(
         string viewName,
         object model,

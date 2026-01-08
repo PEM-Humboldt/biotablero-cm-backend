@@ -58,15 +58,7 @@ public class EmailService : IEmailService
         }
     }
 
-    /// <summary>
-    /// Send email.
-    /// </summary>
-    /// <param name="subject">Email subject.</param>
-    /// <param name="receivers">Email receivers list.</param>
-    /// <param name="hiddenReceivers">Email hidden receivers list.</param>
-    /// <param name="body">Email body.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<string> SendEmailAsync(string subject, CustomEmailAddress[] receivers, CustomEmailAddress[] hiddenReceivers, string body, CancellationToken ct = default)
     {
         var options = SecureSocketOptions.StartTls;

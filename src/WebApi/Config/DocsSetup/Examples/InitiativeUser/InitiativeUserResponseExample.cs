@@ -12,10 +12,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// </summary>
 public class InitiativeUserResponseExample : IExamplesProvider<InitiativeUserDto>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public InitiativeUserDto GetExamples() => new()
     {
         Id = 0,

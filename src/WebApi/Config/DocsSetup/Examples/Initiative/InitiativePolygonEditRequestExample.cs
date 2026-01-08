@@ -7,9 +7,6 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 public class InitiativePolygonEditRequestExample : IExamplesProvider<string>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public string GetExamples() => "{\"coordinates\":[[[-74.1563522266587,4.662729197971359],[-74.09318638402624,4.568287702377319],[-74.03317883352514,4.704699136317785],[-74.1563522266587,4.662729197971359]]],\"type\":\"Polygon\"}";
 }

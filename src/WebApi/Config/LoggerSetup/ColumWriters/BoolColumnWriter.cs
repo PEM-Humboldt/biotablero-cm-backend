@@ -16,12 +16,7 @@ public class BoolColumnWriter(string propertyName, NpgsqlDbType dbType = NpgsqlD
 {
     private readonly string propertyName = propertyName;
 
-    /// <summary>
-    /// Get data value.
-    /// </summary>
-    /// <param name="logEvent">Log event data.</param>
-    /// <param name="formatProvider">Format provider.</param>
-    /// <returns>Scalar property value.</returns>
+    /// <inheritdoc/>
     public override object GetValue(LogEvent logEvent, IFormatProvider formatProvider = null)
     {
         if (logEvent != null && logEvent.Properties.TryGetValue(propertyName, out var value) && value is ScalarValue scalar && scalar.Value is bool guidValue)

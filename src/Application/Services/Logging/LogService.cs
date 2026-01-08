@@ -49,12 +49,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
         odataMapper = new LogBaseMappings();
     }
 
-    /// <summary>
-    /// Get elements list (OData).
-    /// </summary>
-    /// <param name="queryOptions">OData query options.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();
@@ -74,12 +69,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
         }
     }
 
-    /// <summary>
-    /// Generate Excel report.
-    /// </summary>
-    /// <param name="queryOptions">OData query options.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GenerateExcel(ODataQueryOptions<LogEntity> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();

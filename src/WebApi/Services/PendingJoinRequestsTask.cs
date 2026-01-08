@@ -31,11 +31,7 @@ public class PendingJoinRequestsTask(
     private readonly TimeZoneInfo timeZone = TimeZoneInfo.Local;
     private readonly ILogger logger = logger;
 
-    /// <summary>
-    /// Execute task.
-    /// </summary>
-    /// <param name="stoppingToken">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         using var scope = serviceScopeFactory.CreateScope();

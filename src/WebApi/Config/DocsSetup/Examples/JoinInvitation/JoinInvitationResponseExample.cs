@@ -11,10 +11,7 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 public class JoinInvitationResponseExample : IExamplesProvider<JoinInvitationDto>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public JoinInvitationDto GetExamples() => new()
     {
         Id = 0,

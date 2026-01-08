@@ -11,11 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// </summary>
 public class JoinInvitationGuestMappings : IMapper<JoinInvitationGuest, JoinInvitationGuestDto>
 {
-    /// <summary>
-    /// Map from entity to DTO.
-    /// </summary>
-    /// <param name="entity">Entity data.</param>
-    /// <returns>DTO data.</returns>
+    /// <inheritdoc/>
     public JoinInvitationGuestDto Map(JoinInvitationGuest entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -28,11 +24,7 @@ public class JoinInvitationGuestMappings : IMapper<JoinInvitationGuest, JoinInvi
         };
     }
 
-    /// <summary>
-    /// Map from DTO to entity.
-    /// </summary>
-    /// <param name="dto">DTO data.</param>
-    /// <returns>Entity data.</returns>
+    /// <inheritdoc/>
     public JoinInvitationGuest Map(JoinInvitationGuestDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);

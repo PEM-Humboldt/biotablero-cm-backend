@@ -11,11 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 /// </summary>
 public class LogMappings : IMapper<LogEntity, LogDto>
 {
-    /// <summary>
-    /// Map from entity to DTO.
-    /// </summary>
-    /// <param name="entity">Entity data.</param>
-    /// <returns>DTO data.</returns>
+    /// <inheritdoc/>
     public LogDto Map(LogEntity entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -36,11 +32,7 @@ public class LogMappings : IMapper<LogEntity, LogDto>
         };
     }
 
-    /// <summary>
-    /// Map from DTO to entity.
-    /// </summary>
-    /// <param name="dto">DTO data.</param>
-    /// <returns>Entity data.</returns>
+    /// <inheritdoc/>
     public LogEntity Map(LogDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);

@@ -18,11 +18,7 @@ public class UserEnricher(IHttpContextAccessor httpContextAccessor) : ILogEventE
 
     private readonly IHttpContextAccessor httpContextAccessor = httpContextAccessor;
 
-    /// <summary>
-    /// Enrich logs with current user name.
-    /// </summary>
-    /// <param name="logEvent">Serilog log event.</param>
-    /// <param name="propertyFactory">Serilog property factory.</param>
+    /// <inheritdoc/>
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
         var httpContext = httpContextAccessor.HttpContext;

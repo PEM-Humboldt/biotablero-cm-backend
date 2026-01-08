@@ -13,10 +13,7 @@ using Swashbuckle.AspNetCore.Filters;
 public abstract class BaseOdataResponseExample<TDto> : IExamplesProvider<Dictionary<string, object>>
     where TDto : class, IDto, new()
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public Dictionary<string, object> GetExamples() => new()
     {
         ["@odata.count"] = 1,

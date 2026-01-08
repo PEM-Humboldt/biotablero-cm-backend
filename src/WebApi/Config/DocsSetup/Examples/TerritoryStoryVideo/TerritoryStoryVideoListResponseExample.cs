@@ -11,10 +11,7 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 public class TerritoryStoryVideoListResponseExample : IExamplesProvider<List<TerritoryStoryVideoDto>>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public List<TerritoryStoryVideoDto> GetExamples() =>
     [
         new()

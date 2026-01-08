@@ -9,10 +9,7 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 public class InitiativeLocationResponseExample : IExamplesProvider<InitiativeLocationDto>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public InitiativeLocationDto GetExamples() => new()
     {
         Id = 0,

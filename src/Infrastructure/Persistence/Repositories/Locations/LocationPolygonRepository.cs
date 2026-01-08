@@ -15,12 +15,7 @@ using Microsoft.EntityFrameworkCore;
 /// <param name="dbContext">General Database Context.</param>
 public class LocationPolygonRepository(GeneralContext dbContext) : Repository<LocationPolygon, int>(dbContext), ILocationPolygonRepository
 {
-    /// <summary>
-    /// Get simplified polygon by location identifier.
-    /// </summary>
-    /// <param name="locationId">Location identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Selected simplified polygon.</returns>
+    /// <inheritdoc/>
     public async Task<string> GetSimplifiedByLocationAsync(int locationId, CancellationToken ct = default) =>
         await dbContext.LocationPolygons
             .Where(i => i.LocationId == locationId)

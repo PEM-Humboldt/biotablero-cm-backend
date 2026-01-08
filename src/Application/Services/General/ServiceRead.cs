@@ -44,20 +44,10 @@ public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityReposi
     /// </summary>
     private protected readonly IMapper<TE, TDto> mapper = mapper;
 
-    /// <summary>
-    /// Check if element exists.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public virtual async Task<bool> AnyAsync(TI id, CancellationToken ct = default) => await entityRepository.AnyAsync(id, ct);
 
-    /// <summary>
-    /// Get element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public virtual async Task<CustomWebResponse> GetItemAsync(TI id, CancellationToken ct = default)
     {
         var dataEntity = await entityRepository.GetByIdAsync(id, ct);
@@ -80,11 +70,7 @@ public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityReposi
         }
     }
 
-    /// <summary>
-    /// Get all elements.
-    /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public virtual async Task<CustomWebResponse> GetAllAsync(CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.ListAsync(ct);
@@ -97,12 +83,7 @@ public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityReposi
         };
     }
 
-    /// <summary>
-    /// Get elements list (OData).
-    /// </summary>
-    /// <param name="queryOptions">OData query options.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public virtual async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();

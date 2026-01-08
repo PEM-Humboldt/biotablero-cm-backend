@@ -11,11 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 /// </summary>
 public class LocationMappings : IMapper<Location, LocationDto>
 {
-    /// <summary>
-    /// Map from entity to DTO.
-    /// </summary>
-    /// <param name="entity">Entity data.</param>
-    /// <returns>DTO data.</returns>
+    /// <inheritdoc/>
     public LocationDto Map(Location entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -29,11 +25,7 @@ public class LocationMappings : IMapper<Location, LocationDto>
         };
     }
 
-    /// <summary>
-    /// Map from DTO to entity.
-    /// </summary>
-    /// <param name="dto">DTO data.</param>
-    /// <returns>Entity data.</returns>
+    /// <inheritdoc/>
     public Location Map(LocationDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);

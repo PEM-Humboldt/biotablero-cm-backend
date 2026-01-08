@@ -10,10 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// </summary>
 public class JoinRequestStatusConfig : IEntityTypeConfiguration<JoinRequestStatus>
 {
-    /// <summary>
-    /// Configure entity.
-    /// </summary>
-    /// <param name="builder">Entity builder.</param>
+    /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<JoinRequestStatus> builder)
     {
         builder.ToTable("join_request_status", "initiatives");

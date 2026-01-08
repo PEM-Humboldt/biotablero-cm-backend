@@ -23,13 +23,7 @@ public class InitiativeTagRepository : Repository<InitiativeTag, int>, IInitiati
     {
     }
 
-    /// <summary>
-    /// Check if element is duplicated.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="tagId">Tag identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int initiativeId, int tagId, CancellationToken ct = default) =>
         await dbContext.InitiativeTags
             .Where(e => e.InitiativeId == initiativeId && e.TagId == tagId)

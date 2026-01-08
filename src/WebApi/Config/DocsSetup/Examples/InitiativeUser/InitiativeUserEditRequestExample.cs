@@ -12,10 +12,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// </summary>
 public class InitiativeUserEditRequestExample : IExamplesProvider<InitiativeUserDto>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public InitiativeUserDto GetExamples() => new()
     {
         FocusArea = "Focus area example",

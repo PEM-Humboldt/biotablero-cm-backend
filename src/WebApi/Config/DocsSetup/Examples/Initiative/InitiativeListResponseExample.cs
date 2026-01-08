@@ -12,10 +12,7 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 public class InitiativeListResponseExample : IExamplesProvider<List<InitiativeDto>>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public List<InitiativeDto> GetExamples() =>
     [
         new()

@@ -14,11 +14,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 public class InitiativeLocationMappings(
     IMapper<Location, LocationDto> locationMappings) : IMapper<InitiativeLocation, InitiativeLocationDto>
 {
-    /// <summary>
-    /// Map from entity to DTO.
-    /// </summary>
-    /// <param name="entity">Entity data.</param>
-    /// <returns>DTO data.</returns>
+    /// <inheritdoc/>
     public InitiativeLocationDto Map(InitiativeLocation entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -32,11 +28,7 @@ public class InitiativeLocationMappings(
         };
     }
 
-    /// <summary>
-    /// Map from DTO to entity.
-    /// </summary>
-    /// <param name="dto">DTO data.</param>
-    /// <returns>Entity data.</returns>
+    /// <inheritdoc/>
     public InitiativeLocation Map(InitiativeLocationDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);

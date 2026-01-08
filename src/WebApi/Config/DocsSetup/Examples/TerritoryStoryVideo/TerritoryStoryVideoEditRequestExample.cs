@@ -9,10 +9,7 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 public class TerritoryStoryVideoEditRequestExample : IExamplesProvider<TerritoryStoryVideoDto>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public TerritoryStoryVideoDto GetExamples() => new()
     {
         FileUrl = "https://www.youtube.com/watch?v=B8lUy-dJ0zY",

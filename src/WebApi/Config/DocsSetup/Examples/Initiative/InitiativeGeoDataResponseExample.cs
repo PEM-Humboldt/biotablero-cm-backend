@@ -11,10 +11,7 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 public class InitiativeGeoDataResponseExample : IExamplesProvider<List<InitiativeGeoData>>
 {
-    /// <summary>
-    /// Get examples.
-    /// </summary>
-    /// <returns>Examples.</returns>
+    /// <inheritdoc/>
     public List<InitiativeGeoData> GetExamples() => [
         new()
         {

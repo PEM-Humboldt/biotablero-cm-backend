@@ -23,33 +23,19 @@ public class JoinInvitationRepository : Repository<JoinInvitation, int>, IJoinIn
     {
     }
 
-    /// <summary>
-    /// Finds an entity with the given primary key value.
-    /// </summary>
-    /// <param name="id">The value of the primary key for the entity to be found.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public new async Task<JoinInvitation> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.JoinInvitations
             .Include(e => e.Guests)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
-    /// <summary>
-    /// Add initiative filter.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="query">Linq Query.</param>
-    /// <returns>Modified Linq query.</returns>
+    /// <inheritdoc/>
     public IQueryable<JoinInvitation> AddInitiativeFilter(int initiativeId, IQueryable<JoinInvitation> query) =>
         query
             .Where(e => e.InitiativeId == initiativeId);
 
-    /// <summary>
-    /// Include OData custom entities.
-    /// </summary>
-    /// <param name="query">Linq Query.</param>
-    /// <returns>Modified Linq query.</returns>
+    /// <inheritdoc/>
     public IQueryable<JoinInvitation> IncludeOdataEntities(IQueryable<JoinInvitation> query) =>
         query
             .Include(e => e.Initiative)

@@ -24,29 +24,15 @@ public class GeneralStatisticsService : IGeneralStatisticsService
         this.initiativeRepository = initiativeRepository;
     }
 
-    /// <summary>
-    /// Get general statistics for community monitoring.
-    /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>General statistics data.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetGeneralStatisticsAsync(CancellationToken ct = default) =>
         await GetGeneralStatisticsInternalAsync(null, null, ct);
 
-    /// <summary>
-    /// Get general statistics filtered by department.
-    /// </summary>
-    /// <param name="departmentId">Department identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>General statistics data for the department.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetGeneralStatisticsByDepartmentAsync(int departmentId, CancellationToken ct = default) =>
         await GetGeneralStatisticsInternalAsync(departmentId, null, ct);
 
-    /// <summary>
-    /// Get general statistics filtered by initiative.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>General statistics data for the initiative.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetGeneralStatisticsByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
         await GetGeneralStatisticsInternalAsync(null, initiativeId, ct);
 

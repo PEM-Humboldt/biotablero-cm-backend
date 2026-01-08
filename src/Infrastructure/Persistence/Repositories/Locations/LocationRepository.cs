@@ -16,24 +16,14 @@ using Microsoft.EntityFrameworkCore;
 /// <param name="dbContext">General Database Context.</param>
 public class LocationRepository(GeneralContext dbContext) : Repository<Location, int>(dbContext), ILocationRepository
 {
-    /// <summary>
-    /// Finds an entity with the given primary key value.
-    /// </summary>
-    /// <param name="id">The value of the primary key for the entity to be found.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public new async Task<Location> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.Locations
             .Include(e => e.Parent)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
-    /// <summary>
-    /// Get elements by parent identifier.
-    /// </summary>
-    /// <param name="parentId">Parent identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>List of elements by specified parent.</returns>
+    /// <inheritdoc/>
     public async Task<IEnumerable<Location>> GetByParentIdAsync(int? parentId, CancellationToken ct = default) =>
         await dbContext.Locations
             .Where(e => e.ParentId == parentId)

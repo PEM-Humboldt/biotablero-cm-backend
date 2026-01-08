@@ -9,9 +9,6 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 public class LogResponseExample : IExamplesProvider<LogDto>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public LogDto GetExamples() => new();
 }

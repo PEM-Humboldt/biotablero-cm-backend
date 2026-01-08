@@ -12,10 +12,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// </summary>
 public class JoinRequestOdataResponseExample : BaseOdataResponseExample<JoinRequestDto>
 {
-    /// <summary>
-    /// Create example DTO object.
-    /// </summary>
-    /// <returns>Example DTO object.</returns>
+    /// <inheritdoc/>
     protected override JoinRequestDto CreateExampleDto() => new()
     {
         Id = 0,
