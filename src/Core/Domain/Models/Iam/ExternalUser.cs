@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Core.Domain.Utils.Iam;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 
 using System;
 

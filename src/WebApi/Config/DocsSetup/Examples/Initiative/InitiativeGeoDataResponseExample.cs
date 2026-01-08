@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 
 using Swashbuckle.AspNetCore.Filters;
 
