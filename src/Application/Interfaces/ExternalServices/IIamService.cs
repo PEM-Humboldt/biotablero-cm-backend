@@ -36,6 +36,13 @@ public interface IIamService
     Task<IEnumerable<ExternalUser>> GetUsersDataAsync(string[] usernames, CancellationToken ct = default);
 
     /// <summary>
+    /// Get all enabled users.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Users data.</returns>
+    Task<IEnumerable<ExternalUser>> GetAllEnabledUsersDataAsync(CancellationToken ct = default);
+
+    /// <summary>
     /// Get user data by email.
     /// </summary>
     /// <param name="email">User email.</param>

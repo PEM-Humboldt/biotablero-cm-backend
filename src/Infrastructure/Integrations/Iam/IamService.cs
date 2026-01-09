@@ -48,12 +48,12 @@ public class IamService : IIamService
     /// <inheritdoc/>
     public async Task<bool> UserExistsAsync(string username, CancellationToken ct = default)
     {
-        var user = await GetUserData(UserVariable.Username, username, ct);
+        var user = await GetKeycloakUserDataAsync(UserVariable.Username, username, ct);
         return user != null;
     }
 
     /// <inheritdoc/>
-    public async Task<ExternalUser> GetUserDataAsync(string username, CancellationToken ct = default) => await GetUserData(UserVariable.Username, username, ct);
+    public async Task<ExternalUser> GetUserDataAsync(string username, CancellationToken ct = default) => await GetKeycloakUserDataAsync(UserVariable.Username, username, ct);
 
     /// <inheritdoc/>
     public async Task<IEnumerable<ExternalUser>> GetUsersDataAsync(string[] usernames, CancellationToken ct = default)
@@ -61,7 +61,7 @@ public class IamService : IIamService
         var results = new List<ExternalUser>();
         var userTasks = usernames.Select(async username =>
         {
-            var userData = await GetUserData(UserVariable.Username, username, ct);
+            var userData = await GetKeycloakUserDataAsync(UserVariable.Username, username, ct);
 
             if (userData != null)
             {
@@ -75,7 +75,7 @@ public class IamService : IIamService
     }
 
     /// <inheritdoc/>
-    public async Task<ExternalUser> GetUserDataByEmailAsync(string email, CancellationToken ct = default) => await GetUserData(UserVariable.Email, email, ct);
+    public async Task<ExternalUser> GetUserDataByEmailAsync(string email, CancellationToken ct = default) => await GetKeycloakUserDataAsync(UserVariable.Email, email, ct);
 
     /// <inheritdoc/>
     public async Task<IEnumerable<ExternalUser>> GetUsersDataByEmailsAsync(string[] emails, CancellationToken ct = default)
@@ -83,7 +83,7 @@ public class IamService : IIamService
         var results = new List<ExternalUser>();
         var userTasks = emails.Select(async username =>
         {
-            var userData = await GetUserData(UserVariable.Email, username, ct);
+            var userData = await GetKeycloakUserDataAsync(UserVariable.Email, username, ct);
 
             if (userData != null)
             {
@@ -94,6 +94,24 @@ public class IamService : IIamService
         await Task.WhenAll(userTasks);
 
         return results;
+    }
+
+    /// <inheritdoc/>
+    public async Task<IEnumerable<ExternalUser>> GetAllEnabledUsersDataAsync(CancellationToken ct = default)
+    {
+        var token = await GetKeycloakAdminTokenAsync(ct);
+
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var url = new Uri($"{baseUrlAdmin}/users?enabled=true");
+
+        var response = await httpClient.GetAsync(url, ct);
+
+        response.EnsureSuccessStatusCode();
+
+        var content = await response.Content.ReadAsStringAsync(ct);
+
+        return JsonSerializer.Deserialize<List<ExternalUser>>(content, jsonSerializerOptions);
     }
 
     /// <summary>
@@ -103,9 +121,9 @@ public class IamService : IIamService
     /// <param name="userVariableValue">User variable value.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>User data.</returns>
-    private async Task<ExternalUser> GetUserData(UserVariable userVariableName, string userVariableValue, CancellationToken ct = default)
+    private async Task<ExternalUser> GetKeycloakUserDataAsync(UserVariable userVariableName, string userVariableValue, CancellationToken ct = default)
     {
-        var token = await GetAdminTokenAsync(ct);
+        var token = await GetKeycloakAdminTokenAsync(ct);
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
@@ -132,7 +150,7 @@ public class IamService : IIamService
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>JWT value.</returns>
-    private async Task<string> GetAdminTokenAsync(CancellationToken ct = default)
+    private async Task<string> GetKeycloakAdminTokenAsync(CancellationToken ct = default)
     {
         var tokenUrl = new Uri($"{baseUrl}/protocol/openid-connect/token");
 
