@@ -440,10 +440,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (fileName == null)
         {
-            return new CustomWebResponse(true)
-            {
-                Message = "Image doesn't exist",
-            };
+            return new CustomWebResponse();
         }
 
         // Remove image
@@ -458,10 +455,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
             logger.AddLog(LogType.Update, "Deleted initiative image", $"(type: {imageTypeStr}): {{@EntityData}}", entityData);
 
-            return new CustomWebResponse()
-            {
-                ResponseBody = entityData,
-            };
+            return new CustomWebResponse();
         }
 
         return new CustomWebResponse(true)

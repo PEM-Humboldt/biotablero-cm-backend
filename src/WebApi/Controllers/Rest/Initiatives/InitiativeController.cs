@@ -165,7 +165,7 @@ public class InitiativeController(
     /// </summary>
     /// <param name="id">Entity identifier.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Updated entity data.</returns>
+    /// <returns>Process result.</returns>
     [HttpDelete("RemoveImage/{id}")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     public async Task<IActionResult> RemoveImage(int id, CancellationToken ct)
@@ -194,7 +194,7 @@ public class InitiativeController(
     /// </summary>
     /// <param name="id">Entity identifier.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Updated entity data.</returns>
+    /// <returns>Process result.</returns>
     [HttpDelete("RemoveBanner/{id}")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     public async Task<IActionResult> RemoveBanner(int id, CancellationToken ct)
