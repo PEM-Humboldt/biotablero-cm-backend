@@ -32,9 +32,9 @@ public class InitiativeDto : IDto
     public string Description { get; set; }
 
     /// <summary>
-    /// Initiative influence area.
+    /// Initiative baseline.
     /// </summary>
-    public string InfluenceArea { get; set; }
+    public string Baseline { get; set; }
 
     /// <summary>
     /// Initiative objective.

@@ -35,8 +35,8 @@ public class InitiativeConfig : IEntityTypeConfiguration<Initiative>
             .HasMaxLength(300)
             .IsRequired();
 
-        builder.Property(i => i.InfluenceArea)
-            .HasColumnName("influence_area")
+        builder.Property(i => i.Baseline)
+            .HasColumnName("baseline")
             .HasMaxLength(1000);
 
         builder.Property(i => i.Objective)

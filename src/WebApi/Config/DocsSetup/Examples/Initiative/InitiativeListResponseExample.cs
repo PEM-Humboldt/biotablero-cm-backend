@@ -21,7 +21,7 @@ public class InitiativeListResponseExample : IExamplesProvider<List<InitiativeDt
             Name = "Initiative example",
             ShortName = "IE",
             Description = "example",
-            InfluenceArea = "Influence area example",
+            Baseline = "Baseline example",
             Objective = "Objective example",
             CreationDate = DateTime.Now,
             Enabled = true,
