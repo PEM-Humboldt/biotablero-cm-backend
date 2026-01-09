@@ -405,6 +405,73 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     }
 
     /// <inheritdoc/>
+    public async Task<CustomWebResponse> RemoveImageAsync(int id, InitiativeImageType imageType, CancellationToken ct = default)
+    {
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate image
+        Uri fileName;
+        switch (imageType)
+        {
+            case InitiativeImageType.Image:
+                fileName = entity.ImageUrl;
+                entity.ImageUrl = null;
+                break;
+            case InitiativeImageType.Banner:
+                fileName = entity.BannerUrl;
+                entity.BannerUrl = null;
+                break;
+            default:
+                return new CustomWebResponse(true)
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Message = $"Invalid image type: {imageType:G}",
+                };
+        }
+
+        if (fileName == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Image doesn't exist",
+            };
+        }
+
+        // Remove image
+        var processSuccessful = await storageService.DeleteFileAsync(fileName.ToString(), ct);
+
+        if (processSuccessful)
+        {
+            await entityRepository.UpdateAsync(entity, ct);
+
+            var imageTypeStr = imageType.ToString("G").ToLower(CultureInfo.CurrentCulture);
+            var entityData = mapper.Map(entity);
+
+            logger.AddLog(LogType.Update, "Deleted initiative image", $"(type: {imageTypeStr}): {{@EntityData}}", entityData);
+
+            return new CustomWebResponse()
+            {
+                ResponseBody = entityData,
+            };
+        }
+
+        return new CustomWebResponse(true)
+        {
+            StatusCode = HttpStatusCode.InternalServerError,
+            Message = "Storage server error",
+        };
+    }
+
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdatePolygonAsync(int id, string geoJsonString, CancellationToken ct = default)
     {
         // Validate entity

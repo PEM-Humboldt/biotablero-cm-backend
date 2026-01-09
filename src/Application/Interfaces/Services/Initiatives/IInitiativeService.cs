@@ -35,6 +35,15 @@ public interface IInitiativeService : IRead<Initiative, int>, IAdd<InitiativeDto
     Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct = default);
 
     /// <summary>
+    /// Reomve image.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="imageType">Initiative image type.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> RemoveImageAsync(int id, InitiativeImageType imageType, CancellationToken ct = default);
+
+    /// <summary>
     /// Get entity polygon.
     /// </summary>
     /// <param name="id">Element identifier.</param>
