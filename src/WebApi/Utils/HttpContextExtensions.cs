@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Utils;
 
 using System.Linq;
+using System.Security.Claims;
 
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
@@ -19,7 +20,17 @@ public static class HttpContextExtensions
     public static string GetUserName(this HttpContext httpContext)
     {
         var username = httpContext?.User.FindAll(IamConstants.UserName);
-
         return username.FirstOrDefault()?.Value;
     }
+
+    /// <summary>
+    /// Get user roles.
+    /// </summary>
+    /// <param name="httpContext">Current HTTP Context.</param>
+    /// <returns>User roles.</returns>
+    public static string[] GetRoles(this HttpContext httpContext) =>
+        httpContext?.User
+            .FindAll(ClaimTypes.Role)
+            .Select(r => r.Value)
+            .ToArray();
 }

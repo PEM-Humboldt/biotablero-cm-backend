@@ -10,6 +10,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.EntityFrameworkCore;
 
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+
 /// <summary>
 /// Initiative User repository.
 /// </summary>
@@ -59,4 +61,10 @@ public class InitiativeUserRepository : Repository<InitiativeUser, int>, IInitia
         await dbContext.InitiativeUsers
             .Where(e => e.InitiativeId == initiativeId && e.LevelId == levelId)
             .ToListAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<bool> AuthorizedEntityModifyAsync(string userName, CancellationToken ct = default) =>
+        await dbContext.InitiativeUsers
+            .Where(e => e.UserName == userName && e.LevelId == (int)InitiativeUserLevelEnum.Leader)
+            .AnyAsync(ct);
 }
