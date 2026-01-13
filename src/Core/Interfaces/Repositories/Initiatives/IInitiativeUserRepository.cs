@@ -65,12 +65,4 @@ public interface IInitiativeUserRepository : IRepository<InitiativeUser, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities by selected parameters.</returns>
     Task<IEnumerable<InitiativeUser>> GetByInitiativeAndLevelAsync(int id, int initiativeId, int levelId, CancellationToken ct = default);
-
-    /// <summary>
-    /// Check authorized entity modification.
-    /// </summary>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if the modification is authorized. False otherwise.</returns>
-    Task<bool> AuthorizedEntityModifyAsync(string userName, CancellationToken ct = default);
 }
