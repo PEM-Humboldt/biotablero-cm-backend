@@ -18,6 +18,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.OData;
 
+using ODataUtilsCustom = IAVH.BioTablero.CM.Application.Utils.ODataUtils;
+
 /// <summary>
 /// System logs service.
 /// </summary>
@@ -77,7 +79,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
 
         try
         {
-            query = AddOdataQueryFilterAndOrder(query, queryOptions, DefaultOdataQuerySettings);
+            query = ODataUtilsCustom.AddOdataQueryFilterAndOrder(query, queryOptions);
 
             var totalItems = await entityRepository.QueryCountAsync(query, ct);
 
