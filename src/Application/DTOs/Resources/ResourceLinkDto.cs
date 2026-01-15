@@ -1,7 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Resources;
 
-using System;
-
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
@@ -27,5 +25,5 @@ public class ResourceLinkDto : IDto
     /// <summary>
     /// Entity URL.
     /// </summary>
-    public Uri Url { get; set; }
+    public string Url { get; set; }
 }

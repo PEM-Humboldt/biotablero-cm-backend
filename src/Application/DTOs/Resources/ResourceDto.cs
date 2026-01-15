@@ -34,12 +34,12 @@ public class ResourceDto : IDto
     /// <summary>
     /// Entity creation date.
     /// </summary>
-    public DateTime CreationDate { get; set; }
+    public DateTime? CreationDate { get; set; }
 
     /// <summary>
     /// Entity publication date.
     /// </summary>
-    public DateTime PublicationDate { get; set; }
+    public DateTime? PublicationDate { get; set; }
 
     /// <summary>
     /// Is draft flag.
@@ -64,12 +64,12 @@ public class ResourceDto : IDto
     /// <summary>
     /// Resource File relationship.
     /// </summary>
-    public ICollection<ResourceFileDto> Files { get; init; }
+    public IEnumerable<ResourceFileDto> Files { get; init; }
 
     /// <summary>
     /// Resource Link relationship.
     /// </summary>
-    public ICollection<ResourceLinkDto> Links { get; init; }
+    public IEnumerable<ResourceLinkDto> Links { get; init; }
 
     /// <summary>
     /// Tags relationship.
