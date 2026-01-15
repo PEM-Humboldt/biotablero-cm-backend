@@ -13,7 +13,6 @@ using IAVH.BioTablero.CM.WebApi.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 using Swashbuckle.AspNetCore.Filters;
 
@@ -28,7 +27,7 @@ using Swashbuckle.AspNetCore.Filters;
 [ApiConventionType(typeof(CustomApiConventions))]
 public class TerritoryStoryVideoController(
     IWebTools webTools,
-    ITerritoryStoryVideoService entityService) : ODataController
+    ITerritoryStoryVideoService entityService) : ControllerBase
 {
     /// <summary>
     /// Get entity.
