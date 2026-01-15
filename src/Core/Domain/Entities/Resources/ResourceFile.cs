@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 public class ResourceFile : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Entity identifier.
+    /// Resource identifier.
     /// </summary>
     public int ResourceId { get; set; }
 
