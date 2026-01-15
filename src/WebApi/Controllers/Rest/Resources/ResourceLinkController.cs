@@ -48,7 +48,7 @@ public class ResourceLinkController(
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByResource/{resourceId}")]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceLinkListResponseExample))]
-    public async Task<IActionResult> GetListByTerritoryStory(int resourceId, CancellationToken ct)
+    public async Task<IActionResult> GetListByResource(int resourceId, CancellationToken ct)
     {
         var response = await entityService.GetByResourceAsync(resourceId, ct);
         return webTools.CustomResponse(response);

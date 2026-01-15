@@ -58,11 +58,13 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
             ResponseBody = dataListDto,
         };
     }
-/// <inheritdoc/>
 
-    public Task<CustomWebResponse> AddAsync(string userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default) => throw new System.NotImplementedException();
     /// <inheritdoc/>
-    public Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default) => throw new System.NotImplementedException();
+    public Task<CustomWebResponse> AddAsync(string userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default) => throw new System.NotImplementedException();
+
     /// <inheritdoc/>
     public Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default) => throw new System.NotImplementedException();
+
+    /// <inheritdoc/>
+    public Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default) => throw new System.NotImplementedException();
 }
