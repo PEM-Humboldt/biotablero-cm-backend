@@ -49,6 +49,7 @@ public static class ConfigAppServices
         services.AddScoped<IResourceTypeService, ResourceTypeService>();
         services.AddScoped<IResourceLinkService, ResourceLinkService>();
         services.AddScoped<IResourceFileService, ResourceFileService>();
+        services.AddScoped<IResourceTagService, ResourceTagService>();
 
         return services;
     }

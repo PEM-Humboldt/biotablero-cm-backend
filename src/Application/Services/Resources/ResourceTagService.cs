@@ -1,13 +1,13 @@
-﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Application.Services.Resources;
 
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Application.Utils;
-using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
-using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 
 using Serilog;
@@ -15,13 +15,13 @@ using Serilog;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// Initiative Tag service.
+/// Resource tag service.
 /// </summary>
-public class InitiativeTagService : IInitiativeTagService
+public class ResourceTagService : IResourceTagService
 {
-    private readonly IInitiativeTagRepository entityRepository;
+    private readonly IResourceTagRepository entityRepository;
     private readonly ILogger logger;
-    private readonly IInitiativeRepository initiativeRepository;
+    private readonly IResourceRepository resourceRepository;
     private readonly ITagRepository tagRepository;
 
     /// <summary>
@@ -29,31 +29,34 @@ public class InitiativeTagService : IInitiativeTagService
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="initiativeRepository">Initiative repository.</param>
+    /// <param name="resourceRepository">Resource repository.</param>
     /// <param name="tagRepository">Tag repository.</param>
-    public InitiativeTagService(
-        IInitiativeTagRepository entityRepository,
+    public ResourceTagService(
+        IResourceTagRepository entityRepository,
         ILogger logger,
-        IInitiativeRepository initiativeRepository,
+        IResourceRepository resourceRepository,
         ITagRepository tagRepository)
     {
         this.entityRepository = entityRepository;
         this.logger = logger;
-        this.initiativeRepository = initiativeRepository;
+        this.resourceRepository = resourceRepository;
         this.tagRepository = tagRepository;
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(int initiativeId, int tagId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string userName, int resourceId, int tagId, CancellationToken ct = default)
     {
-        // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
+        // Validate username
+        // TODO: pending !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        if (!initiativeExists)
+        // Validate resource
+        var resourceExists = await resourceRepository.AnyAsync(resourceId, ct);
+
+        if (!resourceExists)
         {
             return new CustomWebResponse(true)
             {
-                Message = "Initiative not found",
+                Message = "Resource not found",
             };
         }
 
@@ -69,34 +72,37 @@ public class InitiativeTagService : IInitiativeTagService
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(initiativeId, tagId, ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(resourceId, tagId, ct);
 
         if (hasDuplicatedEntities)
         {
             return new CustomWebResponse(true)
             {
-                Message = "Duplicated initiative tag relationship",
+                Message = "Duplicated resource tag relationship",
             };
         }
 
         // Build entity data
-        var entity = new InitiativeTag()
+        var entity = new ResourceTag()
         {
-            InitiativeId = initiativeId,
+            ResourceId = resourceId,
             TagId = tagId,
         };
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
 
-        logger.AddLog(LogType.Create, "Added initiative tag relationship", "{@EntityData}", entity);
+        logger.AddLog(LogType.Create, "Added resource tag relationship", "{@EntityData}", entity);
 
         return new CustomWebResponse();
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
+        // Validate username
+        // TODO: pending !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -110,7 +116,7 @@ public class InitiativeTagService : IInitiativeTagService
 
         await entityRepository.DeleteAsync(entity, ct);
 
-        logger.AddLog(LogType.Delete, "Deleted initiative tag relationship", "{@EntityData}", entity);
+        logger.AddLog(LogType.Delete, "Deleted resource tag relationship", "{@EntityData}", entity);
 
         return new CustomWebResponse();
     }

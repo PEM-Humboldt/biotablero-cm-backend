@@ -63,8 +63,10 @@ public static class ConfigExternalServices
         services.AddScoped<ITerritoryStoryVideoRepository, TerritoryStoryVideoRepository>();
 
         //// Resources
+        services.AddScoped<IResourceRepository, ResourceRepository>();
         services.AddScoped<IResourceLinkRepository, ResourceLinkRepository>();
         services.AddScoped<IResourceFileRepository, ResourceFileRepository>();
+        services.AddScoped<IResourceTagRepository, ResourceTagRepository>();
 
         // External services
         services.AddScoped(typeof(IReportService<>), typeof(ReportExcelService<>));
