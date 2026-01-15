@@ -315,7 +315,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Update entity data
         entity.Name = entityData.Name;
+        entity.ShortName = entityData.ShortName;
         entity.Description = entityData.Description;
+        entity.Baseline = entityData.Baseline;
+        entity.Objective = entityData.Objective;
 
         // Recalculate polygon area if locations might have changed
         entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
