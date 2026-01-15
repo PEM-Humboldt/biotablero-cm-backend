@@ -64,6 +64,7 @@ public static class ConfigExternalServices
 
         //// Resources
         services.AddScoped<IResourceLinkRepository, ResourceLinkRepository>();
+        services.AddScoped<IResourceFileRepository, ResourceFileRepository>();
 
         // External services
         services.AddScoped(typeof(IReportService<>), typeof(ReportExcelService<>));

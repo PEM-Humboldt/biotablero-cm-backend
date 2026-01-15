@@ -48,6 +48,7 @@ public static class ConfigAppServices
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IResourceTypeService, ResourceTypeService>();
         services.AddScoped<IResourceLinkService, ResourceLinkService>();
+        services.AddScoped<IResourceFileService, ResourceFileService>();
 
         return services;
     }
