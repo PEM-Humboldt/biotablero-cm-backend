@@ -35,7 +35,7 @@ public interface IInitiativeService : IRead<Initiative, int>, IAdd<InitiativeDto
     Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct = default);
 
     /// <summary>
-    /// Reomve image.
+    /// Remove image.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
     /// <param name="imageType">Initiative image type.</param>
