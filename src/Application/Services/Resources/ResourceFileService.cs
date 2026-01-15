@@ -31,8 +31,8 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
-    /// <param name="entityValidator"></param>
-    /// <param name="logger"></param>
+    /// <param name="entityValidator">Entity validator.</param>
+    /// <param name="logger">System logger.</param>
     public ResourceFileService(
         IResourceFileRepository entityRepository,
         IMapper<ResourceFile, ResourceFileDto> mapper,

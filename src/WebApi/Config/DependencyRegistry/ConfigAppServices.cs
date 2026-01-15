@@ -46,6 +46,7 @@ public static class ConfigAppServices
         services.AddScoped<ITerritoryStoryImageService, TerritoryStoryImageService>();
         services.AddScoped<ITerritoryStoryVideoService, TerritoryStoryVideoService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IResourceService, ResourceService>();
         services.AddScoped<IResourceTypeService, ResourceTypeService>();
         services.AddScoped<IResourceLinkService, ResourceLinkService>();
         services.AddScoped<IResourceFileService, ResourceFileService>();
