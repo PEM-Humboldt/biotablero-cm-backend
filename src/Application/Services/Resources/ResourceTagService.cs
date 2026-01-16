@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Resources;
 
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,8 +47,16 @@ public class ResourceTagService : IResourceTagService
     /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(string userName, int resourceId, int tagId, CancellationToken ct = default)
     {
-        // Validate username
-        // TODO: pending !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // Validate user permissions
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
 
         // Validate resource
         var resourceExists = await resourceRepository.AnyAsync(resourceId, ct);
@@ -100,9 +109,6 @@ public class ResourceTagService : IResourceTagService
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate username
-        // TODO: pending !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -111,6 +117,17 @@ public class ResourceTagService : IResourceTagService
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate user permissions
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entity.ResourceId, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 

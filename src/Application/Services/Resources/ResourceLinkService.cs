@@ -100,7 +100,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
             };
         }
 
-        // Validate user level and permissions
+        // Validate user permissions
         var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entityData.ResourceId, userName, ct);
 
         if (!authorizedUserAction)
@@ -176,7 +176,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
             };
         }
 
-        // Validate user level and permissions
+        // Validate user permissions
         var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entity.ResourceId, userName, ct);
 
         if (!authorizedUserAction)
@@ -239,7 +239,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
             };
         }
 
-        // Validate user level and permissions
+        // Validate user permissions
         var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entity.ResourceId, userName, ct);
 
         if (!authorizedUserAction)

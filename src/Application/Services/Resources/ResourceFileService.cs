@@ -83,7 +83,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
             };
         }
 
-        // Validate resource
+        // Validate user permissions
         var resourceExists = await resourceRepository.AnyAsync(entityData.ResourceId, ct);
 
         if (!resourceExists)
