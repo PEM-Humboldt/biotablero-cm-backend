@@ -146,17 +146,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(TerritoryStoryDto entityData, CancellationToken ct = default)
     {
-        // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(null, entityData.AuthorUserName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new CustomWebResponse(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
-        }
-
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
 
@@ -178,6 +167,17 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             return new CustomWebResponse(true)
             {
                 Message = "Initiative not found",
+            };
+        }
+
+        // Validate user level and permissions
+        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId.Value, entityData.AuthorUserName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 

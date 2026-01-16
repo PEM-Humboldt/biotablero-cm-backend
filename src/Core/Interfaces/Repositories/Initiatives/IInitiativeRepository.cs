@@ -48,7 +48,7 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     Task<bool> IsDuplicatedAsync(int id, string name, CancellationToken ct = default);
 
     /// <summary>
-    /// Get if elements exists by tag.
+    /// Check if elements exists by tag.
     /// </summary>
     /// <param name="tagId">Tag identifier.</param>
     /// <param name="ct">Cancellation token.</param>
