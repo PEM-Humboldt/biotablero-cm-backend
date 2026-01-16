@@ -1,7 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Utils;
 
 using System.Linq;
-using System.Net.Mime;
 
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
@@ -25,12 +24,12 @@ public static class FileUtils
     /// <returns>True if is valid. False otherwise.</returns>
     public static bool IsValidImage(this IInputFile file)
     {
-        var validImageMimeTypes = new string[]
+        var validMimeTypes = new string[]
         {
             MediaTypeNames.Image.Jpeg,
             MediaTypeNames.Image.Png,
         };
-        return validImageMimeTypes.Contains(file?.ContentType);
+        return validMimeTypes.Contains(file?.ContentType);
     }
 
     /// <summary>
