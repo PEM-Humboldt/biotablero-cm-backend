@@ -101,7 +101,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate user permissions
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entityData.ResourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(entityData.ResourceId, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -177,7 +177,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate user permissions
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entity.ResourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(entity.ResourceId, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -240,7 +240,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate user permissions
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entity.ResourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(entity.ResourceId, userName, ct);
 
         if (!authorizedUserAction)
         {

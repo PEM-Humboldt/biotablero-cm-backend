@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,11 +12,21 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 public interface IResourceRepository : IRepository<Resource, int>
 {
     /// <summary>
-    /// Check authorized entity modification.
+    /// Get query with initiative and user name filters.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="query">Linq Query.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Custom query.</returns>
+    Task<IQueryable<Resource>> GetQueryWithInitiativeAndUserNameAsync(int initiativeId, string userName, IQueryable<Resource> query, CancellationToken ct = default);
+
+    /// <summary>
+    /// Check resource and user relationship (by initiative).
     /// </summary>
     /// <param name="id">Entity identifier.</param>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if the modification is authorized. False otherwise.</returns>
-    Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default);
+    /// <returns>True if the relationship exists. False otherwise.</returns>
+    Task<bool> UserRelationshipExistsAsync(int id, string userName, CancellationToken ct = default);
 }

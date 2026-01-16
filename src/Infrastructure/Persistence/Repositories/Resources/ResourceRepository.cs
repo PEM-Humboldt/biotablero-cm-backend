@@ -24,10 +24,44 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
     }
 
     /// <inheritdoc/>
-    public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default) =>
+    public async Task<IQueryable<Resource>> GetQueryWithInitiativeAndUserNameAsync(int initiativeId, string userName, IQueryable<Resource> query, CancellationToken ct = default)
+    {
+        var userBelongsToInitiative = await dbContext.InitiativeUsers
+            .Where(e => e.UserName == userName && e.InitiativeId == initiativeId)
+            .AnyAsync(ct);
+
+        if (userBelongsToInitiative)
+        {
+            return IncludeCustomEntities(query)
+                .Where(e => e.InitiativeId == initiativeId);
+        }
+
+        return IncludeCustomEntities(query)
+            .Where(e => e.InitiativeId == initiativeId && !e.IsDraft);
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> UserRelationshipExistsAsync(int id, string userName, CancellationToken ct = default) =>
         await dbContext.Resources
             .Include(e => e.Initiative)
                 .ThenInclude(e => e.InitiativeUsers)
             .Where(e => e.Id == id && e.Initiative.InitiativeUsers.Any(e => e.UserName == userName))
             .AnyAsync(ct);
+
+    /// <summary>
+    /// Include custom entities.
+    /// </summary>
+    /// <returns>Modified Linq query.</returns>
+    private IQueryable<Resource> IncludeCustomEntities(IQueryable<Resource> query = null)
+    {
+        query ??= dbContext.Resources;
+
+        return query
+            .Include(e => e.Likes)
+            .Include(e => e.Files)
+            .Include(e => e.Links)
+            .Include(e => e.ResourceType)
+            .Include(e => e.ResourceTags)
+                .ThenInclude(e => e.Tag);
+    }
 }
