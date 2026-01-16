@@ -80,9 +80,9 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate user level and permissions
-        var entityExists = await entityRepository.AnyAsync(id, ct);
+        var entity = await entityRepository.GetByIdAsync(id, ct);
 
-        if (entityExists)
+        if (entity != null)
         {
             var authorizedUserAction = await entityRepository.AuthorizedEntityReadAsync(id, userName, ct);
 
@@ -93,31 +93,25 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
                     StatusCode = HttpStatusCode.Forbidden,
                 };
             }
-        }
 
-        var entity = await entityRepository.GetByIdAsync(id, ct);
-
-        if (entity != null)
-        {
             if (!string.IsNullOrWhiteSpace(userName))
             {
                 entity.ILikedIt = entity.Likes?.Any(e => e.UserName == userName);
             }
 
             var dataDto = mapper.Map(entity);
+
             return new()
             {
                 ResponseBody = dataDto,
             };
         }
-        else
+
+        return new(true)
         {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.NotFound,
-                Message = MessageConstants.NotFound,
-            };
-        }
+            StatusCode = HttpStatusCode.NotFound,
+            Message = MessageConstants.NotFound,
+        };
     }
 
     /// <inheritdoc/>
