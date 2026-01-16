@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Video;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Web;
 
 using System;
 using System.Net.Http;
@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 
 /// <summary>
-/// Video Helper service.
+/// Web Helper service.
 /// </summary>
-public class VideoHelperService : IVideoHelperService
+public class WebHelperService : IWebHelperService
 {
     private readonly HttpClient httpClient;
 
@@ -18,24 +18,22 @@ public class VideoHelperService : IVideoHelperService
     /// Constructor.
     /// </summary>
     /// <param name="httpClient">HTTP Client.</param>
-    public VideoHelperService(HttpClient httpClient)
+    public WebHelperService(HttpClient httpClient)
     {
         this.httpClient = httpClient;
     }
 
     /// <inheritdoc/>
-    public async Task<bool> VideoExistsAsync(string videoUrl, CancellationToken ct = default)
+    public async Task<bool> LinkExistsAsync(string url, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(videoUrl))
+        if (string.IsNullOrWhiteSpace(url))
         {
             return false;
         }
 
-        string oembedUrl = $"https://www.youtube.com/oembed?url={videoUrl}&format=json";
-
         try
         {
-            var response = await httpClient.GetAsync(oembedUrl, ct);
+            var response = await httpClient.GetAsync(url, ct);
             return response.IsSuccessStatusCode;
         }
         catch (InvalidOperationException)

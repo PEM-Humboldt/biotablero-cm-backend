@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Resources;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -29,4 +30,16 @@ public class ResourceLinkRepository : Repository<ResourceLink, int>, IResourceLi
         await dbContext.ResourceLinks
             .Where(e => e.ResourceId == resourceId)
             .ToListAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<bool> IsDuplicatedAsync(Uri url, CancellationToken ct = default) =>
+        await dbContext.ResourceLinks
+            .Where(e => e.Url == url)
+            .AnyAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<bool> IsDuplicatedAsync(int id, Uri url, CancellationToken ct = default) =>
+        await dbContext.ResourceLinks
+            .Where(e => e.Id != id && e.Url == url)
+            .AnyAsync(ct);
 }
