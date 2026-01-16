@@ -90,9 +90,9 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate resource
-        var resource = await resourceRepository.GetByIdAsync(entityData.ResourceId, ct);
+        var resourceExists = await resourceRepository.AnyAsync(entityData.ResourceId, ct);
 
-        if (resource == null)
+        if (!resourceExists)
         {
             return new CustomWebResponse(true)
             {
@@ -177,7 +177,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate user level and permissions
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entity.ResourceId, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -240,7 +240,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate user level and permissions
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entity.ResourceId, userName, ct);
 
         if (!authorizedUserAction)
         {

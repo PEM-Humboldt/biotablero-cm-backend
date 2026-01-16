@@ -213,6 +213,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         // Validate image
         var updateHasFile = !formFile.IsEmpty();
+
         if (updateHasFile)
         {
             if (!formFile.IsValidImage())
@@ -267,6 +268,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         // Update entity data
         entity.Description = entityData.Description;
+
         if (!updateHasFile)
         {
             await entityRepository.UpdateAsync(entity, ct);
