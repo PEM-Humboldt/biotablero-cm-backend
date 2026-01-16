@@ -48,6 +48,18 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
             .Where(e => e.Id == id && e.Initiative.InitiativeUsers.Any(e => e.UserName == userName))
             .AnyAsync(ct);
 
+    /// <inheritdoc/>
+    public async Task<bool> IsDuplicatedAsync(string name, CancellationToken ct = default) =>
+        await dbContext.Resources
+            .Where(e => e.Name == name)
+            .AnyAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<bool> IsDuplicatedAsync(int id, string name, CancellationToken ct = default) =>
+        await dbContext.Resources
+            .Where(e => e.Id != id && e.Name == name)
+            .AnyAsync(ct);
+
     /// <summary>
     /// Include custom entities.
     /// </summary>

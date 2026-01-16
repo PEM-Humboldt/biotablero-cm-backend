@@ -29,4 +29,21 @@ public interface IResourceRepository : IRepository<Resource, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if the relationship exists. False otherwise.</returns>
     Task<bool> UserRelationshipExistsAsync(int id, string userName, CancellationToken ct = default);
+
+    /// <summary>
+    /// Check if element is duplicated.
+    /// </summary>
+    /// <param name="name">Entity name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    Task<bool> IsDuplicatedAsync(string name, CancellationToken ct = default);
+
+    /// <summary>
+    /// Check if element is duplicated.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="name">Entity name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    Task<bool> IsDuplicatedAsync(int id, string name, CancellationToken ct = default);
 }

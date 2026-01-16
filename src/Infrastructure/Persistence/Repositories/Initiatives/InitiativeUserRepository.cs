@@ -31,9 +31,12 @@ public class InitiativeUserRepository : Repository<InitiativeUser, int>, IInitia
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<bool> AnyByInitiativeUserAndLevelAsync(int initiativeId, string userName, int levelId, CancellationToken ct = default) =>
+    public async Task<bool> AnyByInitiativeUserAndLevelAsync(int initiativeId, string userName, int? levelId, CancellationToken ct = default) =>
         await dbContext.InitiativeUsers
-            .Where(e => e.InitiativeId == initiativeId && e.UserName == userName && e.LevelId == levelId)
+            .Where(e =>
+                e.InitiativeId == initiativeId &&
+                e.UserName == userName &&
+                (!levelId.HasValue || e.LevelId == levelId))
             .AnyAsync(ct);
 
     /// <inheritdoc/>

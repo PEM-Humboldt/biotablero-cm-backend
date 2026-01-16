@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Resources;
 
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -14,12 +15,16 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.OData;
 
 using Serilog;
+
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
 /// Resource service.
@@ -29,6 +34,10 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     private new readonly IResourceRepository entityRepository;
     private readonly IValidator<ResourceDto> entityValidator;
     private readonly ILogger logger;
+    private readonly IInitiativeRepository initiativeRepository;
+    private readonly IInitiativeUserRepository initiativeUserRepository;
+    private readonly IRepository<ResourceType, int> resourceTypeRepository;
+    private readonly IResourceLikeRepository resourceLikeRepository;
 
     /// <summary>
     /// Constructor.
@@ -37,16 +46,28 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
+    /// <param name="initiativeRepository">Initiative repository.</param>
+    /// <param name="initiativeUserRepository">Initiative User repository.</param>
+    /// <param name="resourceTypeRepository">Resource Type repository.</param>
+    /// <param name="resourceLikeRepository">Resource Like repository.</param>
     public ResourceService(
         IResourceRepository entityRepository,
         IMapper<Resource, ResourceDto> mapper,
         IValidator<ResourceDto> entityValidator,
-        ILogger logger)
+        ILogger logger,
+        IInitiativeRepository initiativeRepository,
+        IInitiativeUserRepository initiativeUserRepository,
+        IRepository<ResourceType, int> resourceTypeRepository,
+        IResourceLikeRepository resourceLikeRepository)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
+        this.initiativeRepository = initiativeRepository;
+        this.initiativeUserRepository = initiativeUserRepository;
+        this.resourceTypeRepository = resourceTypeRepository;
+        this.resourceLikeRepository = resourceLikeRepository;
     }
 
     /// <inheritdoc/>
@@ -117,14 +138,230 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public Task<CustomWebResponse> AddAsync(string userName, ResourceDto entityData, CancellationToken ct = default) => throw new System.NotImplementedException();
+    public async Task<CustomWebResponse> AddAsync(string userName, ResourceDto entityData, CancellationToken ct = default)
+    {
+        // Validate user permissions
+        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId, userName, null, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate data
+        var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
+
+        if (!validationResult.IsValid)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Validation errors",
+                ResponseBody = validationResult.Errors
+                    .Select(error => error.ErrorMessage),
+            };
+        }
+
+        // Validate initiative
+        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId, ct);
+
+        if (!initiativeExists)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Initiative not found",
+            };
+        }
+
+        // Validate Resource Type
+        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType.Id.Value, ct);
+
+        if (!resourceTypeExists)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Resource Type not found",
+            };
+        }
+
+        // Validate duplicated entities
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(entityData.Name, ct);
+
+        if (hasDuplicatedEntities)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "There is already a resource with the same name",
+            };
+        }
+
+        // Build entity data
+        var entity = mapper.Map(entityData);
+
+        var now = DateTime.Now;
+        entity.CreationDate = now;
+
+        if (!entity.IsDraft)
+        {
+            entity.PublicationDate = now;
+        }
+
+        // Save data
+        entity = await entityRepository.AddAsync(entity, ct);
+
+        entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Create, "Added resource", "{@EntityData}", entityData);
+
+        return new CustomWebResponse()
+        {
+            ResponseBody = entityData,
+        };
+    }
 
     /// <inheritdoc/>
-    public Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default) => throw new System.NotImplementedException();
+    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceDto entityData, CancellationToken ct = default)
+    {
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.UserRelationshipExistsAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate data
+        var validationResult = await entityValidator.ValidateAsync(entityData, ct);
+
+        if (!validationResult.IsValid)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Validation errors",
+                ResponseBody = validationResult.Errors
+                    .Select(error => error.ErrorMessage),
+            };
+        }
+
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate duplicated entities
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.Name, ct);
+
+        if (hasDuplicatedEntities)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "There is already a resource with the same name",
+            };
+        }
+
+        // Update entity data
+        entityData = mapper.Map(entity);
+
+        await entityRepository.UpdateAsync(entity, ct);
+
+        entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Update, "Updated resource", "{@EntityData}", entityData);
+
+        return new CustomWebResponse()
+        {
+            ResponseBody = entityData,
+        };
+    }
 
     /// <inheritdoc/>
-    public Task<CustomWebResponse> LikeActionAsync(ResourceDto entityData, CancellationToken ct = default) => throw new System.NotImplementedException();
+    public async Task<CustomWebResponse> LikeActionAsync(ResourceLikeDto entityData, CancellationToken ct = default)
+    {
+        // Validate Territory Story
+        var entity = await entityRepository.GetByIdAsync(entityData.ResourceId, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = MessageConstants.NotFound,
+            };
+        }
+
+        if (entity.IsDraft)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = MessageConstants.DisabledElement,
+            };
+        }
+
+        var hasDuplicatedEntities = await resourceLikeRepository.IsDuplicatedAsync(entityData.ResourceId, entityData.UserName, ct);
+
+        if (hasDuplicatedEntities)
+        {
+            var like = await resourceLikeRepository.GetByResourceAndUserNameAsync(entityData.ResourceId, entityData.UserName, ct);
+            await resourceLikeRepository.DeleteAsync(like, ct);
+            logger.AddLog(LogType.Delete, $"Unliked resource", "{@EntityData}", entityData);
+        }
+        else
+        {
+            var like = new ResourceLike()
+            {
+                CreationDate = DateTime.Now,
+                ResourceId = entityData.ResourceId,
+                UserName = entityData.UserName,
+            };
+
+            await resourceLikeRepository.AddAsync(like, ct);
+            logger.AddLog(LogType.Create, $"Liked resource", "{@EntityData}", entityData);
+        }
+
+        return new CustomWebResponse();
+    }
 
     /// <inheritdoc/>
-    public Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceDto entityData, CancellationToken ct = default) => throw new System.NotImplementedException();
+    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
+    {
+        // Validate user permissions
+        var authorizedUserAction = await entityRepository.UserRelationshipExistsAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = MessageConstants.NotFound,
+            };
+        }
+
+        await entityRepository.DeleteAsync(entity, ct);
+
+        var entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Delete, "Deleted resource", "{@EntityData}", entityData);
+
+        return new CustomWebResponse();
+    }
 }

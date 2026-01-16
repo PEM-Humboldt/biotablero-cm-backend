@@ -28,7 +28,7 @@ public interface IInitiativeUserRepository : IRepository<InitiativeUser, int>
     /// <param name="levelId">Level identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities by selected initiative.</returns>
-    Task<bool> AnyByInitiativeUserAndLevelAsync(int initiativeId, string userName, int levelId, CancellationToken ct = default);
+    Task<bool> AnyByInitiativeUserAndLevelAsync(int initiativeId, string userName, int? levelId, CancellationToken ct = default);
 
     /// <summary>
     /// Get by initiative and username.

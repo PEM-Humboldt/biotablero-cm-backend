@@ -52,12 +52,8 @@ public class ResourceMappings(
             InitiativeId = dto.InitiativeId,
             Name = dto.Name,
             Description = dto.Description,
-            CreationDate = dto.CreationDate ?? DateTime.Now,
-            PublicationDate = dto.PublicationDate ?? DateTime.Now,
             IsDraft = dto.IsDraft,
             ResourceType = resourceTypeMappings.Map(dto.ResourceType),
-            Files = dto.Files?.Select(resourceFileMappings.Map).ToList(),
-            Links = dto.Links?.Select(resourceLinkMappings.Map).ToList(),
         };
     }
 }

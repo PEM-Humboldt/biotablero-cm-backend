@@ -59,7 +59,7 @@ public interface IResourceService : IRead<Resource, int>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> LikeActionAsync(ResourceDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> LikeActionAsync(ResourceLikeDto entityData, CancellationToken ct = default);
 
     /// <summary>
     /// Delete element.
