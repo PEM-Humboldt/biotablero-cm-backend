@@ -11,6 +11,9 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.OData;
+
+using ODataUtilsCustom = IAVH.BioTablero.CM.Application.Utils.ODataUtils;
 
 /// <summary>
 /// User service.
@@ -32,31 +35,42 @@ public class UserService : IUserService
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<ExternalUser> queryOptions, CancellationToken ct = default)
     {
-        // Get users data
-        var users = await iamService.GetAllEnabledUsersDataAsync(ct);
-
-        // Apply OData filters
-        var query = users.AsQueryable();
-
-        query = ODataUtils.AddOdataQueryFilterAndOrder(query, queryOptions);
-        query = ODataUtils.AddOdataQueryPagination(query, queryOptions);
-
-        // Get result
-        var dataList = queryOptions.ApplyTo(query) as IQueryable<ExternalUser>;
-
-        var odataResponse = new ODataResponse<ExternalUser>()
+        try
         {
-            TotalItems = users.Count(),
-            DataList = [.. dataList],
-        };
+            // Get users data
+            var users = await iamService.GetAllEnabledUsersDataAsync(ct);
 
-        return new()
-        {
-            ResponseBody = new Dictionary<string, object>()
+            // Apply OData filters
+            var query = users.AsQueryable();
+
+            query = ODataUtilsCustom.AddOdataQueryFilterAndOrder(query, queryOptions);
+            var totalItems = query.Count();
+            query = ODataUtilsCustom.AddOdataQueryPagination(query, queryOptions);
+
+            // Get result
+            var dataList = queryOptions.ApplyTo(query) as IQueryable<ExternalUser>;
+
+            var odataResponse = new ODataResponse<ExternalUser>()
             {
-                ["@odata.count"] = odataResponse.TotalItems,
-                ["value"] = odataResponse.DataList,
-            },
-        };
+                TotalItems = totalItems,
+                DataList = [.. dataList],
+            };
+
+            return new()
+            {
+                ResponseBody = new Dictionary<string, object>()
+                {
+                    ["@odata.count"] = odataResponse.TotalItems,
+                    ["value"] = odataResponse.DataList,
+                },
+            };
+        }
+        catch (ODataException ex)
+        {
+            return new(true)
+            {
+                Message = $"Invalid filter: {ex.Message}",
+            };
+        }
     }
 }
