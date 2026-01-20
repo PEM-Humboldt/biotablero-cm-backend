@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Core.Domain.Utils.Iam;
+using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 
 /// <summary>
 /// Identity and Access Management service interface.

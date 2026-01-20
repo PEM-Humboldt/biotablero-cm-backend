@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 
 using NetTopologySuite.Geometries;
 

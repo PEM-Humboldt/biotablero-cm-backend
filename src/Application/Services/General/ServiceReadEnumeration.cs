@@ -15,18 +15,12 @@ using IAVH.BioTablero.CM.Application.Utils;
 public class ServiceReadEnumeration<TEnum> : IReadEnumeration<TEnum>
     where TEnum : Enum
 {
-    /// <summary>
-    /// Get all elements as IEnumerable.
-    /// </summary>
-    /// <returns>IEnumerable list.</returns>
+    /// <inheritdoc/>
     public IEnumerable<EnumEntityDto<TEnum>> GetEnumerable() => Enum.GetValues(typeof(TEnum))
             .Cast<TEnum>()
             .Select(t => new EnumEntityDto<TEnum>(t));
 
-    /// <summary>
-    /// Get all elements.
-    /// </summary>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public CustomWebResponse GetAll() => new()
     {
         ResponseBody = GetEnumerable(),

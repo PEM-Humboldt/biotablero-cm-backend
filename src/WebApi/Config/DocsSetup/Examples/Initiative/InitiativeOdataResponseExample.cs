@@ -9,17 +9,14 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 /// </summary>
 public class InitiativeOdataResponseExample : BaseOdataResponseExample<InitiativeDto>
 {
-    /// <summary>
-    /// Create example DTO object.
-    /// </summary>
-    /// <returns>Example DTO object.</returns>
+    /// <inheritdoc/>
     protected override InitiativeDto CreateExampleDto() => new()
     {
         Id = 0,
         Name = "Initiative example",
         ShortName = "IE",
         Description = "example",
-        InfluenceArea = "Influence area example",
+        Baseline = "Baseline example",
         Objective = "Objective example",
         CreationDate = DateTime.Now,
         Coordinate = [-75.3, 5.3],

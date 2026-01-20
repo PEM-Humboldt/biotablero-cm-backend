@@ -40,12 +40,7 @@ public class LocationService : ServiceRead<Location, LocationDto, int>, ILocatio
         this.locationPolygonRepository = locationPolygonRepository;
     }
 
-    /// <summary>
-    /// Get locations by parent.
-    /// </summary>
-    /// <param name="parentId">Parent identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetByParentAsync(int? parentId, CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.GetByParentIdAsync(parentId, ct);
@@ -59,12 +54,7 @@ public class LocationService : ServiceRead<Location, LocationDto, int>, ILocatio
         };
     }
 
-    /// <summary>
-    /// Get entity polygon (simplified).
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetPolygonAsync(int id, CancellationToken ct = default)
     {
         var simplifiedGeometry = await locationPolygonRepository.GetSimplifiedByLocationAsync(id, ct);
@@ -83,12 +73,7 @@ public class LocationService : ServiceRead<Location, LocationDto, int>, ILocatio
         };
     }
 
-    /// <summary>
-    /// Calculate total area for a collection of location IDs.
-    /// </summary>
-    /// <param name="locationIds">Collection of location IDs.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Total area in square kilometers.</returns>
+    /// <inheritdoc/>
     public async Task<double> CalculateTotalAreaForLocationsAsync(IEnumerable<int> locationIds, CancellationToken ct = default)
     {
         if (locationIds == null || !locationIds.Any())

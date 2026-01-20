@@ -9,10 +9,7 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 public class TerritoryStoryEditRequestExample : IExamplesProvider<TerritoryStoryDto>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public TerritoryStoryDto GetExamples() => new()
     {
         Title = "Territory Story example",

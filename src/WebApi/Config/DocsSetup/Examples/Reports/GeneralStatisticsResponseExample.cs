@@ -9,12 +9,9 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 public class GeneralStatisticsResponseExample : IExamplesProvider<GeneralStatisticsDto>
 {
-    /// <summary>
-    /// Get example data.
-    /// </summary>
-    /// <returns>Example general statistics data.</returns>
+    /// <inheritdoc/>
     public GeneralStatisticsDto GetExamples() =>
-        new GeneralStatisticsDto
+        new()
         {
             TotalActiveInitiatives = 12,
             TotalPeopleInvolved = 45,

@@ -10,10 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// </summary>
 public class InitiativeTagConfig : IEntityTypeConfiguration<InitiativeTag>
 {
-    /// <summary>
-    /// Configure entity.
-    /// </summary>
-    /// <param name="builder">Entity builder.</param>
+    /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<InitiativeTag> builder)
     {
         builder.ToTable("initiative_tag", "initiatives");

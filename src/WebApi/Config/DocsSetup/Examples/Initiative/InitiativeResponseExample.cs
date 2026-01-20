@@ -14,17 +14,14 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// </summary>
 public class InitiativeResponseExample : IExamplesProvider<InitiativeDto>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public InitiativeDto GetExamples() => new()
     {
         Id = 0,
         Name = "Initiative example",
         ShortName = "IE",
         Description = "example",
-        InfluenceArea = "Influence area example",
+        Baseline = "Baseline example",
         Objective = "Objective example",
         CreationDate = DateTime.Now,
         Coordinate = [-75.3, 5.3],

@@ -3,7 +3,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Core.Domain.Utils.Email;
+using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 
 /// <summary>
 /// Email service interface.

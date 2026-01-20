@@ -12,10 +12,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// </summary>
 public class JoinRequestAddRequestExample : IExamplesProvider<JoinRequestDto>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public JoinRequestDto GetExamples() => new()
     {
         InitiativeId = 1,

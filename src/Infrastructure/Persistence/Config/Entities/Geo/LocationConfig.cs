@@ -10,10 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// </summary>
 public class LocationConfig : IEntityTypeConfiguration<Location>
 {
-    /// <summary>
-    /// Configure builder.
-    /// </summary>
-    /// <param name="builder">Entity builder.</param>
+    /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<Location> builder)
     {
         builder.ToTable("location", "geo");

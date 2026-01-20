@@ -31,7 +31,7 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
                 .WithMessage("Description is required")
             .MaximumLength(300);
 
-        RuleFor(dto => dto.InfluenceArea)
+        RuleFor(dto => dto.Baseline)
             .MaximumLength(1000);
 
         RuleFor(dto => dto.Objective)

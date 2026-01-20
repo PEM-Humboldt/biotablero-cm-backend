@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Storage;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Models.Storage;
 
 /// <summary>
 /// General file data.

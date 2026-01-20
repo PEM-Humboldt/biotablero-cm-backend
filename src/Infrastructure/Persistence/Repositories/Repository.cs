@@ -36,41 +36,19 @@ public class Repository<TE, TI> : IRepository<TE, TI>
         this.dbContext = dbContext;
     }
 
-    /// <summary>
-    /// Finds an entity with the given primary key value.
-    /// </summary>
-    /// <param name="id">The value of the primary key for the entity to be found.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<TE> GetByIdAsync(TI id, CancellationToken ct = default) => await dbContext.Set<TE>().FindAsync([id], ct);
 
-    /// <summary>
-    /// Finds all entities of <typeparamref name="TE" /> from the database.
-    /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<List<TE>> ListAsync(CancellationToken ct = default) => await dbContext.Set<TE>().ToListAsync(ct);
 
-    /// <summary>
-    /// Returns the total number of records.
-    /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<int> CountAsync(CancellationToken ct = default) => await dbContext.Set<TE>().CountAsync(ct);
 
-    /// <summary>
-    /// Returns a boolean whether any entity exists or not.
-    /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<bool> AnyAsync(CancellationToken ct = default) => await dbContext.Set<TE>().AnyAsync(ct);
 
-    /// <summary>
-    /// Checks if entity with the given primary key value exists.
-    /// </summary>
-    /// <param name="id">The value of the primary key for the entity to be found.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<bool> AnyAsync(TI id, CancellationToken ct = default)
     {
         var parameter = Expression.Parameter(typeof(TE), "e");
@@ -83,12 +61,7 @@ public class Repository<TE, TI> : IRepository<TE, TI>
         return await dbContext.Set<TE>().AnyAsync(predicate, ct);
     }
 
-    /// <summary>
-    /// Adds an entity in the database.
-    /// </summary>
-    /// <param name="entity">The entity to add.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<TE> AddAsync(TE entity, CancellationToken ct = default)
     {
         dbContext.Set<TE>().Add(entity);
@@ -96,12 +69,7 @@ public class Repository<TE, TI> : IRepository<TE, TI>
         return entity;
     }
 
-    /// <summary>
-    /// Adds the given entities in the database.
-    /// </summary>
-    /// <param name="entities">The entities to add.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<IEnumerable<TE>> AddRangeAsync(IEnumerable<TE> entities, CancellationToken ct = default)
     {
         dbContext.Set<TE>().AddRange(entities);
@@ -109,12 +77,7 @@ public class Repository<TE, TI> : IRepository<TE, TI>
         return entities;
     }
 
-    /// <summary>
-    /// Updates an entity in the database.
-    /// </summary>
-    /// <param name="entity">The entity to update.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<int> UpdateAsync(TE entity, CancellationToken ct = default)
     {
         dbContext.Entry(entity).State = EntityState.Modified;
@@ -122,12 +85,7 @@ public class Repository<TE, TI> : IRepository<TE, TI>
         return result;
     }
 
-    /// <summary>
-    /// Updates the given entities in the database.
-    /// </summary>
-    /// <param name="entities">The entities to update.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<int> UpdateRangeAsync(IEnumerable<TE> entities, CancellationToken ct = default)
     {
         foreach (var entity in entities)
@@ -139,12 +97,7 @@ public class Repository<TE, TI> : IRepository<TE, TI>
         return result;
     }
 
-    /// <summary>
-    /// Removes an entity in the database.
-    /// </summary>
-    /// <param name="entity">The entity to delete.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<int> DeleteAsync(TE entity, CancellationToken ct = default)
     {
         dbContext.Set<TE>().Remove(entity);
@@ -152,12 +105,7 @@ public class Repository<TE, TI> : IRepository<TE, TI>
         return result;
     }
 
-    /// <summary>
-    /// Removes the given entities in the database.
-    /// </summary>
-    /// <param name="entities">The entities to remove.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<int> DeleteRangeAsync(IEnumerable<TE> entities, CancellationToken ct = default)
     {
         dbContext.Set<TE>().RemoveRange(entities);
@@ -165,33 +113,16 @@ public class Repository<TE, TI> : IRepository<TE, TI>
         return result;
     }
 
-    /// <summary>
-    /// Persists changes to the database.
-    /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <inheritdoc/>
     public async Task<int> SaveChangesAsync(CancellationToken ct = default) => await dbContext.SaveChangesAsync(ct);
 
-    /// <summary>
-    /// Get a new query.
-    /// </summary>
-    /// <returns>Linq Query.</returns>
+    /// <inheritdoc/>
     public IQueryable<TE> GetQueryable() =>
         dbContext.Set<TE>().AsNoTracking();
 
-    /// <summary>
-    /// Get the number of elements in a query.
-    /// </summary>
-    /// <param name="query">Linq Query.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Number of elements in the query.</returns>
+    /// <inheritdoc/>
     public async Task<int> QueryCountAsync(IQueryable<TE> query, CancellationToken ct = default) => await query.CountAsync(ct);
 
-    /// <summary>
-    /// Creates a List from a query.
-    /// </summary>
-    /// <param name="query">Linq Query.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>List of elements in the query.</returns>
+    /// <inheritdoc/>
     public async Task<List<TE>> QueryToListAsync(IQueryable<TE> query, CancellationToken ct = default) => await query.ToListAsync(ct);
 }

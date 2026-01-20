@@ -19,6 +19,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
@@ -394,6 +395,67 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             {
                 ResponseBody = entityData,
             };
+        }
+
+        return new CustomWebResponse(true)
+        {
+            StatusCode = HttpStatusCode.InternalServerError,
+            Message = "Storage server error",
+        };
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> RemoveImageAsync(int id, InitiativeImageType imageType, CancellationToken ct = default)
+    {
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate image
+        Uri fileName;
+        switch (imageType)
+        {
+            case InitiativeImageType.Image:
+                fileName = entity.ImageUrl;
+                entity.ImageUrl = null;
+                break;
+            case InitiativeImageType.Banner:
+                fileName = entity.BannerUrl;
+                entity.BannerUrl = null;
+                break;
+            default:
+                return new CustomWebResponse(true)
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Message = $"Invalid image type: {imageType:G}",
+                };
+        }
+
+        if (fileName == null)
+        {
+            return new CustomWebResponse();
+        }
+
+        // Remove image
+        var processSuccessful = await storageService.DeleteFileAsync(fileName.ToString(), ct);
+
+        if (processSuccessful)
+        {
+            await entityRepository.UpdateAsync(entity, ct);
+
+            var imageTypeStr = imageType.ToString("G").ToLower(CultureInfo.CurrentCulture);
+            var entityData = mapper.Map(entity);
+
+            logger.AddLog(LogType.Update, "Deleted initiative image", $"(type: {imageTypeStr}): {{@EntityData}}", entityData);
+
+            return new CustomWebResponse();
         }
 
         return new CustomWebResponse(true)

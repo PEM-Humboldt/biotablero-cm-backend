@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Core.Domain.Entities.Storage;
+using IAVH.BioTablero.CM.Core.Domain.Models.Storage;
 
 /// <summary>
 /// File Storage service interface.

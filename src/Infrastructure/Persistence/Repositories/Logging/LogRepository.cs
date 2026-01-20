@@ -12,11 +12,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
 /// <param name="dbContext">General Database Context.</param>
 public class LogRepository(GeneralContext dbContext) : Repository<LogEntity, Guid>(dbContext), ILogRepository
 {
-    /// <summary>
-    /// Include OData custom filters.
-    /// </summary>
-    /// <param name="query">Linq Query.</param>
-    /// <returns>Modified Linq query.</returns>
+    /// <inheritdoc/>
     public IQueryable<LogEntity> IncludeOdataFilters(IQueryable<LogEntity> query) =>
         query
             .Where(e => e.CustomRecord)

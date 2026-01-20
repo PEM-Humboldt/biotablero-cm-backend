@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Iam;
+using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IamEnums;
 
@@ -45,32 +45,17 @@ public class IamService : IIamService
         };
     }
 
-    /// <summary>
-    /// Check if user exists.
-    /// </summary>
-    /// <param name="username">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if user exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> UserExistsAsync(string username, CancellationToken ct = default)
     {
         var user = await GetUserData(UserVariable.Username, username, ct);
         return user != null;
     }
 
-    /// <summary>
-    /// Get user data.
-    /// </summary>
-    /// <param name="username">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>User data.</returns>
+    /// <inheritdoc/>
     public async Task<ExternalUser> GetUserDataAsync(string username, CancellationToken ct = default) => await GetUserData(UserVariable.Username, username, ct);
 
-    /// <summary>
-    /// Get users data.
-    /// </summary>
-    /// <param name="usernames">User name list.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Users data.</returns>
+    /// <inheritdoc/>
     public async Task<IEnumerable<ExternalUser>> GetUsersDataAsync(string[] usernames, CancellationToken ct = default)
     {
         var results = new List<ExternalUser>();
@@ -89,20 +74,10 @@ public class IamService : IIamService
         return results;
     }
 
-    /// <summary>
-    /// Get user data by email.
-    /// </summary>
-    /// <param name="email">User email.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>User data.</returns>
+    /// <inheritdoc/>
     public async Task<ExternalUser> GetUserDataByEmailAsync(string email, CancellationToken ct = default) => await GetUserData(UserVariable.Email, email, ct);
 
-    /// <summary>
-    /// Get users data by emails.
-    /// </summary>
-    /// <param name="emails">User emails list.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Users data.</returns>
+    /// <inheritdoc/>
     public async Task<IEnumerable<ExternalUser>> GetUsersDataByEmailsAsync(string[] emails, CancellationToken ct = default)
     {
         var results = new List<ExternalUser>();

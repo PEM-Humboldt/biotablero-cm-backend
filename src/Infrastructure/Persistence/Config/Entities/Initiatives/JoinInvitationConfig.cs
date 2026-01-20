@@ -10,10 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// </summary>
 public class JoinInvitationConfig : IEntityTypeConfiguration<JoinInvitation>
 {
-    /// <summary>
-    /// Configure entity.
-    /// </summary>
-    /// <param name="builder">Entity builder.</param>
+    /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<JoinInvitation> builder)
     {
         builder.ToTable("join_invitation", "initiatives");

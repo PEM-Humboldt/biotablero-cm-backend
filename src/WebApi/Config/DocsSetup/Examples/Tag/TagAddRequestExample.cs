@@ -12,10 +12,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 /// </summary>
 public class TagAddRequestExample : IExamplesProvider<TagDto>
 {
-    /// <summary>
-    /// Get examples for entity.
-    /// </summary>
-    /// <returns>Entity examples.</returns>
+    /// <inheritdoc/>
     public TagDto GetExamples() => new()
     {
         Name = "Tag example",

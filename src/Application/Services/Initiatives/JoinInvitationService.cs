@@ -16,7 +16,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Email;
+using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.AspNetCore.OData.Query;
@@ -75,14 +75,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         this.iamService = iamService;
     }
 
-    /// <summary>
-    /// Get elements list (OData).
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="queryOptions">OData query options.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct = default)
     {
         // Validate user level
@@ -103,12 +96,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 
-    /// <summary>
-    /// Add element.
-    /// </summary>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(JoinInvitationDto entityData, CancellationToken ct = default)
     {
         // Validate user role and initiative relationship
@@ -207,6 +195,14 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         };
     }
 
+    /// <summary>
+    /// Send notification for join invitation.
+    /// </summary>
+    /// <param name="emails">Receivers emails.</param>
+    /// <param name="initiative">Initiative data.</param>
+    /// <param name="emailMessage">Email message.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if the process is successful. False otherwise.</returns>
     private async Task<bool> SendNotificationJoinInvitation(string[] emails, Initiative initiative, string emailMessage, CancellationToken ct = default)
     {
         var emailData = new JoinInvitationEmailData

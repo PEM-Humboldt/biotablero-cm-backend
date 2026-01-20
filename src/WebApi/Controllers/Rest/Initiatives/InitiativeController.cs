@@ -161,6 +161,20 @@ public class InitiativeController(
     }
 
     /// <summary>
+    /// Remove entity image.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    [HttpDelete("RemoveImage/{id}")]
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    public async Task<IActionResult> RemoveImage(int id, CancellationToken ct)
+    {
+        var response = await entityService.RemoveImageAsync(id, InitiativeImageType.Image, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
     /// Upload entity banner.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
@@ -172,6 +186,20 @@ public class InitiativeController(
     public async Task<IActionResult> UploadBanner(int id, IFormFile formFile, CancellationToken ct)
     {
         var response = await entityService.UploadImageAsync(id, new FormFileAdapter(formFile), InitiativeImageType.Banner, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
+    /// Remove entity banner.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    [HttpDelete("RemoveBanner/{id}")]
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    public async Task<IActionResult> RemoveBanner(int id, CancellationToken ct)
+    {
+        var response = await entityService.RemoveImageAsync(id, InitiativeImageType.Banner, ct);
         return webTools.CustomResponse(response);
     }
 

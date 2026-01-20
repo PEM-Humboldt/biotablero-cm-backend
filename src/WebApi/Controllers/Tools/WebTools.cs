@@ -13,10 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 /// </summary>
 public sealed class WebTools(IHttpContextAccessor httpContextAccessor) : ControllerBase, IWebTools
 {
-    /// <summary>
-    /// Get base URL.
-    /// </summary>
-    /// <returns>Current project base URL.</returns>
+    /// <inheritdoc/>
     [ApiExplorerSettings(IgnoreApi = true)]
     public Uri GetBaseUrl()
     {
@@ -24,11 +21,7 @@ public sealed class WebTools(IHttpContextAccessor httpContextAccessor) : Control
         return new Uri($"{context?.Request.Scheme}://{context?.Request.Host.Value}{context?.Request.PathBase.Value}/");
     }
 
-    /// <summary>
-    /// Generate custom http response.
-    /// </summary>
-    /// <param name="response">Model with response data.</param>
-    /// <returns>HTTP response with custom parameters.</returns>
+    /// <inheritdoc/>
     [ApiExplorerSettings(IgnoreApi = true)]
     public IActionResult CustomResponse(CustomWebResponse response)
     {

@@ -11,11 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// </summary>
 public class InitiativeContactMappings : IMapper<InitiativeContact, InitiativeContactDto>
 {
-    /// <summary>
-    /// Map from entity to DTO.
-    /// </summary>
-    /// <param name="entity">Entity data.</param>
-    /// <returns>DTO data.</returns>
+    /// <inheritdoc/>
     public InitiativeContactDto Map(InitiativeContact entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -29,11 +25,7 @@ public class InitiativeContactMappings : IMapper<InitiativeContact, InitiativeCo
         };
     }
 
-    /// <summary>
-    /// Map from DTO to entity.
-    /// </summary>
-    /// <param name="dto">DTO data.</param>
-    /// <returns>Entity data.</returns>
+    /// <inheritdoc/>
     public InitiativeContact Map(InitiativeContactDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);

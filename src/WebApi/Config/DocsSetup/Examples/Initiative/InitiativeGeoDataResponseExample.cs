@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 
 using Swashbuckle.AspNetCore.Filters;
 
@@ -11,10 +11,7 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 public class InitiativeGeoDataResponseExample : IExamplesProvider<List<InitiativeGeoData>>
 {
-    /// <summary>
-    /// Get examples.
-    /// </summary>
-    /// <returns>Examples.</returns>
+    /// <inheritdoc/>
     public List<InitiativeGeoData> GetExamples() => [
         new()
         {

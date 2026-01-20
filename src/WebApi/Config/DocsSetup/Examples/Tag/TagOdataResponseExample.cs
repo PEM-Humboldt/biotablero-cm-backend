@@ -10,10 +10,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 /// </summary>
 public class TagOdataResponseExample : BaseOdataResponseExample<TagDto>
 {
-    /// <summary>
-    /// Create example DTO object.
-    /// </summary>
-    /// <returns>Example DTO object.</returns>
+    /// <inheritdoc/>
     protected override TagDto CreateExampleDto() => new()
     {
         Id = 0,

@@ -1,6 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Mvc;
 
-using IAVH.BioTablero.CM.Core.Domain.Utils.Email;
+using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 
 using Microsoft.AspNetCore.Mvc;
 

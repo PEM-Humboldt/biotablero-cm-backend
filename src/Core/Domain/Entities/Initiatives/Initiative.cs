@@ -31,9 +31,9 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     public string Description { get; set; }
 
     /// <summary>
-    /// Initiative influence area.
+    /// Initiative base line.
     /// </summary>
-    public string InfluenceArea { get; set; }
+    public string Baseline { get; set; }
 
     /// <summary>
     /// Initiative objective.

@@ -56,12 +56,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         this.initiativeRepository = initiativeRepository;
     }
 
-    /// <summary>
-    /// Get entities by initiative.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default)
     {
         var dataListEntity = await entityRepository.GetByInitiativeAsync(initiativeId, ct);
@@ -75,12 +70,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         };
     }
 
-    /// <summary>
-    /// Add element.
-    /// </summary>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(InitiativeLocationDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -157,13 +147,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         };
     }
 
-    /// <summary>
-    /// Update element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, InitiativeLocationDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -238,12 +222,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         };
     }
 
-    /// <summary>
-    /// Delete element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
     {
         // Validate entity

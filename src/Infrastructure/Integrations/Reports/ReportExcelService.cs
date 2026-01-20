@@ -25,12 +25,7 @@ public class ReportExcelService<TDto>(IServiceProvider serviceProvider) : IRepor
 {
     private readonly IServiceProvider serviceProvider = serviceProvider;
 
-    /// <summary>
-    /// Generate report.
-    /// </summary>
-    /// <param name="dataList">DTO object list.</param>
-    /// <param name="sheetName">Sheet name.</param>
-    /// <returns>Report data.</returns>
+    /// <inheritdoc/>
     public byte[] GenerateReport(TDto[] dataList, string sheetName = "report")
     {
         using var workbook = new XLWorkbook();

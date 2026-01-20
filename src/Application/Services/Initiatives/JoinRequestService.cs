@@ -18,9 +18,9 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Email;
+using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Email;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Iam;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.AspNetCore.OData.Query;
@@ -80,14 +80,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         this.iamService = iamService;
     }
 
-    /// <summary>
-    /// Get elements list (OData).
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="queryOptions">OData query options.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default)
     {
         // Validate user level
@@ -107,12 +100,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 
-    /// <summary>
-    /// Add element.
-    /// </summary>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(JoinRequestDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -201,13 +189,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         };
     }
 
-    /// <summary>
-    /// Update element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, JoinRequestDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -288,11 +270,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         };
     }
 
-    /// <summary>
-    /// Send notifications for old pending join requests.
-    /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task SendNotificationsOldPendingRequestsAsync(CancellationToken ct = default)
     {
         const int oldPendingRequestsDays = 30;

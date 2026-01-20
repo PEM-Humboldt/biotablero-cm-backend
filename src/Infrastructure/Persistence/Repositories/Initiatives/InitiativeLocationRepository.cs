@@ -24,63 +24,33 @@ public class InitiativeLocationRepository : Repository<InitiativeLocation, int>,
     {
     }
 
-    /// <summary>
-    /// Finds an entity with the given primary key value.
-    /// </summary>
-    /// <param name="id">The value of the primary key for the entity to be found.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public new async Task<InitiativeLocation> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.InitiativeLocations
             .Include(e => e.Location)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
-    /// <summary>
-    /// Get elements by initiative.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Entities by selected initiative.</returns>
+    /// <inheritdoc/>
     public async Task<IEnumerable<InitiativeLocation>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
         await dbContext.InitiativeLocations
             .Include(e => e.Location)
             .Where(e => e.InitiativeId == initiativeId)
             .ToListAsync(ct);
 
-    /// <summary>
-    /// Count elements by initiative.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public async Task<int> CountByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
         await dbContext.InitiativeLocations
             .Where(e => e.InitiativeId == initiativeId)
             .CountAsync(ct);
 
-    /// <summary>
-    /// Check if element is duplicated.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="locationId">Location identifier.</param>
-    /// <param name="locality">Locality name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int initiativeId, int locationId, string locality, CancellationToken ct = default) =>
         await dbContext.InitiativeLocations
             .Where(e => e.InitiativeId == initiativeId && e.LocationId == locationId && e.Locality == locality)
             .AnyAsync(ct);
 
-    /// <summary>
-    /// Check if element is duplicated.
-    /// </summary>
-    /// <param name="id">Entity identifier.</param>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="locationId">Location identifier.</param>
-    /// <param name="locality">Locality name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if any element exists. False otherwise.</returns>
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int id, int initiativeId, int locationId, string locality, CancellationToken ct = default) =>
         await dbContext.InitiativeLocations
             .Where(e => e.Id != id && e.InitiativeId == initiativeId && e.LocationId == locationId && e.Locality == locality)
