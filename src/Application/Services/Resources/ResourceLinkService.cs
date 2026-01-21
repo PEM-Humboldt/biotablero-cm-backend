@@ -137,7 +137,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         var entity = mapper.Map(entityData);
 
         // Save data
-        entity = await entityRepository.AddAsync(entity, ct);
+        entity = await entityRepository.AddAsync(entity, userName, ct);
 
         entityData = mapper.Map(entity);
 
@@ -213,7 +213,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         entity.Name = entityData.Name;
         entity.Url = new Uri(entityData.Url);
 
-        await entityRepository.UpdateAsync(entity, ct);
+        await entityRepository.UpdateAsync(entity, userName, ct);
 
         entityData = mapper.Map(entity);
 
