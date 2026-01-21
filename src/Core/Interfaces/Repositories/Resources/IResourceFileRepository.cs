@@ -25,16 +25,18 @@ public interface IResourceFileRepository : IRepository<ResourceFile, int>
     /// </summary>
     /// <param name="entity">The entity to add.</param>
     /// <param name="inputFile">Input file data.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<ResourceFile> AddAsync(ResourceFile entity, IInputFile inputFile, CancellationToken ct = default);
+    Task<ResourceFile> AddAsync(ResourceFile entity, IInputFile inputFile, string userName, CancellationToken ct = default);
 
     /// <summary>
     /// Update an entity in the database and upload a file in the storage service.
     /// </summary>
     /// <param name="entity">The entity to add.</param>
     /// <param name="inputFile">Input file data.</param>
+    /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<ResourceFile> UpdateAsync(ResourceFile entity, IInputFile inputFile, CancellationToken ct = default);
+    Task<ResourceFile> UpdateAsync(ResourceFile entity, IInputFile inputFile, string userName, CancellationToken ct = default);
 }

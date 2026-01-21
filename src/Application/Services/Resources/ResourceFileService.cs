@@ -134,7 +134,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         var entity = mapper.Map(entityData);
 
         // Save data
-        entity = await entityRepository.AddAsync(entity, formFile, ct);
+        entity = await entityRepository.AddAsync(entity, formFile, userName, ct);
 
         entityData = mapper.Map(entity);
 
@@ -214,7 +214,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         }
         else
         {
-            await entityRepository.UpdateAsync(entity, formFile, ct);
+            await entityRepository.UpdateAsync(entity, formFile, userName, ct);
         }
 
         entityData = mapper.Map(entity);

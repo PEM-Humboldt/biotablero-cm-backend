@@ -7,9 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Email;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 
 using Microsoft.EntityFrameworkCore;
@@ -24,14 +26,22 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
     private const string StoragePrefix = "resources";
     private readonly ILogger logger;
     private readonly IStorageService storageService;
+    private readonly IEmailResourceService emailResourceService;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public ResourceFileRepository(GeneralContext dbContext)
+    /// <param name="logger">System logger.</param>
+    /// <param name="emailResourceService">Email resource service.</param>
+    public ResourceFileRepository(
+        GeneralContext dbContext,
+        ILogger logger,
+        IEmailResourceService emailResourceService)
         : base(dbContext)
     {
+        this.logger = logger;
+        this.emailResourceService = emailResourceService;
     }
 
     /// <inheritdoc/>
@@ -41,7 +51,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<ResourceFile> AddAsync(ResourceFile entity, IInputFile inputFile, CancellationToken ct = default)
+    public async Task<ResourceFile> AddAsync(ResourceFile entity, IInputFile inputFile, string userName, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
@@ -64,6 +74,31 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
             entity.Url = fileUri;
 
             await dbContext.SaveChangesAsync(ct);
+
+            // Update Resource publication date and send notification
+            var resource = await dbContext.Resources
+                .Where(e => e.Id == entity.ResourceId)
+                .FirstOrDefaultAsync(ct);
+
+            if (!resource.IsDraft)
+            {
+                resource.PublicationDate = DateTime.Now;
+                await dbContext.SaveChangesAsync(ct);
+
+                var initiativeUsers = await dbContext.InitiativeUsers
+                    .Where(e => e.InitiativeId == resource.Id)
+                    .Select(e => e.UserName)
+                    .ToArrayAsync(ct);
+
+                var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(resource, userName, initiativeUsers, ct);
+
+                if (!notificationSuccessfulProcess)
+                {
+                    logger.Error("Send resource update notification error");
+                    throw new EmailException("Send resource update notification error");
+                }
+            }
+
             await transaction.CommitAsync(ct);
 
             return entity;
@@ -71,19 +106,19 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
         catch (DbUpdateException ex)
         {
             await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource file transaction error");
+            logger.Error(ex, "Resource file add transaction error (DbUpdateException)");
             return null;
         }
         catch (StorageException ex)
         {
             await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource file transaction error");
+            logger.Error(ex, "Resource file add transaction error (StorageException)");
             return null;
         }
     }
 
     /// <inheritdoc/>
-    public async Task<ResourceFile> UpdateAsync(ResourceFile entity, IInputFile inputFile, CancellationToken ct = default)
+    public async Task<ResourceFile> UpdateAsync(ResourceFile entity, IInputFile inputFile, string userName, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
@@ -104,6 +139,31 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
             entity.Url = fileUri;
 
             await dbContext.SaveChangesAsync(ct);
+
+            // Update Resource publication date and send notification
+            var resource = await dbContext.Resources
+                .Where(e => e.Id == entity.ResourceId)
+                .FirstOrDefaultAsync(ct);
+
+            if (!resource.IsDraft)
+            {
+                resource.PublicationDate = DateTime.Now;
+                await dbContext.SaveChangesAsync(ct);
+
+                var initiativeUsers = await dbContext.InitiativeUsers
+                    .Where(e => e.InitiativeId == resource.Id)
+                    .Select(e => e.UserName)
+                    .ToArrayAsync(ct);
+
+                var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(resource, userName, initiativeUsers, ct);
+
+                if (!notificationSuccessfulProcess)
+                {
+                    logger.Error("Send resource update notification error");
+                    throw new EmailException("Send resource update notification error");
+                }
+            }
+
             await transaction.CommitAsync(ct);
 
             if (oldFileUri != entity.Url)
@@ -116,13 +176,19 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
         catch (DbUpdateException ex)
         {
             await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource file transaction error");
+            logger.Error(ex, "Resource file update transaction error (DbUpdateException)");
+            return null;
+        }
+        catch (EmailException ex)
+        {
+            await transaction.RollbackAsync(ct);
+            logger.Error(ex, "Resource file update transaction error (EmailException)");
             return null;
         }
         catch (StorageException ex)
         {
             await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource file transaction error");
+            logger.Error(ex, "Resource file update transaction error (StorageException)");
             return null;
         }
     }
