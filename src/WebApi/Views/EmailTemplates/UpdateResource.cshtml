@@ -1,0 +1,10 @@
+@model IAVH.BioTablero.CM.Core.Domain.Models.Email.UpdateResourceEmailData
+@{
+    Model.Subject = $"Se ha actualizado el recurso '{Model?.ResourceName}'";
+    Model.Content = $"Se ha actualizado la información del recurso '{Model?.ResourceName}' por parte del usuario '{Model?.EditorUserName}'.";
+}
+
+<div style="margin: auto;width: 20rem;">
+    <h2 style="color: #e84a5f;">Actualización de recurso</h2>
+    <p>@Html.Raw(Model?.Content)</p>
+</div>

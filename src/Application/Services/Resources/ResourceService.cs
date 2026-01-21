@@ -273,7 +273,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         // Update entity data
         entityData = mapper.Map(entity);
 
-        await entityRepository.UpdateAsync(entity, ct);
+        await entityRepository.UpdateAsync(entity, userName, ct);
 
         entityData = mapper.Map(entity);
 
