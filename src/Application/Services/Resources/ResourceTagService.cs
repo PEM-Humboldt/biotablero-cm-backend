@@ -99,7 +99,7 @@ public class ResourceTagService : IResourceTagService
         };
 
         // Save data
-        entity = await entityRepository.AddAsync(entity, ct);
+        entity = await entityRepository.AddAsync(entity, userName, ct);
 
         logger.AddLog(LogType.Create, "Added resource tag relationship", "{@EntityData}", entity);
 
@@ -131,7 +131,7 @@ public class ResourceTagService : IResourceTagService
             };
         }
 
-        await entityRepository.DeleteAsync(entity, ct);
+        await entityRepository.DeleteAsync(entity, userName, ct);
 
         logger.AddLog(LogType.Delete, "Deleted resource tag relationship", "{@EntityData}", entity);
 
