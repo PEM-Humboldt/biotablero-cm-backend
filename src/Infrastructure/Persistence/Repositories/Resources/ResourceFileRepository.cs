@@ -33,14 +33,17 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
     /// <param name="logger">System logger.</param>
+    /// <param name="storageService">Storage service.</param>
     /// <param name="emailResourceService">Email resource service.</param>
     public ResourceFileRepository(
         GeneralContext dbContext,
         ILogger logger,
+        IStorageService storageService,
         IEmailResourceService emailResourceService)
         : base(dbContext)
     {
         this.logger = logger;
+        this.storageService = storageService;
         this.emailResourceService = emailResourceService;
     }
 
@@ -94,7 +97,6 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
 
                 if (!notificationSuccessfulProcess)
                 {
-                    logger.Error("Send resource update notification error");
                     throw new EmailException("Send resource update notification error");
                 }
             }
@@ -107,6 +109,12 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
         {
             await transaction.RollbackAsync(ct);
             logger.Error(ex, "Resource file add transaction error (DbUpdateException)");
+            return null;
+        }
+        catch (EmailException ex)
+        {
+            await transaction.RollbackAsync(ct);
+            logger.Error(ex, "Resource file update transaction error (EmailException)");
             return null;
         }
         catch (StorageException ex)
@@ -159,7 +167,6 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
 
                 if (!notificationSuccessfulProcess)
                 {
-                    logger.Error("Send resource update notification error");
                     throw new EmailException("Send resource update notification error");
                 }
             }
