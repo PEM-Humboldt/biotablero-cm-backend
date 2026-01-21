@@ -5,11 +5,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
-using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Email;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
-using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
 
@@ -23,30 +20,22 @@ using Serilog;
 public class ResourceRepository : Repository<Resource, int>, IResourceRepository
 {
     private readonly ILogger logger;
-    private readonly IWebViewTools webViewTools;
-    private readonly IEmailService emailService;
-    private readonly IIamService iamService;
+    private readonly IEmailResourceService emailResourceService;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="webViewTools">Web View Tools.</param>
-    /// <param name="emailService">Email service.</param>
-    /// <param name="iamService">IAM service.</param>
+    /// <param name="emailResourceService">Email resource service.</param>
     public ResourceRepository(
         GeneralContext dbContext,
         ILogger logger,
-        IWebViewTools webViewTools,
-        IEmailService emailService,
-        IIamService iamService)
+        IEmailResourceService emailResourceService)
         : base(dbContext)
     {
         this.logger = logger;
-        this.webViewTools = webViewTools;
-        this.emailService = emailService;
-        this.iamService = iamService;
+        this.emailResourceService = emailResourceService;
     }
 
     /// <inheritdoc/>
@@ -100,9 +89,10 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
             // Send notification
             var initiativeUsers = await dbContext.InitiativeUsers
                 .Where(e => e.InitiativeId == entity.InitiativeId)
+                .Select(e => e.UserName)
                 .ToArrayAsync(ct);
 
-            var notificationSuccessfulProcess = await SendNotificationUpdateResource(entity, userName, initiativeUsers, ct);
+            var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(entity, userName, initiativeUsers, ct);
 
             if (!notificationSuccessfulProcess)
             {
@@ -116,48 +106,15 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
         catch (DbUpdateException ex)
         {
             await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource update transaction error");
+            logger.Error(ex, "Resource update transaction error (DbUpdateException)");
             return null;
         }
         catch (EmailException ex)
         {
             await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource update transaction error");
+            logger.Error(ex, "Resource update transaction error (EmailException)");
             return null;
         }
-    }
-
-    /// <summary>
-    /// Send notification for recourse update.
-    /// </summary>
-    /// <param name="resource">Resource data.</param>
-    /// <param name="userName">Editor user name.</param>
-    /// <param name="initiativeUsers">initiative users.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>True if the process is successful. False otherwise.</returns>
-    private async Task<bool> SendNotificationUpdateResource(Resource resource, string userName, InitiativeUser[] initiativeUsers, CancellationToken ct = default)
-    {
-        var emailData = new UpdateResourceEmailData
-        {
-            ResourceName = resource.Name,
-            EditorUserName = userName,
-        };
-
-        var initiativeUserNames = initiativeUsers
-            .Select(e => e.UserName)
-            .ToArray();
-
-        var externalUsersData = await iamService.GetUsersDataAsync(initiativeUserNames, ct);
-
-        var receivers = initiativeUsers
-            .Select(e => new CustomEmailAddress(e.UserName))
-            .ToArray();
-
-        var htmlBody = await webViewTools.RenderViewToStringAsync("UpdateResource", emailData);
-
-        var response = await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
-
-        return !string.IsNullOrEmpty(response);
     }
 
     /// <summary>
