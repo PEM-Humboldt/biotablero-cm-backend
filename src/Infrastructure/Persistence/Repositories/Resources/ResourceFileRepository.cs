@@ -24,7 +24,6 @@ using Serilog;
 public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFileRepository
 {
     private const string StoragePrefix = "resources";
-    private readonly ILogger logger;
     private readonly IStorageService storageService;
     private readonly IEmailResourceService emailResourceService;
 
@@ -40,9 +39,8 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
         ILogger logger,
         IStorageService storageService,
         IEmailResourceService emailResourceService)
-        : base(dbContext)
+        : base(dbContext, logger)
     {
-        this.logger = logger;
         this.storageService = storageService;
         this.emailResourceService = emailResourceService;
     }
@@ -54,149 +52,107 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<ResourceFile> AddAsync(ResourceFile entity, IInputFile inputFile, string userName, CancellationToken ct = default)
-    {
-        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
-
-        try
-        {
-            entity.Url = new Uri($"/temp-uri/{DateTime.Now.ToFileTime()}");
-            await dbContext.ResourceFiles.AddAsync(entity, ct);
-            await dbContext.SaveChangesAsync(ct);
-
-            // Upload/Overwrite image
-            var fileName = $"{StoragePrefix}/{entity.Id}.{inputFile.Extension}";
-            var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-            var uploadSuccessful = await storageService.UploadFileAsync(fileName, inputFile.OpenStream(), inputFile.ContentType, ct);
-
-            if (!uploadSuccessful)
+    public async Task<ResourceFile> AddAsync(ResourceFile entity, IInputFile inputFile, string userName, CancellationToken ct = default) =>
+        await ExecuteInTransactionAsync(
+            async ct =>
             {
-                throw new StorageException("Resource file upload error");
-            }
-
-            entity.Url = fileUri;
-
-            await dbContext.SaveChangesAsync(ct);
-
-            // Update Resource publication date and send notification
-            var resource = await dbContext.Resources
-                .Where(e => e.Id == entity.ResourceId)
-                .FirstOrDefaultAsync(ct);
-
-            if (!resource.IsDraft)
-            {
-                resource.PublicationDate = DateTime.Now;
+                entity.Url = new Uri($"/temp-uri/{DateTime.Now.ToFileTime()}");
+                await dbContext.ResourceFiles.AddAsync(entity, ct);
                 await dbContext.SaveChangesAsync(ct);
 
-                var initiativeUsers = await dbContext.InitiativeUsers
-                    .Where(e => e.InitiativeId == resource.Id)
-                    .Select(e => e.UserName)
-                    .ToArrayAsync(ct);
+                // Upload/Overwrite image
+                var fileName = $"{StoragePrefix}/{entity.Id}.{inputFile.Extension}";
+                var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
+                var uploadSuccessful = await storageService.UploadFileAsync(fileName, inputFile.OpenStream(), inputFile.ContentType, ct);
 
-                var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(resource, userName, initiativeUsers, ct);
-
-                if (!notificationSuccessfulProcess)
+                if (!uploadSuccessful)
                 {
-                    throw new EmailException("Send resource update notification error");
+                    throw new StorageException("Resource file upload error");
                 }
-            }
 
-            await transaction.CommitAsync(ct);
+                entity.Url = fileUri;
 
-            return entity;
-        }
-        catch (DbUpdateException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource file add transaction error (DbUpdateException)");
-            return null;
-        }
-        catch (EmailException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource file update transaction error (EmailException)");
-            return null;
-        }
-        catch (StorageException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource file add transaction error (StorageException)");
-            return null;
-        }
-    }
+                await dbContext.SaveChangesAsync(ct);
+
+                // Update Resource publication date and send notification
+                var resource = await dbContext.Resources
+                    .Where(e => e.Id == entity.ResourceId)
+                    .FirstOrDefaultAsync(ct);
+
+                if (!resource.IsDraft)
+                {
+                    resource.PublicationDate = DateTime.Now;
+                    await dbContext.SaveChangesAsync(ct);
+
+                    var initiativeUsers = await dbContext.InitiativeUsers
+                        .Where(e => e.InitiativeId == resource.Id)
+                        .Select(e => e.UserName)
+                        .ToArrayAsync(ct);
+
+                    var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(resource, userName, initiativeUsers, ct);
+
+                    if (!notificationSuccessfulProcess)
+                    {
+                        throw new EmailException("Send resource update notification error");
+                    }
+                }
+
+                return entity;
+            },
+            "Resource file add transaction error",
+            ct);
 
     /// <inheritdoc/>
-    public async Task<ResourceFile> UpdateAsync(ResourceFile entity, IInputFile inputFile, string userName, CancellationToken ct = default)
-    {
-        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
-
-        try
-        {
-            var oldFileUri = entity.Url;
-
-            // Upload/Overwrite image
-            var fileName = $"{StoragePrefix}/{entity.Id}.{inputFile.Extension}";
-            var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-            var uploadSuccessful = await storageService.UploadFileAsync(fileName, inputFile.OpenStream(), inputFile.ContentType, ct);
-
-            if (!uploadSuccessful)
+    public async Task<ResourceFile> UpdateAsync(ResourceFile entity, IInputFile inputFile, string userName, CancellationToken ct = default) =>
+        await ExecuteInTransactionAsync(
+            async ct =>
             {
-                throw new StorageException("Resource file upload error");
-            }
+                var oldFileUri = entity.Url;
 
-            entity.Url = fileUri;
+                // Upload/Overwrite image
+                var fileName = $"{StoragePrefix}/{entity.Id}.{inputFile.Extension}";
+                var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
+                var uploadSuccessful = await storageService.UploadFileAsync(fileName, inputFile.OpenStream(), inputFile.ContentType, ct);
 
-            await dbContext.SaveChangesAsync(ct);
+                if (!uploadSuccessful)
+                {
+                    throw new StorageException("Resource file upload error");
+                }
 
-            // Update Resource publication date and send notification
-            var resource = await dbContext.Resources
-                .Where(e => e.Id == entity.ResourceId)
-                .FirstOrDefaultAsync(ct);
+                entity.Url = fileUri;
 
-            if (!resource.IsDraft)
-            {
-                resource.PublicationDate = DateTime.Now;
                 await dbContext.SaveChangesAsync(ct);
 
-                var initiativeUsers = await dbContext.InitiativeUsers
-                    .Where(e => e.InitiativeId == resource.Id)
-                    .Select(e => e.UserName)
-                    .ToArrayAsync(ct);
+                // Update Resource publication date and send notification
+                var resource = await dbContext.Resources
+                    .Where(e => e.Id == entity.ResourceId)
+                    .FirstOrDefaultAsync(ct);
 
-                var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(resource, userName, initiativeUsers, ct);
-
-                if (!notificationSuccessfulProcess)
+                if (!resource.IsDraft)
                 {
-                    throw new EmailException("Send resource update notification error");
+                    resource.PublicationDate = DateTime.Now;
+                    await dbContext.SaveChangesAsync(ct);
+
+                    var initiativeUsers = await dbContext.InitiativeUsers
+                        .Where(e => e.InitiativeId == resource.Id)
+                        .Select(e => e.UserName)
+                        .ToArrayAsync(ct);
+
+                    var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(resource, userName, initiativeUsers, ct);
+
+                    if (!notificationSuccessfulProcess)
+                    {
+                        throw new EmailException("Send resource update notification error");
+                    }
                 }
-            }
 
-            await transaction.CommitAsync(ct);
+                if (oldFileUri != entity.Url)
+                {
+                    await storageService.DeleteFileAsync(oldFileUri.ToString(), ct);
+                }
 
-            if (oldFileUri != entity.Url)
-            {
-                await storageService.DeleteFileAsync(oldFileUri.ToString(), ct);
-            }
-
-            return entity;
-        }
-        catch (DbUpdateException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource file update transaction error (DbUpdateException)");
-            return null;
-        }
-        catch (EmailException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource file update transaction error (EmailException)");
-            return null;
-        }
-        catch (StorageException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource file update transaction error (StorageException)");
-            return null;
-        }
-    }
+                return entity;
+            },
+            "Resource file update transaction error",
+            ct);
 }

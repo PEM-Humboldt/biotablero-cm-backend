@@ -19,7 +19,6 @@ using Serilog;
 /// </summary>
 public class ResourceRepository : Repository<Resource, int>, IResourceRepository
 {
-    private readonly ILogger logger;
     private readonly IEmailResourceService emailResourceService;
 
     /// <summary>
@@ -32,9 +31,8 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
         GeneralContext dbContext,
         ILogger logger,
         IEmailResourceService emailResourceService)
-        : base(dbContext)
+        : base(dbContext, logger)
     {
-        this.logger = logger;
         this.emailResourceService = emailResourceService;
     }
 
@@ -76,46 +74,31 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<Resource> UpdateAsync(Resource entity, string userName, CancellationToken ct = default)
-    {
-        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
-
-        try
-        {
-            // Update entity.
-            entity.PublicationDate = DateTime.Now;
-            await dbContext.SaveChangesAsync(ct);
-
-            // Send notification
-            var initiativeUsers = await dbContext.InitiativeUsers
-                .Where(e => e.InitiativeId == entity.InitiativeId)
-                .Select(e => e.UserName)
-                .ToArrayAsync(ct);
-
-            var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(entity, userName, initiativeUsers, ct);
-
-            if (!notificationSuccessfulProcess)
+    public async Task<Resource> UpdateAsync(Resource entity, string userName, CancellationToken ct = default) =>
+        await ExecuteInTransactionAsync(
+            async ct =>
             {
-                logger.Error("Send resource update notification error");
-                throw new EmailException("Send resource update notification error");
-            }
+                entity.PublicationDate = DateTime.Now;
+                await dbContext.SaveChangesAsync(ct);
 
-            await transaction.CommitAsync(ct);
-            return entity;
-        }
-        catch (DbUpdateException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource update transaction error (DbUpdateException)");
-            return null;
-        }
-        catch (EmailException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource update transaction error (EmailException)");
-            return null;
-        }
-    }
+                // Send notification
+                var initiativeUsers = await dbContext.InitiativeUsers
+                    .Where(e => e.InitiativeId == entity.InitiativeId)
+                    .Select(e => e.UserName)
+                    .ToArrayAsync(ct);
+
+                var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(entity, userName, initiativeUsers, ct);
+
+                if (!notificationSuccessfulProcess)
+                {
+                    logger.Error("Send resource update notification error");
+                    throw new EmailException("Send resource update notification error");
+                }
+
+                return entity;
+            },
+            "Resource update transaction error",
+            ct);
 
     /// <summary>
     /// Include custom entities.

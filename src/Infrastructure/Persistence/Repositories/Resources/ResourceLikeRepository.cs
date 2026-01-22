@@ -9,6 +9,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 /// <summary>
 /// Resource Like repository.
 /// </summary>
@@ -18,8 +20,11 @@ public class ResourceLikeRepository : Repository<ResourceLike, int>, IResourceLi
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public ResourceLikeRepository(GeneralContext dbContext)
-        : base(dbContext)
+    /// <param name="logger">System logger.</param>
+    public ResourceLikeRepository(
+        GeneralContext dbContext,
+        ILogger logger)
+        : base(dbContext, logger)
     {
     }
 

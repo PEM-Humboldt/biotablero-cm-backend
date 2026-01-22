@@ -19,7 +19,6 @@ using Serilog;
 /// </summary>
 public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagRepository
 {
-    private readonly ILogger logger;
     private readonly IEmailResourceService emailResourceService;
 
     /// <summary>
@@ -32,9 +31,8 @@ public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagR
         GeneralContext dbContext,
         ILogger logger,
         IEmailResourceService emailResourceService)
-        : base(dbContext)
+        : base(dbContext, logger)
     {
-        this.logger = logger;
         this.emailResourceService = emailResourceService;
     }
 
@@ -45,104 +43,74 @@ public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagR
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<ResourceTag> AddAsync(ResourceTag entity, string userName, CancellationToken ct = default)
-    {
-        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
-
-        try
-        {
-            await dbContext.ResourceTags.AddAsync(entity, ct);
-            await dbContext.SaveChangesAsync(ct);
-
-            // Update Resource publication date and send notification
-            var resource = await dbContext.Resources
-                .Where(e => e.Id == entity.ResourceId)
-                .FirstOrDefaultAsync(ct);
-
-            if (!resource.IsDraft)
+    public async Task<ResourceTag> AddAsync(ResourceTag entity, string userName, CancellationToken ct = default) =>
+        await ExecuteInTransactionAsync(
+            async ct =>
             {
-                resource.PublicationDate = DateTime.Now;
+                await dbContext.ResourceTags.AddAsync(entity, ct);
                 await dbContext.SaveChangesAsync(ct);
 
-                var initiativeUsers = await dbContext.InitiativeUsers
-                    .Where(e => e.InitiativeId == resource.Id)
-                    .Select(e => e.UserName)
-                    .ToArrayAsync(ct);
+                // Update Resource publication date and send notification
+                var resource = await dbContext.Resources
+                    .Where(e => e.Id == entity.ResourceId)
+                    .FirstOrDefaultAsync(ct);
 
-                var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(resource, userName, initiativeUsers, ct);
-
-                if (!notificationSuccessfulProcess)
+                if (!resource.IsDraft)
                 {
-                    throw new EmailException("Send resource update notification error");
+                    resource.PublicationDate = DateTime.Now;
+                    await dbContext.SaveChangesAsync(ct);
+
+                    var initiativeUsers = await dbContext.InitiativeUsers
+                        .Where(e => e.InitiativeId == resource.Id)
+                        .Select(e => e.UserName)
+                        .ToArrayAsync(ct);
+
+                    var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(resource, userName, initiativeUsers, ct);
+
+                    if (!notificationSuccessfulProcess)
+                    {
+                        throw new EmailException("Send resource update notification error");
+                    }
                 }
-            }
 
-            await transaction.CommitAsync(ct);
-
-            return entity;
-        }
-        catch (DbUpdateException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource tag add transaction error (DbUpdateException)");
-            return null;
-        }
-        catch (EmailException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource tag add transaction error (EmailException)");
-            return null;
-        }
-    }
+                return entity;
+            },
+            "Resource tag add transaction error",
+            ct);
 
     /// <inheritdoc/>
-    public async Task<int> DeleteAsync(ResourceTag entity, string userName, CancellationToken ct = default)
-    {
-        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
-
-        try
-        {
-            dbContext.ResourceTags.Remove(entity);
-            var result = await dbContext.SaveChangesAsync(ct);
-
-            // Update Resource publication date and send notification
-            var resource = await dbContext.Resources
-                .Where(e => e.Id == entity.ResourceId)
-                .FirstOrDefaultAsync(ct);
-
-            if (!resource.IsDraft)
+    public async Task<int> DeleteAsync(ResourceTag entity, string userName, CancellationToken ct = default) =>
+        await ExecuteInTransactionAsync(
+            async ct =>
             {
-                resource.PublicationDate = DateTime.Now;
-                await dbContext.SaveChangesAsync(ct);
+                dbContext.ResourceTags.Remove(entity);
+                var result = await dbContext.SaveChangesAsync(ct);
 
-                var initiativeUsers = await dbContext.InitiativeUsers
-                    .Where(e => e.InitiativeId == resource.Id)
-                    .Select(e => e.UserName)
-                    .ToArrayAsync(ct);
+                // Update Resource publication date and send notification
+                var resource = await dbContext.Resources
+                    .Where(e => e.Id == entity.ResourceId)
+                    .FirstOrDefaultAsync(ct);
 
-                var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(resource, userName, initiativeUsers, ct);
-
-                if (!notificationSuccessfulProcess)
+                if (!resource.IsDraft)
                 {
-                    throw new EmailException("Send resource update notification error");
+                    resource.PublicationDate = DateTime.Now;
+                    await dbContext.SaveChangesAsync(ct);
+
+                    var initiativeUsers = await dbContext.InitiativeUsers
+                        .Where(e => e.InitiativeId == resource.Id)
+                        .Select(e => e.UserName)
+                        .ToArrayAsync(ct);
+
+                    var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(resource, userName, initiativeUsers, ct);
+
+                    if (!notificationSuccessfulProcess)
+                    {
+                        throw new EmailException("Send resource update notification error");
+                    }
                 }
-            }
 
-            await transaction.CommitAsync(ct);
-
-            return result;
-        }
-        catch (DbUpdateException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource tag delete transaction error (DbUpdateException)");
-            return 0;
-        }
-        catch (EmailException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Resource tag delete transaction error (EmailException)");
-            return 0;
-        }
-    }
+                return result;
+            },
+            "Resource tag delete transaction error",
+            ct);
 }
