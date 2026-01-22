@@ -16,7 +16,6 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
-using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 
 using Serilog;
@@ -78,7 +77,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(string userName, ResourceLinkDto entityData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string userName, ResourceLinkDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
@@ -157,7 +156,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceLinkDto entityData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceLinkDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
