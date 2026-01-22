@@ -9,11 +9,14 @@ using System.Threading.Tasks;
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
+using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
@@ -38,6 +41,9 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IRepository<ResourceType, int> resourceTypeRepository;
     private readonly IResourceLikeRepository resourceLikeRepository;
+    private readonly IWebViewTools webViewTools;
+    private readonly IEmailService emailService;
+    private readonly IIamService iamService;
 
     /// <summary>
     /// Constructor.
@@ -50,6 +56,9 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <param name="initiativeUserRepository">Initiative User repository.</param>
     /// <param name="resourceTypeRepository">Resource Type repository.</param>
     /// <param name="resourceLikeRepository">Resource Like repository.</param>
+    /// <param name="webViewTools">Web View Tools.</param>
+    /// <param name="emailService">Email service.</param>
+    /// <param name="iamService">IAM service.</param>
     public ResourceService(
         IResourceRepository entityRepository,
         IMapper<Resource, ResourceDto> mapper,
@@ -58,7 +67,10 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         IInitiativeRepository initiativeRepository,
         IInitiativeUserRepository initiativeUserRepository,
         IRepository<ResourceType, int> resourceTypeRepository,
-        IResourceLikeRepository resourceLikeRepository)
+        IResourceLikeRepository resourceLikeRepository,
+        IWebViewTools webViewTools,
+        IEmailService emailService,
+        IIamService iamService)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
@@ -68,6 +80,9 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         this.initiativeUserRepository = initiativeUserRepository;
         this.resourceTypeRepository = resourceTypeRepository;
         this.resourceLikeRepository = resourceLikeRepository;
+        this.webViewTools = webViewTools;
+        this.emailService = emailService;
+        this.iamService = iamService;
     }
 
     /// <inheritdoc/>
@@ -271,9 +286,15 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Update entity data
-        entityData = mapper.Map(entity);
+        if (!entity.IsDraft)
+        {
+            entity.PublicationDate = DateTime.Now;
+        }
 
-        await entityRepository.UpdateAsync(entity, userName, ct);
+        await entityRepository.UpdateAsync(entity, ct);
+
+        // Send email
+        await SendUpdateNotificationAsync(entity, userName, ct);
 
         entityData = mapper.Map(entity);
 
@@ -363,5 +384,36 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         logger.AddLog(LogType.Delete, "Deleted resource", "{@EntityData}", entityData);
 
         return new CustomWebResponse();
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> SendUpdateNotificationAsync(Resource resource, string userName, CancellationToken ct = default)
+    {
+        if (resource.IsDraft)
+        {
+            return true;
+        }
+
+        var emailData = new UpdateResourceEmailData
+        {
+            ResourceName = resource.Name,
+            EditorUserName = userName,
+        };
+
+        var initiativeUsers = (await initiativeUserRepository.GetByInitiativeAsync(resource.InitiativeId, ct))
+            .Select(e => e.UserName)
+            .ToArray();
+
+        var externalUsersData = await iamService.GetUsersDataAsync(initiativeUsers, ct);
+
+        var receivers = initiativeUsers
+            .Select(e => new CustomEmailAddress(e))
+            .ToArray();
+
+        var htmlBody = await webViewTools.RenderViewToStringAsync("UpdateResource", emailData);
+
+        var response = await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
+
+        return !string.IsNullOrEmpty(response);
     }
 }

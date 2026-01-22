@@ -2,7 +2,6 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Email;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
@@ -10,7 +9,6 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
-using IAVH.BioTablero.CM.Infrastructure.Integrations.Email.Services;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.ImageUtils;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports;
@@ -77,7 +75,6 @@ public static class ConfigExternalServices
         services.AddScoped<IStorageService, StorageService>();
         services.AddSingleton<IIamService, IamService>();
         services.AddSingleton<IEmailService, EmailService>();
-        services.AddSingleton<IEmailResourceService, EmailResourceService>();
         services.AddScoped<IReportConfig<LogDto>, LogReportConfig>();
         services.AddScoped<IVideoHelperService, VideoHelperService>();
         services.AddScoped<IImageUtilsService, ImageUtilsService>();

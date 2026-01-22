@@ -36,22 +36,4 @@ public interface IResourceLinkRepository : IRepository<ResourceLink, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
     Task<bool> IsDuplicatedAsync(int id, Uri url, CancellationToken ct = default);
-
-    /// <summary>
-    /// Adds an entity in the database.
-    /// </summary>
-    /// <param name="entity">The entity to add.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    Task<ResourceLink> AddAsync(ResourceLink entity, string userName, CancellationToken ct = default);
-
-    /// <summary>
-    /// Update an entity in the database.
-    /// </summary>
-    /// <param name="entity">The entity to add.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    Task<ResourceLink> UpdateAsync(ResourceLink entity, string userName, CancellationToken ct = default);
 }

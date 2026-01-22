@@ -46,13 +46,4 @@ public interface IResourceRepository : IRepository<Resource, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
     Task<bool> IsDuplicatedAsync(int id, string name, CancellationToken ct = default);
-
-    /// <summary>
-    /// Updates an entity in the database.
-    /// </summary>
-    /// <param name="entity">The entity to update.</param>
-    /// <param name="userName">The editor user name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    Task<Resource> UpdateAsync(Resource entity, string userName, CancellationToken ct = default);
 }

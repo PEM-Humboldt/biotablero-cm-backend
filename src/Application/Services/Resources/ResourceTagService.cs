@@ -24,6 +24,7 @@ public class ResourceTagService : IResourceTagService
     private readonly ILogger logger;
     private readonly IResourceRepository resourceRepository;
     private readonly ITagRepository tagRepository;
+    private readonly IResourceService resourceService;
 
     /// <summary>
     /// Constructor.
@@ -32,16 +33,19 @@ public class ResourceTagService : IResourceTagService
     /// <param name="logger">System logger.</param>
     /// <param name="resourceRepository">Resource repository.</param>
     /// <param name="tagRepository">Tag repository.</param>
+    /// <param name="resourceService">Resource service.</param>
     public ResourceTagService(
         IResourceTagRepository entityRepository,
         ILogger logger,
         IResourceRepository resourceRepository,
-        ITagRepository tagRepository)
+        ITagRepository tagRepository,
+        IResourceService resourceService)
     {
         this.entityRepository = entityRepository;
         this.logger = logger;
         this.resourceRepository = resourceRepository;
         this.tagRepository = tagRepository;
+        this.resourceService = resourceService;
     }
 
     /// <inheritdoc/>
@@ -59,9 +63,9 @@ public class ResourceTagService : IResourceTagService
         }
 
         // Validate resource
-        var resourceExists = await resourceRepository.AnyAsync(resourceId, ct);
+        var resource = await resourceRepository.GetByIdAsync(resourceId, ct);
 
-        if (!resourceExists)
+        if (resource != null)
         {
             return new CustomWebResponse(true)
             {
@@ -99,7 +103,10 @@ public class ResourceTagService : IResourceTagService
         };
 
         // Save data
-        entity = await entityRepository.AddAsync(entity, userName, ct);
+        entity = await entityRepository.AddAsync(entity, ct);
+
+        // Send email
+        await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         logger.AddLog(LogType.Create, "Added resource tag relationship", "{@EntityData}", entity);
 
@@ -131,7 +138,11 @@ public class ResourceTagService : IResourceTagService
             };
         }
 
-        await entityRepository.DeleteAsync(entity, userName, ct);
+        await entityRepository.DeleteAsync(entity, ct);
+
+        // Send email
+        var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+        await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         logger.AddLog(LogType.Delete, "Deleted resource tag relationship", "{@EntityData}", entity);
 

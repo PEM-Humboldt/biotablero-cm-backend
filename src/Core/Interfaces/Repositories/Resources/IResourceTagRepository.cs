@@ -18,22 +18,4 @@ public interface IResourceTagRepository : IRepository<ResourceTag, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
     Task<bool> IsDuplicatedAsync(int resourceId, int tagId, CancellationToken ct = default);
-
-    /// <summary>
-    /// Adds an entity in the database.
-    /// </summary>
-    /// <param name="entity">The entity to add.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    Task<ResourceTag> AddAsync(ResourceTag entity, string userName, CancellationToken ct = default);
-
-    /// <summary>
-    /// Removes an entity in the database.
-    /// </summary>
-    /// <param name="entity">The entity to delete.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    Task<int> DeleteAsync(ResourceTag entity, string userName, CancellationToken ct = default);
 }

@@ -30,6 +30,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     private readonly IValidator<ResourceFileDto> entityValidator;
     private readonly ILogger logger;
     private readonly IResourceRepository resourceRepository;
+    private readonly IResourceService resourceService;
 
     /// <summary>
     /// Constructor.
@@ -39,18 +40,21 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="resourceRepository">Resource repository.</param>
+    /// <param name="resourceService">Resource service.</param>
     public ResourceFileService(
         IResourceFileRepository entityRepository,
         IMapper<ResourceFile, ResourceFileDto> mapper,
         IValidator<ResourceFileDto> entityValidator,
         ILogger logger,
-        IResourceRepository resourceRepository)
+        IResourceRepository resourceRepository,
+        IResourceService resourceService)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.resourceRepository = resourceRepository;
+        this.resourceService = resourceService;
     }
 
     /// <inheritdoc/>
@@ -83,10 +87,10 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
             };
         }
 
-        // Validate user permissions
-        var resourceExists = await resourceRepository.AnyAsync(entityData.ResourceId, ct);
+        // Validate resource
+        var resource = await resourceRepository.GetByIdAsync(entityData.ResourceId, ct);
 
-        if (!resourceExists)
+        if (resource == null)
         {
             return new CustomWebResponse(true)
             {
@@ -134,7 +138,10 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         var entity = mapper.Map(entityData);
 
         // Save data
-        entity = await entityRepository.AddAsync(entity, formFile, userName, ct);
+        entity = await entityRepository.AddAsync(entity, formFile, ct);
+
+        // Send email
+        await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         entityData = mapper.Map(entity);
 
@@ -214,8 +221,12 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         }
         else
         {
-            await entityRepository.UpdateAsync(entity, formFile, userName, ct);
+            await entityRepository.UpdateAsync(entity, formFile, ct);
         }
+
+        // Send email
+        var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+        await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         entityData = mapper.Map(entity);
 
@@ -253,6 +264,10 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         }
 
         await entityRepository.DeleteAsync(entity, ct);
+
+        // Send email
+        var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+        await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         var entityData = mapper.Map(entity);
 

@@ -69,4 +69,13 @@ public interface IResourceService : IRead<Resource, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default);
+
+    /// <summary>
+    /// Send notification for resource update.
+    /// </summary>
+    /// <param name="resource">Resource data.</param>
+    /// <param name="userName">Editor user name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if the process is successful. False otherwise.</returns>
+    Task<bool> SendUpdateNotificationAsync(Resource resource, string userName, CancellationToken ct = default);
 }

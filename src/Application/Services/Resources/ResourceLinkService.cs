@@ -33,6 +33,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     private readonly ILogger logger;
     private readonly IResourceRepository resourceRepository;
     private readonly IWebHelperService webHelperService;
+    private readonly IResourceService resourceService;
 
     /// <summary>
     /// Constructor.
@@ -43,13 +44,15 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     /// <param name="logger">System logger.</param>
     /// <param name="resourceRepository">Resource repository.</param>
     /// <param name="webHelperService">Web Helper service.</param>
+    /// <param name="resourceService">Resource service.</param>
     public ResourceLinkService(
         IResourceLinkRepository entityRepository,
         IMapper<ResourceLink, ResourceLinkDto> mapper,
         IValidator<ResourceLinkDto> entityValidator,
         ILogger logger,
         IResourceRepository resourceRepository,
-        IWebHelperService webHelperService)
+        IWebHelperService webHelperService,
+        IResourceService resourceService)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
@@ -57,6 +60,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         this.logger = logger;
         this.resourceRepository = resourceRepository;
         this.webHelperService = webHelperService;
+        this.resourceService = resourceService;
     }
 
     /// <inheritdoc/>
@@ -90,9 +94,9 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate resource
-        var resourceExists = await resourceRepository.AnyAsync(entityData.ResourceId, ct);
+        var resource = await resourceRepository.GetByIdAsync(entityData.ResourceId, ct);
 
-        if (!resourceExists)
+        if (resource == null)
         {
             return new CustomWebResponse(true)
             {
@@ -137,7 +141,10 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         var entity = mapper.Map(entityData);
 
         // Save data
-        entity = await entityRepository.AddAsync(entity, userName, ct);
+        entity = await entityRepository.AddAsync(entity, ct);
+
+        // Send email
+        await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         entityData = mapper.Map(entity);
 
@@ -213,7 +220,11 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         entity.Name = entityData.Name;
         entity.Url = new Uri(entityData.Url);
 
-        await entityRepository.UpdateAsync(entity, userName, ct);
+        await entityRepository.UpdateAsync(entity, ct);
+
+        // Send email
+        var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+        await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         entityData = mapper.Map(entity);
 
@@ -251,6 +262,10 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         await entityRepository.DeleteAsync(entity, ct);
+
+        // Send email
+        var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+        await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         var entityData = mapper.Map(entity);
 

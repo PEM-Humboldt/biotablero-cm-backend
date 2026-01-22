@@ -1,14 +1,11 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Resources;
 
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Email;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
-using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -19,21 +16,16 @@ using Serilog;
 /// </summary>
 public class ResourceRepository : Repository<Resource, int>, IResourceRepository
 {
-    private readonly IEmailResourceService emailResourceService;
-
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="emailResourceService">Email resource service.</param>
     public ResourceRepository(
         GeneralContext dbContext,
-        ILogger logger,
-        IEmailResourceService emailResourceService)
+        ILogger logger)
         : base(dbContext, logger)
     {
-        this.emailResourceService = emailResourceService;
     }
 
     /// <inheritdoc/>
@@ -72,33 +64,6 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
         await dbContext.Resources
             .Where(e => e.Id != id && e.Name == name)
             .AnyAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<Resource> UpdateAsync(Resource entity, string userName, CancellationToken ct = default) =>
-        await ExecuteInTransactionAsync(
-            async ct =>
-            {
-                entity.PublicationDate = DateTime.Now;
-                await dbContext.SaveChangesAsync(ct);
-
-                // Send notification
-                var initiativeUsers = await dbContext.InitiativeUsers
-                    .Where(e => e.InitiativeId == entity.InitiativeId)
-                    .Select(e => e.UserName)
-                    .ToArrayAsync(ct);
-
-                var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(entity, userName, initiativeUsers, ct);
-
-                if (!notificationSuccessfulProcess)
-                {
-                    logger.Error("Send resource update notification error");
-                    throw new EmailException("Send resource update notification error");
-                }
-
-                return entity;
-            },
-            "Resource update transaction error",
-            ct);
 
     /// <summary>
     /// Include custom entities.

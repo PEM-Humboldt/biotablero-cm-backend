@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Email;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
@@ -24,7 +23,6 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
 {
     private const string StoragePrefix = "resources";
     private readonly IStorageService storageService;
-    private readonly IEmailResourceService emailResourceService;
 
     /// <summary>
     /// Constructor.
@@ -32,16 +30,13 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
     /// <param name="dbContext">General Database Context.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="storageService">Storage service.</param>
-    /// <param name="emailResourceService">Email resource service.</param>
     public ResourceFileRepository(
         GeneralContext dbContext,
         ILogger logger,
-        IStorageService storageService,
-        IEmailResourceService emailResourceService)
+        IStorageService storageService)
         : base(dbContext, logger)
     {
         this.storageService = storageService;
-        this.emailResourceService = emailResourceService;
     }
 
     /// <inheritdoc/>
@@ -51,7 +46,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<ResourceFile> AddAsync(ResourceFile entity, IInputFile inputFile, string userName, CancellationToken ct = default) =>
+    public async Task<ResourceFile> AddAsync(ResourceFile entity, IInputFile inputFile, CancellationToken ct = default) =>
         await ExecuteInTransactionAsync(
             async ct =>
             {
@@ -62,7 +57,16 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
                 await UploadAndSetFileAsync(entity, inputFile, ct);
                 await dbContext.SaveChangesAsync(ct);
 
-                await UpdateResourceAndNotifyAsync(entity, userName, ct);
+                // Update Resource publication date
+                var resource = await dbContext.Resources
+                    .Where(e => e.Id == entity.ResourceId)
+                    .FirstOrDefaultAsync(ct);
+
+                if (!resource.IsDraft)
+                {
+                    resource.PublicationDate = DateTime.Now;
+                    await dbContext.SaveChangesAsync(ct);
+                }
 
                 return entity;
             },
@@ -70,23 +74,56 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
             ct);
 
     /// <inheritdoc/>
-    public async Task<ResourceFile> UpdateAsync(ResourceFile entity, IInputFile inputFile, string userName, CancellationToken ct = default) =>
+    public new async Task<int> UpdateAsync(ResourceFile entity, CancellationToken ct = default) =>
+        await ExecuteInTransactionAsync(
+            async ct =>
+            {
+                dbContext.Entry(entity).State = EntityState.Modified;
+                var result = await dbContext.SaveChangesAsync(ct);
+
+                // Update Resource publication date
+                var resource = await dbContext.Resources
+                    .Where(e => e.Id == entity.ResourceId)
+                    .FirstOrDefaultAsync(ct);
+
+                if (!resource.IsDraft)
+                {
+                    resource.PublicationDate = DateTime.Now;
+                    result = await dbContext.SaveChangesAsync(ct);
+                }
+
+                return result;
+            },
+            "Resource file update transaction error",
+            ct);
+
+    /// <inheritdoc/>
+    public async Task<int> UpdateAsync(ResourceFile entity, IInputFile inputFile, CancellationToken ct = default) =>
         await ExecuteInTransactionAsync(
             async ct =>
             {
                 var oldFileUri = entity.Url;
 
                 await UploadAndSetFileAsync(entity, inputFile, ct);
-                await dbContext.SaveChangesAsync(ct);
+                var result = await dbContext.SaveChangesAsync(ct);
 
-                await UpdateResourceAndNotifyAsync(entity, userName, ct);
+                // Update Resource publication date
+                var resource = await dbContext.Resources
+                    .Where(e => e.Id == entity.ResourceId)
+                    .FirstOrDefaultAsync(ct);
+
+                if (!resource.IsDraft)
+                {
+                    resource.PublicationDate = DateTime.Now;
+                    result = await dbContext.SaveChangesAsync(ct);
+                }
 
                 if (oldFileUri != entity.Url)
                 {
                     await storageService.DeleteFileAsync(oldFileUri.ToString(), ct);
                 }
 
-                return entity;
+                return result;
             },
             "Resource file update transaction error",
             ct);
@@ -117,36 +154,5 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
         }
 
         entity.Url = fileUri;
-    }
-
-    /// <summary>
-    /// Update Resource publication date and send notification.
-    /// </summary>
-    /// <param name="entity">Resource entity.</param>
-    /// <param name="userName">Editor username.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>process result.</returns>
-    private async Task UpdateResourceAndNotifyAsync(
-        ResourceFile entity,
-        string userName,
-        CancellationToken ct)
-    {
-        var resource = await dbContext.Resources
-            .FirstOrDefaultAsync(e => e.Id == entity.ResourceId, ct);
-
-        if (resource.IsDraft)
-        {
-            return;
-        }
-
-        resource.PublicationDate = DateTime.Now;
-        await dbContext.SaveChangesAsync(ct);
-
-        var users = await dbContext.InitiativeUsers
-            .Where(e => e.InitiativeId == resource.Id)
-            .Select(e => e.UserName)
-            .ToArrayAsync(ct);
-
-        await emailResourceService.SendNotificationUpdateResource(resource, userName, users, ct);
     }
 }
