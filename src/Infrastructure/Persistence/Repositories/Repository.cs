@@ -10,9 +10,13 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.Infrastructure.Persistence;
 
 using Microsoft.EntityFrameworkCore;
+
+using Serilog;
 
 /// <summary>
 /// Base repository interface.
@@ -28,12 +32,21 @@ public class Repository<TE, TI> : IRepository<TE, TI>
     private protected readonly GeneralContext dbContext;
 
     /// <summary>
+    /// Serilog logger.
+    /// </summary>
+    private protected readonly ILogger logger;
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public Repository(GeneralContext dbContext)
+    /// <param name="logger">System logger.</param>
+    public Repository(
+        GeneralContext dbContext,
+        ILogger logger)
     {
         this.dbContext = dbContext;
+        this.logger = logger;
     }
 
     /// <inheritdoc/>
@@ -125,4 +138,26 @@ public class Repository<TE, TI> : IRepository<TE, TI>
 
     /// <inheritdoc/>
     public async Task<List<TE>> QueryToListAsync(IQueryable<TE> query, CancellationToken ct = default) => await query.ToListAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<TR> ExecuteInTransactionAsync<TR>(Func<CancellationToken, Task<TR>> action, string errorContext, CancellationToken ct = default)
+    {
+        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
+
+        try
+        {
+            var result = await action(ct);
+            await transaction.CommitAsync(ct);
+            return result;
+        }
+        catch (Exception ex) when (
+            ex is DbUpdateException or
+            EmailException or
+            StorageException)
+        {
+            await transaction.RollbackAsync(ct);
+            logger.Error(ex, errorContext);
+            return default;
+        }
+    }
 }
