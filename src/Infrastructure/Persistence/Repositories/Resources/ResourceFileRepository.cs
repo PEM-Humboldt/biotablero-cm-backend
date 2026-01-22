@@ -11,7 +11,6 @@ using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Email;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
-using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 
 using Microsoft.EntityFrameworkCore;
@@ -60,42 +59,10 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
                 await dbContext.ResourceFiles.AddAsync(entity, ct);
                 await dbContext.SaveChangesAsync(ct);
 
-                // Upload/Overwrite image
-                var fileName = $"{StoragePrefix}/{entity.Id}.{inputFile.Extension}";
-                var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-                var uploadSuccessful = await storageService.UploadFileAsync(fileName, inputFile.OpenStream(), inputFile.ContentType, ct);
-
-                if (!uploadSuccessful)
-                {
-                    throw new StorageException("Resource file upload error");
-                }
-
-                entity.Url = fileUri;
-
+                await UploadAndSetFileAsync(entity, inputFile, ct);
                 await dbContext.SaveChangesAsync(ct);
 
-                // Update Resource publication date and send notification
-                var resource = await dbContext.Resources
-                    .Where(e => e.Id == entity.ResourceId)
-                    .FirstOrDefaultAsync(ct);
-
-                if (!resource.IsDraft)
-                {
-                    resource.PublicationDate = DateTime.Now;
-                    await dbContext.SaveChangesAsync(ct);
-
-                    var initiativeUsers = await dbContext.InitiativeUsers
-                        .Where(e => e.InitiativeId == resource.Id)
-                        .Select(e => e.UserName)
-                        .ToArrayAsync(ct);
-
-                    var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(resource, userName, initiativeUsers, ct);
-
-                    if (!notificationSuccessfulProcess)
-                    {
-                        throw new EmailException("Send resource update notification error");
-                    }
-                }
+                await UpdateResourceAndNotifyAsync(entity, userName, ct);
 
                 return entity;
             },
@@ -109,42 +76,10 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
             {
                 var oldFileUri = entity.Url;
 
-                // Upload/Overwrite image
-                var fileName = $"{StoragePrefix}/{entity.Id}.{inputFile.Extension}";
-                var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-                var uploadSuccessful = await storageService.UploadFileAsync(fileName, inputFile.OpenStream(), inputFile.ContentType, ct);
-
-                if (!uploadSuccessful)
-                {
-                    throw new StorageException("Resource file upload error");
-                }
-
-                entity.Url = fileUri;
-
+                await UploadAndSetFileAsync(entity, inputFile, ct);
                 await dbContext.SaveChangesAsync(ct);
 
-                // Update Resource publication date and send notification
-                var resource = await dbContext.Resources
-                    .Where(e => e.Id == entity.ResourceId)
-                    .FirstOrDefaultAsync(ct);
-
-                if (!resource.IsDraft)
-                {
-                    resource.PublicationDate = DateTime.Now;
-                    await dbContext.SaveChangesAsync(ct);
-
-                    var initiativeUsers = await dbContext.InitiativeUsers
-                        .Where(e => e.InitiativeId == resource.Id)
-                        .Select(e => e.UserName)
-                        .ToArrayAsync(ct);
-
-                    var notificationSuccessfulProcess = await emailResourceService.SendNotificationUpdateResource(resource, userName, initiativeUsers, ct);
-
-                    if (!notificationSuccessfulProcess)
-                    {
-                        throw new EmailException("Send resource update notification error");
-                    }
-                }
+                await UpdateResourceAndNotifyAsync(entity, userName, ct);
 
                 if (oldFileUri != entity.Url)
                 {
@@ -155,4 +90,63 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
             },
             "Resource file update transaction error",
             ct);
+
+    /// <summary>
+    /// Upload and set Resource File.
+    /// </summary>
+    /// <param name="entity">Resource File entity.</param>
+    /// <param name="inputFile">Input File data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    /// <exception cref="StorageException">External storage exception.</exception>
+    private async Task UploadAndSetFileAsync(
+        ResourceFile entity,
+        IInputFile inputFile,
+        CancellationToken ct)
+    {
+        var fileName = $"{StoragePrefix}/{entity.Id}.{inputFile.Extension}";
+        var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
+
+        if (!await storageService.UploadFileAsync(
+            fileName,
+            inputFile.OpenStream(),
+            inputFile.ContentType,
+            ct))
+        {
+            throw new StorageException("Resource file upload error");
+        }
+
+        entity.Url = fileUri;
+    }
+
+    /// <summary>
+    /// Update Resource publication date and send notification.
+    /// </summary>
+    /// <param name="entity">Resource entity.</param>
+    /// <param name="userName">Editor username.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>process result.</returns>
+    private async Task UpdateResourceAndNotifyAsync(
+        ResourceFile entity,
+        string userName,
+        CancellationToken ct)
+    {
+        var resource = await dbContext.Resources
+            .FirstOrDefaultAsync(e => e.Id == entity.ResourceId, ct);
+
+        if (resource.IsDraft)
+        {
+            return;
+        }
+
+        resource.PublicationDate = DateTime.Now;
+        await dbContext.SaveChangesAsync(ct);
+
+        var users = await dbContext.InitiativeUsers
+            .Where(e => e.InitiativeId == resource.Id)
+            .Select(e => e.UserName)
+            .ToArrayAsync(ct);
+
+        await emailResourceService.SendNotificationUpdateResource(resource, userName, users, ct);
+    }
 }

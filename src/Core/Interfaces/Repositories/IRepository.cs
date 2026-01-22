@@ -132,7 +132,7 @@ public interface IRepository<TE, TI>
     Task<List<TE>> QueryToListAsync(IQueryable<TE> query, CancellationToken ct = default);
 
     /// <summary>
-    /// General transaction Executor.
+    /// General transaction executor.
     /// </summary>
     /// <typeparam name="TR">Result type.</typeparam>
     /// <param name="action">Transaction action.</param>
