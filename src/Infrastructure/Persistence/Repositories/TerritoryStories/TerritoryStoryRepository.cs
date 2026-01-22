@@ -18,8 +18,6 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 /// </summary>
 public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerritoryStoryRepository
 {
-    private readonly ILogger logger;
-
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -28,9 +26,8 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     public TerritoryStoryRepository(
         GeneralContext dbContext,
         ILogger logger)
-        : base(dbContext)
+        : base(dbContext, logger)
     {
-        this.logger = logger;
     }
 
     /// <inheritdoc/>

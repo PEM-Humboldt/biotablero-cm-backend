@@ -11,6 +11,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
 /// <summary>
@@ -22,8 +24,11 @@ public class TerritoryStoryVideoRepository : Repository<TerritoryStoryVideo, int
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public TerritoryStoryVideoRepository(GeneralContext dbContext)
-        : base(dbContext)
+    /// <param name="logger">Logger.</param>
+    public TerritoryStoryVideoRepository(
+        GeneralContext dbContext,
+        ILogger logger)
+        : base(dbContext, logger)
     {
     }
 

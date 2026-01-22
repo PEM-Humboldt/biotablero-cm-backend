@@ -9,6 +9,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 /// <summary>
 /// Initiative Tag repository.
 /// </summary>
@@ -18,8 +20,11 @@ public class InitiativeTagRepository : Repository<InitiativeTag, int>, IInitiati
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public InitiativeTagRepository(GeneralContext dbContext)
-        : base(dbContext)
+    /// <param name="logger">System logger.</param>
+    public InitiativeTagRepository(
+        GeneralContext dbContext,
+        ILogger logger)
+        : base(dbContext, logger)
     {
     }
 

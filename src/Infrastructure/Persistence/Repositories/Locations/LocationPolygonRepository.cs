@@ -9,11 +9,14 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 /// <summary>
 /// Location Polygon repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
-public class LocationPolygonRepository(GeneralContext dbContext) : Repository<LocationPolygon, int>(dbContext), ILocationPolygonRepository
+/// <param name="logger">System logger.</param>
+public class LocationPolygonRepository(GeneralContext dbContext, ILogger logger) : Repository<LocationPolygon, int>(dbContext, logger), ILocationPolygonRepository
 {
     /// <inheritdoc/>
     public async Task<string> GetSimplifiedByLocationAsync(int locationId, CancellationToken ct = default) =>

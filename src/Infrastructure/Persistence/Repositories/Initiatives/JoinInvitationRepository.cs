@@ -9,6 +9,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 /// <summary>
 /// Join Invitation repository.
 /// </summary>
@@ -18,8 +20,11 @@ public class JoinInvitationRepository : Repository<JoinInvitation, int>, IJoinIn
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public JoinInvitationRepository(GeneralContext dbContext)
-        : base(dbContext)
+    /// <param name="logger">System logger.</param>
+    public JoinInvitationRepository(
+        GeneralContext dbContext,
+        ILogger logger)
+        : base(dbContext, logger)
     {
     }
 

@@ -24,7 +24,6 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int>, ITerritoryStoryImageRepository
 {
     private const string StoragePrefix = "territory-stories";
-    private readonly ILogger logger;
     private readonly IStorageService storageService;
 
     /// <summary>
@@ -37,9 +36,8 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
         GeneralContext dbContext,
         ILogger logger,
         IStorageService storageService)
-        : base(dbContext)
+        : base(dbContext, logger)
     {
-        this.logger = logger;
         this.storageService = storageService;
     }
 

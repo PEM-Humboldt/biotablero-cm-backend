@@ -9,6 +9,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 /// <summary>
 /// Tag repository.
 /// </summary>
@@ -18,8 +20,11 @@ public class TagRepository : Repository<Tag, int>, ITagRepository
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public TagRepository(GeneralContext dbContext)
-        : base(dbContext)
+    /// <param name="logger">System logger.</param>
+    public TagRepository(
+        GeneralContext dbContext,
+        ILogger logger)
+        : base(dbContext, logger)
     {
     }
 

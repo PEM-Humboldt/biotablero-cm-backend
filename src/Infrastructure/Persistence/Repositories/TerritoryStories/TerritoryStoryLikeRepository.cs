@@ -9,6 +9,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 /// <summary>
 /// Territory Story Like repository.
 /// </summary>
@@ -18,8 +20,11 @@ public class TerritoryStoryLikeRepository : Repository<TerritoryStoryLike, int>,
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public TerritoryStoryLikeRepository(GeneralContext dbContext)
-        : base(dbContext)
+    /// <param name="logger">System logger.</param>
+    public TerritoryStoryLikeRepository(
+        GeneralContext dbContext,
+        ILogger logger)
+        : base(dbContext, logger)
     {
     }
 
