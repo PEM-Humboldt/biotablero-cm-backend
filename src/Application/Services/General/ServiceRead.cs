@@ -16,6 +16,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.OData;
 
+using ODataUtilsCustom = IAVH.BioTablero.CM.Application.Utils.ODataUtils;
+
 /// <summary>
 /// General service for only read functions.
 /// </summary>
@@ -26,14 +28,6 @@ public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityReposi
     where TDto : class, IDto
     where TE : BaseEntity<TI>, IAggregateRoot
 {
-    /// <summary>
-    /// Default OData query settings.
-    /// </summary>
-    protected static readonly ODataQuerySettings DefaultOdataQuerySettings = new()
-    {
-        HandleNullPropagation = HandleNullPropagationOption.True,
-    };
-
     /// <summary>
     /// Entity repository.
     /// </summary>
@@ -99,11 +93,11 @@ public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityReposi
     /// <returns>Object with total items and data list.</returns>
     private protected async Task<ODataResponse<TE>> GetOdataDtoListByQueryAsync(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, CancellationToken ct = default)
     {
-        query = AddOdataQueryFilterAndOrder(query, queryOptions, DefaultOdataQuerySettings);
+        query = ODataUtilsCustom.AddOdataQueryFilterAndOrder(query, queryOptions);
 
         var totalItems = await entityRepository.QueryCountAsync(query, ct);
 
-        query = AddOdataQueryPagination(query, queryOptions, DefaultOdataQuerySettings);
+        query = ODataUtilsCustom.AddOdataQueryPagination(query, queryOptions);
 
         // Get result
         var dataList = await entityRepository.QueryToListAsync(query, ct);
@@ -153,55 +147,5 @@ public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityReposi
                 Message = $"Invalid filter: {ex.Message}",
             };
         }
-    }
-
-    /// <summary>
-    /// Add filter and order settings to OData query.
-    /// </summary>
-    /// <param name="query">Linq Query.</param>
-    /// <param name="queryOptions">OData query options.</param>
-    /// <param name="settings">OData query settings.</param>
-    /// <returns>Modified Linq query.</returns>
-    private protected static IQueryable<TE> AddOdataQueryFilterAndOrder(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, ODataQuerySettings settings)
-    {
-        // Apply order and filter settings
-        if (queryOptions?.Filter != null)
-        {
-            query = (IQueryable<TE>)queryOptions.Filter.ApplyTo(query, settings);
-        }
-
-        if (queryOptions.OrderBy != null)
-        {
-            query = queryOptions.OrderBy.ApplyTo(query, settings);
-        }
-
-        return query;
-    }
-
-    /// <summary>
-    /// Add pagination settings to OData query.
-    /// </summary>
-    /// <param name="query">Linq Query.</param>
-    /// <param name="queryOptions">OData query options.</param>
-    /// <param name="settings">OData query settings.</param>
-    /// <returns>Modified Linq query.</returns>
-    private protected static IQueryable<TE> AddOdataQueryPagination(IQueryable<TE> query, ODataQueryOptions<TE> queryOptions, ODataQuerySettings settings)
-    {
-        const int maxPageSize = 20;
-
-        if (queryOptions.Skip != null)
-        {
-            query = queryOptions.Skip.ApplyTo(query, settings);
-        }
-
-        var pageSize = queryOptions.Top?.Value ?? maxPageSize;
-        if (pageSize > maxPageSize)
-        {
-            pageSize = maxPageSize;
-        }
-
-        query = query.Take(pageSize);
-
-        return query;
     }
 }

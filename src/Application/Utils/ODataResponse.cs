@@ -2,14 +2,12 @@
 
 using System.Collections.Generic;
 
-using IAVH.BioTablero.CM.Core.Interfaces.Entities;
-
 /// <summary>
 /// General OData response.
 /// </summary>
-/// <typeparam name="TE">Entity type.</typeparam>
-public class ODataResponse<TE>
-    where TE : IAggregateRoot
+/// <typeparam name="T">Class type.</typeparam>
+public class ODataResponse<T>
+    where T : class
 {
     /// <summary>
     /// Total items.
@@ -19,5 +17,5 @@ public class ODataResponse<TE>
     /// <summary>
     /// Data list.
     /// </summary>
-    public List<TE> DataList { get; set; }
+    public List<T> DataList { get; set; }
 }

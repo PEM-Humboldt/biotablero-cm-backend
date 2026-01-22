@@ -193,6 +193,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         // Validate locations data
         var locationsIds = entityData.Locations
             .Select(l => l.LocationId ?? 0)
+            .Distinct()
             .ToArray();
 
         var initiativeLocationQuery = locationRepository
@@ -206,6 +207,18 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             return new CustomWebResponse(true)
             {
                 Message = $"Invalid initiative locations data",
+            };
+        }
+
+        var duplicatedLocations = entityData.Locations.Count() > entityData.Locations
+            .DistinctBy(l => (l.LocationId, l.Locality))
+            .Count();
+
+        if (duplicatedLocations)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = $"Invalid initiative locations (duplicated data)",
             };
         }
 
@@ -302,7 +315,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Update entity data
         entity.Name = entityData.Name;
+        entity.ShortName = entityData.ShortName;
         entity.Description = entityData.Description;
+        entity.Baseline = entityData.Baseline;
+        entity.Objective = entityData.Objective;
 
         // Recalculate polygon area if locations might have changed
         entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);

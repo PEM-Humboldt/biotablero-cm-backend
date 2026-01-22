@@ -33,12 +33,12 @@ public class InitiativeContactRepository : Repository<InitiativeContact, int>, I
     /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int initiativeId, string email, string phone, CancellationToken ct = default) =>
         await dbContext.InitiativeContacts
-            .Where(e => e.InitiativeId == initiativeId && (e.Phone == phone || e.Email == email))
+            .Where(e => e.InitiativeId == initiativeId && ((e.Phone != null && e.Phone == phone) || e.Email == email))
             .AnyAsync(ct);
 
     /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int id, int initiativeId, string email, string phone, CancellationToken ct = default) =>
         await dbContext.InitiativeContacts
-            .Where(e => e.Id != id && e.InitiativeId == initiativeId && (e.Phone == phone || e.Email == email))
+            .Where(e => e.Id != id && e.InitiativeId == initiativeId && ((e.Phone != null && e.Phone == phone) || e.Email == email))
             .AnyAsync(ct);
 }
