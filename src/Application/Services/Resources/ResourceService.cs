@@ -297,6 +297,11 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Update entity data
+        entity.ResourceTypeId = entityData.ResourceType.Id.Value;
+        entity.Name = entityData.Name;
+        entity.Description = entityData.Description;
+        entity.IsDraft = entityData.IsDraft;
+
         if (!entity.IsDraft)
         {
             entity.PublicationDate = DateTime.Now;
