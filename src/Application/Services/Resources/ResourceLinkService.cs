@@ -93,7 +93,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate resource
-        var resource = await resourceRepository.GetByIdAsync(entityData.ResourceId, ct);
+        var resource = await resourceRepository.GetByIdAsync(entityData.ResourceId.Value, ct);
 
         if (resource == null)
         {
@@ -104,7 +104,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate user permissions
-        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(entityData.ResourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(entityData.ResourceId.Value, userName, ct);
 
         if (!authorizedUserAction)
         {

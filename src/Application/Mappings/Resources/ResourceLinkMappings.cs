@@ -33,7 +33,7 @@ public class ResourceLinkMappings : IMapper<ResourceLink, ResourceLinkDto>
         return new()
         {
             Id = dto.Id ?? 0,
-            ResourceId = dto.ResourceId,
+            ResourceId = dto.ResourceId ?? 0,
             Url = new Uri(dto.Url),
             Name = dto.Name,
         };
