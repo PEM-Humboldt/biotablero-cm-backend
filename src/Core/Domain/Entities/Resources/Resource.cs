@@ -40,7 +40,7 @@ public class Resource : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Entity publication date.
     /// </summary>
-    public DateTime PublicationDate { get; set; }
+    public DateTime? PublicationDate { get; set; }
 
     /// <summary>
     /// Is draft flag.
