@@ -65,7 +65,7 @@ public class ResourceTagService : IResourceTagService
         // Validate resource
         var resource = await resourceRepository.GetByIdAsync(resourceId, ct);
 
-        if (resource != null)
+        if (resource == null)
         {
             return new CustomWebResponse(true)
             {

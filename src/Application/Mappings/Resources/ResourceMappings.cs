@@ -4,10 +4,8 @@ using System;
 using System.Linq;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
-using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
-using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
 /// <summary>
 /// Resource mappings.
@@ -16,7 +14,7 @@ public class ResourceMappings(
     IMapper<ResourceType, ResourceTypeDto> resourceTypeMappings,
     IMapper<ResourceFile, ResourceFileDto> resourceFileMappings,
     IMapper<ResourceLink, ResourceLinkDto> resourceLinkMappings,
-    IMapper<Tag, TagDto> tagMappings) : IMapper<Resource, ResourceDto>
+    IMapper<ResourceTag, ResourceTagDto> resourceTagMappings) : IMapper<Resource, ResourceDto>
 {
     /// <inheritdoc/>
     public ResourceDto Map(Resource entity)
@@ -37,7 +35,7 @@ public class ResourceMappings(
             ResourceType = resourceTypeMappings.Map(entity.ResourceType),
             Files = entity.Files?.Select(resourceFileMappings.Map),
             Links = entity.Links?.Select(resourceLinkMappings.Map),
-            Tags = entity.ResourceTags?.Select(e => tagMappings.Map(e.Tag)),
+            Tags = entity.ResourceTags?.Select(resourceTagMappings.Map),
         };
     }
 

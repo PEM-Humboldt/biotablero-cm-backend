@@ -51,6 +51,7 @@ public static class ConfigMappings
         services.AddSingleton<IMapper<ResourceType, ResourceTypeDto>, ResourceTypeMappings>();
         services.AddSingleton<IMapper<ResourceFile, ResourceFileDto>, ResourceFileMappings>();
         services.AddSingleton<IMapper<ResourceLink, ResourceLinkDto>, ResourceLinkMappings>();
+        services.AddSingleton<IMapper<ResourceTag, ResourceTagDto>, ResourceTagMappings>();
 
         return services;
     }
