@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -141,7 +142,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
         IInputFile inputFile,
         CancellationToken ct)
     {
-        var fileName = $"{StoragePrefix}/{entity.Id}{inputFile.Extension}";
+        var fileName = $"{StoragePrefix}/{entity.Id}{inputFile.Extension.ToLower(CultureInfo.CurrentCulture)}";
         var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
 
         if (!await storageService.UploadFileAsync(
