@@ -24,7 +24,7 @@ public static class RegExprConstants
     /// - https://example.com/example
     /// </example>
     /// </summary>
-    public const string Url = @"^(https?:\/\/)([\da-z\.-]+\.[a-z\.]{2,6}|[\d\.]+)([\/:?=&#]{1}[\da-z\.-]+)*[\/\?]?$";
+    public const string Url = @"^[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$";
 
     /// <summary>
     /// Regular expression for keyword list.
