@@ -36,7 +36,7 @@ public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagR
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public new async Task<ResourceTag> AddAsync(ResourceTag entity, CancellationToken ct = default) =>
+    public override async Task<ResourceTag> AddAsync(ResourceTag entity, CancellationToken ct = default) =>
         await ExecuteInTransactionAsync(
             async ct =>
             {
@@ -60,7 +60,7 @@ public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagR
             ct);
 
     /// <inheritdoc/>
-    public new async Task<int> DeleteAsync(ResourceTag entity, CancellationToken ct = default) =>
+    public override async Task<int> DeleteAsync(ResourceTag entity, CancellationToken ct = default) =>
         await ExecuteInTransactionAsync(
             async ct =>
             {

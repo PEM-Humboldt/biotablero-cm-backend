@@ -49,7 +49,7 @@ public class ResourceLinkRepository : Repository<ResourceLink, int>, IResourceLi
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public new async Task<ResourceLink> AddAsync(ResourceLink entity, CancellationToken ct = default) =>
+    public override async Task<ResourceLink> AddAsync(ResourceLink entity, CancellationToken ct = default) =>
         await ExecuteInTransactionAsync(
             async ct =>
             {
@@ -73,7 +73,7 @@ public class ResourceLinkRepository : Repository<ResourceLink, int>, IResourceLi
             ct);
 
     /// <inheritdoc/>
-    public new async Task<int> UpdateAsync(ResourceLink entity, CancellationToken ct = default) =>
+    public override async Task<int> UpdateAsync(ResourceLink entity, CancellationToken ct = default) =>
         await ExecuteInTransactionAsync(
             async ct =>
             {

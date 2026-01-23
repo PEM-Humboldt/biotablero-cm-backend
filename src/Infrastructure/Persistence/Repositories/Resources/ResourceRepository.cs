@@ -29,7 +29,7 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
     }
 
     /// <inheritdoc/>
-    public new async Task<Resource> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<Resource> GetByIdAsync(int id, CancellationToken ct = default) =>
         await IncludeCustomEntities()
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);

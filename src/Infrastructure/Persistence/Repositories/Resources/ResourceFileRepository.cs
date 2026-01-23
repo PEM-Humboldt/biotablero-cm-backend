@@ -74,7 +74,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
             ct);
 
     /// <inheritdoc/>
-    public new async Task<int> UpdateAsync(ResourceFile entity, CancellationToken ct = default) =>
+    public override async Task<int> UpdateAsync(ResourceFile entity, CancellationToken ct = default) =>
         await ExecuteInTransactionAsync(
             async ct =>
             {
