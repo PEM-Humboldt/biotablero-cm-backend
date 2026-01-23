@@ -19,7 +19,7 @@ public class ResourceFileListResponseExample : IExamplesProvider<List<ResourceFi
         {
             Id = 0,
             ResourceId = 0,
-            Name = "Resource link example",
+            Name = "Resource file example",
             Url = new Uri("https://cdn.prod.website-files.com/64bea006689ebc2d5d9499ad/67ac933f9b2b1323a3e61073_30-humboldt-negro.svg"),
         },
     ];
