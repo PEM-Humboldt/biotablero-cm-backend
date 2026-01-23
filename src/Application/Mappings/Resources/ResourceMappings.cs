@@ -48,6 +48,7 @@ public class ResourceMappings(
         {
             Id = dto.Id ?? 0,
             InitiativeId = dto.InitiativeId ?? 0,
+            ResourceTypeId = dto.ResourceType.Id ?? 0,
             Name = dto.Name,
             Description = dto.Description,
             IsDraft = dto.IsDraft,

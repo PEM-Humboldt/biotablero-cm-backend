@@ -191,9 +191,9 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate Resource Type
-        var resourceType = await resourceTypeRepository.GetByIdAsync(entityData.ResourceType.Id.Value, ct);
+        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType.Id.Value, ct);
 
-        if (resourceType == null)
+        if (!resourceTypeExists)
         {
             return new CustomWebResponse(true)
             {
@@ -214,7 +214,6 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         // Build entity data
         var entity = mapper.Map(entityData);
-        entity.ResourceType = resourceType;
 
         var now = DateTime.Now;
         entity.CreationDate = now;
@@ -287,9 +286,9 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate Resource Type
-        var resourceType = await resourceTypeRepository.GetByIdAsync(entityData.ResourceType.Id.Value, ct);
+        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType.Id.Value, ct);
 
-        if (resourceType == null)
+        if (!resourceTypeExists)
         {
             return new CustomWebResponse(true)
             {
@@ -298,7 +297,6 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Update entity data
-        entity.ResourceType = resourceType;
         if (!entity.IsDraft)
         {
             entity.PublicationDate = DateTime.Now;

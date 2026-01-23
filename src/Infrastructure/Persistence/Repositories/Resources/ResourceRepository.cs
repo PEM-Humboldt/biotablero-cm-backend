@@ -71,6 +71,13 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
             .Where(e => e.Id != id && e.Name == name)
             .AnyAsync(ct);
 
+    /// <inheritdoc/>
+    public override async Task<Resource> AddAsync(Resource entity, CancellationToken ct = default)
+    {
+        await base.AddAsync(entity, ct);
+        return await GetByIdAsync(entity.Id, ct);
+    }
+
     /// <summary>
     /// Include custom entities.
     /// </summary>
