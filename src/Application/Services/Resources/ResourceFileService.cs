@@ -26,6 +26,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// </summary>
 public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, int>, IResourceFileService
 {
+    private const int MaxItemsPerResource = 5;
     private new readonly IResourceFileRepository entityRepository;
     private readonly IValidator<ResourceFileDto> entityValidator;
     private readonly ILogger logger;
@@ -106,6 +107,15 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
             return new CustomWebResponse(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate number of items
+        if (resource.Files.Count >= MaxItemsPerResource)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = $"The number of items per resource must be less than or equal to {MaxItemsPerResource}",
             };
         }
 
