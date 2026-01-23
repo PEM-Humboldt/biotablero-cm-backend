@@ -141,7 +141,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
         IInputFile inputFile,
         CancellationToken ct)
     {
-        var fileName = $"{StoragePrefix}/{entity.Id}.{inputFile.Extension}";
+        var fileName = $"{StoragePrefix}/{entity.Id}{inputFile.Extension}";
         var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
 
         if (!await storageService.UploadFileAsync(
