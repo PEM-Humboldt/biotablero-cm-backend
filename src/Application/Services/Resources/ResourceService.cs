@@ -156,7 +156,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     public async Task<CustomWebResponse> AddAsync(string userName, ResourceDto entityData, CancellationToken ct = default)
     {
         // Validate user permissions
-        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId, userName, null, ct);
+        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId.Value, userName, null, ct);
 
         if (!authorizedUserAction)
         {
@@ -180,7 +180,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId, ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId.Value, ct);
 
         if (!initiativeExists)
         {
@@ -191,9 +191,9 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate Resource Type
-        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType.Id.Value, ct);
+        var resourceType = await resourceTypeRepository.GetByIdAsync(entityData.ResourceType.Id.Value, ct);
 
-        if (!resourceTypeExists)
+        if (resourceType == null)
         {
             return new CustomWebResponse(true)
             {
@@ -214,6 +214,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         // Build entity data
         var entity = mapper.Map(entityData);
+        entity.ResourceType = resourceType;
 
         var now = DateTime.Now;
         entity.CreationDate = now;
@@ -285,7 +286,19 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
             };
         }
 
+        // Validate Resource Type
+        var resourceType = await resourceTypeRepository.GetByIdAsync(entityData.ResourceType.Id.Value, ct);
+
+        if (resourceType == null)
+        {
+            return new CustomWebResponse(true)
+            {
+                Message = "Resource Type not found",
+            };
+        }
+
         // Update entity data
+        entity.ResourceType = resourceType;
         if (!entity.IsDraft)
         {
             entity.PublicationDate = DateTime.Now;
@@ -355,17 +368,6 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate user permissions
-        var authorizedUserAction = await entityRepository.UserRelationshipExistsAsync(id, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new CustomWebResponse(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
-        }
-
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -374,6 +376,17 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate user permissions
+        var authorizedUserAction = await entityRepository.UserRelationshipExistsAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -406,8 +419,8 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         var externalUsersData = await iamService.GetUsersDataAsync(initiativeUsers, ct);
 
-        var receivers = initiativeUsers
-            .Select(e => new CustomEmailAddress(e))
+        var receivers = externalUsersData
+            .Select(e => new CustomEmailAddress(e.FullName, e.Email))
             .ToArray();
 
         var htmlBody = await webViewTools.RenderViewToStringAsync("UpdateResource", emailData);

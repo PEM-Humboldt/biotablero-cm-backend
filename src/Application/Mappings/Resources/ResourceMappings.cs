@@ -49,11 +49,10 @@ public class ResourceMappings(
         return new()
         {
             Id = dto.Id ?? 0,
-            InitiativeId = dto.InitiativeId,
+            InitiativeId = dto.InitiativeId ?? 0,
             Name = dto.Name,
             Description = dto.Description,
             IsDraft = dto.IsDraft,
-            ResourceType = resourceTypeMappings.Map(dto.ResourceType),
         };
     }
 }

@@ -12,6 +12,10 @@ public class ResourceEditRequestExample : IExamplesProvider<ResourceDto>
     /// <inheritdoc/>
     public ResourceDto GetExamples() => new()
     {
+        ResourceType = new()
+        {
+            Id = 1,
+        },
         Name = "Resource example",
         Description = "Example",
         IsDraft = false,

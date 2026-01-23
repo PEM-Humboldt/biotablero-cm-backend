@@ -29,6 +29,12 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
     }
 
     /// <inheritdoc/>
+    public new async Task<Resource> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await IncludeCustomEntities()
+            .Where(e => e.Id == id)
+            .FirstOrDefaultAsync(ct);
+
+    /// <inheritdoc/>
     public async Task<IQueryable<Resource>> GetQueryWithInitiativeAndUserNameAsync(int initiativeId, string userName, IQueryable<Resource> query, CancellationToken ct = default)
     {
         var userBelongsToInitiative = await dbContext.InitiativeUsers

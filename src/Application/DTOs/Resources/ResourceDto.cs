@@ -19,7 +19,7 @@ public class ResourceDto : IDto
     /// <summary>
     /// Initiative identifier.
     /// </summary>
-    public int InitiativeId { get; set; }
+    public int? InitiativeId { get; set; }
 
     /// <summary>
     /// Entity name.

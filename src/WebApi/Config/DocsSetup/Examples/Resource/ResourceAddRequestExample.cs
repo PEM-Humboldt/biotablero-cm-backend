@@ -13,6 +13,10 @@ public class ResourceAddRequestExample : IExamplesProvider<ResourceDto>
     public ResourceDto GetExamples() => new()
     {
         InitiativeId = 1,
+        ResourceType = new()
+        {
+            Id = 1,
+        },
         Name = "Resource example",
         Description = "Example",
         IsDraft = false,
