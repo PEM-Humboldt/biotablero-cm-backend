@@ -65,10 +65,10 @@ public class ResourceFileController(
     /// <param name="requestData">Request data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
-    [HttpPut]
+    [HttpPost]
     [Authorize]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceFileResponseExample))]
-    public async Task<IActionResult> Put([FromForm] ResourceFileAddRequest requestData, CancellationToken ct)
+    public async Task<IActionResult> Post([FromForm] ResourceFileAddRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new ResourceFileDto()
         {
@@ -87,10 +87,10 @@ public class ResourceFileController(
     /// <param name="requestData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
-    [HttpPost("{id}")]
+    [HttpPut("{id}")]
     [Authorize]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceFileResponseExample))]
-    public async Task<IActionResult> Post(int id, [FromForm] ResourceFileEditRequest requestData, CancellationToken ct)
+    public async Task<IActionResult> Put(int id, [FromForm] ResourceFileEditRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new ResourceFileDto()
         {

@@ -63,12 +63,12 @@ public class ResourceLinkController(
     /// <param name="requestData">Request data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
-    [HttpPut]
+    [HttpPost]
     [Consumes("application/json")]
     [Authorize]
     [SwaggerRequestExample(typeof(ResourceLinkDto), typeof(ResourceLinkAddRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceLinkResponseExample))]
-    public async Task<IActionResult> Put([FromBody] ResourceLinkDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Post([FromBody] ResourceLinkDto requestData, CancellationToken ct)
     {
         var response = await entityService.AddAsync(HttpContext.GetUserName(), requestData, ct);
         return webTools.CustomResponse(response);
@@ -81,12 +81,12 @@ public class ResourceLinkController(
     /// <param name="requestData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
-    [HttpPost("{id}")]
+    [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize]
     [SwaggerRequestExample(typeof(ResourceLinkDto), typeof(ResourceLinkEditRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceLinkResponseExample))]
-    public async Task<IActionResult> Post(int id, [FromBody] ResourceLinkDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Put(int id, [FromBody] ResourceLinkDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, ct);
         return webTools.CustomResponse(response);

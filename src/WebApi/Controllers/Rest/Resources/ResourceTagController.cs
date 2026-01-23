@@ -32,12 +32,12 @@ public class ResourceTagController(
     /// <param name="tagId">Tag identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
-    [HttpPut]
+    [HttpPost]
     [Authorize]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Put(int resourceId, int tagId, CancellationToken ct)
+    public async Task<IActionResult> Post(int resourceId, int tagId, CancellationToken ct)
     {
         var response = await entityService.AddAsync(HttpContext.GetUserName(), resourceId, tagId, ct);
         return webTools.CustomResponse(response);
