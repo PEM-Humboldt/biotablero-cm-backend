@@ -240,17 +240,6 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceDto entityData, CancellationToken ct = default)
     {
-        // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.UserRelationshipExistsAsync(id, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new CustomWebResponse(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
-        }
-
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
@@ -272,6 +261,17 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
             return new CustomWebResponse(true)
             {
                 Message = MessageConstants.NotFound,
+            };
+        }
+
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.UserRelationshipExistsAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new CustomWebResponse(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
