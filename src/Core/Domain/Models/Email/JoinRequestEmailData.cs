@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Models.Email;
 
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
+
 /// <summary>
 /// Join request email data.
 /// </summary>
@@ -16,7 +18,7 @@ public class JoinRequestEmailData : DefaultEmailData
     public string UserName { get; set; }
 
     /// <summary>
-    /// Join request status: "Created", "Approved", "Rejected".
+    /// Join request status.
     /// </summary>
-    public string JoinRequestStatus { get; set; }
+    public JoinRequestStatus JoinRequestStatus { get; set; }
 }

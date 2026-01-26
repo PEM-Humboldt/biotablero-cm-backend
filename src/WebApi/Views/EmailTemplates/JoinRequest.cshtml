@@ -1,29 +1,24 @@
+@using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums
 @model IAVH.BioTablero.CM.Core.Domain.Models.Email.JoinRequestEmailData
 @{
-    string subject;
-    string content;
-    
-    if (Model?.JoinRequestStatus == "Created")
+    if (Model?.JoinRequestStatus == JoinRequestStatus.UnderReview)
     {
-        subject = $"Solicitud de ingreso a '{Model?.InitiativeName}'";
-        content = $"El usuario '{Model?.UserName}' ha realizado una solicitud de acceso para la iniciativa '{Model?.InitiativeName}'";
+        Model.Subject = $"Solicitud de ingreso a '{Model?.InitiativeName}'";
+        Model.Content = $"El usuario '{Model?.UserName}' ha realizado una solicitud de acceso para la iniciativa '{Model?.InitiativeName}'";
     }
-    else if (Model?.JoinRequestStatus == "Approved")
+    else if (Model?.JoinRequestStatus == JoinRequestStatus.Approved)
     {
-        subject = $"Solicitud de ingreso a '{Model?.InitiativeName}' aprobada";
-        content = $"Bienvenido a '{Model?.InitiativeName}'.<br /> Ya puedes aportar al estado de la biodiversidad de nuestro territorio.<br /><br />Ve a la sección de colaboradores de tu iniciativa y diligencia tus áreas de experticia e interés";
+        Model.Subject = $"Solicitud de ingreso a '{Model?.InitiativeName}' aprobada";
+        Model.Content = $"Bienvenido a '{Model?.InitiativeName}'.<br /> Ya puedes aportar al estado de la biodiversidad de nuestro territorio.<br /><br />Ve a la sección de colaboradores de tu iniciativa y diligencia tus áreas de experticia e interés";
     }
-    else
+    else if (Model?.JoinRequestStatus == JoinRequestStatus.Rejected)
     {
-        subject = $"Solicitud de ingreso a '{Model?.InitiativeName}' rechazada";
-        content = "Tu solicitud ha sido rechazada. Si consideras que se trata de un error solicita de nuevo.";
+        Model.Subject = $"Solicitud de ingreso a '{Model?.InitiativeName}' rechazada";
+        Model.Content = "Tu solicitud ha sido rechazada. Si consideras que se trata de un error solicita de nuevo.";
     }
-    
-    Model.Subject = subject;
-    Model.Content = content;
 }
 
 <div style="margin: auto;width: 20rem;">
     <h2 style="color: #e84a5f;">Solicitud de Ingreso</h2>
-    <p>@Html.Raw(content)</p>
+    <p>@Html.Raw(Model?.Content)</p>
 </div>

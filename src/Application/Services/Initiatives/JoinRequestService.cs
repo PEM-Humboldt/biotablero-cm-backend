@@ -174,7 +174,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             Address = new(userData.FullName, userData.Email),
             InitiativeName = initiative.Name,
             UserName = userData.Username,
-            JoinRequestStatus = "Created",
+            JoinRequestStatus = JoinRequestStatusEnum.UnderReview,
         };
 
         SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
@@ -257,7 +257,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             Address = new(userData.FullName, userData.Email),
             InitiativeName = initiative.Name,
-            JoinRequestStatus = entity.StatusId == (int)JoinRequestStatusEnum.Approved ? "Approved" : "Rejected",
+            JoinRequestStatus = (JoinRequestStatusEnum)entity.StatusId,
         };
 
         SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
