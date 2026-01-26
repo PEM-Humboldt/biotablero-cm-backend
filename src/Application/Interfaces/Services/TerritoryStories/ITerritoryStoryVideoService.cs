@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 
 using System.Threading;
 using System.Threading.Tasks;

@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Mappings.TerritoryStory;
+﻿namespace IAVH.BioTablero.CM.Application.Mappings.TerritoryStories;
 
 using System;
 
@@ -7,12 +7,12 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 /// <summary>
-/// Territory Story Image mappings.
+/// Territory Story Video mappings.
 /// </summary>
-public class TerritoryStoryImageMappings : IMapper<TerritoryStoryImage, TerritoryStoryImageDto>
+public class TerritoryStoryVideoMappings : IMapper<TerritoryStoryVideo, TerritoryStoryVideoDto>
 {
     /// <inheritdoc/>
-    public TerritoryStoryImageDto Map(TerritoryStoryImage entity)
+    public TerritoryStoryVideoDto Map(TerritoryStoryVideo entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -20,14 +20,12 @@ public class TerritoryStoryImageMappings : IMapper<TerritoryStoryImage, Territor
         {
             Id = entity.Id,
             TerritoryStoryId = entity.TerritoryStoryId,
-            FileUrl = entity.FileUrl,
-            Description = entity.Description,
-            FeaturedContent = entity.FeaturedContent,
+            FileUrl = entity.FileUrl.ToString(),
         };
     }
 
     /// <inheritdoc/>
-    public TerritoryStoryImage Map(TerritoryStoryImageDto dto)
+    public TerritoryStoryVideo Map(TerritoryStoryVideoDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 
@@ -35,9 +33,7 @@ public class TerritoryStoryImageMappings : IMapper<TerritoryStoryImage, Territor
         {
             Id = dto.Id ?? 0,
             TerritoryStoryId = dto.TerritoryStoryId ?? 0,
-            FileUrl = dto.FileUrl,
-            Description = dto.Description,
-            FeaturedContent = dto.FeaturedContent,
+            FileUrl = new Uri(dto.FileUrl),
         };
     }
 }

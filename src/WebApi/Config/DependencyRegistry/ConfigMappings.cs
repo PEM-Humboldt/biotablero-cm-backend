@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Application.Mappings.Initiatives;
 using IAVH.BioTablero.CM.Application.Mappings.Logging;
 using IAVH.BioTablero.CM.Application.Mappings.Resources;
 using IAVH.BioTablero.CM.Application.Mappings.Tags;
-using IAVH.BioTablero.CM.Application.Mappings.TerritoryStory;
+using IAVH.BioTablero.CM.Application.Mappings.TerritoryStories;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;

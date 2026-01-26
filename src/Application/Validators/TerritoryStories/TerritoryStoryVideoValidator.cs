@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Validators.TerritoryStory;
+﻿namespace IAVH.BioTablero.CM.Application.Validators.TerritoryStories;
 
 using FluentValidation;
 

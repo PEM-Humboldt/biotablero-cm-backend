@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Services.TerritoryStory;
+﻿namespace IAVH.BioTablero.CM.Application.Services.TerritoryStories;
 
 using System;
 using System.Linq;
@@ -11,7 +11,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;

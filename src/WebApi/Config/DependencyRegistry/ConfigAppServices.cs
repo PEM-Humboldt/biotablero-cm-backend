@@ -6,7 +6,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Statistics;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Tags;
-using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Users;
 using IAVH.BioTablero.CM.Application.Services.Geo;
 using IAVH.BioTablero.CM.Application.Services.Initiatives;
@@ -14,7 +14,7 @@ using IAVH.BioTablero.CM.Application.Services.Logging;
 using IAVH.BioTablero.CM.Application.Services.Resources;
 using IAVH.BioTablero.CM.Application.Services.Statistics;
 using IAVH.BioTablero.CM.Application.Services.Tag;
-using IAVH.BioTablero.CM.Application.Services.TerritoryStory;
+using IAVH.BioTablero.CM.Application.Services.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Services.Users;
 
 using Microsoft.Extensions.DependencyInjection;

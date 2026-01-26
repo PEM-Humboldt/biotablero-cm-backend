@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,13 +7,12 @@ using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
-
-using Microsoft.AspNetCore.OData.Query;
+using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
 /// <summary>
-/// Territory Story service interface.
+/// Territory Story Image service interface.
 /// </summary>
-public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<TerritoryStoryDto>
+public interface ITerritoryStoryImageService : IRead<TerritoryStoryImage, int>
 {
     /// <summary>
     /// Get element.
@@ -25,14 +24,22 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default);
 
     /// <summary>
-    /// Get entities by initiative (OData).
+    /// Get elements by territory story.
     /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="territoryStoryId">Territory Story identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities by selected territory story.</returns>
+    Task<CustomWebResponse> GetByTerritoryStoryAsync(int territoryStoryId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Add element.
+    /// </summary>
     /// <param name="userName">User name.</param>
-    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="formFile">Image data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct = default);
+    Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.
@@ -40,17 +47,10 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     /// <param name="id">Element identifier.</param>
     /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
+    /// <param name="formFile">Image data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryDto entityData, CancellationToken ct = default);
-
-    /// <summary>
-    /// Like action.
-    /// </summary>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    Task<CustomWebResponse> LikeActionAsync(TerritoryStoryLikeDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default);
 
     /// <summary>
     /// Featured content action.
@@ -62,20 +62,11 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default);
 
     /// <summary>
-    /// Enable element.
+    /// Delete element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> EnableAsync(int id, string userName, CancellationToken ct = default);
-
-    /// <summary>
-    /// Disable element.
-    /// </summary>
-    /// <param name="id">Element identifier.</param>
-    /// <param name="userName">User name.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DisableAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default);
 }
