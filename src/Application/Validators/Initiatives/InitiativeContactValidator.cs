@@ -21,7 +21,7 @@ public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto
 
         RuleFor(dto => dto.Email)
             .NotEmpty()
-                .WithMessage("Email is required")
+                .WithMessage("{PropertyName} is required")
             .EmailAddress()
             .MaximumLength(100);
 
@@ -34,7 +34,7 @@ public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithMessage("Initiative identifier is required");
+                    .WithMessage("{PropertyName} is required");
         });
     }
 }

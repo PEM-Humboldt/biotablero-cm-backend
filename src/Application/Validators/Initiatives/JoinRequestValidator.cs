@@ -24,13 +24,13 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
 
         RuleFor(dto => dto.InitiativeId)
             .NotNull()
-                .WithMessage("Initiative identifier is required");
+                .WithMessage("{PropertyName} is required");
 
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.Level)
                 .NotNull()
-                    .WithMessage("User level cannot be null")
+                    .WithMessage("{PropertyName} cannot be null")
                 .ChildRules(level =>
                 {
                     level.RuleFor(levelEnumDto => levelEnumDto.Name)
@@ -51,7 +51,7 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
         {
             RuleFor(dto => dto.Status)
                 .NotNull()
-                    .WithMessage("Status cannot be null")
+                    .WithMessage("{PropertyName} cannot be null")
                 .ChildRules(status =>
                 {
                     status.RuleFor(statusEnumDto => statusEnumDto.Name)
@@ -64,7 +64,7 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
 
                             return false;
                         })
-                        .WithMessage("Invalid selected status");
+                        .WithMessage("Invalid value for {PropertyName}");
                 });
         });
     }

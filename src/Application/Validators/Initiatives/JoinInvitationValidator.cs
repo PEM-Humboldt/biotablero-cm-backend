@@ -20,7 +20,7 @@ public class JoinInvitationValidator : AbstractValidator<JoinInvitationDto>
 
         RuleFor(dto => dto.Creator)
             .NotEmpty()
-                .WithMessage("Creator user name is required")
+                .WithMessage("{PropertyName} is required")
             .MaximumLength(75);
 
         RuleFor(dto => dto.Message)
@@ -30,7 +30,7 @@ public class JoinInvitationValidator : AbstractValidator<JoinInvitationDto>
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithMessage("Initiative identifier is required");
+                    .WithMessage("{PropertyName} is required");
 
             RuleFor(dto => dto.Guests)
                 .NotEmpty()

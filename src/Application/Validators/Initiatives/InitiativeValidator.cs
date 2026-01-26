@@ -20,7 +20,7 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
 
         RuleFor(dto => dto.Name)
             .NotEmpty()
-                .WithMessage("Name is required")
+                .WithMessage("{PropertyName} is required")
             .MaximumLength(100);
 
         RuleFor(dto => dto.ShortName)
@@ -28,7 +28,7 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
 
         RuleFor(dto => dto.Description)
             .NotEmpty()
-                .WithMessage("Description is required")
+                .WithMessage("{PropertyName} is required")
             .MaximumLength(300);
 
         RuleFor(dto => dto.Baseline)

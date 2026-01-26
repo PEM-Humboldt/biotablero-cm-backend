@@ -20,14 +20,14 @@ public class TerritoryStoryImageValidator : AbstractValidator<TerritoryStoryImag
 
         RuleFor(dto => dto.Description)
             .NotEmpty()
-                .WithMessage("Description is required")
+                .WithMessage("{PropertyName} is required")
             .MaximumLength(500);
 
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.TerritoryStoryId)
                 .NotNull()
-                    .WithMessage("Territory Story identifier is required");
+                    .WithMessage("{PropertyName} is required");
         });
     }
 }

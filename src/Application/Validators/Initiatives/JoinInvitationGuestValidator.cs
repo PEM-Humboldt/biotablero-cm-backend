@@ -20,7 +20,7 @@ public class JoinInvitationGuestValidator : AbstractValidator<JoinInvitationGues
 
         RuleFor(dto => dto.Email)
             .NotEmpty()
-                .WithMessage("Email is required")
+                .WithMessage("{PropertyName} is required")
             .EmailAddress()
             .MaximumLength(100);
     }

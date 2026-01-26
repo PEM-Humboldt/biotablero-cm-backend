@@ -20,7 +20,7 @@ public class InitiativeLocationValidator : AbstractValidator<InitiativeLocationD
 
         RuleFor(dto => dto.LocationId)
             .NotNull()
-                .WithMessage("Location identifier is required");
+                .WithMessage("{PropertyName} is required");
 
         RuleFor(dto => dto.Locality)
             .MaximumLength(300);
@@ -29,7 +29,7 @@ public class InitiativeLocationValidator : AbstractValidator<InitiativeLocationD
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithMessage("Initiative identifier is required");
+                    .WithMessage("{PropertyName} is required");
         });
     }
 }

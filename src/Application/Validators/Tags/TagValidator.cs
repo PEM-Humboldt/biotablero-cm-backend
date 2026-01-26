@@ -23,7 +23,7 @@ public class TagValidator : AbstractValidator<TagDto>
 
         RuleFor(dto => dto.Name)
             .NotEmpty()
-                .WithMessage("Name is required")
+                .WithMessage("{PropertyName} is required")
             .MaximumLength(40);
 
         RuleFor(dto => dto.Url)
@@ -34,12 +34,12 @@ public class TagValidator : AbstractValidator<TagDto>
         {
             RuleFor(dto => dto.Category)
                 .NotNull()
-                    .WithMessage("Tag category cannot be null")
+                    .WithMessage("{PropertyName} cannot be null")
                 .ChildRules(level =>
                 {
                     level.RuleFor(tagEnumDto => tagEnumDto.Name)
                         .IsEnumName(typeof(TagCategory), caseSensitive: false)
-                            .WithMessage("Tag category invalid");
+                            .WithMessage("Invalid value for {PropertyName}");
                 });
         });
     }
