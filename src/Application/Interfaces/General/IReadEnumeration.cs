@@ -3,8 +3,8 @@
 using System;
 using System.Collections.Generic;
 
+using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
-using IAVH.BioTablero.CM.Application.Utils;
 
 /// <summary>
 /// Read enum interface (for services).
