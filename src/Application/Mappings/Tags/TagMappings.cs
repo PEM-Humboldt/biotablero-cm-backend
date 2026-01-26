@@ -4,7 +4,7 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
 using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums.TagCategory;
@@ -12,7 +12,7 @@ using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums.TagC
 /// <summary>
 /// Tag mappings.
 /// </summary>
-public class TagMappings : IMapper<Tag, TagDto>
+public class TagMappings : IMapperCreateAndRead<Tag, TagDto>
 {
     /// <inheritdoc/>
     public TagDto Map(Tag entity)

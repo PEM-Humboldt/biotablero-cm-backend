@@ -3,13 +3,13 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Geo;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 
 /// <summary>
 /// Initiative mappings.
 /// </summary>
-public class LocationMappings : IMapper<Location, LocationDto>
+public class LocationMappings : IMapperRead<Location, LocationDto>
 {
     /// <inheritdoc/>
     public LocationDto Map(Location entity)
@@ -22,19 +22,6 @@ public class LocationMappings : IMapper<Location, LocationDto>
             Name = entity.Name,
             Code = entity.Code,
             Parent = entity.Parent != null ? Map(entity.Parent) : null,
-        };
-    }
-
-    /// <inheritdoc/>
-    public Location Map(LocationDto dto)
-    {
-        ArgumentNullException.ThrowIfNull(dto);
-
-        return new()
-        {
-            Name = dto.Name,
-            Code = dto.Code,
-            Parent = dto.Parent != null ? Map(dto.Parent) : null,
         };
     }
 }

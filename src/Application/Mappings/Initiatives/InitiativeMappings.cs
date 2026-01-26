@@ -5,7 +5,7 @@ using System.Linq;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
@@ -13,10 +13,10 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 /// Initiative mappings.
 /// </summary>
 public class InitiativeMappings(
-    IMapper<InitiativeContact, InitiativeContactDto> initiativeContactMappings,
-    IMapper<InitiativeLocation, InitiativeLocationDto> initiativeLocationMappings,
-    IMapper<InitiativeUser, InitiativeUserDto> initiativeUserMappings,
-    IMapper<Tag, TagDto> tagMappings) : IMapper<Initiative, InitiativeDto>
+    IMapperCreateAndRead<InitiativeContact, InitiativeContactDto> initiativeContactMappings,
+    IMapperCreateAndRead<InitiativeLocation, InitiativeLocationDto> initiativeLocationMappings,
+    IMapperCreateAndRead<InitiativeUser, InitiativeUserDto> initiativeUserMappings,
+    IMapperCreateAndRead<Tag, TagDto> tagMappings) : IMapperCreateAndRead<Initiative, InitiativeDto>
 {
     /// <inheritdoc/>
     public InitiativeDto Map(Initiative entity)

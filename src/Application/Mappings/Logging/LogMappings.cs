@@ -3,13 +3,13 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 
 /// <summary>
 /// System logs mappings.
 /// </summary>
-public class LogMappings : IMapper<LogEntity, LogDto>
+public class LogMappings : IMapperRead<LogEntity, LogDto>
 {
     /// <inheritdoc/>
     public LogDto Map(LogEntity entity)
@@ -29,27 +29,6 @@ public class LogMappings : IMapper<LogEntity, LogDto>
             ClientIp = entity.ClientIp,
             ClientAgent = entity.ClientAgent,
             Properties = entity.Properties,
-        };
-    }
-
-    /// <inheritdoc/>
-    public LogEntity Map(LogDto dto)
-    {
-        ArgumentNullException.ThrowIfNull(dto);
-
-        return new()
-        {
-            Id = dto.Id,
-            Level = dto.Level,
-            Type = dto.Type,
-            TimeStamp = dto.TimeStamp,
-            UserName = dto.UserName,
-            CustomRecord = dto.CustomRecord,
-            Message = dto.Message,
-            ShortMessage = dto.ShortMessage,
-            ClientIp = dto.ClientIp,
-            ClientAgent = dto.ClientAgent,
-            Properties = dto.Properties,
         };
     }
 }

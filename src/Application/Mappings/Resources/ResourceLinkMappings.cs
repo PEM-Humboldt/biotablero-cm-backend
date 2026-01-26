@@ -3,13 +3,13 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 
 /// <summary>
 /// Resource Link mappings.
 /// </summary>
-public class ResourceLinkMappings : IMapper<ResourceLink, ResourceLinkDto>
+public class ResourceLinkMappings : IMapperCreateAndRead<ResourceLink, ResourceLinkDto>
 {
     /// <inheritdoc/>
     public ResourceLinkDto Map(ResourceLink entity)

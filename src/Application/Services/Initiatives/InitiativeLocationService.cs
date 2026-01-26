@@ -8,7 +8,7 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -29,6 +29,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     private new readonly IInitiativeLocationRepository entityRepository;
     private readonly IValidator<InitiativeLocationDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateAndRead<InitiativeLocation, InitiativeLocationDto> mapper;
     private readonly ILocationRepository locationRepository;
     private readonly IInitiativeRepository initiativeRepository;
 
@@ -43,7 +44,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeLocationService(
         IInitiativeLocationRepository entityRepository,
-        IMapper<InitiativeLocation, InitiativeLocationDto> mapper,
+        IMapperCreateAndRead<InitiativeLocation, InitiativeLocationDto> mapper,
         IValidator<InitiativeLocationDto> entityValidator,
         ILogger logger,
         ILocationRepository locationRepository,
@@ -51,6 +52,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.locationRepository = locationRepository;

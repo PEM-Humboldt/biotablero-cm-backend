@@ -4,14 +4,14 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
 /// <summary>
 /// Resource Tag mappings.
 /// </summary>
-public class ResourceTagMappings(IMapper<Tag, TagDto> tagMappings) : IMapper<ResourceTag, ResourceTagDto>
+public class ResourceTagMappings(IMapperCreateAndRead<Tag, TagDto> tagMappings) : IMapperRead<ResourceTag, ResourceTagDto>
 {
     /// <inheritdoc/>
     public ResourceTagDto Map(ResourceTag entity)
@@ -22,16 +22,6 @@ public class ResourceTagMappings(IMapper<Tag, TagDto> tagMappings) : IMapper<Res
         {
             ResourceTagId = entity.Id,
             Tag = tagMappings.Map(entity.Tag),
-        };
-    }
-
-    /// <inheritdoc/>
-    public ResourceTag Map(ResourceTagDto dto)
-    {
-        ArgumentNullException.ThrowIfNull(dto);
-
-        return new()
-        {
         };
     }
 }

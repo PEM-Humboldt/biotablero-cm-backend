@@ -10,7 +10,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -36,6 +36,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     private new readonly IInitiativeUserRepository entityRepository;
     private readonly IValidator<InitiativeUserDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateAndRead<InitiativeUser, InitiativeUserDto> mapper;
     private readonly IIamService iamService;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly IWebViewTools webViewTools;
@@ -54,7 +55,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="emailService">Email service.</param>
     public InitiativeUserService(
         IInitiativeUserRepository entityRepository,
-        IMapper<InitiativeUser, InitiativeUserDto> mapper,
+        IMapperCreateAndRead<InitiativeUser, InitiativeUserDto> mapper,
         IValidator<InitiativeUserDto> entityValidator,
         ILogger logger,
         IIamService iamService,
@@ -64,6 +65,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.iamService = iamService;

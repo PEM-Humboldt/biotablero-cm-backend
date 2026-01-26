@@ -3,13 +3,13 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 
 /// <summary>
 /// Resource File mappings.
 /// </summary>
-public class ResourceFileMappings : IMapper<ResourceFile, ResourceFileDto>
+public class ResourceFileMappings : IMapperCreateAndRead<ResourceFile, ResourceFileDto>
 {
     /// <inheritdoc/>
     public ResourceFileDto Map(ResourceFile entity)

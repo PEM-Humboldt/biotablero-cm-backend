@@ -4,15 +4,15 @@ using System;
 using System.Linq;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 /// <summary>
 /// Territory Story mappings.
 /// </summary>
 public class TerritoryStoryMappings(
-    IMapper<TerritoryStoryImage, TerritoryStoryImageDto> territoryStoryImageMappings,
-    IMapper<TerritoryStoryVideo, TerritoryStoryVideoDto> territoryStoryVideoMappings) : IMapper<TerritoryStory, TerritoryStoryDto>
+    IMapperCreateAndRead<TerritoryStoryImage, TerritoryStoryImageDto> territoryStoryImageMappings,
+    IMapperCreateAndRead<TerritoryStoryVideo, TerritoryStoryVideoDto> territoryStoryVideoMappings) : IMapperCreateAndRead<TerritoryStory, TerritoryStoryDto>
 {
     /// <inheritdoc/>
     public TerritoryStoryDto Map(TerritoryStory entity)

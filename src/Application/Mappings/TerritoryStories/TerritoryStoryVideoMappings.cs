@@ -3,13 +3,13 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 /// <summary>
 /// Territory Story Video mappings.
 /// </summary>
-public class TerritoryStoryVideoMappings : IMapper<TerritoryStoryVideo, TerritoryStoryVideoDto>
+public class TerritoryStoryVideoMappings : IMapperCreateAndRead<TerritoryStoryVideo, TerritoryStoryVideoDto>
 {
     /// <inheritdoc/>
     public TerritoryStoryVideoDto Map(TerritoryStoryVideo entity)

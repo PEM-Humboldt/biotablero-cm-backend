@@ -4,17 +4,17 @@ using System;
 using System.Linq;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 
 /// <summary>
 /// Resource mappings.
 /// </summary>
 public class ResourceMappings(
-    IMapper<ResourceType, ResourceTypeDto> resourceTypeMappings,
-    IMapper<ResourceFile, ResourceFileDto> resourceFileMappings,
-    IMapper<ResourceLink, ResourceLinkDto> resourceLinkMappings,
-    IMapper<ResourceTag, ResourceTagDto> resourceTagMappings) : IMapper<Resource, ResourceDto>
+    IMapperRead<ResourceType, ResourceTypeDto> resourceTypeMappings,
+    IMapperCreateAndRead<ResourceFile, ResourceFileDto> resourceFileMappings,
+    IMapperCreateAndRead<ResourceLink, ResourceLinkDto> resourceLinkMappings,
+    IMapperRead<ResourceTag, ResourceTagDto> resourceTagMappings) : IMapperCreateAndRead<Resource, ResourceDto>
 {
     /// <inheritdoc/>
     public ResourceDto Map(Resource entity)

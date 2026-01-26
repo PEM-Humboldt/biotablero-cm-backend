@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Logging;
 using IAVH.BioTablero.CM.Application.Mappings.Logging;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -32,7 +32,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
     /// <summary>
     /// Entity mapper.
     /// </summary>
-    private readonly IMapper<LogEntity, LogBaseDto> odataMapper;
+    private readonly IMapperRead<LogEntity, LogBaseDto> odataMapper;
 
     /// <summary>
     /// Constructor.
@@ -42,7 +42,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
     /// <param name="entityReportService">Entity report service.</param>
     public LogService(
         ILogRepository entityRepository,
-        IMapper<LogEntity, LogDto> mapper,
+        IMapperRead<LogEntity, LogDto> mapper,
         IReportService<LogDto> entityReportService)
         : base(entityRepository, mapper)
     {

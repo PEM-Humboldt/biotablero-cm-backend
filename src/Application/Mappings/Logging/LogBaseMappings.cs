@@ -3,13 +3,13 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 
 /// <summary>
 /// System logs mappings for OData.
 /// </summary>
-public class LogBaseMappings : IMapper<LogEntity, LogBaseDto>
+public class LogBaseMappings : IMapperRead<LogEntity, LogBaseDto>
 {
     /// <inheritdoc/>
     public LogBaseDto Map(LogEntity entity)
@@ -23,21 +23,6 @@ public class LogBaseMappings : IMapper<LogEntity, LogBaseDto>
             TimeStamp = entity.TimeStamp,
             UserName = entity.UserName,
             ShortMessage = entity.ShortMessage,
-        };
-    }
-
-    /// <inheritdoc/>
-    public LogEntity Map(LogBaseDto dto)
-    {
-        ArgumentNullException.ThrowIfNull(dto);
-
-        return new()
-        {
-            Id = dto.Id,
-            Type = dto.Type,
-            TimeStamp = dto.TimeStamp,
-            UserName = dto.UserName,
-            ShortMessage = dto.ShortMessage,
         };
     }
 }

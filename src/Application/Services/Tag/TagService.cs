@@ -9,7 +9,7 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Tags;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -30,6 +30,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     private new readonly ITagRepository entityRepository;
     private readonly IValidator<TagDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateAndRead<Tag, TagDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
@@ -42,13 +43,14 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     /// <param name="initiativeRepository">Initiative repository.</param>
     public TagService(
         ITagRepository entityRepository,
-        IMapper<Tag, TagDto> mapper,
+        IMapperCreateAndRead<Tag, TagDto> mapper,
         IValidator<TagDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;

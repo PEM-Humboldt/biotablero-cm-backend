@@ -13,7 +13,7 @@ using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -41,6 +41,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     private new readonly IJoinRequestRepository entityRepository;
     private readonly IValidator<JoinRequestDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateAndRead<JoinRequest, JoinRequestDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IWebViewTools webViewTools;
@@ -61,7 +62,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <param name="iamService">IAM service.</param>
     public JoinRequestService(
         IJoinRequestRepository entityRepository,
-        IMapper<JoinRequest, JoinRequestDto> mapper,
+        IMapperCreateAndRead<JoinRequest, JoinRequestDto> mapper,
         IValidator<JoinRequestDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
@@ -72,6 +73,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;

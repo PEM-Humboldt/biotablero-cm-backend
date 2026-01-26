@@ -14,7 +14,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -47,6 +47,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     private const string StoragePrefix = "initiatives";
     private readonly IValidator<InitiativeDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateAndRead<Initiative, InitiativeDto> mapper;
     private new readonly IInitiativeRepository entityRepository;
     private readonly ILocationRepository locationRepository;
     private readonly ILocationService locationService;
@@ -70,7 +71,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// <param name="imageUtilsService">Image utils service.</param>
     public InitiativeService(
         IInitiativeRepository entityRepository,
-        IMapper<Initiative, InitiativeDto> mapper,
+        IMapperCreateAndRead<Initiative, InitiativeDto> mapper,
         IValidator<InitiativeDto> entityValidator,
         ILogger logger,
         ILocationRepository locationRepository,
@@ -81,6 +82,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.locationRepository = locationRepository;

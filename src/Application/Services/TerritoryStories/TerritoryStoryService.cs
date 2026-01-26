@@ -11,7 +11,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -37,6 +37,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     private new readonly ITerritoryStoryRepository entityRepository;
     private readonly IValidator<TerritoryStoryDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateAndRead<TerritoryStory, TerritoryStoryDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ITerritoryStoryLikeRepository territoryStoryLikeRepository;
     private readonly ITerritoryStoryVideoRepository territoryStoryVideoRepository;
@@ -57,7 +58,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <param name="initiativeUserRepository">Initiative User repository.</param>
     public TerritoryStoryService(
         ITerritoryStoryRepository entityRepository,
-        IMapper<TerritoryStory, TerritoryStoryDto> mapper,
+        IMapperCreateAndRead<TerritoryStory, TerritoryStoryDto> mapper,
         IValidator<TerritoryStoryDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
@@ -68,6 +69,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;

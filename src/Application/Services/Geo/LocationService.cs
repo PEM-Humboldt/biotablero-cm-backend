@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Geo;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Geo;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -33,7 +33,7 @@ public class LocationService : ServiceRead<Location, LocationDto, int>, ILocatio
     /// <param name="locationPolygonRepository">Location Polygon repository.</param>
     public LocationService(
         ILocationRepository entityRepository,
-        IMapper<Location, LocationDto> mapper,
+        IMapperRead<Location, LocationDto> mapper,
         ILocationPolygonRepository locationPolygonRepository)
         : base(entityRepository, mapper)
     {

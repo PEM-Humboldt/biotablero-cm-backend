@@ -11,7 +11,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -32,6 +32,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     private new readonly IResourceLinkRepository entityRepository;
     private readonly IValidator<ResourceLinkDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateAndRead<ResourceLink, ResourceLinkDto> mapper;
     private readonly IResourceRepository resourceRepository;
     private readonly IWebHelperService webHelperService;
     private readonly IResourceService resourceService;
@@ -48,7 +49,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     /// <param name="resourceService">Resource service.</param>
     public ResourceLinkService(
         IResourceLinkRepository entityRepository,
-        IMapper<ResourceLink, ResourceLinkDto> mapper,
+        IMapperCreateAndRead<ResourceLink, ResourceLinkDto> mapper,
         IValidator<ResourceLinkDto> entityValidator,
         ILogger logger,
         IResourceRepository resourceRepository,
@@ -57,6 +58,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.resourceRepository = resourceRepository;

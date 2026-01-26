@@ -11,7 +11,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -36,6 +36,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     private new readonly IJoinInvitationRepository entityRepository;
     private readonly IValidator<JoinInvitationDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateAndRead<JoinInvitation, JoinInvitationDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IWebViewTools webViewTools;
@@ -56,7 +57,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// <param name="iamService">IAM service.</param>
     public JoinInvitationService(
         IJoinInvitationRepository entityRepository,
-        IMapper<JoinInvitation, JoinInvitationDto> mapper,
+        IMapperCreateAndRead<JoinInvitation, JoinInvitationDto> mapper,
         IValidator<JoinInvitationDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
@@ -67,6 +68,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;

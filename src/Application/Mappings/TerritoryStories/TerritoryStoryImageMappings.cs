@@ -3,13 +3,13 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 /// <summary>
 /// Territory Story Image mappings.
 /// </summary>
-public class TerritoryStoryImageMappings : IMapper<TerritoryStoryImage, TerritoryStoryImageDto>
+public class TerritoryStoryImageMappings : IMapperCreateAndRead<TerritoryStoryImage, TerritoryStoryImageDto>
 {
     /// <inheritdoc/>
     public TerritoryStoryImageDto Map(TerritoryStoryImage entity)

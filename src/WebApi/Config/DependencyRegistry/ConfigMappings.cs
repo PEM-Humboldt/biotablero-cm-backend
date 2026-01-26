@@ -6,7 +6,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Mappings.Geo;
 using IAVH.BioTablero.CM.Application.Mappings.Initiatives;
 using IAVH.BioTablero.CM.Application.Mappings.Logging;
@@ -34,24 +34,24 @@ public static class ConfigMappings
     /// <returns>Host builder configuration.</returns>
     public static IServiceCollection AddMappings(this IServiceCollection services)
     {
-        services.AddSingleton<IMapper<LogEntity, LogDto>, LogMappings>();
-        services.AddSingleton<IMapper<Location, LocationDto>, LocationMappings>();
-        services.AddSingleton<IMapper<Initiative, InitiativeDto>, InitiativeMappings>();
-        services.AddSingleton<IMapper<InitiativeContact, InitiativeContactDto>, InitiativeContactMappings>();
-        services.AddSingleton<IMapper<InitiativeLocation, InitiativeLocationDto>, InitiativeLocationMappings>();
-        services.AddSingleton<IMapper<InitiativeUser, InitiativeUserDto>, InitiativeUserMappings>();
-        services.AddSingleton<IMapper<Tag, TagDto>, TagMappings>();
-        services.AddSingleton<IMapper<JoinRequest, JoinRequestDto>, JoinRequestMappings>();
-        services.AddSingleton<IMapper<JoinInvitation, JoinInvitationDto>, JoinInvitationMappings>();
-        services.AddSingleton<IMapper<JoinInvitationGuest, JoinInvitationGuestDto>, JoinInvitationGuestMappings>();
-        services.AddSingleton<IMapper<TerritoryStory, TerritoryStoryDto>, TerritoryStoryMappings>();
-        services.AddSingleton<IMapper<TerritoryStoryImage, TerritoryStoryImageDto>, TerritoryStoryImageMappings>();
-        services.AddSingleton<IMapper<TerritoryStoryVideo, TerritoryStoryVideoDto>, TerritoryStoryVideoMappings>();
-        services.AddSingleton<IMapper<Resource, ResourceDto>, ResourceMappings>();
-        services.AddSingleton<IMapper<ResourceType, ResourceTypeDto>, ResourceTypeMappings>();
-        services.AddSingleton<IMapper<ResourceFile, ResourceFileDto>, ResourceFileMappings>();
-        services.AddSingleton<IMapper<ResourceLink, ResourceLinkDto>, ResourceLinkMappings>();
-        services.AddSingleton<IMapper<ResourceTag, ResourceTagDto>, ResourceTagMappings>();
+        services.AddSingleton<IMapperRead<LogEntity, LogDto>, LogMappings>();
+        services.AddSingleton<IMapperRead<Location, LocationDto>, LocationMappings>();
+        services.AddSingleton<IMapperCreateAndRead<Tag, TagDto>, TagMappings>();
+        services.AddSingleton<IMapperCreateAndRead<Initiative, InitiativeDto>, InitiativeMappings>();
+        services.AddSingleton<IMapperCreateAndRead<InitiativeContact, InitiativeContactDto>, InitiativeContactMappings>();
+        services.AddSingleton<IMapperCreateAndRead<InitiativeLocation, InitiativeLocationDto>, InitiativeLocationMappings>();
+        services.AddSingleton<IMapperCreateAndRead<InitiativeUser, InitiativeUserDto>, InitiativeUserMappings>();
+        services.AddSingleton<IMapperCreateAndRead<JoinRequest, JoinRequestDto>, JoinRequestMappings>();
+        services.AddSingleton<IMapperCreateAndRead<JoinInvitation, JoinInvitationDto>, JoinInvitationMappings>();
+        services.AddSingleton<IMapperCreateAndRead<JoinInvitationGuest, JoinInvitationGuestDto>, JoinInvitationGuestMappings>();
+        services.AddSingleton<IMapperCreateAndRead<TerritoryStory, TerritoryStoryDto>, TerritoryStoryMappings>();
+        services.AddSingleton<IMapperCreateAndRead<TerritoryStoryImage, TerritoryStoryImageDto>, TerritoryStoryImageMappings>();
+        services.AddSingleton<IMapperCreateAndRead<TerritoryStoryVideo, TerritoryStoryVideoDto>, TerritoryStoryVideoMappings>();
+        services.AddSingleton<IMapperCreateAndRead<Resource, ResourceDto>, ResourceMappings>();
+        services.AddSingleton<IMapperRead<ResourceType, ResourceTypeDto>, ResourceTypeMappings>();
+        services.AddSingleton<IMapperCreateAndRead<ResourceFile, ResourceFileDto>, ResourceFileMappings>();
+        services.AddSingleton<IMapperCreateAndRead<ResourceLink, ResourceLinkDto>, ResourceLinkMappings>();
+        services.AddSingleton<IMapperRead<ResourceTag, ResourceTagDto>, ResourceTagMappings>();
 
         return services;
     }
