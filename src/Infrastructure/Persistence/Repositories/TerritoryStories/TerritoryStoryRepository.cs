@@ -31,7 +31,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     }
 
     /// <inheritdoc/>
-    public new async Task<TerritoryStory> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<TerritoryStory> GetByIdAsync(int id, CancellationToken ct = default) =>
         await IncludeCustomEntities()
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);

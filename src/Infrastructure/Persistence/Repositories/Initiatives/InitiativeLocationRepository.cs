@@ -30,7 +30,7 @@ public class InitiativeLocationRepository : Repository<InitiativeLocation, int>,
     }
 
     /// <inheritdoc/>
-    public new async Task<InitiativeLocation> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<InitiativeLocation> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.InitiativeLocations
             .Include(e => e.Location)
             .Where(e => e.Id == id)
