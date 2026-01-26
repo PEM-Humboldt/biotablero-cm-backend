@@ -38,19 +38,11 @@ public class VideoHelperService : IVideoHelperService
             var response = await httpClient.GetAsync(oembedUrl, ct);
             return response.IsSuccessStatusCode;
         }
-        catch (InvalidOperationException)
-        {
-            return false;
-        }
-        catch (HttpRequestException)
-        {
-            return false;
-        }
-        catch (TaskCanceledException)
-        {
-            return false;
-        }
-        catch (UriFormatException)
+        catch (Exception ex) when (
+            ex is InvalidOperationException or
+            HttpRequestException or
+            TaskCanceledException or
+            UriFormatException)
         {
             return false;
         }
