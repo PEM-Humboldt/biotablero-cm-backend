@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// Initiative contact mappings.
 /// </summary>
 public class InitiativeLocationMappings(
-    IMapperRead<Location, LocationDto> locationMappings) : IMapperCreateAndRead<InitiativeLocation, InitiativeLocationDto>
+    IMapperRead<Location, LocationDto> locationMappings) : IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto>
 {
     /// <inheritdoc/>
     public InitiativeLocationDto Map(InitiativeLocation entity)
@@ -40,5 +40,15 @@ public class InitiativeLocationMappings(
             LocationId = dto.LocationId ?? 0,
             Locality = dto.Locality,
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(InitiativeLocation entity, InitiativeLocationDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.LocationId = dto.LocationId ?? 0;
+        entity.Locality = dto.Locality;
     }
 }

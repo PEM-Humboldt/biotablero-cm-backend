@@ -11,8 +11,8 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 /// Territory Story mappings.
 /// </summary>
 public class TerritoryStoryMappings(
-    IMapperCreateAndRead<TerritoryStoryImage, TerritoryStoryImageDto> territoryStoryImageMappings,
-    IMapperCreateAndRead<TerritoryStoryVideo, TerritoryStoryVideoDto> territoryStoryVideoMappings) : IMapperCreateAndRead<TerritoryStory, TerritoryStoryDto>
+    IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto> territoryStoryImageMappings,
+    IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto> territoryStoryVideoMappings) : IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto>
 {
     /// <inheritdoc/>
     public TerritoryStoryDto Map(TerritoryStory entity)
@@ -58,5 +58,17 @@ public class TerritoryStoryMappings(
             Images = dto.Images?.Select(territoryStoryImageMappings.Map).ToList(),
             Videos = dto.Videos?.Select(territoryStoryVideoMappings.Map).ToList(),
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(TerritoryStory entity, TerritoryStoryDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.Title = dto.Title;
+        entity.Text = dto.Text;
+        entity.Keywords = dto.Keywords;
+        entity.Restricted = dto.Restricted ?? entity.Restricted;
     }
 }

@@ -31,7 +31,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     private new readonly ITerritoryStoryImageRepository entityRepository;
     private readonly IValidator<TerritoryStoryImageDto> entityValidator;
     private readonly ILogger logger;
-    private new readonly IMapperCreateAndRead<TerritoryStoryImage, TerritoryStoryImageDto> mapper;
+    private new readonly IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto> mapper;
     private readonly ITerritoryStoryRepository territoryStoryRepository;
     private readonly IImageUtilsService imageUtilsService;
 
@@ -46,7 +46,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <param name="imageUtilsService">Image Utils service.</param>
     public TerritoryStoryImageService(
         ITerritoryStoryImageRepository entityRepository,
-        IMapperCreateAndRead<TerritoryStoryImage, TerritoryStoryImageDto> mapper,
+        IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto> mapper,
         IValidator<TerritoryStoryImageDto> entityValidator,
         ILogger logger,
         ITerritoryStoryRepository territoryStoryRepository,
@@ -270,7 +270,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         }
 
         // Update entity data
-        entity.Description = entityData.Description;
+        mapper.Update(entity, entityData);
 
         if (!updateHasFile)
         {

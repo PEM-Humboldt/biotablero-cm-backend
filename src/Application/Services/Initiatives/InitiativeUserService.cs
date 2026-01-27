@@ -36,7 +36,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     private new readonly IInitiativeUserRepository entityRepository;
     private readonly IValidator<InitiativeUserDto> entityValidator;
     private readonly ILogger logger;
-    private new readonly IMapperCreateAndRead<InitiativeUser, InitiativeUserDto> mapper;
+    private new readonly IMapperCreateReadAndUpdate<InitiativeUser, InitiativeUserDto> mapper;
     private readonly IIamService iamService;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly IWebViewTools webViewTools;
@@ -55,7 +55,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="emailService">Email service.</param>
     public InitiativeUserService(
         IInitiativeUserRepository entityRepository,
-        IMapperCreateAndRead<InitiativeUser, InitiativeUserDto> mapper,
+        IMapperCreateReadAndUpdate<InitiativeUser, InitiativeUserDto> mapper,
         IValidator<InitiativeUserDto> entityValidator,
         ILogger logger,
         IIamService iamService,
@@ -215,8 +215,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         }
 
         // Update entity data
-        entity.LevelId = entityData.Level.Id;
-        entity.FocusArea = entityData.FocusArea;
+        mapper.Update(entity, entityData);
 
         await entityRepository.UpdateAsync(entity, ct);
 

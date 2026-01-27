@@ -12,7 +12,7 @@ using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums.TagC
 /// <summary>
 /// Tag mappings.
 /// </summary>
-public class TagMappings : IMapperCreateAndRead<Tag, TagDto>
+public class TagMappings : IMapperCreateReadAndUpdate<Tag, TagDto>
 {
     /// <inheritdoc/>
     public TagDto Map(Tag entity)
@@ -39,5 +39,15 @@ public class TagMappings : IMapperCreateAndRead<Tag, TagDto>
             Url = new Uri(dto.Url),
             CategoryId = dto.Category.Id,
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(Tag entity, TagDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.Name = dto.Name;
+        entity.Url = dto.Url != null ? new Uri(dto.Url) : null;
     }
 }

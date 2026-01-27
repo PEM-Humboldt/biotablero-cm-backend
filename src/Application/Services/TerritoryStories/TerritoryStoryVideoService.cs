@@ -31,7 +31,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     private new readonly ITerritoryStoryVideoRepository entityRepository;
     private readonly IValidator<TerritoryStoryVideoDto> entityValidator;
     private readonly ILogger logger;
-    private new readonly IMapperCreateAndRead<TerritoryStoryVideo, TerritoryStoryVideoDto> mapper;
+    private new readonly IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto> mapper;
     private readonly ITerritoryStoryRepository territoryStoryRepository;
     private readonly IVideoHelperService videoHelperService;
 
@@ -46,7 +46,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     /// <param name="videoHelperService">Video Helper service.</param>
     public TerritoryStoryVideoService(
         ITerritoryStoryVideoRepository entityRepository,
-        IMapperCreateAndRead<TerritoryStoryVideo, TerritoryStoryVideoDto> mapper,
+        IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto> mapper,
         IValidator<TerritoryStoryVideoDto> entityValidator,
         ILogger logger,
         ITerritoryStoryRepository territoryStoryRepository,
@@ -254,7 +254,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         }
 
         // Update entity data
-        entity.FileUrl = new Uri(entityData.FileUrl);
+        mapper.Update(entity, entityData);
 
         await entityRepository.UpdateAsync(entity, ct);
 

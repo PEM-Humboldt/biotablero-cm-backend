@@ -32,7 +32,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     private new readonly IResourceLinkRepository entityRepository;
     private readonly IValidator<ResourceLinkDto> entityValidator;
     private readonly ILogger logger;
-    private new readonly IMapperCreateAndRead<ResourceLink, ResourceLinkDto> mapper;
+    private new readonly IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto> mapper;
     private readonly IResourceRepository resourceRepository;
     private readonly IWebHelperService webHelperService;
     private readonly IResourceService resourceService;
@@ -49,7 +49,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     /// <param name="resourceService">Resource service.</param>
     public ResourceLinkService(
         IResourceLinkRepository entityRepository,
-        IMapperCreateAndRead<ResourceLink, ResourceLinkDto> mapper,
+        IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto> mapper,
         IValidator<ResourceLinkDto> entityValidator,
         ILogger logger,
         IResourceRepository resourceRepository,
@@ -229,8 +229,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Update entity data
-        entity.Name = entityData.Name;
-        entity.Url = new Uri(entityData.Url);
+        mapper.Update(entity, entityData);
 
         await entityRepository.UpdateAsync(entity, ct);
 

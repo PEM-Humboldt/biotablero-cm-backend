@@ -9,7 +9,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 /// <summary>
 /// Territory Story Image mappings.
 /// </summary>
-public class TerritoryStoryImageMappings : IMapperCreateAndRead<TerritoryStoryImage, TerritoryStoryImageDto>
+public class TerritoryStoryImageMappings : IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto>
 {
     /// <inheritdoc/>
     public TerritoryStoryImageDto Map(TerritoryStoryImage entity)
@@ -39,5 +39,14 @@ public class TerritoryStoryImageMappings : IMapperCreateAndRead<TerritoryStoryIm
             Description = dto.Description,
             FeaturedContent = dto.FeaturedContent,
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(TerritoryStoryImage entity, TerritoryStoryImageDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.Description = dto.Description;
     }
 }

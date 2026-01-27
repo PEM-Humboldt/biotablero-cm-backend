@@ -37,7 +37,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     private new readonly ITerritoryStoryRepository entityRepository;
     private readonly IValidator<TerritoryStoryDto> entityValidator;
     private readonly ILogger logger;
-    private new readonly IMapperCreateAndRead<TerritoryStory, TerritoryStoryDto> mapper;
+    private new readonly IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ITerritoryStoryLikeRepository territoryStoryLikeRepository;
     private readonly ITerritoryStoryVideoRepository territoryStoryVideoRepository;
@@ -58,7 +58,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <param name="initiativeUserRepository">Initiative User repository.</param>
     public TerritoryStoryService(
         ITerritoryStoryRepository entityRepository,
-        IMapperCreateAndRead<TerritoryStory, TerritoryStoryDto> mapper,
+        IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto> mapper,
         IValidator<TerritoryStoryDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
@@ -305,10 +305,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         }
 
         // Update entity data
-        entity.Title = entityData.Title;
-        entity.Text = entityData.Text;
-        entity.Keywords = entityData.Keywords;
-        entity.Restricted = entityData.Restricted ?? entity.Restricted;
+        mapper.Update(entity, entityData);
 
         await entityRepository.UpdateAsync(entity, ct);
 

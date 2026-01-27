@@ -9,7 +9,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 /// <summary>
 /// Resource Link mappings.
 /// </summary>
-public class ResourceLinkMappings : IMapperCreateAndRead<ResourceLink, ResourceLinkDto>
+public class ResourceLinkMappings : IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto>
 {
     /// <inheritdoc/>
     public ResourceLinkDto Map(ResourceLink entity)
@@ -37,5 +37,15 @@ public class ResourceLinkMappings : IMapperCreateAndRead<ResourceLink, ResourceL
             Url = new Uri(dto.Url),
             Name = dto.Name,
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(ResourceLink entity, ResourceLinkDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.Name = dto.Name;
+        entity.Url = new Uri(dto.Url);
     }
 }

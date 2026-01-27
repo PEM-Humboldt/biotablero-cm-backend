@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 /// <summary>
 /// Resource Tag mappings.
 /// </summary>
-public class ResourceTagMappings(IMapperCreateAndRead<Tag, TagDto> tagMappings) : IMapperRead<ResourceTag, ResourceTagDto>
+public class ResourceTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : IMapperRead<ResourceTag, ResourceTagDto>
 {
     /// <inheritdoc/>
     public ResourceTagDto Map(ResourceTag entity)

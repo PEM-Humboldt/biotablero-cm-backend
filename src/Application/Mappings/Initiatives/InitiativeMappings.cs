@@ -13,10 +13,10 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 /// Initiative mappings.
 /// </summary>
 public class InitiativeMappings(
-    IMapperCreateAndRead<InitiativeContact, InitiativeContactDto> initiativeContactMappings,
-    IMapperCreateAndRead<InitiativeLocation, InitiativeLocationDto> initiativeLocationMappings,
-    IMapperCreateAndRead<InitiativeUser, InitiativeUserDto> initiativeUserMappings,
-    IMapperCreateAndRead<Tag, TagDto> tagMappings) : IMapperCreateAndRead<Initiative, InitiativeDto>
+    IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto> initiativeContactMappings,
+    IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto> initiativeLocationMappings,
+    IMapperCreateReadAndUpdate<InitiativeUser, InitiativeUserDto> initiativeUserMappings,
+    IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : IMapperCreateReadAndUpdate<Initiative, InitiativeDto>
 {
     /// <inheritdoc/>
     public InitiativeDto Map(Initiative entity)
@@ -65,5 +65,18 @@ public class InitiativeMappings(
             InitiativeLocations = [.. dto.Locations?.Select(initiativeLocationMappings.Map)],
             InitiativeUsers = [.. dto.Users?.Select(initiativeUserMappings.Map)],
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(Initiative entity, InitiativeDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.Name = dto.Name;
+        entity.ShortName = dto.ShortName;
+        entity.Description = dto.Description;
+        entity.Baseline = dto.Baseline;
+        entity.Objective = dto.Objective;
     }
 }

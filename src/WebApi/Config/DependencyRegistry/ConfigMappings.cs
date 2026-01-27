@@ -36,21 +36,21 @@ public static class ConfigMappings
     {
         services.AddSingleton<IMapperRead<LogEntity, LogDto>, LogMappings>();
         services.AddSingleton<IMapperRead<Location, LocationDto>, LocationMappings>();
-        services.AddSingleton<IMapperCreateAndRead<Tag, TagDto>, TagMappings>();
-        services.AddSingleton<IMapperCreateAndRead<Initiative, InitiativeDto>, InitiativeMappings>();
-        services.AddSingleton<IMapperCreateAndRead<InitiativeContact, InitiativeContactDto>, InitiativeContactMappings>();
-        services.AddSingleton<IMapperCreateAndRead<InitiativeLocation, InitiativeLocationDto>, InitiativeLocationMappings>();
-        services.AddSingleton<IMapperCreateAndRead<InitiativeUser, InitiativeUserDto>, InitiativeUserMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<Tag, TagDto>, TagMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<Initiative, InitiativeDto>, InitiativeMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto>, InitiativeContactMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto>, InitiativeLocationMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<InitiativeUser, InitiativeUserDto>, InitiativeUserMappings>();
         services.AddSingleton<IMapperCreateAndRead<JoinRequest, JoinRequestDto>, JoinRequestMappings>();
         services.AddSingleton<IMapperCreateAndRead<JoinInvitation, JoinInvitationDto>, JoinInvitationMappings>();
         services.AddSingleton<IMapperCreateAndRead<JoinInvitationGuest, JoinInvitationGuestDto>, JoinInvitationGuestMappings>();
-        services.AddSingleton<IMapperCreateAndRead<TerritoryStory, TerritoryStoryDto>, TerritoryStoryMappings>();
-        services.AddSingleton<IMapperCreateAndRead<TerritoryStoryImage, TerritoryStoryImageDto>, TerritoryStoryImageMappings>();
-        services.AddSingleton<IMapperCreateAndRead<TerritoryStoryVideo, TerritoryStoryVideoDto>, TerritoryStoryVideoMappings>();
-        services.AddSingleton<IMapperCreateAndRead<Resource, ResourceDto>, ResourceMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto>, TerritoryStoryMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto>, TerritoryStoryImageMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto>, TerritoryStoryVideoMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<Resource, ResourceDto>, ResourceMappings>();
         services.AddSingleton<IMapperRead<ResourceType, ResourceTypeDto>, ResourceTypeMappings>();
-        services.AddSingleton<IMapperCreateAndRead<ResourceFile, ResourceFileDto>, ResourceFileMappings>();
-        services.AddSingleton<IMapperCreateAndRead<ResourceLink, ResourceLinkDto>, ResourceLinkMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto>, ResourceFileMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto>, ResourceLinkMappings>();
         services.AddSingleton<IMapperRead<ResourceTag, ResourceTagDto>, ResourceTagMappings>();
 
         return services;

@@ -9,7 +9,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 /// <summary>
 /// Resource File mappings.
 /// </summary>
-public class ResourceFileMappings : IMapperCreateAndRead<ResourceFile, ResourceFileDto>
+public class ResourceFileMappings : IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto>
 {
     /// <inheritdoc/>
     public ResourceFileDto Map(ResourceFile entity)
@@ -37,5 +37,14 @@ public class ResourceFileMappings : IMapperCreateAndRead<ResourceFile, ResourceF
             Url = dto.Url,
             Name = dto.Name,
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(ResourceFile entity, ResourceFileDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.Name = dto.Name;
     }
 }

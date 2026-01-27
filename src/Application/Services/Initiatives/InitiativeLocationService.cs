@@ -29,7 +29,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     private new readonly IInitiativeLocationRepository entityRepository;
     private readonly IValidator<InitiativeLocationDto> entityValidator;
     private readonly ILogger logger;
-    private new readonly IMapperCreateAndRead<InitiativeLocation, InitiativeLocationDto> mapper;
+    private new readonly IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto> mapper;
     private readonly ILocationRepository locationRepository;
     private readonly IInitiativeRepository initiativeRepository;
 
@@ -44,7 +44,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeLocationService(
         IInitiativeLocationRepository entityRepository,
-        IMapperCreateAndRead<InitiativeLocation, InitiativeLocationDto> mapper,
+        IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto> mapper,
         IValidator<InitiativeLocationDto> entityValidator,
         ILogger logger,
         ILocationRepository locationRepository,
@@ -198,8 +198,8 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         }
 
         // Validate duplicated entities
-        var capitalizedLocalityName = entityData.Locality?.Capitalize();
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.InitiativeId, locationId, capitalizedLocalityName, ct);
+        entityData.Locality = entityData.Locality?.Capitalize();
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.InitiativeId, locationId, entityData.Locality, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -210,8 +210,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         }
 
         // Update entity data
-        entity.LocationId = entityData.LocationId ?? 0;
-        entity.Locality = capitalizedLocalityName;
+        mapper.Update(entity, entityData);
 
         await entityRepository.UpdateAsync(entity, ct);
 

@@ -12,9 +12,9 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 /// </summary>
 public class ResourceMappings(
     IMapperRead<ResourceType, ResourceTypeDto> resourceTypeMappings,
-    IMapperCreateAndRead<ResourceFile, ResourceFileDto> resourceFileMappings,
-    IMapperCreateAndRead<ResourceLink, ResourceLinkDto> resourceLinkMappings,
-    IMapperRead<ResourceTag, ResourceTagDto> resourceTagMappings) : IMapperCreateAndRead<Resource, ResourceDto>
+    IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto> resourceFileMappings,
+    IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto> resourceLinkMappings,
+    IMapperRead<ResourceTag, ResourceTagDto> resourceTagMappings) : IMapperCreateReadAndUpdate<Resource, ResourceDto>
 {
     /// <inheritdoc/>
     public ResourceDto Map(Resource entity)
@@ -53,5 +53,22 @@ public class ResourceMappings(
             Description = dto.Description,
             IsDraft = dto.IsDraft,
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(Resource entity, ResourceDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.ResourceTypeId = dto.ResourceType.Id.Value;
+        entity.Name = dto.Name;
+        entity.Description = dto.Description;
+        entity.IsDraft = dto.IsDraft;
+
+        if (!entity.IsDraft)
+        {
+            entity.PublicationDate = DateTime.Now;
+        }
     }
 }

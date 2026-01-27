@@ -31,7 +31,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     private new readonly IResourceFileRepository entityRepository;
     private readonly IValidator<ResourceFileDto> entityValidator;
     private readonly ILogger logger;
-    private new readonly IMapperCreateAndRead<ResourceFile, ResourceFileDto> mapper;
+    private new readonly IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto> mapper;
     private readonly IResourceRepository resourceRepository;
     private readonly IResourceService resourceService;
 
@@ -46,7 +46,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     /// <param name="resourceService">Resource service.</param>
     public ResourceFileService(
         IResourceFileRepository entityRepository,
-        IMapperCreateAndRead<ResourceFile, ResourceFileDto> mapper,
+        IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto> mapper,
         IValidator<ResourceFileDto> entityValidator,
         ILogger logger,
         IResourceRepository resourceRepository,
@@ -226,7 +226,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         }
 
         // Update entity data
-        entity.Name = entityData.Name;
+        mapper.Update(entity, entityData);
 
         if (!updateHasFile)
         {

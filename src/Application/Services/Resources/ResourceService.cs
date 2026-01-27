@@ -38,7 +38,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     private new readonly IResourceRepository entityRepository;
     private readonly IValidator<ResourceDto> entityValidator;
     private readonly ILogger logger;
-    private new readonly IMapperCreateAndRead<Resource, ResourceDto> mapper;
+    private new readonly IMapperCreateReadAndUpdate<Resource, ResourceDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IRepository<ResourceType, int> resourceTypeRepository;
@@ -63,7 +63,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <param name="iamService">IAM service.</param>
     public ResourceService(
         IResourceRepository entityRepository,
-        IMapperCreateAndRead<Resource, ResourceDto> mapper,
+        IMapperCreateReadAndUpdate<Resource, ResourceDto> mapper,
         IValidator<ResourceDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
@@ -300,15 +300,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Update entity data
-        entity.ResourceTypeId = entityData.ResourceType.Id.Value;
-        entity.Name = entityData.Name;
-        entity.Description = entityData.Description;
-        entity.IsDraft = entityData.IsDraft;
-
-        if (!entity.IsDraft)
-        {
-            entity.PublicationDate = DateTime.Now;
-        }
+        mapper.Update(entity, entityData);
 
         await entityRepository.UpdateAsync(entity, ct);
 

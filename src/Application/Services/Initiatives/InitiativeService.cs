@@ -47,7 +47,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     private const string StoragePrefix = "initiatives";
     private readonly IValidator<InitiativeDto> entityValidator;
     private readonly ILogger logger;
-    private new readonly IMapperCreateAndRead<Initiative, InitiativeDto> mapper;
+    private new readonly IMapperCreateReadAndUpdate<Initiative, InitiativeDto> mapper;
     private new readonly IInitiativeRepository entityRepository;
     private readonly ILocationRepository locationRepository;
     private readonly ILocationService locationService;
@@ -71,7 +71,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// <param name="imageUtilsService">Image utils service.</param>
     public InitiativeService(
         IInitiativeRepository entityRepository,
-        IMapperCreateAndRead<Initiative, InitiativeDto> mapper,
+        IMapperCreateReadAndUpdate<Initiative, InitiativeDto> mapper,
         IValidator<InitiativeDto> entityValidator,
         ILogger logger,
         ILocationRepository locationRepository,
@@ -317,11 +317,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
 
         // Update entity data
-        entity.Name = entityData.Name;
-        entity.ShortName = entityData.ShortName;
-        entity.Description = entityData.Description;
-        entity.Baseline = entityData.Baseline;
-        entity.Objective = entityData.Objective;
+        mapper.Update(entity, entityData);
 
         // Recalculate polygon area if locations might have changed
         entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
