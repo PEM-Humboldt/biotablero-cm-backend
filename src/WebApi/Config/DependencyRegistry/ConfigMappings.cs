@@ -41,6 +41,7 @@ public static class ConfigMappings
         services.AddSingleton<IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto>, InitiativeContactMappings>();
         services.AddSingleton<IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto>, InitiativeLocationMappings>();
         services.AddSingleton<IMapperCreateReadAndUpdate<InitiativeUser, InitiativeUserDto>, InitiativeUserMappings>();
+        services.AddSingleton<IMapperRead<InitiativeTag, InitiativeTagDto>, InitiativeTagMappings>();
         services.AddSingleton<IMapperCreateAndRead<JoinRequest, JoinRequestDto>, JoinRequestMappings>();
         services.AddSingleton<IMapperCreateAndRead<JoinInvitation, JoinInvitationDto>, JoinInvitationMappings>();
         services.AddSingleton<IMapperCreateAndRead<JoinInvitationGuest, JoinInvitationGuestDto>, JoinInvitationGuestMappings>();

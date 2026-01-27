@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 
-using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
@@ -89,5 +88,5 @@ public class InitiativeDto : IDto
     /// <summary>
     /// Tags relationship.
     /// </summary>
-    public IEnumerable<TagDto> Tags { get; init; }
+    public IEnumerable<InitiativeTagDto> Tags { get; init; }
 }
