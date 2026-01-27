@@ -32,7 +32,7 @@ public class ResourceMappings(
             IsDraft = entity.IsDraft,
             Likes = entity.TotalLikes,
             ILikedIt = entity.ILikedIt,
-            ResourceType = resourceTypeMappings.Map(entity.ResourceType),
+            ResourceType = entity.ResourceType != null ? resourceTypeMappings.Map(entity.ResourceType) : null,
             Files = entity.Files?.Select(resourceFileMappings.Map),
             Links = entity.Links?.Select(resourceLinkMappings.Map),
             Tags = entity.ResourceTags?.Select(resourceTagMappings.Map),
