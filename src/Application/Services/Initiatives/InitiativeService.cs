@@ -384,12 +384,15 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (uploadSuccessful)
         {
+            Uri oldImageUrl = null;
             switch (imageType)
             {
                 case InitiativeImageType.Image:
+                    oldImageUrl = entity.ImageUrl;
                     entity.ImageUrl = fileUri;
                     break;
                 case InitiativeImageType.Banner:
+                    oldImageUrl = entity.BannerUrl;
                     entity.BannerUrl = fileUri;
                     break;
                 default:
@@ -398,6 +401,11 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
                         StatusCode = HttpStatusCode.InternalServerError,
                         Message = $"Invalid image type: {imageType:G}",
                     };
+            }
+
+            if (oldImageUrl != null && oldImageUrl != fileUri)
+            {
+                await storageService.DeleteFileAsync(oldImageUrl.ToString(), ct);
             }
 
             await entityRepository.UpdateAsync(entity, ct);

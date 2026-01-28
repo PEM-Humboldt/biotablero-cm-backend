@@ -33,6 +33,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     private readonly ILogger logger;
     private new readonly IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto> mapper;
     private readonly ITerritoryStoryRepository territoryStoryRepository;
+    private readonly IStorageService storageService;
     private readonly IImageUtilsService imageUtilsService;
 
     /// <summary>
@@ -43,6 +44,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="territoryStoryRepository">Territory Story repository.</param>
+    /// <param name="storageService">Storage service.</param>
     /// <param name="imageUtilsService">Image Utils service.</param>
     public TerritoryStoryImageService(
         ITerritoryStoryImageRepository entityRepository,
@@ -50,6 +52,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         IValidator<TerritoryStoryImageDto> entityValidator,
         ILogger logger,
         ITerritoryStoryRepository territoryStoryRepository,
+        IStorageService storageService,
         IImageUtilsService imageUtilsService)
         : base(entityRepository, mapper)
     {
@@ -58,6 +61,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.territoryStoryRepository = territoryStoryRepository;
+        this.storageService = storageService;
         this.imageUtilsService = imageUtilsService;
     }
 
@@ -398,6 +402,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         }
 
         await entityRepository.DeleteAsync(entity, ct);
+        await storageService.DeleteFileAsync(entity.FileUrl.ToString(), ct);
 
         var entityData = mapper.Map(entity);
 

@@ -162,7 +162,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
                 var oldFileUri = entity.FileUrl;
 
                 // Upload/Overwrite image
-                var fileName = $"{StoragePrefix}/{entity.Id}.webp";
+                var fileName = $"{StoragePrefix}/{entity.Id}/{FileUtils.ComputeHash(imageStream)}.webp";
                 var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
                 var uploadSuccessful = await storageService.UploadFileAsync(fileName, imageStream, contentType, ct);
 
