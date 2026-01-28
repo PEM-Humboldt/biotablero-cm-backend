@@ -121,6 +121,10 @@ dotnet_diagnostic.CA1056.severity = none
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1308
 dotnet_diagnostic.CA1308.severity = none
 
+# Do Not Use Weak Cryptographic Algorithms
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca5350
+dotnet_diagnostic.CA5350.severity = suggestion
+
 # --------------------- #
 # Custom StyleCop rules #
 # --------------------- #
@@ -161,9 +165,9 @@ dotnet_diagnostic.SA1401.severity = none
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1204.md
 dotnet_diagnostic.SA1204.severity = none
 
-# ------------------- #
+# --------------------- #
 # Unused Code Detection #
-# ------------------- #
+# --------------------- #
 
 # Remove unused private members
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1822
@@ -200,7 +204,3 @@ dotnet_diagnostic.IDE0002.severity = suggestion
 # Remove unreachable code (example: catch all exceptions)
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1031
 dotnet_diagnostic.CA1031.severity = warning
-
-# Do Not Use Weak Cryptographic Algorithms
-# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca5350
-dotnet_diagnostic.CA5350.severity = suggestion
