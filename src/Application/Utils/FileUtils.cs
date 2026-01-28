@@ -24,11 +24,11 @@ public static class FileUtils
     public static bool IsEmpty(this IInputFile file) => file == null || file.Size <= 0;
 
     /// <summary>
-    /// Compute hash Sum for stream (SHA256).
+    /// Compute hash Sum for stream (SHA1).
     /// </summary>
     /// <param name="stream">File stream.</param>
-    /// <returns>SHA256 Sum.</returns>
-    public static string ComputeHash(Stream stream)
+    /// <returns>File hash.</returns>
+    public static string ComputeFileHash(Stream stream)
     {
         // Ensure the stream is at the beginning if it needs to be read from the start
         if (stream.CanSeek)
