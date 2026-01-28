@@ -1,6 +1,10 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Utils;
 
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
@@ -10,12 +14,46 @@ using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 /// </summary>
 public static class FileUtils
 {
+    #region General
+
     /// <summary>
     /// Check if a file is empty.
     /// </summary>
     /// <param name="file">Input file.</param>
     /// <returns>True if is empty. False otherwise.</returns>
     public static bool IsEmpty(this IInputFile file) => file == null || file.Size <= 0;
+
+    /// <summary>
+    /// Compute hash Sum for stream (SHA256).
+    /// </summary>
+    /// <param name="stream">File stream.</param>
+    /// <returns>SHA256 Sum.</returns>
+    public static string ComputeHash(Stream stream)
+    {
+        // Ensure the stream is at the beginning if it needs to be read from the start
+        if (stream.CanSeek)
+        {
+            stream.Position = 0;
+        }
+
+        using var sha1 = SHA1.Create();
+
+        // Compute the hash of the stream
+        byte[] hashBytes = sha1.ComputeHash(stream);
+
+        // Convert the byte array to a hexadecimal string
+        var builder = new StringBuilder();
+
+        for (int i = 0; i < hashBytes.Length; i++)
+        {
+            // "x2" formats the byte as a two-digit hexadecimal number
+            builder.Append(hashBytes[i].ToString("x2", CultureInfo.InvariantCulture));
+        }
+
+        return builder.ToString();
+    }
+
+    #endregion
 
     #region Territory Story
 

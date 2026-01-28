@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
@@ -135,7 +136,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
                 await dbContext.SaveChangesAsync(ct);
 
                 // Upload/Overwrite image
-                var fileName = $"{StoragePrefix}/{entity.Id}.webp";
+                var fileName = $"{StoragePrefix}/{entity.Id}/{FileUtils.ComputeHash(imageStream)}.webp";
                 var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
                 var uploadSuccessful = await storageService.UploadFileAsync(fileName, imageStream, contentType, ct);
 
