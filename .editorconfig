@@ -200,3 +200,7 @@ dotnet_diagnostic.IDE0002.severity = suggestion
 # Remove unreachable code (example: catch all exceptions)
 # https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1031
 dotnet_diagnostic.CA1031.severity = warning
+
+# Do Not Use Weak Cryptographic Algorithms
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca5350
+dotnet_diagnostic.CA5350.severity = suggestion
