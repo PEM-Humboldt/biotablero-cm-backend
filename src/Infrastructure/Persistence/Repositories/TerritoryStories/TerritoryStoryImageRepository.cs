@@ -131,22 +131,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
         await ExecuteInTransactionAsync(
             async ct =>
             {
-                entity.FileUrl = new Uri($"/temp-uri/{DateTime.Now.ToFileTime()}");
-                await dbContext.TerritoryStoryImages.AddAsync(entity, ct);
-                await dbContext.SaveChangesAsync(ct);
-
-                // Upload/Overwrite image
-                var fileName = $"{StoragePrefix}/{entity.Id}/{FileUtils.ComputeFileHash(imageStream)}.webp";
-                var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-                var uploadSuccessful = await storageService.UploadFileAsync(fileName, imageStream, contentType, ct);
-
-                if (!uploadSuccessful)
-                {
-                    throw new StorageException("Territory Story Image upload error");
-                }
-
-                entity.FileUrl = fileUri;
-
+                await UploadImage(entity, imageStream, contentType, ct);
                 await dbContext.SaveChangesAsync(ct);
 
                 return entity;
@@ -159,29 +144,49 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
         await ExecuteInTransactionAsync(
             async ct =>
             {
-                var oldFileUri = entity.FileUrl;
-
-                // Upload/Overwrite image
-                var fileName = $"{StoragePrefix}/{entity.Id}/{FileUtils.ComputeFileHash(imageStream)}.webp";
-                var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
-                var uploadSuccessful = await storageService.UploadFileAsync(fileName, imageStream, contentType, ct);
-
-                if (!uploadSuccessful)
-                {
-                    throw new StorageException("Territory Story Image upload error");
-                }
-
-                entity.FileUrl = fileUri;
-
-                await dbContext.SaveChangesAsync(ct);
-
-                if (oldFileUri != entity.FileUrl)
-                {
-                    await storageService.DeleteFileAsync(oldFileUri.ToString(), ct);
-                }
-
+                await UploadImage(entity, imageStream, contentType, ct);
                 return entity;
             },
             "Territory Story Image transaction error",
             ct);
+
+    /// <summary>
+    /// Upload Territory Story Image.
+    /// </summary>
+    /// <param name="entity">Territory Story Image entity.</param>
+    /// <param name="imageStream">Image stream.</param>
+    /// <param name="contentType">File content type.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    /// <exception cref="StorageException">Storage exception.</exception>
+    private async Task UploadImage(TerritoryStoryImage entity, Stream imageStream, string contentType, CancellationToken ct = default)
+    {
+        var oldFileUri = entity.FileUrl;
+
+        if (entity.FileUrl == null)
+        {
+            entity.FileUrl = new Uri($"/temp-uri/{DateTime.Now.ToFileTime()}");
+            await dbContext.TerritoryStoryImages.AddAsync(entity, ct);
+            await dbContext.SaveChangesAsync(ct);
+        }
+
+        // Upload/Overwrite image
+        var fileName = $"{StoragePrefix}/{entity.Id}/{FileUtils.ComputeFileHash(imageStream)}.webp";
+        var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
+        var uploadSuccessful = await storageService.UploadFileAsync(fileName, imageStream, contentType, ct);
+
+        if (!uploadSuccessful)
+        {
+            throw new StorageException("Territory Story Image upload error");
+        }
+
+        entity.FileUrl = fileUri;
+
+        await dbContext.SaveChangesAsync(ct);
+
+        if (oldFileUri != null && oldFileUri != entity.FileUrl)
+        {
+            await storageService.DeleteFileAsync(oldFileUri.ToString(), ct);
+        }
+    }
 }
