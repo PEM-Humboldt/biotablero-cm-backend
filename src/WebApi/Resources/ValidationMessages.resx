@@ -122,7 +122,11 @@
     <comment/>
   </data>
   <data name="SYS_002" xml:space="preserve">
-    <value>{PropertyName} is required</value>
+    <value>Property is required</value>
+    <comment/>
+  </data>
+  <data name="SYS_003" xml:space="preserve">
+    <value>Invalid property value</value>
     <comment/>
   </data>
 </root>

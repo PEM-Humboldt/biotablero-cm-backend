@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
@@ -19,11 +20,11 @@ public class TagValidator : AbstractValidator<TagDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithMessage("Entity data cannot be null");
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
 
         RuleFor(dto => dto.Name)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
             .MaximumLength(40);
 
         RuleFor(dto => dto.Url)
@@ -33,13 +34,13 @@ public class TagValidator : AbstractValidator<TagDto>
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.Category)
-                .NotNull()
-                    .WithMessage("{PropertyName} cannot be null")
+            .NotEmpty()
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
                 .ChildRules(level =>
                 {
                     level.RuleFor(tagEnumDto => tagEnumDto.Name)
                         .IsEnumName(typeof(TagCategory), caseSensitive: false)
-                            .WithMessage("Invalid value for {PropertyName}");
+                            .WithErrorCode(ValidationErrorCodes.GeneralInvalidPropertyValue);
                 });
         });
     }

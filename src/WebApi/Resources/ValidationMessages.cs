@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Resources;
+﻿namespace IAVH.BioTablero.CM.WebApi.Resources;
 
 /// <summary>
 /// System validation messages.

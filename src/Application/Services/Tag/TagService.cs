@@ -8,6 +8,7 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Tags;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -27,9 +28,10 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 {
     private new readonly ITagRepository entityRepository;
-    private readonly IValidator<TagDto> entityValidator;
-    private readonly ILogger logger;
     private new readonly IMapperCreateReadAndUpdate<Tag, TagDto> mapper;
+    private readonly IValidator<TagDto> entityValidator;
+    private readonly IValidationErrorTranslator errorTranslator;
+    private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
@@ -38,12 +40,14 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="entityValidator">Entity validator.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     public TagService(
         ITagRepository entityRepository,
         IMapperCreateReadAndUpdate<Tag, TagDto> mapper,
         IValidator<TagDto> entityValidator,
+        IValidationErrorTranslator errorTranslator,
         ILogger logger,
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper)
@@ -51,6 +55,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         this.entityRepository = entityRepository;
         this.mapper = mapper;
         this.entityValidator = entityValidator;
+        this.errorTranslator = errorTranslator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
     }
@@ -59,7 +64,6 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     public async Task<CustomWebResponse> AddAsync(TagDto entityData, CancellationToken ct = default)
     {
         // Validate data
-        entityData.Name = entityData.Name.Capitalize();
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
 
         if (!validationResult.IsValid)
@@ -67,12 +71,12 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
             return new CustomWebResponse(true)
             {
                 Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
         // Validate duplicated entities
+        entityData.Name = entityData.Name.Capitalize();
         var hasDuplicatedEntities = await entityRepository.AnyByNameAndCategory(entityData.Name, entityData.Category.Id, ct);
 
         if (hasDuplicatedEntities)
