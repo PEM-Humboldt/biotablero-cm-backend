@@ -43,6 +43,9 @@ public static class ConfigCoreDependencies
 
         services.AddAuthService(isDevelopment);
 
+        // Add localization (for custom error messages and codes)
+        services.AddLocalization();
+
         return services;
     }
 
