@@ -64,12 +64,12 @@ public class TerritoryStoryVideoController(
     /// <param name="requestData">Request data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
-    [HttpPut]
+    [HttpPost]
     [Consumes("application/json")]
     [Authorize]
     [SwaggerRequestExample(typeof(TerritoryStoryVideoDto), typeof(TerritoryStoryVideoAddRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryVideoResponseExample))]
-    public async Task<IActionResult> Put([FromBody] TerritoryStoryVideoDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Post([FromBody] TerritoryStoryVideoDto requestData, CancellationToken ct)
     {
         var response = await entityService.AddAsync(HttpContext.GetUserName(), requestData, ct);
         return webTools.CustomResponse(response);
@@ -82,12 +82,12 @@ public class TerritoryStoryVideoController(
     /// <param name="requestData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
-    [HttpPost("{id}")]
+    [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize]
     [SwaggerRequestExample(typeof(TerritoryStoryVideoDto), typeof(TerritoryStoryVideoEditRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryVideoResponseExample))]
-    public async Task<IActionResult> Post(int id, [FromBody] TerritoryStoryVideoDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Put(int id, [FromBody] TerritoryStoryVideoDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, ct);
         return webTools.CustomResponse(response);

@@ -51,11 +51,11 @@ public class JoinInvitationController(
     /// <param name="requestData">Request data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
-    [HttpPut]
+    [HttpPost]
     [Consumes("application/json")]
     [SwaggerRequestExample(typeof(JoinInvitationDto), typeof(JoinInvitationAddRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinInvitationResponseExample))]
-    public async Task<IActionResult> Put([FromBody] JoinInvitationDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Post([FromBody] JoinInvitationDto requestData, CancellationToken ct)
     {
         requestData.Creator = HttpContext.GetUserName();
         var response = await entityService.AddAsync(requestData, ct);
