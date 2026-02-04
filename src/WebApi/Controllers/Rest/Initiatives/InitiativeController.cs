@@ -95,12 +95,12 @@ public class InitiativeController(
     /// <param name="requestData">Request data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
-    [HttpPut]
+    [HttpPost]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeDto), typeof(InitiativeAddRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
-    public async Task<IActionResult> Put([FromBody] InitiativeDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Post([FromBody] InitiativeDto requestData, CancellationToken ct)
     {
         var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
@@ -113,12 +113,12 @@ public class InitiativeController(
     /// <param name="requestData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
-    [HttpPost("{id}")]
+    [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeDto), typeof(InitiativeEditRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
-    public async Task<IActionResult> Post(int id, [FromBody] InitiativeDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Put(int id, [FromBody] InitiativeDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);
         return webTools.CustomResponse(response);
@@ -131,7 +131,7 @@ public class InitiativeController(
     /// <param name="request">Polygon request.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
-    [HttpPost("Polygon/{id}")]
+    [HttpPut("Polygon/{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(string), typeof(InitiativePolygonEditRequestExample))]

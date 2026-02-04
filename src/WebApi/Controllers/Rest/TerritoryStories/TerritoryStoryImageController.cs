@@ -66,10 +66,10 @@ public class TerritoryStoryImageController(
     /// <param name="requestData">Request data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
-    [HttpPut]
+    [HttpPost]
     [Authorize]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryImageResponseExample))]
-    public async Task<IActionResult> Put([FromForm] TerritoryStoryImageAddRequest requestData, CancellationToken ct)
+    public async Task<IActionResult> Post([FromForm] TerritoryStoryImageAddRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new TerritoryStoryImageDto()
         {
@@ -88,10 +88,10 @@ public class TerritoryStoryImageController(
     /// <param name="requestData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
-    [HttpPost("{id}")]
+    [HttpPut("{id}")]
     [Authorize]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryImageResponseExample))]
-    public async Task<IActionResult> Post(int id, [FromForm] TerritoryStoryImageEditRequest requestData, CancellationToken ct)
+    public async Task<IActionResult> Put(int id, [FromForm] TerritoryStoryImageEditRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new TerritoryStoryImageDto()
         {

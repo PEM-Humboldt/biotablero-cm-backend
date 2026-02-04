@@ -62,12 +62,12 @@ public class InitiativeUserController(
     /// <param name="requestData">Request data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
-    [HttpPut]
+    [HttpPost]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeUserDto), typeof(InitiativeUserAddRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserResponseExample))]
-    public async Task<IActionResult> Put([FromBody] InitiativeUserDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Post([FromBody] InitiativeUserDto requestData, CancellationToken ct)
     {
         var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
@@ -80,12 +80,12 @@ public class InitiativeUserController(
     /// <param name="requestData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
-    [HttpPost("{id}")]
+    [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [SwaggerRequestExample(typeof(InitiativeUserDto), typeof(InitiativeUserEditRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserResponseExample))]
-    public async Task<IActionResult> Post(int id, [FromBody] InitiativeUserDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Put(int id, [FromBody] InitiativeUserDto requestData, CancellationToken ct)
     {
         var reviewerUserName = HttpContext.GetUserName();
         var response = await entityService.UpdateAsync(id, reviewerUserName, requestData, ct);
