@@ -32,12 +32,12 @@ public class InitiativeTagController(
     /// <param name="tagId">Tag identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
-    [HttpPut]
+    [HttpPost]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Put(int initiativeId, int tagId, CancellationToken ct)
+    public async Task<IActionResult> Post(int initiativeId, int tagId, CancellationToken ct)
     {
         var response = await entityService.AddAsync(initiativeId, tagId, ct);
         return webTools.CustomResponse(response);
