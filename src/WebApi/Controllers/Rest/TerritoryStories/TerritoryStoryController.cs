@@ -67,12 +67,12 @@ public class TerritoryStoryController(
     /// <param name="requestData">Request data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
-    [HttpPut]
+    [HttpPost]
     [Consumes("application/json")]
     [Authorize]
     [SwaggerRequestExample(typeof(TerritoryStoryDto), typeof(TerritoryStoryAddRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
-    public async Task<IActionResult> Put([FromBody] TerritoryStoryDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Post([FromBody] TerritoryStoryDto requestData, CancellationToken ct)
     {
         requestData.AuthorUserName = HttpContext.GetUserName();
         var response = await entityService.AddAsync(requestData, ct);
@@ -86,12 +86,12 @@ public class TerritoryStoryController(
     /// <param name="requestData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
-    [HttpPost("{id}")]
+    [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize]
     [SwaggerRequestExample(typeof(TerritoryStoryDto), typeof(TerritoryStoryEditRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
-    public async Task<IActionResult> Post(int id, [FromBody] TerritoryStoryDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Put(int id, [FromBody] TerritoryStoryDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, ct);
         return webTools.CustomResponse(response);

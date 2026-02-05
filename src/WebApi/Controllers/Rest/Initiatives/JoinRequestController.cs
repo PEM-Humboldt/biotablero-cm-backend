@@ -54,12 +54,12 @@ public class JoinRequestController(
     /// <param name="requestData">Request data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
-    [HttpPut]
+    [HttpPost]
     [Consumes("application/json")]
     [Authorize]
     [SwaggerRequestExample(typeof(JoinRequestDto), typeof(JoinRequestAddRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
-    public async Task<IActionResult> Put([FromBody] JoinRequestDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Post([FromBody] JoinRequestDto requestData, CancellationToken ct)
     {
         requestData.UserName = HttpContext.GetUserName();
         var response = await entityService.AddAsync(requestData, ct);
@@ -73,10 +73,10 @@ public class JoinRequestController(
     /// <param name="requestStatus">Join request status.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated entity data.</returns>
-    [HttpPost("{id}")]
+    [HttpPut("{id}")]
     [Authorize]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
-    public async Task<IActionResult> Post(int id, JoinRequestStatusEnum requestStatus, CancellationToken ct)
+    public async Task<IActionResult> Put(int id, JoinRequestStatusEnum requestStatus, CancellationToken ct)
     {
         var requestData = new JoinRequestDto()
         {
