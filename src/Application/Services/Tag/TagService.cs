@@ -14,7 +14,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Tags;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 
@@ -30,7 +30,6 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     private new readonly ITagRepository entityRepository;
     private new readonly IMapperCreateReadAndUpdate<Tag, TagDto> mapper;
     private readonly IValidator<TagDto> entityValidator;
-    private readonly IValidationErrorTranslator errorTranslator;
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
 
@@ -39,23 +38,22 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
-    /// <param name="entityValidator">Entity validator.</param>
     /// <param name="errorTranslator">Error translator.</param>
+    /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     public TagService(
         ITagRepository entityRepository,
         IMapperCreateReadAndUpdate<Tag, TagDto> mapper,
-        IValidator<TagDto> entityValidator,
         IValidationErrorTranslator errorTranslator,
+        IValidator<TagDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
         this.entityValidator = entityValidator;
-        this.errorTranslator = errorTranslator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
     }
@@ -127,7 +125,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -167,7 +165,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 

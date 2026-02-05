@@ -11,6 +11,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
@@ -48,6 +49,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
@@ -58,6 +60,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     public JoinInvitationService(
         IJoinInvitationRepository entityRepository,
         IMapperCreateAndRead<JoinInvitation, JoinInvitationDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<JoinInvitationDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
@@ -65,7 +68,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         IWebViewTools webViewTools,
         IEmailService emailService,
         IIamService iamService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;

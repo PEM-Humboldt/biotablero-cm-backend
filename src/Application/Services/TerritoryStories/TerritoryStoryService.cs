@@ -11,12 +11,13 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
@@ -49,6 +50,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
@@ -59,6 +61,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     public TerritoryStoryService(
         ITerritoryStoryRepository entityRepository,
         IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<TerritoryStoryDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
@@ -66,7 +69,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         ITerritoryStoryVideoRepository territoryStoryVideoRepository,
         IVideoHelperService videoHelperService,
         IInitiativeUserRepository initiativeUserRepository)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -113,7 +116,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         return new(true)
         {
             StatusCode = HttpStatusCode.NotFound,
-            Message = MessageConstants.NotFound,
+            ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
         };
     }
 
@@ -281,7 +284,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -289,7 +292,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.DisabledElement,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementDisabled),
             };
         }
 
@@ -329,7 +332,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -337,7 +340,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.DisabledElement,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementDisabled),
             };
         }
 
@@ -375,7 +378,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -383,7 +386,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.DisabledElement,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementDisabled),
             };
         }
 
@@ -454,7 +457,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 

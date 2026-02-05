@@ -11,12 +11,13 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
 using Serilog;
@@ -40,6 +41,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="territoryStoryRepository">Territory Story repository.</param>
@@ -47,11 +49,12 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     public TerritoryStoryVideoService(
         ITerritoryStoryVideoRepository entityRepository,
         IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<TerritoryStoryVideoDto> entityValidator,
         ILogger logger,
         ITerritoryStoryRepository territoryStoryRepository,
         IVideoHelperService videoHelperService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -205,7 +208,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -278,7 +281,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 

@@ -14,6 +14,14 @@ public interface IValidationErrorTranslator
     /// <summary>
     /// Translate error message.
     /// </summary>
+    /// <param name="errorCode">Error code.</param>
+    /// <param name="propertyName">Property name.</param>
+    /// <returns>Translated message.</returns>
+    ApiValidationError Translate(string errorCode, string propertyName = null);
+
+    /// <summary>
+    /// Translate error messages.
+    /// </summary>
     /// <param name="failures">Failures list.</param>
     /// <returns>Translated messages.</returns>
     IEnumerable<ApiValidationError> Translate(

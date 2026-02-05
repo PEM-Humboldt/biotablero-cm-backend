@@ -11,6 +11,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
@@ -18,7 +19,7 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
@@ -52,6 +53,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
@@ -64,6 +66,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     public ResourceService(
         IResourceRepository entityRepository,
         IMapperCreateReadAndUpdate<Resource, ResourceDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<ResourceDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
@@ -73,7 +76,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         IWebViewTools webViewTools,
         IEmailService emailService,
         IIamService iamService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -122,7 +125,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         return new(true)
         {
             StatusCode = HttpStatusCode.NotFound,
-            Message = MessageConstants.NotFound,
+            ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
         };
     }
 
@@ -262,7 +265,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -327,7 +330,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -335,7 +338,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.DisabledElement,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementDisabled),
             };
         }
 
@@ -373,7 +376,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 

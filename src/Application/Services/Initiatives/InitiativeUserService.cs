@@ -10,6 +10,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
@@ -18,7 +19,7 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Serilog;
@@ -47,6 +48,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="iamService">IAM service.</param>
@@ -56,13 +58,14 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     public InitiativeUserService(
         IInitiativeUserRepository entityRepository,
         IMapperCreateReadAndUpdate<InitiativeUser, InitiativeUserDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<InitiativeUserDto> entityValidator,
         ILogger logger,
         IIamService iamService,
         IInitiativeRepository initiativeRepository,
         IWebViewTools webViewTools,
         IEmailService emailService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -191,7 +194,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -244,7 +247,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 

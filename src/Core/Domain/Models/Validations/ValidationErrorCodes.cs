@@ -22,6 +22,16 @@ public static class ValidationErrorCodes
     /// </summary>
     public const string GeneralInvalidPropertyValue = "SYS_003";
 
+    /// <summary>
+    /// Element not found.
+    /// </summary>
+    public const string GeneralElementNotFound = "SYS_004";
+
+    /// <summary>
+    /// Element disabled.
+    /// </summary>
+    public const string GeneralElementDisabled = "SYS_005";
+
     #endregion
 
     #region Initiatives

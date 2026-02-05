@@ -9,12 +9,13 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 
@@ -40,6 +41,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="resourceRepository">Resource repository.</param>
@@ -47,11 +49,12 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     public ResourceFileService(
         IResourceFileRepository entityRepository,
         IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<ResourceFileDto> entityValidator,
         ILogger logger,
         IResourceRepository resourceRepository,
         IResourceService resourceService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -210,7 +213,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -261,7 +264,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 

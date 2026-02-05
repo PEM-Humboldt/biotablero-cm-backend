@@ -8,12 +8,13 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
@@ -38,6 +39,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="locationRepository">Location repository.</param>
@@ -45,11 +47,12 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     public InitiativeLocationService(
         IInitiativeLocationRepository entityRepository,
         IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<InitiativeLocationDto> entityValidator,
         ILogger logger,
         ILocationRepository locationRepository,
         IInitiativeRepository initiativeRepository)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -173,7 +176,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -234,7 +237,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 

@@ -129,4 +129,12 @@
     <value>Invalid property value</value>
     <comment/>
   </data>
+  <data name="SYS_004" xml:space="preserve">
+    <value>Not found</value>
+    <comment/>
+  </data>
+  <data name="SYS_005" xml:space="preserve">
+    <value>Disabled element</value>
+    <comment/>
+  </data>
 </root>

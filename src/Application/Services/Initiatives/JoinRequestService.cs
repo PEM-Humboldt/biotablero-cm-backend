@@ -13,6 +13,7 @@ using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
@@ -21,7 +22,7 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.AspNetCore.OData.Query;
@@ -53,6 +54,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
@@ -63,6 +65,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     public JoinRequestService(
         IJoinRequestRepository entityRepository,
         IMapperCreateAndRead<JoinRequest, JoinRequestDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<JoinRequestDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
@@ -70,7 +73,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         IWebViewTools webViewTools,
         IEmailService emailService,
         IIamService iamService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -215,7 +218,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 

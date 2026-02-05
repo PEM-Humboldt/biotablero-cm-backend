@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Services;
+﻿namespace IAVH.BioTablero.CM.WebApi.Services;
 
 using System.Collections.Generic;
 using System.Globalization;
@@ -29,6 +29,15 @@ public class ResxValidationErrorTranslator
     {
         this.localizer = localizer;
     }
+
+    /// <inheritdoc/>
+    public ApiValidationError Translate(string errorCode, string propertyName) =>
+        new()
+        {
+            Code = errorCode,
+            Description = localizer[errorCode],
+            Field = propertyName,
+        };
 
     /// <inheritdoc/>
     public IEnumerable<ApiValidationError> Translate(

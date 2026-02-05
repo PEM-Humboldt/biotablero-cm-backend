@@ -10,7 +10,7 @@ using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
@@ -25,7 +25,13 @@ using ODataUtilsCustom = IAVH.BioTablero.CM.Application.Utils.ODataUtils;
 /// <typeparam name="TE">Entity type.</typeparam>
 /// <typeparam name="TDto">DTO class type.</typeparam>
 /// <typeparam name="TI">Entity identifier type.</typeparam>
-public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityRepository, IMapperRead<TE, TDto> mapper) : IRead<TE, TI>
+/// <param name="entityRepository">Entity repository.</param>
+/// <param name="mapper">Entity mapper.</param>
+/// <param name="errorTranslator">Error translator.</param>
+public abstract class ServiceRead<TE, TDto, TI>(
+    IRepository<TE, TI> entityRepository,
+    IMapperRead<TE, TDto> mapper,
+    IValidationErrorTranslator errorTranslator) : IRead<TE, TI>
     where TDto : class, IDto
     where TE : BaseEntity<TI>, IAggregateRoot
 {
@@ -38,6 +44,11 @@ public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityReposi
     /// Entity mapper.
     /// </summary>
     private protected readonly IMapperRead<TE, TDto> mapper = mapper;
+
+    /// <summary>
+    /// Error translator.
+    /// </summary>
+    private protected readonly IValidationErrorTranslator errorTranslator = errorTranslator;
 
     /// <inheritdoc/>
     public virtual async Task<bool> AnyAsync(TI id, CancellationToken ct = default) => await entityRepository.AnyAsync(id, ct);
@@ -60,7 +71,7 @@ public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityReposi
             return new(true)
             {
                 StatusCode = HttpStatusCode.NotFound,
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound, nameof(TE)),
             };
         }
     }

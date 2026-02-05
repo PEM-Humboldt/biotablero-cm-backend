@@ -14,6 +14,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
@@ -21,6 +22,7 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
@@ -62,6 +64,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="locationRepository">Initiative Location repository.</param>
@@ -72,6 +75,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     public InitiativeService(
         IInitiativeRepository entityRepository,
         IMapperCreateReadAndUpdate<Initiative, InitiativeDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<InitiativeDto> entityValidator,
         ILogger logger,
         ILocationRepository locationRepository,
@@ -79,7 +83,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         IIamService iamService,
         IStorageService storageService,
         IImageUtilsService imageUtilsService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -312,7 +316,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -360,7 +364,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -437,7 +441,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -498,7 +502,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
@@ -615,7 +619,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
             };
         }
 
