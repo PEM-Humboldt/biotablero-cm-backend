@@ -139,7 +139,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new CustomWebResponse(true)
             {
-                Message = "There are one or more pending join requests",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinRequests.PendingJoinRequests),
             };
         }
 
@@ -150,7 +150,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new CustomWebResponse(true)
             {
-                Message = "The user already belongs to the initiative",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.Duplicated),
             };
         }
 
@@ -161,7 +161,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new CustomWebResponse(true)
             {
-                Message = "User is invalid or does not exist",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Users.Invalid),
             };
         }
 
@@ -235,7 +235,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new CustomWebResponse(true)
             {
-                Message = "The join request has already been reviewed",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinRequests.ReviewedJoinRequests),
             };
         }
 

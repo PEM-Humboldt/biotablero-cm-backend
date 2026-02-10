@@ -105,7 +105,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already a contact with the same email and/or phone",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeContacts.Duplicated),
             };
         }
 
@@ -158,7 +158,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already a contact with the same email and/or phone",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeContacts.Duplicated),
             };
         }
 

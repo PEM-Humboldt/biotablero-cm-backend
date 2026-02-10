@@ -189,4 +189,56 @@
     <value>Resource type not found</value>
     <comment/>
   </data>
+  <data name="ICO_001" xml:space="preserve">
+    <value>There is already a contact with the same email and/or phone</value>
+    <comment/>
+  </data>
+  <data name="ILO_001" xml:space="preserve">
+    <value>The location already belongs to the initiative</value>
+    <comment/>
+  </data>
+  <data name="ILO_002" xml:space="preserve">
+    <value>Locality is only available for municipalities</value>
+    <comment/>
+  </data>
+  <data name="ILO_003" xml:space="preserve">
+    <value>At least one location is required per initiative</value>
+    <comment/>
+  </data>
+  <data name="INI_005" xml:space="preserve">
+    <value>There is already an initiative with the same name</value>
+    <comment/>
+  </data>
+  <data name="INI_006" xml:space="preserve">
+    <value>One or more users are invalid or do not exist</value>
+    <comment/>
+  </data>
+  <data name="SYS_006" xml:space="preserve">
+    <value>Duplicated element</value>
+    <comment/>
+  </data>
+  <data name="IUS_001" xml:space="preserve">
+    <value>The user already belongs to the initiative</value>
+    <comment/>
+  </data>
+  <data name="USR_001" xml:space="preserve">
+    <value>User is invalid or does not exist</value>
+    <comment/>
+  </data>
+  <data name="IUS_002" xml:space="preserve">
+    <value>At least one leader is required per initiative</value>
+    <comment/>
+  </data>
+  <data name="IJI_002" xml:space="preserve">
+    <value>There are duplicate emails</value>
+    <comment/>
+  </data>
+  <data name="IJR_002" xml:space="preserve">
+    <value>There are one or more pending join requests</value>
+    <comment/>
+  </data>
+  <data name="IJR_003" xml:space="preserve">
+    <value>The join request has already been reviewed</value>
+    <comment/>
+  </data>
 </root>

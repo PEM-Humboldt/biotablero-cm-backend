@@ -81,7 +81,7 @@ public class InitiativeTagService : IInitiativeTagService
         {
             return new CustomWebResponse(true)
             {
-                Message = "Duplicated initiative tag relationship",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.Duplicated),
             };
         }
 

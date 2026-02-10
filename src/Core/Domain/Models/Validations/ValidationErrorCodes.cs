@@ -34,6 +34,11 @@ public static class ValidationErrorCodes
         /// Element disabled.
         /// </summary>
         public const string ElementDisabled = "SYS_005";
+
+        /// <summary>
+        /// Element duplicated.
+        /// </summary>
+        public const string Duplicated = "SYS_006";
     }
 
     /// <summary>
@@ -47,19 +52,77 @@ public static class ValidationErrorCodes
         public const string NotFound = "INI_001";
 
         /// <summary>
-        /// At least one location is required.
+        /// Locations required.
         /// </summary>
         public const string LocationsRequired = "INI_002";
 
         /// <summary>
-        /// At least one contact is required.
+        /// Contacts required.
         /// </summary>
         public const string ContactsRequired = "INI_003";
 
         /// <summary>
-        /// At least one user is required.
+        /// Users required.
         /// </summary>
         public const string UsersRequired = "INI_004";
+
+        /// <summary>
+        /// Duplicated.
+        /// </summary>
+        public const string Duplicated = "INI_005";
+
+        /// <summary>
+        /// Invalid users.
+        /// </summary>
+        public const string InvalidUsers = "INI_006";
+    }
+
+    /// <summary>
+    /// Initiative Contacts errors.
+    /// </summary>
+    public static class InitiativeContacts
+    {
+        /// <summary>
+        /// Duplicated.
+        /// </summary>
+        public const string Duplicated = "ICO_001";
+    }
+
+    /// <summary>
+    /// Initiative Locations errors.
+    /// </summary>
+    public static class InitiativeLocations
+    {
+        /// <summary>
+        /// Duplicated.
+        /// </summary>
+        public const string Duplicated = "ILO_001";
+
+        /// <summary>
+        /// Locality only for municipality.
+        /// </summary>
+        public const string LocalityOnlyForMunicipality = "ILO_002";
+
+        /// <summary>
+        /// Locations required.
+        /// </summary>
+        public const string LocationsRequired = "ILO_003";
+    }
+
+    /// <summary>
+    /// Initiative Users errors.
+    /// </summary>
+    public static class InitiativeUsers
+    {
+        /// <summary>
+        /// Duplicated.
+        /// </summary>
+        public const string Duplicated = "IUS_001";
+
+        /// <summary>
+        /// Leaders required.
+        /// </summary>
+        public const string LeadersRequired = "IUS_002";
     }
 
     /// <summary>
@@ -71,6 +134,11 @@ public static class ValidationErrorCodes
         /// At least one guest is required.
         /// </summary>
         public const string GuestsRequired = "IJI_001";
+
+        /// <summary>
+        /// Duplicated emails.
+        /// </summary>
+        public const string DuplicatedEmails = "IJI_002";
     }
 
     /// <summary>
@@ -82,6 +150,16 @@ public static class ValidationErrorCodes
         /// Invalid user level.
         /// </summary>
         public const string InvalidUserLevel = "IJR_001";
+
+        /// <summary>
+        /// Pending join requests.
+        /// </summary>
+        public const string PendingJoinRequests = "IJR_002";
+
+        /// <summary>
+        /// Reviewed join request.
+        /// </summary>
+        public const string ReviewedJoinRequests = "IJR_003";
     }
 
     /// <summary>
@@ -147,5 +225,16 @@ public static class ValidationErrorCodes
         /// Entity not found.
         /// </summary>
         public const string NotFound = "RTY_001";
+    }
+
+    /// <summary>
+    /// Users errors.
+    /// </summary>
+    public static class Users
+    {
+        /// <summary>
+        /// Invalid user.
+        /// </summary>
+        public const string Invalid = "USR_001";
     }
 }

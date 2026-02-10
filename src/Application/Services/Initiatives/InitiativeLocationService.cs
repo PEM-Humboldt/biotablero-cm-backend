@@ -119,7 +119,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = "Locality is only available for municipalities",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.LocalityOnlyForMunicipality),
             };
         }
 
@@ -131,7 +131,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = "The location already belongs to the initiative",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.Duplicated),
             };
         }
 
@@ -194,7 +194,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = "Locality is only available for municipalities",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.LocalityOnlyForMunicipality),
             };
         }
 
@@ -206,7 +206,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = "The location already belongs to the initiative",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.Duplicated),
             };
         }
 
@@ -246,7 +246,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = $"At least one location is required per initiative",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.LocationsRequired),
             };
         }
 

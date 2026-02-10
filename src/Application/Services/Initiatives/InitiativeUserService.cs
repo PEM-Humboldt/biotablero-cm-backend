@@ -125,7 +125,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = "The user already belongs to the initiative",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.Duplicated),
             };
         }
 
@@ -150,7 +150,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = $"User is invalid or does not exist",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Users.Invalid),
             };
         }
 
@@ -203,7 +203,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = $"At least one leader is required per initiative",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeadersRequired),
             };
         }
 
@@ -259,7 +259,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             {
                 return new CustomWebResponse(true)
                 {
-                    Message = $"At least one leader is required per initiative",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeadersRequired),
                 };
             }
         }

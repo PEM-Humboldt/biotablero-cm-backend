@@ -97,7 +97,7 @@ public class ResourceTagService : IResourceTagService
         {
             return new CustomWebResponse(true)
             {
-                Message = "Duplicated resource tag relationship",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.Duplicated),
             };
         }
 

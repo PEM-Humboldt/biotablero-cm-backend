@@ -149,7 +149,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         {
             return new CustomWebResponse(true)
             {
-                Message = "There are duplicate emails",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.DuplicatedEmails),
             };
         }
 

@@ -179,7 +179,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already an initiative with the same name",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Duplicated),
             };
         }
 
@@ -237,7 +237,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = "Locality is only available for municipalities",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.LocalityOnlyForMunicipality),
             };
         }
 
@@ -256,7 +256,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = $"One or more users are invalid or do not exist",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidUsers),
             };
         }
 
@@ -303,7 +303,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already an initiative with the same name",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Duplicated),
             };
         }
 
