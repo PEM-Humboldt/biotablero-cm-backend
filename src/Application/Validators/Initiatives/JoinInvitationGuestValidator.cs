@@ -17,11 +17,11 @@ public class JoinInvitationGuestValidator : AbstractValidator<JoinInvitationGues
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.Email)
             .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .EmailAddress()
             .MaximumLength(100);
     }

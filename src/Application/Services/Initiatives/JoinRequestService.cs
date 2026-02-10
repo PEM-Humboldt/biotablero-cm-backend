@@ -218,7 +218,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 

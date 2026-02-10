@@ -208,7 +208,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -281,7 +281,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 

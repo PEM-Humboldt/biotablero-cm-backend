@@ -213,7 +213,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -264,7 +264,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 

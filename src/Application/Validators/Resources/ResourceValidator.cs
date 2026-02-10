@@ -17,27 +17,27 @@ public class ResourceValidator : AbstractValidator<ResourceDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.Name)
             .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .MaximumLength(100);
 
         RuleFor(dto => dto.Description)
             .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .MaximumLength(500);
 
         RuleFor(dto => dto.ResourceType)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
 
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
 
             RuleForEach(dto => dto.Files)
                 .SetValidator(new ResourceFileValidator(), "default");

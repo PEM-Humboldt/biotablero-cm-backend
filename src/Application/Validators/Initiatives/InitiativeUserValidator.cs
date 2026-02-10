@@ -19,30 +19,30 @@ public class InitiativeUserValidator : AbstractValidator<InitiativeUserDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.FocusArea)
             .MaximumLength(200);
 
         RuleFor(dto => dto.Level)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .ChildRules(level =>
             {
                 level.RuleFor(levelEnumDto => levelEnumDto.Name)
                     .IsEnumName(typeof(InitiativeUserLevel), caseSensitive: false)
-                        .WithErrorCode(ValidationErrorCodes.GeneralInvalidPropertyValue);
+                        .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue);
             });
 
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
 
             RuleFor(dto => dto.UserName)
                 .NotEmpty()
-                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
                 .MaximumLength(75);
         });
     }

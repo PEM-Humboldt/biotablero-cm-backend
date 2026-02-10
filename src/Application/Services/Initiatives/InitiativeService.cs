@@ -316,7 +316,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -364,7 +364,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -441,7 +441,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -502,7 +502,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -619,7 +619,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 

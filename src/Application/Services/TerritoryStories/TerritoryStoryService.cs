@@ -116,7 +116,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         return new(true)
         {
             StatusCode = HttpStatusCode.NotFound,
-            ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+            ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
         };
     }
 
@@ -284,7 +284,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -292,7 +292,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementDisabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementDisabled),
             };
         }
 
@@ -332,7 +332,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -340,7 +340,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementDisabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementDisabled),
             };
         }
 
@@ -378,7 +378,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -386,7 +386,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementDisabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementDisabled),
             };
         }
 
@@ -457,7 +457,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 

@@ -17,11 +17,11 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.Name)
             .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .MaximumLength(100);
 
         RuleFor(dto => dto.ShortName)
@@ -29,7 +29,7 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
 
         RuleFor(dto => dto.Description)
             .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .MaximumLength(300);
 
         RuleFor(dto => dto.Baseline)

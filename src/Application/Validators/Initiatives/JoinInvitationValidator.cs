@@ -17,11 +17,11 @@ public class JoinInvitationValidator : AbstractValidator<JoinInvitationDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.Creator)
             .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .MaximumLength(75);
 
         RuleFor(dto => dto.Message)
@@ -31,7 +31,7 @@ public class JoinInvitationValidator : AbstractValidator<JoinInvitationDto>
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
 
             RuleFor(dto => dto.Guests)
                 .NotEmpty()

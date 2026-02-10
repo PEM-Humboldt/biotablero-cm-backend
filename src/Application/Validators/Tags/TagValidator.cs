@@ -20,11 +20,11 @@ public class TagValidator : AbstractValidator<TagDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.Name)
             .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .MaximumLength(40);
 
         RuleFor(dto => dto.Url)
@@ -35,12 +35,12 @@ public class TagValidator : AbstractValidator<TagDto>
         {
             RuleFor(dto => dto.Category)
             .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
                 .ChildRules(level =>
                 {
                     level.RuleFor(tagEnumDto => tagEnumDto.Name)
                         .IsEnumName(typeof(TagCategory), caseSensitive: false)
-                            .WithErrorCode(ValidationErrorCodes.GeneralInvalidPropertyValue);
+                            .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue);
                 });
         });
     }

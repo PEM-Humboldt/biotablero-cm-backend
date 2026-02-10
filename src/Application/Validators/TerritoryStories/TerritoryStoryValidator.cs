@@ -18,21 +18,21 @@ public class TerritoryStoryValidator : AbstractValidator<TerritoryStoryDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.Title)
             .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .MaximumLength(100);
 
         RuleFor(dto => dto.Text)
             .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .MaximumLength(2000);
 
         RuleFor(dto => dto.Restricted)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
 
         RuleFor(dto => dto.Keywords)
             .Matches(RegExprConstants.Keywords)
@@ -43,11 +43,11 @@ public class TerritoryStoryValidator : AbstractValidator<TerritoryStoryDto>
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
 
             RuleFor(dto => dto.AuthorUserName)
                 .NotEmpty()
-                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
                 .MaximumLength(75);
 
             RuleForEach(dto => dto.Videos)

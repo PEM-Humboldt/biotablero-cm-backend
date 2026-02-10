@@ -17,11 +17,11 @@ public class InitiativeLocationValidator : AbstractValidator<InitiativeLocationD
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.LocationId)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
 
         RuleFor(dto => dto.Locality)
             .MaximumLength(300);
@@ -30,7 +30,7 @@ public class InitiativeLocationValidator : AbstractValidator<InitiativeLocationD
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
         });
     }
 }

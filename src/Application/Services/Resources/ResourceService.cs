@@ -125,7 +125,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         return new(true)
         {
             StatusCode = HttpStatusCode.NotFound,
-            ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+            ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
         };
     }
 
@@ -265,7 +265,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -330,7 +330,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -338,7 +338,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementDisabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementDisabled),
             };
         }
 
@@ -376,7 +376,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.GeneralElementNotFound),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 

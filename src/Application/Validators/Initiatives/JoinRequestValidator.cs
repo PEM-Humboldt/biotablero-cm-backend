@@ -21,17 +21,17 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.InitiativeId)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
 
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.Level)
                 .NotNull()
-                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
                 .ChildRules(level =>
                 {
                     level.RuleFor(levelEnumDto => levelEnumDto.Name)
@@ -52,7 +52,7 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
         {
             RuleFor(dto => dto.Status)
                 .NotNull()
-                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
                 .ChildRules(status =>
                 {
                     status.RuleFor(statusEnumDto => statusEnumDto.Name)
@@ -65,7 +65,7 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
 
                             return false;
                         })
-                        .WithErrorCode(ValidationErrorCodes.GeneralInvalidPropertyValue);
+                        .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue);
                 });
         });
     }

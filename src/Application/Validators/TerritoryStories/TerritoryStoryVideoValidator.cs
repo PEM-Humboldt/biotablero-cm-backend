@@ -18,11 +18,11 @@ public class TerritoryStoryVideoValidator : AbstractValidator<TerritoryStoryVide
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.FileUrl)
             .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .Matches(RegExprConstants.YouTubeVideoUrl)
             .MaximumLength(150);
 
@@ -30,7 +30,7 @@ public class TerritoryStoryVideoValidator : AbstractValidator<TerritoryStoryVide
         {
             RuleFor(dto => dto.TerritoryStoryId)
                 .NotNull()
-                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
         });
     }
 }
