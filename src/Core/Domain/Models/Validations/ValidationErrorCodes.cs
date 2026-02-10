@@ -35,4 +35,58 @@ public static class ValidationErrorCodes
         /// </summary>
         public const string ElementDisabled = "SYS_005";
     }
+
+    /// <summary>
+    /// Initiatives errors.
+    /// </summary>
+    public static class Initiatives
+    {
+        /// <summary>
+        /// At least one location is required.
+        /// </summary>
+        public const string LocationsRequired = "INI_001";
+
+        /// <summary>
+        /// At least one contact is required.
+        /// </summary>
+        public const string ContactsRequired = "INI_002";
+
+        /// <summary>
+        /// At least one user is required.
+        /// </summary>
+        public const string UsersRequired = "INI_003";
+    }
+
+    /// <summary>
+    /// Initiative Join Invitations errors.
+    /// </summary>
+    public static class JoinInvitations
+    {
+        /// <summary>
+        /// At least one guest is required.
+        /// </summary>
+        public const string GuestsRequired = "IJI_001";
+    }
+
+    /// <summary>
+    /// Initiative Join Requests errors.
+    /// </summary>
+    public static class JoinRequests
+    {
+        /// <summary>
+        /// Invalid user level.
+        /// </summary>
+        public const string InvalidUserLevel = "IJR_001";
+    }
+
+    /// <summary>
+    /// Territory Stories errors.
+    /// </summary>
+    public static class TerritoryStories
+    {
+        /// <summary>
+        /// Invalid keywords.
+        /// </summary>
+        public const string InvalidKeywords = "STO_001";
+    }
 }

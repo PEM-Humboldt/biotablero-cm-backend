@@ -44,7 +44,7 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
 
                             return false;
                         })
-                        .WithMessage("User level must be either 'Member' or 'Reader'.");
+                        .WithErrorCode(ValidationErrorCodes.JoinRequests.InvalidUserLevel);
                 });
         });
 

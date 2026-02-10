@@ -42,21 +42,21 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
         {
             RuleFor(dto => dto.Locations)
                 .NotEmpty()
-                    .WithMessage("At least one location is required");
+                    .WithErrorCode(ValidationErrorCodes.Initiatives.LocationsRequired);
 
             RuleForEach(dto => dto.Locations)
                 .SetValidator(new InitiativeLocationValidator(), "default");
 
             RuleFor(dto => dto.Contacts)
                 .NotEmpty()
-                    .WithMessage("At least one contact is required");
+                    .WithErrorCode(ValidationErrorCodes.Initiatives.ContactsRequired);
 
             RuleForEach(dto => dto.Contacts)
                 .SetValidator(new InitiativeContactValidator(), "default");
 
             RuleFor(dto => dto.Users)
                 .NotEmpty()
-                    .WithMessage("At least one user is required");
+                    .WithErrorCode(ValidationErrorCodes.Initiatives.UsersRequired);
 
             RuleForEach(dto => dto.Users)
                 .SetValidator(new InitiativeUserValidator(), "default");

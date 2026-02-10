@@ -35,7 +35,7 @@ public class JoinInvitationValidator : AbstractValidator<JoinInvitationDto>
 
             RuleFor(dto => dto.Guests)
                 .NotEmpty()
-                    .WithMessage("At least one guest is required");
+                    .WithErrorCode(ValidationErrorCodes.JoinInvitations.GuestsRequired);
 
             RuleForEach(dto => dto.Guests)
                 .SetValidator(new JoinInvitationGuestValidator(), "default");

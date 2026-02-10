@@ -137,4 +137,28 @@
     <value>Disabled element</value>
     <comment/>
   </data>
+  <data name="INI_001" xml:space="preserve">
+    <value>At least one location is required</value>
+    <comment/>
+  </data>
+  <data name="INI_002" xml:space="preserve">
+    <value>At least one contact is required</value>
+    <comment/>
+  </data>
+  <data name="INI_003" xml:space="preserve">
+    <value>At least one user is required</value>
+    <comment/>
+  </data>
+  <data name="IJI_001" xml:space="preserve">
+    <value>At least one guest is required</value>
+    <comment/>
+  </data>
+  <data name="IJR_001" xml:space="preserve">
+    <value>User level must be either 'Member' or 'Reader'.</value>
+    <comment/>
+  </data>
+  <data name="STO_001" xml:space="preserve">
+    <value>Invalid format. Keywords must be separated by commas. Spaces and special characters are not allowed. Only up to 5 keywords are allowed.</value>
+    <comment/>
+  </data>
 </root>
