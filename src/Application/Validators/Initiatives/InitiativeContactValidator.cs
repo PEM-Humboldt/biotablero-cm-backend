@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 /// <summary>
@@ -17,11 +18,11 @@ public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithMessage("Entity data cannot be null");
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
 
         RuleFor(dto => dto.Email)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
             .EmailAddress()
             .MaximumLength(100);
 
@@ -34,7 +35,7 @@ public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithMessage("{PropertyName} is required");
+                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
         });
     }
 }

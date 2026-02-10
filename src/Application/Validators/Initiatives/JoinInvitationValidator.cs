@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 
 /// <summary>
 /// Join invitation validator.
@@ -16,11 +17,11 @@ public class JoinInvitationValidator : AbstractValidator<JoinInvitationDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithMessage("Entity data cannot be null");
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
 
         RuleFor(dto => dto.Creator)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
             .MaximumLength(75);
 
         RuleFor(dto => dto.Message)
@@ -30,7 +31,7 @@ public class JoinInvitationValidator : AbstractValidator<JoinInvitationDto>
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithMessage("{PropertyName} is required");
+                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
 
             RuleFor(dto => dto.Guests)
                 .NotEmpty()

@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 
 /// <summary>
 /// Resource validator.
@@ -16,27 +17,27 @@ public class ResourceValidator : AbstractValidator<ResourceDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithMessage("Entity data cannot be null");
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
 
         RuleFor(dto => dto.Name)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
             .MaximumLength(100);
 
         RuleFor(dto => dto.Description)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
             .MaximumLength(500);
 
         RuleFor(dto => dto.ResourceType)
             .NotNull()
-                .WithMessage("{PropertyName} is required");
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
 
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithMessage("{PropertyName} is required");
+                    .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty);
 
             RuleForEach(dto => dto.Files)
                 .SetValidator(new ResourceFileValidator(), "default");

@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 
 /// <summary>
 /// Initiative validator.
@@ -16,11 +17,11 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithMessage("Entity data cannot be null");
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyEntityData);
 
         RuleFor(dto => dto.Name)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
             .MaximumLength(100);
 
         RuleFor(dto => dto.ShortName)
@@ -28,7 +29,7 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
 
         RuleFor(dto => dto.Description)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.GeneralEmptyProperty)
             .MaximumLength(300);
 
         RuleFor(dto => dto.Baseline)
