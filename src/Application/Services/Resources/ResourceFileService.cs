@@ -101,7 +101,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "Resource not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.NotFound),
             };
         }
 

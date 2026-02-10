@@ -95,7 +95,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         {
             return new CustomWebResponse(true)
             {
-                Message = "Initiative not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
         }
 

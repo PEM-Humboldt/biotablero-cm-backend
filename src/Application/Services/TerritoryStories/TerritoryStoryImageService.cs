@@ -129,7 +129,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Territory Story not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.NotFound),
             };
         }
 
@@ -137,7 +137,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Territory Story disabled",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
         }
 
@@ -273,7 +273,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Territory Story disabled",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
         }
 
@@ -343,7 +343,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Territory Story disabled",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
         }
 
@@ -401,7 +401,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Territory Story disabled",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
         }
 

@@ -75,7 +75,7 @@ public class ResourceTagService : IResourceTagService
         {
             return new CustomWebResponse(true)
             {
-                Message = "Resource not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.NotFound),
             };
         }
 
@@ -86,7 +86,7 @@ public class ResourceTagService : IResourceTagService
         {
             return new CustomWebResponse(true)
             {
-                Message = "Tag not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.NotFound),
             };
         }
 

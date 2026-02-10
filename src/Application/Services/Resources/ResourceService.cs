@@ -192,7 +192,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                Message = "Initiative not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
         }
 
@@ -203,7 +203,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                Message = "Resource Type not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceTypes.NotFound),
             };
         }
 
@@ -298,7 +298,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                Message = "Resource Type not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceTypes.NotFound),
             };
         }
 

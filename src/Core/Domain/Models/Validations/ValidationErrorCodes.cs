@@ -42,19 +42,24 @@ public static class ValidationErrorCodes
     public static class Initiatives
     {
         /// <summary>
+        /// Entity not found.
+        /// </summary>
+        public const string NotFound = "INI_001";
+
+        /// <summary>
         /// At least one location is required.
         /// </summary>
-        public const string LocationsRequired = "INI_001";
+        public const string LocationsRequired = "INI_002";
 
         /// <summary>
         /// At least one contact is required.
         /// </summary>
-        public const string ContactsRequired = "INI_002";
+        public const string ContactsRequired = "INI_003";
 
         /// <summary>
         /// At least one user is required.
         /// </summary>
-        public const string UsersRequired = "INI_003";
+        public const string UsersRequired = "INI_004";
     }
 
     /// <summary>
@@ -85,8 +90,62 @@ public static class ValidationErrorCodes
     public static class TerritoryStories
     {
         /// <summary>
+        /// Entity not found.
+        /// </summary>
+        public const string NotFound = "STO_001";
+
+        /// <summary>
+        /// Entity disabled.
+        /// </summary>
+        public const string Disabled = "STO_002";
+
+        /// <summary>
         /// Invalid keywords.
         /// </summary>
-        public const string InvalidKeywords = "STO_001";
+        public const string InvalidKeywords = "STO_003";
+    }
+
+    /// <summary>
+    /// Locations errors.
+    /// </summary>
+    public static class Locations
+    {
+        /// <summary>
+        /// Entity not found.
+        /// </summary>
+        public const string NotFound = "LOC_001";
+    }
+
+    /// <summary>
+    /// Tags errors.
+    /// </summary>
+    public static class Tags
+    {
+        /// <summary>
+        /// Entity not found.
+        /// </summary>
+        public const string NotFound = "TAG_001";
+    }
+
+    /// <summary>
+    /// Resources errors.
+    /// </summary>
+    public static class Resources
+    {
+        /// <summary>
+        /// Entity not found.
+        /// </summary>
+        public const string NotFound = "RES_001";
+    }
+
+    /// <summary>
+    /// Resource Types errors.
+    /// </summary>
+    public static class ResourceTypes
+    {
+        /// <summary>
+        /// Entity not found.
+        /// </summary>
+        public const string NotFound = "RTY_001";
     }
 }

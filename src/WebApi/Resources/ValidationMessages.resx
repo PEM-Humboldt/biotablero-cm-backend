@@ -138,14 +138,18 @@
     <comment/>
   </data>
   <data name="INI_001" xml:space="preserve">
-    <value>At least one location is required</value>
+    <value>Initiative not found</value>
     <comment/>
   </data>
   <data name="INI_002" xml:space="preserve">
-    <value>At least one contact is required</value>
+    <value>At least one location is required</value>
     <comment/>
   </data>
   <data name="INI_003" xml:space="preserve">
+    <value>At least one contact is required</value>
+    <comment/>
+  </data>
+  <data name="INI_004" xml:space="preserve">
     <value>At least one user is required</value>
     <comment/>
   </data>
@@ -158,7 +162,31 @@
     <comment/>
   </data>
   <data name="STO_001" xml:space="preserve">
+    <value>Territory Story not found</value>
+    <comment/>
+  </data>
+  <data name="STO_002" xml:space="preserve">
+    <value>Territory Story disabled</value>
+    <comment/>
+  </data>
+  <data name="STO_003" xml:space="preserve">
     <value>Invalid format. Keywords must be separated by commas. Spaces and special characters are not allowed. Only up to 5 keywords are allowed.</value>
+    <comment/>
+  </data>
+  <data name="LOC_001" xml:space="preserve">
+    <value>Location not found</value>
+    <comment/>
+  </data>
+  <data name="TAG_001" xml:space="preserve">
+    <value>Tag not found</value>
+    <comment/>
+  </data>
+  <data name="RES_001" xml:space="preserve">
+    <value>Resource not found</value>
+    <comment/>
+  </data>
+  <data name="RTY_001" xml:space="preserve">
+    <value>Resource type not found</value>
     <comment/>
   </data>
 </root>

@@ -100,7 +100,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = "Initiative not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
         }
 
@@ -112,7 +112,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = "Location not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Locations.NotFound),
             };
         }
 
@@ -188,7 +188,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = "Location not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Locations.NotFound),
             };
         }
 

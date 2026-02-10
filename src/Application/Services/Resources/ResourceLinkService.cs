@@ -106,7 +106,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "Resource not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.NotFound),
             };
         }
 

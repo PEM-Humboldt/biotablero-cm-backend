@@ -59,7 +59,7 @@ public class InitiativeTagService : IInitiativeTagService
         {
             return new CustomWebResponse(true)
             {
-                Message = "Initiative not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
         }
 
@@ -70,7 +70,7 @@ public class InitiativeTagService : IInitiativeTagService
         {
             return new CustomWebResponse(true)
             {
-                Message = "Tag not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.NotFound),
             };
         }
 
