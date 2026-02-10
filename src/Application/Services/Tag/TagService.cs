@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Tag;
 
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -113,8 +112,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
             return new CustomWebResponse(true)
             {
                 Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 

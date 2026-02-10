@@ -180,8 +180,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
             return new CustomWebResponse(true)
             {
                 Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -253,8 +252,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
             return new CustomWebResponse(true)
             {
                 Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 

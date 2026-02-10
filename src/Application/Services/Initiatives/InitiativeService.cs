@@ -168,8 +168,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             return new CustomWebResponse(true)
             {
                 Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -293,8 +292,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             return new CustomWebResponse(true)
             {
                 Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
