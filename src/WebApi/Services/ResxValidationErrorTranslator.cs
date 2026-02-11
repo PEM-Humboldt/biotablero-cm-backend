@@ -31,12 +31,13 @@ public class ResxValidationErrorTranslator
     }
 
     /// <inheritdoc/>
-    public ApiValidationError Translate(string errorCode, string propertyName) =>
+    public ApiValidationError Translate(string errorCode, string propertyName = null, object data = null) =>
         new()
         {
             Code = errorCode,
             Description = localizer[errorCode],
             Field = propertyName,
+            Data = data,
         };
 
     /// <inheritdoc/>

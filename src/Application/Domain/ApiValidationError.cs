@@ -19,4 +19,9 @@ public class ApiValidationError
     /// Validation field.
     /// </summary>
     public string Field { get; set; }
+
+    /// <summary>
+    /// Additional data.
+    /// </summary>
+    public object Data { get; set; }
 }

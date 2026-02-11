@@ -233,6 +233,10 @@
     <value>There are duplicate emails</value>
     <comment/>
   </data>
+  <data name="IJI_003" xml:space="preserve">
+    <value>One or more users with the entered email addresses are already in the system</value>
+    <comment/>
+  </data>
   <data name="IJR_002" xml:space="preserve">
     <value>There are one or more pending join requests</value>
     <comment/>

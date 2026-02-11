@@ -167,8 +167,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
             return new CustomWebResponse(true)
             {
-                Message = "One or more users with the entered email addresses are already in the system",
-                ResponseBody = existingEmails,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.ExistingUsers, data: existingEmails),
             };
         }
 

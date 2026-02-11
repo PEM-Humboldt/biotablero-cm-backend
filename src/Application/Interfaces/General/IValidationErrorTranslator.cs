@@ -16,8 +16,9 @@ public interface IValidationErrorTranslator
     /// </summary>
     /// <param name="errorCode">Error code.</param>
     /// <param name="propertyName">Property name.</param>
+    /// <param name="data">Additional error data.</param>
     /// <returns>Translated message.</returns>
-    ApiValidationError Translate(string errorCode, string propertyName = null);
+    ApiValidationError Translate(string errorCode, string propertyName = null, object data = null);
 
     /// <summary>
     /// Translate error messages.
