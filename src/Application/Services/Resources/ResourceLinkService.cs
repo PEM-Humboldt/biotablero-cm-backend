@@ -91,7 +91,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -102,7 +102,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         if (resource == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.NotFound),
             };
@@ -113,7 +113,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -122,7 +122,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         // Validate number of items
         if (resource.Links.Count >= MaxItemsPerResource)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceLinks.ItemsLimitExceeded, data: MaxItemsPerResource),
             };
@@ -133,7 +133,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceLinks.Duplicated),
             };
@@ -144,7 +144,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         if (!linkExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceLinks.UrlNotFound),
             };
@@ -163,7 +163,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         logger.AddLog(LogType.Create, "Added resource link", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -177,7 +177,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -188,7 +188,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -199,7 +199,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -210,7 +210,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceLinks.Duplicated),
             };
@@ -221,7 +221,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         if (!linkExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceLinks.UrlNotFound),
             };
@@ -240,7 +240,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         logger.AddLog(LogType.Update, "Updated resource link", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -254,7 +254,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -265,7 +265,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -281,6 +281,6 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         logger.AddLog(LogType.Delete, "Deleted resource link", "{@EntityData}", entityData);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

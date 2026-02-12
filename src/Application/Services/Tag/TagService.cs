@@ -65,7 +65,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -77,7 +77,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.Duplicated),
             };
@@ -93,7 +93,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         logger.AddLog(LogType.Create, "Added tag", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -108,7 +108,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -119,7 +119,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -130,7 +130,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.Duplicated),
             };
@@ -145,7 +145,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         logger.AddLog(LogType.Update, "Updated tag", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -159,7 +159,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -170,7 +170,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         if (hasRelationships)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.HasRelationships),
             };
@@ -182,6 +182,6 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         logger.AddLog(LogType.Delete, "Deleted tag", "{@EntityData}", entityData);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

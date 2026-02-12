@@ -94,7 +94,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (!userIsLeader)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -114,7 +114,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -125,7 +125,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (initiative == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
@@ -136,7 +136,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (hasPendingRequests)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinRequests.PendingJoinRequests),
             };
@@ -147,7 +147,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (hasUserAndInitiativeRelationship)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.Duplicated),
             };
@@ -158,7 +158,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (userData == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Users.Invalid),
             };
@@ -187,7 +187,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         logger.AddLog(LogType.Create, "Added initiative join request", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -201,7 +201,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -212,7 +212,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -223,7 +223,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (!userIsLeader)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -231,7 +231,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (entity.StatusId != (int)JoinRequestStatusEnum.UnderReview)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinRequests.ReviewedJoinRequests),
             };
@@ -242,7 +242,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.InternalServerError,
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
@@ -266,7 +266,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         logger.AddLog(LogType.Update, "Updated initiative join request", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };

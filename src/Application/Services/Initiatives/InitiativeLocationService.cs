@@ -84,7 +84,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -96,7 +96,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (!initiativeExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
@@ -108,7 +108,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (location == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Locations.NotFound),
             };
@@ -116,7 +116,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.ParentId == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.LocalityOnlyForMunicipality),
             };
@@ -128,7 +128,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.Duplicated),
             };
@@ -145,7 +145,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         logger.AddLog(LogType.Create, "Added initiative location", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -159,7 +159,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -170,7 +170,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -182,7 +182,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (location == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Locations.NotFound),
             };
@@ -190,7 +190,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.ParentId == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.LocalityOnlyForMunicipality),
             };
@@ -202,7 +202,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.Duplicated),
             };
@@ -217,7 +217,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         logger.AddLog(LogType.Update, "Updated initiative location", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -231,7 +231,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -242,7 +242,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (totalLocations is <= 1)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.LocationsRequired),
             };
@@ -254,6 +254,6 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         logger.AddLog(LogType.Delete, "Deleted initiative location", "{@EntityData}", entityData);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

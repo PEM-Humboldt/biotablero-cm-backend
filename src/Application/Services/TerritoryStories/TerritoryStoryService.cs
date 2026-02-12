@@ -94,7 +94,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
             if (!authorizedUserAction)
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
                     StatusCode = HttpStatusCode.Forbidden,
                 };
@@ -157,7 +157,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -168,7 +168,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (!initiativeExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
@@ -179,7 +179,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -190,7 +190,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Duplicated),
             };
@@ -207,7 +207,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
             if (hasDuplicatedEntitiesVideos)
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
                     ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.DuplicatedVideos),
                 };
@@ -220,7 +220,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
                 if (!videoExists)
                 {
-                    return new CustomWebResponse(true)
+                    return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStoryVideos.NotFound, data: videoUrl),
                     };
@@ -242,7 +242,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         logger.AddLog(LogType.Create, "Added territory story", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -256,7 +256,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -267,7 +267,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -278,7 +278,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -286,7 +286,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (!entity.Enabled)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementDisabled),
             };
@@ -297,7 +297,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Duplicated),
             };
@@ -312,7 +312,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         logger.AddLog(LogType.Update, "Updated territory story", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -326,7 +326,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -334,7 +334,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (!entity.Enabled)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementDisabled),
             };
@@ -361,7 +361,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             logger.AddLog(LogType.Create, $"Liked territory story", "{@EntityData}", entityData);
         }
 
-        return new CustomWebResponse();
+        return new();
     }
 
     /// <inheritdoc/>
@@ -372,7 +372,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -380,7 +380,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (!entity.Enabled)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementDisabled),
             };
@@ -391,7 +391,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (!userIsLeader)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -402,7 +402,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.InternalServerError,
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
@@ -413,7 +413,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         logger.AddLog(LogType.Update, "Marked territory story as featured content", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -440,7 +440,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -451,7 +451,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -464,7 +464,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
         logger.AddLog(LogType.Update, $"{(disable ? "Disabled" : "Enabled")} territory story", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };

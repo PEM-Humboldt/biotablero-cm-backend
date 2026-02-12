@@ -57,7 +57,7 @@ public class InitiativeTagService : IInitiativeTagService
 
         if (!initiativeExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
@@ -68,7 +68,7 @@ public class InitiativeTagService : IInitiativeTagService
 
         if (!tagExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.NotFound),
             };
@@ -79,7 +79,7 @@ public class InitiativeTagService : IInitiativeTagService
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.Duplicated),
             };
@@ -97,7 +97,7 @@ public class InitiativeTagService : IInitiativeTagService
 
         logger.AddLog(LogType.Create, "Added initiative tag relationship", "{@EntityData}", entity);
 
-        return new CustomWebResponse();
+        return new();
     }
 
     /// <inheritdoc/>
@@ -108,7 +108,7 @@ public class InitiativeTagService : IInitiativeTagService
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -118,6 +118,6 @@ public class InitiativeTagService : IInitiativeTagService
 
         logger.AddLog(LogType.Delete, "Deleted initiative tag relationship", "{@EntityData}", entity);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

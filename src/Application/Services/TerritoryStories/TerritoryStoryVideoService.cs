@@ -76,7 +76,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
             if (!authorizedUserAction)
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
                     StatusCode = HttpStatusCode.Forbidden,
                 };
@@ -108,7 +108,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -120,7 +120,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (territoryStory == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.NotFound),
             };
@@ -128,7 +128,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (!territoryStory.Enabled)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
@@ -139,7 +139,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -150,7 +150,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStoryVideos.Duplicated),
             };
@@ -161,7 +161,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (!videoExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStoryVideos.NotFound),
             };
@@ -177,7 +177,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         logger.AddLog(LogType.Create, "Added territory story video", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -191,7 +191,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -202,7 +202,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -213,7 +213,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -224,7 +224,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (!territoryStory.Enabled)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
@@ -235,7 +235,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStoryVideos.Duplicated),
             };
@@ -246,7 +246,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (!videoExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStoryVideos.NotFound),
             };
@@ -261,7 +261,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         logger.AddLog(LogType.Update, "Updated territory story video", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -275,7 +275,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -286,7 +286,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -297,7 +297,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         if (!territoryStory.Enabled)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
@@ -309,6 +309,6 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
 
         logger.AddLog(LogType.Delete, "Deleted territory story video", "{@EntityData}", entityData);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

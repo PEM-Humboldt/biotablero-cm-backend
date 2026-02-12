@@ -79,7 +79,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -91,7 +91,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (!initiativeExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
@@ -102,7 +102,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeContacts.Duplicated),
             };
@@ -118,7 +118,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         logger.AddLog(LogType.Create, "Added initiative contact", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -132,7 +132,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -143,7 +143,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -154,7 +154,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeContacts.Duplicated),
             };
@@ -169,7 +169,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         logger.AddLog(LogType.Update, "Updated initiative contact", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -183,7 +183,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -195,6 +195,6 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         logger.AddLog(LogType.Delete, "Deleted initiative contact", "{@EntityData}", entityData);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

@@ -90,7 +90,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
         if (!userIsLeader)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -111,7 +111,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
         if (!userIsLeader)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -122,7 +122,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -133,7 +133,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
         if (initiative == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
@@ -146,7 +146,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
         if (hasDuplicateEmails)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.DuplicatedEmails),
             };
@@ -164,7 +164,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
             var existingEmails = externalUsersData
                 .Select(e => e.Email);
 
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.ExistingUsers, data: existingEmails),
             };
@@ -186,13 +186,13 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
             logger.AddLog(LogType.Create, "Added initiative join invitation", "{@entityData}", entityData);
 
-            return new CustomWebResponse()
+            return new()
             {
                 ResponseBody = entityData,
             };
         }
 
-        return new CustomWebResponse(true)
+        return new(true)
         {
             StatusCode = HttpStatusCode.InternalServerError,
             ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.EmailsSendingError),

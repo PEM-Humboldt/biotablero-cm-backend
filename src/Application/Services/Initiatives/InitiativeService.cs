@@ -165,7 +165,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -176,7 +176,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Duplicated),
             };
@@ -189,7 +189,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (leaderCount > MaxLeadersByInitiative)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.LeadersPerInitiative),
             };
@@ -209,7 +209,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (locationsIds.Length != locationsDb.Count)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidLocationsData),
             };
@@ -221,7 +221,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (duplicatedLocations)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.DuplicatedLocationsData),
             };
@@ -234,7 +234,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (hasDepartmentsWithLocalities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.LocalityOnlyForMunicipality),
             };
@@ -253,7 +253,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (invalidUsers)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidUsers),
             };
@@ -274,7 +274,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         logger.AddLog(LogType.Create, "Added initiative", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -288,7 +288,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -299,7 +299,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Duplicated),
             };
@@ -310,7 +310,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -328,7 +328,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         logger.AddLog(LogType.Update, "Updated initiative", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -339,7 +339,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     {
         if (formFile.IsEmpty())
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Empty),
             };
@@ -347,7 +347,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (!formFile.IsValidImage())
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
             };
@@ -358,7 +358,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -370,7 +370,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (compressedImageStream == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.ProcessingError),
             };
@@ -396,7 +396,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
                     entity.BannerUrl = fileUri;
                     break;
                 default:
-                    return new CustomWebResponse(true)
+                    return new(true)
                     {
                         StatusCode = HttpStatusCode.InternalServerError,
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidImageType, data: $"{imageType:G}"),
@@ -414,13 +414,13 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
             logger.AddLog(LogType.Update, "Updated initiative image", $"(type: {imageTypeStr}): {{@EntityData}}", entityData);
 
-            return new CustomWebResponse()
+            return new()
             {
                 ResponseBody = entityData,
             };
         }
 
-        return new CustomWebResponse(true)
+        return new(true)
         {
             StatusCode = HttpStatusCode.InternalServerError,
             ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Storage),
@@ -435,7 +435,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -454,7 +454,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
                 entity.BannerUrl = null;
                 break;
             default:
-                return new CustomWebResponse(true)
+                return new(true)
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
                     ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidImageType, data: $"{imageType:G}"),
@@ -463,7 +463,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (fileName == null)
         {
-            return new CustomWebResponse();
+            return new();
         }
 
         // Remove image
@@ -478,10 +478,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
             logger.AddLog(LogType.Update, "Deleted initiative image", $"(type: {imageTypeStr}): {{@EntityData}}", entityData);
 
-            return new CustomWebResponse();
+            return new();
         }
 
-        return new CustomWebResponse(true)
+        return new(true)
         {
             StatusCode = HttpStatusCode.InternalServerError,
             ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Storage),
@@ -496,7 +496,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -511,7 +511,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
         catch (JsonException)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidJson),
             };
@@ -520,7 +520,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         // Validate polygon
         if (geometry is not Polygon polygon)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidGeojson),
             };
@@ -540,7 +540,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         logger.AddLog(LogType.Update, $"Updated initiative polygon", "{{@EntityData}}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -613,7 +613,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -626,7 +626,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         logger.AddLog(LogType.Update, $"{(disable ? "Disabled" : "Enabled")} initiative", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };

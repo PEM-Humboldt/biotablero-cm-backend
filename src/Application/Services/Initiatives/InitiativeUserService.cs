@@ -99,7 +99,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -111,7 +111,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (!initiativeExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
@@ -122,7 +122,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.Duplicated),
             };
@@ -135,7 +135,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
             if (leaders.Count() >= MaxLeadersByInitiative)
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
                     ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeaderLimitExceeded, data: MaxLeadersByInitiative),
                 };
@@ -147,7 +147,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (!userExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Users.Invalid),
             };
@@ -163,7 +163,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         logger.AddLog(LogType.Create, "Added initiative user", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -177,7 +177,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -188,7 +188,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -199,7 +199,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader && !leaders.Any())
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeadersRequired),
             };
@@ -207,7 +207,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader && leaders.Count() >= MaxLeadersByInitiative)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeaderLimitExceeded, data: MaxLeadersByInitiative),
             };
@@ -227,7 +227,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         var initiative = await initiativeRepository.GetByIdAsync(entity.InitiativeId, ct);
         SendNotificationChangedLevel(userData, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, leaders, ct);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -241,7 +241,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -255,7 +255,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
             if (leaders.Count() is <= 1)
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
                     ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeadersRequired),
                 };
@@ -273,7 +273,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         var initiative = await initiativeRepository.GetByIdAsync(entity.InitiativeId, ct);
         SendNotificationUserBanned(userData, initiative, leaders, ct);
 
-        return new CustomWebResponse();
+        return new();
     }
 
     /// <summary>

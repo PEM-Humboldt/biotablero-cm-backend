@@ -62,7 +62,7 @@ public class ResourceTagService : IResourceTagService
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -73,7 +73,7 @@ public class ResourceTagService : IResourceTagService
 
         if (resource == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.NotFound),
             };
@@ -84,7 +84,7 @@ public class ResourceTagService : IResourceTagService
 
         if (!tagExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.NotFound),
             };
@@ -95,7 +95,7 @@ public class ResourceTagService : IResourceTagService
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.Duplicated),
             };
@@ -116,7 +116,7 @@ public class ResourceTagService : IResourceTagService
 
         logger.AddLog(LogType.Create, "Added resource tag relationship", "{@EntityData}", entity);
 
-        return new CustomWebResponse();
+        return new();
     }
 
     /// <inheritdoc/>
@@ -127,7 +127,7 @@ public class ResourceTagService : IResourceTagService
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -138,7 +138,7 @@ public class ResourceTagService : IResourceTagService
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -152,6 +152,6 @@ public class ResourceTagService : IResourceTagService
 
         logger.AddLog(LogType.Delete, "Deleted resource tag relationship", "{@EntityData}", entity);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

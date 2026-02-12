@@ -103,7 +103,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
             if (!userBelongsToInitiative && entity.IsDraft)
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
                     StatusCode = HttpStatusCode.Forbidden,
                 };
@@ -166,7 +166,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -177,7 +177,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -188,7 +188,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (!initiativeExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
@@ -199,7 +199,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (!resourceTypeExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceTypes.NotFound),
             };
@@ -210,7 +210,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.Duplicated),
             };
@@ -234,7 +234,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         logger.AddLog(LogType.Create, "Added resource", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -248,7 +248,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
@@ -259,7 +259,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -270,7 +270,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -281,7 +281,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.Duplicated),
             };
@@ -292,7 +292,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (!resourceTypeExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceTypes.NotFound),
             };
@@ -310,7 +310,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         logger.AddLog(LogType.Update, "Updated resource", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -324,7 +324,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -332,7 +332,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (entity.IsDraft)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementDisabled),
             };
@@ -359,7 +359,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
             logger.AddLog(LogType.Create, $"Liked resource", "{@EntityData}", entityData);
         }
 
-        return new CustomWebResponse();
+        return new();
     }
 
     /// <inheritdoc/>
@@ -370,7 +370,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
@@ -381,7 +381,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -393,7 +393,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         logger.AddLog(LogType.Delete, "Deleted resource", "{@EntityData}", entityData);
 
-        return new CustomWebResponse();
+        return new();
     }
 
     /// <inheritdoc/>
