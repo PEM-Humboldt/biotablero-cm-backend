@@ -6,6 +6,11 @@
 public static class ValidationErrorCodes
 {
     /// <summary>
+    /// Validation errors message.
+    /// </summary>
+    public const string ValidationErrorsMsg = "Validation errors";
+
+    /// <summary>
     /// General errors.
     /// </summary>
     public static class General
@@ -39,6 +44,52 @@ public static class ValidationErrorCodes
         /// Element duplicated.
         /// </summary>
         public const string Duplicated = "SYS_006";
+
+        /// <summary>
+        /// Database error.
+        /// </summary>
+        public const string DatabaseError = "SYS_007";
+
+        /// <summary>
+        /// OData invalid filter.
+        /// </summary>
+        public const string OdataInvalidFilter = "SYS_008";
+
+        /// <summary>
+        /// OData row limit exceeded.
+        /// </summary>
+        public const string OdataRowLimitExceeded = "SYS_009";
+    }
+
+    /// <summary>
+    /// Files errors.
+    /// </summary>
+    public static class Files
+    {
+        /// <summary>
+        /// Empty element.
+        /// </summary>
+        public const string Empty = "FIL_001";
+
+        /// <summary>
+        /// Invalid format.
+        /// </summary>
+        public const string InvalidFormat = "FIL_002";
+
+        /// <summary>
+        /// File processing error.
+        /// </summary>
+        public const string ProcessingError = "FIL_003";
+
+        /// <summary>
+        /// Storage error.
+        /// </summary>
+        public const string Storage = "FIL_004";
+
+        /// <summary>
+        /// Invalid size.
+        /// </summary>
+        public const string InvalidSize = "FIL_005";
     }
 
     /// <summary>
@@ -75,6 +126,36 @@ public static class ValidationErrorCodes
         /// Invalid users.
         /// </summary>
         public const string InvalidUsers = "INI_006";
+
+        /// <summary>
+        /// Invalid locations data.
+        /// </summary>
+        public const string InvalidLocationsData = "INI_007";
+
+        /// <summary>
+        /// Duplicated locations data.
+        /// </summary>
+        public const string DuplicatedLocationsData = "INI_008";
+
+        /// <summary>
+        /// Leaders per initiative.
+        /// </summary>
+        public const string LeadersPerInitiative = "INI_009";
+
+        /// <summary>
+        /// Invalid JSON object.
+        /// </summary>
+        public const string InvalidJson = "INI_010";
+
+        /// <summary>
+        /// Invalid GeoJSON object.
+        /// </summary>
+        public const string InvalidGeojson = "INI_011";
+
+        /// <summary>
+        /// Invalid image type.
+        /// </summary>
+        public const string InvalidImageType = "INI_012";
     }
 
     /// <summary>
@@ -123,6 +204,11 @@ public static class ValidationErrorCodes
         /// Leaders required.
         /// </summary>
         public const string LeadersRequired = "IUS_002";
+
+        /// <summary>
+        /// Leader limit exceeded.
+        /// </summary>
+        public const string LeaderLimitExceeded = "IUS_003";
     }
 
     /// <summary>
@@ -139,6 +225,16 @@ public static class ValidationErrorCodes
         /// Duplicated emails.
         /// </summary>
         public const string DuplicatedEmails = "IJI_002";
+
+        /// <summary>
+        /// Existing users.
+        /// </summary>
+        public const string ExistingUsers = "IJI_003";
+
+        /// <summary>
+        /// Emails sending error.
+        /// </summary>
+        public const string EmailsSendingError = "IJI_004";
     }
 
     /// <summary>
@@ -181,6 +277,32 @@ public static class ValidationErrorCodes
         /// Invalid keywords.
         /// </summary>
         public const string InvalidKeywords = "STO_003";
+
+        /// <summary>
+        /// Element duplicated.
+        /// </summary>
+        public const string Duplicated = "STO_004";
+
+        /// <summary>
+        /// Duplicated videos.
+        /// </summary>
+        public const string DuplicatedVideos = "STO_005";
+    }
+
+    /// <summary>
+    /// Territory Story Videos errors.
+    /// </summary>
+    public static class TerritoryStoryVideos
+    {
+        /// <summary>
+        /// Element duplicated.
+        /// </summary>
+        public const string Duplicated = "SVI_001";
+
+        /// <summary>
+        /// Entity not found.
+        /// </summary>
+        public const string NotFound = "SVI_002";
     }
 
     /// <summary>
@@ -203,6 +325,16 @@ public static class ValidationErrorCodes
         /// Entity not found.
         /// </summary>
         public const string NotFound = "TAG_001";
+
+        /// <summary>
+        /// Element duplicated.
+        /// </summary>
+        public const string Duplicated = "TAG_002";
+
+        /// <summary>
+        /// Element relationships.
+        /// </summary>
+        public const string HasRelationships = "TAG_003";
     }
 
     /// <summary>
@@ -214,6 +346,11 @@ public static class ValidationErrorCodes
         /// Entity not found.
         /// </summary>
         public const string NotFound = "RES_001";
+
+        /// <summary>
+        /// Element duplicated.
+        /// </summary>
+        public const string Duplicated = "RES_002";
     }
 
     /// <summary>
@@ -225,6 +362,38 @@ public static class ValidationErrorCodes
         /// Entity not found.
         /// </summary>
         public const string NotFound = "RTY_001";
+    }
+
+    /// <summary>
+    /// Resource Files errors.
+    /// </summary>
+    public static class ResourceFiles
+    {
+        /// <summary>
+        /// Items limit exceeded.
+        /// </summary>
+        public const string ItemsLimitExceeded = "RFI_001";
+    }
+
+    /// <summary>
+    /// Resource Links errors.
+    /// </summary>
+    public static class ResourceLinks
+    {
+        /// <summary>
+        /// Items limit exceeded.
+        /// </summary>
+        public const string ItemsLimitExceeded = "RLI_001";
+
+        /// <summary>
+        /// Element duplicated.
+        /// </summary>
+        public const string Duplicated = "RLI_002";
+
+        /// <summary>
+        /// URL not found.
+        /// </summary>
+        public const string UrlNotFound = "RLI_003";
     }
 
     /// <summary>

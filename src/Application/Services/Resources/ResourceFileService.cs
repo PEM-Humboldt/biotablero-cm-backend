@@ -88,7 +88,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -120,7 +120,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = $"The number of items per resource must be less than or equal to {MaxItemsPerResource}",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceFiles.ItemsLimitExceeded, data: MaxItemsPerResource),
             };
         }
 
@@ -129,7 +129,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "The file is empty",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Empty),
             };
         }
 
@@ -137,7 +137,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "Invalid file format",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
             };
         }
 
@@ -145,7 +145,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "Invalid file size",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidSize),
             };
         }
 
@@ -178,7 +178,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -191,7 +191,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
             {
                 return new CustomWebResponse(true)
                 {
-                    Message = "Invalid file format",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
                 };
             }
 
@@ -199,7 +199,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
             {
                 return new CustomWebResponse(true)
                 {
-                    Message = "Invalid file size",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidSize),
                 };
             }
         }

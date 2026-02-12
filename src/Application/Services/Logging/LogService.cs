@@ -14,6 +14,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Logging;
 using IAVH.BioTablero.CM.Application.Mappings.Logging;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
 
 using Microsoft.AspNetCore.OData.Query;
@@ -69,7 +70,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
         {
             return new(true)
             {
-                Message = $"Invalid filter: {ex.Message}",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter, data: ex.StackTrace),
             };
         }
     }
@@ -90,7 +91,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
             {
                 return new(true)
                 {
-                    Message = $"The parameters generate a file with more than {ReportMaxRows} records.",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataRowLimitExceeded, data: ReportMaxRows),
                 };
             }
 
@@ -111,7 +112,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
         {
             return new(true)
             {
-                Message = $"Invalid filter: {ex.Message}",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter, data: ex.StackTrace),
             };
         }
     }

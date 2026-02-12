@@ -110,7 +110,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -153,7 +153,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already a video with the same URL",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStoryVideos.Duplicated),
             };
         }
 
@@ -164,7 +164,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "The video URL does not exist",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStoryVideos.NotFound),
             };
         }
 
@@ -194,7 +194,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -239,7 +239,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already a video with the same URL",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStoryVideos.Duplicated),
             };
         }
 
@@ -250,7 +250,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "The video URL does not exist",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStoryVideos.NotFound),
             };
         }
 

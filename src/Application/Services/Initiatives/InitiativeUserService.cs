@@ -101,7 +101,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -138,7 +138,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             {
                 return new CustomWebResponse(true)
                 {
-                    Message = $"Initiatives cannot have more than {MaxLeadersByInitiative} leaders",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeaderLimitExceeded, data: MaxLeadersByInitiative),
                 };
             }
         }
@@ -180,7 +180,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -211,7 +211,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = $"Initiatives cannot have more than {MaxLeadersByInitiative} leaders",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeaderLimitExceeded, data: MaxLeadersByInitiative),
             };
         }
 

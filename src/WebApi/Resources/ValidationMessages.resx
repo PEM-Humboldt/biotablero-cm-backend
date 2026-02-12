@@ -245,4 +245,112 @@
     <value>The join request has already been reviewed</value>
     <comment/>
   </data>
+  <data name="INI_007" xml:space="preserve">
+    <value>Invalid initiative locations data</value>
+    <comment/>
+  </data>
+  <data name="INI_008" xml:space="preserve">
+    <value>Invalid initiative locations (duplicated data)</value>
+    <comment/>
+  </data>
+  <data name="INI_009" xml:space="preserve">
+    <value>The number of leaders per initiative should be between 1 and 3</value>
+    <comment/>
+  </data>
+  <data name="FIL_001" xml:space="preserve">
+    <value>The file is empty</value>
+    <comment/>
+  </data>
+  <data name="FIL_002" xml:space="preserve">
+    <value>Invalid file format</value>
+    <comment/>
+  </data>
+  <data name="FIL_003" xml:space="preserve">
+    <value>File processing error</value>
+    <comment/>
+  </data>
+  <data name="FIL_004" xml:space="preserve">
+    <value>Storage error</value>
+    <comment/>
+  </data>
+  <data name="INI_010" xml:space="preserve">
+    <value>Invalid JSON object</value>
+    <comment/>
+  </data>
+  <data name="INI_011" xml:space="preserve">
+    <value>GeoJSON type should be 'Polygon'</value>
+    <comment/>
+  </data>
+  <data name="INI_012" xml:space="preserve">
+    <value>Invalid image type</value>
+    <comment/>
+  </data>
+  <data name="IUS_003" xml:space="preserve">
+    <value>Initiative leader limit exceeded</value>
+    <comment/>
+  </data>
+  <data name="IJI_004" xml:space="preserve">
+    <value>Emails sending failed</value>
+    <comment/>
+  </data>
+  <data name="SYS_007" xml:space="preserve">
+    <value>Database error</value>
+    <comment/>
+  </data>
+  <data name="SYS_008" xml:space="preserve">
+    <value>Invalid filter</value>
+    <comment/>
+  </data>
+  <data name="SYS_009" xml:space="preserve">
+    <value>Row limit exceeded</value>
+    <comment/>
+  </data>
+  <data name="FIL_005" xml:space="preserve">
+    <value>Invalid file size</value>
+    <comment/>
+  </data>
+  <data name="RFI_001" xml:space="preserve">
+    <value>Limit of elements per resource exceeded</value>
+    <comment/>
+  </data>
+  <data name="RLI_001" xml:space="preserve">
+    <value>Limit of elements per resource exceeded</value>
+    <comment/>
+  </data>
+  <data name="RLI_002" xml:space="preserve">
+    <value>There is already a link with the same URL</value>
+    <comment/>
+  </data>
+  <data name="RLI_003" xml:space="preserve">
+    <value>URL not found</value>
+    <comment/>
+  </data>
+  <data name="RES_002" xml:space="preserve">
+    <value>There is already a resource with the same name</value>
+    <comment/>
+  </data>
+  <data name="TAG_002" xml:space="preserve">
+    <value>Duplicated tag</value>
+    <comment/>
+  </data>
+  <data name="TAG_003" xml:space="preserve">
+    <value>The tag has relationships with one or more entities</value>
+    <comment/>
+  </data>
+  <data name="STO_004" xml:space="preserve">
+    <value>There is already a territory story with the same title</value>
+    <comment/>
+  </data>
+  <data name="SVI_001" xml:space="preserve">
+    <value>There is already a video with the same URL</value>
+    <comment/>
+  </data>
+  <data name="STO_005" xml:space="preserve">
+    <value>There is already at least one video with the same URL</value>
+    <comment/>
+  </data>
+  <data name="SVI_002" xml:space="preserve">
+    <value>The video URL does not exist</value>
+    <comment/>
+  </data>
 </root>

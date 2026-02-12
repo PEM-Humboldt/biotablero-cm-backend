@@ -86,7 +86,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -162,7 +162,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }

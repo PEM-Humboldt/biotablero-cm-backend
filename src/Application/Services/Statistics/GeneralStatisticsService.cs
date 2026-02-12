@@ -73,31 +73,6 @@ public class GeneralStatisticsService : IGeneralStatisticsService
             totalAreaInHectares = GeometryUtils.ConvertSquareKilometersToHectares(totalAreaInSquareKm);
         }
 
-        // Validate data integrity
-        if (totalActiveInitiatives < 0)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = "Invalid data: negative initiative count",
-            };
-        }
-
-        if (totalPeopleInvolved < 0)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = "Invalid data: negative people count",
-            };
-        }
-
-        if (totalAreaInHectares < 0)
-        {
-            return new CustomWebResponse(true)
-            {
-                Message = "Invalid data: negative area value",
-            };
-        }
-
         var statistics = new GeneralStatisticsDto
         {
             TotalActiveInitiatives = totalActiveInitiatives,

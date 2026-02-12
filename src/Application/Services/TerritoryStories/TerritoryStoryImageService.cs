@@ -115,7 +115,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -156,7 +156,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "The file is empty",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Empty),
             };
         }
 
@@ -164,7 +164,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Invalid file format",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
             };
         }
 
@@ -172,7 +172,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Invalid file size",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidSize),
             };
         }
 
@@ -184,7 +184,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Image processing error",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.ProcessingError),
             };
         }
 
@@ -215,7 +215,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -229,7 +229,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             {
                 return new CustomWebResponse(true)
                 {
-                    Message = "Invalid file format",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
                 };
             }
 
@@ -237,7 +237,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             {
                 return new CustomWebResponse(true)
                 {
-                    Message = "Invalid file size",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidSize),
                 };
             }
         }
@@ -292,7 +292,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             {
                 return new CustomWebResponse(true)
                 {
-                    Message = "Image processing error",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.ProcessingError),
                 };
             }
 
@@ -353,7 +353,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             return new CustomWebResponse(true)
             {
                 StatusCode = HttpStatusCode.InternalServerError,
-                Message = "Database error",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
             };
         }
 

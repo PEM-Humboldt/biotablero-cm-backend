@@ -116,7 +116,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -204,7 +204,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -247,7 +247,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             return new CustomWebResponse(true)
             {
                 StatusCode = HttpStatusCode.InternalServerError,
-                Message = "Database error",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
             };
         }
 

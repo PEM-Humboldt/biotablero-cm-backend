@@ -71,7 +71,7 @@ public abstract class ServiceRead<TE, TDto, TI>(
             return new(true)
             {
                 StatusCode = HttpStatusCode.NotFound,
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound, nameof(TE)),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound, propertyName: nameof(TE)),
             };
         }
     }
@@ -156,7 +156,7 @@ public abstract class ServiceRead<TE, TDto, TI>(
         {
             return new(true)
             {
-                Message = $"Invalid filter: {ex.Message}",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter, data: ex.StackTrace),
             };
         }
     }

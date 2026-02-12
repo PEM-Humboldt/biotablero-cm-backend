@@ -167,7 +167,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -192,7 +192,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = $"The number of leaders per initiative should be between 1 and 3",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.LeadersPerInitiative),
             };
         }
 
@@ -212,7 +212,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = $"Invalid initiative locations data",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidLocationsData),
             };
         }
 
@@ -224,7 +224,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = $"Invalid initiative locations (duplicated data)",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.DuplicatedLocationsData),
             };
         }
 
@@ -291,7 +291,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -343,7 +343,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = "The file is empty",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Empty),
             };
         }
 
@@ -351,7 +351,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = "Invalid file format",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
             };
         }
 
@@ -374,7 +374,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = "Image processing error",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.ProcessingError),
             };
         }
 
@@ -401,7 +401,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
                     return new CustomWebResponse(true)
                     {
                         StatusCode = HttpStatusCode.InternalServerError,
-                        Message = $"Invalid image type: {imageType:G}",
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidImageType, data: $"{imageType:G}"),
                     };
             }
 
@@ -425,7 +425,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         return new CustomWebResponse(true)
         {
             StatusCode = HttpStatusCode.InternalServerError,
-            Message = "Storage server error",
+            ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Storage),
         };
     }
 
@@ -459,7 +459,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
                 return new CustomWebResponse(true)
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    Message = $"Invalid image type: {imageType:G}",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidImageType, data: $"{imageType:G}"),
                 };
         }
 
@@ -486,7 +486,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         return new CustomWebResponse(true)
         {
             StatusCode = HttpStatusCode.InternalServerError,
-            Message = "Storage server error",
+            ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Storage),
         };
     }
 
@@ -515,7 +515,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = "Invalid JSON object",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidJson),
             };
         }
 
@@ -524,7 +524,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             return new CustomWebResponse(true)
             {
-                Message = "GeoJSON type should be 'Polygon'",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidGeojson),
             };
         }
 

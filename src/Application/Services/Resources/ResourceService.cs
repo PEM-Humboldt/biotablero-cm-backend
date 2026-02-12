@@ -153,7 +153,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new(true)
             {
-                Message = $"Invalid filter: {ex.Message}",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter, data: ex.StackTrace),
             };
         }
     }
@@ -179,7 +179,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -213,7 +213,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already a resource with the same name",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.Duplicated),
             };
         }
 
@@ -251,7 +251,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -285,7 +285,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already a resource with the same name",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.Duplicated),
             };
         }
 

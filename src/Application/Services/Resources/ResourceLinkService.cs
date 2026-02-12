@@ -93,7 +93,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -125,7 +125,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = $"The number of items per resource must be less than or equal to {MaxItemsPerResource}",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceLinks.ItemsLimitExceeded, data: MaxItemsPerResource),
             };
         }
 
@@ -136,7 +136,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already a link with the same URL",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceLinks.Duplicated),
             };
         }
 
@@ -147,7 +147,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "The URL does not exist",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceLinks.UrlNotFound),
             };
         }
 
@@ -180,7 +180,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -214,7 +214,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already a link with the same URL",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceLinks.Duplicated),
             };
         }
 
@@ -225,7 +225,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = "The URL does not exist",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceLinks.UrlNotFound),
             };
         }
 

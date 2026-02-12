@@ -124,7 +124,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -195,8 +195,8 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
         return new CustomWebResponse(true)
         {
-            Message = "Failed emails sending.",
             StatusCode = HttpStatusCode.InternalServerError,
+            ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.EmailsSendingError),
         };
     }
 

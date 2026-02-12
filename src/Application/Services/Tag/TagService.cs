@@ -67,7 +67,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -80,7 +80,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         {
             return new CustomWebResponse(true)
             {
-                Message = "Duplicated tag",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.Duplicated),
             };
         }
 
@@ -111,7 +111,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -134,7 +134,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         {
             return new CustomWebResponse(true)
             {
-                Message = "Duplicated tag",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.Duplicated),
             };
         }
 
@@ -174,7 +174,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         {
             return new CustomWebResponse(true)
             {
-                Message = "The tag has relationships with one or more initiatives",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.HasRelationships),
             };
         }
 

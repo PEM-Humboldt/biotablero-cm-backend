@@ -144,7 +144,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new(true)
             {
-                Message = $"Invalid filter: {ex.Message}",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter, data: ex.StackTrace),
             };
         }
     }
@@ -159,7 +159,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -193,7 +193,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already a territory story with the same title",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Duplicated),
             };
         }
 
@@ -210,7 +210,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             {
                 return new CustomWebResponse(true)
                 {
-                    Message = "There is already at least one video with the same URL",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.DuplicatedVideos),
                 };
             }
 
@@ -223,7 +223,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
                 {
                     return new CustomWebResponse(true)
                     {
-                        Message = $"The video URL '{videoUrl}' does not exist",
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStoryVideos.NotFound, data: videoUrl),
                     };
                 }
             }
@@ -270,7 +270,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = "Validation errors",
+                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -301,7 +301,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = "There is already a territory story with the same title",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Duplicated),
             };
         }
 
@@ -407,7 +407,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             return new CustomWebResponse(true)
             {
                 StatusCode = HttpStatusCode.InternalServerError,
-                Message = "Database error",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
             };
         }
 
