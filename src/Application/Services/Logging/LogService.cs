@@ -66,11 +66,11 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
             var odataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
             return GetOdataWebResponse(odataResponse, odataMapper);
         }
-        catch (ODataException ex)
+        catch (ODataException)
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter, data: ex.StackTrace),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter),
             };
         }
     }
@@ -108,11 +108,11 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
                 ResponseBody = entityReportService.GenerateReport(dataListDto),
             };
         }
-        catch (ODataException ex)
+        catch (ODataException)
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter, data: ex.StackTrace),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter),
             };
         }
     }

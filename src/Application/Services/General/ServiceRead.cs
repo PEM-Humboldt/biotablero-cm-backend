@@ -152,11 +152,11 @@ public abstract class ServiceRead<TE, TDto, TI>(
             var odataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
             return GetOdataWebResponse(odataResponse, mapper);
         }
-        catch (ODataException ex)
+        catch (ODataException)
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter, data: ex.StackTrace),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter),
             };
         }
     }

@@ -140,11 +140,11 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
 
             return GetOdataWebResponse(odataResponse, mapper);
         }
-        catch (ODataException ex)
+        catch (ODataException)
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter, data: ex.StackTrace),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter),
             };
         }
     }
