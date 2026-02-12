@@ -259,85 +259,6 @@ public static class ValidationErrorCodes
     }
 
     /// <summary>
-    /// Territory Stories errors.
-    /// </summary>
-    public static class TerritoryStories
-    {
-        /// <summary>
-        /// Entity not found.
-        /// </summary>
-        public const string NotFound = "STO_001";
-
-        /// <summary>
-        /// Entity disabled.
-        /// </summary>
-        public const string Disabled = "STO_002";
-
-        /// <summary>
-        /// Invalid keywords.
-        /// </summary>
-        public const string InvalidKeywords = "STO_003";
-
-        /// <summary>
-        /// Element duplicated.
-        /// </summary>
-        public const string Duplicated = "STO_004";
-
-        /// <summary>
-        /// Duplicated videos.
-        /// </summary>
-        public const string DuplicatedVideos = "STO_005";
-    }
-
-    /// <summary>
-    /// Territory Story Videos errors.
-    /// </summary>
-    public static class TerritoryStoryVideos
-    {
-        /// <summary>
-        /// Element duplicated.
-        /// </summary>
-        public const string Duplicated = "SVI_001";
-
-        /// <summary>
-        /// Entity not found.
-        /// </summary>
-        public const string NotFound = "SVI_002";
-    }
-
-    /// <summary>
-    /// Locations errors.
-    /// </summary>
-    public static class Locations
-    {
-        /// <summary>
-        /// Entity not found.
-        /// </summary>
-        public const string NotFound = "LOC_001";
-    }
-
-    /// <summary>
-    /// Tags errors.
-    /// </summary>
-    public static class Tags
-    {
-        /// <summary>
-        /// Entity not found.
-        /// </summary>
-        public const string NotFound = "TAG_001";
-
-        /// <summary>
-        /// Element duplicated.
-        /// </summary>
-        public const string Duplicated = "TAG_002";
-
-        /// <summary>
-        /// Element relationships.
-        /// </summary>
-        public const string HasRelationships = "TAG_003";
-    }
-
-    /// <summary>
     /// Resources errors.
     /// </summary>
     public static class Resources
@@ -394,6 +315,85 @@ public static class ValidationErrorCodes
         /// URL not found.
         /// </summary>
         public const string UrlNotFound = "RLI_003";
+    }
+
+    /// <summary>
+    /// Locations errors.
+    /// </summary>
+    public static class Locations
+    {
+        /// <summary>
+        /// Entity not found.
+        /// </summary>
+        public const string NotFound = "LOC_001";
+    }
+
+    /// <summary>
+    /// Tags errors.
+    /// </summary>
+    public static class Tags
+    {
+        /// <summary>
+        /// Entity not found.
+        /// </summary>
+        public const string NotFound = "TAG_001";
+
+        /// <summary>
+        /// Element duplicated.
+        /// </summary>
+        public const string Duplicated = "TAG_002";
+
+        /// <summary>
+        /// Element relationships.
+        /// </summary>
+        public const string HasRelationships = "TAG_003";
+    }
+
+    /// <summary>
+    /// Territory Stories errors.
+    /// </summary>
+    public static class TerritoryStories
+    {
+        /// <summary>
+        /// Entity not found.
+        /// </summary>
+        public const string NotFound = "STO_001";
+
+        /// <summary>
+        /// Entity disabled.
+        /// </summary>
+        public const string Disabled = "STO_002";
+
+        /// <summary>
+        /// Invalid keywords.
+        /// </summary>
+        public const string InvalidKeywords = "STO_003";
+
+        /// <summary>
+        /// Element duplicated.
+        /// </summary>
+        public const string Duplicated = "STO_004";
+
+        /// <summary>
+        /// Duplicated videos.
+        /// </summary>
+        public const string DuplicatedVideos = "STO_005";
+    }
+
+    /// <summary>
+    /// Territory Story Videos errors.
+    /// </summary>
+    public static class TerritoryStoryVideos
+    {
+        /// <summary>
+        /// Element duplicated.
+        /// </summary>
+        public const string Duplicated = "SVI_001";
+
+        /// <summary>
+        /// Entity not found.
+        /// </summary>
+        public const string NotFound = "SVI_002";
     }
 
     /// <summary>

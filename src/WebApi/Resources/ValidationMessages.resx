@@ -137,124 +137,20 @@
     <value>Disabled element</value>
     <comment/>
   </data>
-  <data name="INI_001" xml:space="preserve">
-    <value>Initiative not found</value>
-    <comment/>
-  </data>
-  <data name="INI_002" xml:space="preserve">
-    <value>At least one location is required</value>
-    <comment/>
-  </data>
-  <data name="INI_003" xml:space="preserve">
-    <value>At least one contact is required</value>
-    <comment/>
-  </data>
-  <data name="INI_004" xml:space="preserve">
-    <value>At least one user is required</value>
-    <comment/>
-  </data>
-  <data name="IJI_001" xml:space="preserve">
-    <value>At least one guest is required</value>
-    <comment/>
-  </data>
-  <data name="IJR_001" xml:space="preserve">
-    <value>User level must be either 'Member' or 'Reader'.</value>
-    <comment/>
-  </data>
-  <data name="STO_001" xml:space="preserve">
-    <value>Territory Story not found</value>
-    <comment/>
-  </data>
-  <data name="STO_002" xml:space="preserve">
-    <value>Territory Story disabled</value>
-    <comment/>
-  </data>
-  <data name="STO_003" xml:space="preserve">
-    <value>Invalid format. Keywords must be separated by commas. Spaces and special characters are not allowed. Only up to 5 keywords are allowed.</value>
-    <comment/>
-  </data>
-  <data name="LOC_001" xml:space="preserve">
-    <value>Location not found</value>
-    <comment/>
-  </data>
-  <data name="TAG_001" xml:space="preserve">
-    <value>Tag not found</value>
-    <comment/>
-  </data>
-  <data name="RES_001" xml:space="preserve">
-    <value>Resource not found</value>
-    <comment/>
-  </data>
-  <data name="RTY_001" xml:space="preserve">
-    <value>Resource type not found</value>
-    <comment/>
-  </data>
-  <data name="ICO_001" xml:space="preserve">
-    <value>There is already a contact with the same email and/or phone</value>
-    <comment/>
-  </data>
-  <data name="ILO_001" xml:space="preserve">
-    <value>The location already belongs to the initiative</value>
-    <comment/>
-  </data>
-  <data name="ILO_002" xml:space="preserve">
-    <value>Locality is only available for municipalities</value>
-    <comment/>
-  </data>
-  <data name="ILO_003" xml:space="preserve">
-    <value>At least one location is required per initiative</value>
-    <comment/>
-  </data>
-  <data name="INI_005" xml:space="preserve">
-    <value>There is already an initiative with the same name</value>
-    <comment/>
-  </data>
-  <data name="INI_006" xml:space="preserve">
-    <value>One or more users are invalid or do not exist</value>
-    <comment/>
-  </data>
   <data name="SYS_006" xml:space="preserve">
     <value>Duplicated element</value>
     <comment/>
   </data>
-  <data name="IUS_001" xml:space="preserve">
-    <value>The user already belongs to the initiative</value>
+  <data name="SYS_007" xml:space="preserve">
+    <value>Database error</value>
     <comment/>
   </data>
-  <data name="USR_001" xml:space="preserve">
-    <value>User is invalid or does not exist</value>
+  <data name="SYS_008" xml:space="preserve">
+    <value>Invalid filter</value>
     <comment/>
   </data>
-  <data name="IUS_002" xml:space="preserve">
-    <value>At least one leader is required per initiative</value>
-    <comment/>
-  </data>
-  <data name="IJI_002" xml:space="preserve">
-    <value>There are duplicate emails</value>
-    <comment/>
-  </data>
-  <data name="IJI_003" xml:space="preserve">
-    <value>One or more users with the entered email addresses are already in the system</value>
-    <comment/>
-  </data>
-  <data name="IJR_002" xml:space="preserve">
-    <value>There are one or more pending join requests</value>
-    <comment/>
-  </data>
-  <data name="IJR_003" xml:space="preserve">
-    <value>The join request has already been reviewed</value>
-    <comment/>
-  </data>
-  <data name="INI_007" xml:space="preserve">
-    <value>Invalid initiative locations data</value>
-    <comment/>
-  </data>
-  <data name="INI_008" xml:space="preserve">
-    <value>Invalid initiative locations (duplicated data)</value>
-    <comment/>
-  </data>
-  <data name="INI_009" xml:space="preserve">
-    <value>The number of leaders per initiative should be between 1 and 3</value>
+  <data name="SYS_009" xml:space="preserve">
+    <value>Row limit exceeded</value>
     <comment/>
   </data>
   <data name="FIL_001" xml:space="preserve">
@@ -273,6 +169,46 @@
     <value>Storage error</value>
     <comment/>
   </data>
+  <data name="FIL_005" xml:space="preserve">
+    <value>Invalid file size</value>
+    <comment/>
+  </data>
+  <data name="INI_001" xml:space="preserve">
+    <value>Initiative not found</value>
+    <comment/>
+  </data>
+  <data name="INI_002" xml:space="preserve">
+    <value>At least one location is required</value>
+    <comment/>
+  </data>
+  <data name="INI_003" xml:space="preserve">
+    <value>At least one contact is required</value>
+    <comment/>
+  </data>
+  <data name="INI_004" xml:space="preserve">
+    <value>At least one user is required</value>
+    <comment/>
+  </data>
+  <data name="INI_005" xml:space="preserve">
+    <value>There is already an initiative with the same name</value>
+    <comment/>
+  </data>
+  <data name="INI_006" xml:space="preserve">
+    <value>One or more users are invalid or do not exist</value>
+    <comment/>
+  </data>
+  <data name="INI_007" xml:space="preserve">
+    <value>Invalid initiative locations data</value>
+    <comment/>
+  </data>
+  <data name="INI_008" xml:space="preserve">
+    <value>Invalid initiative locations (duplicated data)</value>
+    <comment/>
+  </data>
+  <data name="INI_009" xml:space="preserve">
+    <value>The number of leaders per initiative should be between 1 and 3</value>
+    <comment/>
+  </data>
   <data name="INI_010" xml:space="preserve">
     <value>Invalid JSON object</value>
     <comment/>
@@ -285,28 +221,72 @@
     <value>Invalid image type</value>
     <comment/>
   </data>
+  <data name="ICO_001" xml:space="preserve">
+    <value>There is already a contact with the same email and/or phone</value>
+    <comment/>
+  </data>
+  <data name="ILO_001" xml:space="preserve">
+    <value>The location already belongs to the initiative</value>
+    <comment/>
+  </data>
+  <data name="ILO_002" xml:space="preserve">
+    <value>Locality is only available for municipalities</value>
+    <comment/>
+  </data>
+  <data name="ILO_003" xml:space="preserve">
+    <value>At least one location is required per initiative</value>
+    <comment/>
+  </data>
+  <data name="IUS_001" xml:space="preserve">
+    <value>The user already belongs to the initiative</value>
+    <comment/>
+  </data>
+  <data name="IUS_002" xml:space="preserve">
+    <value>At least one leader is required per initiative</value>
+    <comment/>
+  </data>
   <data name="IUS_003" xml:space="preserve">
     <value>Initiative leader limit exceeded</value>
+    <comment/>
+  </data>
+  <data name="IJI_001" xml:space="preserve">
+    <value>At least one guest is required</value>
+    <comment/>
+  </data>
+  <data name="IJI_002" xml:space="preserve">
+    <value>There are duplicate emails</value>
+    <comment/>
+  </data>
+  <data name="IJI_003" xml:space="preserve">
+    <value>One or more users with the entered email addresses are already in the system</value>
     <comment/>
   </data>
   <data name="IJI_004" xml:space="preserve">
     <value>Emails sending failed</value>
     <comment/>
   </data>
-  <data name="SYS_007" xml:space="preserve">
-    <value>Database error</value>
+  <data name="IJR_001" xml:space="preserve">
+    <value>User level must be either 'Member' or 'Reader'.</value>
     <comment/>
   </data>
-  <data name="SYS_008" xml:space="preserve">
-    <value>Invalid filter</value>
+  <data name="IJR_002" xml:space="preserve">
+    <value>There are one or more pending join requests</value>
     <comment/>
   </data>
-  <data name="SYS_009" xml:space="preserve">
-    <value>Row limit exceeded</value>
+  <data name="IJR_003" xml:space="preserve">
+    <value>The join request has already been reviewed</value>
     <comment/>
   </data>
-  <data name="FIL_005" xml:space="preserve">
-    <value>Invalid file size</value>
+  <data name="RES_001" xml:space="preserve">
+    <value>Resource not found</value>
+    <comment/>
+  </data>
+  <data name="RES_002" xml:space="preserve">
+    <value>There is already a resource with the same name</value>
+    <comment/>
+  </data>
+  <data name="RTY_001" xml:space="preserve">
+    <value>Resource type not found</value>
     <comment/>
   </data>
   <data name="RFI_001" xml:space="preserve">
@@ -325,8 +305,12 @@
     <value>URL not found</value>
     <comment/>
   </data>
-  <data name="RES_002" xml:space="preserve">
-    <value>There is already a resource with the same name</value>
+  <data name="LOC_001" xml:space="preserve">
+    <value>Location not found</value>
+    <comment/>
+  </data>
+  <data name="TAG_001" xml:space="preserve">
+    <value>Tag not found</value>
     <comment/>
   </data>
   <data name="TAG_002" xml:space="preserve">
@@ -337,20 +321,36 @@
     <value>The tag has relationships with one or more entities</value>
     <comment/>
   </data>
-  <data name="STO_004" xml:space="preserve">
-    <value>There is already a territory story with the same title</value>
+  <data name="STO_001" xml:space="preserve">
+    <value>Territory Story not found</value>
     <comment/>
   </data>
-  <data name="SVI_001" xml:space="preserve">
-    <value>There is already a video with the same URL</value>
+  <data name="STO_002" xml:space="preserve">
+    <value>Territory Story disabled</value>
+    <comment/>
+  </data>
+  <data name="STO_003" xml:space="preserve">
+    <value>Invalid format. Keywords must be separated by commas. Spaces and special characters are not allowed. Only up to 5 keywords are allowed.</value>
+    <comment/>
+  </data>
+  <data name="STO_004" xml:space="preserve">
+    <value>There is already a territory story with the same title</value>
     <comment/>
   </data>
   <data name="STO_005" xml:space="preserve">
     <value>There is already at least one video with the same URL</value>
     <comment/>
   </data>
+  <data name="SVI_001" xml:space="preserve">
+    <value>There is already a video with the same URL</value>
+    <comment/>
+  </data>
   <data name="SVI_002" xml:space="preserve">
     <value>The video URL does not exist</value>
+    <comment/>
+  </data>
+  <data name="USR_001" xml:space="preserve">
+    <value>User is invalid or does not exist</value>
     <comment/>
   </data>
 </root>
