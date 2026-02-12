@@ -67,7 +67,6 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -111,7 +110,6 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }

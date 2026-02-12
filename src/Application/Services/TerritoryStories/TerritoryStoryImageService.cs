@@ -115,7 +115,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -215,7 +214,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }

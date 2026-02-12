@@ -110,7 +110,6 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -194,7 +193,6 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }

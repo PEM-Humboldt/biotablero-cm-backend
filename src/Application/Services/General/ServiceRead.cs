@@ -71,7 +71,7 @@ public abstract class ServiceRead<TE, TDto, TI>(
             return new(true)
             {
                 StatusCode = HttpStatusCode.NotFound,
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound, propertyName: nameof(TE)),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
     }

@@ -1,8 +1,10 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Tools;
 
 using System;
+using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.Domain;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Http;
@@ -29,15 +31,18 @@ public sealed class WebTools(IHttpContextAccessor httpContextAccessor) : Control
         {
             return Ok(response.ResponseBody);
         }
-        else
-        {
-            var errorObject = new
-            {
-                error = response.Message,
-                data = response.ResponseBody,
-            };
 
-            return StatusCode((int)response.StatusCode, errorObject);
+        if (string.IsNullOrEmpty(response.Message) && response.ResponseBody is IEnumerable<ApiValidationError>)
+        {
+            response.Message = ValidationErrorCodes.ValidationErrorsMsg;
         }
+
+        var errorObject = new
+        {
+            error = response.Message,
+            data = response.ResponseBody,
+        };
+
+        return StatusCode((int)response.StatusCode, errorObject);
     }
 }

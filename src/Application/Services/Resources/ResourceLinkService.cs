@@ -93,7 +93,6 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -180,7 +179,6 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }

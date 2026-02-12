@@ -116,7 +116,6 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -204,7 +203,6 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }

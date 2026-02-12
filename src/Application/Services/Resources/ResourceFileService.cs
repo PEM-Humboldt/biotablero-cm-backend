@@ -88,7 +88,6 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -178,7 +177,6 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }

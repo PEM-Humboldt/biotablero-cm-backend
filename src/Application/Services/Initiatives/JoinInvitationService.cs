@@ -124,7 +124,6 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }

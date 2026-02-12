@@ -101,7 +101,6 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -180,7 +179,6 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }

@@ -159,7 +159,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
@@ -270,7 +269,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             return new CustomWebResponse(true)
             {
-                Message = ValidationErrorCodes.ValidationErrorsMsg,
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
