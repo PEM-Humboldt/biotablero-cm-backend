@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
@@ -32,7 +33,8 @@ public sealed class WebTools(IHttpContextAccessor httpContextAccessor) : Control
             return Ok(response.ResponseBody);
         }
 
-        if (string.IsNullOrEmpty(response.Message) && response.ResponseBody is IEnumerable<ApiValidationError>)
+        // Add custom error message for validations
+        if (string.IsNullOrEmpty(response.Message) && response.StatusCode == HttpStatusCode.BadRequest && response.ResponseBody is IEnumerable<ApiValidationError>)
         {
             response.Message = ValidationErrorCodes.ValidationErrorsMsg;
         }
