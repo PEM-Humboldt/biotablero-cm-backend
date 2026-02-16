@@ -13,6 +13,14 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 public interface IJoinRequestRepository : IRepository<JoinRequest, int>
 {
     /// <summary>
+    /// Get elements by user name.
+    /// </summary>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Elements list.</returns>
+    Task<IEnumerable<JoinRequest>> GetByUserNameAsync(string userName, CancellationToken ct = default);
+
+    /// <summary>
     /// Add initiative filter.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>

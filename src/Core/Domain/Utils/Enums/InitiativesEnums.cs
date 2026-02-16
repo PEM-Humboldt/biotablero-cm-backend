@@ -61,5 +61,10 @@ public static class InitiativesEnums
         /// Rejected status.
         /// </summary>
         Rejected,
+
+        /// <summary>
+        /// Cancelled status.
+        /// </summary>
+        Cancelled,
     }
 }
