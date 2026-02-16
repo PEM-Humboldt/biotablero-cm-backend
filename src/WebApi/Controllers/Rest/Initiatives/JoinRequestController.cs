@@ -52,7 +52,7 @@ public class JoinRequestController(
     /// Get my join requests.
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Selected entity data.</returns>
+    /// <returns>Join Requests list.</returns>
     [Authorize]
     [HttpGet("MyRequests")]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestListResponseExample))]
