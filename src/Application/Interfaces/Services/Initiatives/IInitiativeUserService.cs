@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// <summary>
 /// Initiative User service interface.
 /// </summary>
-public interface IInitiativeUserService : IRead<InitiativeUser, int>, IAdd<InitiativeUserDto>, IDelete<int>
+public interface IInitiativeUserService : IRead<InitiativeUser, int>, IAdd<InitiativeUserDto>
 {
     /// <summary>
     /// Get entities by initiative.
@@ -26,8 +26,19 @@ public interface IInitiativeUserService : IRead<InitiativeUser, int>, IAdd<Initi
     /// </summary>
     /// <param name="id">Element identifier.</param>
     /// <param name="reviewerUserName">Reviewer user name.</param>
+    /// <param name="userIsAdmin">User administrator flag.</param>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string reviewerUserName, InitiativeUserDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string reviewerUserName, bool userIsAdmin, InitiativeUserDto entityData, CancellationToken ct = default);
+
+    /// <summary>
+    /// Delete element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="userIsAdmin">User administrator flag.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default);
 }

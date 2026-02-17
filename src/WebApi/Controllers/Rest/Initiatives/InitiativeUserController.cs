@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Initiatives;
 
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -82,13 +83,14 @@ public class InitiativeUserController(
     /// <returns>Updated entity data.</returns>
     [HttpPut("{id}")]
     [Consumes("application/json")]
-    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [Authorize]
     [SwaggerRequestExample(typeof(InitiativeUserDto), typeof(InitiativeUserEditRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] InitiativeUserDto requestData, CancellationToken ct)
     {
         var reviewerUserName = HttpContext.GetUserName();
-        var response = await entityService.UpdateAsync(id, reviewerUserName, requestData, ct);
+        var userIsAdmin = HttpContext.GetRoles().Contains(IamConstants.RoleModuleAdmin);
+        var response = await entityService.UpdateAsync(id, reviewerUserName, userIsAdmin, requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -99,10 +101,11 @@ public class InitiativeUserController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
-    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [Authorize]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var response = await entityService.DeleteAsync(id, ct);
+        var userIsAdmin = HttpContext.GetRoles().Contains(IamConstants.RoleModuleAdmin);
+        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), userIsAdmin, ct);
         return webTools.CustomResponse(response);
     }
 }
