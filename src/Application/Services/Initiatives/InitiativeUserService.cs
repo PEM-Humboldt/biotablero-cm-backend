@@ -212,7 +212,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         // Validate number of leaders
         var leaders = await entityRepository.GetByInitiativeAndLevelAsync(id, entity.InitiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
 
-        if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader && !leaders.Any())
+        if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader && leaders.Count() <= 1)
         {
             return new(true)
             {
