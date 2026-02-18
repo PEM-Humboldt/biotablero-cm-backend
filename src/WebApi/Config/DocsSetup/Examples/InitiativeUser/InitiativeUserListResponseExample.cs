@@ -20,7 +20,7 @@ public class InitiativeUserListResponseExample : IExamplesProvider<List<Initiati
         new()
         {
             Id = 0,
-            UserName = "Example",
+            UserName = "initiative-leader@example.com",
             FocusArea = "Focus area example",
             Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Leader),
         }

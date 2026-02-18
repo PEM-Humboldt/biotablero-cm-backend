@@ -23,7 +23,7 @@ public class UserOdataResponseExample : IExamplesProvider<Dictionary<string, obj
                 Id = Guid.Empty,
                 Email = "user@example.com",
                 EmailVerified = false,
-                Username = "general-user",
+                Username = "user@example.com",
                 FirstName = "User",
                 LastName = "Example",
             },

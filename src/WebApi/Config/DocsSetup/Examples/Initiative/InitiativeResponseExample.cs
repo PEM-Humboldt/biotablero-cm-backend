@@ -61,7 +61,7 @@ public class InitiativeResponseExample : IExamplesProvider<InitiativeDto>
             {
                 Id = 1,
                 InitiativeId = 1,
-                UserName = "general-admin",
+                UserName = "initiative-leader@example.com",
                 Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Leader),
             },
         ],

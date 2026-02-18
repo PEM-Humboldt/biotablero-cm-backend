@@ -19,7 +19,7 @@ public class JoinRequestResponseExample : IExamplesProvider<JoinRequestDto>
     {
         Id = 0,
         InitiativeId = 0,
-        UserName = "Example",
+        UserName = "initiative-leader@example.com",
         ReviewerUserName = "ReviewerExample",
         CreationDate = DateTime.Now,
         ResponseDate = DateTime.Now,
