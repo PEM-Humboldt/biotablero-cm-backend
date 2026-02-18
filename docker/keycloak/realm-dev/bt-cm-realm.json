@@ -15,6 +15,7 @@
         {
             "username": "admin@example.com",
             "enabled": true,
+            "emailVerified": true,
             "firstName": "Admin",
             "lastName": "Example",
             "email": "admin@example.com",
@@ -31,6 +32,7 @@
         {
             "username": "user@example.com",
             "enabled": true,
+            "emailVerified": true,
             "firstName": "General User",
             "lastName": "Example",
             "email": "user@example.com",
@@ -47,6 +49,7 @@
         {
             "username": "initiative-leader@example.com",
             "enabled": true,
+            "emailVerified": true,
             "firstName": "Initiative Leader",
             "lastName": "Example",
             "email": "initiative-leader@example.com",
@@ -63,6 +66,7 @@
         {
             "username": "initiative-member@example.com",
             "enabled": true,
+            "emailVerified": true,
             "firstName": "Initiative Member",
             "lastName": "Example",
             "email": "initiative-member@example.com",
