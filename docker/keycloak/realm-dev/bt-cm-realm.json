@@ -13,9 +13,25 @@
             }
         },
         {
-            "username": "general-user",
+            "username": "admin@example.com",
             "enabled": true,
-            "firstName": "User",
+            "firstName": "Admin",
+            "lastName": "Example",
+            "email": "admin@example.com",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "pass"
+                }
+            ],
+            "realmRoles": [
+                "Admin"
+            ]
+        },
+        {
+            "username": "user@example.com",
+            "enabled": true,
+            "firstName": "General User",
             "lastName": "Example",
             "email": "user@example.com",
             "credentials": [
@@ -29,11 +45,11 @@
             ]
         },
         {
-            "username": "general-admin",
+            "username": "initiative-leader@example.com",
             "enabled": true,
-            "firstName": "Admin",
+            "firstName": "Initiative Leader",
             "lastName": "Example",
-            "email": "admin@example.com",
+            "email": "initiative-leader@example.com",
             "credentials": [
                 {
                     "type": "password",
@@ -41,7 +57,23 @@
                 }
             ],
             "realmRoles": [
-                "Admin"
+                "User"
+            ]
+        },
+        {
+            "username": "initiative-member@example.com",
+            "enabled": true,
+            "firstName": "Initiative Member",
+            "lastName": "Example",
+            "email": "initiative-member@example.com",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "pass"
+                }
+            ],
+            "realmRoles": [
+                "User"
             ]
         }
     ],
