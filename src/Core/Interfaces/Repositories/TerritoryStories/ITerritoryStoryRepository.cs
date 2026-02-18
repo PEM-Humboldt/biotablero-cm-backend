@@ -37,7 +37,7 @@ public interface ITerritoryStoryRepository : IRepository<TerritoryStory, int>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if the modification is authorized. False otherwise.</returns>
-    Task<bool> AuthorizedEntityModifyAsync(int? id, string userName, CancellationToken ct = default);
+    Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default);
 
     /// <summary>
     /// Check if element is duplicated.

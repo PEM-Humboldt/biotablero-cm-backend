@@ -47,7 +47,7 @@ public interface ITerritoryStoryImageRepository : IRepository<TerritoryStoryImag
     Task<TerritoryStoryImage> MarkAsFeaturedContentAsync(int id, CancellationToken ct = default);
 
     /// <summary>
-    /// Adds an entity in the database and upload the image in the storage service.
+    /// Adds an entity in the database and upload an image in the storage service.
     /// </summary>
     /// <param name="entity">The entity to add.</param>
     /// <param name="imageStream">Image stream.</param>
@@ -57,7 +57,7 @@ public interface ITerritoryStoryImageRepository : IRepository<TerritoryStoryImag
     Task<TerritoryStoryImage> AddAsync(TerritoryStoryImage entity, Stream imageStream, string contentType, CancellationToken ct = default);
 
     /// <summary>
-    /// Update an entity in the database and upload the image in the storage service.
+    /// Update an entity in the database and upload an image in the storage service.
     /// </summary>
     /// <param name="entity">The entity to add.</param>
     /// <param name="imageStream">Image stream.</param>

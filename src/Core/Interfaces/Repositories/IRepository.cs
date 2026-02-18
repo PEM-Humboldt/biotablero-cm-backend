@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -129,4 +130,17 @@ public interface IRepository<TE, TI>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of elements in the query.</returns>
     Task<List<TE>> QueryToListAsync(IQueryable<TE> query, CancellationToken ct = default);
+
+    /// <summary>
+    /// General transaction executor.
+    /// </summary>
+    /// <typeparam name="TR">Result type.</typeparam>
+    /// <param name="action">Transaction action.</param>
+    /// <param name="errorContext">Error message for context.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<TR> ExecuteInTransactionAsync<TR>(
+    Func<CancellationToken, Task<TR>> action,
+    string errorContext,
+    CancellationToken ct = default);
 }

@@ -30,7 +30,7 @@ public class InitiativeTagService : IInitiativeTagService
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
-    /// <param name="tagRepository">Initiative Tag repository.</param>
+    /// <param name="tagRepository">Tag repository.</param>
     public InitiativeTagService(
         IInitiativeTagRepository entityRepository,
         ILogger logger,
@@ -57,7 +57,7 @@ public class InitiativeTagService : IInitiativeTagService
             };
         }
 
-        // Validate initiative tag
+        // Validate tag
         var tagExists = await tagRepository.AnyAsync(tagId, ct);
 
         if (!tagExists)

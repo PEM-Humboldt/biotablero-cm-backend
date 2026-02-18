@@ -600,7 +600,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
-                    b.Property<DateTime>("PublicationDate")
+                    b.Property<DateTime?>("PublicationDate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("publication_date");
 

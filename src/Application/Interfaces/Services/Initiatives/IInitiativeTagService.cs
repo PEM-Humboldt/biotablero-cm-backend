@@ -15,7 +15,7 @@ public interface IInitiativeTagService : IDelete<int>
     /// Add element.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="tagId">Initiative tag identifier.</param>
+    /// <param name="tagId">Tag identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<CustomWebResponse> AddAsync(int initiativeId, int tagId, CancellationToken ct = default);

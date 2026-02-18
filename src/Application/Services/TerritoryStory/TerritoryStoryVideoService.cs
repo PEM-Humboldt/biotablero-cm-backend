@@ -131,7 +131,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         }
 
         // Validate user level and permissions
-        var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(entityData.TerritoryStoryId, userName, ct);
+        var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(entityData.TerritoryStoryId.Value, userName, ct);
 
         if (!authorizedUserAction)
         {

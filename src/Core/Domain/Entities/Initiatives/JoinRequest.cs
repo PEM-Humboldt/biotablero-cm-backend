@@ -26,7 +26,7 @@ public class JoinRequest : BaseEntity<int>, IAggregateRoot
     public DateTime CreationDate { get; set; }
 
     /// <summary>
-    /// Join Request creation date.
+    /// Join Request response date.
     /// </summary>
     public DateTime? ResponseDate { get; set; }
 

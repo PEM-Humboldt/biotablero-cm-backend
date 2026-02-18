@@ -10,6 +10,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 /// <summary>
 /// Initiative User repository.
 /// </summary>
@@ -19,8 +21,11 @@ public class InitiativeUserRepository : Repository<InitiativeUser, int>, IInitia
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public InitiativeUserRepository(GeneralContext dbContext)
-        : base(dbContext)
+    /// <param name="logger">System logger.</param>
+    public InitiativeUserRepository(
+        GeneralContext dbContext,
+        ILogger logger)
+        : base(dbContext, logger)
     {
     }
 
@@ -31,9 +36,12 @@ public class InitiativeUserRepository : Repository<InitiativeUser, int>, IInitia
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<bool> AnyByInitiativeUserAndLevelAsync(int initiativeId, string userName, int levelId, CancellationToken ct = default) =>
+    public async Task<bool> AnyByInitiativeUserAndLevelAsync(int initiativeId, string userName, int? levelId, CancellationToken ct = default) =>
         await dbContext.InitiativeUsers
-            .Where(e => e.InitiativeId == initiativeId && e.UserName == userName && e.LevelId == levelId)
+            .Where(e =>
+                e.InitiativeId == initiativeId &&
+                e.UserName == userName &&
+                (!levelId.HasValue || e.LevelId == levelId))
             .AnyAsync(ct);
 
     /// <inheritdoc/>

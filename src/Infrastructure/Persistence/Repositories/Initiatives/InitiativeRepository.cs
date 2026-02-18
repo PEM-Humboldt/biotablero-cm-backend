@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 
 using NetTopologySuite.Geometries;
 
+using Serilog;
+
 /// <summary>
 /// Initiative repository.
 /// </summary>
@@ -22,8 +24,11 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    public InitiativeRepository(GeneralContext dbContext)
-        : base(dbContext)
+    /// <param name="logger">System logger.</param>
+    public InitiativeRepository(
+        GeneralContext dbContext,
+        ILogger logger)
+        : base(dbContext, logger)
     {
     }
 

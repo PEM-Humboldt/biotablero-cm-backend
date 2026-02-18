@@ -6,11 +6,14 @@ using System.Linq;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
 
+using Serilog;
+
 /// <summary>
 /// Log repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
-public class LogRepository(GeneralContext dbContext) : Repository<LogEntity, Guid>(dbContext), ILogRepository
+/// <param name="logger">System logger.</param>
+public class LogRepository(GeneralContext dbContext, ILogger logger) : Repository<LogEntity, Guid>(dbContext, logger), ILogRepository
 {
     /// <inheritdoc/>
     public IQueryable<LogEntity> IncludeOdataFilters(IQueryable<LogEntity> query) =>

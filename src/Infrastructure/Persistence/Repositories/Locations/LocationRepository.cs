@@ -10,11 +10,14 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 /// <summary>
 /// Location repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
-public class LocationRepository(GeneralContext dbContext) : Repository<Location, int>(dbContext), ILocationRepository
+/// <param name="logger">System logger.</param>
+public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repository<Location, int>(dbContext, logger), ILocationRepository
 {
     /// <inheritdoc/>
     public new async Task<Location> GetByIdAsync(int id, CancellationToken ct = default) =>

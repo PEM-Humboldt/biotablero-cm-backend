@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 
 /// <summary>
-/// Video service.
+/// Video Helper service.
 /// </summary>
 public class VideoHelperService : IVideoHelperService
 {

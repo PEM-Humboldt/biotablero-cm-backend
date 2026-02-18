@@ -21,19 +21,16 @@ using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initiat
 /// </summary>
 public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestRepository
 {
-    private readonly ILogger logger;
-
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">Logger.</param>
+    /// <param name="logger">System logger.</param>
     public JoinRequestRepository(
         GeneralContext dbContext,
         ILogger logger)
-        : base(dbContext)
+        : base(dbContext, logger)
     {
-        this.logger = logger;
     }
 
     /// <inheritdoc/>

@@ -15,7 +15,6 @@ using IAVH.BioTablero.CM.WebApi.Utils.Requests.TerritoryStoryImage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 using Swashbuckle.AspNetCore.Filters;
 
@@ -30,7 +29,7 @@ using Swashbuckle.AspNetCore.Filters;
 [ApiConventionType(typeof(CustomApiConventions))]
 public class TerritoryStoryImageController(
     IWebTools webTools,
-    ITerritoryStoryImageService entityService) : ODataController
+    ITerritoryStoryImageService entityService) : ControllerBase
 {
     /// <summary>
     /// Get entity.

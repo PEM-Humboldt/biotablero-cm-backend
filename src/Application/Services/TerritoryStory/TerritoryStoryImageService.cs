@@ -131,7 +131,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         }
 
         // Validate user level and permissions
-        var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(entityData.TerritoryStoryId, userName, ct);
+        var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(entityData.TerritoryStoryId.Value, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -183,7 +183,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         entity.FeaturedContent = false;
 
         // Save data
-        entity = await entityRepository.AddAsync(entity, compressedImageStream, ContentTypes.ImageWebp, ct);
+        entity = await entityRepository.AddAsync(entity, compressedImageStream, MediaTypeNames.Image.ImageWebp, ct);
 
         entityData = mapper.Map(entity);
 
@@ -213,6 +213,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         // Validate image
         var updateHasFile = !formFile.IsEmpty();
+
         if (updateHasFile)
         {
             if (!formFile.IsValidImage())
@@ -267,6 +268,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         // Update entity data
         entity.Description = entityData.Description;
+
         if (!updateHasFile)
         {
             await entityRepository.UpdateAsync(entity, ct);
@@ -285,7 +287,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
                 };
             }
 
-            await entityRepository.UpdateAsync(entity, compressedImageStream, ContentTypes.ImageWebp, ct);
+            await entityRepository.UpdateAsync(entity, compressedImageStream, MediaTypeNames.Image.ImageWebp, ct);
         }
 
         entityData = mapper.Map(entity);

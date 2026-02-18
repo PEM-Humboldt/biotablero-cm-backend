@@ -22,4 +22,13 @@ public static class FileConstants
     public const int TerritoryStoryImageSizeLimit = 5242880; // 5 MB
 
     #endregion
+
+    #region Resource
+
+    /// <summary>
+    /// Territory Story image size limit.
+    /// </summary>
+    public const int ResourceFileSizeLimit = 10485760; // 10 MB
+
+    #endregion
 }
