@@ -46,4 +46,12 @@ public interface IResourceRepository : IRepository<Resource, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
     Task<bool> IsDuplicatedAsync(int id, string name, CancellationToken ct = default);
+
+    /// <summary>
+    /// Check if elements exists by tag.
+    /// </summary>
+    /// <param name="tagId">Tag identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    Task<bool> AnyByTagAsync(int tagId, CancellationToken ct = default);
 }

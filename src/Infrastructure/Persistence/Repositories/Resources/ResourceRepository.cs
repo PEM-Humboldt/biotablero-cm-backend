@@ -72,6 +72,12 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
             .AnyAsync(ct);
 
     /// <inheritdoc/>
+    public async Task<bool> AnyByTagAsync(int tagId, CancellationToken ct = default) =>
+        await dbContext.Resources
+            .Where(e => e.ResourceTags.Any(e => e.TagId == tagId))
+            .AnyAsync(ct);
+
+    /// <inheritdoc/>
     public override async Task<Resource> AddAsync(Resource entity, CancellationToken ct = default)
     {
         await base.AddAsync(entity, ct);
