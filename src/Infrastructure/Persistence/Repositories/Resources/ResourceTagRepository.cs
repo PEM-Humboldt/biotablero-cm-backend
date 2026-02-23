@@ -30,6 +30,13 @@ public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagR
     }
 
     /// <inheritdoc/>
+    public override async Task<ResourceTag> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await dbContext.ResourceTags
+                .Include(e => e.Tag)
+            .Where(e => e.Id == id)
+            .FirstOrDefaultAsync(ct);
+
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int resourceId, int tagId, CancellationToken ct = default) =>
         await dbContext.ResourceTags
             .Where(e => e.ResourceId == resourceId && e.TagId == tagId)
@@ -54,7 +61,7 @@ public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagR
                     await dbContext.SaveChangesAsync(ct);
                 }
 
-                return entity;
+                return await GetByIdAsync(entity.Id, ct);
             },
             "Resource tag add transaction error",
             ct);

@@ -5,7 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Domain;
+using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
@@ -25,6 +27,7 @@ public class ResourceTagService : IResourceTagService
     private readonly IResourceTagRepository entityRepository;
     private readonly IValidationErrorTranslator errorTranslator;
     private readonly ILogger logger;
+    private readonly IMapperRead<ResourceTag, ResourceTagDto> mapper;
     private readonly IResourceRepository resourceRepository;
     private readonly ITagRepository tagRepository;
     private readonly IResourceService resourceService;
@@ -33,6 +36,7 @@ public class ResourceTagService : IResourceTagService
     /// Constructor.
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
+    /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="resourceRepository">Resource repository.</param>
@@ -40,6 +44,7 @@ public class ResourceTagService : IResourceTagService
     /// <param name="resourceService">Resource service.</param>
     public ResourceTagService(
         IResourceTagRepository entityRepository,
+        IMapperRead<ResourceTag, ResourceTagDto> mapper,
         IValidationErrorTranslator errorTranslator,
         ILogger logger,
         IResourceRepository resourceRepository,
@@ -47,6 +52,7 @@ public class ResourceTagService : IResourceTagService
         IResourceService resourceService)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.errorTranslator = errorTranslator;
         this.logger = logger;
         this.resourceRepository = resourceRepository;
@@ -110,13 +116,17 @@ public class ResourceTagService : IResourceTagService
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
+        var entityData = mapper.Map(entity);
 
         // Send email
         await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
-        logger.AddLog(LogType.Create, "Added resource tag relationship", "{@EntityData}", entity);
+        logger.AddLog(LogType.Create, "Added resource tag relationship", "{@EntityData}", entityData);
 
-        return new();
+        return new()
+        {
+            ResponseBody = entityData,
+        };
     }
 
     /// <inheritdoc/>
