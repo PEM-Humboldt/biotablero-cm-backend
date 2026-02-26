@@ -24,6 +24,7 @@ public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .EmailAddress()
+                .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue)
             .MaximumLength(100);
 
         RuleFor(dto => dto.Phone)
