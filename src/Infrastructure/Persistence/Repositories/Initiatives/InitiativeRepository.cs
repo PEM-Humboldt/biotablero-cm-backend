@@ -55,7 +55,7 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     /// <inheritdoc/>
     public async Task<IEnumerable<Initiative>> GetByUserNameAsync(string userName, CancellationToken ct = default) =>
         await dbContext.Initiatives
-            .Include(e => e.InitiativeUsers)
+            .Include(e => e.InitiativeUsers.Where(u => u.UserName == userName))
             .Where(e => e.InitiativeUsers.Any(e => e.UserName == userName))
             .ToListAsync(ct);
 
