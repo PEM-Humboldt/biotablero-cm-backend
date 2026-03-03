@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Services.TerritoryStory;
+﻿namespace IAVH.BioTablero.CM.Application.Services.TerritoryStories;
 
 using System;
 using System.Linq;
@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 using FluentValidation;
 
+using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
@@ -30,6 +31,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     private new readonly ITerritoryStoryVideoRepository entityRepository;
     private readonly IValidator<TerritoryStoryVideoDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto> mapper;
     private readonly ITerritoryStoryRepository territoryStoryRepository;
     private readonly IVideoHelperService videoHelperService;
 
@@ -44,7 +46,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     /// <param name="videoHelperService">Video Helper service.</param>
     public TerritoryStoryVideoService(
         ITerritoryStoryVideoRepository entityRepository,
-        IMapper<TerritoryStoryVideo, TerritoryStoryVideoDto> mapper,
+        IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto> mapper,
         IValidator<TerritoryStoryVideoDto> entityValidator,
         ILogger logger,
         ITerritoryStoryRepository territoryStoryRepository,
@@ -52,6 +54,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.territoryStoryRepository = territoryStoryRepository;
@@ -251,7 +254,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         }
 
         // Update entity data
-        entity.FileUrl = new Uri(entityData.FileUrl);
+        mapper.Update(entity, entityData);
 
         await entityRepository.UpdateAsync(entity, ct);
 

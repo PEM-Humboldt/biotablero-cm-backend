@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 using FluentValidation;
 
+using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Application.Services.General;
@@ -37,6 +38,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     private new readonly IResourceRepository entityRepository;
     private readonly IValidator<ResourceDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateReadAndUpdate<Resource, ResourceDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IRepository<ResourceType, int> resourceTypeRepository;
@@ -61,7 +63,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <param name="iamService">IAM service.</param>
     public ResourceService(
         IResourceRepository entityRepository,
-        IMapper<Resource, ResourceDto> mapper,
+        IMapperCreateReadAndUpdate<Resource, ResourceDto> mapper,
         IValidator<ResourceDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
@@ -74,6 +76,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
@@ -275,7 +278,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.Name, ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entityData.Name, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -297,15 +300,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Update entity data
-        entity.ResourceTypeId = entityData.ResourceType.Id.Value;
-        entity.Name = entityData.Name;
-        entity.Description = entityData.Description;
-        entity.IsDraft = entityData.IsDraft;
-
-        if (!entity.IsDraft)
-        {
-            entity.PublicationDate = DateTime.Now;
-        }
+        mapper.Update(entity, entityData);
 
         await entityRepository.UpdateAsync(entity, ct);
 

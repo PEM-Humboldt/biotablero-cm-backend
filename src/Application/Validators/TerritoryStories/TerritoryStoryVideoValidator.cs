@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Validators.TerritoryStory;
+﻿namespace IAVH.BioTablero.CM.Application.Validators.TerritoryStories;
 
 using FluentValidation;
 
@@ -21,7 +21,7 @@ public class TerritoryStoryVideoValidator : AbstractValidator<TerritoryStoryVide
 
         RuleFor(dto => dto.FileUrl)
             .NotEmpty()
-                .WithMessage("File url is required")
+                .WithMessage("{PropertyName} is required")
             .Matches(RegExprConstants.YouTubeVideoUrl)
             .MaximumLength(150);
 
@@ -29,7 +29,7 @@ public class TerritoryStoryVideoValidator : AbstractValidator<TerritoryStoryVide
         {
             RuleFor(dto => dto.TerritoryStoryId)
                 .NotNull()
-                    .WithMessage("Territory Story identifier is required");
+                    .WithMessage("{PropertyName} is required");
         });
     }
 }

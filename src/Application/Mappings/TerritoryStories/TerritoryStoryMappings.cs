@@ -1,18 +1,18 @@
-﻿namespace IAVH.BioTablero.CM.Application.Mappings.TerritoryStory;
+﻿namespace IAVH.BioTablero.CM.Application.Mappings.TerritoryStories;
 
 using System;
 using System.Linq;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 /// <summary>
 /// Territory Story mappings.
 /// </summary>
 public class TerritoryStoryMappings(
-    IMapper<TerritoryStoryImage, TerritoryStoryImageDto> territoryStoryImageMappings,
-    IMapper<TerritoryStoryVideo, TerritoryStoryVideoDto> territoryStoryVideoMappings) : IMapper<TerritoryStory, TerritoryStoryDto>
+    IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto> territoryStoryImageMappings,
+    IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto> territoryStoryVideoMappings) : IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto>
 {
     /// <inheritdoc/>
     public TerritoryStoryDto Map(TerritoryStory entity)
@@ -58,5 +58,17 @@ public class TerritoryStoryMappings(
             Images = dto.Images?.Select(territoryStoryImageMappings.Map).ToList(),
             Videos = dto.Videos?.Select(territoryStoryVideoMappings.Map).ToList(),
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(TerritoryStory entity, TerritoryStoryDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.Title = dto.Title;
+        entity.Text = dto.Text;
+        entity.Keywords = dto.Keywords;
+        entity.Restricted = dto.Restricted ?? entity.Restricted;
     }
 }

@@ -1,11 +1,11 @@
-﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 using Microsoft.AspNetCore.OData.Query;

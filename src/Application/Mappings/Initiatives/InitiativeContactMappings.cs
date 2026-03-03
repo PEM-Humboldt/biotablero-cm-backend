@@ -3,13 +3,13 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
 /// Initiative contact mappings.
 /// </summary>
-public class InitiativeContactMappings : IMapper<InitiativeContact, InitiativeContactDto>
+public class InitiativeContactMappings : IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto>
 {
     /// <inheritdoc/>
     public InitiativeContactDto Map(InitiativeContact entity)
@@ -36,5 +36,15 @@ public class InitiativeContactMappings : IMapper<InitiativeContact, InitiativeCo
             Phone = dto.Phone,
             Email = dto.Email,
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(InitiativeContact entity, InitiativeContactDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.Email = dto.Email;
+        entity.Phone = dto.Phone;
     }
 }

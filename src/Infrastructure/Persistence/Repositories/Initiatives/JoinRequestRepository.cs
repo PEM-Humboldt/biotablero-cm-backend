@@ -45,60 +45,52 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, int requestStatusId, CancellationToken ct = default)
-    {
-        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
-
-        try
-        {
-            var entity = await dbContext.JoinRequests
-                .Where(e => e.Id == requestId)
-                .FirstOrDefaultAsync(ct);
-
-            // Ignore transaction for empty or reviewed entities or empty reviewer user name
-            if (entity == null || entity.StatusId != (int)JoinRequestStatusEnum.UnderReview || string.IsNullOrEmpty(reviewerUserName))
+    public async Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, int requestStatusId, CancellationToken ct = default) =>
+        await ExecuteInTransactionAsync(
+            async ct =>
             {
-                return entity;
-            }
+                var entity = await dbContext.JoinRequests
+                    .Where(e => e.Id == requestId)
+                    .FirstOrDefaultAsync(ct);
 
-            if (requestStatusId == (int)JoinRequestStatusEnum.Approved)
-            {
-                // Update initiative and user relationship
-                var userBelongsToinitiative = await dbContext.InitiativeUsers
-                    .Where(e => e.UserName == entity.UserName && e.InitiativeId == entity.InitiativeId)
-                    .AnyAsync(ct);
-
-                if (!userBelongsToinitiative)
+                // Ignore transaction for empty or reviewed entities or empty reviewer user name
+                if (entity == null || entity.StatusId != (int)JoinRequestStatusEnum.UnderReview || string.IsNullOrEmpty(reviewerUserName))
                 {
-                    var initiativeUserEntity = new InitiativeUser()
-                    {
-                        InitiativeId = entity.InitiativeId,
-                        UserName = entity.UserName,
-                        LevelId = entity.LevelId,
-                    };
-
-                    await dbContext.InitiativeUsers.AddAsync(initiativeUserEntity, ct);
-                    await dbContext.SaveChangesAsync(ct);
+                    return entity;
                 }
-            }
 
-            // Update request data
-            entity.StatusId = requestStatusId;
-            entity.ReviewerUserName = reviewerUserName;
-            entity.ResponseDate = DateTime.Now;
+                if (requestStatusId == (int)JoinRequestStatusEnum.Approved)
+                {
+                    // Update initiative and user relationship
+                    var userBelongsToinitiative = await dbContext.InitiativeUsers
+                        .Where(e => e.UserName == entity.UserName && e.InitiativeId == entity.InitiativeId)
+                        .AnyAsync(ct);
 
-            await dbContext.SaveChangesAsync(ct);
-            await transaction.CommitAsync(ct);
+                    if (!userBelongsToinitiative)
+                    {
+                        var initiativeUserEntity = new InitiativeUser()
+                        {
+                            InitiativeId = entity.InitiativeId,
+                            UserName = entity.UserName,
+                            LevelId = entity.LevelId,
+                        };
 
-            return entity;
-        }
-        catch (DbUpdateException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Join request review transaction error");
-            return null;
-        }
-    }
+                        await dbContext.InitiativeUsers.AddAsync(initiativeUserEntity, ct);
+                        await dbContext.SaveChangesAsync(ct);
+                    }
+                }
+
+                // Update request data
+                entity.StatusId = requestStatusId;
+                entity.ReviewerUserName = reviewerUserName;
+                entity.ResponseDate = DateTime.Now;
+
+                await dbContext.SaveChangesAsync(ct);
+
+                return entity;
+            },
+            "Join request review transaction error",
+            ct);
 
     /// <inheritdoc/>
     public async Task<Dictionary<string, int>> GetPendingOldRequestsAsync(int daysOld, CancellationToken ct = default)

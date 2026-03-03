@@ -20,7 +20,7 @@ using Serilog;
 public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repository<Location, int>(dbContext, logger), ILocationRepository
 {
     /// <inheritdoc/>
-    public new async Task<Location> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<Location> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.Locations
             .Include(e => e.Parent)
             .Where(e => e.Id == id)

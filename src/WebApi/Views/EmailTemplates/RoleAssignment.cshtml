@@ -1,12 +1,10 @@
 @model IAVH.BioTablero.CM.Core.Domain.Models.Email.RoleAssignmentEmailData
 @{
-    var subject = $"Ahora eres {Model?.LevelName} de {Model?.InitiativeName}";
-    var content = $"Se te ha asignado el rol de {Model?.LevelName} en la iniciativa '{Model?.InitiativeName}' por el usuario '{Model?.ReviewerUserName}'.";
-    Model.Subject = subject;
-    Model.Content = content;
+    Model.Subject = $"Ahora eres {Model?.LevelName} de {Model?.InitiativeName}";
+    Model.Content = $"Se te ha asignado el rol de {Model?.LevelName} en la iniciativa '{Model?.InitiativeName}' por el usuario '{Model?.ReviewerUserName}'.";
 }
 
 <div style="margin: auto;width: 20rem;">
     <h2 style="color: #e84a5f;">Asignación de Rol</h2>
-    <p>@Html.Raw(content)</p>
+    <p>@Html.Raw(Model?.Content)</p>
 </div>

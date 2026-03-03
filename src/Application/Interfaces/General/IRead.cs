@@ -3,7 +3,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.Utils;
+using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 using Microsoft.AspNetCore.OData.Query;

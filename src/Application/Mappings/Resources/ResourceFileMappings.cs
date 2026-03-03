@@ -3,13 +3,13 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 
 /// <summary>
 /// Resource File mappings.
 /// </summary>
-public class ResourceFileMappings : IMapper<ResourceFile, ResourceFileDto>
+public class ResourceFileMappings : IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto>
 {
     /// <inheritdoc/>
     public ResourceFileDto Map(ResourceFile entity)
@@ -37,5 +37,14 @@ public class ResourceFileMappings : IMapper<ResourceFile, ResourceFileDto>
             Url = dto.Url,
             Name = dto.Name,
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(ResourceFile entity, ResourceFileDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.Name = dto.Name;
     }
 }

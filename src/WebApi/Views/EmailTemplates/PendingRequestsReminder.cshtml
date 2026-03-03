@@ -1,12 +1,10 @@
 @model IAVH.BioTablero.CM.Core.Domain.Models.Email.PendingRequestsReminderEmailData
 @{
-    var subject = "Tienes solicitudes de ingreso pendientes de revisión";
-    var content = $"Tienes <b>{Model?.PendingRequestsCount}</b> solicitudes de ingreso que necesitan tu revisión.";
-    Model.Subject = subject;
-    Model.Content = content;
+    Model.Subject = "Tienes solicitudes de ingreso pendientes de revisión";
+    Model.Content = $"Tienes <b>{Model?.PendingRequestsCount}</b> solicitudes de ingreso que necesitan tu revisión.";
 }
 
 <div style="margin: auto;width: 20rem;">
     <h2 style="color: #e84a5f;">Recordatorio de Revisión</h2>
-    <p>@Html.Raw(content)</p>
+    <p>@Html.Raw(Model?.Content)</p>
 </div>

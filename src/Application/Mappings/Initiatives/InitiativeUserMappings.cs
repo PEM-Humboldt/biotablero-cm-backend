@@ -4,7 +4,7 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
@@ -12,7 +12,7 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 /// <summary>
 /// Initiative contact mappings.
 /// </summary>
-public class InitiativeUserMappings : IMapper<InitiativeUser, InitiativeUserDto>
+public class InitiativeUserMappings : IMapperCreateReadAndUpdate<InitiativeUser, InitiativeUserDto>
 {
     /// <inheritdoc/>
     public InitiativeUserDto Map(InitiativeUser entity)
@@ -43,5 +43,15 @@ public class InitiativeUserMappings : IMapper<InitiativeUser, InitiativeUserDto>
             LevelId = dto.Level.Id,
             CreationDate = dto.CreationDate ?? DateTime.Now,
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(InitiativeUser entity, InitiativeUserDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.LevelId = dto.Level.Id;
+        entity.FocusArea = dto.FocusArea;
     }
 }

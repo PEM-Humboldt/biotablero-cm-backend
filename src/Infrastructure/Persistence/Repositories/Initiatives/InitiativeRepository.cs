@@ -33,7 +33,7 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     }
 
     /// <inheritdoc/>
-    public new async Task<Initiative> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<Initiative> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.Initiatives
             .Include(e => e.InitiativeContacts)
             .Include(e => e.InitiativeUsers)

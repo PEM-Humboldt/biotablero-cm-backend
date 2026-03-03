@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Validators.TerritoryStory;
+﻿namespace IAVH.BioTablero.CM.Application.Validators.TerritoryStories;
 
 using FluentValidation;
 
@@ -21,17 +21,17 @@ public class TerritoryStoryValidator : AbstractValidator<TerritoryStoryDto>
 
         RuleFor(dto => dto.Title)
             .NotEmpty()
-                .WithMessage("Title is required")
+                .WithMessage("{PropertyName} is required")
             .MaximumLength(100);
 
         RuleFor(dto => dto.Text)
             .NotEmpty()
-                .WithMessage("Text is required")
+                .WithMessage("{PropertyName} is required")
             .MaximumLength(2000);
 
         RuleFor(dto => dto.Restricted)
             .NotNull()
-                .WithMessage("Restricted flag is required");
+                .WithMessage("{PropertyName} is required");
 
         RuleFor(dto => dto.Keywords)
             .Matches(RegExprConstants.Keywords)
@@ -42,11 +42,11 @@ public class TerritoryStoryValidator : AbstractValidator<TerritoryStoryDto>
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithMessage("Initiative identifier is required");
+                    .WithMessage("{PropertyName} is required");
 
             RuleFor(dto => dto.AuthorUserName)
                 .NotEmpty()
-                    .WithMessage("Author is required")
+                    .WithMessage("{PropertyName} is required")
                 .MaximumLength(75);
 
             RuleForEach(dto => dto.Videos)

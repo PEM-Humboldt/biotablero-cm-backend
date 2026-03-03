@@ -29,7 +29,7 @@ public class JoinInvitationRepository : Repository<JoinInvitation, int>, IJoinIn
     }
 
     /// <inheritdoc/>
-    public new async Task<JoinInvitation> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<JoinInvitation> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.JoinInvitations
             .Include(e => e.Guests)
             .Where(e => e.Id == id)

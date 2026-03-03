@@ -4,14 +4,14 @@ using System;
 using System.Linq;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
 /// Join invitation mappings.
 /// </summary>
 public class JoinInvitationMappings(
-    IMapper<JoinInvitationGuest, JoinInvitationGuestDto> joinInvitationGuestMappings) : IMapper<JoinInvitation, JoinInvitationDto>
+    IMapperCreateAndRead<JoinInvitationGuest, JoinInvitationGuestDto> joinInvitationGuestMappings) : IMapperCreateAndRead<JoinInvitation, JoinInvitationDto>
 {
     /// <inheritdoc/>
     public JoinInvitationDto Map(JoinInvitation entity)

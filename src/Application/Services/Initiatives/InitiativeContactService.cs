@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 using FluentValidation;
 
+using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -27,6 +28,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     private new readonly IInitiativeContactRepository entityRepository;
     private readonly IValidator<InitiativeContactDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
@@ -39,13 +41,14 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeContactService(
         IInitiativeContactRepository entityRepository,
-        IMapper<InitiativeContact, InitiativeContactDto> mapper,
+        IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto> mapper,
         IValidator<InitiativeContactDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
@@ -159,8 +162,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         }
 
         // Update entity data
-        entity.Email = entityData.Email;
-        entity.Phone = entityData.Phone;
+        mapper.Update(entity, entityData);
 
         await entityRepository.UpdateAsync(entity, ct);
 

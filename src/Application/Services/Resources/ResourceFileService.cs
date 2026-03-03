@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 using FluentValidation;
 
+using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -30,6 +31,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     private new readonly IResourceFileRepository entityRepository;
     private readonly IValidator<ResourceFileDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto> mapper;
     private readonly IResourceRepository resourceRepository;
     private readonly IResourceService resourceService;
 
@@ -44,7 +46,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     /// <param name="resourceService">Resource service.</param>
     public ResourceFileService(
         IResourceFileRepository entityRepository,
-        IMapper<ResourceFile, ResourceFileDto> mapper,
+        IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto> mapper,
         IValidator<ResourceFileDto> entityValidator,
         ILogger logger,
         IResourceRepository resourceRepository,
@@ -52,6 +54,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.resourceRepository = resourceRepository;
@@ -223,7 +226,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         }
 
         // Update entity data
-        entity.Name = entityData.Name;
+        mapper.Update(entity, entityData);
 
         if (!updateHasFile)
         {

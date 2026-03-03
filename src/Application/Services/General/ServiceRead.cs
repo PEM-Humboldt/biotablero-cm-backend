@@ -6,8 +6,9 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Application.Utils;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
@@ -24,7 +25,7 @@ using ODataUtilsCustom = IAVH.BioTablero.CM.Application.Utils.ODataUtils;
 /// <typeparam name="TE">Entity type.</typeparam>
 /// <typeparam name="TDto">DTO class type.</typeparam>
 /// <typeparam name="TI">Entity identifier type.</typeparam>
-public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityRepository, IMapper<TE, TDto> mapper) : IRead<TE, TI>
+public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityRepository, IMapperRead<TE, TDto> mapper) : IRead<TE, TI>
     where TDto : class, IDto
     where TE : BaseEntity<TI>, IAggregateRoot
 {
@@ -36,7 +37,7 @@ public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityReposi
     /// <summary>
     /// Entity mapper.
     /// </summary>
-    private protected readonly IMapper<TE, TDto> mapper = mapper;
+    private protected readonly IMapperRead<TE, TDto> mapper = mapper;
 
     /// <inheritdoc/>
     public virtual async Task<bool> AnyAsync(TI id, CancellationToken ct = default) => await entityRepository.AnyAsync(id, ct);
@@ -116,7 +117,7 @@ public abstract class ServiceRead<TE, TDto, TI>(IRepository<TE, TI> entityReposi
     /// <param name="odataResponse">OData response data.</param>
     /// <param name="responseMapper">Mapper for response.</param>
     /// <returns>Custom OData web response.</returns>
-    private protected static CustomWebResponse GetOdataWebResponse<TDtoM>(ODataResponse<TE> odataResponse, IMapper<TE, TDtoM> responseMapper)
+    private protected static CustomWebResponse GetOdataWebResponse<TDtoM>(ODataResponse<TE> odataResponse, IMapperRead<TE, TDtoM> responseMapper)
         where TDtoM : class, IDto => new()
         {
             ResponseBody = new Dictionary<string, object>()

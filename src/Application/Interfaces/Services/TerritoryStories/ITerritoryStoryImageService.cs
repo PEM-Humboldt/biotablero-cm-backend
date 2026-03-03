@@ -1,17 +1,18 @@
-﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStory;
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
+using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
 /// <summary>
-/// Territory Story Video service interface.
+/// Territory Story Image service interface.
 /// </summary>
-public interface ITerritoryStoryVideoService : IRead<TerritoryStoryVideo, int>
+public interface ITerritoryStoryImageService : IRead<TerritoryStoryImage, int>
 {
     /// <summary>
     /// Get element.
@@ -35,9 +36,10 @@ public interface ITerritoryStoryVideoService : IRead<TerritoryStoryVideo, int>
     /// </summary>
     /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
+    /// <param name="formFile">Image data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.
@@ -45,9 +47,19 @@ public interface ITerritoryStoryVideoService : IRead<TerritoryStoryVideo, int>
     /// <param name="id">Element identifier.</param>
     /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
+    /// <param name="formFile">Image data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default);
+
+    /// <summary>
+    /// Featured content action.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default);
 
     /// <summary>
     /// Delete element.

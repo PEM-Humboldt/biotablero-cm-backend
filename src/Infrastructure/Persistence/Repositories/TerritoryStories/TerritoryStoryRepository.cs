@@ -31,7 +31,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     }
 
     /// <inheritdoc/>
-    public new async Task<TerritoryStory> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<TerritoryStory> GetByIdAsync(int id, CancellationToken ct = default) =>
         await IncludeCustomEntities()
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
@@ -101,47 +101,39 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<TerritoryStory> MarkAsFeaturedContentAsync(int id, CancellationToken ct = default)
-    {
-        using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
-
-        try
-        {
-            var entity = await dbContext.TerritoryStories
-                .Where(e => e.Id == id)
-                .FirstOrDefaultAsync(ct);
-
-            if (entity == null)
+    public async Task<TerritoryStory> MarkAsFeaturedContentAsync(int id, CancellationToken ct = default) =>
+        await ExecuteInTransactionAsync(
+            async ct =>
             {
+                var entity = await dbContext.TerritoryStories
+                    .Where(e => e.Id == id)
+                    .FirstOrDefaultAsync(ct);
+
+                if (entity == null)
+                {
+                    return entity;
+                }
+
+                if (!entity.FeaturedContent)
+                {
+                    entity.FeaturedContent = true;
+                }
+
+                var storiesFromSameinitiative = await dbContext.TerritoryStories
+                    .Where(e => e.Id != entity.Id && e.InitiativeId == entity.InitiativeId)
+                    .ToListAsync(ct);
+
+                foreach (var territoryStory in storiesFromSameinitiative)
+                {
+                    territoryStory.FeaturedContent = false;
+                }
+
+                await dbContext.SaveChangesAsync(ct);
+
                 return entity;
-            }
-
-            if (!entity.FeaturedContent)
-            {
-                entity.FeaturedContent = true;
-            }
-
-            var storiesFromSameinitiative = await dbContext.TerritoryStories
-                .Where(e => e.Id != entity.Id && e.InitiativeId == entity.InitiativeId)
-                .ToListAsync(ct);
-
-            foreach (var territoryStory in storiesFromSameinitiative)
-            {
-                territoryStory.FeaturedContent = false;
-            }
-
-            await dbContext.SaveChangesAsync(ct);
-            await transaction.CommitAsync(ct);
-
-            return entity;
-        }
-        catch (DbUpdateException ex)
-        {
-            await transaction.RollbackAsync(ct);
-            logger.Error(ex, "Territory Story transaction error");
-            return null;
-        }
-    }
+            },
+            "Territory Story Image error",
+            ct);
 
     /// <summary>
     /// Include custom entities.

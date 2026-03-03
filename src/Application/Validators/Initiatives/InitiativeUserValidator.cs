@@ -25,23 +25,23 @@ public class InitiativeUserValidator : AbstractValidator<InitiativeUserDto>
 
         RuleFor(dto => dto.Level)
             .NotNull()
-                .WithMessage("User level cannot be null")
+                .WithMessage("{PropertyName} cannot be null")
             .ChildRules(level =>
             {
                 level.RuleFor(levelEnumDto => levelEnumDto.Name)
                     .IsEnumName(typeof(InitiativeUserLevel), caseSensitive: false)
-                        .WithMessage("User level invalid");
+                        .WithMessage("{PropertyName} invalid");
             });
 
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithMessage("Initiative identifier is required");
+                    .WithMessage("{PropertyName} is required");
 
             RuleFor(dto => dto.UserName)
                 .NotEmpty()
-                    .WithMessage("User name is required")
+                    .WithMessage("{PropertyName} is required")
                 .MaximumLength(75);
         });
     }

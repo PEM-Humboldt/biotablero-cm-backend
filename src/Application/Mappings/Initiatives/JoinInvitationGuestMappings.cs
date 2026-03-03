@@ -3,13 +3,13 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
 /// Join invitation guest mappings.
 /// </summary>
-public class JoinInvitationGuestMappings : IMapper<JoinInvitationGuest, JoinInvitationGuestDto>
+public class JoinInvitationGuestMappings : IMapperCreateAndRead<JoinInvitationGuest, JoinInvitationGuestDto>
 {
     /// <inheritdoc/>
     public JoinInvitationGuestDto Map(JoinInvitationGuest entity)

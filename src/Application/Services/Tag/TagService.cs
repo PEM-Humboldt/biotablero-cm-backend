@@ -1,14 +1,14 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Tag;
 
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using FluentValidation;
 
+using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Tags;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -29,6 +29,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     private new readonly ITagRepository entityRepository;
     private readonly IValidator<TagDto> entityValidator;
     private readonly ILogger logger;
+    private new readonly IMapperCreateReadAndUpdate<Tag, TagDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
@@ -41,13 +42,14 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     /// <param name="initiativeRepository">Initiative repository.</param>
     public TagService(
         ITagRepository entityRepository,
-        IMapper<Tag, TagDto> mapper,
+        IMapperCreateReadAndUpdate<Tag, TagDto> mapper,
         IValidator<TagDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper)
     {
         this.entityRepository = entityRepository;
+        this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
@@ -137,8 +139,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         }
 
         // Update entity data
-        entity.Name = entityData.Name;
-        entity.Url = entityData.Url != null ? new Uri(entityData.Url) : null;
+        mapper.Update(entity, entityData);
 
         await entityRepository.UpdateAsync(entity, ct);
 

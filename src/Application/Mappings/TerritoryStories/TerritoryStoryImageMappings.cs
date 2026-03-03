@@ -1,15 +1,15 @@
-﻿namespace IAVH.BioTablero.CM.Application.Mappings.TerritoryStory;
+﻿namespace IAVH.BioTablero.CM.Application.Mappings.TerritoryStories;
 
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 /// <summary>
 /// Territory Story Image mappings.
 /// </summary>
-public class TerritoryStoryImageMappings : IMapper<TerritoryStoryImage, TerritoryStoryImageDto>
+public class TerritoryStoryImageMappings : IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto>
 {
     /// <inheritdoc/>
     public TerritoryStoryImageDto Map(TerritoryStoryImage entity)
@@ -39,5 +39,14 @@ public class TerritoryStoryImageMappings : IMapper<TerritoryStoryImage, Territor
             Description = dto.Description,
             FeaturedContent = dto.FeaturedContent,
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(TerritoryStoryImage entity, TerritoryStoryImageDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.Description = dto.Description;
     }
 }
