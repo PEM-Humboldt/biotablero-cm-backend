@@ -29,6 +29,7 @@ public class ResourceLinkValidator : AbstractValidator<ResourceLinkDto>
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .Matches(RegExprConstants.Url)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue)
             .MaximumLength(250);
 
         RuleSet("Create", () =>

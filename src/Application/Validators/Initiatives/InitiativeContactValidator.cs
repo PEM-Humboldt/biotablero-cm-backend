@@ -29,6 +29,7 @@ public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto
 
         RuleFor(dto => dto.Phone)
             .Matches(RegExprConstants.Phone)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue)
             .MinimumLength(7)
             .MaximumLength(15);
 

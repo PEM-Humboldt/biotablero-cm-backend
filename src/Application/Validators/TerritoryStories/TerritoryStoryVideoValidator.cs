@@ -24,6 +24,7 @@ public class TerritoryStoryVideoValidator : AbstractValidator<TerritoryStoryVide
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .Matches(RegExprConstants.YouTubeVideoUrl)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue)
             .MaximumLength(150);
 
         RuleSet("Create", () =>
