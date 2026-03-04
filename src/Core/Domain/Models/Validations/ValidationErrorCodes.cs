@@ -59,6 +59,11 @@ public static class ValidationErrorCodes
         /// OData row limit exceeded.
         /// </summary>
         public const string OdataRowLimitExceeded = "SYS_009";
+
+        /// <summary>
+        /// Invalid text length.
+        /// </summary>
+        public const string InvalidTextLength = "SYS_010";
     }
 
     /// <summary>

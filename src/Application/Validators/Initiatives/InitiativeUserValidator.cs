@@ -22,7 +22,8 @@ public class InitiativeUserValidator : AbstractValidator<InitiativeUserDto>
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.FocusArea)
-            .MaximumLength(200);
+            .MaximumLength(200)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Level)
             .NotNull()
@@ -43,7 +44,8 @@ public class InitiativeUserValidator : AbstractValidator<InitiativeUserDto>
             RuleFor(dto => dto.UserName)
                 .NotEmpty()
                     .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
-                .MaximumLength(75);
+                .MaximumLength(75)
+                    .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
         });
     }
 }

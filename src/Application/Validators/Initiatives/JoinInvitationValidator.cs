@@ -22,10 +22,12 @@ public class JoinInvitationValidator : AbstractValidator<JoinInvitationDto>
         RuleFor(dto => dto.Creator)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
-            .MaximumLength(75);
+            .MaximumLength(75)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Message)
-            .MaximumLength(350);
+            .MaximumLength(350)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleSet("Create", () =>
         {

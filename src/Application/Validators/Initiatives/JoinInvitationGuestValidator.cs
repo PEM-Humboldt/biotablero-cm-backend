@@ -24,6 +24,7 @@ public class JoinInvitationGuestValidator : AbstractValidator<JoinInvitationGues
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .EmailAddress()
                 .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue)
-            .MaximumLength(100);
+            .MaximumLength(100)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
     }
 }

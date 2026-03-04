@@ -22,7 +22,8 @@ public class TerritoryStoryImageValidator : AbstractValidator<TerritoryStoryImag
         RuleFor(dto => dto.Description)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
-            .MaximumLength(500);
+            .MaximumLength(500)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleSet("Create", () =>
         {

@@ -153,6 +153,10 @@
     <value>Row limit exceeded</value>
     <comment/>
   </data>
+  <data name="SYS_010" xml:space="preserve">
+    <value>Invalid text length</value>
+    <comment/>
+  </data>
   <data name="FIL_001" xml:space="preserve">
     <value>The file is empty</value>
     <comment/>

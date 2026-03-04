@@ -23,14 +23,16 @@ public class ResourceLinkValidator : AbstractValidator<ResourceLinkDto>
         RuleFor(dto => dto.Name)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
-            .MaximumLength(100);
+            .MaximumLength(100)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Url)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .Matches(RegExprConstants.Url)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue)
-            .MaximumLength(250);
+            .MaximumLength(250)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleSet("Create", () =>
         {
