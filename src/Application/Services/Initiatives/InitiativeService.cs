@@ -51,6 +51,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     private readonly ILogger logger;
     private new readonly IMapperCreateReadAndUpdate<Initiative, InitiativeDto> mapper;
     private new readonly IInitiativeRepository entityRepository;
+    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly ILocationRepository locationRepository;
     private readonly ILocationService locationService;
     private readonly IIamService iamService;
@@ -67,6 +68,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
+    /// <param name="initiativeUserRepository">Initiative user repository</param>
     /// <param name="locationRepository">Initiative Location repository.</param>
     /// <param name="locationService">Location service.</param>
     /// <param name="iamService">IAM service.</param>
@@ -78,6 +80,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         IValidationErrorTranslator errorTranslator,
         IValidator<InitiativeDto> entityValidator,
         ILogger logger,
+        IInitiativeUserRepository initiativeUserRepository,
         ILocationRepository locationRepository,
         ILocationService locationService,
         IIamService iamService,
@@ -89,6 +92,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
+        this.initiativeUserRepository = initiativeUserRepository;
         this.locationRepository = locationRepository;
         this.locationService = locationService;
         this.iamService = iamService;
@@ -281,7 +285,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, InitiativeDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, bool userIsAdmin, InitiativeDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -314,6 +318,20 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
+        }
+
+        // Validate user permissions
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(id, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
         }
 
         // Update entity data

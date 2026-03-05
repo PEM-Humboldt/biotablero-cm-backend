@@ -11,6 +11,7 @@ using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
+using IAVH.BioTablero.CM.WebApi.Utils;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -60,6 +61,20 @@ public class InitiativeController(
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
+    /// Get active initiatives with coordinates by location.
+    /// </summary>
+    /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>List of initiatives with coordinates.</returns>
+    [HttpGet("GetByLocation")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeGeoDataResponseExample))]
+    public async Task<IActionResult> GetByLocation([FromQuery] int? locationId = null, CancellationToken ct = default)
+    {
+        var response = await entityService.GetByLocationAsync(locationId, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -115,12 +130,12 @@ public class InitiativeController(
     /// <returns>Updated entity data.</returns>
     [HttpPut("{id}")]
     [Consumes("application/json")]
-    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [Authorize]
     [SwaggerRequestExample(typeof(InitiativeDto), typeof(InitiativeEditRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] InitiativeDto requestData, CancellationToken ct)
     {
-        var response = await entityService.UpdateAsync(id, requestData, ct);
+        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), HttpContext.UserIsAdmin(), requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -228,20 +243,6 @@ public class InitiativeController(
     public async Task<IActionResult> Disable(int id, CancellationToken ct)
     {
         var response = await entityService.DisableAsync(id, ct);
-        return webTools.CustomResponse(response);
-    }
-
-    /// <summary>
-    /// Get active initiatives with coordinates by location.
-    /// </summary>
-    /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>List of initiatives with coordinates.</returns>
-    [HttpGet("GetByLocation")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeGeoDataResponseExample))]
-    public async Task<IActionResult> GetByLocation([FromQuery] int? locationId = null, CancellationToken ct = default)
-    {
-        var response = await entityService.GetByLocationAsync(locationId, ct);
         return webTools.CustomResponse(response);
     }
 }
