@@ -57,6 +57,7 @@ public class InitiativeTagService : IInitiativeTagService
         this.mapper = mapper;
         this.errorTranslator = errorTranslator;
         this.logger = logger;
+        this.initiativeUserRepository = initiativeUserRepository;
         this.initiativeRepository = initiativeRepository;
         this.tagRepository = tagRepository;
     }
@@ -64,17 +65,6 @@ public class InitiativeTagService : IInitiativeTagService
     /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(string userName, bool userIsAdmin, int initiativeId, int tagId, CancellationToken ct = default)
     {
-        // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
-
-        if (!initiativeExists)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
-            };
-        }
-
         // Validate user permissions
         if (!userIsAdmin)
         {
@@ -87,6 +77,17 @@ public class InitiativeTagService : IInitiativeTagService
                     StatusCode = HttpStatusCode.Forbidden,
                 };
             }
+        }
+
+        // Validate initiative
+        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
+
+        if (!initiativeExists)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
+            };
         }
 
         // Validate tag
@@ -133,21 +134,13 @@ public class InitiativeTagService : IInitiativeTagService
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default)
     {
-        // Validate entity
-        var entity = await entityRepository.GetByIdAsync(id, ct);
-
-        if (entity == null)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
         // Validate user permissions
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+        var initiativeId = entity?.InitiativeId ?? 0;
+
         if (!userIsAdmin)
         {
-            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
 
             if (!authorizedUserAction)
             {
@@ -156,6 +149,15 @@ public class InitiativeTagService : IInitiativeTagService
                     StatusCode = HttpStatusCode.Forbidden,
                 };
             }
+        }
+
+        // Validate entity
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
         }
 
         await entityRepository.DeleteAsync(entity, ct);

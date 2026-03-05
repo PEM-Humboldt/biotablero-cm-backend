@@ -173,6 +173,32 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string reviewerUserName, bool userIsAdmin, InitiativeUserDto entityData, CancellationToken ct = default)
     {
+        // Validate user permissions
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+        var initiativeId = entity?.InitiativeId ?? 0;
+
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await entityRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, reviewerUserName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
+        }
+
+        // Validate entity
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
@@ -182,31 +208,6 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
-        }
-
-        // Validate entity
-        var entity = await entityRepository.GetByIdAsync(id, ct);
-
-        if (entity == null)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
-        // Validate user permissions
-        if (!userIsAdmin)
-        {
-            var authorizedUserAction = await entityRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, reviewerUserName, (int)InitiativeUserLevelEnum.Leader, ct);
-
-            if (!authorizedUserAction)
-            {
-                return new(true)
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                };
-            }
         }
 
         // Validate number of leaders
@@ -251,21 +252,13 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default)
     {
-        // Validate entity
-        var entity = await entityRepository.GetByIdAsync(id, ct);
-
-        if (entity == null)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
         // Validate user permissions
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+        var initiativeId = entity?.InitiativeId ?? 0;
+
         if (!userIsAdmin)
         {
-            var authorizedUserAction = await entityRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+            var authorizedUserAction = await entityRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
 
             if (!authorizedUserAction)
             {
@@ -274,6 +267,15 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
                     StatusCode = HttpStatusCode.Forbidden,
                 };
             }
+        }
+
+        // Validate entity
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
         }
 
         // Validate number of leaders

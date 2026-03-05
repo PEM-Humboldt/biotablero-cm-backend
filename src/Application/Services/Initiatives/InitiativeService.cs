@@ -287,6 +287,20 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, bool userIsAdmin, InitiativeDto entityData, CancellationToken ct = default)
     {
+        // Validate user permissions
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(id, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
@@ -318,20 +332,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
-        }
-
-        // Validate user permissions
-        if (!userIsAdmin)
-        {
-            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(id, userName, (int)InitiativeUserLevelEnum.Leader, ct);
-
-            if (!authorizedUserAction)
-            {
-                return new(true)
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                };
-            }
         }
 
         // Update entity data
