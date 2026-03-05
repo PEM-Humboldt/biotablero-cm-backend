@@ -99,7 +99,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
 
         if (entity != null)
         {
-            var userBelongsToInitiative = await entityRepository.UserRelationshipExistsAsync(id, userName, ct);
+            var userBelongsToInitiative = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
             if (!userBelongsToInitiative && entity.IsDraft)
             {
@@ -244,7 +244,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceDto entityData, CancellationToken ct = default)
     {
         // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.UserRelationshipExistsAsync(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -366,7 +366,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
         // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.UserRelationshipExistsAsync(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)
         {

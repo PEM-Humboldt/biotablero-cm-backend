@@ -52,7 +52,7 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
     }
 
     /// <inheritdoc/>
-    public async Task<bool> UserRelationshipExistsAsync(int id, string userName, CancellationToken ct = default) =>
+    public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default) =>
         await dbContext.Resources
             .Include(e => e.Initiative)
                 .ThenInclude(e => e.InitiativeUsers)

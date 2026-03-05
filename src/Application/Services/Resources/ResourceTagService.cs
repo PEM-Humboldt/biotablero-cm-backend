@@ -64,7 +64,7 @@ public class ResourceTagService : IResourceTagService
     public async Task<CustomWebResponse> AddAsync(string userName, int resourceId, int tagId, CancellationToken ct = default)
     {
         // Validate user permissions
-        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(resourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -136,7 +136,7 @@ public class ResourceTagService : IResourceTagService
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
 
-        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(resourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
 
         if (!authorizedUserAction)
         {
