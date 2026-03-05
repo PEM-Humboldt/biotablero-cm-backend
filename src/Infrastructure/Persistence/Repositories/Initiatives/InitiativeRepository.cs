@@ -62,13 +62,20 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default) =>
-        await dbContext.Initiatives
+    public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default)
+    {
+        if (userIsAdmin)
+        {
+            return true;
+        }
+
+        return await dbContext.Initiatives
             .Include(e => e.InitiativeUsers)
             .Where(e =>
                 e.Id == id &&
                 e.InitiativeUsers.Any(e => e.UserName == userName && e.LevelId == (int)InitiativeUserLevelEnum.Leader))
             .AnyAsync(ct);
+    }
 
     /// <inheritdoc/>
     public async Task<bool> AnyByNameAsync(string name, CancellationToken ct = default) =>

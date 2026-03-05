@@ -60,17 +60,12 @@ public class InitiativeTagService : IInitiativeTagService
     public async Task<CustomWebResponse> AddAsync(string userName, bool userIsAdmin, int initiativeId, int tagId, CancellationToken ct = default)
     {
         // Validate user permissions
-        if (!userIsAdmin)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, userIsAdmin, ct))
         {
-            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
-
-            if (!authorizedUserAction)
+            return new(true)
             {
-                return new(true)
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                };
-            }
+                StatusCode = HttpStatusCode.Forbidden,
+            };
         }
 
         // Validate initiative
@@ -132,17 +127,12 @@ public class InitiativeTagService : IInitiativeTagService
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
 
-        if (!userIsAdmin)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, userIsAdmin, ct))
         {
-            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
-
-            if (!authorizedUserAction)
+            return new(true)
             {
-                return new(true)
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                };
-            }
+                StatusCode = HttpStatusCode.Forbidden,
+            };
         }
 
         // Validate entity

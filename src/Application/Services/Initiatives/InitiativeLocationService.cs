@@ -83,17 +83,12 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         // Validate user permissions
         var initiativeId = entityData.InitiativeId ?? 0;
 
-        if (!userIsAdmin)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, userIsAdmin, ct))
         {
-            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
-
-            if (!authorizedUserAction)
+            return new(true)
             {
-                return new(true)
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                };
-            }
+                StatusCode = HttpStatusCode.Forbidden,
+            };
         }
 
         // Validate data
@@ -174,17 +169,12 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
 
-        if (!userIsAdmin)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, userIsAdmin, ct))
         {
-            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
-
-            if (!authorizedUserAction)
+            return new(true)
             {
-                return new(true)
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                };
-            }
+                StatusCode = HttpStatusCode.Forbidden,
+            };
         }
 
         // Validate entity
@@ -261,17 +251,12 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         var initiativeId = entity?.InitiativeId ?? 0;
 
         // Validate user permissions
-        if (!userIsAdmin)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, userIsAdmin, ct))
         {
-            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
-
-            if (!authorizedUserAction)
+            return new(true)
             {
-                return new(true)
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                };
-            }
+                StatusCode = HttpStatusCode.Forbidden,
+            };
         }
 
         // Validate entity

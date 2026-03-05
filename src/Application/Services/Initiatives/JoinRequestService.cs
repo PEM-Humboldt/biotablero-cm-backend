@@ -90,9 +90,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     public async Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default)
     {
         // Validate user level
-        var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
-
-        if (!authorizedUserAction)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, false, ct))
         {
             return new(true)
             {
@@ -214,9 +212,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
 
-        var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, entityData.ReviewerUserName, ct);
-
-        if (!authorizedUserAction)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, entityData.ReviewerUserName, false, ct))
         {
             return new(true)
             {

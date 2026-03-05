@@ -80,9 +80,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     public async Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct = default)
     {
         // Validate user level
-        var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
-
-        if (!authorizedUserAction)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, false, ct))
         {
             return new(true)
             {
@@ -101,9 +99,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     public async Task<CustomWebResponse> AddAsync(JoinInvitationDto entityData, CancellationToken ct = default)
     {
         // Validate user permissions
-        var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(entityData.InitiativeId, entityData.Creator, ct);
-
-        if (!authorizedUserAction)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(entityData.InitiativeId, entityData.Creator, false, ct))
         {
             return new(true)
             {

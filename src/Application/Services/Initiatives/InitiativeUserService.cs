@@ -177,17 +177,12 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
 
-        if (!userIsAdmin)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, reviewerUserName, userIsAdmin, ct))
         {
-            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, reviewerUserName, ct);
-
-            if (!authorizedUserAction)
+            return new(true)
             {
-                return new(true)
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                };
-            }
+                StatusCode = HttpStatusCode.Forbidden,
+            };
         }
 
         // Validate entity
@@ -256,17 +251,12 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
 
-        if (!userIsAdmin)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, userIsAdmin, ct))
         {
-            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
-
-            if (!authorizedUserAction)
+            return new(true)
             {
-                return new(true)
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                };
-            }
+                StatusCode = HttpStatusCode.Forbidden,
+            };
         }
 
         // Validate entity

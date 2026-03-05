@@ -284,17 +284,12 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, bool userIsAdmin, InitiativeDto entityData, CancellationToken ct = default)
     {
         // Validate user permissions
-        if (!userIsAdmin)
+        if (!await entityRepository.AuthorizedEntityModifyAsync(id, userName, userIsAdmin, ct))
         {
-            var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
-
-            if (!authorizedUserAction)
+            return new(true)
             {
-                return new(true)
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                };
-            }
+                StatusCode = HttpStatusCode.Forbidden,
+            };
         }
 
         // Validate data
