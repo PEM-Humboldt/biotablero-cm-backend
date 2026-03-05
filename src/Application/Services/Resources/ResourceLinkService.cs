@@ -86,6 +86,18 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(string userName, ResourceLinkDto entityData, CancellationToken ct = default)
     {
+        // Validate user level and permissions
+        var resourceId = entityData?.ResourceId ?? 0;
+        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(resourceId, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
 
@@ -105,17 +117,6 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.NotFound),
-            };
-        }
-
-        // Validate user permissions
-        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(entityData.ResourceId.Value, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -172,20 +173,21 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceLinkDto entityData, CancellationToken ct = default)
     {
-        // Validate data
-        var validationResult = await entityValidator.ValidateAsync(entityData, ct);
+        // Validate user level and permissions
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+        var resourceId = entity?.ResourceId ?? 0;
 
-        if (!validationResult.IsValid)
+        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(resourceId, userName, ct);
+
+        if (!authorizedUserAction)
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(validationResult.Errors),
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
         // Validate entity
-        var entity = await entityRepository.GetByIdAsync(id, ct);
-
         if (entity == null)
         {
             return new(true)
@@ -194,14 +196,14 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
             };
         }
 
-        // Validate user permissions
-        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(entity.ResourceId, userName, ct);
+        // Validate data
+        var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
-        if (!authorizedUserAction)
+        if (!validationResult.IsValid)
         {
             return new(true)
             {
-                StatusCode = HttpStatusCode.Forbidden,
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -249,25 +251,26 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate entity
+        // Validate user level and permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
+        var resourceId = entity?.ResourceId ?? 0;
 
-        if (entity == null)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
-        // Validate user permissions
-        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(entity.ResourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(resourceId, userName, ct);
 
         if (!authorizedUserAction)
         {
             return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate entity
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 

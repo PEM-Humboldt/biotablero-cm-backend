@@ -103,6 +103,18 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default)
     {
+        // Validate user level and permissions
+        var territoryStoryId = entityData?.TerritoryStoryId ?? 0;
+        var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(territoryStoryId, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
 
@@ -115,7 +127,6 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         }
 
         // Validate territory story
-        var territoryStoryId = entityData.TerritoryStoryId ?? 0;
         var territoryStory = await territoryStoryRepository.GetByIdAsync(territoryStoryId, ct);
 
         if (territoryStory == null)
@@ -131,17 +142,6 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
-            };
-        }
-
-        // Validate user level and permissions
-        var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(entityData.TerritoryStoryId.Value, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -186,6 +186,17 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default)
     {
+        // Validate user level and permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
@@ -205,17 +216,6 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
-        // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -270,17 +270,6 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate entity
-        var entity = await entityRepository.GetByIdAsync(id, ct);
-
-        if (entity == null)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
         // Validate user level and permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
@@ -289,6 +278,17 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
             return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
