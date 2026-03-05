@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,6 +23,8 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+
 /// <summary>
 /// Initiative Location service.
 /// </summary>
@@ -31,6 +34,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     private readonly IValidator<InitiativeLocationDto> entityValidator;
     private readonly ILogger logger;
     private new readonly IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto> mapper;
+    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly ILocationRepository locationRepository;
     private readonly IInitiativeRepository initiativeRepository;
 
@@ -42,6 +46,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
+    /// <param name="initiativeUserRepository">Initiative user repository.</param>
     /// <param name="locationRepository">Location repository.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeLocationService(
@@ -50,6 +55,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         IValidationErrorTranslator errorTranslator,
         IValidator<InitiativeLocationDto> entityValidator,
         ILogger logger,
+        IInitiativeUserRepository initiativeUserRepository,
         ILocationRepository locationRepository,
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper, errorTranslator)
@@ -58,6 +64,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
+        this.initiativeUserRepository = initiativeUserRepository;
         this.locationRepository = locationRepository;
         this.initiativeRepository = initiativeRepository;
     }
@@ -77,7 +84,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(InitiativeLocationDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string userName, bool userIsAdmin, InitiativeLocationDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
@@ -100,6 +107,20 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
+        }
+
+        // Validate user permissions
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
         }
 
         // Validate location
@@ -152,7 +173,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, InitiativeLocationDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, bool userIsAdmin, InitiativeLocationDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -174,6 +195,20 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
+        }
+
+        // Validate user permissions
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
         }
 
         // Validate location
@@ -224,7 +259,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default)
     {
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
@@ -235,6 +270,20 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
+        }
+
+        // Validate user permissions
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
         }
 
         // Validate number of locations
