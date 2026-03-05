@@ -15,6 +15,8 @@ using NetTopologySuite.Geometries;
 
 using Serilog;
 
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+
 /// <summary>
 /// Initiative repository.
 /// </summary>
@@ -58,6 +60,15 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .Include(e => e.InitiativeUsers.Where(u => u.UserName == userName))
             .Where(e => e.InitiativeUsers.Any(e => e.UserName == userName))
             .ToListAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Include(e => e.InitiativeUsers)
+            .Where(e =>
+                e.Id == id &&
+                e.InitiativeUsers.Any(e => e.UserName == userName && e.LevelId == (int)InitiativeUserLevelEnum.Leader))
+            .AnyAsync(ct);
 
     /// <inheritdoc/>
     public async Task<bool> AnyByNameAsync(string name, CancellationToken ct = default) =>

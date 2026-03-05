@@ -179,7 +179,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (!userIsAdmin)
         {
-            var authorizedUserAction = await entityRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, reviewerUserName, (int)InitiativeUserLevelEnum.Leader, ct);
+            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, reviewerUserName, ct);
 
             if (!authorizedUserAction)
             {
@@ -258,7 +258,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (!userIsAdmin)
         {
-            var authorizedUserAction = await entityRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
 
             if (!authorizedUserAction)
             {

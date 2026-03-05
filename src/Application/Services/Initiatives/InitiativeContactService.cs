@@ -22,8 +22,6 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
-
 /// <summary>
 /// Initiative Contact service.
 /// </summary>
@@ -33,7 +31,6 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     private readonly IValidator<InitiativeContactDto> entityValidator;
     private readonly ILogger logger;
     private new readonly IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto> mapper;
-    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
@@ -44,7 +41,6 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="initiativeUserRepository">Initiative user repository.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeContactService(
         IInitiativeContactRepository entityRepository,
@@ -52,7 +48,6 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         IValidationErrorTranslator errorTranslator,
         IValidator<InitiativeContactDto> entityValidator,
         ILogger logger,
-        IInitiativeUserRepository initiativeUserRepository,
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper, errorTranslator)
     {
@@ -60,7 +55,6 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
-        this.initiativeUserRepository = initiativeUserRepository;
         this.initiativeRepository = initiativeRepository;
     }
 
@@ -86,7 +80,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (!userIsAdmin)
         {
-            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
 
             if (!authorizedUserAction)
             {
@@ -155,7 +149,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (!userIsAdmin)
         {
-            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
 
             if (!authorizedUserAction)
             {
@@ -221,7 +215,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (!userIsAdmin)
         {
-            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
 
             if (!authorizedUserAction)
             {

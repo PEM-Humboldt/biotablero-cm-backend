@@ -23,8 +23,6 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
-
 /// <summary>
 /// Initiative Location service.
 /// </summary>
@@ -34,7 +32,6 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     private readonly IValidator<InitiativeLocationDto> entityValidator;
     private readonly ILogger logger;
     private new readonly IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto> mapper;
-    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly ILocationRepository locationRepository;
     private readonly IInitiativeRepository initiativeRepository;
 
@@ -46,7 +43,6 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="initiativeUserRepository">Initiative user repository.</param>
     /// <param name="locationRepository">Location repository.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeLocationService(
@@ -55,7 +51,6 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         IValidationErrorTranslator errorTranslator,
         IValidator<InitiativeLocationDto> entityValidator,
         ILogger logger,
-        IInitiativeUserRepository initiativeUserRepository,
         ILocationRepository locationRepository,
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper, errorTranslator)
@@ -64,7 +59,6 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
-        this.initiativeUserRepository = initiativeUserRepository;
         this.locationRepository = locationRepository;
         this.initiativeRepository = initiativeRepository;
     }
@@ -91,7 +85,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (!userIsAdmin)
         {
-            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
 
             if (!authorizedUserAction)
             {
@@ -182,7 +176,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (!userIsAdmin)
         {
-            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
 
             if (!authorizedUserAction)
             {
@@ -269,7 +263,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         // Validate user permissions
         if (!userIsAdmin)
         {
-            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
 
             if (!authorizedUserAction)
             {

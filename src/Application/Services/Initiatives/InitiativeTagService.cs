@@ -19,8 +19,6 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
-
 /// <summary>
 /// Initiative Tag service.
 /// </summary>
@@ -30,7 +28,6 @@ public class InitiativeTagService : IInitiativeTagService
     private readonly IValidationErrorTranslator errorTranslator;
     private readonly ILogger logger;
     private readonly IMapperRead<InitiativeTag, InitiativeTagDto> mapper;
-    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ITagRepository tagRepository;
 
@@ -41,7 +38,6 @@ public class InitiativeTagService : IInitiativeTagService
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="initiativeUserRepository">Initiative user repository.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="tagRepository">Tag repository.</param>
     public InitiativeTagService(
@@ -49,7 +45,6 @@ public class InitiativeTagService : IInitiativeTagService
         IMapperRead<InitiativeTag, InitiativeTagDto> mapper,
         IValidationErrorTranslator errorTranslator,
         ILogger logger,
-        IInitiativeUserRepository initiativeUserRepository,
         IInitiativeRepository initiativeRepository,
         ITagRepository tagRepository)
     {
@@ -57,7 +52,6 @@ public class InitiativeTagService : IInitiativeTagService
         this.mapper = mapper;
         this.errorTranslator = errorTranslator;
         this.logger = logger;
-        this.initiativeUserRepository = initiativeUserRepository;
         this.initiativeRepository = initiativeRepository;
         this.tagRepository = tagRepository;
     }
@@ -68,7 +62,7 @@ public class InitiativeTagService : IInitiativeTagService
         // Validate user permissions
         if (!userIsAdmin)
         {
-            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
 
             if (!authorizedUserAction)
             {
@@ -140,7 +134,7 @@ public class InitiativeTagService : IInitiativeTagService
 
         if (!userIsAdmin)
         {
-            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+            var authorizedUserAction = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, ct);
 
             if (!authorizedUserAction)
             {
