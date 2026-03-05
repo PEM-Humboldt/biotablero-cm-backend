@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,6 +19,8 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+
 /// <summary>
 /// Initiative Tag service.
 /// </summary>
@@ -27,6 +30,7 @@ public class InitiativeTagService : IInitiativeTagService
     private readonly IValidationErrorTranslator errorTranslator;
     private readonly ILogger logger;
     private readonly IMapperRead<InitiativeTag, InitiativeTagDto> mapper;
+    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ITagRepository tagRepository;
 
@@ -37,6 +41,7 @@ public class InitiativeTagService : IInitiativeTagService
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="logger">System logger.</param>
+    /// <param name="initiativeUserRepository">Initiative user repository.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="tagRepository">Tag repository.</param>
     public InitiativeTagService(
@@ -44,6 +49,7 @@ public class InitiativeTagService : IInitiativeTagService
         IMapperRead<InitiativeTag, InitiativeTagDto> mapper,
         IValidationErrorTranslator errorTranslator,
         ILogger logger,
+        IInitiativeUserRepository initiativeUserRepository,
         IInitiativeRepository initiativeRepository,
         ITagRepository tagRepository)
     {
@@ -56,7 +62,7 @@ public class InitiativeTagService : IInitiativeTagService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(int initiativeId, int tagId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string userName, bool userIsAdmin, int initiativeId, int tagId, CancellationToken ct = default)
     {
         // Validate initiative
         var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
@@ -67,6 +73,20 @@ public class InitiativeTagService : IInitiativeTagService
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
+        }
+
+        // Validate user permissions
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
         }
 
         // Validate tag
@@ -111,7 +131,7 @@ public class InitiativeTagService : IInitiativeTagService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default)
     {
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
@@ -122,6 +142,20 @@ public class InitiativeTagService : IInitiativeTagService
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
+        }
+
+        // Validate user permissions
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
         }
 
         await entityRepository.DeleteAsync(entity, ct);

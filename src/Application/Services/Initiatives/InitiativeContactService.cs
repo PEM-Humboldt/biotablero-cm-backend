@@ -30,10 +30,10 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 public class InitiativeContactService : ServiceRead<InitiativeContact, InitiativeContactDto, int>, IInitiativeContactService
 {
     private new readonly IInitiativeContactRepository entityRepository;
-    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IValidator<InitiativeContactDto> entityValidator;
     private readonly ILogger logger;
     private new readonly IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto> mapper;
+    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
@@ -43,16 +43,16 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
-    /// <param name="initiativeUserRepository">Initiative user repository.</param>
     /// <param name="logger">System logger.</param>
+    /// <param name="initiativeUserRepository">Initiative user repository.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeContactService(
         IInitiativeContactRepository entityRepository,
         IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto> mapper,
         IValidationErrorTranslator errorTranslator,
         IValidator<InitiativeContactDto> entityValidator,
-        IInitiativeUserRepository initiativeUserRepository,
         ILogger logger,
+        IInitiativeUserRepository initiativeUserRepository,
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper, errorTranslator)
     {
