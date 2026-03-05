@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// <summary>
 /// Initiative Contact service interface.
 /// </summary>
-public interface IInitiativeContactService : IRead<InitiativeContact, int>, IAdd<InitiativeContactDto>, IUpdate<InitiativeContactDto, int>, IDelete<int>
+public interface IInitiativeContactService : IRead<InitiativeContact, int>
 {
     /// <summary>
     /// Get entities by initiative.
@@ -20,4 +20,35 @@ public interface IInitiativeContactService : IRead<InitiativeContact, int>, IAdd
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Add element.
+    /// </summary>
+    /// <param name="userName">User name.</param>
+    /// <param name="userIsAdmin">User administrator flag.</param>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> AddAsync(string userName, bool userIsAdmin, InitiativeContactDto entityData, CancellationToken ct = default);
+
+    /// <summary>
+    /// Update element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="userIsAdmin">User administrator flag.</param>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> UpdateAsync(int id, string userName, bool userIsAdmin, InitiativeContactDto entityData, CancellationToken ct = default);
+
+    /// <summary>
+    /// Delete element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="userIsAdmin">User administrator flag.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default);
 }

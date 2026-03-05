@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,12 +22,15 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+
 /// <summary>
 /// Initiative Contact service.
 /// </summary>
 public class InitiativeContactService : ServiceRead<InitiativeContact, InitiativeContactDto, int>, IInitiativeContactService
 {
     private new readonly IInitiativeContactRepository entityRepository;
+    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IValidator<InitiativeContactDto> entityValidator;
     private readonly ILogger logger;
     private new readonly IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto> mapper;
@@ -39,6 +43,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
+    /// <param name="initiativeUserRepository">Initiative user repository.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeContactService(
@@ -46,6 +51,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto> mapper,
         IValidationErrorTranslator errorTranslator,
         IValidator<InitiativeContactDto> entityValidator,
+        IInitiativeUserRepository initiativeUserRepository,
         ILogger logger,
         IInitiativeRepository initiativeRepository)
         : base(entityRepository, mapper, errorTranslator)
@@ -54,6 +60,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
+        this.initiativeUserRepository = initiativeUserRepository;
         this.initiativeRepository = initiativeRepository;
     }
 
@@ -72,7 +79,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(InitiativeContactDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string userName, bool userIsAdmin, InitiativeContactDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
@@ -95,6 +102,20 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
+        }
+
+        // Validate user permissions
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
         }
 
         // Validate duplicated entities
@@ -125,7 +146,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, InitiativeContactDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, bool userIsAdmin, InitiativeContactDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -147,6 +168,20 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
+        }
+
+        // Validate user permissions
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
         }
 
         // Validate duplicated entities
@@ -176,7 +211,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default)
     {
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
@@ -187,6 +222,20 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
+        }
+
+        // Validate user permissions
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
         }
 
         await entityRepository.DeleteAsync(entity, ct);

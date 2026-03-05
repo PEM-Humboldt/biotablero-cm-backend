@@ -68,7 +68,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="initiativeUserRepository">Initiative user repository</param>
+    /// <param name="initiativeUserRepository">Initiative user repository.</param>
     /// <param name="locationRepository">Initiative Location repository.</param>
     /// <param name="locationService">Location service.</param>
     /// <param name="iamService">IAM service.</param>
