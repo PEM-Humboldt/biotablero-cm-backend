@@ -378,18 +378,21 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Upload/Overwrite image
         var imageTypeStr = imageType.ToString("G").ToLower(CultureInfo.CurrentCulture);
-        var fileName = $"{StoragePrefix}/{id}/{imageTypeStr}.webp";
+        var fileName = $"{StoragePrefix}/{id}/{imageTypeStr}/{FileUtils.ComputeFileHash(compressedImageStream)}.webp";
         var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");
         var uploadSuccessful = await storageService.UploadFileAsync(fileName, compressedImageStream, MediaTypeNames.Image.ImageWebp, ct);
 
         if (uploadSuccessful)
         {
+            Uri oldImageUrl = null;
             switch (imageType)
             {
                 case InitiativeImageType.Image:
+                    oldImageUrl = entity.ImageUrl;
                     entity.ImageUrl = fileUri;
                     break;
                 case InitiativeImageType.Banner:
+                    oldImageUrl = entity.BannerUrl;
                     entity.BannerUrl = fileUri;
                     break;
                 default:
@@ -398,6 +401,11 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
                         StatusCode = HttpStatusCode.InternalServerError,
                         Message = $"Invalid image type: {imageType:G}",
                     };
+            }
+
+            if (oldImageUrl != null && oldImageUrl != fileUri)
+            {
+                await storageService.DeleteFileAsync(oldImageUrl.ToString(), ct);
             }
 
             await entityRepository.UpdateAsync(entity, ct);
