@@ -85,7 +85,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
         if (entity != null)
@@ -152,7 +152,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(TerritoryStoryDto entityData, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var initiativeId = entityData?.InitiativeId ?? 0;
         var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, entityData.AuthorUserName, (int)InitiativeUserLevelEnum.Leader, ct);
 
@@ -252,7 +252,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryDto entityData, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)
@@ -368,13 +368,13 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <inheritdoc/>
     public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
 
-        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
 
-        if (!userIsLeader)
+        if (!authorizedUserAction)
         {
             return new(true)
             {
@@ -437,7 +437,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <returns>Process result.</returns>
     private async Task<CustomWebResponse> DisableOrEnableAsync(int id, string userName, bool disable, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)

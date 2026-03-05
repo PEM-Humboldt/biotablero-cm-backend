@@ -81,7 +81,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(string userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var resourceId = entityData?.ResourceId ?? 0;
 
         var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
@@ -172,7 +172,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
 
@@ -256,7 +256,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
 

@@ -72,7 +72,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var entityExists = await entityRepository.AnyAsync(id, ct);
 
         if (entityExists)
@@ -108,7 +108,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var territoryStoryId = entityData?.TerritoryStoryId ?? 0;
         var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(territoryStoryId, userName, ct);
 
@@ -207,7 +207,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)
@@ -310,7 +310,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)
@@ -368,7 +368,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
         if (!authorizedUserAction)

@@ -86,7 +86,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(string userName, ResourceLinkDto entityData, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var resourceId = entityData?.ResourceId ?? 0;
         var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
 
@@ -173,7 +173,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceLinkDto entityData, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
 
@@ -251,7 +251,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
 
