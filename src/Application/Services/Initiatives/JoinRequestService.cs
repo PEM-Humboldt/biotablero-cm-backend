@@ -257,17 +257,6 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             };
         }
 
-        // Check the number of leaders if the user is a leader and wants to leave the initiative
-        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, entity.UserName, (int)InitiativeUserLevelEnum.Leader, ct);
-
-        // Check leaders constraints
-        EnumEntityDto<InitiativeUserLevelEnum> enumEntity = null;
-
-        if (entity.LevelId != null)
-        {
-            enumEntity = new((InitiativeUserLevelEnum)entity.LevelId);
-        }
-
         // Update entity data
         entity = await entityRepository.ReviewRequestAsync(id, entityData.ReviewerUserName, entityData.Status.Id, ct);
 
