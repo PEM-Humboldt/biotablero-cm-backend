@@ -157,7 +157,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         // Validate user and initiative relationship
         var hasUserAndInitiativeRelationship = await initiativeUserRepository.IsDuplicatedAsync(entityData.InitiativeId, entityData.UserName, ct);
 
-        if (hasUserAndInitiativeRelationship)
+        if (hasUserAndInitiativeRelationship && entityData.Level != null)
         {
             return new(true)
             {
@@ -229,7 +229,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             };
         }
 
-        if (entity.StatusId != (int)JoinRequestStatusEnum.UnderReview)
+        if (entity.StatusId is not (int)JoinRequestStatusEnum.UnderReview)
         {
             return new(true)
             {

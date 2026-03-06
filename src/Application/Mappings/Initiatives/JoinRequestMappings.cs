@@ -28,7 +28,7 @@ public class JoinRequestMappings() : IMapperCreateAndRead<JoinRequest, JoinReque
             CreationDate = entity.CreationDate,
             ResponseDate = entity.ResponseDate,
             InitiativeId = entity.InitiativeId,
-            Level = new EnumEntityDto<InitiativeUserLevelEnum>(entity.LevelId),
+            Level = new EnumEntityDto<InitiativeUserLevelEnum>(entity?.LevelId ?? 0),
             Status = new EnumEntityDto<JoinRequestStatusEnum>(entity.StatusId),
         };
     }

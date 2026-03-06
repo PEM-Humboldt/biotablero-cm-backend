@@ -69,17 +69,22 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
                 if (requestStatusId == (int)JoinRequestStatusEnum.Approved)
                 {
                     // Update initiative and user relationship
-                    var userBelongsToinitiative = await dbContext.InitiativeUsers
+                    var initiativeUserRelationship = await dbContext.InitiativeUsers
                         .Where(e => e.UserName == entity.UserName && e.InitiativeId == entity.InitiativeId)
-                        .AnyAsync(ct);
+                        .FirstOrDefaultAsync(ct);
 
-                    if (!userBelongsToinitiative)
+                    if (initiativeUserRelationship != null && entity.LevelId == null)
+                    {
+                        dbContext.InitiativeUsers.Remove(initiativeUserRelationship);
+                        await dbContext.SaveChangesAsync(ct);
+                    }
+                    else
                     {
                         var initiativeUserEntity = new InitiativeUser()
                         {
                             InitiativeId = entity.InitiativeId,
                             UserName = entity.UserName,
-                            LevelId = entity.LevelId,
+                            LevelId = entity.LevelId.Value,
                         };
 
                         await dbContext.InitiativeUsers.AddAsync(initiativeUserEntity, ct);
