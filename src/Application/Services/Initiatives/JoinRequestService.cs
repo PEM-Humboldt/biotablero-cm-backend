@@ -200,6 +200,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             InitiativeName = initiative.Name,
             UserName = userData.Username,
             JoinRequestStatus = JoinRequestStatusEnum.UnderReview,
+            LeaveInitiative = entityData.Level == null,
         };
 
         await SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
@@ -298,6 +299,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             Address = new(userData.FullName, userData.Email),
             InitiativeName = initiative.Name,
             JoinRequestStatus = (JoinRequestStatusEnum)entity.StatusId,
+            LeaveInitiative = entityData.Level == null,
         };
 
         await SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
