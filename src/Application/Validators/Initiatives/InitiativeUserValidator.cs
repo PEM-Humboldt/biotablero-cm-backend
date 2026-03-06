@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
@@ -18,30 +19,30 @@ public class InitiativeUserValidator : AbstractValidator<InitiativeUserDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithMessage("Entity data cannot be null");
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.FocusArea)
             .MaximumLength(200);
 
         RuleFor(dto => dto.Level)
             .NotNull()
-                .WithMessage("{PropertyName} cannot be null")
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .ChildRules(level =>
             {
                 level.RuleFor(levelEnumDto => levelEnumDto.Name)
                     .IsEnumName(typeof(InitiativeUserLevel), caseSensitive: false)
-                        .WithMessage("{PropertyName} invalid");
+                        .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue);
             });
 
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithMessage("{PropertyName} is required");
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
 
             RuleFor(dto => dto.UserName)
                 .NotEmpty()
-                    .WithMessage("{PropertyName} is required")
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
                 .MaximumLength(75);
         });
     }

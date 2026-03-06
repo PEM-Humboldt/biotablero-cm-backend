@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 /// <summary>
@@ -17,11 +18,11 @@ public class TerritoryStoryVideoValidator : AbstractValidator<TerritoryStoryVide
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithMessage("Entity data cannot be null");
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.FileUrl)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .Matches(RegExprConstants.YouTubeVideoUrl)
             .MaximumLength(150);
 
@@ -29,7 +30,7 @@ public class TerritoryStoryVideoValidator : AbstractValidator<TerritoryStoryVide
         {
             RuleFor(dto => dto.TerritoryStoryId)
                 .NotNull()
-                    .WithMessage("{PropertyName} is required");
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
         });
     }
 }

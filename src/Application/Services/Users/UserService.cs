@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Users;
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.OData;
@@ -22,14 +24,19 @@ public class UserService : IUserService
 {
     private readonly IIamService iamService;
 
+    private readonly IValidationErrorTranslator errorTranslator;
+
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="iamService">IAM service.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     public UserService(
-        IIamService iamService)
+        IIamService iamService,
+        IValidationErrorTranslator errorTranslator)
     {
         this.iamService = iamService;
+        this.errorTranslator = errorTranslator;
     }
 
     /// <inheritdoc/>
@@ -65,11 +72,11 @@ public class UserService : IUserService
                 },
             };
         }
-        catch (ODataException ex)
+        catch (ODataException)
         {
             return new(true)
             {
-                Message = $"Invalid filter: {ex.Message}",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter),
             };
         }
     }

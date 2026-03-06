@@ -11,6 +11,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
@@ -18,6 +19,7 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.AspNetCore.OData.Query;
@@ -48,6 +50,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
@@ -58,6 +61,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     public JoinInvitationService(
         IJoinInvitationRepository entityRepository,
         IMapperCreateAndRead<JoinInvitation, JoinInvitationDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<JoinInvitationDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
@@ -65,7 +69,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         IWebViewTools webViewTools,
         IEmailService emailService,
         IIamService iamService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -86,7 +90,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
         if (!userIsLeader)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -107,7 +111,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
         if (!userIsLeader)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -118,11 +122,9 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -131,9 +133,9 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
         if (initiative == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Initiative not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
         }
 
@@ -144,9 +146,9 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
         if (hasDuplicateEmails)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "There are duplicate emails",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.DuplicatedEmails),
             };
         }
 
@@ -162,10 +164,9 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
             var existingEmails = externalUsersData
                 .Select(e => e.Email);
 
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "One or more users with the entered email addresses are already in the system",
-                ResponseBody = existingEmails,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.ExistingUsers, data: existingEmails),
             };
         }
 
@@ -185,16 +186,16 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
             logger.AddLog(LogType.Create, "Added initiative join invitation", "{@entityData}", entityData);
 
-            return new CustomWebResponse()
+            return new()
             {
                 ResponseBody = entityData,
             };
         }
 
-        return new CustomWebResponse(true)
+        return new(true)
         {
-            Message = "Failed emails sending.",
             StatusCode = HttpStatusCode.InternalServerError,
+            ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.EmailsSendingError),
         };
     }
 

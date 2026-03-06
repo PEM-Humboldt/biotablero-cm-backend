@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Tag;
 
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,12 +7,13 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Tags;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 
@@ -27,9 +27,9 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 {
     private new readonly ITagRepository entityRepository;
+    private new readonly IMapperCreateReadAndUpdate<Tag, TagDto> mapper;
     private readonly IValidator<TagDto> entityValidator;
     private readonly ILogger logger;
-    private new readonly IMapperCreateReadAndUpdate<Tag, TagDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
 
     /// <summary>
@@ -37,16 +37,18 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     public TagService(
         ITagRepository entityRepository,
         IMapperCreateReadAndUpdate<Tag, TagDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<TagDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -59,27 +61,25 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     public async Task<CustomWebResponse> AddAsync(TagDto entityData, CancellationToken ct = default)
     {
         // Validate data
-        entityData.Name = entityData.Name.Capitalize();
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
         // Validate duplicated entities
+        entityData.Name = entityData.Name.Capitalize();
         var hasDuplicatedEntities = await entityRepository.AnyByNameAndCategory(entityData.Name, entityData.Category.Id, ct);
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Duplicated tag",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.Duplicated),
             };
         }
 
@@ -93,7 +93,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         logger.AddLog(LogType.Create, "Added tag", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -108,11 +108,9 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -121,9 +119,9 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -132,9 +130,9 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Duplicated tag",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.Duplicated),
             };
         }
 
@@ -147,7 +145,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         logger.AddLog(LogType.Update, "Updated tag", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -161,9 +159,9 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -172,9 +170,9 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         if (hasRelationships)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "The tag has relationships with one or more initiatives",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.HasRelationships),
             };
         }
 
@@ -184,6 +182,6 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
 
         logger.AddLog(LogType.Delete, "Deleted tag", "{@EntityData}", entityData);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

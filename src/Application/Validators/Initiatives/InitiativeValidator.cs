@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 
 /// <summary>
 /// Initiative validator.
@@ -16,11 +17,11 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithMessage("Entity data cannot be null");
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.Name)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .MaximumLength(100);
 
         RuleFor(dto => dto.ShortName)
@@ -28,7 +29,7 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
 
         RuleFor(dto => dto.Description)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .MaximumLength(300);
 
         RuleFor(dto => dto.Baseline)
@@ -41,21 +42,21 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
         {
             RuleFor(dto => dto.Locations)
                 .NotEmpty()
-                    .WithMessage("At least one location is required");
+                    .WithErrorCode(ValidationErrorCodes.Initiatives.LocationsRequired);
 
             RuleForEach(dto => dto.Locations)
                 .SetValidator(new InitiativeLocationValidator(), "default");
 
             RuleFor(dto => dto.Contacts)
                 .NotEmpty()
-                    .WithMessage("At least one contact is required");
+                    .WithErrorCode(ValidationErrorCodes.Initiatives.ContactsRequired);
 
             RuleForEach(dto => dto.Contacts)
                 .SetValidator(new InitiativeContactValidator(), "default");
 
             RuleFor(dto => dto.Users)
                 .NotEmpty()
-                    .WithMessage("At least one user is required");
+                    .WithErrorCode(ValidationErrorCodes.Initiatives.UsersRequired);
 
             RuleForEach(dto => dto.Users)
                 .SetValidator(new InitiativeUserValidator(), "default");

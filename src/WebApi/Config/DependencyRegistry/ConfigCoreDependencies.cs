@@ -9,6 +9,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories;
 using IAVH.BioTablero.CM.WebApi.Controllers.Tools;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
+using IAVH.BioTablero.CM.WebApi.Services;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
@@ -42,6 +43,10 @@ public static class ConfigCoreDependencies
         services.AddSingleton(typeof(IReadEnumeration<>), typeof(ServiceReadEnumeration<>));
 
         services.AddAuthService(isDevelopment);
+
+        // Add localization (for custom error messages and codes)
+        services.AddLocalization();
+        services.AddSingleton<IValidationErrorTranslator, ResxValidationErrorTranslator>();
 
         return services;
     }

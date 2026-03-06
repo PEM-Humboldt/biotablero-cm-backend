@@ -9,12 +9,13 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 
@@ -40,6 +41,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="resourceRepository">Resource repository.</param>
@@ -47,11 +49,12 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     public ResourceFileService(
         IResourceFileRepository entityRepository,
         IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<ResourceFileDto> entityValidator,
         ILogger logger,
         IResourceRepository resourceRepository,
         IResourceService resourceService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -83,11 +86,9 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -96,9 +97,9 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         if (resource == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Resource not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.NotFound),
             };
         }
 
@@ -107,7 +108,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -116,34 +117,34 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         // Validate number of items
         if (resource.Files.Count >= MaxItemsPerResource)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = $"The number of items per resource must be less than or equal to {MaxItemsPerResource}",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.ResourceFiles.ItemsLimitExceeded, data: MaxItemsPerResource),
             };
         }
 
         // Validate file
         if (formFile.IsEmpty())
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "The file is empty",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Empty),
             };
         }
 
         if (!formFile.IsValidResourceFile())
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Invalid file format",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
             };
         }
 
         if (!formFile.HasResourceFileValidSize())
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Invalid file size",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidSize),
             };
         }
 
@@ -160,7 +161,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         logger.AddLog(LogType.Create, "Added resource file", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -174,11 +175,9 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -188,17 +187,17 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         {
             if (!formFile.IsValidResourceFile())
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
-                    Message = "Invalid file format",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
                 };
             }
 
             if (!formFile.HasResourceFileValidSize())
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
-                    Message = "Invalid file size",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidSize),
                 };
             }
         }
@@ -208,9 +207,9 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -219,7 +218,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -245,7 +244,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         logger.AddLog(LogType.Update, "Updated resource file", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -259,9 +258,9 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -270,7 +269,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -286,6 +285,6 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         logger.AddLog(LogType.Delete, "Deleted resource file", "{@EntityData}", entityData);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

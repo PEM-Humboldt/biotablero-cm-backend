@@ -10,11 +10,13 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
@@ -41,6 +43,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="territoryStoryRepository">Territory Story repository.</param>
@@ -49,12 +52,13 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     public TerritoryStoryImageService(
         ITerritoryStoryImageRepository entityRepository,
         IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<TerritoryStoryImageDto> entityValidator,
         ILogger logger,
         ITerritoryStoryRepository territoryStoryRepository,
         IStorageService storageService,
         IImageUtilsService imageUtilsService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -77,7 +81,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
             if (!authorizedUserAction)
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
                     StatusCode = HttpStatusCode.Forbidden,
                 };
@@ -109,11 +113,9 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -123,17 +125,17 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (territoryStory == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Territory Story not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.NotFound),
             };
         }
 
         if (!territoryStory.Enabled)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Territory Story disabled",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
         }
 
@@ -142,7 +144,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -151,25 +153,25 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         // Validate image
         if (formFile.IsEmpty())
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "The file is empty",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Empty),
             };
         }
 
         if (!formFile.IsValidImage())
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Invalid file format",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
             };
         }
 
         if (!formFile.HasTerritoryStoryImageValidSize())
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Invalid file size",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidSize),
             };
         }
 
@@ -179,9 +181,9 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (compressedImageStream == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Image processing error",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.ProcessingError),
             };
         }
 
@@ -196,7 +198,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         logger.AddLog(LogType.Create, "Added territory story image", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -210,11 +212,9 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -225,17 +225,17 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         {
             if (!formFile.IsValidImage())
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
-                    Message = "Invalid file format",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
                 };
             }
 
             if (!formFile.HasTerritoryStoryImageValidSize())
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
-                    Message = "Invalid file size",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidSize),
                 };
             }
         }
@@ -245,9 +245,9 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -256,7 +256,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -267,9 +267,9 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (!territoryStory.Enabled)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Territory Story disabled",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
         }
 
@@ -288,9 +288,9 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
             if (compressedImageStream == null)
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
-                    Message = "Image processing error",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.ProcessingError),
                 };
             }
 
@@ -301,7 +301,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         logger.AddLog(LogType.Update, "Updated territory story image", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -315,9 +315,9 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -326,7 +326,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -337,9 +337,9 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (!territoryStory.Enabled)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Territory Story disabled",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
         }
 
@@ -348,10 +348,10 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.InternalServerError,
-                Message = "Database error",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
             };
         }
 
@@ -359,7 +359,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         logger.AddLog(LogType.Update, "Marked territory story image as featured content", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -373,9 +373,9 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -384,7 +384,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -395,9 +395,9 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (!territoryStory.Enabled)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Territory Story disabled",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
         }
 
@@ -408,6 +408,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         logger.AddLog(LogType.Delete, "Deleted territory story image", "{@EntityData}", entityData);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

@@ -10,6 +10,7 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
@@ -18,7 +19,7 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Serilog;
@@ -47,6 +48,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="iamService">IAM service.</param>
@@ -56,13 +58,14 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     public InitiativeUserService(
         IInitiativeUserRepository entityRepository,
         IMapperCreateReadAndUpdate<InitiativeUser, InitiativeUserDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<InitiativeUserDto> entityValidator,
         ILogger logger,
         IIamService iamService,
         IInitiativeRepository initiativeRepository,
         IWebViewTools webViewTools,
         IEmailService emailService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -96,11 +99,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -110,9 +111,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (!initiativeExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Initiative not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
         }
 
@@ -121,9 +122,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "The user already belongs to the initiative",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.Duplicated),
             };
         }
 
@@ -134,9 +135,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
             if (leaders.Count() >= MaxLeadersByInitiative)
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
-                    Message = $"Initiatives cannot have more than {MaxLeadersByInitiative} leaders",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeaderLimitExceeded, data: MaxLeadersByInitiative),
                 };
             }
         }
@@ -146,9 +147,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (!userExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = $"User is invalid or does not exist",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Users.Invalid),
             };
         }
 
@@ -162,7 +163,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         logger.AddLog(LogType.Create, "Added initiative user", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -176,11 +177,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -189,9 +188,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -200,17 +199,17 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader && !leaders.Any())
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = $"At least one leader is required per initiative",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeadersRequired),
             };
         }
 
         if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader && leaders.Count() >= MaxLeadersByInitiative)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = $"Initiatives cannot have more than {MaxLeadersByInitiative} leaders",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeaderLimitExceeded, data: MaxLeadersByInitiative),
             };
         }
 
@@ -228,7 +227,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         var initiative = await initiativeRepository.GetByIdAsync(entity.InitiativeId, ct);
         SendNotificationChangedLevel(userData, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, leaders, ct);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -242,9 +241,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -256,9 +255,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
             if (leaders.Count() is <= 1)
             {
-                return new CustomWebResponse(true)
+                return new(true)
                 {
-                    Message = $"At least one leader is required per initiative",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeadersRequired),
                 };
             }
         }
@@ -274,7 +273,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         var initiative = await initiativeRepository.GetByIdAsync(entity.InitiativeId, ct);
         SendNotificationUserBanned(userData, initiative, leaders, ct);
 
-        return new CustomWebResponse();
+        return new();
     }
 
     /// <summary>

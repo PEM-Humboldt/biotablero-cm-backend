@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 
 /// <summary>
 /// Initiative location validator.
@@ -16,11 +17,11 @@ public class InitiativeLocationValidator : AbstractValidator<InitiativeLocationD
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithMessage("Entity data cannot be null");
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.LocationId)
             .NotNull()
-                .WithMessage("{PropertyName} is required");
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
 
         RuleFor(dto => dto.Locality)
             .MaximumLength(300);
@@ -29,7 +30,7 @@ public class InitiativeLocationValidator : AbstractValidator<InitiativeLocationD
         {
             RuleFor(dto => dto.InitiativeId)
                 .NotNull()
-                    .WithMessage("{PropertyName} is required");
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
         });
     }
 }

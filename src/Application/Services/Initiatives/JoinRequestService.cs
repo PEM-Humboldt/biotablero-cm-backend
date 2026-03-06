@@ -13,6 +13,7 @@ using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
@@ -21,7 +22,7 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.AspNetCore.OData.Query;
@@ -53,6 +54,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
@@ -63,6 +65,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     public JoinRequestService(
         IJoinRequestRepository entityRepository,
         IMapperCreateAndRead<JoinRequest, JoinRequestDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<JoinRequestDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
@@ -70,7 +73,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         IWebViewTools webViewTools,
         IEmailService emailService,
         IIamService iamService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -91,7 +94,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (!userIsLeader)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -111,11 +114,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -124,9 +125,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (initiative == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Initiative not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
         }
 
@@ -135,9 +136,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (hasPendingRequests)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "There are one or more pending join requests",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinRequests.PendingJoinRequests),
             };
         }
 
@@ -146,9 +147,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (hasUserAndInitiativeRelationship)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "The user already belongs to the initiative",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.Duplicated),
             };
         }
 
@@ -157,9 +158,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (userData == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "User is invalid or does not exist",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Users.Invalid),
             };
         }
 
@@ -186,7 +187,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         logger.AddLog(LogType.Create, "Added initiative join request", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -200,11 +201,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -213,9 +212,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -224,7 +223,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (!userIsLeader)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -232,9 +231,9 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (entity.StatusId != (int)JoinRequestStatusEnum.UnderReview)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "The join request has already been reviewed",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinRequests.ReviewedJoinRequests),
             };
         }
 
@@ -243,10 +242,10 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.InternalServerError,
-                Message = "Database error",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
             };
         }
 
@@ -267,7 +266,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         logger.AddLog(LogType.Update, "Updated initiative join request", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };

@@ -5,10 +5,11 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Domain;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 
@@ -22,6 +23,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 public class ResourceTagService : IResourceTagService
 {
     private readonly IResourceTagRepository entityRepository;
+    private readonly IValidationErrorTranslator errorTranslator;
     private readonly ILogger logger;
     private readonly IResourceRepository resourceRepository;
     private readonly ITagRepository tagRepository;
@@ -31,18 +33,21 @@ public class ResourceTagService : IResourceTagService
     /// Constructor.
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="resourceRepository">Resource repository.</param>
     /// <param name="tagRepository">Tag repository.</param>
     /// <param name="resourceService">Resource service.</param>
     public ResourceTagService(
         IResourceTagRepository entityRepository,
+        IValidationErrorTranslator errorTranslator,
         ILogger logger,
         IResourceRepository resourceRepository,
         ITagRepository tagRepository,
         IResourceService resourceService)
     {
         this.entityRepository = entityRepository;
+        this.errorTranslator = errorTranslator;
         this.logger = logger;
         this.resourceRepository = resourceRepository;
         this.tagRepository = tagRepository;
@@ -57,7 +62,7 @@ public class ResourceTagService : IResourceTagService
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -68,9 +73,9 @@ public class ResourceTagService : IResourceTagService
 
         if (resource == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Resource not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.NotFound),
             };
         }
 
@@ -79,9 +84,9 @@ public class ResourceTagService : IResourceTagService
 
         if (!tagExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Tag not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.NotFound),
             };
         }
 
@@ -90,9 +95,9 @@ public class ResourceTagService : IResourceTagService
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Duplicated resource tag relationship",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.Duplicated),
             };
         }
 
@@ -111,7 +116,7 @@ public class ResourceTagService : IResourceTagService
 
         logger.AddLog(LogType.Create, "Added resource tag relationship", "{@EntityData}", entity);
 
-        return new CustomWebResponse();
+        return new();
     }
 
     /// <inheritdoc/>
@@ -122,9 +127,9 @@ public class ResourceTagService : IResourceTagService
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -133,7 +138,7 @@ public class ResourceTagService : IResourceTagService
 
         if (!authorizedUserAction)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
             };
@@ -147,6 +152,6 @@ public class ResourceTagService : IResourceTagService
 
         logger.AddLog(LogType.Delete, "Deleted resource tag relationship", "{@EntityData}", entity);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

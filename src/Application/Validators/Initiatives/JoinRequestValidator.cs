@@ -5,6 +5,7 @@ using System;
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
@@ -20,17 +21,17 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithMessage("Entity data cannot be null");
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.InitiativeId)
             .NotNull()
-                .WithMessage("{PropertyName} is required");
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
 
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.Level)
                 .NotNull()
-                    .WithMessage("{PropertyName} cannot be null")
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
                 .ChildRules(level =>
                 {
                     level.RuleFor(levelEnumDto => levelEnumDto.Name)
@@ -43,7 +44,7 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
 
                             return false;
                         })
-                        .WithMessage("User level must be either 'Member' or 'Reader'.");
+                        .WithErrorCode(ValidationErrorCodes.JoinRequests.InvalidUserLevel);
                 });
         });
 
@@ -51,7 +52,7 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
         {
             RuleFor(dto => dto.Status)
                 .NotNull()
-                    .WithMessage("{PropertyName} cannot be null")
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
                 .ChildRules(status =>
                 {
                     status.RuleFor(statusEnumDto => statusEnumDto.Name)
@@ -64,7 +65,7 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
 
                             return false;
                         })
-                        .WithMessage("Invalid value for {PropertyName}");
+                        .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue);
                 });
         });
     }

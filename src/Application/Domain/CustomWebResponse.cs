@@ -26,5 +26,5 @@ public class CustomWebResponse(bool error = false)
     /// <summary>
     /// Custom response error message.
     /// </summary>
-    public string Message { get; init; }
+    public string Message { get; set; }
 }

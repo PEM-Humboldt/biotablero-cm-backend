@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 
 /// <summary>
 /// Join invitation guest validator.
@@ -16,11 +17,11 @@ public class JoinInvitationGuestValidator : AbstractValidator<JoinInvitationGues
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithMessage("Entity data cannot be null");
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.Email)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .EmailAddress()
             .MaximumLength(100);
     }

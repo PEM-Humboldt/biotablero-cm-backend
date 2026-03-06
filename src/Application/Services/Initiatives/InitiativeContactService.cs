@@ -8,12 +8,13 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Serilog;
@@ -36,16 +37,18 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     public InitiativeContactService(
         IInitiativeContactRepository entityRepository,
         IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<InitiativeContactDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -76,11 +79,9 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -90,9 +91,9 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (!initiativeExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Initiative not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
         }
 
@@ -101,9 +102,9 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "There is already a contact with the same email and/or phone",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeContacts.Duplicated),
             };
         }
 
@@ -117,7 +118,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         logger.AddLog(LogType.Create, "Added initiative contact", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -131,11 +132,9 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -144,9 +143,9 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -155,9 +154,9 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "There is already a contact with the same email and/or phone",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeContacts.Duplicated),
             };
         }
 
@@ -170,7 +169,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         logger.AddLog(LogType.Update, "Updated initiative contact", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -184,9 +183,9 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -196,6 +195,6 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
 
         logger.AddLog(LogType.Delete, "Deleted initiative contact", "{@EntityData}", entityData);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

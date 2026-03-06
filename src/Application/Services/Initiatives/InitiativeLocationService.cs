@@ -8,12 +8,13 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
@@ -38,6 +39,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="locationRepository">Location repository.</param>
@@ -45,11 +47,12 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
     public InitiativeLocationService(
         IInitiativeLocationRepository entityRepository,
         IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IValidator<InitiativeLocationDto> entityValidator,
         ILogger logger,
         ILocationRepository locationRepository,
         IInitiativeRepository initiativeRepository)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
@@ -81,11 +84,9 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -95,9 +96,9 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (!initiativeExists)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Initiative not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
             };
         }
 
@@ -107,17 +108,17 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (location == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Location not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Locations.NotFound),
             };
         }
 
         if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.ParentId == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Locality is only available for municipalities",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.LocalityOnlyForMunicipality),
             };
         }
 
@@ -127,9 +128,9 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "The location already belongs to the initiative",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.Duplicated),
             };
         }
 
@@ -144,7 +145,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         logger.AddLog(LogType.Create, "Added initiative location", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -158,11 +159,9 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (!validationResult.IsValid)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Validation errors",
-                ResponseBody = validationResult.Errors
-                    .Select(error => error.ErrorMessage),
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
@@ -171,9 +170,9 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -183,17 +182,17 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (location == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Location not found",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Locations.NotFound),
             };
         }
 
         if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.ParentId == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "Locality is only available for municipalities",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.LocalityOnlyForMunicipality),
             };
         }
 
@@ -203,9 +202,9 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (hasDuplicatedEntities)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = "The location already belongs to the initiative",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.Duplicated),
             };
         }
 
@@ -218,7 +217,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         logger.AddLog(LogType.Update, "Updated initiative location", "{@EntityData}", entityData);
 
-        return new CustomWebResponse()
+        return new()
         {
             ResponseBody = entityData,
         };
@@ -232,9 +231,9 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (entity == null)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = MessageConstants.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -243,9 +242,9 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         if (totalLocations is <= 1)
         {
-            return new CustomWebResponse(true)
+            return new(true)
             {
-                Message = $"At least one location is required per initiative",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeLocations.LocationsRequired),
             };
         }
 
@@ -255,6 +254,6 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         logger.AddLog(LogType.Delete, "Deleted initiative location", "{@EntityData}", entityData);
 
-        return new CustomWebResponse();
+        return new();
     }
 }

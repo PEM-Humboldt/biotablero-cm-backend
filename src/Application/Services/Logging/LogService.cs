@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Logging;
 using IAVH.BioTablero.CM.Application.Mappings.Logging;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
 
 using Microsoft.AspNetCore.OData.Query;
@@ -39,12 +41,14 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
     /// <param name="entityReportService">Entity report service.</param>
     public LogService(
         ILogRepository entityRepository,
         IMapperRead<LogEntity, LogDto> mapper,
+        IValidationErrorTranslator errorTranslator,
         IReportService<LogDto> entityReportService)
-        : base(entityRepository, mapper)
+        : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
         this.entityReportService = entityReportService;
@@ -62,11 +66,11 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
             var odataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
             return GetOdataWebResponse(odataResponse, odataMapper);
         }
-        catch (ODataException ex)
+        catch (ODataException)
         {
             return new(true)
             {
-                Message = $"Invalid filter: {ex.Message}",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter),
             };
         }
     }
@@ -87,7 +91,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
             {
                 return new(true)
                 {
-                    Message = $"The parameters generate a file with more than {ReportMaxRows} records.",
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataRowLimitExceeded, data: ReportMaxRows),
                 };
             }
 
@@ -104,11 +108,11 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
                 ResponseBody = entityReportService.GenerateReport(dataListDto),
             };
         }
-        catch (ODataException ex)
+        catch (ODataException)
         {
             return new(true)
             {
-                Message = $"Invalid filter: {ex.Message}",
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter),
             };
         }
     }

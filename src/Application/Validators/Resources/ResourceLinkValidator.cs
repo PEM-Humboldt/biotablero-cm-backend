@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 /// <summary>
@@ -17,16 +18,16 @@ public class ResourceLinkValidator : AbstractValidator<ResourceLinkDto>
     {
         RuleFor(dto => dto)
             .NotNull()
-                .WithMessage("Entity data cannot be null");
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.Name)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .MaximumLength(100);
 
         RuleFor(dto => dto.Url)
             .NotEmpty()
-                .WithMessage("{PropertyName} is required")
+                .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .Matches(RegExprConstants.Url)
             .MaximumLength(250);
 
@@ -34,7 +35,7 @@ public class ResourceLinkValidator : AbstractValidator<ResourceLinkDto>
         {
             RuleFor(dto => dto.ResourceId)
                 .NotNull()
-                    .WithMessage("{PropertyName} is required");
+                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
         });
     }
 }
