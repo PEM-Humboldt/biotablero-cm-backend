@@ -23,6 +23,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.AspNetCore.OData.Query;
@@ -144,7 +145,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         }
 
         // Validate pending requests
-        var hasPendingRequests = await entityRepository.AnyPendingRequests(entityData.InitiativeId, entityData.UserName, ct);
+        var hasPendingRequests = await entityRepository.AnyPendingRequests(initiative.Id, entityData.UserName, ct);
 
         if (hasPendingRequests)
         {
@@ -155,7 +156,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         }
 
         // Validate user and initiative relationship
-        var hasUserAndInitiativeRelationship = await initiativeUserRepository.IsDuplicatedAsync(entityData.InitiativeId, entityData.UserName, ct);
+        var hasUserAndInitiativeRelationship = await initiativeUserRepository.IsDuplicatedAsync(initiative.Id, entityData.UserName, ct);
 
         if (hasUserAndInitiativeRelationship && entityData.Level != null)
         {
@@ -163,6 +164,14 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.Duplicated),
             };
+        }
+
+        // Check leaders constraints
+        var errorResponse = await CheckLeaderConstraints(initiative.Id, entityData.UserName, entityData.Level, ct);
+
+        if (errorResponse != null)
+        {
+            return errorResponse;
         }
 
         // Get user data from external system
@@ -246,6 +255,17 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             {
                 ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
+        }
+
+        // Check the number of leaders if the user is a leader and wants to leave the initiative
+        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId, entityData.UserName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+        // Check leaders constraints
+        var errorResponse = await CheckLeaderConstraints(entityData.InitiativeId, entityData.UserName, entityData.Level, ct);
+
+        if (errorResponse != null)
+        {
+            return errorResponse;
         }
 
         // Update entity data
@@ -395,5 +415,39 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
 
         return true;
+    }
+
+    /// <summary>
+    /// Check leaders constraints.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="username">User name.</param>
+    /// <param name="level">Initiative User level.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Custom web response if does not meet the constraints. Null otherwise.</returns>
+    private async Task<CustomWebResponse> CheckLeaderConstraints(int initiativeId, string username, EnumEntityDto<InitiativeUserLevelEnum> level, CancellationToken ct = default)
+    {
+        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, username, (int)InitiativeUserLevelEnum.Leader, ct);
+        var leaders = await initiativeUserRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
+
+        // Check the number of leaders if the user is a leader and wants to leave the initiative
+        if (userIsLeader && level == null && leaders.Count() <= 1)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeadersRequired),
+            };
+        }
+
+        // Check the number of leaders if the user wants to be a leader
+        if (level?.Id == (int)InitiativeUserLevelEnum.Leader && leaders.Count() >= InitiativeConstants.MaxLeadersPerInitiative)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeaderLimitExceeded, data: InitiativeConstants.MaxLeadersPerInitiative),
+            };
+        }
+
+        return null;
     }
 }

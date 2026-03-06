@@ -21,6 +21,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Serilog;
@@ -34,7 +35,6 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 /// </summary>
 public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserDto, int>, IInitiativeUserService
 {
-    private const int MaxLeadersByInitiative = 3;
     private new readonly IInitiativeUserRepository entityRepository;
     private readonly IValidator<InitiativeUserDto> entityValidator;
     private readonly ILogger logger;
@@ -134,11 +134,11 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             var leaders = await entityRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
 
-            if (leaders.Count() >= MaxLeadersByInitiative)
+            if (leaders.Count() >= InitiativeConstants.MaxLeadersPerInitiative)
             {
                 return new(true)
                 {
-                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeaderLimitExceeded, data: MaxLeadersByInitiative),
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeaderLimitExceeded, data: InitiativeConstants.MaxLeadersPerInitiative),
                 };
             }
         }
@@ -216,11 +216,11 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             };
         }
 
-        if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader && leaders.Count() >= MaxLeadersByInitiative)
+        if (entityData.Level.Id == (int)InitiativeUserLevelEnum.Leader && leaders.Count() >= InitiativeConstants.MaxLeadersPerInitiative)
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeaderLimitExceeded, data: MaxLeadersByInitiative),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeaderLimitExceeded, data: InitiativeConstants.MaxLeadersPerInitiative),
             };
         }
 
