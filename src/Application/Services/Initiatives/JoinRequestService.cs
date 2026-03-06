@@ -23,7 +23,6 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.AspNetCore.OData.Query;
@@ -174,14 +173,6 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             };
         }
 
-        // Check leaders constraints
-        var leaderConstraintsErrorResponse = await CheckLeaderConstraints(initiative.Id, entityData.UserName, entityData.Level, ct);
-
-        if (leaderConstraintsErrorResponse != null)
-        {
-            return leaderConstraintsErrorResponse;
-        }
-
         // Get user data from external system
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
 
@@ -275,13 +266,6 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         if (entity.LevelId != null)
         {
             enumEntity = new((InitiativeUserLevelEnum)entity.LevelId);
-        }
-
-        var leaderConstraintsErrorResponse = await CheckLeaderConstraints(initiativeId, entity.UserName, enumEntity, ct);
-
-        if (leaderConstraintsErrorResponse != null)
-        {
-            return leaderConstraintsErrorResponse;
         }
 
         // Update entity data
@@ -432,39 +416,5 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
 
         return true;
-    }
-
-    /// <summary>
-    /// Check leaders constraints.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="username">User name.</param>
-    /// <param name="level">Initiative User level.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Custom web response if does not meet the constraints. Null otherwise.</returns>
-    private async Task<CustomWebResponse> CheckLeaderConstraints(int initiativeId, string username, EnumEntityDto<InitiativeUserLevelEnum> level, CancellationToken ct = default)
-    {
-        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, username, (int)InitiativeUserLevelEnum.Leader, ct);
-        var leaders = await initiativeUserRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
-
-        // Check the number of leaders if the user is a leader and wants to leave the initiative
-        if (userIsLeader && level == null && leaders.Count() <= 1)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeadersRequired),
-            };
-        }
-
-        // Check the number of leaders if the user wants to be a leader
-        if (level?.Id == (int)InitiativeUserLevelEnum.Leader && leaders.Count() >= InitiativeConstants.MaxLeadersPerInitiative)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.LeaderLimitExceeded, data: InitiativeConstants.MaxLeadersPerInitiative),
-            };
-        }
-
-        return null;
     }
 }
