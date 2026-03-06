@@ -282,7 +282,7 @@
     <comment/>
   </data>
   <data name="IJR_004" xml:space="preserve">
-    <value>Relationship between user and initiative doesn't exist</value>
+    <value>The user does not belong to the initiative</value>
     <comment/>
   </data>
   <data name="RES_001" xml:space="preserve">
