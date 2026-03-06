@@ -28,7 +28,7 @@ public class JoinRequestMappings() : IMapperCreateAndRead<JoinRequest, JoinReque
             CreationDate = entity.CreationDate,
             ResponseDate = entity.ResponseDate,
             InitiativeId = entity.InitiativeId,
-            Level = new EnumEntityDto<InitiativeUserLevelEnum>(entity?.LevelId ?? 0),
+            Level = entity.LevelId != null ? new EnumEntityDto<InitiativeUserLevelEnum>(entity.LevelId.Value) : null,
             Status = new EnumEntityDto<JoinRequestStatusEnum>(entity.StatusId),
         };
     }
@@ -45,7 +45,7 @@ public class JoinRequestMappings() : IMapperCreateAndRead<JoinRequest, JoinReque
             CreationDate = dto.CreationDate ?? DateTime.Now,
             ResponseDate = dto.ResponseDate,
             InitiativeId = dto.InitiativeId,
-            LevelId = dto.Level.Id,
+            LevelId = dto.Level?.Id,
             StatusId = dto.Status.Id,
         };
     }
