@@ -261,6 +261,11 @@ public static class ValidationErrorCodes
         /// Reviewed join request.
         /// </summary>
         public const string ReviewedJoinRequests = "IJR_003";
+
+        /// <summary>
+        /// Relationship between user and initiative doesn't exist.
+        /// </summary>
+        public const string RelationshipDoesNotExists = "IJR_004";
     }
 
     /// <summary>

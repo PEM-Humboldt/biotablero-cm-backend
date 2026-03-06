@@ -166,12 +166,20 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             };
         }
 
-        // Check leaders constraints
-        var errorResponse = await CheckLeaderConstraints(initiative.Id, entityData.UserName, entityData.Level, ct);
-
-        if (errorResponse != null)
+        if (!hasUserAndInitiativeRelationship && entityData.Level == null)
         {
-            return errorResponse;
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinRequests.RelationshipDoesNotExists),
+            };
+        }
+
+        // Check leaders constraints
+        var leaderConstraintsErrorResponse = await CheckLeaderConstraints(initiative.Id, entityData.UserName, entityData.Level, ct);
+
+        if (leaderConstraintsErrorResponse != null)
+        {
+            return leaderConstraintsErrorResponse;
         }
 
         // Get user data from external system
@@ -269,11 +277,11 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             enumEntity = new((InitiativeUserLevelEnum)entity.LevelId);
         }
 
-        var errorResponse = await CheckLeaderConstraints(initiativeId, entity.UserName, enumEntity, ct);
+        var leaderConstraintsErrorResponse = await CheckLeaderConstraints(initiativeId, entity.UserName, enumEntity, ct);
 
-        if (errorResponse != null)
+        if (leaderConstraintsErrorResponse != null)
         {
-            return errorResponse;
+            return leaderConstraintsErrorResponse;
         }
 
         // Update entity data
