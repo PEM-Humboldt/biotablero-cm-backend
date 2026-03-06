@@ -258,10 +258,17 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         }
 
         // Check the number of leaders if the user is a leader and wants to leave the initiative
-        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId, entityData.UserName, (int)InitiativeUserLevelEnum.Leader, ct);
+        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, entity.UserName, (int)InitiativeUserLevelEnum.Leader, ct);
 
         // Check leaders constraints
-        var errorResponse = await CheckLeaderConstraints(entityData.InitiativeId, entityData.UserName, entityData.Level, ct);
+        EnumEntityDto<InitiativeUserLevelEnum> enumEntity = null;
+
+        if (entity.LevelId != null)
+        {
+            enumEntity = new((InitiativeUserLevelEnum)entity.LevelId);
+        }
+
+        var errorResponse = await CheckLeaderConstraints(initiativeId, entity.UserName, enumEntity, ct);
 
         if (errorResponse != null)
         {

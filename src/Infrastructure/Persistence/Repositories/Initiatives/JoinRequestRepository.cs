@@ -78,7 +78,7 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
                         dbContext.InitiativeUsers.Remove(initiativeUserRelationship);
                         await dbContext.SaveChangesAsync(ct);
                     }
-                    else
+                    else if (entity.LevelId != null)
                     {
                         var initiativeUserEntity = new InitiativeUser()
                         {
