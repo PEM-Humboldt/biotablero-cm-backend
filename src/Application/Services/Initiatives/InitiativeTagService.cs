@@ -69,13 +69,21 @@ public class InitiativeTagService : IInitiativeTagService
         }
 
         // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
+        var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
 
-        if (!initiativeExists)
+        if (initiative == null)
         {
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
+            };
+        }
+
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
         }
 
@@ -141,6 +149,17 @@ public class InitiativeTagService : IInitiativeTagService
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        // Validate initiative
+        var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
+
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
         }
 

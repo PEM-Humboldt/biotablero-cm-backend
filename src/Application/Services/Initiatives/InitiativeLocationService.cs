@@ -103,13 +103,21 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         }
 
         // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
+        var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
 
-        if (!initiativeExists)
+        if (initiative == null)
         {
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
+            };
+        }
+
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
         }
 
@@ -197,6 +205,17 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
             };
         }
 
+        // Validate initiative
+        var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
+
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+            };
+        }
+
         // Validate location
         var locationId = entityData.LocationId ?? 0;
         var location = await locationRepository.GetByIdAsync(locationId, ct);
@@ -265,6 +284,17 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        // Validate initiative
+        var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
+
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
             };
         }
 
