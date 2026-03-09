@@ -122,6 +122,7 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
                 jr => jr.InitiativeId,
                 (join, jr) => new { join.iu, join.i, jr })
             .Where(join =>
+                join.i.Enabled &&
                 join.jr.StatusId == (int)JoinRequestStatusEnum.UnderReview &&
                 join.jr.CreationDate <= since)
             .GroupBy(join => join.iu.UserName)
