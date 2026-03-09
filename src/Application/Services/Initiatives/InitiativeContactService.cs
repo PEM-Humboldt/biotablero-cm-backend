@@ -112,7 +112,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
@@ -174,7 +174,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
@@ -246,7 +246,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 

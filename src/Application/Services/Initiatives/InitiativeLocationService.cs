@@ -117,7 +117,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
@@ -212,7 +212,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
@@ -294,7 +294,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 

@@ -83,7 +83,7 @@ public class InitiativeTagService : IInitiativeTagService
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
@@ -159,7 +159,7 @@ public class InitiativeTagService : IInitiativeTagService
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 

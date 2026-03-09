@@ -122,7 +122,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
@@ -209,7 +209,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
@@ -293,7 +293,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 

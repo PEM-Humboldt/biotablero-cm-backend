@@ -147,7 +147,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
@@ -252,7 +252,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
