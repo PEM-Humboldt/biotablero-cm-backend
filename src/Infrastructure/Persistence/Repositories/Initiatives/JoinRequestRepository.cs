@@ -34,6 +34,13 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
     }
 
     /// <inheritdoc/>
+    public async Task<IEnumerable<JoinRequest>> GetByUserNameAsync(string userName, CancellationToken ct = default) =>
+        await dbContext.JoinRequests
+            .Include(e => e.Initiative)
+            .Where(e => e.UserName == userName)
+            .ToListAsync(ct);
+
+    /// <inheritdoc/>
     public IQueryable<JoinRequest> AddInitiativeFilter(int initiativeId, IQueryable<JoinRequest> query) =>
         query
             .Where(e => e.InitiativeId == initiativeId);

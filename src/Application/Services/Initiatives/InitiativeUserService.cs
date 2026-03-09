@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -170,7 +171,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string reviewerUserName, InitiativeUserDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string reviewerUserName, bool userIsAdmin, InitiativeUserDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -194,10 +195,24 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             };
         }
 
+        // Validate user permissions
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await entityRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, reviewerUserName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
+        }
+
         // Validate number of leaders
         var leaders = await entityRepository.GetByInitiativeAndLevelAsync(id, entity.InitiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
 
-        if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader && !leaders.Any())
+        if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader && entityData.Level.Id != (int)InitiativeUserLevelEnum.Leader && leaders.Count() <= 1)
         {
             return new(true)
             {
@@ -234,7 +249,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default)
     {
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
@@ -245,6 +260,20 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
+        }
+
+        // Validate user permissions
+        if (!userIsAdmin)
+        {
+            var authorizedUserAction = await entityRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
         }
 
         // Validate number of leaders

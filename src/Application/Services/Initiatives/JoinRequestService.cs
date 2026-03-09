@@ -107,6 +107,20 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     }
 
     /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default)
+    {
+        var dataListEntity = await entityRepository.GetByUserNameAsync(userName, ct);
+
+        var dataListDto = dataListEntity
+            .Select(mapper.Map);
+
+        return new()
+        {
+            ResponseBody = dataListDto,
+        };
+    }
+
+    /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(JoinRequestDto entityData, CancellationToken ct = default)
     {
         // Validate data
@@ -270,6 +284,39 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         {
             ResponseBody = entityData,
         };
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> CancelAsync(int id, string userName, CancellationToken ct = default)
+    {
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        // Validate user
+        if (entity.UserName != userName || entity.StatusId != (int)JoinRequestStatusEnum.UnderReview)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        entity.StatusId = (int)JoinRequestStatusEnum.Cancelled;
+        await entityRepository.UpdateAsync(entity, ct);
+
+        var entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Delete, "Cancelled JoinRequest", "{@EntityData}", entityData);
+
+        return new();
     }
 
     /// <inheritdoc/>

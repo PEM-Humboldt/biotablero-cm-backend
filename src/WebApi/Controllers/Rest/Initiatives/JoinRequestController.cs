@@ -49,6 +49,20 @@ public class JoinRequestController(
     }
 
     /// <summary>
+    /// Get my join requests.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Join Requests list.</returns>
+    [Authorize]
+    [HttpGet("MyRequests")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestListResponseExample))]
+    public async Task<IActionResult> GetListInitiativesData(CancellationToken ct)
+    {
+        var response = await entityService.GetByUserNameAsync(HttpContext.GetUserName(), ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
     /// Add entity.
     /// </summary>
     /// <param name="requestData">Request data.</param>
@@ -85,6 +99,20 @@ public class JoinRequestController(
         };
 
         var response = await entityService.UpdateAsync(id, requestData, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
+    /// Cancel request.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    [HttpDelete("Cancel/{id}")]
+    [Authorize]
+    public async Task<IActionResult> Cancel(int id, CancellationToken ct)
+    {
+        var response = await entityService.CancelAsync(id, HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
     }
 }

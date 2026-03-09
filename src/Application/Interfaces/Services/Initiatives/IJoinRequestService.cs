@@ -26,6 +26,23 @@ public interface IJoinRequestService : IRead<JoinRequest, int>, IAdd<JoinRequest
     Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default);
 
     /// <summary>
+    /// Get entities by user name.
+    /// </summary>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default);
+
+    /// <summary>
+    /// Cancel element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> CancelAsync(int id, string userName, CancellationToken ct = default);
+
+    /// <summary>
     /// Send notifications for old pending join requests.
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
