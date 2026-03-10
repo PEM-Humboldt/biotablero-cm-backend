@@ -7,6 +7,7 @@ using DotNetEnv;
 using IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup;
 using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup;
+using IAVH.BioTablero.CM.WebApi.Utils;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -93,11 +94,13 @@ public class Program
         app.MapHealthChecks("/health/live", new HealthCheckOptions
         {
             Predicate = r => r.Tags.Contains("live"),
+            ResponseWriter = HealthCheckResponseWriter.ResponseWriter,
         });
 
         app.MapHealthChecks("/health/ready", new HealthCheckOptions
         {
             Predicate = r => r.Tags.Contains("ready"),
+            ResponseWriter = HealthCheckResponseWriter.ResponseWriter,
         });
 
         // Add support to logging request with Serilog
