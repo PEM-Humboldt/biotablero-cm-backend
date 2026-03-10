@@ -92,9 +92,19 @@ public static class ConfigExternalServices
             var region = Environment.GetEnvironmentVariable("AWS_REGION");
             var endpoint = Environment.GetEnvironmentVariable("S3_ENDPOINT_URL");
 
-            var config = new AmazonS3Config
+            var isProductionEnv = endpoint == null;
+            AmazonS3Config config = null;
+
+            if (isProductionEnv)
             {
-                RegionEndpoint = RegionEndpoint.GetBySystemName(region),
+                config = new()
+                {
+                    RegionEndpoint = RegionEndpoint.GetBySystemName(region),
+                };
+            }
+
+            config = new()
+            {
                 ServiceURL = endpoint,
                 UseHttp = true,
                 ForcePathStyle = true,
