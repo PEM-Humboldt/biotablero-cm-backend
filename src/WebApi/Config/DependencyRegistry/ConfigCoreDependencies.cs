@@ -2,10 +2,14 @@
 
 using System;
 
+using global::HealthChecks.Network.Core;
+
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Services.General;
+using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories;
 using IAVH.BioTablero.CM.WebApi.Config.HealthChecks;
@@ -25,6 +29,7 @@ public static class ConfigCoreDependencies
 {
     private static readonly string OidcServer = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}/";
     private static readonly string ConnectionString = Environment.GetEnvironmentVariable("CS_MAIN");
+    private static readonly SmtpConfigData SmtpData = EmailService.InitSmtpData();
 
     /// <summary>
     /// Add core services.
@@ -115,6 +120,27 @@ public static class ConfigCoreDependencies
             .AddNpgSql(
                 ConnectionString,
                 name: "postgres")
+            .AddTcpHealthCheck(
+                setup: options =>
+                {
+                    options.AddHost("1.1.1.1", 53);
+                },
+                name: "internet")
+            .AddSmtpHealthCheck(
+                options =>
+                {
+                    options.Host = SmtpData.Host;
+                    options.Port = SmtpData.Port;
+                    options.ConnectionType = SmtpData.EnableSsl
+                        ? SmtpConnectionType.TLS
+                        : SmtpConnectionType.PLAIN;
+
+                    if (!string.IsNullOrEmpty(SmtpData.User))
+                    {
+                        options.LoginWith(SmtpData.User, SmtpData.Password);
+                    }
+                },
+                name: "smtp")
             .AddCheck<S3HealthCheck>(name: "aws s3");
 
         return services;
