@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 
 using DotNetEnv;
 
-using IAVH.BioTablero.CM.Infrastructure.Persistence.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup;
 using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup;
@@ -34,10 +33,7 @@ public class Program
         // Load environment variables from a local file
         Env.Load("../../.env");
 
-        // Add DB Contexts
-        ConfigDbDependencies.AddDbServices(builder.Services);
-
-        // Dependency injection configuration
+        // Dependency registry setup
         builder.Services.AddHttpClient();
         builder.Services.AddCoreServices(builder.Environment.IsDevelopment());
         builder.Services.AddAppServices();

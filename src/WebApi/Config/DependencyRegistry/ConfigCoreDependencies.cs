@@ -6,6 +6,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Infrastructure.Persistence.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories;
 using IAVH.BioTablero.CM.WebApi.Controllers.Tools;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -22,6 +23,7 @@ using Microsoft.IdentityModel.Tokens;
 public static class ConfigCoreDependencies
 {
     private static readonly string OidcServer = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}/";
+    private static readonly string ConnectionString = Environment.GetEnvironmentVariable("CS_MAIN");
 
     /// <summary>
     /// Add core services.
@@ -31,10 +33,17 @@ public static class ConfigCoreDependencies
     /// <returns>Service descriptors collection with custom services.</returns>
     public static IServiceCollection AddCoreServices(this IServiceCollection services, bool isDevelopment = false)
     {
+        // Add DB Contexts
+        ConfigDbDependencies.AddDbServices(services, ConnectionString);
+
+        // Health checks setup
         services.AddHealthChecks()
             .AddOpenIdConnectServer(
                 oidcSvrUri: new Uri(OidcServer),
-                name: "keycloak");
+                name: "keycloak")
+            .AddNpgSql(
+                ConnectionString,
+                name: "postgres");
 
         services.AddHttpContextAccessor(); // Required for Serilog (ASP.NET)
 
