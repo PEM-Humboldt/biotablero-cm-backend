@@ -21,6 +21,8 @@ using Microsoft.IdentityModel.Tokens;
 /// </summary>
 public static class ConfigCoreDependencies
 {
+    private static readonly string OidcServer = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}/";
+
     /// <summary>
     /// Add core services.
     /// </summary>
@@ -29,7 +31,11 @@ public static class ConfigCoreDependencies
     /// <returns>Service descriptors collection with custom services.</returns>
     public static IServiceCollection AddCoreServices(this IServiceCollection services, bool isDevelopment = false)
     {
-        services.AddHealthChecks();
+        services.AddHealthChecks()
+            .AddOpenIdConnectServer(
+                oidcSvrUri: new Uri(OidcServer),
+                name: "keycloak");
+
         services.AddHttpContextAccessor(); // Required for Serilog (ASP.NET)
 
         // Enabled MVC without routing
@@ -59,20 +65,19 @@ public static class ConfigCoreDependencies
     /// <returns>Service descriptors collection with authentication service.</returns>
     private static IServiceCollection AddAuthService(this IServiceCollection services, bool isDevelopment)
     {
-        var url = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}";
         var clientId = Environment.GetEnvironmentVariable("KC_CLIENT");
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = url;
+                options.Authority = OidcServer;
                 options.Audience = clientId;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = true,
                     ValidateIssuer = true,
-                    ValidIssuer = url,
+                    ValidIssuer = OidcServer,
                     ValidateLifetime = true,
                 };
                 options.RequireHttpsMetadata = !isDevelopment;
