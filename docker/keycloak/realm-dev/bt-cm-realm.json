@@ -79,6 +79,23 @@
             "realmRoles": [
                 "User"
             ]
+        },
+        {
+            "username": "initiative-reader@example.com",
+            "enabled": true,
+            "emailVerified": true,
+            "firstName": "Initiative Reader",
+            "lastName": "Example",
+            "email": "initiative-reader@example.com",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "pass"
+                }
+            ],
+            "realmRoles": [
+                "User"
+            ]
         }
     ],
     "roles": {
