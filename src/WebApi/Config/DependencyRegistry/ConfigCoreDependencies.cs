@@ -8,6 +8,7 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories;
+using IAVH.BioTablero.CM.WebApi.Config.HealthChecks;
 using IAVH.BioTablero.CM.WebApi.Controllers.Tools;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 using IAVH.BioTablero.CM.WebApi.Services;
@@ -36,15 +37,7 @@ public static class ConfigCoreDependencies
         // Add DB Contexts
         ConfigDbDependencies.AddDbServices(services, ConnectionString);
 
-        // Health checks setup
-        services.AddHealthChecks()
-            .AddOpenIdConnectServer(
-                oidcSvrUri: new Uri(OidcServer),
-                name: "keycloak")
-            .AddNpgSql(
-                ConnectionString,
-                name: "postgres")
-            .AddCheck<S3HealthCheck>(name: "aws s3");
+        services.ConfigureHealthChecks();
 
         services.AddHttpContextAccessor(); // Required for Serilog (ASP.NET)
 
@@ -107,4 +100,23 @@ public static class ConfigCoreDependencies
         {
             options.MultipartBodyLengthLimit = 5_242_880; // 5 MB
         });
+
+    /// <summary>
+    /// Configure HealthChecks.
+    /// </summary>
+    /// <param name="services">Service descriptors collection.</param>
+    /// <returns>Service descriptors collection with custom services.</returns>
+    private static IServiceCollection ConfigureHealthChecks(this IServiceCollection services)
+    {
+        services.AddHealthChecks()
+            .AddOpenIdConnectServer(
+                oidcSvrUri: new Uri(OidcServer),
+                name: "keycloak")
+            .AddNpgSql(
+                ConnectionString,
+                name: "postgres")
+            .AddCheck<S3HealthCheck>(name: "aws s3");
+
+        return services;
+    }
 }
