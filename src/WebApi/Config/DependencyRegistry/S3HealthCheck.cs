@@ -12,19 +12,11 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 /// <summary>
 /// Custom AWS S3 Healht check.
 /// </summary>
-public class S3HealthCheck : IHealthCheck
+/// <param name="client">AWS S3 client.</param>
+public class S3HealthCheck(IAmazonS3 client) : IHealthCheck
 {
-    private readonly IAmazonS3 client;
+    private readonly IAmazonS3 client = client;
     private readonly string bucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME");
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="client">AWS S3 client.</param>
-    public S3HealthCheck(IAmazonS3 client)
-    {
-        this.client = client;
-    }
 
     /// <inheritdoc/>
     public async Task<HealthCheckResult> CheckHealthAsync(
@@ -33,19 +25,18 @@ public class S3HealthCheck : IHealthCheck
     {
         try
         {
-            await client.ListObjectsV2Async(
-                new ListObjectsV2Request
-                {
-                    BucketName = bucketName,
-                    MaxKeys = 1,
-                },
-                cancellationToken);
+            var request = new HeadBucketRequest
+            {
+                BucketName = bucketName,
+            };
 
-            return HealthCheckResult.Healthy("S3 reachable");
+            await client.HeadBucketAsync(request, cancellationToken);
+
+            return HealthCheckResult.Healthy();
         }
         catch (AmazonS3Exception ex)
         {
-            return HealthCheckResult.Unhealthy("S3 unavailable", ex);
+            return HealthCheckResult.Unhealthy("S3 bucket unavailable", ex);
         }
     }
 }
