@@ -9,6 +9,7 @@ using IAVH.BioTablero.CM.WebApi.Config.DocsSetup;
 using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup;
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -89,7 +90,15 @@ public class Program
         }
 
         // Setup health checks endpoint
-        app.MapHealthChecks("/health");
+        app.MapHealthChecks("/health/live", new HealthCheckOptions
+        {
+            Predicate = r => r.Tags.Contains("live"),
+        });
+
+        app.MapHealthChecks("/health/ready", new HealthCheckOptions
+        {
+            Predicate = r => r.Tags.Contains("ready"),
+        });
 
         // Add support to logging request with Serilog
         app.UseSerilogRequestLogging();

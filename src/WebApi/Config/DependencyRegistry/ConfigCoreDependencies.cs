@@ -20,6 +20,7 @@ using IAVH.BioTablero.CM.WebApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 
 /// <summary>
@@ -116,16 +117,19 @@ public static class ConfigCoreDependencies
         services.AddHealthChecks()
             .AddOpenIdConnectServer(
                 oidcSvrUri: new Uri(OidcServer),
-                name: "keycloak")
+                name: "keycloak",
+                tags: ["ready"])
             .AddNpgSql(
                 ConnectionString,
-                name: "postgres")
+                name: "postgres",
+                tags: ["ready"])
             .AddTcpHealthCheck(
                 setup: options =>
                 {
                     options.AddHost("1.1.1.1", 53);
                 },
-                name: "internet")
+                name: "internet",
+                tags: ["ready"])
             .AddSmtpHealthCheck(
                 options =>
                 {
@@ -140,8 +144,15 @@ public static class ConfigCoreDependencies
                         options.LoginWith(SmtpData.User, SmtpData.Password);
                     }
                 },
-                name: "smtp")
-            .AddCheck<S3HealthCheck>(name: "aws s3");
+                name: "smtp",
+                tags: ["ready"])
+            .AddCheck<S3HealthCheck>(
+                name: "aws s3",
+                tags: ["ready"])
+            .AddCheck(
+                "self",
+                () => HealthCheckResult.Healthy(),
+                tags: ["live"]);
 
         return services;
     }
