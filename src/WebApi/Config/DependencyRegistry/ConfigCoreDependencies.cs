@@ -43,7 +43,8 @@ public static class ConfigCoreDependencies
                 name: "keycloak")
             .AddNpgSql(
                 ConnectionString,
-                name: "postgres");
+                name: "postgres")
+            .AddCheck<S3HealthCheck>(name: "aws s3");
 
         services.AddHttpContextAccessor(); // Required for Serilog (ASP.NET)
 
