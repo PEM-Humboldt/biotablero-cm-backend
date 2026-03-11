@@ -36,7 +36,7 @@ public class TagMappings : IMapperCreateReadAndUpdate<Tag, TagDto>
         return new()
         {
             Name = dto.Name,
-            Url = new Uri(dto.Url),
+            Url = dto.Url != null ? new Uri(dto.Url) : null,
             CategoryId = dto.Category.Id,
         };
     }
