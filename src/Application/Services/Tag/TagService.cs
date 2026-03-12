@@ -15,6 +15,7 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 
 using Serilog;
@@ -31,6 +32,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     private readonly IValidator<TagDto> entityValidator;
     private readonly ILogger logger;
     private readonly IInitiativeRepository initiativeRepository;
+    private readonly IResourceRepository resourceRepository;
 
     /// <summary>
     /// Constructor.
@@ -41,13 +43,15 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
+    /// <param name="resourceRepository">Resource repository.</param>
     public TagService(
         ITagRepository entityRepository,
         IMapperCreateReadAndUpdate<Tag, TagDto> mapper,
         IValidationErrorTranslator errorTranslator,
         IValidator<TagDto> entityValidator,
         ILogger logger,
-        IInitiativeRepository initiativeRepository)
+        IInitiativeRepository initiativeRepository,
+        IResourceRepository resourceRepository)
         : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
@@ -55,6 +59,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
+        this.resourceRepository = resourceRepository;
     }
 
     /// <inheritdoc/>
@@ -166,9 +171,10 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         }
 
         // Validate relationships
-        var hasRelationships = await initiativeRepository.AnyByTagAsync(id, ct);
+        var hasInitiativeRelationships = await initiativeRepository.AnyByTagAsync(id, ct);
+        var hasResourceRelationships = await resourceRepository.AnyByTagAsync(id, ct);
 
-        if (hasRelationships)
+        if (hasInitiativeRelationships || hasResourceRelationships)
         {
             return new(true)
             {
