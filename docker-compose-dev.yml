@@ -8,6 +8,12 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     ports:
       - "${DB_PORT:-5432}:5432"
     volumes:
@@ -30,7 +36,7 @@ services:
       KC_HOSTNAME: localhost
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin
-    restart: on-failure
+    restart: "no"
     ports:
       - "8080:8080"
     command:
@@ -40,7 +46,8 @@ services:
     volumes:
       - ./docker/keycloak/realm-dev:/opt/keycloak/data/import:ro
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - bt-search-network
 

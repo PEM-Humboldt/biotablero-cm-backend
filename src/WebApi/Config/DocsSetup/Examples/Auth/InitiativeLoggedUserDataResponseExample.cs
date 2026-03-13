@@ -31,7 +31,7 @@ public class InitiativeLoggedUserDataResponseExample : IExamplesProvider<List<In
                 new()
                 {
                     Id = 0,
-                    UserName = "Example",
+                    UserName = "initiative-leader@example.com",
                     Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Leader),
                 }
             ],

@@ -24,12 +24,17 @@ public class InitiativeContactValidator : AbstractValidator<InitiativeContactDto
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .EmailAddress()
-            .MaximumLength(100);
+                .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue)
+            .MaximumLength(100)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Phone)
             .Matches(RegExprConstants.Phone)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue)
             .MinimumLength(7)
-            .MaximumLength(15);
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength)
+            .MaximumLength(15)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleSet("Create", () =>
         {

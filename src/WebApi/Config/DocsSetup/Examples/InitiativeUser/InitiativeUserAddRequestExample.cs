@@ -16,8 +16,8 @@ public class InitiativeUserAddRequestExample : IExamplesProvider<InitiativeUserD
     public InitiativeUserDto GetExamples() => new()
     {
         InitiativeId = 1,
-        UserName = "Example",
+        UserName = "initiative-member@example.com",
         FocusArea = "Focus area example",
-        Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Leader),
+        Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Member),
     };
 }

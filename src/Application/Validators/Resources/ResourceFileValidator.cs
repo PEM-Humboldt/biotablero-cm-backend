@@ -22,7 +22,8 @@ public class ResourceFileValidator : AbstractValidator<ResourceFileDto>
         RuleFor(dto => dto.Name)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
-            .MaximumLength(100);
+            .MaximumLength(100)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleSet("Create", () =>
         {

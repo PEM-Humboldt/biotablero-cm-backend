@@ -23,6 +23,8 @@ public class JoinInvitationGuestValidator : AbstractValidator<JoinInvitationGues
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
             .EmailAddress()
-            .MaximumLength(100);
+                .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue)
+            .MaximumLength(100)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
     }
 }

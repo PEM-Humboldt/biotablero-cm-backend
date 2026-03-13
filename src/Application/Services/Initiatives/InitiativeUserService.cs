@@ -240,7 +240,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
         var initiative = await initiativeRepository.GetByIdAsync(entity.InitiativeId, ct);
-        SendNotificationChangedLevel(userData, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, leaders, ct);
+        await SendNotificationChangedLevel(userData, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, leaders, ct);
 
         return new()
         {
@@ -300,7 +300,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
         var initiative = await initiativeRepository.GetByIdAsync(entity.InitiativeId, ct);
-        SendNotificationUserBanned(userData, initiative, leaders, ct);
+        await SendNotificationUserBanned(userData, initiative, leaders, ct);
 
         return new();
     }
@@ -314,45 +314,43 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="reviewerUserName">Reviewer user name.</param>
     /// <param name="leaders">Initiative leaders list.</param>
     /// <param name="ct">Cancellation token.</param>
-    private void SendNotificationChangedLevel(ExternalUser userData, Initiative initiative, InitiativeUserLevelEnum level, string reviewerUserName, IEnumerable<InitiativeUser> leaders, CancellationToken ct = default) => Task.Run(
-        async () =>
+    private async Task SendNotificationChangedLevel(ExternalUser userData, Initiative initiative, InitiativeUserLevelEnum level, string reviewerUserName, IEnumerable<InitiativeUser> leaders, CancellationToken ct = default)
+    {
+        var newLevelName = string.Empty;
+
+        newLevelName = level switch
         {
-            var newLevelName = string.Empty;
+            InitiativeUserLevelEnum.Leader => "líder",
+            InitiativeUserLevelEnum.Reader => "lector",
+            _ => "miembro",
+        };
 
-            newLevelName = level switch
-            {
-                InitiativeUserLevelEnum.Leader => "líder",
-                InitiativeUserLevelEnum.Reader => "lector",
-                _ => "miembro",
-            };
+        var emailData = new RoleAssignmentEmailData
+        {
+            Address = new(userData.FullName, userData.Email),
+            InitiativeName = initiative.Name,
+            LevelName = newLevelName,
+            ReviewerUserName = reviewerUserName,
+        };
 
-            var emailData = new RoleAssignmentEmailData
-            {
-                Address = new(userData.FullName, userData.Email),
-                InitiativeName = initiative.Name,
-                LevelName = newLevelName,
-                ReviewerUserName = reviewerUserName,
-            };
+        var receivers = new CustomEmailAddress[] { emailData.Address };
+        CustomEmailAddress[] hiddenReceivers = null;
+        var htmlBody = await webViewTools.RenderViewToStringAsync("RoleAssignment", emailData);
 
-            var receivers = new CustomEmailAddress[] { emailData.Address };
-            CustomEmailAddress[] hiddenReceivers = null;
-            var htmlBody = await webViewTools.RenderViewToStringAsync("RoleAssignment", emailData);
+        if (leaders?.Any() ?? false)
+        {
+            var leadersUserNames = leaders
+                .Select(e => e.UserName)
+                .ToArray();
 
-            if (leaders?.Any() ?? false)
-            {
-                var leadersUserNames = leaders
-                    .Select(e => e.UserName)
-                    .ToArray();
+            var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
+            hiddenReceivers = leadersData
+                .Select(u => new CustomEmailAddress(u.FullName, u.Email))
+                .ToArray();
+        }
 
-                var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
-                hiddenReceivers = leadersData
-                    .Select(u => new CustomEmailAddress(u.FullName, u.Email))
-                    .ToArray();
-            }
-
-            await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
-        },
-        ct);
+        await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
+    }
 
     /// <summary>
     /// Send notification when a user has been banned.
@@ -361,32 +359,30 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="initiative">Initiative data.</param>
     /// <param name="leaders">Initiative leaders list.</param>
     /// <param name="ct">Cancellation token.</param>
-    private void SendNotificationUserBanned(ExternalUser userData, Initiative initiative, IEnumerable<InitiativeUser> leaders, CancellationToken ct = default) => Task.Run(
-        async () =>
+    private async Task SendNotificationUserBanned(ExternalUser userData, Initiative initiative, IEnumerable<InitiativeUser> leaders, CancellationToken ct = default)
+    {
+        var emailData = new UserRemovalEmailData
         {
-            var emailData = new UserRemovalEmailData
-            {
-                Address = new(userData.FullName, userData.Email),
-                InitiativeName = initiative.Name,
-            };
+            Address = new(userData.FullName, userData.Email),
+            InitiativeName = initiative.Name,
+        };
 
-            var receivers = new CustomEmailAddress[] { emailData.Address };
-            CustomEmailAddress[] hiddenReceivers = null;
-            var htmlBody = await webViewTools.RenderViewToStringAsync("UserRemoval", emailData);
+        var receivers = new CustomEmailAddress[] { emailData.Address };
+        CustomEmailAddress[] hiddenReceivers = null;
+        var htmlBody = await webViewTools.RenderViewToStringAsync("UserRemoval", emailData);
 
-            if (leaders?.Any() ?? false)
-            {
-                var leadersUserNames = leaders
-                    .Select(e => e.UserName)
-                    .ToArray();
+        if (leaders?.Any() ?? false)
+        {
+            var leadersUserNames = leaders
+                .Select(e => e.UserName)
+                .ToArray();
 
-                var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
-                hiddenReceivers = leadersData
-                    .Select(u => new CustomEmailAddress(u.FullName, u.Email))
-                    .ToArray();
-            }
+            var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
+            hiddenReceivers = leadersData
+                .Select(u => new CustomEmailAddress(u.FullName, u.Email))
+                .ToArray();
+        }
 
-            await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
-        },
-        ct);
+        await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
+    }
 }

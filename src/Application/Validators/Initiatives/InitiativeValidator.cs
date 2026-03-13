@@ -22,21 +22,26 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
         RuleFor(dto => dto.Name)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
-            .MaximumLength(100);
+            .MaximumLength(100)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.ShortName)
-            .MaximumLength(120);
+            .MaximumLength(120)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Description)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
-            .MaximumLength(300);
+            .MaximumLength(300)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Baseline)
-            .MaximumLength(1000);
+            .MaximumLength(1000)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Objective)
-            .MaximumLength(1000);
+            .MaximumLength(1000)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleSet("Create", () =>
         {

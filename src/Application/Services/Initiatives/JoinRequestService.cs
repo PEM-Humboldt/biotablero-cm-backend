@@ -195,7 +195,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             JoinRequestStatus = JoinRequestStatusEnum.UnderReview,
         };
 
-        SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
+        await SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
 
         entityData = mapper.Map(entity);
 
@@ -276,7 +276,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             JoinRequestStatus = (JoinRequestStatusEnum)entity.StatusId,
         };
 
-        SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
+        await SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
 
         logger.AddLog(LogType.Update, "Updated initiative join request", "{@EntityData}", entityData);
 
@@ -353,31 +353,29 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="emailData">Email data.</param>
     /// <param name="ct">Cancellation token.</param>
-    private void SendNotificationJoinRequest(int initiativeId, JoinRequestEmailData emailData, CancellationToken ct = default) => _ = Task.Run(
-        async () =>
+    private async Task SendNotificationJoinRequest(int initiativeId, JoinRequestEmailData emailData, CancellationToken ct = default)
+    {
+        var leaders = await initiativeUserRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
+
+        if (leaders?.Any() ?? false)
         {
-            var leaders = await initiativeUserRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
+            var leadersUserNames = leaders
+                .Select(e => e.UserName)
+                .ToArray();
 
-            if (leaders?.Any() ?? false)
-            {
-                var leadersUserNames = leaders
-                    .Select(e => e.UserName)
-                    .ToArray();
+            var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
 
-                var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
+            var hiddenReceivers = leadersData
+                .Select(e => new CustomEmailAddress(e.FullName, e.Email))
+                .ToArray();
 
-                var hiddenReceivers = leadersData
-                    .Select(e => new CustomEmailAddress(e.FullName, e.Email))
-                    .ToArray();
+            var receivers = new CustomEmailAddress[] { emailData.Address };
 
-                var receivers = new CustomEmailAddress[] { emailData.Address };
+            var htmlBody = await webViewTools.RenderViewToStringAsync("JoinRequest", emailData);
 
-                var htmlBody = await webViewTools.RenderViewToStringAsync("JoinRequest", emailData);
-
-                await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
-            }
-        },
-        ct);
+            await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
+        }
+    }
 
     /// <summary>
     /// Send notifications for old pending join requests.

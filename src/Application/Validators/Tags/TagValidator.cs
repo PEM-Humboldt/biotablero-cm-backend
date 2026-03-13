@@ -25,11 +25,14 @@ public class TagValidator : AbstractValidator<TagDto>
         RuleFor(dto => dto.Name)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
-            .MaximumLength(40);
+            .MaximumLength(40)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Url)
             .Matches(RegExprConstants.Url)
-            .MaximumLength(150);
+                .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue)
+            .MaximumLength(150)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleSet("Create", () =>
         {

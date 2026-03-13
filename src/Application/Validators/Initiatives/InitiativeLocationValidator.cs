@@ -24,7 +24,8 @@ public class InitiativeLocationValidator : AbstractValidator<InitiativeLocationD
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty);
 
         RuleFor(dto => dto.Locality)
-            .MaximumLength(300);
+            .MaximumLength(300)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleSet("Create", () =>
         {

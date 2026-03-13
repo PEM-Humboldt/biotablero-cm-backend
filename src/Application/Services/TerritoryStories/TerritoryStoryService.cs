@@ -196,7 +196,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
             };
         }
 
-        if (entityData.Videos.Any())
+        if (entityData.Videos?.Any() ?? false)
         {
             // Validate duplicated videos
             var videosUrls = entityData.Videos

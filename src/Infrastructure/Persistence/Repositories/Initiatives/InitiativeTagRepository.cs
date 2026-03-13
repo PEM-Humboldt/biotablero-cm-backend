@@ -29,6 +29,20 @@ public class InitiativeTagRepository : Repository<InitiativeTag, int>, IInitiati
     }
 
     /// <inheritdoc/>
+    public override async Task<InitiativeTag> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await dbContext.InitiativeTags
+                .Include(e => e.Tag)
+            .Where(e => e.Id == id)
+            .FirstOrDefaultAsync(ct);
+
+    /// <inheritdoc/>
+    public override async Task<InitiativeTag> AddAsync(InitiativeTag entity, CancellationToken ct = default)
+    {
+        await base.AddAsync(entity, ct);
+        return await GetByIdAsync(entity.Id, ct);
+    }
+
+    /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int initiativeId, int tagId, CancellationToken ct = default) =>
         await dbContext.InitiativeTags
             .Where(e => e.InitiativeId == initiativeId && e.TagId == tagId)
