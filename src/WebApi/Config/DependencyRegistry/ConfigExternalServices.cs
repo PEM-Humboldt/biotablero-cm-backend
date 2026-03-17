@@ -1,5 +1,11 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
+using System;
+
+using Amazon;
+using Amazon.Runtime;
+using Amazon.S3;
+
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
@@ -79,6 +85,30 @@ public static class ConfigExternalServices
         services.AddScoped<IVideoHelperService, VideoHelperService>();
         services.AddScoped<IImageUtilsService, ImageUtilsService>();
         services.AddScoped<IWebHelperService, WebHelperService>();
+        services.AddSingleton<IAmazonS3>(_ =>
+        {
+            var accessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY");
+            var secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY");
+            var region = Environment.GetEnvironmentVariable("AWS_REGION");
+            var endpoint = Environment.GetEnvironmentVariable("S3_ENDPOINT_URL");
+
+            var config = new AmazonS3Config()
+            {
+                RegionEndpoint = RegionEndpoint.GetBySystemName(region),
+            };
+
+            if (endpoint != null)
+            {
+                config = new()
+                {
+                    ServiceURL = endpoint,
+                    UseHttp = true,
+                    ForcePathStyle = true,
+                };
+            }
+
+            return new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey), config);
+        });
 
         return services;
     }
