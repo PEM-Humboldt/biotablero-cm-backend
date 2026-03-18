@@ -137,7 +137,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.Duplicated),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.Duplicated),
             };
         }
 
