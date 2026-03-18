@@ -103,7 +103,7 @@ public class IamService : IIamService
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var url = new Uri($"{baseUrlAdmin}/users?enabled=true");
+        var url = new Uri($"{baseUrlAdmin}/users?enabled=true&emailVerified=true");
 
         var response = await httpClient.GetAsync(url, ct);
 
