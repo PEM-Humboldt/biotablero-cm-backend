@@ -154,7 +154,8 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     {
         // Validate user permissions
         var initiativeId = entityData?.InitiativeId ?? 0;
-        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, entityData.AuthorUserName, (int)InitiativeUserLevelEnum.Leader, ct);
+        var authorizedLevels = new int[] { (int)InitiativeUserLevelEnum.Leader, (int)InitiativeUserLevelEnum.Member };
+        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelsAsync(initiativeId, entityData.AuthorUserName, authorizedLevels, ct);
 
         if (!authorizedUserAction)
         {
