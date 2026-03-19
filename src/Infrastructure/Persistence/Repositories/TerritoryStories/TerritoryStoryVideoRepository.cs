@@ -82,15 +82,15 @@ public class TerritoryStoryVideoRepository : Repository<TerritoryStoryVideo, int
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<bool> IsDuplicatedAsync(Uri fileUrl, CancellationToken ct = default) =>
+    public async Task<bool> IsDuplicatedAsync(int territoryStoryId, Uri fileUrl, CancellationToken ct = default) =>
         await dbContext.TerritoryStoryVideos
-            .Where(e => e.FileUrl == fileUrl)
+            .Where(e => e.TerritoryStoryId == territoryStoryId && e.FileUrl == fileUrl)
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<bool> IsDuplicatedAsync(int id, Uri fileUrl, CancellationToken ct = default) =>
+    public async Task<bool> IsDuplicatedAsync(int id, int territoryStoryId, Uri fileUrl, CancellationToken ct = default) =>
         await dbContext.TerritoryStoryVideos
-            .Where(e => e.Id != id && e.FileUrl == fileUrl)
+            .Where(e => e.Id != id && e.TerritoryStoryId == territoryStoryId && e.FileUrl == fileUrl)
             .AnyAsync(ct);
 
     /// <inheritdoc/>

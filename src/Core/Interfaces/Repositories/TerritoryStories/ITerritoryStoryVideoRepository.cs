@@ -41,19 +41,21 @@ public interface ITerritoryStoryVideoRepository : IRepository<TerritoryStoryVide
     /// <summary>
     /// Check if element is duplicated.
     /// </summary>
+    /// <param name="territoryStoryId">Territory Story identifier.</param>
     /// <param name="fileUrl">File URL.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
-    Task<bool> IsDuplicatedAsync(Uri fileUrl, CancellationToken ct = default);
+    Task<bool> IsDuplicatedAsync(int territoryStoryId, Uri fileUrl, CancellationToken ct = default);
 
     /// <summary>
     /// Check if element is duplicated.
     /// </summary>
     /// <param name="id">Entity identifier.</param>
+    /// <param name="territoryStoryId">Territory Story identifier.</param>
     /// <param name="fileUrl">File URL.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
-    Task<bool> IsDuplicatedAsync(int id, Uri fileUrl, CancellationToken ct = default);
+    Task<bool> IsDuplicatedAsync(int id, int territoryStoryId, Uri fileUrl, CancellationToken ct = default);
 
     /// <summary>
     /// Check if elements are duplicated.
