@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Utils;
 
-using System;
 using System.Globalization;
 
 /// <summary>
@@ -24,12 +23,11 @@ public static class StringUtils
     /// </summary>
     /// <param name="input">String input.</param>
     /// <returns>String input with the first char in lower case.</returns>
-    /// <exception cref="ArgumentException">Property argument exception.</exception>
     public static string LowerCaseFirstChar(this string input)
     {
         if (string.IsNullOrEmpty(input))
         {
-            throw new ArgumentException("The input must be a non-emtpy string.");
+            return input;
         }
 
         return char.ToLowerInvariant(input[0]) + input[1..];
