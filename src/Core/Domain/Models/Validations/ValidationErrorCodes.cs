@@ -161,6 +161,11 @@ public static class ValidationErrorCodes
         /// Invalid image type.
         /// </summary>
         public const string InvalidImageType = "INI_012";
+
+        /// <summary>
+        /// Entity disabled.
+        /// </summary>
+        public const string Disabled = "INI_013";
     }
 
     /// <summary>

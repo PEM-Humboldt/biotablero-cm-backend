@@ -108,13 +108,21 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Validate initiative
         var initiativeId = entityData.InitiativeId ?? 0;
-        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
+        var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
 
-        if (!initiativeExists)
+        if (initiative == null)
         {
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
+            };
+        }
+
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
@@ -194,6 +202,17 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             };
         }
 
+        // Validate initiative
+        var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
+
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
@@ -235,7 +254,6 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
-        var initiative = await initiativeRepository.GetByIdAsync(entity.InitiativeId, ct);
         await SendNotificationChangedLevel(userData, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, leaders, ct);
 
         return new()
@@ -268,6 +286,17 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             };
         }
 
+        // Validate initiative
+        var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
+
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
+            };
+        }
+
         // Validate number of leaders
         IEnumerable<InitiativeUser> leaders = null;
         if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader)
@@ -291,7 +320,6 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
-        var initiative = await initiativeRepository.GetByIdAsync(entity.InitiativeId, ct);
         await SendNotificationUserBanned(userData, initiative, leaders, ct);
 
         return new();

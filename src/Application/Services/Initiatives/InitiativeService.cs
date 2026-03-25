@@ -303,17 +303,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             };
         }
 
-        // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entityData.Name, ct);
-
-        if (hasDuplicatedEntities)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Duplicated),
-            };
-        }
-
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -322,6 +311,25 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        if (!entity.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementDisabled),
+            };
+        }
+
+        // Validate duplicated entities
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entityData.Name, ct);
+
+        if (hasDuplicatedEntities)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Duplicated),
             };
         }
 
@@ -346,6 +354,26 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UploadImageAsync(int id, IInputFile formFile, InitiativeImageType imageType, CancellationToken ct = default)
     {
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        if (!entity.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementDisabled),
+            };
+        }
+
+        // Validate image
         if (formFile.IsEmpty())
         {
             return new(true)
@@ -359,17 +387,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
-            };
-        }
-
-        // Validate entity
-        var entity = await entityRepository.GetByIdAsync(id, ct);
-
-        if (entity == null)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 
@@ -450,6 +467,14 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             };
         }
 
+        if (!entity.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementDisabled),
+            };
+        }
+
         // Validate image
         Uri fileName;
         switch (imageType)
@@ -508,6 +533,14 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        if (!entity.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementDisabled),
             };
         }
 

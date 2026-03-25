@@ -143,6 +143,14 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             };
         }
 
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
+            };
+        }
+
         // Validate pending requests
         var hasPendingRequests = await entityRepository.AnyPendingRequests(initiative.Id, entityData.UserName, ct);
 
@@ -229,6 +237,25 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             };
         }
 
+        // Validate initiative
+        var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
+
+        if (initiative == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
+            };
+        }
+
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
+            };
+        }
+
         // Validate entity
         if (entity == null)
         {
@@ -273,7 +300,6 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
-        var initiative = await initiativeRepository.GetByIdAsync(entityData.InitiativeId, ct);
 
         var emailObject = new JoinRequestEmailData()
         {

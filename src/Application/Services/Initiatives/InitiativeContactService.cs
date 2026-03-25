@@ -98,13 +98,21 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         }
 
         // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
+        var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
 
-        if (!initiativeExists)
+        if (initiative == null)
         {
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
+            };
+        }
+
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
@@ -156,6 +164,17 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        // Validate initiative
+        var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
+
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
@@ -217,6 +236,17 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        // Validate initiative
+        var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
+
+        if (!initiative.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
             };
         }
 
