@@ -72,7 +72,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var entityExists = await entityRepository.AnyAsync(id, ct);
 
         if (entityExists)
@@ -108,6 +108,18 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
+        // Validate user permissions
+        var territoryStoryId = entityData?.TerritoryStoryId ?? 0;
+        var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(territoryStoryId, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
 
@@ -120,7 +132,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
         }
 
         // Validate territory story
-        var territoryStoryId = entityData.TerritoryStoryId ?? 0;
         var territoryStory = await territoryStoryRepository.GetByIdAsync(territoryStoryId, ct);
 
         if (territoryStory == null)
@@ -136,17 +147,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
-            };
-        }
-
-        // Validate user level and permissions
-        var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(entityData.TerritoryStoryId.Value, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -207,6 +207,17 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
+        // Validate user permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
@@ -248,17 +259,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
-        // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -310,6 +310,17 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
     {
+        // Validate user permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -318,17 +329,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
-        // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -368,6 +368,17 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
+        // Validate user permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -376,17 +387,6 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
-        // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 

@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -56,8 +57,17 @@ public class InitiativeTagService : IInitiativeTagService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(int initiativeId, int tagId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string userName, bool userIsAdmin, int initiativeId, int tagId, CancellationToken ct = default)
     {
+        // Validate user permissions
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, userIsAdmin, ct))
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate initiative
         var initiativeExists = await initiativeRepository.AnyAsync(initiativeId, ct);
 
@@ -111,11 +121,21 @@ public class InitiativeTagService : IInitiativeTagService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default)
     {
-        // Validate entity
+        // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
+        var initiativeId = entity?.InitiativeId ?? 0;
 
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, userIsAdmin, ct))
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate entity
         if (entity == null)
         {
             return new(true)

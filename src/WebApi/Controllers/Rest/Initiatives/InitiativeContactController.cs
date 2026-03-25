@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.InitiativeContact;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
+using IAVH.BioTablero.CM.WebApi.Utils;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -63,12 +63,12 @@ public class InitiativeContactController(
     /// <returns>Added entity data.</returns>
     [HttpPost]
     [Consumes("application/json")]
-    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [Authorize]
     [SwaggerRequestExample(typeof(InitiativeContactDto), typeof(InitiativeContactAddRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactResponseExample))]
     public async Task<IActionResult> Post([FromBody] InitiativeContactDto requestData, CancellationToken ct)
     {
-        var response = await entityService.AddAsync(requestData, ct);
+        var response = await entityService.AddAsync(HttpContext.GetUserName(), HttpContext.UserIsAdmin(), requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -81,12 +81,12 @@ public class InitiativeContactController(
     /// <returns>Updated entity data.</returns>
     [HttpPut("{id}")]
     [Consumes("application/json")]
-    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [Authorize]
     [SwaggerRequestExample(typeof(InitiativeContactDto), typeof(InitiativeContactEditRequestExample))]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] InitiativeContactDto requestData, CancellationToken ct)
     {
-        var response = await entityService.UpdateAsync(id, requestData, ct);
+        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), HttpContext.UserIsAdmin(), requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -97,10 +97,10 @@ public class InitiativeContactController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
-    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [Authorize]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var response = await entityService.DeleteAsync(id, ct);
+        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), HttpContext.UserIsAdmin(), ct);
         return webTools.CustomResponse(response);
     }
 }

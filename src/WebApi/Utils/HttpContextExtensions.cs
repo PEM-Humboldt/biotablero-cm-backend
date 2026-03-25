@@ -33,4 +33,12 @@ public static class HttpContextExtensions
             .FindAll(ClaimTypes.Role)
             .Select(r => r.Value)
             .ToArray();
+
+    /// <summary>
+    /// Checks if the current user is an administrator.
+    /// </summary>
+    /// <param name="httpContext">Current HTTP Context.</param>
+    /// <returns>True if the user is an adminstrator. False otherwise.</returns>
+    public static bool UserIsAdmin(this HttpContext httpContext) =>
+        GetRoles(httpContext).Contains(IamConstants.RoleModuleAdmin);
 }

@@ -64,7 +64,7 @@ public class ResourceTagService : IResourceTagService
     public async Task<CustomWebResponse> AddAsync(string userName, int resourceId, int tagId, CancellationToken ct = default)
     {
         // Validate user permissions
-        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(resourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -132,25 +132,26 @@ public class ResourceTagService : IResourceTagService
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate entity
-        var entity = await entityRepository.GetByIdAsync(id, ct);
-
-        if (entity == null)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
         // Validate user permissions
-        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(entity.ResourceId, userName, ct);
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+        var resourceId = entity?.ResourceId ?? 0;
+
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
 
         if (!authorizedUserAction)
         {
             return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate entity
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 

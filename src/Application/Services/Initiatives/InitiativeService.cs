@@ -281,8 +281,17 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, InitiativeDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, bool userIsAdmin, InitiativeDto entityData, CancellationToken ct = default)
     {
+        // Validate user permissions
+        if (!await entityRepository.AuthorizedEntityModifyAsync(id, userName, userIsAdmin, ct))
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 

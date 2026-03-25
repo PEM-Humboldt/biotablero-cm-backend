@@ -94,12 +94,12 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate user level and permissions
+        // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
         if (entity != null)
         {
-            var userBelongsToInitiative = await entityRepository.UserRelationshipExistsAsync(id, userName, ct);
+            var userBelongsToInitiative = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
             if (!userBelongsToInitiative && entity.IsDraft)
             {
@@ -243,6 +243,17 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceDto entityData, CancellationToken ct = default)
     {
+        // Validate user permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
@@ -262,17 +273,6 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
-        // Validate user level and permissions
-        var authorizedUserAction = await entityRepository.UserRelationshipExistsAsync(id, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -319,7 +319,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <inheritdoc/>
     public async Task<CustomWebResponse> LikeActionAsync(ResourceLikeDto entityData, CancellationToken ct = default)
     {
-        // Validate Territory Story
+        // Validate entity
         var entity = await entityRepository.GetByIdAsync(entityData.ResourceId, ct);
 
         if (entity == null)
@@ -365,6 +365,17 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
+        // Validate user permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -373,17 +384,6 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
-        // Validate user permissions
-        var authorizedUserAction = await entityRepository.UserRelationshipExistsAsync(id, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 

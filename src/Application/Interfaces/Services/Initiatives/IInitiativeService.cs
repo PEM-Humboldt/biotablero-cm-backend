@@ -14,7 +14,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// <summary>
 /// Initiative service interface.
 /// </summary>
-public interface IInitiativeService : IRead<Initiative, int>, IAdd<InitiativeDto>, IUpdate<InitiativeDto, int>, IDisable<int>
+public interface IInitiativeService : IRead<Initiative, int>, IAdd<InitiativeDto>, IDisable<int>
 {
     /// <summary>
     /// Get entities by user name.
@@ -23,6 +23,17 @@ public interface IInitiativeService : IRead<Initiative, int>, IAdd<InitiativeDto
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default);
+
+    /// <summary>
+    /// Update element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="userIsAdmin">User administrator flag.</param>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> UpdateAsync(int id, string userName, bool userIsAdmin, InitiativeDto entityData, CancellationToken ct = default);
 
     /// <summary>
     /// Upload image.

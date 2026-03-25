@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Initiatives;
 
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -88,9 +87,7 @@ public class InitiativeUserController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] InitiativeUserDto requestData, CancellationToken ct)
     {
-        var reviewerUserName = HttpContext.GetUserName();
-        var userIsAdmin = HttpContext.GetRoles().Contains(IamConstants.RoleModuleAdmin);
-        var response = await entityService.UpdateAsync(id, reviewerUserName, userIsAdmin, requestData, ct);
+        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), HttpContext.UserIsAdmin(), requestData, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -104,8 +101,7 @@ public class InitiativeUserController(
     [Authorize]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var userIsAdmin = HttpContext.GetRoles().Contains(IamConstants.RoleModuleAdmin);
-        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), userIsAdmin, ct);
+        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), HttpContext.UserIsAdmin(), ct);
         return webTools.CustomResponse(response);
     }
 }

@@ -4,9 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
+using IAVH.BioTablero.CM.WebApi.Utils;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -33,13 +33,13 @@ public class InitiativeTagController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
     [HttpPost]
-    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [Authorize]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Post(int initiativeId, int tagId, CancellationToken ct)
     {
-        var response = await entityService.AddAsync(initiativeId, tagId, ct);
+        var response = await entityService.AddAsync(HttpContext.GetUserName(), HttpContext.UserIsAdmin(), initiativeId, tagId, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -50,10 +50,10 @@ public class InitiativeTagController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     [HttpDelete("{id}")]
-    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [Authorize]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var response = await entityService.DeleteAsync(id, ct);
+        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), HttpContext.UserIsAdmin(), ct);
         return webTools.CustomResponse(response);
     }
 }

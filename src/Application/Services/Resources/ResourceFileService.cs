@@ -81,6 +81,19 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(string userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
+        // Validate user permissions
+        var resourceId = entityData?.ResourceId ?? 0;
+
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
 
@@ -100,17 +113,6 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Resources.NotFound),
-            };
-        }
-
-        // Validate user level and permissions
-        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(entityData.ResourceId, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
@@ -170,6 +172,29 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
+        // Validate user permissions
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+        var resourceId = entity?.ResourceId ?? 0;
+
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate entity
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
@@ -202,28 +227,6 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
             }
         }
 
-        // Validate entity
-        var entity = await entityRepository.GetByIdAsync(id, ct);
-
-        if (entity == null)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
-        // Validate user level and permissions
-        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(entity.ResourceId, userName, ct);
-
-        if (!authorizedUserAction)
-        {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
-        }
-
         // Update entity data
         mapper.Update(entity, entityData);
 
@@ -253,25 +256,26 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
     {
-        // Validate entity
+        // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
+        var resourceId = entity?.ResourceId ?? 0;
 
-        if (entity == null)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
-            };
-        }
-
-        // Validate user level and permissions
-        var authorizedUserAction = await resourceRepository.UserRelationshipExistsAsync(entity.ResourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
 
         if (!authorizedUserAction)
         {
             return new(true)
             {
                 StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate entity
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
             };
         }
 

@@ -28,8 +28,6 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
-
 /// <summary>
 /// Join Invitation service.
 /// </summary>
@@ -40,7 +38,6 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     private readonly ILogger logger;
     private new readonly IMapperCreateAndRead<JoinInvitation, JoinInvitationDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
-    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IWebViewTools webViewTools;
     private readonly IEmailService emailService;
     private readonly IIamService iamService;
@@ -54,7 +51,6 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
-    /// <param name="initiativeUserRepository">Initiative user repository.</param>
     /// <param name="webViewTools">Web View Tools.</param>
     /// <param name="emailService">Email service.</param>
     /// <param name="iamService">IAM service.</param>
@@ -65,7 +61,6 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         IValidator<JoinInvitationDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
-        IInitiativeUserRepository initiativeUserRepository,
         IWebViewTools webViewTools,
         IEmailService emailService,
         IIamService iamService)
@@ -76,7 +71,6 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
-        this.initiativeUserRepository = initiativeUserRepository;
         this.webViewTools = webViewTools;
         this.emailService = emailService;
         this.iamService = iamService;
@@ -86,9 +80,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     public async Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct = default)
     {
         // Validate user level
-        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
-
-        if (!userIsLeader)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, false, ct))
         {
             return new(true)
             {
@@ -106,10 +98,8 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// <inheritdoc/>
     public async Task<CustomWebResponse> AddAsync(JoinInvitationDto entityData, CancellationToken ct = default)
     {
-        // Validate user role and initiative relationship
-        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId, entityData.Creator, (int)InitiativeUserLevelEnum.Leader, ct);
-
-        if (!userIsLeader)
+        // Validate user permissions
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(entityData.InitiativeId, entityData.Creator, false, ct))
         {
             return new(true)
             {

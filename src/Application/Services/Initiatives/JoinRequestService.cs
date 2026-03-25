@@ -90,9 +90,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     public async Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default)
     {
         // Validate user level
-        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(initiativeId, userName, (int)InitiativeUserLevelEnum.Leader, ct);
-
-        if (!userIsLeader)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, false, ct))
         {
             return new(true)
             {
@@ -210,20 +208,19 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <inheritdoc/>
     public async Task<CustomWebResponse> UpdateAsync(int id, JoinRequestDto entityData, CancellationToken ct = default)
     {
-        // Validate data
-        var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Update"), ct);
+        // Validate user level
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+        var initiativeId = entity?.InitiativeId ?? 0;
 
-        if (!validationResult.IsValid)
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, entityData.ReviewerUserName, false, ct))
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(validationResult.Errors),
+                StatusCode = HttpStatusCode.Forbidden,
             };
         }
 
         // Validate entity
-        var entity = await entityRepository.GetByIdAsync(id, ct);
-
         if (entity == null)
         {
             return new(true)
@@ -232,22 +229,22 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             };
         }
 
-        // Validate user level
-        var userIsLeader = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entity.InitiativeId, entityData.ReviewerUserName, (int)InitiativeUserLevelEnum.Leader, ct);
-
-        if (!userIsLeader)
-        {
-            return new(true)
-            {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
-        }
-
         if (entity.StatusId != (int)JoinRequestStatusEnum.UnderReview)
         {
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinRequests.ReviewedJoinRequests),
+            };
+        }
+
+        // Validate data
+        var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Update"), ct);
+
+        if (!validationResult.IsValid)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
             };
         }
 
