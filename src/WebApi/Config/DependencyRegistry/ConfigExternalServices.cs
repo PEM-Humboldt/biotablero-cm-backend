@@ -5,6 +5,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Notifications;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
@@ -20,6 +21,7 @@ using IAVH.BioTablero.CM.Infrastructure.Integrations.Web;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Locations;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Logging;
+using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Notifications;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Resources;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Tags;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.TerritoryStories;
@@ -69,6 +71,9 @@ public static class ConfigExternalServices
         services.AddScoped<IResourceFileRepository, ResourceFileRepository>();
         services.AddScoped<IResourceTagRepository, ResourceTagRepository>();
         services.AddScoped<IResourceLikeRepository, ResourceLikeRepository>();
+
+        //// Notifications
+        services.AddScoped<INotificationRepository, NotificationRepository>();
 
         // External services
         services.AddScoped(typeof(IReportService<>), typeof(ReportExcelService<>));
