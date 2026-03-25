@@ -8,6 +8,7 @@ using System.Reflection;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
@@ -40,6 +41,15 @@ public sealed class GeneralContext : DbContext
     /// System logs DbSet.
     /// </summary>
     public DbSet<LogEntity> Logs { get; set; }
+
+    #endregion
+
+    #region Notifications module
+
+    /// <summary>
+    /// Notifications DbSet.
+    /// </summary>
+    public DbSet<Notification> Notifications { get; set; }
 
     #endregion
 
