@@ -51,7 +51,6 @@ public class NotificationConfig : IEntityTypeConfiguration<Notification>
 
         builder.Property(e => e.Properties)
             .HasColumnName("properties")
-            .HasColumnType("jsonb")
-            .IsRequired();
+            .HasColumnType("jsonb");
     }
 }
