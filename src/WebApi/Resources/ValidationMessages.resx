@@ -281,6 +281,10 @@
     <value>The join request has already been reviewed</value>
     <comment/>
   </data>
+  <data name="IJR_004" xml:space="preserve">
+    <value>The user does not belong to the initiative</value>
+    <comment/>
+  </data>
   <data name="RES_001" xml:space="preserve">
     <value>Resource not found</value>
     <comment/>

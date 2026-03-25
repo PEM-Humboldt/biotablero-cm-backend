@@ -21,4 +21,9 @@ public class JoinRequestEmailData : DefaultEmailData
     /// Join request status.
     /// </summary>
     public JoinRequestStatus JoinRequestStatus { get; set; }
+
+    /// <summary>
+    /// Leave initiative flag.
+    /// </summary>
+    public bool LeaveInitiative { get; set; }
 }

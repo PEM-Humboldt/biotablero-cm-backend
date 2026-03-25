@@ -43,8 +43,7 @@ public class JoinRequestConfig : IEntityTypeConfiguration<JoinRequest>
             .IsRequired();
 
         builder.Property(i => i.LevelId)
-            .HasColumnName("initiative_user_level_id")
-            .IsRequired();
+            .HasColumnName("initiative_user_level_id");
 
         builder.Property(i => i.StatusId)
             .HasColumnName("join_request_status_id")

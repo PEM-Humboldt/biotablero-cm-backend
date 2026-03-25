@@ -30,8 +30,6 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
         RuleSet("Create", () =>
         {
             RuleFor(dto => dto.Level)
-                .NotNull()
-                    .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
                 .ChildRules(level =>
                 {
                     level.RuleFor(levelEnumDto => levelEnumDto.Name)

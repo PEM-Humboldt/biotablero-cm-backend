@@ -144,7 +144,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         }
 
         // Validate pending requests
-        var hasPendingRequests = await entityRepository.AnyPendingRequests(entityData.InitiativeId, entityData.UserName, ct);
+        var hasPendingRequests = await entityRepository.AnyPendingRequests(initiative.Id, entityData.UserName, ct);
 
         if (hasPendingRequests)
         {
@@ -155,13 +155,21 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         }
 
         // Validate user and initiative relationship
-        var hasUserAndInitiativeRelationship = await initiativeUserRepository.IsDuplicatedAsync(entityData.InitiativeId, entityData.UserName, ct);
+        var hasUserAndInitiativeRelationship = await initiativeUserRepository.IsDuplicatedAsync(initiative.Id, entityData.UserName, ct);
 
-        if (hasUserAndInitiativeRelationship)
+        if (hasUserAndInitiativeRelationship && entityData.Level != null)
         {
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeUsers.Duplicated),
+            };
+        }
+
+        if (!hasUserAndInitiativeRelationship && entityData.Level == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinRequests.RelationshipDoesNotExists),
             };
         }
 
@@ -191,6 +199,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             InitiativeName = initiative.Name,
             UserName = userData.Username,
             JoinRequestStatus = JoinRequestStatusEnum.UnderReview,
+            LeaveInitiative = entityData.Level == null,
         };
 
         await SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
@@ -229,7 +238,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             };
         }
 
-        if (entity.StatusId != (int)JoinRequestStatusEnum.UnderReview)
+        if (entity.StatusId is not (int)JoinRequestStatusEnum.UnderReview)
         {
             return new(true)
             {
@@ -271,6 +280,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             Address = new(userData.FullName, userData.Email),
             InitiativeName = initiative.Name,
             JoinRequestStatus = (JoinRequestStatusEnum)entity.StatusId,
+            LeaveInitiative = entityData.Level == null,
         };
 
         await SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);

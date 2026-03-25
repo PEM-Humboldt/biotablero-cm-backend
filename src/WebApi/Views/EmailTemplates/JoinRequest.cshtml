@@ -1,24 +1,56 @@
 @using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums
 @model IAVH.BioTablero.CM.Core.Domain.Models.Email.JoinRequestEmailData
 @{
+    var messageTitle = "Solicitud de Ingreso";
+
+    if (Model?.LeaveInitiative ?? false)
+    {
+        messageTitle = "Solicitud de salida";
+    }
+
     if (Model?.JoinRequestStatus == JoinRequestStatus.UnderReview)
     {
-        Model.Subject = $"Solicitud de ingreso a '{Model?.InitiativeName}'";
-        Model.Content = $"El usuario '{Model?.UserName}' ha realizado una solicitud de acceso para la iniciativa '{Model?.InitiativeName}'";
+        if (!Model?.LeaveInitiative ?? true)
+        {
+            Model.Subject = $"Solicitud de ingreso a '{Model?.InitiativeName}'";
+            Model.Content = $"El usuario '{Model?.UserName}' ha realizado una solicitud de acceso para la iniciativa '{Model?.InitiativeName}'";
+        }
+        else
+        {
+            Model.Subject = $"Solicitud para salir de '{Model?.InitiativeName}'";
+            Model.Content = $"El usuario '{Model?.UserName}' ha realizado una solicitud para salir de la iniciativa '{Model?.InitiativeName}'";
+        }
+        
     }
     else if (Model?.JoinRequestStatus == JoinRequestStatus.Approved)
     {
-        Model.Subject = $"Solicitud de ingreso a '{Model?.InitiativeName}' aprobada";
-        Model.Content = $"Bienvenido a '{Model?.InitiativeName}'.<br /> Ya puedes aportar al estado de la biodiversidad de nuestro territorio.<br /><br />Ve a la sección de colaboradores de tu iniciativa y diligencia tus áreas de experticia e interés";
+        if (!Model?.LeaveInitiative ?? true)
+        {
+            Model.Subject = $"Solicitud de ingreso a '{Model?.InitiativeName}' aprobada";
+            Model.Content = $"Bienvenido a '{Model?.InitiativeName}'.<br /> Ya puedes aportar al estado de la biodiversidad de nuestro territorio.<br /><br />Ve a la sección de colaboradores de tu iniciativa y diligencia tus áreas de experticia e interés";
+        }
+        else
+        {
+            Model.Subject = $"Solicitud de salida de '{Model?.InitiativeName}' aprobada";
+            Model.Content = $"Se ha aprobado la solicitud para salir de la iniciativa '{Model?.InitiativeName}'.";
+        }
     }
     else if (Model?.JoinRequestStatus == JoinRequestStatus.Rejected)
     {
-        Model.Subject = $"Solicitud de ingreso a '{Model?.InitiativeName}' rechazada";
+        if (!Model?.LeaveInitiative ?? true)
+        {
+            Model.Subject = $"Solicitud de ingreso a '{Model?.InitiativeName}' rechazada";
+        }
+        else
+        {
+            Model.Subject = $"Solicitud de salida de '{Model?.InitiativeName}' rechazada";
+        }
+
         Model.Content = "Tu solicitud ha sido rechazada. Si consideras que se trata de un error solicita de nuevo.";
     }
 }
 
 <div style="margin: auto;width: 20rem;">
-    <h2 style="color: #e84a5f;">Solicitud de Ingreso</h2>
+    <h2 style="color: #e84a5f;">@messageTitle</h2>
     <p>@Html.Raw(Model?.Content)</p>
 </div>

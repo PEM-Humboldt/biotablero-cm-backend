@@ -38,7 +38,7 @@ public class JoinRequest : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Level identifier.
     /// </summary>
-    public int LevelId { get; set; }
+    public int? LevelId { get; set; }
 
     /// <summary>
     /// Join Request Status identifier.
