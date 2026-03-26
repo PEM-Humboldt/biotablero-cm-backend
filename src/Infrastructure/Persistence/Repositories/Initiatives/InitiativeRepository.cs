@@ -99,7 +99,7 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     public async Task<Point> GetCentroidAsync(int[] locationIds, CancellationToken ct = default)
     {
         var geometries = await dbContext.LocationPolygons
-            .Where(lp => locationIds.Contains(lp.Id))
+            .Where(lp => locationIds.Contains(lp.LocationId))
             .Select(lp => lp.Geometry)
             .ToListAsync(ct);
 

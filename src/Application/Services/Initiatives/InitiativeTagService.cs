@@ -164,8 +164,9 @@ public class InitiativeTagService : IInitiativeTagService
         }
 
         await entityRepository.DeleteAsync(entity, ct);
+        var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Delete, "Deleted initiative tag relationship", "{@EntityData}", entity);
+        logger.AddLog(LogType.Delete, "Deleted initiative tag relationship", "{@EntityData}", entityData);
 
         return new();
     }
