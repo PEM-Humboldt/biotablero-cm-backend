@@ -29,7 +29,7 @@ public class NotificationRepository : Repository<Notification, int>, INotificati
     }
 
     /// <inheritdoc/>
-    public IQueryable<Notification> GetQueryWithUserNameAsync(string userName, IQueryable<Notification> query, CancellationToken ct = default) =>
+    public IQueryable<Notification> GetQueryWithUserName(string userName, IQueryable<Notification> query) =>
         query
             .Where(e => e.Receiver == userName);
 

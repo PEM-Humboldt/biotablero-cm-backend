@@ -1,7 +1,13 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Notifications;
 
+using System.Collections.Generic;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+
 using FluentValidation;
 
+using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Notifications;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
@@ -9,6 +15,8 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Notifications;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Notifications;
+
+using Microsoft.AspNetCore.OData.Query;
 
 using Serilog;
 
@@ -42,5 +50,43 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         this.mapper = mapper;
         this.entityValidator = entityValidator;
         this.logger = logger;
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetTotalUnreadedByUserNameAsync(string userName, CancellationToken ct = default)
+    {
+        var total = await entityRepository.CountNotReadedByUserNameAsync(userName, ct);
+
+        return new()
+        {
+            ResponseBody = new Dictionary<string, int>
+            {
+                { "Total", total },
+            },
+        };
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
+    {
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity != null && entity.Receiver != userName)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        return await GetItemAsync(id, ct);
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetByUserNameAsync(string userName, ODataQueryOptions<Notification> queryOptions, CancellationToken ct = default)
+    {
+        var query = entityRepository.GetQueryable();
+        query = entityRepository.GetQueryWithUserName(userName, query);
+        return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 }

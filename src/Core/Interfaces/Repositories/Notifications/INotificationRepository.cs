@@ -12,13 +12,12 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
 public interface INotificationRepository : IRepository<Notification, int>
 {
     /// <summary>
-    /// Get query with user name filters.
+    /// Get query with user name filter.
     /// </summary>
     /// <param name="userName">User name.</param>
     /// <param name="query">Linq Query.</param>
-    /// <param name="ct">Cancellation token.</param>
     /// <returns>Custom query.</returns>
-    IQueryable<Notification> GetQueryWithUserNameAsync(string userName, IQueryable<Notification> query, CancellationToken ct = default);
+    IQueryable<Notification> GetQueryWithUserName(string userName, IQueryable<Notification> query);
 
     /// <summary>
     /// Count not readed elements by user name.
