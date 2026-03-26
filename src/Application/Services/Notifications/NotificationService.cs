@@ -119,4 +119,27 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         query = entityRepository.GetQueryWithUserName(userName, query);
         return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
+
+    /// <inheritdoc/>
+    public async Task SendNotificationAsync(NotificationDto entityData, bool sendEmail, CancellationToken ct = default)
+    {
+        // Validate data
+        var validationResult = await entityValidator.ValidateAsync(entityData, ct);
+
+        if (!validationResult.IsValid)
+        {
+            logger.AddLog(LogType.System, "Invalid 'entityData' values", "{@ValidationResults}", validationResult.Errors, Serilog.Events.LogEventLevel.Error);
+            throw new ArgumentException("Invalid 'entityData' values", nameof(entityData));
+        }
+
+        // Build entity data
+        var entity = mapper.Map(entityData);
+        entity.CreationDate = DateTime.Now;
+
+        // Save data
+        entity = await entityRepository.AddAsync(entity, ct);
+        entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Create, "Added notification", "{@EntityData}", entityData);
+    }
 }
