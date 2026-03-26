@@ -10,6 +10,7 @@ using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Notification;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 using IAVH.BioTablero.CM.WebApi.Utils;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -25,6 +26,7 @@ using Swashbuckle.AspNetCore.Filters;
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
+[Authorize]
 [ApiConventionType(typeof(CustomApiConventions))]
 public class NotificationController(
     IWebTools webTools,
@@ -45,10 +47,10 @@ public class NotificationController(
     }
 
     /// <summary>
-    /// Get my unreaded notifications.
+    /// Get my unreaded total notifications.
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Entities list from parameters.</returns>
+    /// <returns>Total unreaded notifications.</returns>
     [HttpGet]
     public async Task<IActionResult> GetTotalUnreaded(CancellationToken ct)
     {

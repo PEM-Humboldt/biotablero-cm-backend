@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Notifications;
 
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
@@ -13,12 +14,15 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Notifications;
 using IAVH.BioTablero.CM.Application.Services.General;
+using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Notifications;
 
 using Microsoft.AspNetCore.OData.Query;
 
 using Serilog;
+
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
 /// Notification service.
@@ -71,15 +75,41 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     {
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
-        if (entity != null && entity.Receiver != userName)
+        if (entity != null)
         {
-            return new(true)
+            if (entity.Receiver != userName)
             {
-                StatusCode = HttpStatusCode.Forbidden,
-            };
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
+
+            if (!entity.Readed)
+            {
+                entity.Readed = true;
+
+                if (entity.ReadingDate == null)
+                {
+                    entity.ReadingDate = DateTime.Now;
+                }
+
+                await entityRepository.UpdateAsync(entity, ct);
+
+                var entityDto = mapper.Map(entity);
+                logger.AddLog(LogType.Update, "Readed notification", "{@Entity}", entityDto);
+
+                return new()
+                {
+                    ResponseBody = entityDto,
+                };
+            }
         }
 
-        return await GetItemAsync(id, ct);
+        return new(true)
+        {
+            StatusCode = HttpStatusCode.NotFound,
+        };
     }
 
     /// <inheritdoc/>
