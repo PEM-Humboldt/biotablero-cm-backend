@@ -20,6 +20,10 @@ public class NotificationOdataResponseExample : BaseOdataResponseExample<Notific
         CreationDate = DateTime.Now,
         ReadingDate = DateTime.Now,
         Readed = true,
-        Properties = new Dictionary<string, object> { { "key", "value" } },
+        Properties = new()
+        {
+            TemplateName = "TemplateExample",
+            Data = new Dictionary<string, object> { { "key", "value" } },
+        },
     };
 }

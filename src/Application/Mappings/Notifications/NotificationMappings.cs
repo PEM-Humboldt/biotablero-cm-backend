@@ -1,7 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Mappings.Notifications;
 
 using System;
-using System.Collections.Generic;
 using System.Text.Json;
 
 using IAVH.BioTablero.CM.Application.DTOs.Notifications;
@@ -27,7 +26,7 @@ public class NotificationMappings : IMapperCreateAndRead<Notification, Notificat
             CreationDate = entity.CreationDate,
             ReadingDate = entity.ReadingDate,
             Readed = entity.Readed,
-            Properties = JsonSerializer.Deserialize<Dictionary<string, object>>(entity.Properties),
+            Properties = JsonSerializer.Deserialize<NotificationPropertiesDto>(entity.Properties),
         };
     }
 

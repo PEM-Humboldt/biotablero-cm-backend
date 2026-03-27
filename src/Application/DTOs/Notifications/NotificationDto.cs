@@ -1,7 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Notifications;
 
 using System;
-using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
@@ -48,5 +47,5 @@ public class NotificationDto : IDto
     /// <summary>
     /// Entity properties.
     /// </summary>
-    public Dictionary<string, object> Properties { get; set; }
+    public NotificationPropertiesDto Properties { get; set; }
 }
