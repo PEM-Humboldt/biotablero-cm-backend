@@ -51,7 +51,7 @@ public class NotificationController(
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Total unreaded notifications.</returns>
-    [HttpGet]
+    [HttpGet("TotalUnreaded")]
     public async Task<IActionResult> GetTotalUnreaded(CancellationToken ct)
     {
         var response = await entityService.GetTotalUnreadedByUserNameAsync(HttpContext.GetUserName(), ct);

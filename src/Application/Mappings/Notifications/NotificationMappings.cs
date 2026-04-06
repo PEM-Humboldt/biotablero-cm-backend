@@ -26,7 +26,7 @@ public class NotificationMappings : IMapperCreateAndRead<Notification, Notificat
             CreationDate = entity.CreationDate,
             ReadingDate = entity.ReadingDate,
             Readed = entity.Readed,
-            Properties = JsonSerializer.Deserialize<NotificationPropertiesDto>(entity.Properties),
+            Properties = entity.Properties != null ? JsonSerializer.Deserialize<NotificationPropertiesDto>(entity.Properties) : null,
         };
     }
 
