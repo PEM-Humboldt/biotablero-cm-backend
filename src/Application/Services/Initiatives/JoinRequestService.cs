@@ -204,7 +204,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             { "LeaveInitiative", entityData.Level == null },
         };
 
-        await SendRequestNotificationToLeaders(initiative.Id, emailData, ct);
+        await SendRequestNotificationToLeadersAsync(initiative.Id, emailData, ct);
 
         entityData = mapper.Map(entity);
 
@@ -303,7 +303,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             { "LeaveInitiative", entityData.Level == null },
         };
 
-        await SendNotificationJoinRequest(entityData.InitiativeId, userData, emailObject, ct);
+        await SendNotificationJoinRequestAsync(entityData.InitiativeId, userData, emailObject, ct);
 
         logger.AddLog(LogType.Update, "Updated initiative join request", "{@EntityData}", entityData);
 
@@ -381,7 +381,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <param name="userData">External user data.</param>
     /// <param name="emailData">Email data.</param>
     /// <param name="ct">Cancellation token.</param>
-    private async Task<bool> SendNotificationJoinRequest(int initiativeId, ExternalUser userData, Dictionary<string, object> emailData, CancellationToken ct = default)
+    private async Task<bool> SendNotificationJoinRequestAsync(int initiativeId, ExternalUser userData, Dictionary<string, object> emailData, CancellationToken ct = default)
     {
         var notificationData = new SendNotificationData()
         {
@@ -443,7 +443,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <param name="emailData">Email data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    private async Task SendRequestNotificationToLeaders(int initiativeId, Dictionary<string, object> emailData, CancellationToken ct = default)
+    private async Task SendRequestNotificationToLeadersAsync(int initiativeId, Dictionary<string, object> emailData, CancellationToken ct = default)
     {
         var leaders = await initiativeUserRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
 
@@ -459,7 +459,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         var results = new List<bool>();
         var emailTasks = notificationsData.Select(async data =>
         {
-            results.Add(await SendNotificationJoinRequest(initiativeId, data.externalUser, emailData, ct));
+            results.Add(await SendNotificationJoinRequestAsync(initiativeId, data.externalUser, emailData, ct));
         });
 
         await Task.WhenAll(emailTasks);

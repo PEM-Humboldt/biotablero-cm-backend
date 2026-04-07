@@ -249,7 +249,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
-        await SendNotificationChangedLevel(userData, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, ct);
+        await SendNotificationChangedLevelAsync(userData, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, ct);
 
         return new()
         {
@@ -315,7 +315,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
-        await SendNotificationUserBanned(userData, initiative, ct);
+        await SendNotificationUserBannedAsync(userData, initiative, ct);
 
         return new();
     }
@@ -328,7 +328,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="level">New user level.</param>
     /// <param name="reviewerUserName">Reviewer user name.</param>
     /// <param name="ct">Cancellation token.</param>
-    private async Task SendNotificationChangedLevel(ExternalUser userData, Initiative initiative, InitiativeUserLevelEnum level, string reviewerUserName, CancellationToken ct = default)
+    private async Task SendNotificationChangedLevelAsync(ExternalUser userData, Initiative initiative, InitiativeUserLevelEnum level, string reviewerUserName, CancellationToken ct = default)
     {
         var newLevelName = level switch
         {
@@ -367,7 +367,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="userData">External user data.</param>
     /// <param name="initiative">Initiative data.</param>
     /// <param name="ct">Cancellation token.</param>
-    private async Task SendNotificationUserBanned(ExternalUser userData, Initiative initiative, CancellationToken ct = default)
+    private async Task SendNotificationUserBannedAsync(ExternalUser userData, Initiative initiative, CancellationToken ct = default)
     {
         var notificationData = new SendNotificationData()
         {

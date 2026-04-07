@@ -162,7 +162,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         }
 
         // Send invitation emails
-        var result = await SendNotificationJoinInvitation(emails, initiative, entityData.Message, ct);
+        var result = await SendNotificationJoinInvitationAsync(emails, initiative, entityData.Message, ct);
 
         if (result)
         {
@@ -198,7 +198,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// <param name="emailMessage">Email message.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if the process is successful. False otherwise.</returns>
-    private async Task<bool> SendNotificationJoinInvitation(string[] emails, Initiative initiative, string emailMessage, CancellationToken ct = default)
+    private async Task<bool> SendNotificationJoinInvitationAsync(string[] emails, Initiative initiative, string emailMessage, CancellationToken ct = default)
     {
         var receivers = emails
             .Select(e => new CustomEmailAddress(e))

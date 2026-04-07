@@ -179,7 +179,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
 
             if (notificationData.SendToHiddenReceivers && notificationData.InitiativeId != null)
             {
-                hiddenReceivers = await GetHiddenReceivers(notificationData.InitiativeId.Value, ct);
+                hiddenReceivers = await GetHiddenReceiversAsync(notificationData.InitiativeId.Value, ct);
             }
 
             await emailService.SendEmailAsync(notificationData.NotificationDto.Subject, notificationData.Receivers, hiddenReceivers, htmlBody, ct);
@@ -192,7 +192,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Hidden receivers list.</returns>
-    private async Task<CustomEmailAddress[]> GetHiddenReceivers(int initiativeId, CancellationToken ct = default)
+    private async Task<CustomEmailAddress[]> GetHiddenReceiversAsync(int initiativeId, CancellationToken ct = default)
     {
         var leaders = await initiativeUserRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
 
