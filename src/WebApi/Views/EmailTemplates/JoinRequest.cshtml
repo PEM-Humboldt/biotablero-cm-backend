@@ -24,7 +24,7 @@
 
         if (joinRequestStatusEnum == JoinRequestStatus.UnderReview)
         {
-            if (leaveInitiative)
+            if (!leaveInitiative)
             {
                 Model.Subject = $"Solicitud de ingreso a '{initiativeName}'";
                 Model.Body = $"El usuario '{userName}' ha realizado una solicitud de acceso para la iniciativa '{initiativeName}'";
@@ -38,7 +38,7 @@
         }
         else if (joinRequestStatusEnum == JoinRequestStatus.Approved)
         {
-            if (leaveInitiative)
+            if (!leaveInitiative)
             {
                 Model.Subject = $"Solicitud de ingreso a '{initiativeName}' aprobada";
                 Model.Body = $"Bienvenido a '{initiativeName}'.<br /> Ya puedes aportar al estado de la biodiversidad de nuestro territorio.<br /><br />Ve a la sección de colaboradores de tu iniciativa y diligencia tus áreas de experticia e interés";
@@ -51,7 +51,7 @@
         }
         else if (joinRequestStatusEnum == JoinRequestStatus.Rejected)
         {
-            if (leaveInitiative)
+            if (!leaveInitiative)
             {
                 Model.Subject = $"Solicitud de ingreso a '{initiativeName}' rechazada";
             }
