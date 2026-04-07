@@ -4,12 +4,13 @@ using System.Text.Json.Serialization;
 
 using DotNetEnv;
 
-using IAVH.BioTablero.CM.Infrastructure.Persistence.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup;
 using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup;
+using IAVH.BioTablero.CM.WebApi.Utils;
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,10 +35,7 @@ public class Program
         // Load environment variables from a local file
         Env.Load("../../.env");
 
-        // Add DB Contexts
-        ConfigDbDependencies.AddDbServices(builder.Services);
-
-        // Dependency injection configuration
+        // Dependency registry setup
         builder.Services.AddHttpClient();
         builder.Services.AddCoreServices(builder.Environment.IsDevelopment());
         builder.Services.AddAppServices();
@@ -93,7 +91,17 @@ public class Program
         }
 
         // Setup health checks endpoint
-        app.MapHealthChecks("/health");
+        app.MapHealthChecks("/health/live", new HealthCheckOptions
+        {
+            Predicate = r => r.Tags.Contains("live"),
+            ResponseWriter = HealthCheckResponseWriter.ResponseWriter,
+        });
+
+        app.MapHealthChecks("/health/ready", new HealthCheckOptions
+        {
+            Predicate = r => r.Tags.Contains("ready"),
+            ResponseWriter = HealthCheckResponseWriter.ResponseWriter,
+        });
 
         // Add support to logging request with Serilog
         app.UseSerilogRequestLogging();

@@ -2,11 +2,17 @@
 
 using System;
 
+using global::HealthChecks.Network.Core;
+
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Services.General;
+using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
+using IAVH.BioTablero.CM.Infrastructure.Persistence.Config.DependencyRegistry;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories;
+using IAVH.BioTablero.CM.WebApi.Config.HealthChecks;
 using IAVH.BioTablero.CM.WebApi.Controllers.Tools;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 using IAVH.BioTablero.CM.WebApi.Services;
@@ -14,6 +20,7 @@ using IAVH.BioTablero.CM.WebApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 
 /// <summary>
@@ -21,6 +28,10 @@ using Microsoft.IdentityModel.Tokens;
 /// </summary>
 public static class ConfigCoreDependencies
 {
+    private static readonly string OidcServer = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}/";
+    private static readonly string ConnectionString = Environment.GetEnvironmentVariable("CS_MAIN");
+    private static readonly SmtpConfigData SmtpData = EmailService.InitSmtpData();
+
     /// <summary>
     /// Add core services.
     /// </summary>
@@ -29,7 +40,11 @@ public static class ConfigCoreDependencies
     /// <returns>Service descriptors collection with custom services.</returns>
     public static IServiceCollection AddCoreServices(this IServiceCollection services, bool isDevelopment = false)
     {
-        services.AddHealthChecks();
+        // Add DB Contexts
+        ConfigDbDependencies.AddDbServices(services, ConnectionString);
+
+        services.ConfigureHealthChecks();
+
         services.AddHttpContextAccessor(); // Required for Serilog (ASP.NET)
 
         // Enabled MVC without routing
@@ -59,20 +74,19 @@ public static class ConfigCoreDependencies
     /// <returns>Service descriptors collection with authentication service.</returns>
     private static IServiceCollection AddAuthService(this IServiceCollection services, bool isDevelopment)
     {
-        var url = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}";
         var clientId = Environment.GetEnvironmentVariable("KC_CLIENT");
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = url;
+                options.Authority = OidcServer;
                 options.Audience = clientId;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = true,
                     ValidateIssuer = true,
-                    ValidIssuer = url,
+                    ValidIssuer = OidcServer,
                     ValidateLifetime = true,
                 };
                 options.RequireHttpsMetadata = !isDevelopment;
@@ -92,4 +106,54 @@ public static class ConfigCoreDependencies
         {
             options.MultipartBodyLengthLimit = 5_242_880; // 5 MB
         });
+
+    /// <summary>
+    /// Configure HealthChecks.
+    /// </summary>
+    /// <param name="services">Service descriptors collection.</param>
+    /// <returns>Service descriptors collection with custom services.</returns>
+    private static IServiceCollection ConfigureHealthChecks(this IServiceCollection services)
+    {
+        services.AddHealthChecks()
+            .AddOpenIdConnectServer(
+                oidcSvrUri: new Uri(OidcServer),
+                name: "keycloak",
+                tags: ["ready"])
+            .AddNpgSql(
+                ConnectionString,
+                name: "postgres",
+                tags: ["ready"])
+            .AddTcpHealthCheck(
+                setup: options =>
+                {
+                    options.AddHost("1.1.1.1", 53);
+                },
+                name: "internet",
+                tags: ["ready"])
+            .AddSmtpHealthCheck(
+                options =>
+                {
+                    options.Host = SmtpData.Host;
+                    options.Port = SmtpData.Port;
+                    options.ConnectionType = SmtpData.EnableSsl
+                        ? SmtpConnectionType.TLS
+                        : SmtpConnectionType.PLAIN;
+
+                    if (!string.IsNullOrEmpty(SmtpData.User))
+                    {
+                        options.LoginWith(SmtpData.User, SmtpData.Password);
+                    }
+                },
+                name: "smtp",
+                tags: ["ready"])
+            .AddCheck<S3HealthCheck>(
+                name: "aws s3",
+                tags: ["ready"])
+            .AddCheck(
+                "self",
+                () => HealthCheckResult.Healthy(),
+                tags: ["live"]);
+
+        return services;
+    }
 }
