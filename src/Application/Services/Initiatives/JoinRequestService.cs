@@ -15,12 +15,11 @@ using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
-using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Notifications;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
@@ -31,7 +30,6 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
 /// <summary>
@@ -45,9 +43,8 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     private new readonly IMapperCreateAndRead<JoinRequest, JoinRequestDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly IInitiativeUserRepository initiativeUserRepository;
-    private readonly IWebViewTools webViewTools;
-    private readonly IEmailService emailService;
     private readonly IIamService iamService;
+    private readonly INotificationService notificationService;
 
     /// <summary>
     /// Constructor.
@@ -59,9 +56,8 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="initiativeUserRepository">Initiative user repository.</param>
-    /// <param name="webViewTools">Web View Tools.</param>
-    /// <param name="emailService">Email service.</param>
     /// <param name="iamService">IAM service.</param>
+    /// <param name="notificationService">Notification service.</param>
     public JoinRequestService(
         IJoinRequestRepository entityRepository,
         IMapperCreateAndRead<JoinRequest, JoinRequestDto> mapper,
@@ -70,8 +66,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
         IInitiativeUserRepository initiativeUserRepository,
-        IWebViewTools webViewTools,
-        IEmailService emailService,
+        INotificationService notificationService,
         IIamService iamService)
         : base(entityRepository, mapper, errorTranslator)
     {
@@ -81,9 +76,8 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
         this.initiativeUserRepository = initiativeUserRepository;
-        this.webViewTools = webViewTools;
-        this.emailService = emailService;
         this.iamService = iamService;
+        this.notificationService = notificationService;
     }
 
     /// <inheritdoc/>
@@ -201,16 +195,15 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         entity = await entityRepository.AddAsync(entity, ct);
 
         // Send email
-        var emailObject = new JoinRequestEmailData()
+        var emailObject = new Dictionary<string, object>()
         {
-            Address = new(userData.FullName, userData.Email),
-            InitiativeName = initiative.Name,
-            UserName = userData.Username,
-            JoinRequestStatus = JoinRequestStatusEnum.UnderReview,
-            LeaveInitiative = entityData.Level == null,
+            { "InitiativeName", initiative.Name },
+            { "UserName", userData.Username },
+            { "JoinRequestStatus", JoinRequestStatusEnum.UnderReview },
+            { "LeaveInitiative", entityData.Level == null },
         };
 
-        await SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
+        await SendNotificationJoinRequest(entityData.InitiativeId, userData, emailObject, ct);
 
         entityData = mapper.Map(entity);
 
@@ -301,15 +294,14 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
 
-        var emailObject = new JoinRequestEmailData()
+        var emailObject = new Dictionary<string, object>()
         {
-            Address = new(userData.FullName, userData.Email),
-            InitiativeName = initiative.Name,
-            JoinRequestStatus = (JoinRequestStatusEnum)entity.StatusId,
-            LeaveInitiative = entityData.Level == null,
+            { "InitiativeName", initiative.Name },
+            { "JoinRequestStatus", (JoinRequestStatusEnum)entity.StatusId },
+            { "LeaveInitiative", entityData.Level == null },
         };
 
-        await SendNotificationJoinRequest(entityData.InitiativeId, emailObject, ct);
+        await SendNotificationJoinRequest(entityData.InitiativeId, userData, emailObject, ct);
 
         logger.AddLog(LogType.Update, "Updated initiative join request", "{@EntityData}", entityData);
 
@@ -384,30 +376,28 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// Send join request notification.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userData">External user data.</param>
     /// <param name="emailData">Email data.</param>
     /// <param name="ct">Cancellation token.</param>
-    private async Task SendNotificationJoinRequest(int initiativeId, JoinRequestEmailData emailData, CancellationToken ct = default)
+    private async Task SendNotificationJoinRequest(int initiativeId, ExternalUser userData, Dictionary<string, object> emailData, CancellationToken ct = default)
     {
-        var leaders = await initiativeUserRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
-
-        if (leaders?.Any() ?? false)
+        var notificationData = new SendNotificationData()
         {
-            var leadersUserNames = leaders
-                .Select(e => e.UserName)
-                .ToArray();
+            NotificationDto = new()
+            {
+                Properties = new()
+                {
+                    TemplateName = "JoinRequest",
+                    Data = emailData,
+                },
+                Receiver = userData.Email,
+            },
+            Receivers = [new(userData.FullName, userData.Email)],
+            SendToHiddenReceivers = true,
+            InitiativeId = initiativeId,
+        };
 
-            var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
-
-            var hiddenReceivers = leadersData
-                .Select(e => new CustomEmailAddress(e.FullName, e.Email))
-                .ToArray();
-
-            var receivers = new CustomEmailAddress[] { emailData.Address };
-
-            var htmlBody = await webViewTools.RenderViewToStringAsync("JoinRequest", emailData);
-
-            await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
-        }
+        await notificationService.SendNotificationAsync(notificationData, ct);
     }
 
     /// <summary>
@@ -419,16 +409,25 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <returns>Process result.</returns>
     private async Task<bool> SendNotificationOldPendingRequestsAsync(ExternalUser leaderData, int pendingRequests, CancellationToken ct = default)
     {
-        var emailData = new PendingRequestsReminderEmailData
+        var notificationData = new SendNotificationData()
         {
-            Address = new(leaderData.FullName, leaderData.Email),
-            PendingRequestsCount = pendingRequests,
+            NotificationDto = new()
+            {
+                Properties = new()
+                {
+                    TemplateName = "PendingRequestsReminder",
+                    Data = new()
+                    {
+                        { "PendingRequestsCount", pendingRequests },
+                    },
+                },
+                Receiver = leaderData.Email,
+            },
+            Receivers = [new(leaderData.FullName, leaderData.Email)],
+            SendToHiddenReceivers = false,
         };
 
-        var receivers = new CustomEmailAddress[] { emailData.Address };
-        var htmlBody = await webViewTools.RenderViewToStringAsync("PendingRequestsReminder", emailData);
-
-        await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
+        await notificationService.SendNotificationAsync(notificationData, ct);
 
         return true;
     }

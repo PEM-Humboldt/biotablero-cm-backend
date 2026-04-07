@@ -1,10 +1,10 @@
-@model IAVH.BioTablero.CM.Core.Domain.Models.Email.PendingRequestsReminderEmailData
+@model IAVH.BioTablero.CM.Application.DTOs.Notifications.NotificationDto
 @{
     Model.Subject = "Tienes solicitudes de ingreso pendientes de revisión";
-    Model.Content = $"Tienes <b>{Model?.PendingRequestsCount}</b> solicitudes de ingreso que necesitan tu revisión.";
+    Model.Body = $"Tienes <b>{Model?.Properties?.Data["PendingRequestsCount"]}</b> solicitudes de ingreso que necesitan tu revisión.";
 }
 
 <div style="margin: auto;width: 20rem;">
     <h2 style="color: #e84a5f;">Recordatorio de Revisión</h2>
-    <p>@Html.Raw(Model?.Content)</p>
+    <p>@Html.Raw(Model?.Body)</p>
 </div>

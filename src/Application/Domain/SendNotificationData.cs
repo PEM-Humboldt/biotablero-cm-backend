@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Domain;
 
 using IAVH.BioTablero.CM.Application.DTOs.Notifications;
+using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 
 /// <summary>
 /// Send Notification data.
@@ -11,6 +12,11 @@ public class SendNotificationData
     /// Notification data.
     /// </summary>
     public NotificationDto NotificationDto { get; set; }
+
+    /// <summary>
+    /// Notification receivers list.
+    /// </summary>
+    public CustomEmailAddress[] Receivers { get; set; }
 
     /// <summary>
     /// Send email flag.

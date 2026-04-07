@@ -147,9 +147,10 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     public async Task SendNotificationAsync(SendNotificationData notificationData, CancellationToken ct = default)
     {
         // Build HTML body
+        var htmlBody = string.Empty;
         if (!string.IsNullOrEmpty(notificationData.NotificationDto.Properties.TemplateName))
         {
-            notificationData.NotificationDto.Body = await webViewTools.RenderViewToStringAsync(notificationData.NotificationDto.Properties.TemplateName, notificationData.NotificationDto.Properties.Data);
+            htmlBody = await webViewTools.RenderViewToStringAsync(notificationData.NotificationDto.Properties.TemplateName, notificationData.NotificationDto);
         }
 
         // Validate data
@@ -174,7 +175,6 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         // Send email
         if (notificationData.SendEmail && !string.IsNullOrEmpty(notificationData.NotificationDto.Properties.TemplateName))
         {
-            var receivers = new CustomEmailAddress[] { new(notificationData.NotificationDto.Receiver) };
             CustomEmailAddress[] hiddenReceivers = null;
 
             if (notificationData.SendToHiddenReceivers && notificationData.InitiativeId != null)
@@ -182,7 +182,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
                 hiddenReceivers = await GetHiddenReceivers(notificationData.InitiativeId.Value, ct);
             }
 
-            await emailService.SendEmailAsync(notificationData.NotificationDto.Subject, receivers, hiddenReceivers, notificationData.NotificationDto.Body, ct);
+            await emailService.SendEmailAsync(notificationData.NotificationDto.Subject, notificationData.Receivers, hiddenReceivers, htmlBody, ct);
         }
     }
 

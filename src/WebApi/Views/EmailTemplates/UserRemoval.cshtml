@@ -1,10 +1,10 @@
-@model IAVH.BioTablero.CM.Core.Domain.Models.Email.UserRemovalEmailData
+@model IAVH.BioTablero.CM.Application.DTOs.Notifications.NotificationDto
 @{
-    Model.Subject = $"Has sido retirado de {Model?.InitiativeName}";
-    Model.Content = $"Tu membresía en la iniciativa '{Model?.InitiativeName}' ha sido revocada. Si consideras que se trata de un error solicita unirte de nuevo.";
+    Model.Subject = $"Has sido retirado de {Model?.Properties?.Data["InitiativeName"]}";
+    Model.Body = $"Tu membresía en la iniciativa '{Model?.Properties?.Data["InitiativeName"]}' ha sido revocada. Si consideras que se trata de un error solicita unirte de nuevo.";
 }
 
 <div style="margin: auto;width: 20rem;">
     <h2 style="color: #e84a5f;">Notificación de Retiro</h2>
-    <p>@Html.Raw(Model?.Content)</p>
+    <p>@Html.Raw(Model?.Body)</p>
 </div>

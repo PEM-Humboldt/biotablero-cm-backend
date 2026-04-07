@@ -1,10 +1,10 @@
-@model IAVH.BioTablero.CM.Core.Domain.Models.Email.JoinInvitationEmailData
+@model IAVH.BioTablero.CM.Application.DTOs.Notifications.NotificationDto
 @{
-    Model.Subject = $"Invitación a unirse a {Model?.InitiativeName}";
-    Model.Content = $"Has sido invitado a unirte a la iniciativa '{Model?.InitiativeName}'.<br /> {Model?.EmailMessage}.";
+    Model.Subject = $"Invitación a unirse a {Model?.Properties?.Data["InitiativeName"]}";
+    Model.Body = $"Has sido invitado a unirte a la iniciativa '{Model?.Properties?.Data["InitiativeName"]}'.<br /> {Model?.Properties?.Data["EmailMessage"]}.";
 }
 
 <div style="margin: auto;width: 20rem;">
     <h2 style="color: #e84a5f;">Invitación a Iniciativa</h2>
-    <p>@Html.Raw(Model?.Content)</p>
+    <p>@Html.Raw(Model?.Body)</p>
 </div>

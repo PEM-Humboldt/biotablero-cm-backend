@@ -10,6 +10,7 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Notifications;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
@@ -199,19 +200,25 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// <returns>True if the process is successful. False otherwise.</returns>
     private async Task<bool> SendNotificationJoinInvitation(string[] emails, Initiative initiative, string emailMessage, CancellationToken ct = default)
     {
-        var emailData = new JoinInvitationEmailData
-        {
-            InitiativeName = initiative.Name,
-            EmailMessage = emailMessage,
-        };
-
         var receivers = emails
             .Select(e => new CustomEmailAddress(e))
             .ToArray();
 
-        var htmlBody = await webViewTools.RenderViewToStringAsync("JoinInvitation", emailData);
+        var notificationDto = new NotificationDto()
+        {
+            Properties = new()
+            {
+                TemplateName = "JoinInvitation",
+                Data = new()
+                    {
+                        { "InitiativeName", initiative.Name },
+                        { "EmailMessage", emailMessage },
+                    },
+            },
+        };
 
-        var response = await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
+        var htmlBody = await webViewTools.RenderViewToStringAsync(notificationDto.Properties.TemplateName, notificationDto);
+        var response = await emailService.SendEmailAsync(notificationDto.Subject, receivers, null, htmlBody, ct);
 
         return !string.IsNullOrEmpty(response);
     }
