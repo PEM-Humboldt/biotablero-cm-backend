@@ -30,6 +30,7 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
+using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
 /// <summary>
@@ -194,8 +195,8 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
 
-        // Send email
-        var emailObject = new Dictionary<string, object>()
+        // Send notifications to initiative leaders
+        var emailData = new Dictionary<string, object>()
         {
             { "InitiativeName", initiative.Name },
             { "UserName", userData.Username },
@@ -203,7 +204,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             { "LeaveInitiative", entityData.Level == null },
         };
 
-        await SendNotificationJoinRequest(entityData.InitiativeId, userData, emailObject, ct);
+        await SendRequestNotificationToLeaders(initiative.Id, emailData, ct);
 
         entityData = mapper.Map(entity);
 
@@ -380,7 +381,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <param name="userData">External user data.</param>
     /// <param name="emailData">Email data.</param>
     /// <param name="ct">Cancellation token.</param>
-    private async Task SendNotificationJoinRequest(int initiativeId, ExternalUser userData, Dictionary<string, object> emailData, CancellationToken ct = default)
+    private async Task<bool> SendNotificationJoinRequest(int initiativeId, ExternalUser userData, Dictionary<string, object> emailData, CancellationToken ct = default)
     {
         var notificationData = new SendNotificationData()
         {
@@ -399,6 +400,8 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         };
 
         await notificationService.SendNotificationAsync(notificationData, ct);
+
+        return true;
     }
 
     /// <summary>
@@ -431,5 +434,34 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         await notificationService.SendNotificationAsync(notificationData, ct);
 
         return true;
+    }
+
+    /// <summary>
+    /// Send new request notification to initiative leaders.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="emailData">Email data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    private async Task SendRequestNotificationToLeaders(int initiativeId, Dictionary<string, object> emailData, CancellationToken ct = default)
+    {
+        var leaders = await initiativeUserRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
+
+        var leadersUserNames = leaders
+            .Select(e => e.UserName)
+            .ToArray();
+
+        var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
+
+        var notificationsData = leaders
+            .Join(leadersData, initiativeUser => initiativeUser.UserName, externalUser => externalUser.Username, (initiativeUser, externalUser) => new { initiativeUser, externalUser });
+
+        var results = new List<bool>();
+        var emailTasks = notificationsData.Select(async data =>
+        {
+            results.Add(await SendNotificationJoinRequest(initiativeId, data.externalUser, emailData, ct));
+        });
+
+        await Task.WhenAll(emailTasks);
     }
 }
