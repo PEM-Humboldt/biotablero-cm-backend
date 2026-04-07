@@ -297,6 +297,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         var emailObject = new Dictionary<string, object>()
         {
             { "InitiativeName", initiative.Name },
+            { "UserName", userData.Username },
             { "JoinRequestStatus", (JoinRequestStatusEnum)entity.StatusId },
             { "LeaveInitiative", entityData.Level == null },
         };

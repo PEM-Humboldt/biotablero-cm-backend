@@ -353,7 +353,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
                 },
                 Receiver = userData.Email,
             },
-            Receivers = [new(userData.Email, userData.FullName)],
+            Receivers = [new(userData.FullName, userData.Email)],
             SendToHiddenReceivers = true,
             InitiativeId = initiative.Id,
         };
@@ -383,7 +383,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
                 },
                 Receiver = userData.Email,
             },
-            Receivers = [new(userData.Email, userData.FullName)],
+            Receivers = [new(userData.FullName, userData.Email)],
             SendToHiddenReceivers = true,
             InitiativeId = initiative.Id,
         };
