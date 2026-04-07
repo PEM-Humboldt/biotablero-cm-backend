@@ -6,7 +6,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
@@ -23,20 +22,24 @@ public class StorageService : IStorageService
 {
     private const string ProjectPreffix = "bt-cm";
     private readonly ILogger logger;
-    private readonly AmazonS3Client client;
-    private readonly string bucketName;
+    private readonly IAmazonS3 client;
     private readonly string endpointUrl;
+    private readonly string bucketName;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="logger">Logger.</param>
-    public StorageService(ILogger logger)
+    /// <param name="client">AWS S3 client.</param>
+    public StorageService(
+        ILogger logger,
+        IAmazonS3 client)
     {
         this.logger = logger;
-        bucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME");
+        this.client = client;
+
         endpointUrl = Environment.GetEnvironmentVariable("S3_ENDPOINT_URL");
-        client = InitClient();
+        bucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME");
     }
 
     /// <inheritdoc/>
@@ -157,25 +160,5 @@ public class StorageService : IStorageService
         }
 
         return false;
-    }
-
-    /// <summary>
-    /// Initialize AWS client.
-    /// </summary>
-    /// <returns>AWS client.</returns>
-    private static AmazonS3Client InitClient()
-    {
-        var accessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY");
-        var secretkey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY");
-
-        var config = new AmazonS3Config
-        {
-            RegionEndpoint = RegionEndpoint.GetBySystemName(Environment.GetEnvironmentVariable("AWS_REGION")),
-            ServiceURL = Environment.GetEnvironmentVariable("S3_ENDPOINT_URL"),
-            UseHttp = true,
-            ForcePathStyle = true,
-        };
-
-        return new(accessKey, secretkey, config);
     }
 }
