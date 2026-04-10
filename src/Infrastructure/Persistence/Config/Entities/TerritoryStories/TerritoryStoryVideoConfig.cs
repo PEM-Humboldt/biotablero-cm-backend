@@ -35,7 +35,7 @@ public class TerritoryStoryVideoConfig : IEntityTypeConfiguration<TerritoryStory
             .HasForeignKey(e => e.TerritoryStoryId);
 
         builder
-            .HasIndex(e => e.FileUrl)
+            .HasIndex(e => new { e.TerritoryStoryId, e.FileUrl })
             .IsUnique();
     }
 }

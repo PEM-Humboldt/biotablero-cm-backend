@@ -8,6 +8,7 @@ using FluentValidation.Results;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.WebApi.Resources;
 
 using Microsoft.Extensions.Localization;
@@ -37,7 +38,7 @@ public class ResxValidationErrorTranslator
             {
                 Code = errorCode,
                 Description = localizer[errorCode],
-                Field = propertyName,
+                Field = propertyName.LowerCaseFirstChar(),
                 Data = data,
             }
         ];
@@ -67,7 +68,7 @@ public class ResxValidationErrorTranslator
             {
                 Code = f.ErrorCode,
                 Description = message,
-                Field = f.PropertyName,
+                Field = f.PropertyName.LowerCaseFirstChar(),
             };
         }
     }

@@ -342,7 +342,7 @@
     <comment/>
   </data>
   <data name="STO_003" xml:space="preserve">
-    <value>Invalid format. Keywords must be separated by commas. Spaces and special characters are not allowed. Only up to 5 keywords are allowed.</value>
+    <value>Invalid format. Keywords must be separated by commas. Spaces and special characters are not allowed. Only up to 4 keywords are allowed.</value>
     <comment/>
   </data>
   <data name="STO_004" xml:space="preserve">
