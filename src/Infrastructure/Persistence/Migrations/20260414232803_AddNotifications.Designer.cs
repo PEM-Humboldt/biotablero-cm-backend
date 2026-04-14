@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20260325223204_AddNotifications")]
+    [Migration("20260414232803_AddNotifications")]
     partial class AddNotifications
     {
         /// <inheritdoc />
@@ -592,15 +592,15 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnName("creation_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<string>("Properties")
-                        .HasColumnType("jsonb")
-                        .HasColumnName("properties");
-
-                    b.Property<bool>("Readed")
+                    b.Property<bool>("IsRead")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false)
-                        .HasColumnName("readed");
+                        .HasColumnName("is_read");
+
+                    b.Property<string>("Properties")
+                        .HasColumnType("jsonb")
+                        .HasColumnName("properties");
 
                     b.Property<DateTime?>("ReadingDate")
                         .HasColumnType("timestamp without time zone")

@@ -21,10 +21,10 @@ public interface INotificationRepository : IRepository<Notification, int>
     IQueryable<Notification> GetQueryWithUserNameAsync(string userName, IQueryable<Notification> query, CancellationToken ct = default);
 
     /// <summary>
-    /// Count not readed elements by user name.
+    /// Count not read elements by user name.
     /// </summary>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Not readed total elements.</returns>
-    Task<int> CountNotReadedByUserNameAsync(string userName, CancellationToken ct = default);
+    /// <returns>Not read total elements.</returns>
+    Task<int> CountNotReadByUserNameAsync(string userName, CancellationToken ct = default);
 }

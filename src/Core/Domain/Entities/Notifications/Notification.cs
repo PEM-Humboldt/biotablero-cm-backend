@@ -35,9 +35,9 @@ public class Notification : BaseEntity<int>, IAggregateRoot
     public DateTime? ReadingDate { get; set; }
 
     /// <summary>
-    /// Readed flag.
+    /// Is read flag.
     /// </summary>
-    public bool Readed { get; set; }
+    public bool IsRead { get; set; }
 
     /// <summary>
     /// Entity properties.

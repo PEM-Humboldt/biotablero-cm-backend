@@ -29,7 +29,7 @@ public partial class AddNotifications : Migration
                 body = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                 creation_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                 reading_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                readed = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                is_read = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                 properties = table.Column<string>(type: "jsonb", nullable: true),
             },
             constraints: table =>

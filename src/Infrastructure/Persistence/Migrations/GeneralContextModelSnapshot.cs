@@ -589,15 +589,15 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnName("creation_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<string>("Properties")
-                        .HasColumnType("jsonb")
-                        .HasColumnName("properties");
-
-                    b.Property<bool>("Readed")
+                    b.Property<bool>("IsRead")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false)
-                        .HasColumnName("readed");
+                        .HasColumnName("is_read");
+
+                    b.Property<string>("Properties")
+                        .HasColumnType("jsonb")
+                        .HasColumnName("properties");
 
                     b.Property<DateTime?>("ReadingDate")
                         .HasColumnType("timestamp without time zone")
