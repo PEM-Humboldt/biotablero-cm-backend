@@ -34,8 +34,8 @@ public class NotificationRepository : Repository<Notification, int>, INotificati
             .Where(e => e.Receiver == userName);
 
     /// <inheritdoc/>
-    public async Task<int> CountNotReadedByUserNameAsync(string userName, CancellationToken ct = default) =>
+    public async Task<int> CountNotReadByUserNameAsync(string userName, CancellationToken ct = default) =>
         await dbContext.Notifications
-            .Where(e => e.Receiver == userName && !e.Readed)
+            .Where(e => e.Receiver == userName && !e.IsRead)
             .CountAsync(ct);
 }

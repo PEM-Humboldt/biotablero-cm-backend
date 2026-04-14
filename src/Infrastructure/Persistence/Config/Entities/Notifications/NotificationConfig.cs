@@ -44,8 +44,8 @@ public class NotificationConfig : IEntityTypeConfiguration<Notification>
         builder.Property(e => e.ReadingDate)
             .HasColumnName("reading_date");
 
-        builder.Property(i => i.Readed)
-            .HasColumnName("readed")
+        builder.Property(i => i.IsRead)
+            .HasColumnName("is_read")
             .HasDefaultValue(false)
             .IsRequired();
 
