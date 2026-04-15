@@ -31,6 +31,10 @@ public class LocationConfig : IEntityTypeConfiguration<Location>
             .HasMaxLength(10)
             .IsRequired();
 
+        builder.Property(l => l.Level)
+            .HasColumnName("level")
+            .IsRequired();
+
         builder.Property(l => l.ParentId)
             .HasColumnName("parent_id");
 

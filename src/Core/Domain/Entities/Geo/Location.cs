@@ -27,6 +27,11 @@ public class Location : BaseEntity<int>, IAggregateRoot
     public int? ParentId { get; set; }
 
     /// <summary>
+    /// Location level.
+    /// </summary>
+    public int Level { get; set; }
+
+    /// <summary>
     /// Parent location relationship.
     /// </summary>
     public Location Parent { get; set; }
