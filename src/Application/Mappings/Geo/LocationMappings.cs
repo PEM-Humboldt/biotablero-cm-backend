@@ -22,6 +22,7 @@ public class LocationMappings : IMapperRead<Location, LocationDto>
             Name = entity.Name,
             Code = entity.Code,
             Parent = entity.Parent != null ? Map(entity.Parent) : null,
+            Level = entity.Level,
         };
     }
 }
