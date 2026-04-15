@@ -47,14 +47,14 @@ public class NotificationController(
     }
 
     /// <summary>
-    /// Get my unreaded total notifications.
+    /// Get my not read total notifications.
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Total unreaded notifications.</returns>
-    [HttpGet("TotalUnreaded")]
-    public async Task<IActionResult> GetTotalUnreaded(CancellationToken ct)
+    /// <returns>Total not read notifications.</returns>
+    [HttpGet("TotalNotRead")]
+    public async Task<IActionResult> GetTotalNotRead(CancellationToken ct)
     {
-        var response = await entityService.GetTotalUnreadedByUserNameAsync(HttpContext.GetUserName(), ct);
+        var response = await entityService.GetTotalNotReadByUserNameAsync(HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
     }
 

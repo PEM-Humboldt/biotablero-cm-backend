@@ -15,12 +15,12 @@ using Microsoft.AspNetCore.OData.Query;
 public interface INotificationService : IRead<Notification, int>
 {
     /// <summary>
-    /// Get total unreaded entities by user name.
+    /// Get total not read entities by user name.
     /// </summary>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetTotalUnreadedByUserNameAsync(string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> GetTotalNotReadByUserNameAsync(string userName, CancellationToken ct = default);
 
     /// <summary>
     /// Get element.

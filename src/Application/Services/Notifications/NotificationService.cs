@@ -80,7 +80,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetTotalUnreadedByUserNameAsync(string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetTotalNotReadByUserNameAsync(string userName, CancellationToken ct = default)
     {
         var total = await entityRepository.CountNotReadByUserNameAsync(userName, ct);
 
@@ -120,7 +120,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
                 await entityRepository.UpdateAsync(entity, ct);
 
                 var entityDto = mapper.Map(entity);
-                logger.AddLog(LogType.Update, "Readed notification", "{@Entity}", entityDto);
+                logger.AddLog(LogType.Update, "Read notification", "{@Entity}", entityDto);
 
                 return new()
                 {
