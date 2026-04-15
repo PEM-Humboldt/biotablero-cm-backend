@@ -21,7 +21,7 @@ public class NotificationResponseExample : IExamplesProvider<NotificationDto>
         Body = "Notification example body",
         CreationDate = DateTime.Now,
         ReadingDate = DateTime.Now,
-        Readed = true,
+        IsRead = true,
         Properties = new()
         {
             TemplateName = "TemplateExample",

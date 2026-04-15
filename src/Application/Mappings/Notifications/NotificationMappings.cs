@@ -25,7 +25,7 @@ public class NotificationMappings : IMapperCreateAndRead<Notification, Notificat
             Body = entity.Body,
             CreationDate = entity.CreationDate,
             ReadingDate = entity.ReadingDate,
-            Readed = entity.Readed,
+            IsRead = entity.IsRead,
             Properties = entity.Properties != null ? JsonSerializer.Deserialize<NotificationPropertiesDto>(entity.Properties) : null,
         };
     }
@@ -43,7 +43,7 @@ public class NotificationMappings : IMapperCreateAndRead<Notification, Notificat
             Body = dto.Body,
             CreationDate = dto.CreationDate,
             ReadingDate = dto.ReadingDate,
-            Readed = dto.Readed,
+            IsRead = dto.IsRead,
             Properties = JsonSerializer.Serialize(dto.Properties),
         };
     }

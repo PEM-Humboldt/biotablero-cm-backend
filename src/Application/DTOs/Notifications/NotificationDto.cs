@@ -40,9 +40,9 @@ public class NotificationDto : IDto
     public DateTime? ReadingDate { get; set; }
 
     /// <summary>
-    /// Readed flag.
+    /// Is Read flag.
     /// </summary>
-    public bool Readed { get; set; }
+    public bool IsRead { get; set; }
 
     /// <summary>
     /// Entity properties.

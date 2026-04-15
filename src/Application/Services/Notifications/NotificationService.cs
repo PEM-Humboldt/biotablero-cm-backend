@@ -82,7 +82,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetTotalUnreadedByUserNameAsync(string userName, CancellationToken ct = default)
     {
-        var total = await entityRepository.CountNotReadedByUserNameAsync(userName, ct);
+        var total = await entityRepository.CountNotReadByUserNameAsync(userName, ct);
 
         return new()
         {
@@ -108,9 +108,9 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
                 };
             }
 
-            if (!entity.Readed)
+            if (!entity.IsRead)
             {
-                entity.Readed = true;
+                entity.IsRead = true;
 
                 if (entity.ReadingDate == null)
                 {
