@@ -230,7 +230,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         var hasDepartmentsWithLocalities = entityData.Locations
             .Join(locationsDb, il => il.LocationId, l => l.Id, (il, l) => new { il, l })
-            .Where(lil => !string.IsNullOrWhiteSpace(lil.il.Locality) && lil.l.Level != (int)LocationLevel.Municipality)
+            .Where(lil => !string.IsNullOrWhiteSpace(lil.il.Locality) && lil.l.Level != (byte)LocationLevel.Municipality)
             .Any();
 
         if (hasDepartmentsWithLocalities)

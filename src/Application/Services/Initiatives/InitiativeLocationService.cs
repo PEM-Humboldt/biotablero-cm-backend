@@ -134,7 +134,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
             };
         }
 
-        if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.Level != (int)LocationLevel.Municipality)
+        if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.Level != (byte)LocationLevel.Municipality)
         {
             return new(true)
             {
@@ -229,7 +229,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
             };
         }
 
-        if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.Level != (int)LocationLevel.Municipality)
+        if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.Level != (byte)LocationLevel.Municipality)
         {
             return new(true)
             {

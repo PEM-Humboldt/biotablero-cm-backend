@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
+namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,8 @@ using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
 using Serilog;
+
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.GeoEnums;
 
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
@@ -168,10 +171,18 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
         var query = dbContext.Initiatives
             .Where(i => i.Enabled && i.Coordinate != null);
 
+        // Discard filter for default nation identifier
+        if (locationId.HasValue && locationId == GeoConstants.DefaultNationId)
+        {
+            locationId = null;
+        }
+
         // Filter by location if provided
         if (locationId.HasValue)
         {
-            query = query.Where(i => i.InitiativeLocations.Any(il => il.LocationId == locationId.Value));
+            query = query.Where(i => i.InitiativeLocations.Any(il =>
+                il.LocationId == locationId.Value &&
+                (il.Location.Level == (byte)LocationLevel.Department || il.Location.Level == (byte)LocationLevel.Municipality)));
         }
 
         var results = await query
