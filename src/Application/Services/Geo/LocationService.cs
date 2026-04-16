@@ -16,6 +16,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Geo;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
 /// <summary>
@@ -47,7 +48,12 @@ public class LocationService : ServiceRead<Location, LocationDto, int>, ILocatio
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetByParentAsync(int? parentId, CancellationToken ct = default)
     {
-        var dataListEntity = await entityRepository.GetByParentIdAsync(parentId, ct);
+        if (!parentId.HasValue)
+        {
+            parentId = GeoConstants.DefaultNationId;
+        }
+
+        var dataListEntity = await entityRepository.GetByParentIdAsync(parentId.Value, ct);
 
         var dataListDto = dataListEntity
             .Select(mapper.Map);
