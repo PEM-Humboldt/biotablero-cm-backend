@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20260415215917_AddLocationLevel")]
+    [Migration("20260416163204_AddLocationLevel")]
     partial class AddLocationLevel
     {
         /// <inheritdoc />
@@ -42,8 +42,8 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(10)")
                         .HasColumnName("code");
 
-                    b.Property<int>("Level")
-                        .HasColumnType("integer")
+                    b.Property<byte>("Level")
+                        .HasColumnType("smallint")
                         .HasColumnName("level");
 
                     b.Property<string>("Name")
@@ -63,7 +63,10 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("location", "geo");
+                    b.ToTable("location", "geo", t =>
+                        {
+                            t.HasCheckConstraint("CK_Location_Level_ValidValues", "\"level\" IN (1, 2, 3)");
+                        });
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Geo.LocationPolygon", b =>
