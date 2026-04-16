@@ -21,6 +21,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
 using Serilog;
 
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.GeoEnums;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
@@ -133,7 +134,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
             };
         }
 
-        if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.ParentId == null)
+        if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.Level != (int)LocationLevel.Municipality)
         {
             return new(true)
             {
@@ -228,7 +229,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
             };
         }
 
-        if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.ParentId == null)
+        if (!string.IsNullOrWhiteSpace(entityData.Locality) && location.Level != (int)LocationLevel.Municipality)
         {
             return new(true)
             {

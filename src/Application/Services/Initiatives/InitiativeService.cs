@@ -35,6 +35,7 @@ using NetTopologySuite.IO;
 
 using Serilog;
 
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.GeoEnums;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
@@ -229,7 +230,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         var hasDepartmentsWithLocalities = entityData.Locations
             .Join(locationsDb, il => il.LocationId, l => l.Id, (il, l) => new { il, l })
-            .Where(lil => !string.IsNullOrWhiteSpace(lil.il.Locality) && lil.l.ParentId == null)
+            .Where(lil => !string.IsNullOrWhiteSpace(lil.il.Locality) && lil.l.Level != (int)LocationLevel.Municipality)
             .Any();
 
         if (hasDepartmentsWithLocalities)
