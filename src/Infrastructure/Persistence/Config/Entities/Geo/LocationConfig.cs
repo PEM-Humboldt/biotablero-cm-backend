@@ -35,6 +35,10 @@ public class LocationConfig : IEntityTypeConfiguration<Location>
             .HasColumnName("level")
             .IsRequired();
 
+        builder.ToTable(t => t.HasCheckConstraint(
+            "CK_Location_Level_ValidValues",
+            "\"level\" IN (1, 2, 3)"));
+
         builder.Property(l => l.ParentId)
             .HasColumnName("parent_id");
 

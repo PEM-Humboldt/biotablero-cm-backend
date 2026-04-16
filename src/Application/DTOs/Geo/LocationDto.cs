@@ -30,5 +30,5 @@ public class LocationDto : IDto
     /// <summary>
     /// Location level.
     /// </summary>
-    public int Level { get; set; }
+    public byte Level { get; set; }
 }

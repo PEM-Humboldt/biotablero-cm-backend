@@ -29,7 +29,7 @@ public class Location : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Location level.
     /// </summary>
-    public int Level { get; set; }
+    public byte Level { get; set; }
 
     /// <summary>
     /// Parent location relationship.
