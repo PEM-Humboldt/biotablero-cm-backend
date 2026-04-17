@@ -29,7 +29,7 @@ public class TerritoryStoryValidator : AbstractValidator<TerritoryStoryDto>
         RuleFor(dto => dto.Text)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
-            .MaximumLength(2000)
+            .MaximumLength(5000)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Restricted)

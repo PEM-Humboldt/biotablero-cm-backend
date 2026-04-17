@@ -32,7 +32,7 @@ public class TerritoryStoryConfig : IEntityTypeConfiguration<TerritoryStory>
 
         builder.Property(i => i.Text)
             .HasColumnName("text")
-            .HasMaxLength(2000);
+            .HasMaxLength(5000);
 
         builder.Property(i => i.Keywords)
             .HasColumnName("keywords")
