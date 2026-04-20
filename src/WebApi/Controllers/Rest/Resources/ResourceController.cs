@@ -47,17 +47,16 @@ public class ResourceController(
     }
 
     /// <summary>
-    /// Get entities by Initiative (paginated).
+    /// Get entities (paginated).
     /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
-    [HttpGet("GetByInitiative/{initiativeId}")]
+    [HttpGet]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceOdataResponseExample))]
-    public async Task<IActionResult> GetOdataListByInitiative(int initiativeId, ODataQueryOptions<Resource> queryOptions, CancellationToken ct)
+    public async Task<IActionResult> GetOdataList(ODataQueryOptions<Resource> queryOptions, CancellationToken ct)
     {
-        var response = await entityService.GetByInitiativeAsync(initiativeId, HttpContext.GetUserName(), queryOptions, ct);
+        var response = await entityService.GetListAsync(HttpContext.GetUserName(), queryOptions, ct);
         return webTools.CustomResponse(response);
     }
 

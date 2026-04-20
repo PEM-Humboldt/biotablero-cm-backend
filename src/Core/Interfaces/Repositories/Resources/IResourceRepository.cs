@@ -12,14 +12,12 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 public interface IResourceRepository : IRepository<Resource, int>
 {
     /// <summary>
-    /// Get query with initiative and user name filters.
+    /// Get query with user name filter.
     /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="userName">User name.</param>
     /// <param name="query">Linq Query.</param>
-    /// <param name="ct">Cancellation token.</param>
     /// <returns>Custom query.</returns>
-    Task<IQueryable<Resource>> GetQueryWithInitiativeAndUserNameAsync(int initiativeId, string userName, IQueryable<Resource> query, CancellationToken ct = default);
+    IQueryable<Resource> GetQueryByUserName(string userName, IQueryable<Resource> query);
 
     /// <summary>
     /// Check authorized entity modification.

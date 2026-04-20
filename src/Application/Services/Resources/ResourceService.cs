@@ -130,10 +130,10 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, ODataQueryOptions<Resource> queryOptions, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetListAsync(string userName, ODataQueryOptions<Resource> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();
-        query = await entityRepository.GetQueryWithInitiativeAndUserNameAsync(initiativeId, userName, query, ct);
+        query = entityRepository.GetQueryByUserName(userName, query);
 
         try
         {
