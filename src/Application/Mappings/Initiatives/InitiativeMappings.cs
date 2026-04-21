@@ -33,7 +33,7 @@ public class InitiativeMappings(
             ImageUrl = entity.ImageUrl,
             BannerUrl = entity.BannerUrl,
             Enabled = entity.Enabled,
-            Coordinate = [entity.Coordinate.X, entity.Coordinate.Y],
+            Coordinate = [entity.Coordinate.Y, entity.Coordinate.X],
             PolygonArea = entity.PolygonArea,
             Contacts = entity.InitiativeContacts?.Select(initiativeContactMappings.Map),
             Locations = entity.InitiativeLocations?.Select(initiativeLocationMappings.Map),
