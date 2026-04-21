@@ -73,7 +73,8 @@ public class ResourceController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceResponseExample))]
     public async Task<IActionResult> Post([FromBody] ResourceDto requestData, CancellationToken ct)
     {
-        var response = await entityService.AddAsync(HttpContext.GetUserName(), requestData, ct);
+        requestData.AuthorUserName = HttpContext.GetUserName();
+        var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }
 

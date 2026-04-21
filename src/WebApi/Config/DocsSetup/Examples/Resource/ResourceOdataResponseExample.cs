@@ -13,6 +13,7 @@ public class ResourceOdataResponseExample : BaseOdataResponseExample<ResourceDto
         {
             Id = 0,
             InitiativeId = 0,
+            AuthorUserName = "example@example.com",
             ResourceType = new()
             {
                 Id = 0,
