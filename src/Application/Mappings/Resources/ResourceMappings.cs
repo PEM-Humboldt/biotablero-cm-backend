@@ -25,6 +25,7 @@ public class ResourceMappings(
         {
             Id = entity.Id,
             InitiativeId = entity.InitiativeId,
+            AuthorUserName = entity.AuthorUserName,
             Name = entity.Name,
             Description = entity.Description,
             CreationDate = entity.CreationDate,
@@ -48,6 +49,7 @@ public class ResourceMappings(
         {
             Id = dto.Id ?? 0,
             InitiativeId = dto.InitiativeId ?? 0,
+            AuthorUserName = dto.AuthorUserName,
             ResourceTypeId = dto.ResourceType.Id ?? 0,
             Name = dto.Name,
             Description = dto.Description,

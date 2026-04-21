@@ -25,6 +25,11 @@ public class ResourceConfig : IEntityTypeConfiguration<Resource>
             .HasColumnName("initiative_id")
             .IsRequired();
 
+        builder.Property(i => i.AuthorUserName)
+            .HasColumnName("author_user_name")
+            .HasMaxLength(75)
+            .IsRequired();
+
         builder.Property(i => i.ResourceTypeId)
             .HasColumnName("resource_type_id")
             .IsRequired();

@@ -21,6 +21,11 @@ public class ResourceDto : IDto
     public int? InitiativeId { get; set; }
 
     /// <summary>
+    /// Author User Name identifier.
+    /// </summary>
+    public string AuthorUserName { get; set; }
+
+    /// <summary>
     /// Entity name.
     /// </summary>
     public string Name { get; set; }

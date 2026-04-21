@@ -18,6 +18,11 @@ public class Resource : BaseEntity<int>, IAggregateRoot
     public int InitiativeId { get; set; }
 
     /// <summary>
+    /// Author User Name identifier.
+    /// </summary>
+    public string AuthorUserName { get; set; }
+
+    /// <summary>
     /// Resource Type identifier.
     /// </summary>
     public int ResourceTypeId { get; set; }
