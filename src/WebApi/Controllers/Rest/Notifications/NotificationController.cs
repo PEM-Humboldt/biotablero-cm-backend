@@ -107,10 +107,6 @@ public class NotificationController(
                 }
             }
         }
-        catch (OperationCanceledException)
-        {
-            // Client disconnected naturally
-        }
         finally
         {
             sseDispatcher.Unsubscribe(userName, connectionId);
