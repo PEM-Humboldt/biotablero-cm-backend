@@ -17,7 +17,7 @@ Generate a `.env` file with the project parameters. You can generate the file ba
 ### Run containers
 
 ```sh
-docker compose -f docker-compose-dev.yml up
+docker compose -f docker-compose-dev.yml -p cm-local up
 ```
 
 > **Note:** When running this command for the first time, it's recommended to verify that the project bucket was built correctly with the `docker logs bt-cm-localstack` command. If you encounter an execution permission error, run these commands:
@@ -100,5 +100,5 @@ If you need to remove the last generated migration, you can do so with the comma
 # Build image
 docker build -t biotablero-cm:latest .
 # Run temporal container
-docker run -it --rm --env-file .env --name biotablero-cm-back -p 8001:8080 biotablero-cm:latest
+docker run -it --rm --env-file .env --name biotablero-cm-back -p 8001:8080 --network=cm-local_bt-search-network biotablero-cm:latest
 ```
