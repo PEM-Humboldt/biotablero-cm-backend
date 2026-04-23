@@ -18,5 +18,6 @@ LICENSE
 # Ignore folders with external data
 .github/
 .sonarqube/
+.idea/
 .vscode/
 docker/

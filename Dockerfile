@@ -1,23 +1,35 @@
-ARG VERSION=8.0.411-alpine3.22-amd64
-ARG ASP_VERSION=8.0.17-alpine3.22-amd64
+ARG VERSION=8.0.420-alpine3.23-amd64
+ARG ASP_VERSION=8.0.26-alpine3.23-amd64
 
 # Build stage
 FROM mcr.microsoft.com/dotnet/sdk:$VERSION AS build-env
 
 WORKDIR /app
 
-## Copy all source code
-COPY . .
+## Copy solution and project files
+ADD *.sln .
+ADD Directory.Build.props .
+ADD /src/Application/*.csproj ./src/Application/
+ADD /src/Core/*.csproj ./src/Core/
+ADD /src/Infrastructure/*.csproj ./src/Infrastructure/
+ADD /src/WebApi/*.csproj ./src/WebApi/
 
 ## Restore dependencies
 RUN dotnet restore
 
+## Copy all source code
+COPY . .
+
 ## Build project and check warnings
-RUN dotnet build --no-incremental -warnaserror
+RUN dotnet build \
+  -c Release \
+  --no-incremental \
+  -warnaserror
 
 ## Publish project
 RUN dotnet publish ./src/WebApi/WebApi.csproj \
   -c Release \
+  --no-build \
   --no-restore \
   -o ./output
 
