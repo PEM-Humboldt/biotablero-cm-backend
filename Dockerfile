@@ -56,7 +56,7 @@ ENV DOTNET_RUNNING_IN_CONTAINER=true \
 EXPOSE 8080
 
 ## Docker health check setup
-HEALTHCHECK --interval=5s --timeout=10s --retries=3 CMD curl --silent --fail http://localhost:8080/health || exit 1
+HEALTHCHECK --interval=30s --timeout=30s --retries=3 CMD curl --silent --fail http://localhost:8080/health/live || exit 1
 
 ## Execute program
 ENTRYPOINT ["dotnet", "WebApi.dll"]
