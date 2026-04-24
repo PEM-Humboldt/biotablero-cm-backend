@@ -101,5 +101,4 @@ If you need to remove the last generated migration, you can do so with the comma
 docker build -t biotablero-cm-backend:latest .
 # Run temporal container
 docker run -it --rm --env-file .env --name bt-cm-backend -p 8001:8080 --network=cm-local_bt-search-network biotablero-cm-backend:latest
-# Added useless line for check github cache with docker publish pipeline
 ```
