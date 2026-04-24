@@ -204,9 +204,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
 
             var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
 
-            var hiddenReceivers = leadersData
-                .Select(e => new CustomEmailAddress(e.FullName, e.Email))
-                .ToArray();
+            return [.. leadersData.Select(e => new CustomEmailAddress(e.FullName, e.Email))];
         }
 
         return null;
