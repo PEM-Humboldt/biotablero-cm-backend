@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'develop'
+      - 'cgalvis/lib-649'
   release:
     types: 
       - published
