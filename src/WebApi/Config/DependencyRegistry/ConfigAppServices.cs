@@ -3,6 +3,7 @@
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Logging;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Notifications;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Statistics;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Tags;
@@ -11,6 +12,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Users;
 using IAVH.BioTablero.CM.Application.Services.Geo;
 using IAVH.BioTablero.CM.Application.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.Logging;
+using IAVH.BioTablero.CM.Application.Services.Notifications;
 using IAVH.BioTablero.CM.Application.Services.Resources;
 using IAVH.BioTablero.CM.Application.Services.Statistics;
 using IAVH.BioTablero.CM.Application.Services.Tag;
@@ -51,6 +53,7 @@ public static class ConfigAppServices
         services.AddScoped<IResourceLinkService, ResourceLinkService>();
         services.AddScoped<IResourceFileService, ResourceFileService>();
         services.AddScoped<IResourceTagService, ResourceTagService>();
+        services.AddScoped<INotificationService, NotificationService>();
 
         return services;
     }
