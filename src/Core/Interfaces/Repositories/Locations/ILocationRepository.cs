@@ -22,10 +22,10 @@ public interface ILocationRepository : IRepository<LocationCustom, int>
     Task<IEnumerable<LocationCustom>> GetByParentIdAsync(int parentId, CancellationToken ct = default);
 
     /// <summary>
-    /// Get department by coordinate.
+    /// Get department identifier by coordinate.
     /// </summary>
     /// <param name="coordinate">Geographic coordinate.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>The department to wich the coordinate belongs. Null if doesn't belong to any department.</returns>
-    Task<LocationCustom> GetDepartmentByCoordinateAsync(Point coordinate, CancellationToken ct = default);
+    Task<int?> GetDepartmentIdByCoordinateAsync(Point coordinate, CancellationToken ct = default);
 }

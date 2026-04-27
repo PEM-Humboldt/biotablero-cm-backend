@@ -39,7 +39,7 @@ public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repo
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<LocationCustom> GetDepartmentByCoordinateAsync(Point coordinate, CancellationToken ct = default)
+    public async Task<int?> GetDepartmentIdByCoordinateAsync(Point coordinate, CancellationToken ct = default)
     {
         if (coordinate == null)
         {
@@ -53,6 +53,7 @@ public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repo
                 e.LocationPolygon != null &&
                 e.LocationPolygon.Geometry != null &&
                 e.LocationPolygon.Geometry.Intersects(coordinate))
+            .Select(e => e.Id)
             .FirstOrDefaultAsync(ct);
     }
 }
