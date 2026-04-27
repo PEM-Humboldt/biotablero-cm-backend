@@ -1,6 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Mvc;
 
-using IAVH.BioTablero.CM.Core.Domain.Models.Email;
+using IAVH.BioTablero.CM.Application.DTOs.Notifications;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +29,7 @@ public class EmailTemplatesController : Controller
     public IActionResult RoleAssignment(string content = null)
     {
         var model = !string.IsNullOrEmpty(content)
-            ? new RoleAssignmentEmailData { Content = content }
+            ? new NotificationDto { Body = content }
             : null;
 
         return View(model);
@@ -45,7 +45,7 @@ public class EmailTemplatesController : Controller
     public IActionResult UserRemoval(string content = null)
     {
         var model = !string.IsNullOrEmpty(content)
-            ? new UserRemovalEmailData { Content = content }
+            ? new NotificationDto { Body = content }
             : null;
 
         return View(model);
@@ -61,7 +61,7 @@ public class EmailTemplatesController : Controller
     public IActionResult JoinInvitation(string content = null)
     {
         var model = !string.IsNullOrEmpty(content)
-            ? new JoinInvitationEmailData { Content = content }
+            ? new NotificationDto { Body = content }
             : null;
 
         return View(model);
@@ -77,7 +77,7 @@ public class EmailTemplatesController : Controller
     public IActionResult JoinRequest(string content = null)
     {
         var model = !string.IsNullOrEmpty(content)
-            ? new JoinRequestEmailData { Content = content }
+            ? new NotificationDto { Body = content }
             : null;
 
         return View(model);
@@ -93,7 +93,7 @@ public class EmailTemplatesController : Controller
     public IActionResult PendingRequestsReminder(string content = null)
     {
         var model = !string.IsNullOrEmpty(content)
-            ? new PendingRequestsReminderEmailData { Content = content }
+            ? new NotificationDto { Body = content }
             : null;
 
         return View(model);

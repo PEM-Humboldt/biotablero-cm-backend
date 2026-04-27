@@ -3,6 +3,7 @@
 using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
+using IAVH.BioTablero.CM.Application.DTOs.Notifications;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
@@ -10,12 +11,14 @@ using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Mappings.Geo;
 using IAVH.BioTablero.CM.Application.Mappings.Initiatives;
 using IAVH.BioTablero.CM.Application.Mappings.Logging;
+using IAVH.BioTablero.CM.Application.Mappings.Notifications;
 using IAVH.BioTablero.CM.Application.Mappings.Resources;
 using IAVH.BioTablero.CM.Application.Mappings.Tags;
 using IAVH.BioTablero.CM.Application.Mappings.TerritoryStories;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
@@ -53,6 +56,7 @@ public static class ConfigMappings
         services.AddSingleton<IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto>, ResourceFileMappings>();
         services.AddSingleton<IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto>, ResourceLinkMappings>();
         services.AddSingleton<IMapperRead<ResourceTag, ResourceTagDto>, ResourceTagMappings>();
+        services.AddSingleton<IMapperCreateAndRead<Notification, NotificationDto>, NotificationMappings>();
 
         return services;
     }

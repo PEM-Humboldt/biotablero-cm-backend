@@ -13,12 +13,11 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
-using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Notifications;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
@@ -41,8 +40,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     private new readonly IMapperCreateReadAndUpdate<InitiativeUser, InitiativeUserDto> mapper;
     private readonly IIamService iamService;
     private readonly IInitiativeRepository initiativeRepository;
-    private readonly IWebViewTools webViewTools;
-    private readonly IEmailService emailService;
+    private readonly INotificationService notificationService;
 
     /// <summary>
     /// Constructor.
@@ -54,8 +52,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="logger">System logger.</param>
     /// <param name="iamService">IAM service.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
-    /// <param name="webViewTools">Web View Tools.</param>
-    /// <param name="emailService">Email service.</param>
+    /// <param name="notificationService">Notification service.</param>
     public InitiativeUserService(
         IInitiativeUserRepository entityRepository,
         IMapperCreateReadAndUpdate<InitiativeUser, InitiativeUserDto> mapper,
@@ -64,8 +61,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         ILogger logger,
         IIamService iamService,
         IInitiativeRepository initiativeRepository,
-        IWebViewTools webViewTools,
-        IEmailService emailService)
+        INotificationService notificationService)
         : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
@@ -74,8 +70,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         this.logger = logger;
         this.iamService = iamService;
         this.initiativeRepository = initiativeRepository;
-        this.webViewTools = webViewTools;
-        this.emailService = emailService;
+        this.notificationService = notificationService;
     }
 
     /// <inheritdoc/>
@@ -254,7 +249,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
-        await SendNotificationChangedLevel(userData, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, leaders, ct);
+        await SendNotificationChangedLevelAsync(userData, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, ct);
 
         return new()
         {
@@ -320,7 +315,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
-        await SendNotificationUserBanned(userData, initiative, leaders, ct);
+        await SendNotificationUserBannedAsync(userData, initiative, ct);
 
         return new();
     }
@@ -332,44 +327,38 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// <param name="initiative">Initiative data.</param>
     /// <param name="level">New user level.</param>
     /// <param name="reviewerUserName">Reviewer user name.</param>
-    /// <param name="leaders">Initiative leaders list.</param>
     /// <param name="ct">Cancellation token.</param>
-    private async Task SendNotificationChangedLevel(ExternalUser userData, Initiative initiative, InitiativeUserLevelEnum level, string reviewerUserName, IEnumerable<InitiativeUser> leaders, CancellationToken ct = default)
+    private async Task SendNotificationChangedLevelAsync(ExternalUser userData, Initiative initiative, InitiativeUserLevelEnum level, string reviewerUserName, CancellationToken ct = default)
     {
-        var newLevelName = string.Empty;
-
-        newLevelName = level switch
+        var newLevelName = level switch
         {
             InitiativeUserLevelEnum.Leader => "líder",
             InitiativeUserLevelEnum.Reader => "lector",
             _ => "miembro",
         };
 
-        var emailData = new RoleAssignmentEmailData
+        var notificationData = new SendNotificationData()
         {
-            Address = new(userData.FullName, userData.Email),
-            InitiativeName = initiative.Name,
-            LevelName = newLevelName,
-            ReviewerUserName = reviewerUserName,
+            NotificationDto = new()
+            {
+                Properties = new()
+                {
+                    TemplateName = "RoleAssignment",
+                    Data = new()
+                    {
+                        { "InitiativeName", initiative.Name },
+                        { "LevelName", newLevelName },
+                        { "ReviewerUserName", reviewerUserName },
+                    },
+                },
+                Receiver = userData.Email,
+            },
+            Receivers = [new(userData.FullName, userData.Email)],
+            SendToHiddenReceivers = true,
+            InitiativeId = initiative.Id,
         };
 
-        var receivers = new CustomEmailAddress[] { emailData.Address };
-        CustomEmailAddress[] hiddenReceivers = null;
-        var htmlBody = await webViewTools.RenderViewToStringAsync("RoleAssignment", emailData);
-
-        if (leaders?.Any() ?? false)
-        {
-            var leadersUserNames = leaders
-                .Select(e => e.UserName)
-                .ToArray();
-
-            var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
-            hiddenReceivers = leadersData
-                .Select(u => new CustomEmailAddress(u.FullName, u.Email))
-                .ToArray();
-        }
-
-        await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
+        await notificationService.SendNotificationAsync(notificationData, ct);
     }
 
     /// <summary>
@@ -377,32 +366,28 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     /// </summary>
     /// <param name="userData">External user data.</param>
     /// <param name="initiative">Initiative data.</param>
-    /// <param name="leaders">Initiative leaders list.</param>
     /// <param name="ct">Cancellation token.</param>
-    private async Task SendNotificationUserBanned(ExternalUser userData, Initiative initiative, IEnumerable<InitiativeUser> leaders, CancellationToken ct = default)
+    private async Task SendNotificationUserBannedAsync(ExternalUser userData, Initiative initiative, CancellationToken ct = default)
     {
-        var emailData = new UserRemovalEmailData
+        var notificationData = new SendNotificationData()
         {
-            Address = new(userData.FullName, userData.Email),
-            InitiativeName = initiative.Name,
+            NotificationDto = new()
+            {
+                Properties = new()
+                {
+                    TemplateName = "UserRemoval",
+                    Data = new()
+                    {
+                        { "InitiativeName", initiative.Name },
+                    },
+                },
+                Receiver = userData.Email,
+            },
+            Receivers = [new(userData.FullName, userData.Email)],
+            SendToHiddenReceivers = true,
+            InitiativeId = initiative.Id,
         };
 
-        var receivers = new CustomEmailAddress[] { emailData.Address };
-        CustomEmailAddress[] hiddenReceivers = null;
-        var htmlBody = await webViewTools.RenderViewToStringAsync("UserRemoval", emailData);
-
-        if (leaders?.Any() ?? false)
-        {
-            var leadersUserNames = leaders
-                .Select(e => e.UserName)
-                .ToArray();
-
-            var leadersData = await iamService.GetUsersDataAsync(leadersUserNames, ct);
-            hiddenReceivers = leadersData
-                .Select(u => new CustomEmailAddress(u.FullName, u.Email))
-                .ToArray();
-        }
-
-        await emailService.SendEmailAsync(emailData.Subject, receivers, hiddenReceivers, htmlBody, ct);
+        await notificationService.SendNotificationAsync(notificationData, ct);
     }
 }

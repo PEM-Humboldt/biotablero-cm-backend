@@ -156,12 +156,13 @@ public class ResourceTagService : IResourceTagService
         }
 
         await entityRepository.DeleteAsync(entity, ct);
+        var entityData = mapper.Map(entity);
 
         // Send email
         var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
         await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
-        logger.AddLog(LogType.Delete, "Deleted resource tag relationship", "{@EntityData}", entity);
+        logger.AddLog(LogType.Delete, "Deleted resource tag relationship", "{@EntityData}", entityData);
 
         return new();
     }

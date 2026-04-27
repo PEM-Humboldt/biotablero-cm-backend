@@ -13,7 +13,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
-using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Notifications;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -44,9 +44,8 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IRepository<ResourceType, int> resourceTypeRepository;
     private readonly IResourceLikeRepository resourceLikeRepository;
-    private readonly IWebViewTools webViewTools;
-    private readonly IEmailService emailService;
     private readonly IIamService iamService;
+    private readonly INotificationService notificationService;
 
     /// <summary>
     /// Constructor.
@@ -60,9 +59,8 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <param name="initiativeUserRepository">Initiative User repository.</param>
     /// <param name="resourceTypeRepository">Resource Type repository.</param>
     /// <param name="resourceLikeRepository">Resource Like repository.</param>
-    /// <param name="webViewTools">Web View Tools.</param>
-    /// <param name="emailService">Email service.</param>
     /// <param name="iamService">IAM service.</param>
+    /// <param name="notificationService">Notification service.</param>
     public ResourceService(
         IResourceRepository entityRepository,
         IMapperCreateReadAndUpdate<Resource, ResourceDto> mapper,
@@ -73,9 +71,8 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         IInitiativeUserRepository initiativeUserRepository,
         IRepository<ResourceType, int> resourceTypeRepository,
         IResourceLikeRepository resourceLikeRepository,
-        IWebViewTools webViewTools,
-        IEmailService emailService,
-        IIamService iamService)
+        IIamService iamService,
+        INotificationService notificationService)
         : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
@@ -86,9 +83,8 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         this.initiativeUserRepository = initiativeUserRepository;
         this.resourceTypeRepository = resourceTypeRepository;
         this.resourceLikeRepository = resourceLikeRepository;
-        this.webViewTools = webViewTools;
-        this.emailService = emailService;
         this.iamService = iamService;
+        this.notificationService = notificationService;
     }
 
     /// <inheritdoc/>
@@ -404,12 +400,6 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
             return true;
         }
 
-        var emailData = new UpdateResourceEmailData
-        {
-            ResourceName = resource.Name,
-            EditorUserName = userName,
-        };
-
         var initiativeUsers = (await initiativeUserRepository.GetByInitiativeAsync(resource.InitiativeId, ct))
             .Select(e => e.UserName)
             .ToArray();
@@ -420,10 +410,26 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
             .Select(e => new CustomEmailAddress(e.FullName, e.Email))
             .ToArray();
 
-        var htmlBody = await webViewTools.RenderViewToStringAsync("UpdateResource", emailData);
+        var notificationData = new SendNotificationData()
+        {
+            NotificationDto = new()
+            {
+                Properties = new()
+                {
+                    TemplateName = "UpdateResource",
+                    Data = new()
+                    {
+                        { "ResourceName", resource.Name },
+                        { "EditorUserName", userName },
+                    },
+                },
+            },
+            Receivers = receivers,
+            SendToHiddenReceivers = false,
+        };
 
-        var response = await emailService.SendEmailAsync(emailData.Subject, receivers, null, htmlBody, ct);
+        await notificationService.SendNotificationAsync(notificationData, ct);
 
-        return !string.IsNullOrEmpty(response);
+        return true;
     }
 }

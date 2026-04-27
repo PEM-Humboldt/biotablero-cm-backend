@@ -3,6 +3,7 @@
 using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Validators.Initiatives;
+using IAVH.BioTablero.CM.Application.Validators.Notifications;
 using IAVH.BioTablero.CM.Application.Validators.Resources;
 using IAVH.BioTablero.CM.Application.Validators.Tags;
 using IAVH.BioTablero.CM.Application.Validators.TerritoryStories;
@@ -33,6 +34,7 @@ public static class ConfigValidators
         services.AddValidatorsFromAssemblyContaining<ResourceValidator>();
         services.AddValidatorsFromAssemblyContaining<ResourceFileValidator>();
         services.AddValidatorsFromAssemblyContaining<ResourceLinkValidator>();
+        services.AddValidatorsFromAssemblyContaining<NotificationValidator>();
 
         return services;
     }

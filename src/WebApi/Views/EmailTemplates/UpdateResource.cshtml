@@ -1,10 +1,10 @@
-@model IAVH.BioTablero.CM.Core.Domain.Models.Email.UpdateResourceEmailData
+@model IAVH.BioTablero.CM.Application.DTOs.Notifications.NotificationDto
 @{
-    Model.Subject = $"Se ha actualizado el recurso '{Model?.ResourceName}'";
-    Model.Content = $"Se ha actualizado la información del recurso '{Model?.ResourceName}' por parte del usuario '{Model?.EditorUserName}'.";
+    Model.Subject = $"Se ha actualizado el recurso '{Model?.Properties?.Data["ResourceName"]}'";
+    Model.Body = $"Se ha actualizado la información del recurso '{Model?.Properties?.Data["ResourceName"]}' por parte del usuario '{Model?.Properties?.Data["EditorUserName"]}'.";
 }
 
 <div style="margin: auto;width: 20rem;">
     <h2 style="color: #e84a5f;">Actualización de recurso</h2>
-    <p>@Html.Raw(Model?.Content)</p>
+    <p>@Html.Raw(Model?.Body)</p>
 </div>
