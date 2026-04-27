@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
+using NetTopologySuite.Geometries;
+
+using LocationCustom = IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location;
 
 /// <summary>
 /// Location repository interface.
 /// </summary>
-public interface ILocationRepository : IRepository<Location, int>
+public interface ILocationRepository : IRepository<LocationCustom, int>
 {
     /// <summary>
     /// Get elements by parent identifier.
@@ -17,5 +19,13 @@ public interface ILocationRepository : IRepository<Location, int>
     /// <param name="parentId">Parent identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of elements by specified parent.</returns>
-    Task<IEnumerable<Location>> GetByParentIdAsync(int parentId, CancellationToken ct = default);
+    Task<IEnumerable<LocationCustom>> GetByParentIdAsync(int parentId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get department by coordinate.
+    /// </summary>
+    /// <param name="coordinate">Geographic coordinate.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>The department to wich the coordinate belongs. Null if doesn't belong to any department.</returns>
+    Task<LocationCustom> GetDepartmentByCoordinateAsync(Point coordinate, CancellationToken ct = default);
 }
