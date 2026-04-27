@@ -9,7 +9,13 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
 using Microsoft.EntityFrameworkCore;
 
+using NetTopologySuite.Geometries;
+
 using Serilog;
+
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.GeoEnums;
+
+using LocationCustom = IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location;
 
 /// <summary>
 /// Location Polygon repository.
@@ -24,4 +30,22 @@ public class LocationPolygonRepository(GeneralContext dbContext, ILogger logger)
             .Where(i => i.LocationId == locationId)
             .Select(e => e.GeometrySimplified)
             .FirstOrDefaultAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<LocationCustom> GetDepartmentByCoordinateAsync(Point coordinate, CancellationToken ct = default)
+    {
+        if (coordinate == null)
+        {
+            return null;
+        }
+
+        return await dbContext.Locations
+            .Include(e => e.LocationPolygon)
+            .Where(e =>
+                e.Level == (byte)LocationLevel.Department &&
+                e.LocationPolygon != null &&
+                e.LocationPolygon.Geometry != null &&
+                e.LocationPolygon.Geometry.Intersects(coordinate))
+            .FirstOrDefaultAsync(ct);
+    }
 }
