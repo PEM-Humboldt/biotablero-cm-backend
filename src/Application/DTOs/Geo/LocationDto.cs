@@ -26,4 +26,9 @@ public class LocationDto : IDto
     /// Parent location relationship.
     /// </summary>
     public LocationDto Parent { get; set; }
+
+    /// <summary>
+    /// Location level.
+    /// </summary>
+    public byte Level { get; set; }
 }

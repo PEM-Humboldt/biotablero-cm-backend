@@ -27,7 +27,7 @@ public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repo
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<Location>> GetByParentIdAsync(int? parentId, CancellationToken ct = default) =>
+    public async Task<IEnumerable<Location>> GetByParentIdAsync(int parentId, CancellationToken ct = default) =>
         await dbContext.Locations
             .Where(e => e.ParentId == parentId)
             .Include(e => e.Parent)
