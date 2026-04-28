@@ -35,21 +35,11 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<IQueryable<Resource>> GetQueryWithInitiativeAndUserNameAsync(int initiativeId, string userName, IQueryable<Resource> query, CancellationToken ct = default)
-    {
-        var userBelongsToInitiative = await dbContext.InitiativeUsers
-            .Where(e => e.UserName == userName && e.InitiativeId == initiativeId)
-            .AnyAsync(ct);
-
-        if (userBelongsToInitiative)
-        {
-            return IncludeCustomEntities(query)
-                .Where(e => e.InitiativeId == initiativeId);
-        }
-
-        return IncludeCustomEntities(query)
-            .Where(e => e.InitiativeId == initiativeId && !e.IsDraft);
-    }
+    public IQueryable<Resource> GetQueryByUserName(string userName, IQueryable<Resource> query) =>
+        IncludeCustomEntities(query)
+            .Include(e => e.Initiative)
+                .ThenInclude(e => e.InitiativeUsers)
+            .Where(e => !e.IsDraft || e.Initiative.InitiativeUsers.Any(e => e.UserName == userName));
 
     /// <inheritdoc/>
     public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default) =>

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.OData.Query;
 /// <summary>
 /// Resource service interface.
 /// </summary>
-public interface IResourceService : IRead<Resource, int>
+public interface IResourceService : IRead<Resource, int>, IAdd<ResourceDto>
 {
     /// <summary>
     /// Get element.
@@ -25,23 +25,13 @@ public interface IResourceService : IRead<Resource, int>
     Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default);
 
     /// <summary>
-    /// Get entities by initiative (OData).
+    /// Get elements list (OData).
     /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="userName">User name.</param>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, ODataQueryOptions<Resource> queryOptions, CancellationToken ct = default);
-
-    /// <summary>
-    /// Add element.
-    /// </summary>
-    /// <param name="userName">User name.</param>
-    /// <param name="entityData">Entity data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Process result.</returns>
-    Task<CustomWebResponse> AddAsync(string userName, ResourceDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> GetListAsync(string userName, ODataQueryOptions<Resource> queryOptions, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.

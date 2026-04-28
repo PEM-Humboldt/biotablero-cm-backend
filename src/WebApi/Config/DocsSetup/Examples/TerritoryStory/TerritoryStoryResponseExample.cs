@@ -16,6 +16,7 @@ public class TerritoryStoryResponseExample : IExamplesProvider<TerritoryStoryDto
     {
         Id = 0,
         InitiativeId = 0,
+        AuthorUserName = "example@example.com",
         Title = "Territory Story example",
         Text = "Territory Story text example",
         Keywords = "Champiñón,Guanábana,Ñame",
@@ -23,6 +24,7 @@ public class TerritoryStoryResponseExample : IExamplesProvider<TerritoryStoryDto
         Enabled = true,
         FeaturedContent = false,
         Likes = 0,
+        ILikedIt = false,
         Images =
         [
             new()

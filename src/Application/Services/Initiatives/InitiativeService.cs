@@ -603,7 +603,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             InitiativeId = i.InitiativeId,
             InitiativeName = i.InitiativeName,
-            Coordinate = i.Coordinate,
+            Coordinate = [i.Coordinate[1], i.Coordinate[0]],
         }).ToList();
 
         return new CustomWebResponse

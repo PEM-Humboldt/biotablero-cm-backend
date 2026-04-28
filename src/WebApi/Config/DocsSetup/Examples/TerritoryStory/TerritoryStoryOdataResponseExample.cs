@@ -13,11 +13,13 @@ public class TerritoryStoryOdataResponseExample : BaseOdataResponseExample<Terri
         {
             Id = 0,
             InitiativeId = 0,
+            AuthorUserName = "example@example.com",
             Title = "Territory Story example",
             Text = "Territory Story text example",
             Restricted = false,
             Enabled = true,
             FeaturedContent = false,
             Likes = 0,
+            ILikedIt = false,
         };
 }
