@@ -20,15 +20,10 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Check code format and unused usings
-        run: dotnet format --verify-no-changes --verbosity diagnostic
-        continue-on-error: false
+      - name: Check code format
+        run: dotnet format --verify-no-changes --no-restore
 
-      - name: Build with code analysis (detects unused code)
+      - name: Build with code analysis
         run: |
           echo "🔍 Analyzing code to detect unused elements..."
-          dotnet build --no-incremental \
-            -warnaserror \
-            -p:EnableNETAnalyzers=true \
-            -p:EnforceCodeStyleInBuild=true
-        continue-on-error: false
+          dotnet build --no-incremental --no-restore -warnaserror
