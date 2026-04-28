@@ -44,6 +44,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     private readonly IEmailService emailService;
     private readonly IIamService iamService;
     private readonly IInitiativeUserRepository initiativeUserRepository;
+    private readonly ISseNotificationDispatcher sseNotificationDispatcher;
 
     /// <summary>
     /// Constructor.
@@ -57,6 +58,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     /// <param name="emailService">Email service.</param>
     /// <param name="iamService">IAM service.</param>
     /// <param name="initiativeUserRepository">Initiative user repository.</param>
+    /// <param name="sseNotificationDispatcher">SSE notification dispatcher.</param>
     public NotificationService(
         INotificationRepository entityRepository,
         IMapperCreateAndRead<Notification, NotificationDto> mapper,
@@ -66,7 +68,8 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         IWebViewTools webViewTools,
         IEmailService emailService,
         IIamService iamService,
-        IInitiativeUserRepository initiativeUserRepository)
+        IInitiativeUserRepository initiativeUserRepository,
+        ISseNotificationDispatcher sseNotificationDispatcher)
         : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
@@ -77,6 +80,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         this.emailService = emailService;
         this.iamService = iamService;
         this.initiativeUserRepository = initiativeUserRepository;
+        this.sseNotificationDispatcher = sseNotificationDispatcher;
     }
 
     /// <inheritdoc/>
@@ -184,6 +188,9 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
 
             await emailService.SendEmailAsync(notificationData.NotificationDto.Subject, notificationData.Receivers, hiddenReceivers, htmlBody, ct);
         }
+
+        // Dispatch SSE Notification
+        await sseNotificationDispatcher.DispatchAsync(entity.Receiver, notificationData.NotificationDto);
     }
 
     /// <summary>
