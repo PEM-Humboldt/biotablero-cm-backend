@@ -203,6 +203,7 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
                 InitiativeId = i.Id,
                 InitiativeName = i.Name,
                 Coordinate = new double[] { i.Coordinate.X, i.Coordinate.Y },
+                MainLocationId = i.MainLocationId,
             })
             .ToListAsync(ct);
 
