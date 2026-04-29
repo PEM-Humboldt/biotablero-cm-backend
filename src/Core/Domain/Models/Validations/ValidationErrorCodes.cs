@@ -166,11 +166,6 @@ public static class ValidationErrorCodes
         /// Entity disabled.
         /// </summary>
         public const string Disabled = "INI_013";
-
-        /// <summary>
-        /// Main location calculation error.
-        /// </summary>
-        public const string MainLocationCalcError = "INI_014";
     }
 
     /// <summary>

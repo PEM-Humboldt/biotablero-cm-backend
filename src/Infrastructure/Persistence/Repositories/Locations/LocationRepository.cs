@@ -1,11 +1,13 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Locations;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
+using IAVH.BioTablero.CM.Infrastructure.Persistence.Exceptions;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -39,14 +41,11 @@ public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repo
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<int?> GetDepartmentIdByCoordinateAsync(Point coordinate, CancellationToken ct = default)
+    public async Task<int> GetDepartmentIdByCoordinateAsync(Point coordinate, CancellationToken ct = default)
     {
-        if (coordinate == null)
-        {
-            return null;
-        }
+        ArgumentNullException.ThrowIfNull(coordinate);
 
-        return await dbContext.Locations
+        var departmentId = await dbContext.Locations
             .Include(e => e.LocationPolygon)
             .Where(e =>
                 e.Level == (byte)LocationLevel.Department &&
@@ -55,5 +54,12 @@ public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repo
                 e.LocationPolygon.Geometry.Intersects(coordinate))
             .Select(e => e.Id)
             .FirstOrDefaultAsync(ct);
+
+        if (departmentId <= 0)
+        {
+            throw new InvalidLocationException($"Invalid location identifier for coordinate [{coordinate.Y},{coordinate.X}]: {departmentId}");
+        }
+
+        return departmentId;
     }
 }

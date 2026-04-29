@@ -26,6 +26,6 @@ public interface ILocationRepository : IRepository<LocationCustom, int>
     /// </summary>
     /// <param name="coordinate">Geographic coordinate.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>The department to wich the coordinate belongs. Null if doesn't belong to any department.</returns>
-    Task<int?> GetDepartmentIdByCoordinateAsync(Point coordinate, CancellationToken ct = default);
+    /// <returns>The department to wich the coordinate belongs.</returns>
+    Task<int> GetDepartmentIdByCoordinateAsync(Point coordinate, CancellationToken ct = default);
 }

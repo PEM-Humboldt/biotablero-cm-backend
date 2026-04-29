@@ -264,9 +264,8 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         var entity = mapper.Map(entityData);
         entity.CreationDate = DateTime.Now;
         entity.Coordinate = await entityRepository.GetCentroidAsync(locationsIds, ct);
-
-        // Calculate polygon area
         entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
+        entity.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(entity.Coordinate, ct);
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
@@ -576,6 +575,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         entity.Polygon = polygon;
         entity.Coordinate = polygon.Centroid;
         entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
+        entity.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(entity.Coordinate, ct);
 
         await entityRepository.UpdateAsync(entity, ct);
 
