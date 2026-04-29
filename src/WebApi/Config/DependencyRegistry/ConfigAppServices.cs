@@ -54,6 +54,7 @@ public static class ConfigAppServices
         services.AddScoped<IResourceFileService, ResourceFileService>();
         services.AddScoped<IResourceTagService, ResourceTagService>();
         services.AddScoped<INotificationService, NotificationService>();
+        services.AddSingleton<ISseNotificationDispatcher, SseNotificationDispatcher>();
 
         return services;
     }

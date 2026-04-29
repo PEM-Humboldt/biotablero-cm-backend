@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Notifications;
 
+using System;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,6 +25,7 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 /// <param name="webTools">General web tools.</param>
 /// <param name="entityService">Entity service.</param>
+/// <param name="sseDispatcher">SSE dispatcher service.</param>
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
@@ -30,8 +33,11 @@ using Swashbuckle.AspNetCore.Filters;
 [ApiConventionType(typeof(CustomApiConventions))]
 public class NotificationController(
     IWebTools webTools,
-    INotificationService entityService) : ODataController
+    INotificationService entityService,
+    ISseNotificationDispatcher sseDispatcher) : ODataController
 {
+    private readonly JsonSerializerOptions jsonSerializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
     /// <summary>
     /// Get entity.
     /// </summary>
@@ -70,5 +76,40 @@ public class NotificationController(
     {
         var response = await entityService.GetByUserNameAsync(HttpContext.GetUserName(), queryOptions, ct);
         return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
+    /// Subscribe to Server-Sent Events (SSE) for notifications.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>A stream of notification events.</returns>
+    [HttpGet("Stream")]
+    public async Task Stream(CancellationToken ct)
+    {
+        var userName = HttpContext.GetUserName();
+        var connectionId = Guid.NewGuid();
+
+        Response.Headers.Append("Content-Type", "text/event-stream");
+        Response.Headers.Append("Cache-Control", "no-cache");
+        Response.Headers.Append("Connection", "keep-alive");
+
+        var channelReader = sseDispatcher.Subscribe(userName, connectionId);
+
+        try
+        {
+            while (await channelReader.WaitToReadAsync(ct))
+            {
+                while (channelReader.TryRead(out var notification))
+                {
+                    var payload = JsonSerializer.Serialize(notification, jsonSerializerOptions);
+                    await Response.WriteAsync($"data: {payload}\n\n", ct);
+                    await Response.Body.FlushAsync(ct);
+                }
+            }
+        }
+        finally
+        {
+            sseDispatcher.Unsubscribe(userName, connectionId);
+        }
     }
 }

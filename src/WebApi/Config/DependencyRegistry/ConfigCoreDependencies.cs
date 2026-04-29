@@ -76,6 +76,12 @@ public static class ConfigCoreDependencies
     {
         var clientId = Environment.GetEnvironmentVariable("KC_CLIENT");
 
+        var useHttpsStr = Environment.GetEnvironmentVariable("KC_USE_HTTPS");
+        if (!bool.TryParse(useHttpsStr, out bool useHttps))
+        {
+            useHttps = !isDevelopment;
+        }
+
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -89,7 +95,7 @@ public static class ConfigCoreDependencies
                     ValidIssuer = OidcServer,
                     ValidateLifetime = true,
                 };
-                options.RequireHttpsMetadata = !isDevelopment;
+                options.RequireHttpsMetadata = useHttps;
             });
 
         return services;
