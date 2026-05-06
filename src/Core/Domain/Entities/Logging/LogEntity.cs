@@ -15,7 +15,7 @@ public class LogEntity : BaseEntity<Guid>, IAggregateRoot
     /// <summary>
     /// Log creation date.
     /// </summary>
-    public DateTime TimeStamp { get; set; }
+    public DateTimeOffset TimeStamp { get; set; }
 
     /// <summary>
     /// Serilog level.
