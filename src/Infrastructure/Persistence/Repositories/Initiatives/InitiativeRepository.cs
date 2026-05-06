@@ -99,17 +99,29 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<Point> GetCentroidAsync(int[] locationIds, CancellationToken ct = default)
-    {
-        var geometries = await dbContext.LocationPolygons
-            .Where(lp => locationIds.Contains(lp.LocationId))
-            .Select(lp => lp.Geometry)
-            .ToListAsync(ct);
+    public async Task<Point> GetCentroidAsync(int[] locationIds, CancellationToken ct = default) =>
+        await dbContext
+            .Database
+            .SqlQuery<Point>(
+                @$"
+                    SELECT ST_Centroid(ST_Union(lp.geometry)) AS ""Value""
+                    FROM ""geo"".""location_polygon"" lp
+                    WHERE lp.location_id = ANY ({locationIds})
+                ")
+            .FirstOrDefaultAsync(ct);
 
-        var union = geometries.Aggregate((g1, g2) => g1.Union(g2));
-
-        return union.Centroid;
-    }
+    /// <inheritdoc/>
+    public async Task<Point> GetCentroidAsync(int initiativeId, CancellationToken ct = default) =>
+        await dbContext
+            .Database
+            .SqlQuery<Point>(
+                @$"
+                    SELECT ST_Centroid(ST_Union(lp.geometry)) AS ""Value""
+                    FROM ""initiatives"".""initiative_location"" il
+                    INNER JOIN ""geo"".""location_polygon"" lp ON il.location_id = lp.location_id 
+                    WHERE il.initiative_id = {initiativeId}
+                ")
+            .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
     public async Task<int> GetActiveInitiativesCountAsync(CancellationToken ct = default) =>
@@ -191,6 +203,7 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
                 InitiativeId = i.Id,
                 InitiativeName = i.Name,
                 Coordinate = new double[] { i.Coordinate.X, i.Coordinate.Y },
+                MainLocationId = i.MainLocationId,
             })
             .ToListAsync(ct);
 

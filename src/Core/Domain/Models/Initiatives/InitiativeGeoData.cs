@@ -19,4 +19,9 @@ public class InitiativeGeoData
     /// Initiative coordinates [longitude, latitude].
     /// </summary>
     public double[] Coordinate { get; set; } = [];
+
+    /// <summary>
+    /// Main location identifier.
+    /// </summary>
+    public int MainLocationId { get; set; }
 }

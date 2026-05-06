@@ -21,7 +21,6 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
@@ -264,9 +263,8 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         var entity = mapper.Map(entityData);
         entity.CreationDate = DateTime.UtcNow;
         entity.Coordinate = await entityRepository.GetCentroidAsync(locationsIds, ct);
-
-        // Calculate polygon area
         entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
+        entity.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(entity.Coordinate, ct);
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
@@ -576,6 +574,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         entity.Polygon = polygon;
         entity.Coordinate = polygon.Centroid;
         entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
+        entity.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(entity.Coordinate, ct);
 
         await entityRepository.UpdateAsync(entity, ct);
 
@@ -598,13 +597,12 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetByLocationAsync(int? locationId = null, CancellationToken ct = default)
     {
-        var initiatives = await entityRepository.GetActiveInitiativesWithCoordinatesByLocationAsync(locationId, ct);
-        var result = initiatives.Select(i => new InitiativeGeoData
+        var result = await entityRepository.GetActiveInitiativesWithCoordinatesByLocationAsync(locationId, ct);
+
+        foreach (var i in result)
         {
-            InitiativeId = i.InitiativeId,
-            InitiativeName = i.InitiativeName,
-            Coordinate = [i.Coordinate[1], i.Coordinate[0]],
-        }).ToList();
+            i.Coordinate = [i.Coordinate[1], i.Coordinate[0]];
+        }
 
         return new CustomWebResponse
         {

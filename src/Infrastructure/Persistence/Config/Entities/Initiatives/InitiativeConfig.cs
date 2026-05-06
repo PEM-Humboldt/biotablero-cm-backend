@@ -70,9 +70,18 @@ public class InitiativeConfig : IEntityTypeConfiguration<Initiative>
             .HasDefaultValue(0m)
             .IsRequired();
 
+        builder.Property(i => i.MainLocationId)
+            .HasColumnName("main_location_id")
+            .IsRequired();
+
         builder.Property(i => i.Enabled)
             .HasColumnName("enabled")
             .HasDefaultValue(true)
             .IsRequired();
+
+        builder.HasOne(l => l.MainLocation)
+            .WithMany(p => p.Initiatives)
+            .HasForeignKey(l => l.MainLocationId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }
