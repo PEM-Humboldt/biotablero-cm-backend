@@ -25,7 +25,6 @@ public class LogConfig : IEntityTypeConfiguration<LogEntity>
 
         builder.Property(e => e.TimeStamp)
             .HasColumnName("timestamp")
-            .HasColumnType("timestamp with time zone")
             .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .IsRequired();
 
