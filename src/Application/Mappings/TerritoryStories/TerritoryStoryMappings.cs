@@ -24,7 +24,7 @@ public class TerritoryStoryMappings(
             Id = entity.Id,
             InitiativeId = entity.InitiativeId,
             AuthorUserName = entity.AuthorUserName,
-            CreationDate = entity.CreationDate,
+            CreationDate = entity.CreationDate.ToUniversalTime(),
             Title = entity.Title,
             Text = entity.Text,
             Keywords = entity.Keywords,

@@ -20,7 +20,7 @@ public class LogBaseMappings : IMapperRead<LogEntity, LogBaseDto>
         {
             Id = entity.Id,
             Type = entity.Type,
-            TimeStamp = entity.TimeStamp,
+            TimeStamp = entity.TimeStamp.ToUniversalTime(),
             UserName = entity.UserName,
             ShortMessage = entity.ShortMessage,
         };

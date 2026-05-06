@@ -29,7 +29,7 @@ public class InitiativeMappings(
             Description = entity.Description,
             Baseline = entity.Baseline,
             Objective = entity.Objective,
-            CreationDate = entity.CreationDate,
+            CreationDate = entity.CreationDate.ToUniversalTime(),
             ImageUrl = entity.ImageUrl,
             BannerUrl = entity.BannerUrl,
             Enabled = entity.Enabled,
