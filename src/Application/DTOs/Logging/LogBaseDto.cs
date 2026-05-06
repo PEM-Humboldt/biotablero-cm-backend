@@ -19,7 +19,7 @@ public class LogBaseDto : IDto
     /// <summary>
     /// Log creation date.
     /// </summary>
-    public DateTime TimeStamp { get; set; }
+    public DateTimeOffset TimeStamp { get; set; }
 
     /// <summary>
     /// Custom log type.
