@@ -57,7 +57,7 @@ public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagR
 
                 if (!resource.IsDraft)
                 {
-                    resource.PublicationDate = DateTime.Now;
+                    resource.PublicationDate = DateTime.UtcNow;
                     await dbContext.SaveChangesAsync(ct);
                 }
 
@@ -81,7 +81,7 @@ public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagR
 
                 if (!resource.IsDraft)
                 {
-                    resource.PublicationDate = DateTime.Now;
+                    resource.PublicationDate = DateTime.UtcNow;
                     await dbContext.SaveChangesAsync(ct);
                 }
 

@@ -54,7 +54,7 @@ public class InitiativeMappings(
             Description = dto.Description,
             Baseline = dto.Baseline,
             Objective = dto.Objective,
-            CreationDate = dto.CreationDate ?? DateTime.Now,
+            CreationDate = dto.CreationDate ?? DateTime.UtcNow,
             ImageUrl = dto.ImageUrl,
             BannerUrl = dto.BannerUrl,
             PolygonArea = dto.PolygonArea ?? 0,

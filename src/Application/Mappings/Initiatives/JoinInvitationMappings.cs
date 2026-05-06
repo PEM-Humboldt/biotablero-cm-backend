@@ -39,7 +39,7 @@ public class JoinInvitationMappings(
             InitiativeId = dto.InitiativeId,
             Creator = dto.Creator,
             Message = dto.Message,
-            CreationDate = dto.CreationDate ?? DateTime.Now,
+            CreationDate = dto.CreationDate ?? DateTime.UtcNow,
             Guests = [.. dto.Guests?.Select(joinInvitationGuestMappings.Map)],
         };
     }

@@ -118,7 +118,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
 
                 if (entity.ReadingDate == null)
                 {
-                    entity.ReadingDate = DateTime.Now;
+                    entity.ReadingDate = DateTime.UtcNow;
                 }
 
                 await entityRepository.UpdateAsync(entity, ct);
@@ -168,7 +168,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
 
         // Build entity data
         var entity = mapper.Map(notificationData.NotificationDto);
-        entity.CreationDate = DateTime.Now;
+        entity.CreationDate = DateTime.UtcNow;
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);

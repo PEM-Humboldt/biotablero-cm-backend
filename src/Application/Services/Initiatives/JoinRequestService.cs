@@ -189,7 +189,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
 
         // Build entity data
         entityData.Status = new EnumEntityDto<JoinRequestStatusEnum>(JoinRequestStatusEnum.UnderReview);
-        entityData.CreationDate = DateTime.Now;
+        entityData.CreationDate = DateTime.UtcNow;
         var entity = mapper.Map(entityData);
 
         // Save data

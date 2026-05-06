@@ -95,7 +95,7 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
                 // Update request data
                 entity.StatusId = requestStatusId;
                 entity.ReviewerUserName = reviewerUserName;
-                entity.ResponseDate = DateTime.Now;
+                entity.ResponseDate = DateTime.UtcNow;
 
                 await dbContext.SaveChangesAsync(ct);
 

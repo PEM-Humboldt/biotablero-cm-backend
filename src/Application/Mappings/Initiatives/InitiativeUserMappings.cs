@@ -41,7 +41,7 @@ public class InitiativeUserMappings : IMapperCreateReadAndUpdate<InitiativeUser,
             UserName = dto.UserName,
             FocusArea = dto.FocusArea,
             LevelId = dto.Level.Id,
-            CreationDate = dto.CreationDate ?? DateTime.Now,
+            CreationDate = dto.CreationDate ?? DateTime.UtcNow,
         };
     }
 

@@ -70,7 +70,7 @@ public class ResourceMappings(
 
         if (!entity.IsDraft)
         {
-            entity.PublicationDate = DateTime.Now;
+            entity.PublicationDate = DateTime.UtcNow;
         }
     }
 }

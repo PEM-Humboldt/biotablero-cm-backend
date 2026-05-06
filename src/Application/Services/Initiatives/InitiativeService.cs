@@ -262,7 +262,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Build entity data
         var entity = mapper.Map(entityData);
-        entity.CreationDate = DateTime.Now;
+        entity.CreationDate = DateTime.UtcNow;
         entity.Coordinate = await entityRepository.GetCentroidAsync(locationsIds, ct);
 
         // Calculate polygon area

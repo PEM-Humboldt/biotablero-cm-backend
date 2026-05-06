@@ -17,8 +17,8 @@ public class NotificationOdataResponseExample : BaseOdataResponseExample<Notific
         Receiver = "initiative-user@example.com",
         Subject = "Notification example",
         Body = "Notification example body",
-        CreationDate = DateTime.Now,
-        ReadingDate = DateTime.Now,
+        CreationDate = DateTime.UtcNow,
+        ReadingDate = DateTime.UtcNow,
         IsRead = true,
         Properties = new()
         {

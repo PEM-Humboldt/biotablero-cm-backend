@@ -48,7 +48,7 @@ public class TerritoryStoryMappings(
             Id = dto.Id ?? 0,
             InitiativeId = dto.InitiativeId ?? 0,
             AuthorUserName = dto.AuthorUserName,
-            CreationDate = dto.CreationDate ?? DateTime.Now,
+            CreationDate = dto.CreationDate ?? DateTime.UtcNow,
             Title = dto.Title,
             Text = dto.Text,
             Keywords = dto.Keywords,

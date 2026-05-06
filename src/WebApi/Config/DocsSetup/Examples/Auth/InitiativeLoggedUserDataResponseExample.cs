@@ -23,7 +23,7 @@ public class InitiativeLoggedUserDataResponseExample : IExamplesProvider<List<In
             Id = 0,
             Name = "Initiative example",
             Description = "example",
-            CreationDate = DateTime.Now,
+            CreationDate = DateTime.UtcNow,
             Enabled = true,
             Locations = null,
             Contacts = null,
