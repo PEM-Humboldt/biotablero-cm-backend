@@ -43,7 +43,7 @@ public class TerritoryStoryDto : IDto
     /// <summary>
     /// Entity creation date.
     /// </summary>
-    public DateTime? CreationDate { get; set; }
+    public DateTimeOffset? CreationDate { get; set; }
 
     /// <summary>
     /// Restricted flag.

@@ -18,7 +18,7 @@ public class JoinInvitationResponseExample : IExamplesProvider<JoinInvitationDto
         InitiativeId = 0,
         Creator = "Example",
         Message = "Message example",
-        CreationDate = DateTime.UtcNow,
+        CreationDate = DateTimeOffset.UtcNow,
         Guests = [
             new()
             {

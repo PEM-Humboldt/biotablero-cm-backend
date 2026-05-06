@@ -31,12 +31,12 @@ public class JoinRequestDto : IDto
     /// <summary>
     /// Join Request creation date.
     /// </summary>
-    public DateTime? CreationDate { get; set; }
+    public DateTimeOffset? CreationDate { get; set; }
 
     /// <summary>
     /// Join Request creation date.
     /// </summary>
-    public DateTime? ResponseDate { get; set; }
+    public DateTimeOffset? ResponseDate { get; set; }
 
     /// <summary>
     /// Initiative identifier.

@@ -45,7 +45,7 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiative creation date.
     /// </summary>
-    public DateTime CreationDate { get; set; }
+    public DateTimeOffset CreationDate { get; set; }
 
     /// <summary>
     /// Initiative image URL.

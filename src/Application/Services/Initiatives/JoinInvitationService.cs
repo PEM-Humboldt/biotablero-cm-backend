@@ -168,7 +168,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         {
             // Build entity data
             var entity = mapper.Map(entityData);
-            entity.CreationDate = DateTime.UtcNow;
+            entity.CreationDate = DateTimeOffset.UtcNow;
 
             // Save data
             entity = await entityRepository.AddAsync(entity, ct);

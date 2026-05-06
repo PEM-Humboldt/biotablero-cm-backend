@@ -21,8 +21,8 @@ public class JoinRequestResponseExample : IExamplesProvider<JoinRequestDto>
         InitiativeId = 0,
         UserName = "initiative-leader@example.com",
         ReviewerUserName = "ReviewerExample",
-        CreationDate = DateTime.UtcNow,
-        ResponseDate = DateTime.UtcNow,
+        CreationDate = DateTimeOffset.UtcNow,
+        ResponseDate = DateTimeOffset.UtcNow,
         Status = new EnumEntityDto<JoinRequestStatus>(JoinRequestStatus.UnderReview),
     };
 }

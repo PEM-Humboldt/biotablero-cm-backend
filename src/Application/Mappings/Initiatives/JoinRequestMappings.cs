@@ -42,7 +42,7 @@ public class JoinRequestMappings() : IMapperCreateAndRead<JoinRequest, JoinReque
         {
             UserName = dto.UserName,
             ReviewerUserName = dto.ReviewerUserName,
-            CreationDate = dto.CreationDate ?? DateTime.UtcNow,
+            CreationDate = dto.CreationDate ?? DateTimeOffset.UtcNow,
             ResponseDate = dto.ResponseDate,
             InitiativeId = dto.InitiativeId,
             LevelId = dto.Level?.Id,

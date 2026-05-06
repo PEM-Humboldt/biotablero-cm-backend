@@ -215,7 +215,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         // Build entity data
         var entity = mapper.Map(entityData);
 
-        var now = DateTime.UtcNow;
+        var now = DateTimeOffset.UtcNow;
         entity.CreationDate = now;
 
         if (!entity.IsDraft)
@@ -346,7 +346,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         {
             var like = new ResourceLike()
             {
-                CreationDate = DateTime.UtcNow,
+                CreationDate = DateTimeOffset.UtcNow,
                 ResourceId = entityData.ResourceId,
                 UserName = entityData.UserName,
             };

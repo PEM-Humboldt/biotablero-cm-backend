@@ -27,12 +27,12 @@ public class Notification : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Entity creation date.
     /// </summary>
-    public DateTime CreationDate { get; set; }
+    public DateTimeOffset CreationDate { get; set; }
 
     /// <summary>
     /// Entity reading date.
     /// </summary>
-    public DateTime? ReadingDate { get; set; }
+    public DateTimeOffset? ReadingDate { get; set; }
 
     /// <summary>
     /// Is read flag.

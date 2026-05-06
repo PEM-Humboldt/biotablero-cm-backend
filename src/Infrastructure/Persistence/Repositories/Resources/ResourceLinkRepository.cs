@@ -63,7 +63,7 @@ public class ResourceLinkRepository : Repository<ResourceLink, int>, IResourceLi
 
                 if (!resource.IsDraft)
                 {
-                    resource.PublicationDate = DateTime.UtcNow;
+                    resource.PublicationDate = DateTimeOffset.UtcNow;
                     await dbContext.SaveChangesAsync(ct);
                 }
 
@@ -87,7 +87,7 @@ public class ResourceLinkRepository : Repository<ResourceLink, int>, IResourceLi
 
                 if (!resource.IsDraft)
                 {
-                    resource.PublicationDate = DateTime.UtcNow;
+                    resource.PublicationDate = DateTimeOffset.UtcNow;
                     result = await dbContext.SaveChangesAsync(ct);
                 }
 

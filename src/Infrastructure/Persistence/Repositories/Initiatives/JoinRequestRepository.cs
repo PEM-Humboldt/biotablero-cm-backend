@@ -95,7 +95,7 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
                 // Update request data
                 entity.StatusId = requestStatusId;
                 entity.ReviewerUserName = reviewerUserName;
-                entity.ResponseDate = DateTime.UtcNow;
+                entity.ResponseDate = DateTimeOffset.UtcNow;
 
                 await dbContext.SaveChangesAsync(ct);
 
@@ -107,7 +107,7 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
     /// <inheritdoc/>
     public async Task<Dictionary<string, int>> GetPendingOldRequestsAsync(int daysOld, CancellationToken ct = default)
     {
-        var since = DateTime.UtcNow.AddDays(-daysOld);
+        var since = DateTimeOffset.UtcNow.AddDays(-daysOld);
 
         var pendingRequestsByLeaders = dbContext.InitiativeUsers
             .Where(iu => iu.LevelId == (int)InitiativeUserLevelEnum.Leader)
