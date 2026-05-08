@@ -5,6 +5,7 @@ using System.Linq;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 /// <summary>
@@ -12,10 +13,10 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 /// </summary>
 public class TerritoryStoryMappings(
     IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto> territoryStoryImageMappings,
-    IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto> territoryStoryVideoMappings) : IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto>
+    IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto> territoryStoryVideoMappings) : MapperRead<TerritoryStory, TerritoryStoryDto>, IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto>
 {
     /// <inheritdoc/>
-    public TerritoryStoryDto Map(TerritoryStory entity)
+    public override TerritoryStoryDto Map(TerritoryStory entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

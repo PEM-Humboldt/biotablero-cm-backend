@@ -17,4 +17,11 @@ public interface IMapperRead<TE, TDto>
     /// <param name="entity">Entity data.</param>
     /// <returns>DTO data.</returns>
     TDto Map(TE entity);
+
+    /// <summary>
+    /// Map from entity to DTO for OData. Useful for reading simplified data.
+    /// </summary>
+    /// <param name="entity">Entity data.</param>
+    /// <returns>DTO data.</returns>
+    TDto MapOdata(TE entity);
 }

@@ -134,7 +134,7 @@ public abstract class ServiceRead<TE, TDto, TI>(
             ResponseBody = new Dictionary<string, object>()
             {
                 ["@odata.count"] = odataResponse.TotalItems,
-                ["value"] = odataResponse.DataList.Select(responseMapper.Map),
+                ["value"] = odataResponse.DataList.Select(responseMapper.MapOdata),
             },
         };
 

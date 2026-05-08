@@ -3,16 +3,16 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
-using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 
 /// <summary>
 /// System logs mappings.
 /// </summary>
-public class LogMappings : IMapperRead<LogEntity, LogDto>
+public class LogMappings : MapperRead<LogEntity, LogDto>
 {
     /// <inheritdoc/>
-    public LogDto Map(LogEntity entity)
+    public override LogDto Map(LogEntity entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

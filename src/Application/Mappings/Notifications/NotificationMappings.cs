@@ -5,15 +5,16 @@ using System.Text.Json;
 
 using IAVH.BioTablero.CM.Application.DTOs.Notifications;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
 
 /// <summary>
 /// Notification mappings.
 /// </summary>
-public class NotificationMappings : IMapperCreateAndRead<Notification, NotificationDto>
+public class NotificationMappings : MapperRead<Notification, NotificationDto>, IMapperCreateAndRead<Notification, NotificationDto>
 {
     /// <inheritdoc/>
-    public NotificationDto Map(Notification entity)
+    public override NotificationDto Map(Notification entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

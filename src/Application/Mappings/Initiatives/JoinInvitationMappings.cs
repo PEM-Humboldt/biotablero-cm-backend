@@ -5,16 +5,17 @@ using System.Linq;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
 /// Join invitation mappings.
 /// </summary>
 public class JoinInvitationMappings(
-    IMapperCreateAndRead<JoinInvitationGuest, JoinInvitationGuestDto> joinInvitationGuestMappings) : IMapperCreateAndRead<JoinInvitation, JoinInvitationDto>
+    IMapperCreateAndRead<JoinInvitationGuest, JoinInvitationGuestDto> joinInvitationGuestMappings) : MapperRead<JoinInvitation, JoinInvitationDto>, IMapperCreateAndRead<JoinInvitation, JoinInvitationDto>
 {
     /// <inheritdoc/>
-    public JoinInvitationDto Map(JoinInvitation entity)
+    public override JoinInvitationDto Map(JoinInvitation entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

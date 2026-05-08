@@ -5,16 +5,17 @@ using System;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
 /// <summary>
 /// Resource Tag mappings.
 /// </summary>
-public class ResourceTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : IMapperRead<ResourceTag, ResourceTagDto>
+public class ResourceTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : MapperRead<ResourceTag, ResourceTagDto>
 {
     /// <inheritdoc/>
-    public ResourceTagDto Map(ResourceTag entity)
+    public override ResourceTagDto Map(ResourceTag entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

@@ -4,15 +4,16 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 /// <summary>
 /// Territory Story Image mappings.
 /// </summary>
-public class TerritoryStoryImageMappings : IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto>
+public class TerritoryStoryImageMappings : MapperRead<TerritoryStoryImage, TerritoryStoryImageDto>, IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto>
 {
     /// <inheritdoc/>
-    public TerritoryStoryImageDto Map(TerritoryStoryImage entity)
+    public override TerritoryStoryImageDto Map(TerritoryStoryImage entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

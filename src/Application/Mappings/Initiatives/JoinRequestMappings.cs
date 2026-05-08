@@ -5,6 +5,7 @@ using System;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
@@ -13,10 +14,10 @@ using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initiat
 /// <summary>
 /// Join Request mappings.
 /// </summary>
-public class JoinRequestMappings() : IMapperCreateAndRead<JoinRequest, JoinRequestDto>
+public class JoinRequestMappings() : MapperRead<JoinRequest, JoinRequestDto>, IMapperCreateAndRead<JoinRequest, JoinRequestDto>
 {
     /// <inheritdoc/>
-    public JoinRequestDto Map(JoinRequest entity)
+    public override JoinRequestDto Map(JoinRequest entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

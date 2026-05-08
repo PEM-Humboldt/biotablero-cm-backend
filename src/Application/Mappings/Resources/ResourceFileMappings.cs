@@ -4,15 +4,16 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 
 /// <summary>
 /// Resource File mappings.
 /// </summary>
-public class ResourceFileMappings : IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto>
+public class ResourceFileMappings : MapperRead<ResourceFile, ResourceFileDto>, IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto>
 {
     /// <inheritdoc/>
-    public ResourceFileDto Map(ResourceFile entity)
+    public override ResourceFileDto Map(ResourceFile entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
