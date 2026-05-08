@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Application.Mappings.General;
+﻿namespace IAVH.BioTablero.CM.Application.Mappings.General;
 
 using System;
 

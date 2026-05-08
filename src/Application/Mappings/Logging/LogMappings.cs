@@ -31,4 +31,19 @@ public class LogMappings : MapperRead<LogEntity, LogDto>
             Properties = entity.Properties,
         };
     }
+
+    /// <inheritdoc/>
+    public override LogDto MapOdata(LogEntity entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        return new()
+        {
+            Id = entity.Id,
+            Type = entity.Type,
+            TimeStamp = entity.TimeStamp.ToUniversalTime(),
+            UserName = entity.UserName,
+            ShortMessage = entity.ShortMessage,
+        };
+    }
 }

@@ -11,7 +11,6 @@ using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Logging;
-using IAVH.BioTablero.CM.Application.Mappings.Logging;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
@@ -32,11 +31,6 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
     private readonly IReportService<LogDto> entityReportService;
 
     /// <summary>
-    /// Entity mapper.
-    /// </summary>
-    private readonly IMapperRead<LogEntity, LogBaseDto> odataMapper;
-
-    /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
@@ -52,7 +46,6 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
     {
         this.entityRepository = entityRepository;
         this.entityReportService = entityReportService;
-        odataMapper = new LogBaseMappings();
     }
 
     /// <inheritdoc/>
@@ -64,7 +57,7 @@ public class LogService : ServiceRead<LogEntity, LogDto, Guid>, ILogService
         try
         {
             var odataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
-            return GetOdataWebResponse(odataResponse, odataMapper);
+            return GetOdataWebResponse(odataResponse, mapper);
         }
         catch (ODataException)
         {
