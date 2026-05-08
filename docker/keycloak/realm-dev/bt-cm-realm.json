@@ -27,7 +27,21 @@
             ],
             "realmRoles": [
                 "Admin"
-            ]
+            ],
+            "attributes": {
+                "picture": [
+                    "https://ui-avatars.com/api/?name=Admin+Example&background=random"
+                ],
+                "organizacion": [
+                    "Instituci\u00f3n p\u00fablica"
+                ],
+                "poblacion": [
+                    "Campesino"
+                ],
+                "genero": [
+                    "Otra identidad de g\u00e9nero"
+                ]
+            }
         },
         {
             "username": "user@example.com",
@@ -44,7 +58,21 @@
             ],
             "realmRoles": [
                 "User"
-            ]
+            ],
+            "attributes": {
+                "picture": [
+                    "https://ui-avatars.com/api/?name=General+User+Example&background=random"
+                ],
+                "organizacion": [
+                    "Instituci\u00f3n p\u00fablica"
+                ],
+                "poblacion": [
+                    "Campesino"
+                ],
+                "genero": [
+                    "Otra identidad de g\u00e9nero"
+                ]
+            }
         },
         {
             "username": "initiative-leader@example.com",
@@ -61,7 +89,24 @@
             ],
             "realmRoles": [
                 "User"
-            ]
+            ],
+            "attributes": {
+                "phone": [
+                    "3055555555"
+                ],
+                "picture": [
+                    "https://ui-avatars.com/api/?name=Initiative+Leader+Example&background=random"
+                ],
+                "organizacion": [
+                    "Instituci\u00f3n p\u00fablica"
+                ],
+                "poblacion": [
+                    "Campesino"
+                ],
+                "genero": [
+                    "Otra identidad de g\u00e9nero"
+                ]
+            }
         },
         {
             "username": "initiative-member@example.com",
@@ -78,7 +123,24 @@
             ],
             "realmRoles": [
                 "User"
-            ]
+            ],
+            "attributes": {
+                "phone": [
+                    "3055555556"
+                ],
+                "picture": [
+                    "https://ui-avatars.com/api/?name=Initiative+Member+Example&background=random"
+                ],
+                "organizacion": [
+                    "Instituci\u00f3n p\u00fablica"
+                ],
+                "poblacion": [
+                    "Campesino"
+                ],
+                "genero": [
+                    "Otra identidad de g\u00e9nero"
+                ]
+            }
         },
         {
             "username": "initiative-reader@example.com",
@@ -95,7 +157,21 @@
             ],
             "realmRoles": [
                 "User"
-            ]
+            ],
+            "attributes": {
+                "picture": [
+                    "https://ui-avatars.com/api/?name=Initiative+Reader+Example&background=random"
+                ],
+                "organizacion": [
+                    "Instituci\u00f3n p\u00fablica"
+                ],
+                "poblacion": [
+                    "Campesino"
+                ],
+                "genero": [
+                    "Otra identidad de g\u00e9nero"
+                ]
+            }
         }
     ],
     "roles": {
@@ -190,7 +266,14 @@
             "webOrigins": [
                 "http://localhost:3000",
                 "http://localhost:8001"
-            ]
+            ],
+            "rootUrl": "${authBaseUrl}",
+            "adminUrl": "${authBaseUrl}",
+            "baseUrl": "/realms/bt-cm/account/",
+            "frontchannelLogout": true,
+            "attributes": {
+                "post.logout.redirect.uris": "+"
+            }
         },
         {
             "clientId": "bt-mc-client-backend",
@@ -201,5 +284,19 @@
             "serviceAccountsEnabled": true,
             "clientAuthenticatorType": "client-secret"
         }
-    ]
+    ],
+    "components": {
+        "org.keycloak.userprofile.UserProfileProvider": [
+            {
+                "id": "a18d7389-8ff3-4de4-8daf-fc247abe7d91",
+                "providerId": "declarative-user-profile",
+                "subComponents": {},
+                "config": {
+                    "kc.user.profile.config": [
+                        "{\"attributes\":[{\"name\":\"username\",\"displayName\":\"${username}\",\"validations\":{\"length\":{\"min\":3,\"max\":255},\"username-prohibited-characters\":{},\"up-username-not-idn-homograph\":{}},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"email\",\"displayName\":\"${email}\",\"validations\":{\"email\":{\"max-local-length\":\"100\"},\"pattern\":{\"pattern\":\"^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\\\\.)+[A-Za-z]{2,}$\",\"error-message\":\"Ingresa un correo electr\u00f3nico v\u00e1lido\"}},\"annotations\":{},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"firstName\",\"displayName\":\"${firstName}\",\"validations\":{\"length\":{\"min\":\"0\",\"max\":\"150\"}},\"annotations\":{},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"lastName\",\"displayName\":\"${lastName}\",\"validations\":{\"person-name-prohibited-characters\":{},\"length\":{\"min\":\"0\",\"max\":\"150\"}},\"annotations\":{},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"phone\",\"displayName\":\"${profile.attributes.phone}\",\"validations\":{\"pattern\":{\"pattern\":\"^[0-9]{10}$\",\"error-message\":\"El campo debe ser num\u00e9rico y tener 10 d\u00edgitos.\"}},\"annotations\":{},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"genero\",\"displayName\":\"${profile.attributes.genero}\",\"validations\":{\"options\":{\"options\":[\"Femenino\",\"Masculino\",\"Otra identidad de g\u00e9nero\",\"Prefiero no responder\"]}},\"annotations\":{\"inputType\":\"select\"},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"organizacion\",\"displayName\":\"${profile.attributes.organizacion}\",\"validations\":{\"options\":{\"options\":[\"Instituci\u00f3n p\u00fablica\",\"Empresa privada\",\"Organizaci\u00f3n No Gubernamental (ONG)\",\"Fundaci\u00f3n\",\"Instituci\u00f3n educativa\",\"Organizaci\u00f3n social o comunitaria\",\"Resguardo ind\u00edgena\",\"Asociaci\u00f3n o agremiaci\u00f3n\",\"Junta de Acci\u00f3n Comunal\",\"Consejo comunitario\",\"Zona de reserva campesina\",\"Medio de comunicaci\u00f3n\",\"Persona independiente\"]}},\"annotations\":{\"inputType\":\"select\"},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"poblacion\",\"displayName\":\"${profile.attributes.poblacion}\",\"validations\":{\"options\":{\"options\":[\"Ind\u00edgena\",\"Campesino\",\"Gitano(a) o Rom\",\"Raizal del Archipi\u00e9lago de San Andr\u00e9s, Providencia y Santa Catalina\",\"Palenquero(a)\",\"Negro(a), mulato(a), afrocolombiano(a) o afrodescendiente\",\"Prefiero no responder\"]}},\"annotations\":{\"inputType\":\"select\"},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"picture\",\"displayName\":\"${profile.attributes.picture}\",\"validations\":{\"pattern\":{\"pattern\":\"^(https?:\\\\/\\\\/(avatars\\\\.githubusercontent\\\\.com|secure\\\\.gravatar\\\\.com|www\\\\.gravatar\\\\.com|res\\\\.cloudinary\\\\.com|i\\\\.imgur\\\\.com|ui-avatars\\\\.com|localhost:4566|192\\\\.168\\\\.11\\\\.93:4566)\\\\/.*)?$\",\"error-message\":\"La imagen debe provenir de GitHub, Gravatar, Cloudinary, Imgur, UI Avatars o LocalStack (localhost:4566). Deje vac\u00edo para usar avatar por defecto.\"}},\"annotations\":{},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false}],\"groups\":[{\"name\":\"user-metadata\",\"displayHeader\":\"User metadata\",\"displayDescription\":\"Attributes, which refer to user metadata\"}],\"unmanagedAttributePolicy\":\"ENABLED\"}"
+                    ]
+                }
+            }
+        ]
+    }
 }
