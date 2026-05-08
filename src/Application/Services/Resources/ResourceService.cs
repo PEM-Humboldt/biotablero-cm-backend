@@ -423,6 +423,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
                         { "EditorUserName", userName },
                     },
                 },
+                Receiver = userName,
             },
             Receivers = receivers,
             SendToHiddenReceivers = false,
