@@ -39,7 +39,7 @@
                     "Campesino"
                 ],
                 "genero": [
-                    "Otra identidad de g\u00e9nero"
+                    "Femenino"
                 ]
             }
         },
@@ -98,13 +98,13 @@
                     "https://ui-avatars.com/api/?name=Initiative+Leader+Example&background=random"
                 ],
                 "organizacion": [
-                    "Instituci\u00f3n p\u00fablica"
+                    "Empresa privada"
                 ],
                 "poblacion": [
-                    "Campesino"
+                    "Ind\u00edgena"
                 ],
                 "genero": [
-                    "Otra identidad de g\u00e9nero"
+                    "Masculino"
                 ]
             }
         },
@@ -132,13 +132,13 @@
                     "https://ui-avatars.com/api/?name=Initiative+Member+Example&background=random"
                 ],
                 "organizacion": [
-                    "Instituci\u00f3n p\u00fablica"
+                    "Organizaci\u00f3n No Gubernamental (ONG)"
                 ],
                 "poblacion": [
-                    "Campesino"
+                    "Gitano(a) o Rom"
                 ],
                 "genero": [
-                    "Otra identidad de g\u00e9nero"
+                    "Prefiero no responder"
                 ]
             }
         },
@@ -163,10 +163,10 @@
                     "https://ui-avatars.com/api/?name=Initiative+Reader+Example&background=random"
                 ],
                 "organizacion": [
-                    "Instituci\u00f3n p\u00fablica"
+                    "Fundaci\u00f3n"
                 ],
                 "poblacion": [
-                    "Campesino"
+                    "Raizal del Archipi\u00e9lago de San Andr\u00e9s, Providencia y Santa Catalina"
                 ],
                 "genero": [
                     "Otra identidad de g\u00e9nero"

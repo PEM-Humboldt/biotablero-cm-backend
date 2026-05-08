@@ -43,6 +43,31 @@ public class ExternalUser
     public string FullName => $"{FirstName} {LastName}";
 
     /// <summary>
+    /// User phone.
+    /// </summary>
+    public string Phone { get; set; }
+
+    /// <summary>
+    /// User picture.
+    /// </summary>
+    public string Picture { get; set; }
+
+    /// <summary>
+    /// User organization.
+    /// </summary>
+    public string Organization { get; set; }
+
+    /// <summary>
+    /// User self-recognition.
+    /// </summary>
+    public string SelfRecognition { get; set; }
+
+    /// <summary>
+    /// User gender.
+    /// </summary>
+    public string Gender { get; set; }
+
+    /// <summary>
     /// User creation date.
     /// </summary>
     public DateTime? CreationDate { get; set; }

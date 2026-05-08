@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Iam;
+namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Iam;
 
 using System;
 using System.Collections.Generic;
@@ -111,7 +111,7 @@ public class IamService : IIamService
 
         var content = await response.Content.ReadAsStringAsync(ct);
 
-        return JsonSerializer.Deserialize<List<ExternalUser>>(content, jsonSerializerOptions);
+        return MapKeycloakUsers(content);
     }
 
     /// <summary>
@@ -140,7 +140,7 @@ public class IamService : IIamService
 
         var content = await response.Content.ReadAsStringAsync(ct);
 
-        var users = JsonSerializer.Deserialize<List<ExternalUser>>(content, jsonSerializerOptions);
+        var users = MapKeycloakUsers(content);
 
         return users.FirstOrDefault();
     }
@@ -167,5 +167,67 @@ public class IamService : IIamService
         var json = await response.Content.ReadAsStringAsync(ct);
         var doc = JsonDocument.Parse(json);
         return doc.RootElement.GetProperty("access_token").GetString()!;
+    }
+
+    /// <summary>
+    /// Maps Keycloak JSON string response to ExternalUser list.
+    /// </summary>
+    /// <param name="jsonContent">JSON content from Keycloak API.</param>
+    /// <returns>List of external users.</returns>
+    private static List<ExternalUser> MapKeycloakUsers(string jsonContent)
+    {
+        var users = new List<ExternalUser>();
+        var jsonDoc = JsonDocument.Parse(jsonContent);
+
+        if (jsonDoc.RootElement.ValueKind != JsonValueKind.Array)
+        {
+            return users;
+        }
+
+        foreach (var element in jsonDoc.RootElement.EnumerateArray())
+        {
+            var user = new ExternalUser
+            {
+                Id = element.TryGetProperty("id", out var id) && id.ValueKind == JsonValueKind.String && Guid.TryParse(id.GetString(), out var guidId) ? guidId : Guid.Empty,
+                Email = element.TryGetProperty("email", out var email) && email.ValueKind == JsonValueKind.String ? email.GetString() : null,
+                EmailVerified = element.TryGetProperty("emailVerified", out var emailVerified) && emailVerified.ValueKind == JsonValueKind.True,
+                Username = element.TryGetProperty("username", out var username) && username.ValueKind == JsonValueKind.String ? username.GetString() : null,
+                FirstName = element.TryGetProperty("firstName", out var firstName) && firstName.ValueKind == JsonValueKind.String ? firstName.GetString() : null,
+                LastName = element.TryGetProperty("lastName", out var lastName) && lastName.ValueKind == JsonValueKind.String ? lastName.GetString() : null,
+                CreationDate = element.TryGetProperty("createdTimestamp", out var createdTs) && createdTs.ValueKind == JsonValueKind.Number ? DateTimeOffset.FromUnixTimeMilliseconds(createdTs.GetInt64()).UtcDateTime : null,
+            };
+
+            if (element.TryGetProperty("attributes", out var attributes) && attributes.ValueKind == JsonValueKind.Object)
+            {
+                if (attributes.TryGetProperty("phone", out var phone) && phone.ValueKind == JsonValueKind.Array && phone.GetArrayLength() > 0)
+                {
+                    user.Phone = phone[0].GetString();
+                }
+
+                if (attributes.TryGetProperty("picture", out var picture) && picture.ValueKind == JsonValueKind.Array && picture.GetArrayLength() > 0)
+                {
+                    user.Picture = picture[0].GetString();
+                }
+
+                if (attributes.TryGetProperty("organizacion", out var org) && org.ValueKind == JsonValueKind.Array && org.GetArrayLength() > 0)
+                {
+                    user.Organization = org[0].GetString();
+                }
+
+                if (attributes.TryGetProperty("poblacion", out var pob) && pob.ValueKind == JsonValueKind.Array && pob.GetArrayLength() > 0)
+                {
+                    user.SelfRecognition = pob[0].GetString();
+                }
+
+                if (attributes.TryGetProperty("genero", out var gen) && gen.ValueKind == JsonValueKind.Array && gen.GetArrayLength() > 0)
+                {
+                    user.Gender = gen[0].GetString();
+                }
+            }
+
+            users.Add(user);
+        }
+
+        return users;
     }
 }
