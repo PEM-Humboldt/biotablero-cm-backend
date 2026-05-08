@@ -35,6 +35,12 @@ public class ResourceMappings(
             Likes = entity.TotalLikes,
             ILikedIt = entity.ILikedIt,
             ResourceType = entity.ResourceType != null ? resourceTypeMappings.Map(entity.ResourceType) : null,
+            Initiative = entity.Initiative != null ? new()
+            {
+                Id = entity.Initiative.Id,
+                Name = entity.Initiative.Name,
+            }
+            : null,
             Files = entity.Files?.Select(resourceFileMappings.Map),
             Links = entity.Links?.Select(resourceLinkMappings.Map),
             Tags = entity.ResourceTags?.Select(resourceTagMappings.Map),
@@ -60,6 +66,12 @@ public class ResourceMappings(
             TotalFiles = entity.TotalFiles,
             TotalLinks = entity.TotalLinks,
             ResourceType = entity.ResourceType != null ? resourceTypeMappings.Map(entity.ResourceType) : null,
+            Initiative = entity.Initiative != null ? new()
+            {
+                Id = entity.Initiative.Id,
+                Name = entity.Initiative.Name,
+            }
+            : null,
             Tags = entity.ResourceTags?.Select(resourceTagMappings.Map),
         };
     }

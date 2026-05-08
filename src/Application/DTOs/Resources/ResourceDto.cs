@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 
+using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
@@ -74,6 +75,11 @@ public class ResourceDto : IDto
     /// Resource Type relationship.
     /// </summary>
     public ResourceTypeDto ResourceType { get; set; }
+
+    /// <summary>
+    /// Initiative relationship.
+    /// </summary>
+    public InitiativeDto Initiative { get; set; }
 
     /// <summary>
     /// Resource File relationship.
