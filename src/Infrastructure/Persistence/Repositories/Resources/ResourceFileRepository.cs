@@ -51,7 +51,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
         await ExecuteInTransactionAsync(
             async ct =>
             {
-                entity.Url = new Uri($"/temp-uri/{DateTime.Now.ToFileTime()}");
+                entity.Url = new Uri($"/temp-uri/{DateTimeOffset.UtcNow.ToFileTime()}");
                 await dbContext.ResourceFiles.AddAsync(entity, ct);
                 await dbContext.SaveChangesAsync(ct);
 
@@ -65,7 +65,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
 
                 if (!resource.IsDraft)
                 {
-                    resource.PublicationDate = DateTime.Now;
+                    resource.PublicationDate = DateTimeOffset.UtcNow;
                     await dbContext.SaveChangesAsync(ct);
                 }
 
@@ -89,7 +89,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
 
                 if (!resource.IsDraft)
                 {
-                    resource.PublicationDate = DateTime.Now;
+                    resource.PublicationDate = DateTimeOffset.UtcNow;
                     result = await dbContext.SaveChangesAsync(ct);
                 }
 
@@ -115,7 +115,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
 
                 if (!resource.IsDraft)
                 {
-                    resource.PublicationDate = DateTime.Now;
+                    resource.PublicationDate = DateTimeOffset.UtcNow;
                     result = await dbContext.SaveChangesAsync(ct);
                 }
 

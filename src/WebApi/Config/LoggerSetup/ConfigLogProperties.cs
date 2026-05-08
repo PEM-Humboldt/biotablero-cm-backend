@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
+using NpgsqlTypes;
+
 using Serilog;
 using Serilog.Enrichers;
 using Serilog.Sinks.PostgreSQL;
@@ -36,16 +38,16 @@ public static class ConfigLogProperties
         var columnWriters = new Dictionary<string, ColumnWriterBase>
         {
             { "id", new GuidColumnWriter("Id") },
-            { "timestamp", new TimestampColumnWriter() },
+            { "timestamp", new TimestampColumnWriter(NpgsqlDbType.TimestampTz) },
             { "level", new LevelColumnWriter() },
             { "type", new IntegerColumnWriter("Type") },
-            { "message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
+            { "message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
             { "short_message", new RawStringColumnWriter("ShortMessage") },
             { "user_name", new RawStringColumnWriter("UserName") },
             { "custom_record", new BoolColumnWriter("CustomRecord") },
             { "client_ip", new RawStringColumnWriter("ClientIp") },
             { "client_agent", new RawStringColumnWriter("ClientAgent") },
-            { "properties", new LogEventSerializedColumnWriter(NpgsqlTypes.NpgsqlDbType.Jsonb) },
+            { "properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb) },
         };
 
         // General setup

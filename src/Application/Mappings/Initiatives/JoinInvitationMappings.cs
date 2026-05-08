@@ -5,16 +5,17 @@ using System.Linq;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
 /// Join invitation mappings.
 /// </summary>
 public class JoinInvitationMappings(
-    IMapperCreateAndRead<JoinInvitationGuest, JoinInvitationGuestDto> joinInvitationGuestMappings) : IMapperCreateAndRead<JoinInvitation, JoinInvitationDto>
+    IMapperCreateAndRead<JoinInvitationGuest, JoinInvitationGuestDto> joinInvitationGuestMappings) : MapperRead<JoinInvitation, JoinInvitationDto>, IMapperCreateAndRead<JoinInvitation, JoinInvitationDto>
 {
     /// <inheritdoc/>
-    public JoinInvitationDto Map(JoinInvitation entity)
+    public override JoinInvitationDto Map(JoinInvitation entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -24,7 +25,7 @@ public class JoinInvitationMappings(
             InitiativeId = entity.InitiativeId,
             Creator = entity.Creator,
             Message = entity.Message,
-            CreationDate = entity.CreationDate,
+            CreationDate = entity.CreationDate.ToUniversalTime(),
             Guests = entity.Guests?.Select(joinInvitationGuestMappings.Map),
         };
     }
@@ -39,7 +40,7 @@ public class JoinInvitationMappings(
             InitiativeId = dto.InitiativeId,
             Creator = dto.Creator,
             Message = dto.Message,
-            CreationDate = dto.CreationDate ?? DateTime.Now,
+            CreationDate = dto.CreationDate ?? DateTimeOffset.UtcNow,
             Guests = [.. dto.Guests?.Select(joinInvitationGuestMappings.Map)],
         };
     }

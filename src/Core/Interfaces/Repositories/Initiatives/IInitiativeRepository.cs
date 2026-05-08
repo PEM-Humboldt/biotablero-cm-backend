@@ -66,12 +66,20 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     Task<bool> AnyByTagAsync(int tagId, CancellationToken ct = default);
 
     /// <summary>
-    /// Get polygon centroid.
+    /// Get centroid from locations set.
     /// </summary>
     /// <param name="locationIds">Location identifiers.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Polygon centroid.</returns>
+    /// <returns>Centroid for locations set.</returns>
     Task<Point> GetCentroidAsync(int[] locationIds, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get centroid from initiative identifier.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Initiative centroid.</returns>
+    Task<Point> GetCentroidAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
     /// Get count of active initiatives.

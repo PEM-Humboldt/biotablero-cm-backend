@@ -40,12 +40,12 @@ public class Resource : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Entity creation date.
     /// </summary>
-    public DateTime CreationDate { get; set; }
+    public DateTimeOffset CreationDate { get; set; }
 
     /// <summary>
     /// Entity publication date.
     /// </summary>
-    public DateTime? PublicationDate { get; set; }
+    public DateTimeOffset? PublicationDate { get; set; }
 
     /// <summary>
     /// Is draft flag.
@@ -61,6 +61,16 @@ public class Resource : BaseEntity<int>, IAggregateRoot
     /// Like action flag for authenticated users.
     /// </summary>
     public bool? ILikedIt { get; set; }
+
+    /// <summary>
+    /// Total of resource files.
+    /// </summary>
+    public int TotalFiles => Files?.Count ?? 0;
+
+    /// <summary>
+    /// Total of resource links.
+    /// </summary>
+    public int TotalLinks => Links?.Count ?? 0;
 
     /// <summary>
     /// Initiative relationship.

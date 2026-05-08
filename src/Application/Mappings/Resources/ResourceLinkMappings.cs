@@ -4,15 +4,16 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 
 /// <summary>
 /// Resource Link mappings.
 /// </summary>
-public class ResourceLinkMappings : IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto>
+public class ResourceLinkMappings : MapperRead<ResourceLink, ResourceLinkDto>, IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto>
 {
     /// <inheritdoc/>
-    public ResourceLinkDto Map(ResourceLink entity)
+    public override ResourceLinkDto Map(ResourceLink entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

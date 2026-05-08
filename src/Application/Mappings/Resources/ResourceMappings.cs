@@ -5,6 +5,7 @@ using System.Linq;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 
 /// <summary>
@@ -14,10 +15,10 @@ public class ResourceMappings(
     IMapperRead<ResourceType, ResourceTypeDto> resourceTypeMappings,
     IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto> resourceFileMappings,
     IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto> resourceLinkMappings,
-    IMapperRead<ResourceTag, ResourceTagDto> resourceTagMappings) : IMapperCreateReadAndUpdate<Resource, ResourceDto>
+    IMapperRead<ResourceTag, ResourceTagDto> resourceTagMappings) : MapperRead<Resource, ResourceDto>, IMapperCreateReadAndUpdate<Resource, ResourceDto>
 {
     /// <inheritdoc/>
-    public ResourceDto Map(Resource entity)
+    public override ResourceDto Map(Resource entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -28,14 +29,49 @@ public class ResourceMappings(
             AuthorUserName = entity.AuthorUserName,
             Name = entity.Name,
             Description = entity.Description,
-            CreationDate = entity.CreationDate,
-            PublicationDate = entity.PublicationDate,
+            CreationDate = entity.CreationDate.ToUniversalTime(),
+            PublicationDate = entity.PublicationDate?.ToUniversalTime(),
             IsDraft = entity.IsDraft,
             Likes = entity.TotalLikes,
             ILikedIt = entity.ILikedIt,
             ResourceType = entity.ResourceType != null ? resourceTypeMappings.Map(entity.ResourceType) : null,
+            Initiative = entity.Initiative != null ? new()
+            {
+                Id = entity.Initiative.Id,
+                Name = entity.Initiative.Name,
+            }
+            : null,
             Files = entity.Files?.Select(resourceFileMappings.Map),
             Links = entity.Links?.Select(resourceLinkMappings.Map),
+            Tags = entity.ResourceTags?.Select(resourceTagMappings.Map),
+        };
+    }
+
+    /// <inheritdoc/>
+    public override ResourceDto MapOdata(Resource entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        return new()
+        {
+            Id = entity.Id,
+            InitiativeId = entity.InitiativeId,
+            AuthorUserName = entity.AuthorUserName,
+            Name = entity.Name,
+            CreationDate = entity.CreationDate.ToUniversalTime(),
+            PublicationDate = entity.PublicationDate?.ToUniversalTime(),
+            IsDraft = entity.IsDraft,
+            Likes = entity.TotalLikes,
+            ILikedIt = entity.ILikedIt,
+            TotalFiles = entity.TotalFiles,
+            TotalLinks = entity.TotalLinks,
+            ResourceType = entity.ResourceType != null ? resourceTypeMappings.Map(entity.ResourceType) : null,
+            Initiative = entity.Initiative != null ? new()
+            {
+                Id = entity.Initiative.Id,
+                Name = entity.Initiative.Name,
+            }
+            : null,
             Tags = entity.ResourceTags?.Select(resourceTagMappings.Map),
         };
     }
@@ -70,7 +106,7 @@ public class ResourceMappings(
 
         if (!entity.IsDraft)
         {
-            entity.PublicationDate = DateTime.Now;
+            entity.PublicationDate = DateTimeOffset.UtcNow;
         }
     }
 }

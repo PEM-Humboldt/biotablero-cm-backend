@@ -3,16 +3,16 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Geo;
-using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 
 /// <summary>
 /// Initiative mappings.
 /// </summary>
-public class LocationMappings : IMapperRead<Location, LocationDto>
+public class LocationMappings : MapperRead<Location, LocationDto>
 {
     /// <inheritdoc/>
-    public LocationDto Map(Location entity)
+    public override LocationDto Map(Location entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

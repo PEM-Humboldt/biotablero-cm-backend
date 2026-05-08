@@ -235,7 +235,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         entityData.Enabled = true;
         entityData.FeaturedContent = false;
         var entity = mapper.Map(entityData);
-        entity.CreationDate = DateTime.Now;
+        entity.CreationDate = DateTimeOffset.UtcNow;
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
@@ -354,7 +354,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         {
             var like = new TerritoryStoryLike()
             {
-                CreationDate = DateTime.Now,
+                CreationDate = DateTimeOffset.UtcNow,
                 TerritoryStoryId = entityData.TerritoryStoryId,
                 UserName = entityData.UserName,
             };

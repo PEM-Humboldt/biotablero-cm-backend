@@ -3,6 +3,7 @@ using System;
 using IAVH.BioTablero.CM.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    partial class GeneralContextModelSnapshot : ModelSnapshot
+    [Migration("20260427224825_AddInitiativeMainLocation")]
+    partial class AddInitiativeMainLocation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,9 +124,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("geometry(Point, 4326)")
                         .HasColumnName("coordinate");
 
-                    b.Property<DateTimeOffset>("CreationDate")
+                    b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("creation_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -283,9 +286,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTimeOffset>("CreationDate")
+                    b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("creation_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -369,9 +372,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTimeOffset>("CreationDate")
+                    b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("creation_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -433,9 +436,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTimeOffset>("CreationDate")
+                    b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("creation_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -447,8 +450,8 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("initiative_user_level_id");
 
-                    b.Property<DateTimeOffset?>("ResponseDate")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateTime?>("ResponseDate")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("response_date");
 
                     b.Property<string>("ReviewerUserName")
@@ -560,9 +563,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("short_message");
 
-                    b.Property<DateTimeOffset>("TimeStamp")
+                    b.Property<DateTime>("TimeStamp")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("timestamp")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -596,9 +599,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(2000)")
                         .HasColumnName("body");
 
-                    b.Property<DateTimeOffset>("CreationDate")
+                    b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("creation_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -612,8 +615,8 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("jsonb")
                         .HasColumnName("properties");
 
-                    b.Property<DateTimeOffset?>("ReadingDate")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateTime?>("ReadingDate")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("reading_date");
 
                     b.Property<string>("Receiver")
@@ -648,9 +651,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(75)")
                         .HasColumnName("author_user_name");
 
-                    b.Property<DateTimeOffset>("CreationDate")
+                    b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("creation_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -676,8 +679,8 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
-                    b.Property<DateTimeOffset?>("PublicationDate")
-                        .HasColumnType("timestamp with time zone")
+                    b.Property<DateTime?>("PublicationDate")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("publication_date");
 
                     b.Property<int>("ResourceTypeId")
@@ -738,9 +741,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTimeOffset>("CreationDate")
+                    b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("creation_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -944,9 +947,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(75)")
                         .HasColumnName("author_user_name");
 
-                    b.Property<DateTimeOffset>("CreationDate")
+                    b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("creation_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
@@ -1048,9 +1051,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTimeOffset>("CreationDate")
+                    b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("creation_date")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 

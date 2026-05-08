@@ -3,16 +3,16 @@
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
-using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 
 /// <summary>
 /// System logs mappings.
 /// </summary>
-public class LogMappings : IMapperRead<LogEntity, LogDto>
+public class LogMappings : MapperRead<LogEntity, LogDto>
 {
     /// <inheritdoc/>
-    public LogDto Map(LogEntity entity)
+    public override LogDto Map(LogEntity entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -21,7 +21,7 @@ public class LogMappings : IMapperRead<LogEntity, LogDto>
             Id = entity.Id,
             Level = entity.Level,
             Type = entity.Type,
-            TimeStamp = entity.TimeStamp,
+            TimeStamp = entity.TimeStamp.ToUniversalTime(),
             UserName = entity.UserName,
             CustomRecord = entity.CustomRecord,
             Message = entity.Message,
@@ -29,6 +29,21 @@ public class LogMappings : IMapperRead<LogEntity, LogDto>
             ClientIp = entity.ClientIp,
             ClientAgent = entity.ClientAgent,
             Properties = entity.Properties,
+        };
+    }
+
+    /// <inheritdoc/>
+    public override LogDto MapOdata(LogEntity entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        return new()
+        {
+            Id = entity.Id,
+            Type = entity.Type,
+            TimeStamp = entity.TimeStamp.ToUniversalTime(),
+            UserName = entity.UserName,
+            ShortMessage = entity.ShortMessage,
         };
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 /// <summary>
@@ -12,10 +13,10 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 /// </summary>
 public class TerritoryStoryMappings(
     IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto> territoryStoryImageMappings,
-    IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto> territoryStoryVideoMappings) : IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto>
+    IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto> territoryStoryVideoMappings) : MapperRead<TerritoryStory, TerritoryStoryDto>, IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto>
 {
     /// <inheritdoc/>
-    public TerritoryStoryDto Map(TerritoryStory entity)
+    public override TerritoryStoryDto Map(TerritoryStory entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -24,7 +25,7 @@ public class TerritoryStoryMappings(
             Id = entity.Id,
             InitiativeId = entity.InitiativeId,
             AuthorUserName = entity.AuthorUserName,
-            CreationDate = entity.CreationDate,
+            CreationDate = entity.CreationDate.ToUniversalTime(),
             Title = entity.Title,
             Text = entity.Text,
             Keywords = entity.Keywords,
@@ -48,7 +49,7 @@ public class TerritoryStoryMappings(
             Id = dto.Id ?? 0,
             InitiativeId = dto.InitiativeId ?? 0,
             AuthorUserName = dto.AuthorUserName,
-            CreationDate = dto.CreationDate ?? DateTime.Now,
+            CreationDate = dto.CreationDate ?? DateTimeOffset.UtcNow,
             Title = dto.Title,
             Text = dto.Text,
             Keywords = dto.Keywords,

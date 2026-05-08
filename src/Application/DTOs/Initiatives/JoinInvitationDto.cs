@@ -33,7 +33,7 @@ public class JoinInvitationDto : IDto
     /// <summary>
     /// Join Invitation creation date.
     /// </summary>
-    public DateTime? CreationDate { get; set; }
+    public DateTimeOffset? CreationDate { get; set; }
 
     /// <summary>
     /// Join Invitation Guests.

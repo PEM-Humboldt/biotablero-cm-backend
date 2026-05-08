@@ -39,11 +39,11 @@ public class PendingJoinRequestsTask(
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            var next = cronExpression.GetNextOccurrence(DateTimeOffset.Now, timeZone);
+            var next = cronExpression.GetNextOccurrence(DateTimeOffset.UtcNow, timeZone);
 
             if (next.HasValue)
             {
-                var delay = next.Value - DateTimeOffset.Now;
+                var delay = next.Value - DateTimeOffset.UtcNow;
 
                 if (delay.TotalMilliseconds > 0)
                 {

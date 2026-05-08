@@ -161,6 +161,11 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
 
+        // Update initiative data
+        initiative.Coordinate = await initiativeRepository.GetCentroidAsync(initiativeId, ct);
+        initiative.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(initiative.Coordinate, ct);
+        await initiativeRepository.UpdateAsync(initiative, ct);
+
         entityData = mapper.Map(entity);
 
         logger.AddLog(LogType.Create, "Added initiative location", "{@EntityData}", entityData);
@@ -252,6 +257,11 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         // Update entity data
         mapper.Update(entity, entityData);
 
+        // Update initiative data
+        initiative.Coordinate = await initiativeRepository.GetCentroidAsync(initiativeId, ct);
+        initiative.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(initiative.Coordinate, ct);
+        await initiativeRepository.UpdateAsync(initiative, ct);
+
         await entityRepository.UpdateAsync(entity, ct);
 
         entityData = mapper.Map(entity);
@@ -311,6 +321,11 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         }
 
         await entityRepository.DeleteAsync(entity, ct);
+
+        // Update initiative data
+        initiative.Coordinate = await initiativeRepository.GetCentroidAsync(initiativeId, ct);
+        initiative.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(initiative.Coordinate, ct);
+        await initiativeRepository.UpdateAsync(initiative, ct);
 
         var entityData = mapper.Map(entity);
 

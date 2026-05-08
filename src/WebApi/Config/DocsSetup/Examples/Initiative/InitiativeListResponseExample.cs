@@ -23,7 +23,7 @@ public class InitiativeListResponseExample : IExamplesProvider<List<InitiativeDt
             Description = "example",
             Baseline = "Baseline example",
             Objective = "Objective example",
-            CreationDate = DateTime.Now,
+            CreationDate = DateTimeOffset.UtcNow,
             Enabled = true,
             Locations = null,
             Contacts = null,

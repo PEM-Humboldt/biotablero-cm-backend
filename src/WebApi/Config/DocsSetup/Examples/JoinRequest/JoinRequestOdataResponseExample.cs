@@ -19,8 +19,8 @@ public class JoinRequestOdataResponseExample : BaseOdataResponseExample<JoinRequ
         InitiativeId = 0,
         UserName = "initiative-user@example.com",
         ReviewerUserName = "initiative-leader@example.com",
-        CreationDate = DateTime.Now,
-        ResponseDate = DateTime.Now,
+        CreationDate = DateTimeOffset.UtcNow,
+        ResponseDate = DateTimeOffset.UtcNow,
         Status = new EnumEntityDto<JoinRequestStatus>(JoinRequestStatus.Rejected),
     };
 }

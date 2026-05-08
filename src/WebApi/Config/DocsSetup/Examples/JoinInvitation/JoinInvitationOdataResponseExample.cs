@@ -16,7 +16,7 @@ public class JoinInvitationOdataResponseExample : BaseOdataResponseExample<JoinI
         InitiativeId = 0,
         Creator = "Example",
         Message = "Message example",
-        CreationDate = DateTime.Now,
+        CreationDate = DateTimeOffset.UtcNow,
         Guests = [
             new()
             {

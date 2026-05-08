@@ -70,5 +70,5 @@ public class ExternalUser
     /// <summary>
     /// User creation date.
     /// </summary>
-    public DateTime? CreationDate { get; set; }
+    public DateTimeOffset? CreationDate { get; set; }
 }

@@ -12,9 +12,16 @@ public interface IMapperRead<TE, TDto>
     where TDto : class, IDto
 {
     /// <summary>
-    /// Map from entity to DTO. Useful for reading data.
+    /// Map from entity to DTO. Useful for reading detailed data.
     /// </summary>
     /// <param name="entity">Entity data.</param>
     /// <returns>DTO data.</returns>
     TDto Map(TE entity);
+
+    /// <summary>
+    /// Map from entity to DTO for OData. Useful for reading simplified data.
+    /// </summary>
+    /// <param name="entity">Entity data.</param>
+    /// <returns>DTO data.</returns>
+    TDto MapOdata(TE entity);
 }
