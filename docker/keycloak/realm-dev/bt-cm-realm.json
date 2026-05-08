@@ -203,7 +203,8 @@
                     "config": {
                         "included.client.audience": "bt-mc-client",
                         "id.token.claim": "false",
-                        "access.token.claim": "true"
+                        "access.token.claim": "true",
+                        "userinfo.token.claim": "true"
                     }
                 },
                 {
@@ -216,7 +217,8 @@
                         "claim.name": "username",
                         "jsonType.label": "String",
                         "id.token.claim": "true",
-                        "access.token.claim": "true"
+                        "access.token.claim": "true",
+                        "userinfo.token.claim": "true"
                     }
                 },
                 {
@@ -229,7 +231,8 @@
                         "claim.name": "email",
                         "jsonType.label": "String",
                         "id.token.claim": "true",
-                        "access.token.claim": "true"
+                        "access.token.claim": "true",
+                        "userinfo.token.claim": "true"
                     }
                 },
                 {
@@ -242,7 +245,106 @@
                         "jsonType.label": "String",
                         "multivalued": "true",
                         "access.token.claim": "true",
-                        "id.token.claim": "true"
+                        "id.token.claim": "true",
+                        "userinfo.token.claim": "true"
+                    }
+                },
+                {
+                    "name": "firstName",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-property-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "user.attribute": "firstName",
+                        "claim.name": "firstName",
+                        "jsonType.label": "String",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true",
+                        "userinfo.token.claim": "true"
+                    }
+                },
+                {
+                    "name": "lastName",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-property-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "user.attribute": "lastName",
+                        "claim.name": "lastName",
+                        "jsonType.label": "String",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true",
+                        "userinfo.token.claim": "true"
+                    }
+                },
+                {
+                    "name": "phone",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-attribute-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "user.attribute": "phone",
+                        "claim.name": "phone",
+                        "jsonType.label": "String",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true",
+                        "userinfo.token.claim": "true"
+                    }
+                },
+                {
+                    "name": "organizacion",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-attribute-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "user.attribute": "organizacion",
+                        "claim.name": "organizacion",
+                        "jsonType.label": "String",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true",
+                        "userinfo.token.claim": "true"
+                    }
+                },
+                {
+                    "name": "poblacion",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-attribute-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "user.attribute": "poblacion",
+                        "claim.name": "poblacion",
+                        "jsonType.label": "String",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true",
+                        "userinfo.token.claim": "true"
+                    }
+                },
+                {
+                    "name": "genero",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-attribute-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "user.attribute": "genero",
+                        "claim.name": "genero",
+                        "jsonType.label": "String",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true",
+                        "userinfo.token.claim": "true"
+                    }
+                },
+                {
+                    "name": "picture",
+                    "protocol": "openid-connect",
+                    "protocolMapper": "oidc-usermodel-attribute-mapper",
+                    "consentRequired": false,
+                    "config": {
+                        "user.attribute": "picture",
+                        "claim.name": "picture",
+                        "jsonType.label": "String",
+                        "id.token.claim": "true",
+                        "access.token.claim": "true",
+                        "userinfo.token.claim": "true"
                     }
                 }
             ]
@@ -261,7 +363,11 @@
             "directAccessGrantsEnabled": true,
             "serviceAccountsEnabled": true,
             "defaultClientScopes": [
-                "aud-bt-mc-client"
+                "aud-bt-mc-client",
+                "profile",
+                "email",
+                "roles",
+                "web-origins"
             ],
             "webOrigins": [
                 "http://localhost:3000",
