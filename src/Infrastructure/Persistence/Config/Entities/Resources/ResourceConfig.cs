@@ -61,6 +61,10 @@ public class ResourceConfig : IEntityTypeConfiguration<Resource>
 
         builder.Ignore(i => i.ILikedIt);
 
+        builder.Ignore(i => i.TotalFiles);
+
+        builder.Ignore(i => i.TotalLinks);
+
         builder.HasOne(e => e.Initiative)
             .WithMany(p => p.Resources)
             .HasForeignKey(e => e.InitiativeId);

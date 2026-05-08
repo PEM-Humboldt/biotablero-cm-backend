@@ -63,6 +63,16 @@ public class Resource : BaseEntity<int>, IAggregateRoot
     public bool? ILikedIt { get; set; }
 
     /// <summary>
+    /// Total of resource files.
+    /// </summary>
+    public int TotalFiles => Files?.Count ?? 0;
+
+    /// <summary>
+    /// Total of resource links.
+    /// </summary>
+    public int TotalLinks => Links?.Count ?? 0;
+
+    /// <summary>
     /// Initiative relationship.
     /// </summary>
     public Initiative Initiative { get; set; }

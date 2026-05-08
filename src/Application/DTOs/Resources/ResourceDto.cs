@@ -51,7 +51,7 @@ public class ResourceDto : IDto
     public bool IsDraft { get; set; }
 
     /// <summary>
-    /// Total of territory story likes.
+    /// Total of resource likes.
     /// </summary>
     public int? Likes { get; set; }
 
@@ -59,6 +59,16 @@ public class ResourceDto : IDto
     /// Like action flag for authenticated users.
     /// </summary>
     public bool? ILikedIt { get; set; }
+
+    /// <summary>
+    /// Total of resource files.
+    /// </summary>
+    public int? TotalFiles { get; set; }
+
+    /// <summary>
+    /// Total of resource links.
+    /// </summary>
+    public int? TotalLinks { get; set; }
 
     /// <summary>
     /// Resource Type relationship.
