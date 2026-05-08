@@ -23,8 +23,8 @@ public class NotificationMappings : IMapperCreateAndRead<Notification, Notificat
             Receiver = entity.Receiver,
             Subject = entity.Subject,
             Body = entity.Body,
-            CreationDate = entity.CreationDate,
-            ReadingDate = entity.ReadingDate,
+            CreationDate = entity.CreationDate.ToUniversalTime(),
+            ReadingDate = entity.ReadingDate?.ToUniversalTime(),
             IsRead = entity.IsRead,
             Properties = entity.Properties != null ? JsonSerializer.Deserialize<NotificationPropertiesDto>(entity.Properties) : null,
         };

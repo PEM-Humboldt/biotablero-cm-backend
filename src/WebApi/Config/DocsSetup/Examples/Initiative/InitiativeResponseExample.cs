@@ -23,7 +23,7 @@ public class InitiativeResponseExample : IExamplesProvider<InitiativeDto>
         Description = "example",
         Baseline = "Baseline example",
         Objective = "Objective example",
-        CreationDate = DateTime.Now,
+        CreationDate = DateTimeOffset.UtcNow,
         Coordinate = [-75.3, 5.3],
         PolygonArea = 62.7,
         Enabled = true,

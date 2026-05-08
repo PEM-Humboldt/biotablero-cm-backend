@@ -19,8 +19,8 @@ public class NotificationResponseExample : IExamplesProvider<NotificationDto>
         Receiver = "initiative-user@example.com",
         Subject = "Notification example",
         Body = "Notification example body",
-        CreationDate = DateTime.Now,
-        ReadingDate = DateTime.Now,
+        CreationDate = DateTimeOffset.UtcNow,
+        ReadingDate = DateTimeOffset.UtcNow,
         IsRead = true,
         Properties = new()
         {

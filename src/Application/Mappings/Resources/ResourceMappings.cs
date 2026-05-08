@@ -28,8 +28,8 @@ public class ResourceMappings(
             AuthorUserName = entity.AuthorUserName,
             Name = entity.Name,
             Description = entity.Description,
-            CreationDate = entity.CreationDate,
-            PublicationDate = entity.PublicationDate,
+            CreationDate = entity.CreationDate.ToUniversalTime(),
+            PublicationDate = entity.PublicationDate?.ToUniversalTime(),
             IsDraft = entity.IsDraft,
             Likes = entity.TotalLikes,
             ILikedIt = entity.ILikedIt,
@@ -70,7 +70,7 @@ public class ResourceMappings(
 
         if (!entity.IsDraft)
         {
-            entity.PublicationDate = DateTime.Now;
+            entity.PublicationDate = DateTimeOffset.UtcNow;
         }
     }
 }

@@ -24,7 +24,7 @@ public class JoinInvitationMappings(
             InitiativeId = entity.InitiativeId,
             Creator = entity.Creator,
             Message = entity.Message,
-            CreationDate = entity.CreationDate,
+            CreationDate = entity.CreationDate.ToUniversalTime(),
             Guests = entity.Guests?.Select(joinInvitationGuestMappings.Map),
         };
     }
@@ -39,7 +39,7 @@ public class JoinInvitationMappings(
             InitiativeId = dto.InitiativeId,
             Creator = dto.Creator,
             Message = dto.Message,
-            CreationDate = dto.CreationDate ?? DateTime.Now,
+            CreationDate = dto.CreationDate ?? DateTimeOffset.UtcNow,
             Guests = [.. dto.Guests?.Select(joinInvitationGuestMappings.Map)],
         };
     }

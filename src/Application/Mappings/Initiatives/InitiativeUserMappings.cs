@@ -26,7 +26,7 @@ public class InitiativeUserMappings : IMapperCreateReadAndUpdate<InitiativeUser,
             UserName = entity.UserName,
             FocusArea = entity.FocusArea,
             Level = new EnumEntityDto<InitiativeUserLevelEnum>(entity.LevelId),
-            CreationDate = entity.CreationDate,
+            CreationDate = entity.CreationDate.ToUniversalTime(),
         };
     }
 
@@ -41,7 +41,7 @@ public class InitiativeUserMappings : IMapperCreateReadAndUpdate<InitiativeUser,
             UserName = dto.UserName,
             FocusArea = dto.FocusArea,
             LevelId = dto.Level.Id,
-            CreationDate = dto.CreationDate ?? DateTime.Now,
+            CreationDate = dto.CreationDate ?? DateTimeOffset.UtcNow,
         };
     }
 

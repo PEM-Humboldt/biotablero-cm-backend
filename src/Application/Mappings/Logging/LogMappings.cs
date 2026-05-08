@@ -21,7 +21,7 @@ public class LogMappings : IMapperRead<LogEntity, LogDto>
             Id = entity.Id,
             Level = entity.Level,
             Type = entity.Type,
-            TimeStamp = entity.TimeStamp,
+            TimeStamp = entity.TimeStamp.ToUniversalTime(),
             UserName = entity.UserName,
             CustomRecord = entity.CustomRecord,
             Message = entity.Message,

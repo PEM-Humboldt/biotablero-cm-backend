@@ -31,7 +31,7 @@ public sealed class GeneralContext : DbContext
     public GeneralContext(DbContextOptions<GeneralContext> options)
         : base(options)
     {
-        // Patch for Postgres DateTime variables
+        // Patch for Postgres DateTimeOffset variables
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
