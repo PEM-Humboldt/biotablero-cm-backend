@@ -10,6 +10,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 using NetTopologySuite.Geometries;
 
+using LocationCustom = IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location;
+
 /// <summary>
 /// Initiative entity.
 /// </summary>
@@ -71,6 +73,11 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     public double PolygonArea { get; set; }
 
     /// <summary>
+    /// Main location based in coordinate.
+    /// </summary>
+    public int MainLocationId { get; set; }
+
+    /// <summary>
     /// Enabled flag.
     /// </summary>
     public bool Enabled { get; set; }
@@ -114,4 +121,9 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     /// Resource relationship.
     /// </summary>
     public ICollection<Resource> Resources { get; init; }
+
+    /// <summary>
+    /// Main location relationship.
+    /// </summary>
+    public LocationCustom MainLocation { get; set; }
 }

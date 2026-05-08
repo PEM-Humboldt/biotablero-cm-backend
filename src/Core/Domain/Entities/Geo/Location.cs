@@ -50,4 +50,9 @@ public class Location : BaseEntity<int>, IAggregateRoot
     /// Initiative Users relationship.
     /// </summary>
     public ICollection<InitiativeLocation> InitiativeLocations { get; } = [];
+
+    /// <summary>
+    /// Initiatives relationship.
+    /// </summary>
+    public ICollection<Initiative> Initiatives { get; set; }
 }
