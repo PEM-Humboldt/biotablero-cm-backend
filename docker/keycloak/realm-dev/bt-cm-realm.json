@@ -358,6 +358,9 @@
             "redirectUris": [
                 "*"
             ],
+            "webOrigins": [
+                "*"
+            ],
             "protocol": "openid-connect",
             "standardFlowEnabled": true,
             "directAccessGrantsEnabled": true,
@@ -368,10 +371,6 @@
                 "email",
                 "roles",
                 "web-origins"
-            ],
-            "webOrigins": [
-                "http://localhost:3000",
-                "http://localhost:8001"
             ],
             "rootUrl": "${authBaseUrl}",
             "adminUrl": "${authBaseUrl}",
