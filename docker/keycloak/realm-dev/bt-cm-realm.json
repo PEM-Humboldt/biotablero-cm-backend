@@ -1,6 +1,8 @@
 {
     "realm": "bt-cm",
     "enabled": true,
+    "registrationAllowed": true,
+    "verifyEmail": true,
     "users": [
         {
             "username": "service-account-bt-mc-client-backend",
