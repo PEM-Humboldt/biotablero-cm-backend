@@ -2310,5 +2310,18 @@
                 "update.profile.on.first.login": "missing"
             }
         }
-    ]
+    ],
+    "smtpServer": {
+        "debug": "false",
+        "replyToDisplayName": "",
+        "starttls": "false",
+        "auth": "",
+        "port": "1025",
+        "host": "smtp-server",
+        "replyTo": "",
+        "from": "local@example.com",
+        "fromDisplayName": "",
+        "envelopeFrom": "",
+        "ssl": "false"
+    }
 }
