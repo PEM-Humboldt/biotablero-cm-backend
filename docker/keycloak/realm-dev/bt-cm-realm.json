@@ -26,14 +26,9 @@
                 }
             ],
             "realmRoles": [
-                "Admin"
+                "Admin",
+                "default-roles"
             ],
-            "clientRoles": {
-                "account": [
-                    "manage-account",
-                    "view-profile"
-                ]
-            },
             "attributes": {
                 "picture": [
                     "https://ui-avatars.com/api/?name=Admin+Example&background=random"
@@ -63,14 +58,8 @@
                 }
             ],
             "realmRoles": [
-                "User"
+                "default-roles"
             ],
-            "clientRoles": {
-                "account": [
-                    "manage-account",
-                    "view-profile"
-                ]
-            },
             "attributes": {
                 "picture": [
                     "https://ui-avatars.com/api/?name=General+User+Example&background=random"
@@ -100,14 +89,8 @@
                 }
             ],
             "realmRoles": [
-                "User"
+                "default-roles"
             ],
-            "clientRoles": {
-                "account": [
-                    "manage-account",
-                    "view-profile"
-                ]
-            },
             "attributes": {
                 "phone": [
                     "3055555555"
@@ -140,14 +123,8 @@
                 }
             ],
             "realmRoles": [
-                "User"
+                "default-roles"
             ],
-            "clientRoles": {
-                "account": [
-                    "manage-account",
-                    "view-profile"
-                ]
-            },
             "attributes": {
                 "phone": [
                     "3055555556"
@@ -180,14 +157,8 @@
                 }
             ],
             "realmRoles": [
-                "User"
+                "default-roles"
             ],
-            "clientRoles": {
-                "account": [
-                    "manage-account",
-                    "view-profile"
-                ]
-            },
             "attributes": {
                 "picture": [
                     "https://ui-avatars.com/api/?name=Initiative+Reader+Example&background=random"
@@ -213,8 +184,30 @@
             {
                 "name": "User",
                 "description": "User role"
+            },
+            {
+                "name": "default-roles",
+                "description": "Default realm roles",
+                "composite": true,
+                "composites": {
+                    "realm": [
+                        "User"
+                    ],
+                    "client": {
+                        "account": [
+                            "manage-account",
+                            "view-profile"
+                        ]
+                    }
+                },
+                "clientRole": false
             }
         ]
+    },
+    "defaultRole": {
+        "name": "default-roles",
+        "composite": true,
+        "clientRole": false
     },
     "clientScopes": [
         {
