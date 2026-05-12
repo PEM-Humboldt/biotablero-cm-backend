@@ -1,50 +1,9 @@
 {
     "id": "234d0115-645b-4854-b84f-f01ba3bbc1c1",
     "realm": "bt-cm",
-    "notBefore": 0,
-    "defaultSignatureAlgorithm": "RS256",
-    "revokeRefreshToken": false,
-    "refreshTokenMaxReuse": 0,
-    "accessTokenLifespan": 300,
-    "accessTokenLifespanForImplicitFlow": 900,
-    "ssoSessionIdleTimeout": 1800,
-    "ssoSessionMaxLifespan": 36000,
-    "ssoSessionIdleTimeoutRememberMe": 0,
-    "ssoSessionMaxLifespanRememberMe": 0,
-    "offlineSessionIdleTimeout": 2592000,
-    "offlineSessionMaxLifespanEnabled": false,
-    "offlineSessionMaxLifespan": 5184000,
-    "clientSessionIdleTimeout": 0,
-    "clientSessionMaxLifespan": 0,
-    "clientOfflineSessionIdleTimeout": 0,
-    "clientOfflineSessionMaxLifespan": 0,
-    "accessCodeLifespan": 60,
-    "accessCodeLifespanUserAction": 300,
-    "accessCodeLifespanLogin": 1800,
-    "actionTokenGeneratedByAdminLifespan": 43200,
-    "actionTokenGeneratedByUserLifespan": 300,
-    "oauth2DeviceCodeLifespan": 600,
-    "oauth2DevicePollingInterval": 5,
     "enabled": true,
-    "sslRequired": "external",
     "registrationAllowed": true,
-    "registrationEmailAsUsername": false,
-    "rememberMe": false,
     "verifyEmail": true,
-    "loginWithEmailAllowed": true,
-    "duplicateEmailsAllowed": false,
-    "resetPasswordAllowed": false,
-    "editUsernameAllowed": false,
-    "bruteForceProtected": false,
-    "permanentLockout": false,
-    "maxTemporaryLockouts": 0,
-    "bruteForceStrategy": "MULTIPLE",
-    "maxFailureWaitSeconds": 900,
-    "minimumQuickLoginWaitSeconds": 60,
-    "waitIncrementSeconds": 60,
-    "quickLoginCheckMilliSeconds": 1000,
-    "maxDeltaTimeSeconds": 43200,
-    "failureFactor": 30,
     "roles": {
         "realm": [
             {
@@ -424,7 +383,6 @@
             "bt-mc-client-backend": []
         }
     },
-    "groups": [],
     "defaultRole": {
         "id": "4cf468dc-5646-4c47-b63d-5a50f150e2d0",
         "name": "default-roles",
@@ -432,50 +390,6 @@
         "clientRole": false,
         "containerId": "234d0115-645b-4854-b84f-f01ba3bbc1c1"
     },
-    "requiredCredentials": [
-        "password"
-    ],
-    "otpPolicyType": "totp",
-    "otpPolicyAlgorithm": "HmacSHA1",
-    "otpPolicyInitialCounter": 0,
-    "otpPolicyDigits": 6,
-    "otpPolicyLookAheadWindow": 1,
-    "otpPolicyPeriod": 30,
-    "otpPolicyCodeReusable": false,
-    "otpSupportedApplications": [
-        "totpAppFreeOTPName",
-        "totpAppGoogleName",
-        "totpAppMicrosoftAuthenticatorName"
-    ],
-    "localizationTexts": {},
-    "webAuthnPolicyRpEntityName": "keycloak",
-    "webAuthnPolicySignatureAlgorithms": [
-        "ES256",
-        "RS256"
-    ],
-    "webAuthnPolicyRpId": "",
-    "webAuthnPolicyAttestationConveyancePreference": "not specified",
-    "webAuthnPolicyAuthenticatorAttachment": "not specified",
-    "webAuthnPolicyRequireResidentKey": "not specified",
-    "webAuthnPolicyUserVerificationRequirement": "not specified",
-    "webAuthnPolicyCreateTimeout": 0,
-    "webAuthnPolicyAvoidSameAuthenticatorRegister": false,
-    "webAuthnPolicyAcceptableAaguids": [],
-    "webAuthnPolicyExtraOrigins": [],
-    "webAuthnPolicyPasswordlessRpEntityName": "keycloak",
-    "webAuthnPolicyPasswordlessSignatureAlgorithms": [
-        "ES256",
-        "RS256"
-    ],
-    "webAuthnPolicyPasswordlessRpId": "",
-    "webAuthnPolicyPasswordlessAttestationConveyancePreference": "not specified",
-    "webAuthnPolicyPasswordlessAuthenticatorAttachment": "not specified",
-    "webAuthnPolicyPasswordlessRequireResidentKey": "not specified",
-    "webAuthnPolicyPasswordlessUserVerificationRequirement": "not specified",
-    "webAuthnPolicyPasswordlessCreateTimeout": 0,
-    "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
-    "webAuthnPolicyPasswordlessAcceptableAaguids": [],
-    "webAuthnPolicyPasswordlessExtraOrigins": [],
     "users": [
         {
             "username": "service-account-bt-mc-client-backend",
@@ -1567,29 +1481,9 @@
             ]
         }
     ],
-    "defaultDefaultClientScopes": [],
     "defaultOptionalClientScopes": [
         "offline_access"
     ],
-    "browserSecurityHeaders": {
-        "contentSecurityPolicyReportOnly": "",
-        "xContentTypeOptions": "nosniff",
-        "referrerPolicy": "no-referrer",
-        "xRobotsTag": "none",
-        "xFrameOptions": "SAMEORIGIN",
-        "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
-        "strictTransportSecurity": "max-age=31536000; includeSubDomains"
-    },
-    "smtpServer": {},
-    "eventsEnabled": false,
-    "eventsListeners": [
-        "jboss-logging"
-    ],
-    "enabledEventTypes": [],
-    "adminEventsEnabled": false,
-    "adminEventsDetailsEnabled": false,
-    "identityProviders": [],
-    "identityProviderMappers": [],
     "components": {
         "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy": [
             {
@@ -1763,7 +1657,6 @@
             }
         ]
     },
-    "internationalizationEnabled": false,
     "authenticationFlows": [
         {
             "id": "5adf39ea-e194-48d9-8405-a81ed62d6184",
@@ -2417,152 +2310,5 @@
                 "update.profile.on.first.login": "missing"
             }
         }
-    ],
-    "requiredActions": [
-        {
-            "alias": "CONFIGURE_TOTP",
-            "name": "Configure OTP",
-            "providerId": "CONFIGURE_TOTP",
-            "enabled": true,
-            "defaultAction": false,
-            "priority": 10,
-            "config": {}
-        },
-        {
-            "alias": "TERMS_AND_CONDITIONS",
-            "name": "Terms and Conditions",
-            "providerId": "TERMS_AND_CONDITIONS",
-            "enabled": false,
-            "defaultAction": false,
-            "priority": 20,
-            "config": {}
-        },
-        {
-            "alias": "UPDATE_PASSWORD",
-            "name": "Update Password",
-            "providerId": "UPDATE_PASSWORD",
-            "enabled": true,
-            "defaultAction": false,
-            "priority": 30,
-            "config": {}
-        },
-        {
-            "alias": "UPDATE_PROFILE",
-            "name": "Update Profile",
-            "providerId": "UPDATE_PROFILE",
-            "enabled": true,
-            "defaultAction": false,
-            "priority": 40,
-            "config": {}
-        },
-        {
-            "alias": "VERIFY_EMAIL",
-            "name": "Verify Email",
-            "providerId": "VERIFY_EMAIL",
-            "enabled": true,
-            "defaultAction": false,
-            "priority": 50,
-            "config": {}
-        },
-        {
-            "alias": "delete_account",
-            "name": "Delete Account",
-            "providerId": "delete_account",
-            "enabled": false,
-            "defaultAction": false,
-            "priority": 60,
-            "config": {}
-        },
-        {
-            "alias": "webauthn-register",
-            "name": "Webauthn Register",
-            "providerId": "webauthn-register",
-            "enabled": true,
-            "defaultAction": false,
-            "priority": 70,
-            "config": {}
-        },
-        {
-            "alias": "webauthn-register-passwordless",
-            "name": "Webauthn Register Passwordless",
-            "providerId": "webauthn-register-passwordless",
-            "enabled": true,
-            "defaultAction": false,
-            "priority": 80,
-            "config": {}
-        },
-        {
-            "alias": "VERIFY_PROFILE",
-            "name": "Verify Profile",
-            "providerId": "VERIFY_PROFILE",
-            "enabled": true,
-            "defaultAction": false,
-            "priority": 90,
-            "config": {}
-        },
-        {
-            "alias": "delete_credential",
-            "name": "Delete Credential",
-            "providerId": "delete_credential",
-            "enabled": true,
-            "defaultAction": false,
-            "priority": 100,
-            "config": {}
-        },
-        {
-            "alias": "idp_link",
-            "name": "Linking Identity Provider",
-            "providerId": "idp_link",
-            "enabled": true,
-            "defaultAction": false,
-            "priority": 110,
-            "config": {}
-        },
-        {
-            "alias": "CONFIGURE_RECOVERY_AUTHN_CODES",
-            "name": "Recovery Authentication Codes",
-            "providerId": "CONFIGURE_RECOVERY_AUTHN_CODES",
-            "enabled": true,
-            "defaultAction": false,
-            "priority": 120,
-            "config": {}
-        },
-        {
-            "alias": "update_user_locale",
-            "name": "Update User Locale",
-            "providerId": "update_user_locale",
-            "enabled": true,
-            "defaultAction": false,
-            "priority": 1000,
-            "config": {}
-        }
-    ],
-    "browserFlow": "browser",
-    "registrationFlow": "registration",
-    "directGrantFlow": "direct grant",
-    "resetCredentialsFlow": "reset credentials",
-    "clientAuthenticationFlow": "clients",
-    "dockerAuthenticationFlow": "docker auth",
-    "firstBrokerLoginFlow": "first broker login",
-    "attributes": {
-        "cibaBackchannelTokenDeliveryMode": "poll",
-        "cibaExpiresIn": "120",
-        "cibaAuthRequestedUserHint": "login_hint",
-        "oauth2DeviceCodeLifespan": "600",
-        "oauth2DevicePollingInterval": "5",
-        "parRequestUriLifespan": "60",
-        "cibaInterval": "5",
-        "realmReusableOtpCode": "false"
-    },
-    "keycloakVersion": "26.3.2",
-    "userManagedAccessAllowed": false,
-    "organizationsEnabled": false,
-    "verifiableCredentialsEnabled": false,
-    "adminPermissionsEnabled": false,
-    "clientProfiles": {
-        "profiles": []
-    },
-    "clientPolicies": {
-        "policies": []
-    }
+    ]
 }
