@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
@@ -55,4 +56,9 @@ public class Location : BaseEntity<int>, IAggregateRoot
     /// Initiatives relationship.
     /// </summary>
     public ICollection<Initiative> Initiatives { get; set; }
+
+    /// <summary>
+    /// Indicator Locations relationship.
+    /// </summary>
+    public ICollection<IndicatorLocation> IndicatorLocations { get; set; }
 }
