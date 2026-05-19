@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
+using System.Collections.Generic;
+
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
@@ -27,4 +29,19 @@ public class Indicator : BaseEntity<int>, IAggregateRoot
     /// Indicator Type relationship.
     /// </summary>
     public IndicatorType Type { get; set; }
+
+    /// <summary>
+    /// Indicator Tag relationship.
+    /// </summary>
+    public ICollection<IndicatorTag> IndicatorTags { get; init; }
+
+    /// <summary>
+    /// Indicator Location relationship.
+    /// </summary>
+    public ICollection<IndicatorLocation> IndicatorLocations { get; init; }
+
+    /// <summary>
+    /// Indicator Version relationship.
+    /// </summary>
+    public ICollection<IndicatorVersion> Versions { get; init; }
 }
