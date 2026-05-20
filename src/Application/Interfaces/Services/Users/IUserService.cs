@@ -14,6 +14,14 @@ using Microsoft.AspNetCore.OData.Query;
 public interface IUserService
 {
     /// <summary>
+    /// Get user profile data.
+    /// </summary>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> GetProfileDataAsync(string userName, CancellationToken ct = default);
+
+    /// <summary>
     /// Get elements list (OData).
     /// </summary>
     /// <param name="queryOptions">OData query options.</param>

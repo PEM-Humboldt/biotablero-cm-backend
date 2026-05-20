@@ -67,7 +67,7 @@ public class GeneralStatisticsService : IGeneralStatisticsService
         }
         else
         {
-            totalActiveInitiatives = await initiativeRepository.GetActiveInitiativesCountAsync(ct);
+            totalActiveInitiatives = await initiativeRepository.GetEnabledRecordsCountAsync(ct);
             totalPeopleInvolved = await initiativeRepository.GetPeopleInvolvedInActiveInitiativesCountAsync(ct);
             var totalAreaInSquareKm = await initiativeRepository.GetTotalAreaOfActiveInitiativesAsync(ct);
             totalAreaInHectares = GeometryUtils.ConvertSquareKilometersToHectares(totalAreaInSquareKm);

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Users;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Auth;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -20,13 +21,29 @@ using Swashbuckle.AspNetCore.Filters;
 /// </summary>
 /// <param name="webTools">General web tools.</param>
 /// <param name="initiativeService">Inititive service.</param>
+/// <param name="userService">User service.</param>
 [ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
 [ApiConventionType(typeof(CustomApiConventions))]
 public class AuthController(IWebTools webTools,
-    IInitiativeService initiativeService) : ControllerBase
+    IInitiativeService initiativeService,
+    IUserService userService) : ControllerBase
 {
+    /// <summary>
+    /// Get profile data from authenticated user.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>User profile data.</returns>
+    [Authorize]
+    [HttpGet("MyProfile")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ProfileDataResponseExample))]
+    public async Task<IActionResult> MyProfile(CancellationToken ct)
+    {
+        var response = await userService.GetProfileDataAsync(HttpContext.GetUserName(), ct);
+        return webTools.CustomResponse(response);
+    }
+
     /// <summary>
     /// Get initiatives data from authenticated user.
     /// </summary>
