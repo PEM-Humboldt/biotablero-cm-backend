@@ -37,6 +37,7 @@ public class AuthController(IWebTools webTools,
     /// <returns>User profile data.</returns>
     [Authorize]
     [HttpGet("MyProfile")]
+    [ProducesResponseType(typeof(ProfileDataResponseExample), StatusCodes.Status200OK)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ProfileDataResponseExample))]
     public async Task<IActionResult> MyProfile(CancellationToken ct)
     {
