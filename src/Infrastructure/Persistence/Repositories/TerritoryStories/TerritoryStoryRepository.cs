@@ -135,6 +135,14 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
             "Territory Story Image error",
             ct);
 
+    /// <inheritdoc/>
+    public async Task<int> GetEnabledRecordsCountAsync(string userName, CancellationToken ct = default) =>
+        await dbContext.TerritoryStories
+            .Include(e => e.Initiative)
+                .ThenInclude(e => e.InitiativeUsers)
+            .Where(e => e.Enabled && e.Initiative.InitiativeUsers.Any(e => e.UserName == userName))
+            .CountAsync(ct);
+
     /// <summary>
     /// Include custom entities.
     /// </summary>

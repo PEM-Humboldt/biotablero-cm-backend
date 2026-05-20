@@ -124,9 +124,16 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<int> GetActiveInitiativesCountAsync(CancellationToken ct = default) =>
+    public async Task<int> GetEnabledRecordsCountAsync(CancellationToken ct = default) =>
         await dbContext.Initiatives
-            .Where(i => i.Enabled)
+            .Where(e => e.Enabled)
+            .CountAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<int> GetEnabledRecordsCountAsync(string userName, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Include(e => e.InitiativeUsers)
+            .Where(e => e.Enabled && e.InitiativeUsers.Any(e => e.UserName == userName))
             .CountAsync(ct);
 
     /// <inheritdoc/>

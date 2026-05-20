@@ -63,4 +63,12 @@ public interface ITerritoryStoryRepository : IRepository<TerritoryStory, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated territory story data.</returns>
     Task<TerritoryStory> MarkAsFeaturedContentAsync(int id, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get the number of enabled records.
+    /// </summary>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Number of enabled records.</returns>
+    Task<int> GetEnabledRecordsCountAsync(string userName, CancellationToken ct = default);
 }
