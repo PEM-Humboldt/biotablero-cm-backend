@@ -77,9 +77,7 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
     /// <inheritdoc/>
     public async Task<int> GetPublishedRecordsCountAsync(string userName, CancellationToken ct = default) =>
         await dbContext.Resources
-            .Include(e => e.Initiative)
-                .ThenInclude(e => e.InitiativeUsers)
-            .Where(e => !e.IsDraft && e.Initiative.InitiativeUsers.Any(e => e.UserName == userName))
+            .Where(e => !e.IsDraft && e.AuthorUserName == userName)
             .CountAsync(ct);
 
     /// <summary>
