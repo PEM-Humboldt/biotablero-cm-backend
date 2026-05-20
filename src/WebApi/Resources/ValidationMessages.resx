@@ -274,7 +274,7 @@
     <comment/>
   </data>
   <data name="IJR_001" xml:space="preserve">
-    <value>User level must be either 'Member' or 'Reader'.</value>
+    <value>User level must be either 'Collaborator' or 'Reader'.</value>
     <comment/>
   </data>
   <data name="IJR_002" xml:space="preserve">

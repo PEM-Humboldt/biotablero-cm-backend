@@ -167,7 +167,7 @@ public partial class InitiativeEntities : Migration
             values: new object[,]
             {
                 { 1, "Leader" },
-                { 2, "Member" },
+                { 2, "Collaborator" },
                 { 3, "Reader" },
             });
 

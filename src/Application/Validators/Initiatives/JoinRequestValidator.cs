@@ -37,7 +37,7 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
                         {
                             if (Enum.TryParse(levelName, true, out InitiativeUserLevel userLevel))
                             {
-                                return userLevel is InitiativeUserLevel.Member or InitiativeUserLevel.Reader;
+                                return userLevel is InitiativeUserLevel.Collaborator or InitiativeUserLevel.Reader;
                             }
 
                             return false;
