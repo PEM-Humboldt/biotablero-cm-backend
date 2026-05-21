@@ -95,6 +95,29 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     }
 
     /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetItemAsync(int id, bool userIsAuthenticated, CancellationToken ct = default)
+    {
+        var dataEntity = await entityRepository.GetByIdAsync(id, userIsAuthenticated, ct);
+
+        if (dataEntity != null)
+        {
+            var dataDto = mapper.Map(dataEntity);
+            return new()
+            {
+                ResponseBody = dataDto,
+            };
+        }
+        else
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+    }
+
+    /// <inheritdoc/>
     public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();

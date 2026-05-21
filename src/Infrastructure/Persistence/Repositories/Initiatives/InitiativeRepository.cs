@@ -39,17 +39,25 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     }
 
     /// <inheritdoc/>
-    public override async Task<Initiative> GetByIdAsync(int id, CancellationToken ct = default) =>
-        await dbContext.Initiatives
-            .Include(e => e.InitiativeContacts)
-            .Include(e => e.InitiativeUsers)
-            .Include(e => e.InitiativeLocations)
-                .ThenInclude(e => e.Location)
-                    .ThenInclude(e => e.Parent)
-            .Include(e => e.InitiativeTags)
-                .ThenInclude(e => e.Tag)
+    public async Task<Initiative> GetByIdAsync(int id, bool userIsAuthenticated, CancellationToken ct = default)
+    {
+        IQueryable<Initiative> query = dbContext.Initiatives
+                    .Include(e => e.InitiativeUsers)
+                    .Include(e => e.InitiativeLocations)
+                        .ThenInclude(e => e.Location)
+                            .ThenInclude(e => e.Parent)
+                    .Include(e => e.InitiativeTags)
+                        .ThenInclude(e => e.Tag);
+
+        if (userIsAuthenticated)
+        {
+            query = query.Include(e => e.InitiativeContacts);
+        }
+
+        return await query
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
+    }
 
     /// <inheritdoc/>
     public IQueryable<Initiative> IncludeOdataEntities(IQueryable<Initiative> query) =>

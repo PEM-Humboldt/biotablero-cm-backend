@@ -46,7 +46,7 @@ public class InitiativeController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
-        var response = await entityService.GetItemAsync(id, ct);
+        var response = await entityService.GetItemAsync(id, !string.IsNullOrEmpty(HttpContext.GetUserName()), ct);
         return webTools.CustomResponse(response);
     }
 

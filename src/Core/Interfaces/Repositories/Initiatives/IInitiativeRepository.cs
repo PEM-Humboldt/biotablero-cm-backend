@@ -23,6 +23,15 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     IQueryable<Initiative> IncludeOdataEntities(IQueryable<Initiative> query);
 
     /// <summary>
+    /// Finds an entity with the given primary key value.
+    /// </summary>
+    /// <param name="id">The value of the primary key for the entity to be found.</param>
+    /// <param name="userIsAuthenticated">User authenticated flag.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<Initiative> GetByIdAsync(int id, bool userIsAuthenticated, CancellationToken ct = default);
+
+    /// <summary>
     /// Get elements by user name.
     /// </summary>
     /// <param name="userName">User name.</param>
