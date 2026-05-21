@@ -26,9 +26,9 @@ public class GeneralStatsService(IInitiativeRepository initiativeRepository) : I
         {
             ResponseBody = new GeneralStatsDto
             {
-                TotalActiveInitiatives = await initiativeRepository.GetEnabledRecordsCountAsync(departmentId: departmentId, initiativeId: initiativeId, ct: ct),
-                TotalPeopleInvolved = await initiativeRepository.GetPeopleInvolvedCountAsync(departmentId, initiativeId, ct),
-                TotalAreaInHectares = GeometryUtils.ConvertSquareKilometersToHectares(totalAreaInSquareKm),
+                EnabledInitiatives = await initiativeRepository.GetEnabledRecordsCountAsync(departmentId: departmentId, initiativeId: initiativeId, ct: ct),
+                PeopleInvolved = await initiativeRepository.GetPeopleInvolvedCountAsync(departmentId, initiativeId, ct),
+                Area = GeometryUtils.ConvertSquareKilometersToHectares(totalAreaInSquareKm),
             },
         };
     }

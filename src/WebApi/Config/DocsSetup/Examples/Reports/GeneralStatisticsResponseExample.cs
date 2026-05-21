@@ -13,8 +13,8 @@ public class GeneralStatisticsResponseExample : IExamplesProvider<GeneralStatsDt
     public GeneralStatsDto GetExamples() =>
         new()
         {
-            TotalActiveInitiatives = 12,
-            TotalPeopleInvolved = 45,
-            TotalAreaInHectares = 125075.50,
+            EnabledInitiatives = 12,
+            PeopleInvolved = 45,
+            Area = 125075.50,
         };
 }
