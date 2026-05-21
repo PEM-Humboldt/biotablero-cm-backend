@@ -16,7 +16,6 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
-using IAVH.BioTablero.CM.Application.Interfaces.Services.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -52,8 +51,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     private new readonly IMapperCreateReadAndUpdate<Initiative, InitiativeDto> mapper;
     private new readonly IInitiativeRepository entityRepository;
     private readonly ILocationRepository locationRepository;
-    private readonly ILocationPolygonRepository locationPolygonRepository;
-    private readonly ILocationService locationService;
     private readonly IIamService iamService;
     private readonly IStorageService storageService;
     private readonly IImageUtilsService imageUtilsService;
@@ -69,8 +66,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="locationRepository">Initiative Location repository.</param>
-    /// <param name="locationPolygonRepository">Location Polygon repository.</param>
-    /// <param name="locationService">Location service.</param>
     /// <param name="iamService">IAM service.</param>
     /// <param name="storageService">Storage service.</param>
     /// <param name="imageUtilsService">Image utils service.</param>
@@ -81,8 +76,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         IValidator<InitiativeDto> entityValidator,
         ILogger logger,
         ILocationRepository locationRepository,
-        ILocationPolygonRepository locationPolygonRepository,
-        ILocationService locationService,
         IIamService iamService,
         IStorageService storageService,
         IImageUtilsService imageUtilsService)
@@ -93,8 +86,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.locationRepository = locationRepository;
-        this.locationPolygonRepository = locationPolygonRepository;
-        this.locationService = locationService;
         this.iamService = iamService;
         this.storageService = storageService;
         this.imageUtilsService = imageUtilsService;
@@ -266,8 +257,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         // Build entity data
         var entity = mapper.Map(entityData);
         entity.CreationDate = DateTimeOffset.UtcNow;
+
+        // TODO: Add these geographic functions to triggers
         entity.Coordinate = await entityRepository.GetCentroidAsync(locationsIds, ct);
-        entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
+        entity.PolygonArea = await entityRepository.CalcAreaAsync(entity, ct);
         entity.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(entity.Coordinate, ct);
 
         // Save data
@@ -573,8 +566,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Update entity
         entity.Polygon = polygon;
+
+        // TODO: Add these geographic functions to triggers
         entity.Coordinate = polygon.Centroid;
-        entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
+        entity.PolygonArea = await entityRepository.CalcAreaAsync(entity, ct);
         entity.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(entity.Coordinate, ct);
 
         await entityRepository.UpdateAsync(entity, ct);
@@ -609,33 +604,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             ResponseBody = result,
         };
-    }
-
-    /// <summary>
-    /// Calculate polygon area for an initiative.
-    /// </summary>
-    /// <param name="entity">Initiative entity.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Area in square kilometers.</returns>
-    private async Task<double> CalculatePolygonAreaAsync(Initiative entity, CancellationToken ct = default)
-    {
-        // If initiative has a polygon, calculate its area
-        if (entity.Polygon != null && !entity.Polygon.IsEmpty)
-        {
-            return GeometryUtils.CalculatePolygonAreaInSquareKilometers(entity.Polygon as Polygon);
-        }
-
-        // If doesn´t have a polygon, calculate area from municipalities
-        if (entity.InitiativeLocations != null && entity.InitiativeLocations.Count > 0)
-        {
-            var locationIds = entity.InitiativeLocations
-                .Select(il => il.LocationId)
-                .ToArray();
-
-            return await locationPolygonRepository.CalcMunicipalitiesAreaAsync(locationIds, ct);
-        }
-
-        return 0;
     }
 
     /// <summary>

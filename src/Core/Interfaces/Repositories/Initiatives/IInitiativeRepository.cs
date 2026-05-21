@@ -173,4 +173,12 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of last created initiatives.</returns>
     Task<IEnumerable<Initiative>> GetLastEntitiesAsync(int count, CancellationToken ct = default);
+
+    /// <summary>
+    /// Calculate initiative polygon area.
+    /// </summary>
+    /// <param name="entity">Initiative data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Area in square kilometers.</returns>
+    Task<double> CalcAreaAsync(Initiative entity, CancellationToken ct = default);
 }

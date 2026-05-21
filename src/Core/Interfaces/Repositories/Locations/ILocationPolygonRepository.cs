@@ -17,12 +17,4 @@ public interface ILocationPolygonRepository : IRepository<LocationPolygon, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected simplified polygon.</returns>
     Task<string> GetSimplifiedByLocationAsync(int locationId, CancellationToken ct = default);
-
-    /// <summary>
-    /// Calculate municipalities area.
-    /// </summary>
-    /// <param name="locationIds">Location identifiers.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Total area in square kilometers.</returns>
-    Task<double> CalcMunicipalitiesAreaAsync(int[] locationIds, CancellationToken ct = default);
 }
