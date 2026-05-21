@@ -64,6 +64,7 @@ public static class ConfigExternalServices
         services.AddScoped<IJoinInvitationRepository, JoinInvitationRepository>();
         services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
+        services.AddScoped<IMonitoringEventsRepository, MonitoringEventsRepository>();
 
         //// Territory Stories
         services.AddScoped<ITerritoryStoryRepository, TerritoryStoryRepository>();

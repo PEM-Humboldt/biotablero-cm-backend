@@ -44,6 +44,7 @@ public static class ConfigAppServices
         services.AddScoped<IJoinRequestService, JoinRequestService>();
         services.AddScoped<IJoinInvitationService, JoinInvitationService>();
         services.AddScoped<IGeneralStatsService, GeneralStatsService>();
+        services.AddScoped<IInitiativeStatsService, InitiativeStatsService>();
         services.AddScoped<ITerritoryStoryService, TerritoryStoryService>();
         services.AddScoped<ITerritoryStoryImageService, TerritoryStoryImageService>();
         services.AddScoped<ITerritoryStoryVideoService, TerritoryStoryVideoService>();
