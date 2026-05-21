@@ -3,7 +3,7 @@
 /// <summary>
 /// General statistics DTO for community monitoring.
 /// </summary>
-public class GeneralStatisticsDto
+public class GeneralStatsDto
 {
     /// <summary>
     /// Total number of active initiatives in the platform.

@@ -133,64 +133,34 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<int> GetEnabledRecordsCountAsync(CancellationToken ct = default) =>
-        await dbContext.Initiatives
-            .Where(e => e.Enabled)
-            .CountAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<int> GetEnabledRecordsCountAsync(string userName, CancellationToken ct = default) =>
+    public async Task<int> GetEnabledRecordsCountAsync(string userName = null, int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
         await dbContext.Initiatives
             .Include(e => e.InitiativeUsers)
-            .Where(e => e.Enabled && e.InitiativeUsers.Any(e => e.UserName == userName))
+            .Include(e => e.InitiativeLocations)
+            .Where(e => e.Enabled &&
+                ((userName != null && e.InitiativeUsers.Any(e => e.UserName == userName)) ||
+                    (departmentId != null && (e.MainLocationId == departmentId || e.InitiativeLocations.Any(e => e.LocationId == departmentId))) ||
+                    (initiativeId != null && e.Id == initiativeId)))
             .CountAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<double> GetTotalAreaOfActiveInitiativesAsync(CancellationToken ct = default) =>
+    public async Task<double> GetAreaAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
         await dbContext.Initiatives
-            .Where(i => i.Enabled && i.PolygonArea > 0)
+            .Include(e => e.InitiativeLocations)
+            .Where(e => e.Enabled &&
+                e.PolygonArea > 0 &&
+                ((departmentId != null && (e.MainLocationId == departmentId || e.InitiativeLocations.Any(e => e.LocationId == departmentId))) ||
+                (initiativeId != null && e.Id == initiativeId)))
             .SumAsync(i => i.PolygonArea, ct);
 
     /// <inheritdoc/>
-    public async Task<int> GetPeopleInvolvedInActiveInitiativesCountAsync(CancellationToken ct = default) =>
-        await dbContext.InitiativeUsers
-            .Where(iu => iu.Initiative.Enabled)
-            .CountAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<int> GetActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default) =>
+    public async Task<int> GetPeopleInvolvedCountAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
         await dbContext.Initiatives
-            .Where(i => i.Enabled && i.InitiativeLocations.Any(il => il.LocationId == departmentId))
-            .CountAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<double> GetTotalAreaOfActiveInitiativesByDepartmentAsync(int departmentId, CancellationToken ct = default) =>
-        await dbContext.Initiatives
-            .Where(i => i.Enabled && i.PolygonArea > 0 && i.InitiativeLocations.Any(il => il.LocationId == departmentId))
-            .SumAsync(i => i.PolygonArea, ct);
-
-    /// <inheritdoc/>
-    public async Task<int> GetPeopleInvolvedInActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default) =>
-        await dbContext.InitiativeUsers
-            .Where(iu => iu.Initiative.Enabled && iu.Initiative.InitiativeLocations.Any(il => il.LocationId == departmentId))
-            .CountAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<int> GetActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
-        await dbContext.Initiatives
-            .Where(i => i.Enabled && i.Id == initiativeId)
-            .CountAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<double> GetTotalAreaOfActiveInitiativesByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
-        await dbContext.Initiatives
-            .Where(i => i.Enabled && i.PolygonArea > 0 && i.Id == initiativeId)
-            .SumAsync(i => i.PolygonArea, ct);
-
-    /// <inheritdoc/>
-    public async Task<int> GetPeopleInvolvedInActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
-        await dbContext.InitiativeUsers
-            .Where(iu => iu.Initiative.Enabled && iu.InitiativeId == initiativeId)
+            .Include(e => e.InitiativeLocations)
+            .Include(e => e.InitiativeUsers)
+            .Where(e => e.Enabled &&
+                ((departmentId != null && (e.MainLocationId == departmentId || e.InitiativeLocations.Any(e => e.LocationId == departmentId))) ||
+                (initiativeId != null && e.Id == initiativeId)))
             .CountAsync(ct);
 
     /// <inheritdoc/>

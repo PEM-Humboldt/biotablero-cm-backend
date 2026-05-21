@@ -43,7 +43,7 @@ public static class ConfigAppServices
         services.AddScoped<IInitiativeTagService, InitiativeTagService>();
         services.AddScoped<IJoinRequestService, JoinRequestService>();
         services.AddScoped<IJoinInvitationService, JoinInvitationService>();
-        services.AddScoped<IGeneralStatisticsService, GeneralStatisticsService>();
+        services.AddScoped<IGeneralStatsService, GeneralStatsService>();
         services.AddScoped<ITerritoryStoryService, TerritoryStoryService>();
         services.AddScoped<ITerritoryStoryImageService, TerritoryStoryImageService>();
         services.AddScoped<ITerritoryStoryVideoService, TerritoryStoryVideoService>();

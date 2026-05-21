@@ -7,10 +7,10 @@ using Swashbuckle.AspNetCore.Filters;
 /// <summary>
 /// General statistics response example.
 /// </summary>
-public class GeneralStatisticsResponseExample : IExamplesProvider<GeneralStatisticsDto>
+public class GeneralStatisticsResponseExample : IExamplesProvider<GeneralStatsDto>
 {
     /// <inheritdoc/>
-    public GeneralStatisticsDto GetExamples() =>
+    public GeneralStatsDto GetExamples() =>
         new()
         {
             TotalActiveInitiatives = 12,
