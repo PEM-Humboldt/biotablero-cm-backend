@@ -149,6 +149,7 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .CountAsync(ct);
 
     /// <inheritdoc/>
+    // FIXME: Calculate the areas with postgis instead of adding the pre-calculated areas
     public async Task<double> GetAreaAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
         await dbContext.Initiatives
             .Include(e => e.InitiativeLocations)

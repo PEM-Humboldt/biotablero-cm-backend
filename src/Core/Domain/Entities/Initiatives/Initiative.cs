@@ -132,4 +132,9 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     /// Indicator relationship.
     /// </summary>
     public ICollection<Indicator> Indicators { get; init; }
+
+    /// <summary>
+    /// Monitoring Events relationship.
+    /// </summary>
+    public ICollection<MonitoringEvents> MonitoringEventsList { get; set; }
 }
