@@ -5,9 +5,13 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Statistics;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Reports;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
+using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Initiative statistics controller.
@@ -30,6 +34,8 @@ public class InitiativeStatsController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>.</returns>
     [HttpGet("GetMonitoringEvents/{id}")]
+    [ProducesResponseType(typeof(MonitoringEventsResponseExample), StatusCodes.Status200OK)]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(MonitoringEventsResponseExample))]
     public async Task<IActionResult> GetMonitoringEvents(int id, int? year, CancellationToken ct = default)
     {
         var response = await initiativeStatsService.GetMonitoringEvents(id, year, ct: ct);
