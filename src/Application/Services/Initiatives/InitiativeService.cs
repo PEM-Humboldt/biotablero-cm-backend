@@ -267,15 +267,11 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         var entity = mapper.Map(entityData);
         entity.CreationDate = DateTimeOffset.UtcNow;
         entity.Coordinate = await entityRepository.GetCentroidAsync(locationsIds, ct);
+        entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
+        entity.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(entity.Coordinate, ct);
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
-
-        // Calc geographic data and save it again
-        // TODO: Add the geographic functions in triggers
-        entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
-        entity.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(entity.Coordinate, ct);
-        await entityRepository.UpdateAsync(entity, ct);
 
         entityData = mapper.Map(entity);
 
@@ -342,9 +338,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Update entity data
         mapper.Update(entity, entityData);
-
-        // Recalculate polygon area if locations might have changed
-        entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
 
         await entityRepository.UpdateAsync(entity, ct);
 
@@ -633,7 +626,16 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
 
         // If doesn´t have a polygon, calculate area from municipalities
-        return await locationPolygonRepository.CalcInitiativeAreaByMunicipalitiesAsync(entity.Id, ct);
+        if (entity.InitiativeLocations != null && entity.InitiativeLocations.Count > 0)
+        {
+            var locationIds = entity.InitiativeLocations
+                .Select(il => il.LocationId)
+                .ToArray();
+
+            return await locationPolygonRepository.CalcMunicipalitiesAreaAsync(locationIds, ct);
+        }
+
+        return 0;
     }
 
     /// <summary>

@@ -19,10 +19,10 @@ public interface ILocationPolygonRepository : IRepository<LocationPolygon, int>
     Task<string> GetSimplifiedByLocationAsync(int locationId, CancellationToken ct = default);
 
     /// <summary>
-    /// Calculate initiative area by associated municipalities.
+    /// Calculate municipalities area.
     /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="locationIds">Location identifiers.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Total area in square kilometers.</returns>
-    Task<double> CalcInitiativeAreaByMunicipalitiesAsync(int initiativeId, CancellationToken ct = default);
+    Task<double> CalcMunicipalitiesAreaAsync(int[] locationIds, CancellationToken ct = default);
 }

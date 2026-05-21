@@ -30,7 +30,7 @@ public class LocationPolygonRepository(GeneralContext dbContext, ILogger logger)
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<double> CalcInitiativeAreaByMunicipalitiesAsync(int initiativeId, CancellationToken ct = default)
+    public async Task<double> CalcMunicipalitiesAreaAsync(int[] locationIds, CancellationToken ct = default)
     {
         var municipalities = await dbContext.LocationPolygons
             .Include(e => e.Location)
@@ -38,14 +38,12 @@ public class LocationPolygonRepository(GeneralContext dbContext, ILogger logger)
             .Where(e => e.Geometry != null &&
                 !e.Geometry.IsEmpty &&
                 e.Location.Level == (byte)LocationLevel.Municipality &&
-                e.Location.InitiativeLocations.Any(e => e.InitiativeId == initiativeId))
+                locationIds.Contains(e.LocationId))
             .Select(e => e.Geometry)
             .ToListAsync(ct);
 
-        var totalArea = municipalities
+        return municipalities
             .Select(GeometryUtils.CalculateAreaInSquareKilometers)
             .Sum();
-
-        return Math.Round(totalArea, 6);
     }
 }
