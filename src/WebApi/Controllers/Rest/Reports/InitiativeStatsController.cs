@@ -33,6 +33,8 @@ public class InitiativeStatsController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Initiative statistics.</returns>
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(InitiativeStatsResponseExample), StatusCodes.Status200OK)]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeStatsResponseExample))]
     public async Task<IActionResult> Get(int id, CancellationToken ct = default)
     {
         var response = await initiativeStatsService.GetStats(id, ct);
