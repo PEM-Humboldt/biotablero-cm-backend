@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Reports;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Reports;
 
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 

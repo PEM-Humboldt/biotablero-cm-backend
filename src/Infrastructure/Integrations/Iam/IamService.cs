@@ -25,7 +25,6 @@ public class IamService : IIamService
     private readonly string baseUrlAdmin;
     private readonly string clientId;
     private readonly string clientSecret;
-    private readonly JsonSerializerOptions jsonSerializerOptions;
 
     /// <summary>
     /// Constructor.
@@ -38,11 +37,6 @@ public class IamService : IIamService
         baseUrlAdmin = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/admin/realms/{Environment.GetEnvironmentVariable("KC_REALM")}";
         clientId = Environment.GetEnvironmentVariable("KC_CLIENT_BACKEND");
         clientSecret = Environment.GetEnvironmentVariable("KC_CLIENT_BACKEND_PASS");
-
-        jsonSerializerOptions = new JsonSerializerOptions()
-        {
-            PropertyNameCaseInsensitive = true,
-        };
     }
 
     /// <inheritdoc/>
@@ -53,7 +47,8 @@ public class IamService : IIamService
     }
 
     /// <inheritdoc/>
-    public async Task<ExternalUser> GetUserDataAsync(string username, CancellationToken ct = default) => await GetKeycloakUserDataAsync(UserVariable.Username, username, ct);
+    public async Task<ExternalUser> GetUserDataAsync(string username, CancellationToken ct = default) =>
+        await GetKeycloakUserDataAsync(UserVariable.Username, username, ct);
 
     /// <inheritdoc/>
     public async Task<IEnumerable<ExternalUser>> GetUsersDataAsync(string[] usernames, CancellationToken ct = default)
@@ -75,7 +70,8 @@ public class IamService : IIamService
     }
 
     /// <inheritdoc/>
-    public async Task<ExternalUser> GetUserDataByEmailAsync(string email, CancellationToken ct = default) => await GetKeycloakUserDataAsync(UserVariable.Email, email, ct);
+    public async Task<ExternalUser> GetUserDataByEmailAsync(string email, CancellationToken ct = default) =>
+        await GetKeycloakUserDataAsync(UserVariable.Email, email, ct);
 
     /// <inheritdoc/>
     public async Task<IEnumerable<ExternalUser>> GetUsersDataByEmailsAsync(string[] emails, CancellationToken ct = default)

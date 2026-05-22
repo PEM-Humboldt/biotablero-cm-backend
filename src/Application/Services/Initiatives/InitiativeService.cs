@@ -13,6 +13,7 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Users;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
@@ -20,6 +21,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
@@ -54,6 +56,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     private readonly IIamService iamService;
     private readonly IStorageService storageService;
     private readonly IImageUtilsService imageUtilsService;
+    private readonly IMapperRead<ExternalUser, ExternalUserBaseDto> externalUserMapper;
     private readonly GeoJsonWriter geoJsonWriter;
     private readonly GeoJsonReader geoJsonReader;
 
@@ -69,6 +72,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// <param name="iamService">IAM service.</param>
     /// <param name="storageService">Storage service.</param>
     /// <param name="imageUtilsService">Image utils service.</param>
+    /// <param name="externalUserMapper">External User mapper.</param>
     public InitiativeService(
         IInitiativeRepository entityRepository,
         IMapperCreateReadAndUpdate<Initiative, InitiativeDto> mapper,
@@ -78,7 +82,8 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         ILocationRepository locationRepository,
         IIamService iamService,
         IStorageService storageService,
-        IImageUtilsService imageUtilsService)
+        IImageUtilsService imageUtilsService,
+        IMapperRead<ExternalUser, ExternalUserBaseDto> externalUserMapper)
         : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
@@ -89,6 +94,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         this.iamService = iamService;
         this.storageService = storageService;
         this.imageUtilsService = imageUtilsService;
+        this.externalUserMapper = externalUserMapper;
 
         geoJsonWriter = new GeoJsonWriter();
         geoJsonReader = new GeoJsonReader();
@@ -102,6 +108,33 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         if (dataEntity != null)
         {
             var dataDto = mapper.Map(dataEntity);
+
+            var userNames = dataDto.Users?
+                .Select(e => e.UserName)
+                .ToArray();
+
+            if (userNames.Length > 0)
+            {
+                var externalUsersData = await iamService.GetUsersDataByEmailsAsync(userNames, ct);
+
+                if (externalUsersData.Any())
+                {
+                    var usersFullData = new List<InitiativeUserDto>();
+
+                    foreach (var userData in dataDto.Users)
+                    {
+                        userData.ExternalData = externalUsersData
+                            .Where(i => i.Username == userData.UserName)
+                            .Select(externalUserMapper.Map)
+                            .FirstOrDefault();
+
+                        usersFullData.Add(userData);
+                    }
+
+                    dataDto.Users = usersFullData;
+                }
+            }
+
             return new()
             {
                 ResponseBody = dataDto,

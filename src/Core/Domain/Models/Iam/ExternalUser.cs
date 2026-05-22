@@ -2,16 +2,14 @@
 
 using System;
 
-/// <summary>
-/// Extarnal User data (IAM).
-/// </summary>
-public class ExternalUser
-{
-    /// <summary>
-    /// User identifier.
-    /// </summary>
-    public Guid Id { get; set; }
+using IAVH.BioTablero.CM.Core.Domain.Entities;
+using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
+/// <summary>
+/// External User data (IAM).
+/// </summary>
+public class ExternalUser : BaseEntity<Guid>, IAggregateRoot
+{
     /// <summary>
     /// User email.
     /// </summary>
