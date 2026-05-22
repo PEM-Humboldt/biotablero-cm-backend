@@ -27,18 +27,31 @@ public class InitiativeStatsController(
     IInitiativeStatsService initiativeStatsService) : ControllerBase
 {
     /// <summary>
+    /// Get initiative statistics.
+    /// </summary>
+    /// <param name="id">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Initiative statistics.</returns>
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(int id, CancellationToken ct = default)
+    {
+        var response = await initiativeStatsService.GetStats(id, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
     /// Get monitoring events data.
     /// </summary>
     /// <param name="id">Initiative identifier.</param>
     /// <param name="year">Year filter (optional).</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>.</returns>
+    /// <returns>Monitoring Events data.</returns>
     [HttpGet("GetMonitoringEvents/{id}")]
     [ProducesResponseType(typeof(MonitoringEventsResponseExample), StatusCodes.Status200OK)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(MonitoringEventsResponseExample))]
     public async Task<IActionResult> GetMonitoringEvents(int id, int? year, CancellationToken ct = default)
     {
-        var response = await initiativeStatsService.GetMonitoringEvents(id, year, ct: ct);
+        var response = await initiativeStatsService.GetMonitoringEvents(id, year, ct);
         return webTools.CustomResponse(response);
     }
 }

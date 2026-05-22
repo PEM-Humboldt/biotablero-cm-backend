@@ -11,6 +11,14 @@ using IAVH.BioTablero.CM.Application.Domain;
 public interface IInitiativeStatsService
 {
     /// <summary>
+    /// Get initiative statistics.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Initiative statistics.</returns>
+    Task<CustomWebResponse> GetStats(int initiativeId, CancellationToken ct = default);
+
+    /// <summary>
     /// Get monitoring events data.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier (optional).</param>

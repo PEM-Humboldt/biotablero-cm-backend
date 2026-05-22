@@ -62,4 +62,12 @@ public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repo
 
         return departmentId;
     }
+
+    /// <inheritdoc/>
+    public async Task<int> GetMunicipalitiesCountAsync(int initiativeId, CancellationToken ct = default) =>
+        await dbContext.Locations
+            .Include(e => e.InitiativeLocations)
+            .Where(e => e.InitiativeLocations.Any(e => e.InitiativeId == initiativeId) && e.Level == (byte)LocationLevel.Municipality)
+            .Distinct()
+            .CountAsync(ct);
 }
