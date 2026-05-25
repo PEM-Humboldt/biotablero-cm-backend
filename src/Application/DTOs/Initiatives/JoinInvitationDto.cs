@@ -36,6 +36,11 @@ public class JoinInvitationDto : IDto
     public string Message { get; set; }
 
     /// <summary>
+    /// Join Invitation HTML message.
+    /// </summary>
+    public string HtmlMessage { get; set; }
+
+    /// <summary>
     /// Initiative name.
     /// </summary>
     public string InitiativeName { get; set; }

@@ -32,6 +32,11 @@ public class JoinInvitation : BaseEntity<int>, IAggregateRoot
     public string Message { get; set; }
 
     /// <summary>
+    /// Join Invitation HTML message.
+    /// </summary>
+    public string HtmlMessage { get; set; }
+
+    /// <summary>
     /// Join Invitation creation date.
     /// </summary>
     public DateTimeOffset CreationDate { get; set; }

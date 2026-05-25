@@ -192,7 +192,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         }
 
         // Send invitation emails
-        var result = await SendNotificationJoinInvitationAsync(emails, initiative, entityData.Message, ct);
+        var result = await SendNotificationJoinInvitationAsync(emails, initiative, entityData, ct);
 
         if (result)
         {
@@ -225,10 +225,10 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// </summary>
     /// <param name="emails">Receivers emails.</param>
     /// <param name="initiative">Initiative data.</param>
-    /// <param name="emailMessage">Email message.</param>
+    /// <param name="joinInvitationData">Join Invitation data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if the process is successful. False otherwise.</returns>
-    private async Task<bool> SendNotificationJoinInvitationAsync(string[] emails, Initiative initiative, string emailMessage, CancellationToken ct = default)
+    private async Task<bool> SendNotificationJoinInvitationAsync(string[] emails, Initiative initiative, JoinInvitationDto joinInvitationData, CancellationToken ct = default)
     {
         var receivers = emails
             .Select(e => new CustomEmailAddress(e))
@@ -242,13 +242,13 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
                 Data = new()
                     {
                         { "InitiativeName", initiative.Name },
-                        { "EmailMessage", emailMessage },
+                        { "EmailMessage", joinInvitationData.Message },
                     },
             },
         };
 
-        var htmlBody = await webViewTools.RenderViewToStringAsync(notificationDto.Properties.TemplateName, notificationDto);
-        var response = await emailService.SendEmailAsync(notificationDto.Subject, receivers, null, htmlBody, ct);
+        joinInvitationData.HtmlMessage = await webViewTools.RenderViewToStringAsync(notificationDto.Properties.TemplateName, notificationDto);
+        var response = await emailService.SendEmailAsync(notificationDto.Subject, receivers, null, joinInvitationData.HtmlMessage, ct);
 
         return !string.IsNullOrEmpty(response);
     }
