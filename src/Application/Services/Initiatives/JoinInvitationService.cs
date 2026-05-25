@@ -24,6 +24,7 @@ using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.OData;
 
 using Serilog;
 
@@ -93,7 +94,36 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         query = entityRepository.AddInitiativeFilter(initiativeId, query);
         query = entityRepository.IncludeOdataEntities(query);
 
-        return await GetOdataListByQueryAsync(query, queryOptions, ct);
+        try
+        {
+            var odataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
+
+            var userNames = odataResponse.DataList?
+                .Select(e => e.Creator)
+                .ToArray();
+
+            var externalUsersData = await iamService.GetUsersDataByEmailsAsync(userNames, ct);
+
+            if (externalUsersData.Any())
+            {
+                foreach (var joinInvitationData in odataResponse.DataList)
+                {
+                    joinInvitationData.CreatorFullName = externalUsersData
+                        .Where(i => i.Username == joinInvitationData.Creator)
+                        .Select(i => i.FullName)
+                        .FirstOrDefault();
+                }
+            }
+
+            return GetOdataWebResponse(odataResponse, mapper);
+        }
+        catch (ODataException)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter),
+            };
+        }
     }
 
     /// <inheritdoc/>

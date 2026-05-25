@@ -26,9 +26,19 @@ public class JoinInvitationDto : IDto
     public string Creator { get; set; }
 
     /// <summary>
+    /// Creator user full name.
+    /// </summary>
+    public string CreatorFullName { get; set; }
+
+    /// <summary>
     /// Join Invitation message.
     /// </summary>
     public string Message { get; set; }
+
+    /// <summary>
+    /// Initiative name.
+    /// </summary>
+    public string InitiativeName { get; set; }
 
     /// <summary>
     /// Join Invitation creation date.

@@ -22,6 +22,11 @@ public class JoinInvitation : BaseEntity<int>, IAggregateRoot
     public string Creator { get; set; }
 
     /// <summary>
+    /// Creator user full name.
+    /// </summary>
+    public string CreatorFullName { get; set; }
+
+    /// <summary>
     /// Join Invitation message.
     /// </summary>
     public string Message { get; set; }

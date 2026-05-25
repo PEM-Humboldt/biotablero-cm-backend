@@ -39,6 +39,8 @@ public class JoinInvitationConfig : IEntityTypeConfiguration<JoinInvitation>
             .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .IsRequired();
 
+        builder.Ignore(i => i.CreatorFullName);
+
         builder.HasOne(e => e.Initiative)
             .WithMany(p => p.JoinInvitations)
             .HasForeignKey(e => e.InitiativeId);
