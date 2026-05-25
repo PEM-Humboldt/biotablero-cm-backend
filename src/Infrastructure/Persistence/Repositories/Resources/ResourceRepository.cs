@@ -83,6 +83,7 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
         query ??= dbContext.Resources;
 
         return query
+            .Include(e => e.Initiative)
             .Include(e => e.Likes)
             .Include(e => e.Files)
             .Include(e => e.Links)

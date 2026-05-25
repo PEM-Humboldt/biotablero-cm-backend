@@ -5,6 +5,7 @@ using System;
 using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
@@ -12,10 +13,10 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 /// Initiative contact mappings.
 /// </summary>
 public class InitiativeLocationMappings(
-    IMapperRead<Location, LocationDto> locationMappings) : IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto>
+    IMapperRead<Location, LocationDto> locationMappings) : MapperRead<InitiativeLocation, InitiativeLocationDto>, IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto>
 {
     /// <inheritdoc/>
-    public InitiativeLocationDto Map(InitiativeLocation entity)
+    public override InitiativeLocationDto Map(InitiativeLocation entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

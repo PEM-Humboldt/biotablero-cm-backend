@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Logging;
 
+using System;
+
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
@@ -7,12 +9,37 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <summary>
 /// Serilog log DTO.
 /// </summary>
-public class LogDto : LogBaseDto, IDto
+public class LogDto : IDto
 {
+    /// <summary>
+    /// Item identifier.
+    /// </summary>
+    public Guid Id { get; set; }
+
+    /// <summary>
+    /// Log creation date.
+    /// </summary>
+    public DateTimeOffset TimeStamp { get; set; }
+
+    /// <summary>
+    /// Custom log type.
+    /// </summary>
+    public LogType Type { get; set; }
+
+    /// <summary>
+    /// Log short message.
+    /// </summary>
+    public string ShortMessage { get; set; }
+
+    /// <summary>
+    /// Event user name.
+    /// </summary>
+    public string UserName { get; set; }
+
     /// <summary>
     /// Serilog level.
     /// </summary>
-    public LogLevel Level { get; set; }
+    public LogLevel? Level { get; set; }
 
     /// <summary>
     /// Log message.
@@ -22,7 +49,7 @@ public class LogDto : LogBaseDto, IDto
     /// <summary>
     /// Indicates whether the record was created manually or not.
     /// </summary>
-    public bool CustomRecord { get; set; }
+    public bool? CustomRecord { get; set; }
 
     /// <summary>
     /// Event client IP.

@@ -5,6 +5,7 @@ using System.Linq;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
@@ -14,10 +15,10 @@ public class InitiativeMappings(
     IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto> initiativeContactMappings,
     IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto> initiativeLocationMappings,
     IMapperCreateReadAndUpdate<InitiativeUser, InitiativeUserDto> initiativeUserMappings,
-    IMapperRead<InitiativeTag, InitiativeTagDto> initiativeTagMappings) : IMapperCreateReadAndUpdate<Initiative, InitiativeDto>
+    IMapperRead<InitiativeTag, InitiativeTagDto> initiativeTagMappings) : MapperRead<Initiative, InitiativeDto>, IMapperCreateReadAndUpdate<Initiative, InitiativeDto>
 {
     /// <inheritdoc/>
-    public InitiativeDto Map(Initiative entity)
+    public override InitiativeDto Map(Initiative entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

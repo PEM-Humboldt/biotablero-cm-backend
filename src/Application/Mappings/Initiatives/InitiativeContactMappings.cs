@@ -4,15 +4,16 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
 /// Initiative contact mappings.
 /// </summary>
-public class InitiativeContactMappings : IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto>
+public class InitiativeContactMappings : MapperRead<InitiativeContact, InitiativeContactDto>, IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto>
 {
     /// <inheritdoc/>
-    public InitiativeContactDto Map(InitiativeContact entity)
+    public override InitiativeContactDto Map(InitiativeContact entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

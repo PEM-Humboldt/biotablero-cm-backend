@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 
+using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
@@ -51,7 +52,7 @@ public class ResourceDto : IDto
     public bool IsDraft { get; set; }
 
     /// <summary>
-    /// Total of territory story likes.
+    /// Total of resource likes.
     /// </summary>
     public int? Likes { get; set; }
 
@@ -61,9 +62,24 @@ public class ResourceDto : IDto
     public bool? ILikedIt { get; set; }
 
     /// <summary>
+    /// Total of resource files.
+    /// </summary>
+    public int? TotalFiles { get; set; }
+
+    /// <summary>
+    /// Total of resource links.
+    /// </summary>
+    public int? TotalLinks { get; set; }
+
+    /// <summary>
     /// Resource Type relationship.
     /// </summary>
     public ResourceTypeDto ResourceType { get; set; }
+
+    /// <summary>
+    /// Initiative relationship.
+    /// </summary>
+    public InitiativeDto Initiative { get; set; }
 
     /// <summary>
     /// Resource File relationship.
