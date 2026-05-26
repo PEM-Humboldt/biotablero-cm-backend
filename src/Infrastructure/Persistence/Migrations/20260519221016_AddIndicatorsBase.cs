@@ -56,8 +56,8 @@ public partial class AddIndicatorsBase : Migration
             {
                 table.PrimaryKey("PK_indicator", x => x.id);
                 table.ForeignKey(
-                    name: "FK_indicator_indicator_type_initiative_id",
-                    column: x => x.initiative_id,
+                    name: "FK_indicator_indicator_type_indicator_type_id",
+                    column: x => x.indicator_type_id,
                     principalSchema: "indicators",
                     principalTable: "indicator_type",
                     principalColumn: "id",
@@ -157,6 +157,12 @@ public partial class AddIndicatorsBase : Migration
                     principalColumn: "id",
                     onDelete: ReferentialAction.Cascade);
             });
+
+        migrationBuilder.CreateIndex(
+            name: "IX_indicator_indicator_type_id",
+            schema: "indicators",
+            table: "indicator",
+            column: "indicator_type_id");
 
         migrationBuilder.CreateIndex(
             name: "IX_indicator_initiative_id",
