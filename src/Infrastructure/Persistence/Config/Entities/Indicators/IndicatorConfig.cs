@@ -35,6 +35,6 @@ public class IndicatorConfig : IEntityTypeConfiguration<Indicator>
 
         builder.HasOne(e => e.Type)
             .WithMany(p => p.Indicators)
-            .HasForeignKey(e => e.InitiativeId);
+            .HasForeignKey(e => e.IndicatorTypeId);
     }
 }
