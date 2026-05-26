@@ -30,7 +30,8 @@ public class InitiativeLocationConfig : IEntityTypeConfiguration<InitiativeLocat
             .IsRequired();
 
         builder.Property(i => i.Locality)
-            .HasColumnName("locality");
+            .HasColumnName("locality")
+            .HasMaxLength(300);
 
         builder.HasOne(e => e.Initiative)
             .WithMany(p => p.InitiativeLocations)

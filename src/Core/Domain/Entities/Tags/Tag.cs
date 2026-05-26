@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 
+using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
@@ -41,4 +42,9 @@ public class Tag : BaseEntity<int>, IAggregateRoot
     /// Tag Resource relationship.
     /// </summary>
     public ICollection<ResourceTag> TagResources { get; init; }
+
+    /// <summary>
+    /// Tag Indicator relationship.
+    /// </summary>
+    public ICollection<IndicatorTag> TagIndicators { get; init; }
 }

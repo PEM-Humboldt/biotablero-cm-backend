@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
@@ -186,6 +187,35 @@ public sealed class GeneralContext : DbContext
     /// Resource Like DbSet.
     /// </summary>
     public DbSet<ResourceLike> ResourceLikes { get; set; }
+
+    #endregion
+
+    #region Indicator entities
+
+    /// <summary>
+    /// Indicator DbSet.
+    /// </summary>
+    public DbSet<Indicator> Indicators { get; set; }
+
+    /// <summary>
+    /// Indicator Type DbSet.
+    /// </summary>
+    public DbSet<IndicatorType> IndicatorTypes { get; set; }
+
+    /// <summary>
+    /// Indicator Tag DbSet.
+    /// </summary>
+    public DbSet<IndicatorTag> IndicatorTags { get; set; }
+
+    /// <summary>
+    /// Indicator Location DbSet.
+    /// </summary>
+    public DbSet<IndicatorLocation> IndicatorLocations { get; set; }
+
+    /// <summary>
+    /// Indicator Version DbSet.
+    /// </summary>
+    public DbSet<IndicatorVersion> IndicatorVersions { get; set; }
 
     #endregion
 

@@ -1,17 +1,17 @@
-﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Initiative Tag entity.
+/// Indicator Tag entity.
 /// </summary>
-public class InitiativeTag : BaseEntity<int>, IAggregateRoot
+public class IndicatorTag : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Initiative identifier.
+    /// Indicator identifier.
     /// </summary>
-    public int InitiativeId { get; set; }
+    public int IndicatorId { get; set; }
 
     /// <summary>
     /// Tag identifier.
@@ -19,9 +19,9 @@ public class InitiativeTag : BaseEntity<int>, IAggregateRoot
     public int TagId { get; set; }
 
     /// <summary>
-    /// Initiative relationship.
+    /// Indicator relationship.
     /// </summary>
-    public Initiative Initiative { get; set; }
+    public Indicator Indicator { get; set; }
 
     /// <summary>
     /// Tag relationship.
