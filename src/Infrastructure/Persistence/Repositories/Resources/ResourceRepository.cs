@@ -74,6 +74,12 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
         return await GetByIdAsync(entity.Id, ct);
     }
 
+    /// <inheritdoc/>
+    public async Task<int> GetPublishedRecordsCountAsync(string userName, CancellationToken ct = default) =>
+        await dbContext.Resources
+            .Where(e => !e.IsDraft && e.AuthorUserName == userName)
+            .CountAsync(ct);
+
     /// <summary>
     /// Include custom entities.
     /// </summary>

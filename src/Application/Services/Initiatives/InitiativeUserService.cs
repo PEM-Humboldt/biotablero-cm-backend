@@ -320,6 +320,33 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         return new();
     }
 
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> UpdateFocusAreaAsync(int initiativeId, string userName, InitiativeUserDto entityData, CancellationToken ct = default)
+    {
+        var entity = await entityRepository.GetByInitiativeAndUserNameAsync(initiativeId, userName, ct);
+
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        entity.FocusArea = entityData.FocusArea;
+
+        await entityRepository.UpdateAsync(entity, ct);
+
+        entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Update, "Updated initiative user focus area", "{@EntityData}", entityData);
+
+        return new()
+        {
+            ResponseBody = entityData,
+        };
+    }
+
     /// <summary>
     /// Send notification when a user's level has changed.
     /// </summary>

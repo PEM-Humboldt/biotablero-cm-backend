@@ -52,4 +52,12 @@ public interface IResourceRepository : IRepository<Resource, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
     Task<bool> AnyByTagAsync(int tagId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get the number of published records.
+    /// </summary>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Number of published records.</returns>
+    Task<int> GetPublishedRecordsCountAsync(string userName, CancellationToken ct = default);
 }

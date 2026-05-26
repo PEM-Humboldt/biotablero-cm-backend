@@ -82,11 +82,19 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     Task<Point> GetCentroidAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
-    /// Get count of active initiatives.
+    /// Get the number of enabled records.
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Count of active initiatives.</returns>
-    Task<int> GetActiveInitiativesCountAsync(CancellationToken ct = default);
+    /// <returns>Number of enabled records.</returns>
+    Task<int> GetEnabledRecordsCountAsync(CancellationToken ct = default);
+
+    /// <summary>
+    /// Get the number of enabled records.
+    /// </summary>
+    /// <param name="userName">User name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Number of enabled records.</returns>
+    Task<int> GetEnabledRecordsCountAsync(string userName, CancellationToken ct = default);
 
     /// <summary>
     /// Get total area of active initiatives with area.
