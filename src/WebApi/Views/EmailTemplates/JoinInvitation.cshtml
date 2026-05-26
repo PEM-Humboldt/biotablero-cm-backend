@@ -1,7 +1,37 @@
 @model IAVH.BioTablero.CM.Application.DTOs.Notifications.NotificationDto
 @{
     Model.Subject = $"Invitación a unirse a {Model?.Properties?.Data["InitiativeName"]}";
-    Model.Body = $"Has sido invitado a unirte a la iniciativa '{Model?.Properties?.Data["InitiativeName"]}'.<br /> {Model?.Properties?.Data["EmailMessage"]}.";
+    var template = @"Estimado/a {1},
+<br /><br />
+Te invitamos a hacer parte de la iniciativa '{0}' en BioTablero, a su módulo de monitoreo comunitario de
+biodiversidad.<br />
+Para unirte, sigue estos pasos:<br /><br />
+
+1. Crea tu usuario en BioTablero ingresando <a href=""{3}"" target=""_blank"">aquí</a>. Si ya tienes cuenta, puedes
+saltar este paso.<br />
+2. Una vez dentro de la plataforma, dirígete al perfil de la iniciativa '{0}' en el siguiente <a href=""{4}""
+target=""_blank"">enlace</a>.<br />
+3. Haz clic en el botón «Unirse» y envía tu solicitud de participación.<br /><br />
+
+Si tienes alguna pregunta o dificultad en el proceso, no dudes en escribirnos.<br /><br />
+
+Cordialmente,<br />
+{2}";
+
+    var customMessage = Model?.Properties?.Data["EmailMessage"]?.ToString();
+
+    if (!string.IsNullOrEmpty(customMessage))
+    {
+        Model.Body = customMessage;
+    }
+    else
+    {
+        Model.Body = string.Format(template, Model?.Properties?.Data["InitiativeName"],
+        Model?.Properties?.Data["Recipients"],
+        Model?.Properties?.Data["SenderFullName"],
+        Model?.Properties?.Data["SignInUrl"],
+        Model?.Properties?.Data["InitiativeUrl"]);
+    }
 }
 
 <div style="margin: auto;width: 20rem;">

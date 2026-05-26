@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -43,6 +44,8 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     private readonly IWebViewTools webViewTools;
     private readonly IEmailService emailService;
     private readonly IIamService iamService;
+    private readonly string iamSignInUrl;
+    private readonly string frontEndInitiativeUrl;
 
     /// <summary>
     /// Constructor.
@@ -76,6 +79,8 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         this.webViewTools = webViewTools;
         this.emailService = emailService;
         this.iamService = iamService;
+        iamSignInUrl = Environment.GetEnvironmentVariable("IAM_SIGN_IN_URL");
+        frontEndInitiativeUrl = Environment.GetEnvironmentVariable("FRONTEND_INITIATIVE_URL");
     }
 
     /// <inheritdoc/>
@@ -234,6 +239,12 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
             .Select(e => new CustomEmailAddress(e))
             .ToArray();
 
+        if (string.IsNullOrEmpty(joinInvitationData.CreatorFullName))
+        {
+            var userData = await iamService.GetUserDataAsync(joinInvitationData.Creator, ct);
+            joinInvitationData.CreatorFullName = userData?.FullName;
+        }
+
         var notificationDto = new NotificationDto()
         {
             Properties = new()
@@ -243,6 +254,10 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
                     {
                         { "InitiativeName", initiative.Name },
                         { "EmailMessage", joinInvitationData.Message },
+                        { "SenderFullName", joinInvitationData.CreatorFullName },
+                        { "Recipients", string.Join(',', emails) },
+                        { "SignInUrl", iamSignInUrl },
+                        { "InitiativeUrl", string.Format(CultureInfo.CurrentCulture, frontEndInitiativeUrl, initiative.Id) },
                     },
             },
         };
