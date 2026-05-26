@@ -41,6 +41,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     private readonly ILogger logger;
     private new readonly IMapperCreateAndRead<JoinInvitation, JoinInvitationDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
+    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IWebViewTools webViewTools;
     private readonly IEmailService emailService;
     private readonly IIamService iamService;
@@ -56,6 +57,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
+    /// <param name="initiativeUserRepository">Initiative User repository.</param>
     /// <param name="webViewTools">Web View Tools.</param>
     /// <param name="emailService">Email service.</param>
     /// <param name="iamService">IAM service.</param>
@@ -66,6 +68,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         IValidator<JoinInvitationDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
+        IInitiativeUserRepository initiativeUserRepository,
         IWebViewTools webViewTools,
         IEmailService emailService,
         IIamService iamService)
@@ -76,6 +79,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
+        this.initiativeUserRepository = initiativeUserRepository;
         this.webViewTools = webViewTools;
         this.emailService = emailService;
         this.iamService = iamService;
@@ -178,21 +182,29 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
             };
         }
 
-        // Validate emails in IAM service
+        // Check if one or more users already belong to the initiative
         var emails = entityData.Guests
             .Select(e => e.Email)
             .ToArray();
 
-        var externalUsersData = await iamService.GetUsersDataByEmailsAsync(emails, ct);
+        var anyUserBelongsToInitiative = await initiativeUserRepository.AnyByInitiativeAndUsersAsync(initiative.Id, emails, ct);
 
-        if (externalUsersData.Any())
+        if (anyUserBelongsToInitiative)
         {
-            var existingEmails = externalUsersData
-                .Select(e => e.Email);
-
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.ExistingUsers, data: existingEmails),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.ExistingUsers),
+            };
+        }
+
+        // Check if an invitation already exists for one or more users
+        var anyEmailsHaveBeenSent = await entityRepository.AnyAsync(initiative.Id, emails, ct);
+
+        if (anyEmailsHaveBeenSent)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.ExistingInvitations),
             };
         }
 
