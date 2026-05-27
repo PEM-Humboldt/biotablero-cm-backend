@@ -1,10 +1,45 @@
 @model IAVH.BioTablero.CM.Application.DTOs.Notifications.NotificationDto
 @{
-    Model.Subject = $"Invitación a unirse a {Model?.Properties?.Data["InitiativeName"]}";
-    Model.Body = $"Has sido invitado a unirte a la iniciativa '{Model?.Properties?.Data["InitiativeName"]}'.<br /> {Model?.Properties?.Data["EmailMessage"]}.";
+    var initiativeName = Model?.Properties?.Data["InitiativeName"];
+    Model.Subject = $"Invitación a unirse a {initiativeName}";
+
+    var template = @"<p style=""margin: 0;margin-bottom: 24px;"">Estimado/a <b>{1}</b>,</p>
+
+<p style=""margin: 0 0 24px;"">Te invitamos a hacer parte de la iniciativa <b>{0}</b> en BioTablero, a su módulo de
+monitoreo comunitario de
+biodiversidad.<br /></p>
+<p style=""margin: 0 0 24px;"">Para unirte, sigue estos pasos:</p>
+
+<p style=""margin: 0 0 5px;""><b>1.</b> Crea tu usuario en BioTablero ingresando <a href=""{3}"" target=""_blank""
+style=""color:
+#E84A60;text-decoration: none;font-weight: bold;"">aquí</a>. Si ya tienes cuenta,
+puedes saltar este paso.<br /></p>
+<p style=""margin: 0 0 5px;""><b>2.</b> Una vez dentro de la plataforma, dirígete al perfil de la iniciativa <b>{0}</b>
+en el siguiente <a
+href=""{4}"" target=""_blank"" style=""color: #E84A60;text-decoration: none;font-weight: bold;"">enlace</a>.<br /></p>
+<p style=""margin: 0 0 24px;""><b>3.</b> Haz clic en el botón <i>«Unirse»</i> y envía tu solicitud de participación.</p>
+
+<p style=""margin: 0 0 24px;"">Si tienes alguna pregunta o dificultad en el proceso, no dudes en escribirnos.</p>
+
+<p><i>
+Cordialmente,<br />
+{2}
+</i></p>";
+
+    var customMessage = Model?.Properties?.Data["EmailMessage"]?.ToString();
+
+    if (!string.IsNullOrEmpty(customMessage))
+    {
+        Model.Body = customMessage;
+    }
+    else
+    {
+        Model.Body = string.Format(template, initiativeName,
+        Model?.Properties?.Data["Recipients"],
+        Model?.Properties?.Data["SenderFullName"],
+        Model?.Properties?.Data["SignInUrl"],
+        Model?.Properties?.Data["InitiativeUrl"]);
+    }
 }
 
-<div style="margin: auto;width: 20rem;">
-    <h2 style="color: #e84a5f;">Invitación a Iniciativa</h2>
-    <p>@Html.Raw(Model?.Body)</p>
-</div>
+<div>@Html.Raw(Model?.Body)</div>

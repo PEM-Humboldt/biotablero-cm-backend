@@ -3,6 +3,7 @@ using System;
 using IAVH.BioTablero.CM.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    partial class GeneralContextModelSnapshot : ModelSnapshot
+    [Migration("20260525221025_UpdateJoinInvitation")]
+    partial class UpdateJoinInvitation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,8 +118,6 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnName("initiative_id");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IndicatorTypeId");
 
                     b.HasIndex("InitiativeId");
 
@@ -1325,7 +1326,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorType", "Type")
                         .WithMany("Indicators")
-                        .HasForeignKey("IndicatorTypeId")
+                        .HasForeignKey("InitiativeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

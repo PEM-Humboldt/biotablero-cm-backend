@@ -106,6 +106,9 @@ public class Program
         // Add support to logging request with Serilog
         app.UseSerilogRequestLogging();
 
+        // Enable static files middleware
+        app.UseStaticFiles();
+
         app.UseAuthentication();
         app.UseAuthorization();
 

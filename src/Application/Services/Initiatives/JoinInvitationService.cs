@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -24,6 +25,7 @@ using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.OData;
 
 using Serilog;
 
@@ -39,9 +41,12 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     private readonly ILogger logger;
     private new readonly IMapperCreateAndRead<JoinInvitation, JoinInvitationDto> mapper;
     private readonly IInitiativeRepository initiativeRepository;
+    private readonly IInitiativeUserRepository initiativeUserRepository;
     private readonly IWebViewTools webViewTools;
     private readonly IEmailService emailService;
     private readonly IIamService iamService;
+    private readonly string iamSignInUrl;
+    private readonly string frontEndInitiativeUrl;
 
     /// <summary>
     /// Constructor.
@@ -52,6 +57,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
+    /// <param name="initiativeUserRepository">Initiative User repository.</param>
     /// <param name="webViewTools">Web View Tools.</param>
     /// <param name="emailService">Email service.</param>
     /// <param name="iamService">IAM service.</param>
@@ -62,6 +68,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         IValidator<JoinInvitationDto> entityValidator,
         ILogger logger,
         IInitiativeRepository initiativeRepository,
+        IInitiativeUserRepository initiativeUserRepository,
         IWebViewTools webViewTools,
         IEmailService emailService,
         IIamService iamService)
@@ -72,9 +79,12 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.initiativeRepository = initiativeRepository;
+        this.initiativeUserRepository = initiativeUserRepository;
         this.webViewTools = webViewTools;
         this.emailService = emailService;
         this.iamService = iamService;
+        iamSignInUrl = Environment.GetEnvironmentVariable("IAM_SIGN_IN_URL");
+        frontEndInitiativeUrl = Environment.GetEnvironmentVariable("FRONTEND_INITIATIVE_URL");
     }
 
     /// <inheritdoc/>
@@ -93,7 +103,36 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         query = entityRepository.AddInitiativeFilter(initiativeId, query);
         query = entityRepository.IncludeOdataEntities(query);
 
-        return await GetOdataListByQueryAsync(query, queryOptions, ct);
+        try
+        {
+            var odataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
+
+            var userNames = odataResponse.DataList?
+                .Select(e => e.Creator)
+                .ToArray();
+
+            var externalUsersData = await iamService.GetUsersDataByEmailsAsync(userNames, ct);
+
+            if (externalUsersData.Any())
+            {
+                foreach (var joinInvitationData in odataResponse.DataList)
+                {
+                    joinInvitationData.CreatorFullName = externalUsersData
+                        .Where(i => i.Username == joinInvitationData.Creator)
+                        .Select(i => i.FullName)
+                        .FirstOrDefault();
+                }
+            }
+
+            return GetOdataWebResponse(odataResponse, mapper);
+        }
+        catch (ODataException)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter),
+            };
+        }
     }
 
     /// <inheritdoc/>
@@ -143,26 +182,34 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
             };
         }
 
-        // Validate emails in IAM service
+        // Check if one or more users already belong to the initiative
         var emails = entityData.Guests
             .Select(e => e.Email)
             .ToArray();
 
-        var externalUsersData = await iamService.GetUsersDataByEmailsAsync(emails, ct);
+        var anyUserBelongsToInitiative = await initiativeUserRepository.AnyByInitiativeAndUsersAsync(initiative.Id, emails, ct);
 
-        if (externalUsersData.Any())
+        if (anyUserBelongsToInitiative)
         {
-            var existingEmails = externalUsersData
-                .Select(e => e.Email);
-
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.ExistingUsers, data: existingEmails),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.ExistingUsers),
+            };
+        }
+
+        // Check if an invitation already exists for one or more users
+        var anyEmailsHaveBeenSent = await entityRepository.AnyAsync(initiative.Id, emails, ct);
+
+        if (anyEmailsHaveBeenSent)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.JoinInvitations.ExistingInvitations),
             };
         }
 
         // Send invitation emails
-        var result = await SendNotificationJoinInvitationAsync(emails, initiative, entityData.Message, ct);
+        var result = await SendNotificationJoinInvitationAsync(emails, initiative, entityData, ct);
 
         if (result)
         {
@@ -195,14 +242,20 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     /// </summary>
     /// <param name="emails">Receivers emails.</param>
     /// <param name="initiative">Initiative data.</param>
-    /// <param name="emailMessage">Email message.</param>
+    /// <param name="joinInvitationData">Join Invitation data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if the process is successful. False otherwise.</returns>
-    private async Task<bool> SendNotificationJoinInvitationAsync(string[] emails, Initiative initiative, string emailMessage, CancellationToken ct = default)
+    private async Task<bool> SendNotificationJoinInvitationAsync(string[] emails, Initiative initiative, JoinInvitationDto joinInvitationData, CancellationToken ct = default)
     {
         var receivers = emails
             .Select(e => new CustomEmailAddress(e))
             .ToArray();
+
+        if (string.IsNullOrEmpty(joinInvitationData.CreatorFullName))
+        {
+            var userData = await iamService.GetUserDataAsync(joinInvitationData.Creator, ct);
+            joinInvitationData.CreatorFullName = userData?.FullName;
+        }
 
         var notificationDto = new NotificationDto()
         {
@@ -212,13 +265,17 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
                 Data = new()
                     {
                         { "InitiativeName", initiative.Name },
-                        { "EmailMessage", emailMessage },
+                        { "EmailMessage", joinInvitationData.Message },
+                        { "SenderFullName", joinInvitationData.CreatorFullName },
+                        { "Recipients", string.Join(',', emails) },
+                        { "SignInUrl", iamSignInUrl },
+                        { "InitiativeUrl", string.Format(CultureInfo.CurrentCulture, frontEndInitiativeUrl, initiative.Id) },
                     },
             },
         };
 
-        var htmlBody = await webViewTools.RenderViewToStringAsync(notificationDto.Properties.TemplateName, notificationDto);
-        var response = await emailService.SendEmailAsync(notificationDto.Subject, receivers, null, htmlBody, ct);
+        joinInvitationData.HtmlMessage = await webViewTools.RenderViewToStringAsync(notificationDto.Properties.TemplateName, notificationDto);
+        var response = await emailService.SendEmailAsync(notificationDto.Subject, receivers, null, joinInvitationData.HtmlMessage, ct);
 
         return !string.IsNullOrEmpty(response);
     }
