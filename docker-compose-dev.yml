@@ -1,7 +1,7 @@
 services:
 
   db:
-    image: timescale/timescaledb-ha:pg17.5-ts2.21.1-oss
+    image: postgis/postgis:17-3.6-alpine
     container_name: bt-cm-db
     restart: "no"
     environment:
@@ -19,8 +19,14 @@ services:
     volumes:
       - db_data:/home/postgres/pgdata
       # Keycloak database setup
-      - ./docker/keycloak/db/init-db.sql:/docker-entrypoint-initdb.d/init-keycloak-db.sql:ro
-      - ./docker/keycloak/db/init-schema.sql:/docker-entrypoint-initdb.d/init-keycloak-schema.sql:ro
+      - ./docker/keycloak/db:/tmp/init:ro
+    entrypoint:
+      - sh
+      - -c
+      - |
+        cp /tmp/init/*.sql /docker-entrypoint-initdb.d/ && \
+        chmod 644 /docker-entrypoint-initdb.d/*.sql && \
+        exec docker-entrypoint.sh postgres
     networks:
       - bt-search-network
 
