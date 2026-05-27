@@ -34,6 +34,7 @@ public class InitiativeContactController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
+    [Authorize]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
@@ -48,6 +49,7 @@ public class InitiativeContactController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByInitiative/{initiativeId}")]
+    [Authorize]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactListResponseExample))]
     public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
     {

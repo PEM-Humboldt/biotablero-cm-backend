@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
@@ -38,17 +39,25 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     }
 
     /// <inheritdoc/>
-    public override async Task<Initiative> GetByIdAsync(int id, CancellationToken ct = default) =>
-        await dbContext.Initiatives
-            .Include(e => e.InitiativeContacts)
-            .Include(e => e.InitiativeUsers)
-            .Include(e => e.InitiativeLocations)
-                .ThenInclude(e => e.Location)
-                    .ThenInclude(e => e.Parent)
-            .Include(e => e.InitiativeTags)
-                .ThenInclude(e => e.Tag)
+    public async Task<Initiative> GetByIdAsync(int id, bool userIsAuthenticated, CancellationToken ct = default)
+    {
+        IQueryable<Initiative> query = dbContext.Initiatives
+                    .Include(e => e.InitiativeUsers)
+                    .Include(e => e.InitiativeLocations)
+                        .ThenInclude(e => e.Location)
+                            .ThenInclude(e => e.Parent)
+                    .Include(e => e.InitiativeTags)
+                        .ThenInclude(e => e.Tag);
+
+        if (userIsAuthenticated)
+        {
+            query = query.Include(e => e.InitiativeContacts);
+        }
+
+        return await query
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
+    }
 
     /// <inheritdoc/>
     public IQueryable<Initiative> IncludeOdataEntities(IQueryable<Initiative> query) =>
@@ -124,64 +133,50 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<int> GetEnabledRecordsCountAsync(CancellationToken ct = default) =>
-        await dbContext.Initiatives
-            .Where(e => e.Enabled)
-            .CountAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<int> GetEnabledRecordsCountAsync(string userName, CancellationToken ct = default) =>
+    public async Task<int> GetEnabledRecordsCountAsync(string userName = null, int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
         await dbContext.Initiatives
             .Include(e => e.InitiativeUsers)
-            .Where(e => e.Enabled && e.InitiativeUsers.Any(e => e.UserName == userName))
+            .Include(e => e.InitiativeLocations)
+                .ThenInclude(e => e.Location)
+            .Where(e => e.Enabled &&
+                (userName == null || e.InitiativeUsers.Any(e => e.UserName == userName)) &&
+                    (departmentId == null ||
+                        e.MainLocationId == departmentId ||
+                        e.InitiativeLocations.Any(e => e.LocationId == departmentId &&
+                            e.Location.Level == (byte)LocationLevel.Department)) &&
+                    (initiativeId == null || e.Id == initiativeId))
+            .Distinct()
             .CountAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<double> GetTotalAreaOfActiveInitiativesAsync(CancellationToken ct = default) =>
+    // FIXME: Calculate the areas with postgis instead of adding the pre-calculated areas
+    public async Task<double> GetAreaAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
         await dbContext.Initiatives
-            .Where(i => i.Enabled && i.PolygonArea > 0)
+            .Include(e => e.InitiativeLocations)
+                .ThenInclude(e => e.Location)
+            .Where(e => e.Enabled &&
+                e.PolygonArea > 0 &&
+                (departmentId == null ||
+                    e.MainLocationId == departmentId ||
+                    e.InitiativeLocations.Any(e => e.LocationId == departmentId &&
+                        e.Location.Level == (byte)LocationLevel.Department)) &&
+                (initiativeId == null || e.Id == initiativeId))
+            .Distinct()
             .SumAsync(i => i.PolygonArea, ct);
 
     /// <inheritdoc/>
-    public async Task<int> GetPeopleInvolvedInActiveInitiativesCountAsync(CancellationToken ct = default) =>
-        await dbContext.InitiativeUsers
-            .Where(iu => iu.Initiative.Enabled)
-            .CountAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<int> GetActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default) =>
+    public async Task<int> GetPeopleInvolvedCountAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
         await dbContext.Initiatives
-            .Where(i => i.Enabled && i.InitiativeLocations.Any(il => il.LocationId == departmentId))
-            .CountAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<double> GetTotalAreaOfActiveInitiativesByDepartmentAsync(int departmentId, CancellationToken ct = default) =>
-        await dbContext.Initiatives
-            .Where(i => i.Enabled && i.PolygonArea > 0 && i.InitiativeLocations.Any(il => il.LocationId == departmentId))
-            .SumAsync(i => i.PolygonArea, ct);
-
-    /// <inheritdoc/>
-    public async Task<int> GetPeopleInvolvedInActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default) =>
-        await dbContext.InitiativeUsers
-            .Where(iu => iu.Initiative.Enabled && iu.Initiative.InitiativeLocations.Any(il => il.LocationId == departmentId))
-            .CountAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<int> GetActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
-        await dbContext.Initiatives
-            .Where(i => i.Enabled && i.Id == initiativeId)
-            .CountAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<double> GetTotalAreaOfActiveInitiativesByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
-        await dbContext.Initiatives
-            .Where(i => i.Enabled && i.PolygonArea > 0 && i.Id == initiativeId)
-            .SumAsync(i => i.PolygonArea, ct);
-
-    /// <inheritdoc/>
-    public async Task<int> GetPeopleInvolvedInActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
-        await dbContext.InitiativeUsers
-            .Where(iu => iu.Initiative.Enabled && iu.InitiativeId == initiativeId)
+            .Include(e => e.InitiativeUsers)
+            .Include(e => e.InitiativeLocations)
+                .ThenInclude(e => e.Location)
+            .Where(e => e.Enabled &&
+                (departmentId == null ||
+                    e.MainLocationId == departmentId ||
+                    e.InitiativeLocations.Any(e => e.LocationId == departmentId &&
+                        e.Location.Level == (byte)LocationLevel.Department)) &&
+                (initiativeId == null || e.Id == initiativeId))
+            .Distinct()
             .CountAsync(ct);
 
     /// <inheritdoc/>
@@ -224,4 +219,38 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .OrderByDescending(e => e.CreationDate)
             .Take(count)
             .ToListAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<double> CalcAreaAsync(Initiative entity, CancellationToken ct = default)
+    {
+        // If initiative has a polygon, calculate its area
+        if (entity.Polygon != null && !entity.Polygon.IsEmpty)
+        {
+            return GeometryUtils.CalculatePolygonAreaInSquareKilometers(entity.Polygon as Polygon);
+        }
+
+        // If doesn´t have a polygon, calculate area from municipalities
+        if (entity.InitiativeLocations != null && entity.InitiativeLocations.Count > 0)
+        {
+            var locationIds = entity.InitiativeLocations
+                .Select(il => il.LocationId)
+                .ToArray();
+
+            var municipalities = await dbContext.LocationPolygons
+                .Include(e => e.Location)
+                    .ThenInclude(e => e.InitiativeLocations)
+                .Where(e => e.Geometry != null &&
+                    !e.Geometry.IsEmpty &&
+                    e.Location.Level == (byte)LocationLevel.Municipality &&
+                    locationIds.Contains(e.LocationId))
+                .Select(e => e.Geometry)
+                .ToListAsync(ct);
+
+            return municipalities
+                .Select(GeometryUtils.CalculateAreaInSquareKilometers)
+                .Sum();
+        }
+
+        return 0;
+    }
 }

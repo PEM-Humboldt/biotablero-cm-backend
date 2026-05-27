@@ -318,7 +318,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "Member"
+                            Name = "Collaborator"
                         },
                         new
                         {

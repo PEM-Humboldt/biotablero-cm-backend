@@ -61,7 +61,7 @@ public class UserService : IUserService
         var response = new UserProfile
         {
             Username = userName,
-            TotalInitiatives = await initiativeRepository.GetEnabledRecordsCountAsync(userName, ct),
+            TotalInitiatives = await initiativeRepository.GetEnabledRecordsCountAsync(userName: userName, ct: ct),
             TotalTerritoryStories = await territoryStoryRepository.GetEnabledRecordsCountAsync(userName, ct),
             TotalResources = await resourceRepository.GetPublishedRecordsCountAsync(userName, ct),
         };

@@ -28,4 +28,12 @@ public interface ILocationRepository : IRepository<LocationCustom, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>The department to wich the coordinate belongs.</returns>
     Task<int> GetDepartmentIdByCoordinateAsync(Point coordinate, CancellationToken ct = default);
+
+    /// <summary>
+    /// Returns the total number of municipalities by initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<int> GetMunicipalitiesCountAsync(int initiativeId, CancellationToken ct = default);
 }

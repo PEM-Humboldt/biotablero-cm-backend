@@ -16,9 +16,9 @@ public static class InitiativesEnums
         Leader = 1,
 
         /// <summary>
-        /// User member level.
+        /// User collaborator level.
         /// </summary>
-        Member,
+        Collaborator,
 
         /// <summary>
         /// User reader level.

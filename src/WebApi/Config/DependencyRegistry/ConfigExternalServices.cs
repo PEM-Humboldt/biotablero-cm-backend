@@ -8,6 +8,7 @@ using Amazon.S3;
 
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
@@ -24,6 +25,7 @@ using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Interfaces;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Video;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Web;
+using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Indicators;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Locations;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Logging;
@@ -64,6 +66,7 @@ public static class ConfigExternalServices
         services.AddScoped<IJoinInvitationRepository, JoinInvitationRepository>();
         services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
+        services.AddScoped<IMonitoringEventsRepository, MonitoringEventsRepository>();
 
         //// Territory Stories
         services.AddScoped<ITerritoryStoryRepository, TerritoryStoryRepository>();
@@ -80,6 +83,9 @@ public static class ConfigExternalServices
 
         //// Notifications
         services.AddScoped<INotificationRepository, NotificationRepository>();
+
+        //// Indicators
+        services.AddScoped<IIndicatorRepository, IndicatorRepository>();
 
         // External services
         services.AddScoped(typeof(IReportService<>), typeof(ReportExcelService<>));

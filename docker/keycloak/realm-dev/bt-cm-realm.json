@@ -499,12 +499,12 @@
             }
         },
         {
-            "username": "initiative-member@example.com",
+            "username": "initiative-collaborator@example.com",
             "enabled": true,
             "emailVerified": true,
-            "firstName": "Initiative Member",
+            "firstName": "Initiative Collaborator",
             "lastName": "Example",
-            "email": "initiative-member@example.com",
+            "email": "initiative-collaborator@example.com",
             "credentials": [
                 {
                     "type": "password",
@@ -519,7 +519,7 @@
                     "3055555556"
                 ],
                 "picture": [
-                    "https://ui-avatars.com/api/?name=Initiative+Member+Example&background=random"
+                    "https://ui-avatars.com/api/?name=Initiative+Collaborator+Example&background=random"
                 ],
                 "organizacion": [
                     "Organizaci\u00f3n No Gubernamental (ONG)"
