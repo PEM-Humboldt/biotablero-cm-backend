@@ -123,6 +123,8 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IndicatorTypeId");
+
                     b.HasIndex("InitiativeId");
 
                     b.ToTable("indicator", "indicators");
@@ -1296,7 +1298,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorType", "Type")
                         .WithMany("Indicators")
-                        .HasForeignKey("InitiativeId")
+                        .HasForeignKey("IndicatorTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
