@@ -37,15 +37,15 @@ public class ResourceLinkRepository : Repository<ResourceLink, int>, IResourceLi
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<bool> IsDuplicatedAsync(Uri url, CancellationToken ct = default) =>
+    public async Task<bool> IsDuplicatedAsync(int resourceId, Uri url, CancellationToken ct = default) =>
         await dbContext.ResourceLinks
-            .Where(e => e.Url == url)
+            .Where(e => e.ResourceId == resourceId && e.Url == url)
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<bool> IsDuplicatedAsync(int id, Uri url, CancellationToken ct = default) =>
+    public async Task<bool> IsDuplicatedAsync(int id, int resourceId, Uri url, CancellationToken ct = default) =>
         await dbContext.ResourceLinks
-            .Where(e => e.Id != id && e.Url == url)
+            .Where(e => e.Id != id && e.ResourceId == resourceId && e.Url == url)
             .AnyAsync(ct);
 
     /// <inheritdoc/>

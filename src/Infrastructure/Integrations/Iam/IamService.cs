@@ -161,7 +161,7 @@ public class IamService : IIamService
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync(ct);
-        var doc = JsonDocument.Parse(json);
+        using var doc = JsonDocument.Parse(json);
         return doc.RootElement.GetProperty("access_token").GetString()!;
     }
 
@@ -173,7 +173,7 @@ public class IamService : IIamService
     private static List<ExternalUser> MapKeycloakUsers(string jsonContent)
     {
         var users = new List<ExternalUser>();
-        var jsonDoc = JsonDocument.Parse(jsonContent);
+        using var jsonDoc = JsonDocument.Parse(jsonContent);
 
         if (jsonDoc.RootElement.ValueKind != JsonValueKind.Array)
         {

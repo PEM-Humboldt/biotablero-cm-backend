@@ -130,7 +130,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(new Uri(entityData.Url), ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(resource.Id, new Uri(entityData.Url), ct);
 
         if (hasDuplicatedEntities)
         {
@@ -208,7 +208,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, new Uri(entityData.Url), ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, resourceId, new Uri(entityData.Url), ct);
 
         if (hasDuplicatedEntities)
         {
