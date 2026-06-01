@@ -8,7 +8,7 @@ using System.Collections.Generic;
 public class IndicatorsStatsDto
 {
     /// <summary>
-    /// Users gender data.
+    /// Indicators by scale data.
     /// </summary>
     public List<KeyValuePair<string, int>> IndicatorsByScale { get; set; }
 }
