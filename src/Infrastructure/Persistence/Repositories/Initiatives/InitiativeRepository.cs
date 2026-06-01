@@ -166,16 +166,14 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
 
     /// <inheritdoc/>
     public async Task<int> GetPeopleInvolvedCountAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
-        await dbContext.Initiatives
-            .Include(e => e.InitiativeUsers)
-            .Include(e => e.InitiativeLocations)
-                .ThenInclude(e => e.Location)
-            .Where(e => e.Enabled &&
+        await dbContext.InitiativeUsers
+            .Where(e => e.Initiative.Enabled &&
                 (departmentId == null ||
-                    e.MainLocationId == departmentId ||
-                    e.InitiativeLocations.Any(e => e.LocationId == departmentId &&
+                    e.Initiative.MainLocationId == departmentId ||
+                    e.Initiative.InitiativeLocations.Any(e => e.LocationId == departmentId &&
                         e.Location.Level == (byte)LocationLevel.Department)) &&
-                (initiativeId == null || e.Id == initiativeId))
+                (initiativeId == null || e.InitiativeId == initiativeId))
+            .Select(e => e.UserName)
             .Distinct()
             .CountAsync(ct);
 
