@@ -154,7 +154,66 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     /// <inheritdoc/>
     public async Task<double> GetAreaAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
     {
-        var sql = """
+        var initiativeCustomPolygonsSql = """
+            SELECT DISTINCT i.polygon AS geom
+            FROM initiatives.initiative i
+            WHERE
+                i.polygon IS NOT NULL
+                AND i.enabled = @enabledInitiatives
+                AND i.polygon_area > 0
+
+                AND (
+                    @departmentId::int IS NULL
+                    OR i.main_location_id = @departmentId::int
+                )
+
+                AND (
+                    @initiativeId::int IS NULL
+                    OR i.id = @initiativeId::int
+                )
+        """;
+
+        var initiativeLocationsSql = """
+            SELECT DISTINCT lp.geometry AS geom
+            FROM initiatives.initiative_location il
+            INNER JOIN initiatives.initiative i
+                ON i.id = il.initiative_id
+            INNER JOIN geo.location l
+                ON l.id = il.location_id
+            INNER JOIN geo.location_polygon lp
+                ON lp.location_id = l.id
+            WHERE
+                i.polygon IS NULL
+                AND i.enabled = @enabledInitiatives
+                AND i.polygon_area > 0
+
+                AND (
+                    @departmentId::int IS NULL
+                    OR i.main_location_id = @departmentId::int
+
+                    OR EXISTS (
+                        SELECT 1
+                        FROM initiatives.initiative_location il2
+                        LEFT JOIN geo.location dept
+                            ON dept.id = il2.location_id
+                        LEFT JOIN geo.location mun
+                            ON mun.id = il2.location_id
+                        WHERE
+                            il2.initiative_id = i.id
+                            AND (
+                                (dept.level = @departmentLevel AND dept.id = @departmentId)
+                                OR (mun.level = @municipalityLevel AND mun.parent_id = @departmentId)
+                            )
+                    )
+                )
+
+                AND (
+                    @initiativeId::int IS NULL
+                    OR il.initiative_id = @initiativeId::int
+                )
+        """;
+
+        var sql = $"""
             SELECT
                 COALESCE(
                     ST_Area(
@@ -166,51 +225,21 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
                     0
                 ) AS "Value"
             FROM (
-                SELECT DISTINCT lp.geometry AS geom
-                FROM initiatives.initiative_location il
-                INNER JOIN initiatives.initiative i
-                    ON i.id = il.initiative_id
-                INNER JOIN geo.location l
-                    ON l.id = il.location_id
-                INNER JOIN geo.location_polygon lp
-                    ON lp.location_id = l.id
-                WHERE
-                    i.enabled = TRUE
-                    AND i.polygon_area > 0
+                {initiativeCustomPolygonsSql}
 
-                    AND (
-                        @departmentId::int IS NULL
-                        OR i.main_location_id = @departmentId::int
+                UNION ALL
 
-                        OR EXISTS (
-                            SELECT 1
-                            FROM initiatives.initiative_location il2
-                            LEFT JOIN geo.location dept
-                                ON dept.id = il2.location_id
-                            LEFT JOIN geo.location mun
-                                ON mun.id = il2.location_id
-                            WHERE
-                                il2.initiative_id = i.id
-                                AND (
-                                    (dept.level = @departmentLevel AND dept.id = @departmentId)
-                                    OR (mun.level = @municipalityLevel AND mun.parent_id = @departmentId)
-                                )
-                        )
-                    )
-
-                    AND (
-                        @initiativeId::int IS NULL
-                        OR il.initiative_id = @initiativeId::int
-                    )
+                {initiativeLocationsSql}
             ) q
         """;
 
         var parameters = new[]
         {
-            new NpgsqlParameter("departmentId", departmentId ?? (object)DBNull.Value),
-            new NpgsqlParameter("initiativeId", initiativeId ?? (object)DBNull.Value),
+            new NpgsqlParameter("enabledInitiatives", true),
             new NpgsqlParameter("departmentLevel", (byte)LocationLevel.Department),
             new NpgsqlParameter("municipalityLevel", (byte)LocationLevel.Municipality),
+            new NpgsqlParameter("departmentId", departmentId ?? (object)DBNull.Value),
+            new NpgsqlParameter("initiativeId", initiativeId ?? (object)DBNull.Value),
         };
 
         return await dbContext.Database
