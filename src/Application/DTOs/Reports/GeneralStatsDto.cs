@@ -1,5 +1,9 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Reports;
 
+using System.Collections.Generic;
+
+using IAVH.BioTablero.CM.Application.DTOs.Tags;
+
 /// <summary>
 /// General statistics DTO for community monitoring.
 /// </summary>
@@ -16,7 +20,6 @@ public class GeneralStatsDto
     public int PeopleInvolved { get; set; }
 
     /// <summary>
-    /// Total area of enabled initiatives.
     /// Number of agreements involved in enabled initiatives.
     /// </summary>
     public int AgreementsInvolved { get; set; }
@@ -25,4 +28,9 @@ public class GeneralStatsDto
     /// Total area of enabled initiatives.
     /// </summary>
     public double Area { get; set; }
+
+    /// <summary>
+    /// Ecosystems involved.
+    /// </summary>
+    public List<TagDto> EcosystemsInvolved { get; set; }
 }
