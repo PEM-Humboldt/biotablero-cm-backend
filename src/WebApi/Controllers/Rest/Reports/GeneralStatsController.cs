@@ -30,46 +30,16 @@ public class GeneralStatsController(
     /// <summary>
     /// Get general statistics for community monitoring.
     /// </summary>
+    /// <param name="departmentId">Department identifier (optional).</param>
+    /// <param name="initiativeId">Initiative identifier (optional).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>General statistics data including initiatives, users, join requests, and recent activity.</returns>
     [HttpGet]
     [ProducesResponseType(typeof(GeneralStatsDto), StatusCodes.Status200OK)]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GeneralStatisticsResponseExample))]
-    public async Task<IActionResult> Get(CancellationToken ct = default)
+    public async Task<IActionResult> Get(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
     {
-        var response = await generalStatsService.GetStatsAsync(ct: ct);
-        return webTools.CustomResponse(response);
-    }
-
-    /// <summary>
-    /// Get general statistics filtered by department.
-    /// </summary>
-    /// <param name="departmentId">Department identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>General statistics data for the specified department.</returns>
-    [HttpGet("department/{departmentId}")]
-    [ProducesResponseType(typeof(GeneralStatsDto), StatusCodes.Status200OK)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GeneralStatisticsResponseExample))]
-    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetByDepartment(int departmentId, CancellationToken ct = default)
-    {
-        var response = await generalStatsService.GetStatsAsync(departmentId: departmentId, ct: ct);
-        return webTools.CustomResponse(response);
-    }
-
-    /// <summary>
-    /// Get general statistics filtered by initiative.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>General statistics data for the specified initiative.</returns>
-    [HttpGet("initiative/{initiativeId}")]
-    [ProducesResponseType(typeof(GeneralStatsDto), StatusCodes.Status200OK)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GeneralStatisticsResponseExample))]
-    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetByInitiative(int initiativeId, CancellationToken ct = default)
-    {
-        var response = await generalStatsService.GetStatsAsync(initiativeId: initiativeId, ct: ct);
+        var response = await generalStatsService.GetStatsAsync(departmentId, initiativeId, ct);
         return webTools.CustomResponse(response);
     }
 }
