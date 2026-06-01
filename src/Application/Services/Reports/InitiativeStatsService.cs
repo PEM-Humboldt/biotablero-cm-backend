@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Services.Statistics;
+﻿namespace IAVH.BioTablero.CM.Application.Services.Reports;
 
 using System.Threading;
 using System.Threading.Tasks;
