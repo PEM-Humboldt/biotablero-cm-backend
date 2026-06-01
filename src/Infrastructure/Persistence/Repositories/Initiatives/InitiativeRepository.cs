@@ -21,6 +21,7 @@ using Npgsql;
 using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.GeoEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 
 using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
@@ -269,6 +270,21 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
                         (e.Location.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
                 (initiativeId == null || e.Id == initiativeId))
             .SelectMany(e => e.InitiativeUsers.Select(e => e.UserName))
+            .Distinct()
+            .CountAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<int> GetAgreementsInvolvedCountAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
+        await dbContext.Initiatives
+            .Where(e => e.Enabled &&
+                e.InitiativeTags.Any(e => e.Tag.CategoryId == (int)TagCategory.PoliticalContext || e.Tag.CategoryId == (int)TagCategory.SocialContext) &&
+                (departmentId == null ||
+                    e.MainLocationId == departmentId ||
+                    e.InitiativeLocations.Any(e =>
+                        (e.LocationId == departmentId && e.Location.Level == (byte)LocationLevel.Department) ||
+                        (e.Location.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
+                (initiativeId == null || e.Id == initiativeId))
+            .SelectMany(e => e.InitiativeTags.Select(e => e.TagId))
             .Distinct()
             .CountAsync(ct);
 

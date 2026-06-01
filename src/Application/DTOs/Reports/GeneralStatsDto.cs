@@ -17,6 +17,12 @@ public class GeneralStatsDto
 
     /// <summary>
     /// Total area of enabled initiatives.
+    /// Number of agreements involved in enabled initiatives.
+    /// </summary>
+    public int AgreementsInvolved { get; set; }
+
+    /// <summary>
+    /// Total area of enabled initiatives.
     /// </summary>
     public double Area { get; set; }
 }

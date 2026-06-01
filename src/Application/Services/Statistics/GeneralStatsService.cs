@@ -28,6 +28,7 @@ public class GeneralStatsService(IInitiativeRepository initiativeRepository) : I
             {
                 EnabledInitiatives = await initiativeRepository.GetEnabledRecordsCountAsync(departmentId: departmentId, initiativeId: initiativeId, ct: ct),
                 PeopleInvolved = await initiativeRepository.GetPeopleInvolvedCountAsync(departmentId, initiativeId, ct),
+                AgreementsInvolved = await initiativeRepository.GetAgreementsInvolvedCountAsync(departmentId, initiativeId, ct),
                 Area = GeometryUtils.ConvertSquareKilometersToHectares(totalAreaInSquareKm),
             },
         };

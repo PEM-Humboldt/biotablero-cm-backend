@@ -119,6 +119,15 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     Task<int> GetPeopleInvolvedCountAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
 
     /// <summary>
+    /// Get the number of agreements involved in initiatives.
+    /// </summary>
+    /// <param name="departmentId">Department identifier (optional).</param>
+    /// <param name="initiativeId">Initiative identifier (optional).</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Number of involved agreements.</returns>
+    Task<int> GetAgreementsInvolvedCountAsync(int? departmentId, int? initiativeId, CancellationToken ct = default);
+
+    /// <summary>
     /// Get active initiatives with coordinates by location.
     /// </summary>
     /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
