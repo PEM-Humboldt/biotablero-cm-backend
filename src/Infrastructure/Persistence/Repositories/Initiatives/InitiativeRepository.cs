@@ -165,6 +165,19 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
                 AND (
                     @departmentId::int IS NULL
                     OR i.main_location_id = @departmentId::int
+
+                    OR EXISTS (
+                        SELECT 1
+                        FROM initiatives.initiative_location il2
+                        LEFT JOIN geo.location dept ON dept.id = il2.location_id
+                        LEFT JOIN geo.location mun ON mun.id = il2.location_id
+                        WHERE
+                            il2.initiative_id = i.id
+                            AND (
+                                (dept.level = @departmentLevel AND dept.id = @departmentId)
+                                OR (mun.level = @municipalityLevel AND mun.parent_id = @departmentId)
+                            )
+                    )
                 )
 
                 AND (
@@ -194,10 +207,8 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
                     OR EXISTS (
                         SELECT 1
                         FROM initiatives.initiative_location il2
-                        LEFT JOIN geo.location dept
-                            ON dept.id = il2.location_id
-                        LEFT JOIN geo.location mun
-                            ON mun.id = il2.location_id
+                        LEFT JOIN geo.location dept ON dept.id = il2.location_id
+                        LEFT JOIN geo.location mun ON mun.id = il2.location_id
                         WHERE
                             il2.initiative_id = i.id
                             AND (
@@ -249,14 +260,15 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
 
     /// <inheritdoc/>
     public async Task<int> GetPeopleInvolvedCountAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
-        await dbContext.InitiativeUsers
-            .Where(e => e.Initiative.Enabled &&
+        await dbContext.Initiatives
+            .Where(e => e.Enabled &&
                 (departmentId == null ||
-                    e.Initiative.MainLocationId == departmentId ||
-                    e.Initiative.InitiativeLocations.Any(e => e.LocationId == departmentId &&
-                        e.Location.Level == (byte)LocationLevel.Department)) &&
-                (initiativeId == null || e.InitiativeId == initiativeId))
-            .Select(e => e.UserName)
+                    e.MainLocationId == departmentId ||
+                    e.InitiativeLocations.Any(e =>
+                        (e.LocationId == departmentId && e.Location.Level == (byte)LocationLevel.Department) ||
+                        (e.Location.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
+                (initiativeId == null || e.Id == initiativeId))
+            .SelectMany(e => e.InitiativeUsers.Select(e => e.UserName))
             .Distinct()
             .CountAsync(ct);
 
