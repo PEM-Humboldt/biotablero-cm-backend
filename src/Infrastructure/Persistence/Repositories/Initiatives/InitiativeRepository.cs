@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -14,6 +15,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using Microsoft.EntityFrameworkCore;
 
 using NetTopologySuite.Geometries;
+
+using Npgsql;
 
 using Serilog;
 
@@ -149,20 +152,68 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .CountAsync(ct);
 
     /// <inheritdoc/>
-    // FIXME: Calculate the areas with postgis instead of adding the pre-calculated areas
-    public async Task<double> GetAreaAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
-        await dbContext.Initiatives
-            .Include(e => e.InitiativeLocations)
-                .ThenInclude(e => e.Location)
-            .Where(e => e.Enabled &&
-                e.PolygonArea > 0 &&
-                (departmentId == null ||
-                    e.MainLocationId == departmentId ||
-                    e.InitiativeLocations.Any(e => e.LocationId == departmentId &&
-                        e.Location.Level == (byte)LocationLevel.Department)) &&
-                (initiativeId == null || e.Id == initiativeId))
-            .Distinct()
-            .SumAsync(i => i.PolygonArea, ct);
+    public async Task<double> GetAreaAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
+    {
+        var sql = """
+            SELECT
+                COALESCE(
+                    ST_Area(
+                        ST_Transform(
+                            ST_UnaryUnion(geom),
+                            3116
+                        )
+                    ),
+                    0
+                ) AS "Value"
+            FROM (
+                SELECT DISTINCT lp.geometry AS geom
+                FROM initiatives.initiative_location il
+                INNER JOIN initiatives.initiative i
+                    ON i.id = il.initiative_id
+                INNER JOIN geo.location l
+                    ON l.id = il.location_id
+                INNER JOIN geo.location_polygon lp
+                    ON lp.location_id = l.id
+                WHERE
+                    i.enabled = TRUE
+                    AND i.polygon_area > 0
+
+                    AND (
+                        @departmentId::int IS NULL
+                        OR i.main_location_id = @departmentId::int
+
+                        OR EXISTS (
+                            SELECT 1
+                            FROM initiatives.initiative_location il2
+                            INNER JOIN geo.location l2
+                                ON l2.id = il2.location_id
+                            WHERE
+                                il2.initiative_id = i.id
+                                AND il2.location_id = @departmentId::int
+                                AND l2.level = @departmentLevel
+                        )
+                    )
+
+                    AND (
+                        @initiativeId::int IS NULL
+                        OR il.initiative_id = @initiativeId::int
+                    )
+            ) q
+        """;
+
+        var parameters = new[]
+        {
+            new NpgsqlParameter("departmentId", departmentId ?? (object)DBNull.Value),
+            new NpgsqlParameter("initiativeId", initiativeId ?? (object)DBNull.Value),
+            new NpgsqlParameter("departmentLevel", (byte)LocationLevel.Department),
+        };
+
+        var area = await dbContext.Database
+            .SqlQueryRaw<double>(sql, parameters)
+            .SingleOrDefaultAsync(ct);
+
+        return area / 1000000;
+    }
 
     /// <inheritdoc/>
     public async Task<int> GetPeopleInvolvedCountAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
