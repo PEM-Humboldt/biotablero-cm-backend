@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Reports;
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -65,18 +66,18 @@ public class GeneralStatsService(
         {
             ResponseBody = new DemographicStatsDto
             {
-                Gender = users
+                Gender = [.. users
                     .GroupBy(e => e.Gender)
                     .Where(group => !string.IsNullOrEmpty(group.Key))
-                    .ToDictionary(group => group.Key, group => group.Count()),
-                Organization = users
+                    .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))],
+                Organization = [.. users
                     .GroupBy(e => e.Organization)
                     .Where(group => !string.IsNullOrEmpty(group.Key))
-                    .ToDictionary(group => group.Key, group => group.Count()),
-                SelfRecognition = users
+                    .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))],
+                SelfRecognition = [.. users
                     .GroupBy(e => e.SelfRecognition)
                     .Where(group => !string.IsNullOrEmpty(group.Key))
-                    .ToDictionary(group => group.Key, group => group.Count()),
+                    .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))],
             },
         };
     }

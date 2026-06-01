@@ -13,20 +13,20 @@ public class DemographicStatsResponseExample : IExamplesProvider<DemographicStat
     public DemographicStatsDto GetExamples() =>
         new()
         {
-            Gender = new()
-            {
-                { "Femenino", 1 },
-                { "Masculino", 1 },
-            },
-            Organization = new()
-            {
-                { "Institución pública", 1 },
-                { "Empresa privada", 1 },
-            },
-            SelfRecognition = new()
-            {
-                { "Indígena", 1 },
-                { "Campesino", 1 },
-            },
+            Gender =
+            [
+                new("Femenino", 1),
+                new("Masculino", 1),
+            ],
+            Organization =
+            [
+                new("Institución pública", 1),
+                new("Empresa privada", 1),
+            ],
+            SelfRecognition =
+            [
+                new("Indígena", 1),
+                new("Campesino", 1),
+            ],
         };
 }

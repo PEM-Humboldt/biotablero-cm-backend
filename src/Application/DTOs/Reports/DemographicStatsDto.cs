@@ -10,15 +10,15 @@ public class DemographicStatsDto
     /// <summary>
     /// Users gender data.
     /// </summary>
-    public Dictionary<string, int> Gender { get; set; }
+    public List<KeyValuePair<string, int>> Gender { get; set; }
 
     /// <summary>
     /// Users self-recognition data.
     /// </summary>
-    public Dictionary<string, int> SelfRecognition { get; set; }
+    public List<KeyValuePair<string, int>> SelfRecognition { get; set; }
 
     /// <summary>
     /// Users organization data.
     /// </summary>
-    public Dictionary<string, int> Organization { get; set; }
+    public List<KeyValuePair<string, int>> Organization { get; set; }
 }
