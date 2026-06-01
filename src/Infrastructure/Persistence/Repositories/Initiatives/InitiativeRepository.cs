@@ -162,7 +162,7 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
                             ST_UnaryUnion(geom),
                             3116
                         )
-                    ),
+                    ) / 1000000.0,
                     0
                 ) AS "Value"
             FROM (
@@ -185,12 +185,16 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
                         OR EXISTS (
                             SELECT 1
                             FROM initiatives.initiative_location il2
-                            INNER JOIN geo.location l2
-                                ON l2.id = il2.location_id
+                            LEFT JOIN geo.location dept
+                                ON dept.id = il2.location_id
+                            LEFT JOIN geo.location mun
+                                ON mun.id = il2.location_id
                             WHERE
                                 il2.initiative_id = i.id
-                                AND il2.location_id = @departmentId::int
-                                AND l2.level = @departmentLevel
+                                AND (
+                                    (dept.level = @departmentLevel AND dept.id = @departmentId)
+                                    OR (mun.level = @municipalityLevel AND mun.parent_id = @departmentId)
+                                )
                         )
                     )
 
@@ -206,13 +210,12 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             new NpgsqlParameter("departmentId", departmentId ?? (object)DBNull.Value),
             new NpgsqlParameter("initiativeId", initiativeId ?? (object)DBNull.Value),
             new NpgsqlParameter("departmentLevel", (byte)LocationLevel.Department),
+            new NpgsqlParameter("municipalityLevel", (byte)LocationLevel.Municipality),
         };
 
-        var area = await dbContext.Database
+        return await dbContext.Database
             .SqlQueryRaw<double>(sql, parameters)
             .SingleOrDefaultAsync(ct);
-
-        return area / 1000000;
     }
 
     /// <inheritdoc/>
