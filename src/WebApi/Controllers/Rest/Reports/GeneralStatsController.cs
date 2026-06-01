@@ -71,7 +71,23 @@ public class GeneralStatsController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(DemographicStatsResponseExample))]
     public async Task<IActionResult> GetDemographicStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
     {
-        var response = await generalStatsService.GetDemographicData(departmentId, initiativeId, ct);
+        var response = await generalStatsService.GetDemographicStats(departmentId, initiativeId, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
+    /// Get indicators statistics.
+    /// </summary>
+    /// <param name="departmentId">Department identifier (optional).</param>
+    /// <param name="initiativeId">Initiative identifier (optional).</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Indicators statistics data.</returns>
+    [HttpGet("Indicators")]
+    [ProducesResponseType(typeof(IndicatorsStatsDto), StatusCodes.Status200OK)]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(IndicatorsStatsResponseExample))]
+    public async Task<IActionResult> GetIndicatorsStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
+    {
+        var response = await generalStatsService.GetIndicatorsStats(departmentId, initiativeId, ct);
         return webTools.CustomResponse(response);
     }
 }

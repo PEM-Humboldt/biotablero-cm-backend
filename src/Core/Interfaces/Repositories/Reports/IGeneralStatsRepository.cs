@@ -56,4 +56,13 @@ public interface IGeneralStatsRepository
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Involved ecosystems.</returns>
     Task<List<Tag>> GetEcosystemsAsync(int? departmentId, int? initiativeId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get indicators by scale.
+    /// </summary>
+    /// <param name="departmentId">Department identifier (optional).</param>
+    /// <param name="initiativeId">Initiative identifier (optional).</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Indicators by scale.</returns>
+    Task<List<KeyValuePair<string, int>>> GetIndicatorsByScaleAsync(int? departmentId, int? initiativeId, CancellationToken ct = default);
 }

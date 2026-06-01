@@ -58,7 +58,7 @@ public class GeneralStatsService(
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetDemographicData(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetDemographicStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
     {
         var users = await iamService.GetAllEnabledUsersDataAsync(ct);
 
@@ -81,4 +81,14 @@ public class GeneralStatsService(
             },
         };
     }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetIndicatorsStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
+        new CustomWebResponse
+        {
+            ResponseBody = new IndicatorsStatsDto
+            {
+                IndicatorsByScale = await generalStatsRepository.GetIndicatorsByScaleAsync(departmentId, initiativeId, ct),
+            },
+        };
 }

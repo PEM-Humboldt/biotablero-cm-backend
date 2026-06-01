@@ -29,11 +29,20 @@ public interface IGeneralStatsService
     Task<CustomWebResponse> GetEcosystemsStatsAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
 
     /// <summary>
-    /// Get demographic data from IAM system.
+    /// Get demographic statistics from IAM system.
     /// </summary>
     /// <param name="departmentId">Department identifier (optional).</param>
     /// <param name="initiativeId">Initiative identifier (optional).</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Demographic data.</returns>
-    Task<CustomWebResponse> GetDemographicData(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
+    /// <returns>Demographic statistics data.</returns>
+    Task<CustomWebResponse> GetDemographicStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get indicators statistics.
+    /// </summary>
+    /// <param name="departmentId">Department identifier (optional).</param>
+    /// <param name="initiativeId">Initiative identifier (optional).</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>indicators statistics data.</returns>
+    Task<CustomWebResponse> GetIndicatorsStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
 }
