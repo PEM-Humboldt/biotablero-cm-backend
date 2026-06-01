@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Statistics;
 using IAVH.BioTablero.CM.Application.Utils;
@@ -18,15 +19,16 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Reports;
 /// </summary>
 /// <param name="generalStatsRepository">General statistics repository.</param>
 /// <param name="tagMapper">Tag mapper.</param>
+/// <param name="iamService">IAM Service.</param>
 public class GeneralStatsService(
     IGeneralStatsRepository generalStatsRepository,
-    IMapperCreateReadAndUpdate<Tag, TagDto> tagMapper) : IGeneralStatsService
+    IMapperCreateReadAndUpdate<Tag, TagDto> tagMapper,
+    IIamService iamService) : IGeneralStatsService
 {
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetStatsAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetGeneralStatsAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
     {
         var totalAreaInSquareKm = await generalStatsRepository.GetAreaAsync(departmentId, initiativeId, ct);
-        var ecosystemsInvolved = await generalStatsRepository.GetEcosystemsAsync(departmentId, initiativeId, ct);
 
         return new CustomWebResponse
         {
@@ -36,7 +38,45 @@ public class GeneralStatsService(
                 PeopleInvolved = await generalStatsRepository.GetPeopleInvolvedCountAsync(departmentId, initiativeId, ct),
                 AgreementsInvolved = await generalStatsRepository.GetAgreementsInvolvedCountAsync(departmentId, initiativeId, ct),
                 Area = GeometryUtils.ConvertSquareKilometersToHectares(totalAreaInSquareKm),
+            },
+        };
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetEcosystemsStatsAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
+    {
+        var ecosystemsInvolved = await generalStatsRepository.GetEcosystemsAsync(departmentId, initiativeId, ct);
+
+        return new CustomWebResponse
+        {
+            ResponseBody = new EcosystemsStatsDto
+            {
                 EcosystemsInvolved = [.. ecosystemsInvolved.Select(tagMapper.Map)],
+            },
+        };
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetDemographicData(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
+    {
+        var users = await iamService.GetAllEnabledUsersDataAsync(ct);
+
+        return new CustomWebResponse
+        {
+            ResponseBody = new DemographicStatsDto
+            {
+                Gender = users
+                    .GroupBy(e => e.Gender)
+                    .Where(group => !string.IsNullOrEmpty(group.Key))
+                    .ToDictionary(group => group.Key, group => group.Count()),
+                Organization = users
+                    .GroupBy(e => e.Organization)
+                    .Where(group => !string.IsNullOrEmpty(group.Key))
+                    .ToDictionary(group => group.Key, group => group.Count()),
+                SelfRecognition = users
+                    .GroupBy(e => e.SelfRecognition)
+                    .Where(group => !string.IsNullOrEmpty(group.Key))
+                    .ToDictionary(group => group.Key, group => group.Count()),
             },
         };
     }

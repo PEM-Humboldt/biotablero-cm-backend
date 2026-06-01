@@ -11,11 +11,29 @@ using IAVH.BioTablero.CM.Application.Domain;
 public interface IGeneralStatsService
 {
     /// <summary>
-    /// Get general statistics for community monitoring.
+    /// Get general statistics.
     /// </summary>
     /// <param name="departmentId">Department identifier (optional).</param>
     /// <param name="initiativeId">Initiative identifier (optional).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>General statistics data.</returns>
-    Task<CustomWebResponse> GetStatsAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
+    Task<CustomWebResponse> GetGeneralStatsAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get ecosystems statistics.
+    /// </summary>
+    /// <param name="departmentId">Department identifier (optional).</param>
+    /// <param name="initiativeId">Initiative identifier (optional).</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>General statistics data.</returns>
+    Task<CustomWebResponse> GetEcosystemsStatsAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get demographic data from IAM system.
+    /// </summary>
+    /// <param name="departmentId">Department identifier (optional).</param>
+    /// <param name="initiativeId">Initiative identifier (optional).</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Demographic data.</returns>
+    Task<CustomWebResponse> GetDemographicData(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
 }
