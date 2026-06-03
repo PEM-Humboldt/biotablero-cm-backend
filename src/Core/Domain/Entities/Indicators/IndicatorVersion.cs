@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 using System;
+using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
@@ -53,4 +54,14 @@ public class IndicatorVersion : BaseEntity<int>, IAggregateRoot
     /// Indicator relationship.
     /// </summary>
     public Indicator Indicator { get; set; }
+
+    /// <summary>
+    /// Indicator Version Map relationship.
+    /// </summary>
+    public ICollection<IndicatorVersionMap> Maps { get; init; }
+
+    /// <summary>
+    /// Indicator Group relationship.
+    /// </summary>
+    public ICollection<IndicatorGroup> Groups { get; init; }
 }
