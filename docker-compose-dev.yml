@@ -1,7 +1,7 @@
 services:
 
   db:
-    image: timescale/timescaledb-ha:pg17.5-ts2.21.1-oss
+    image: postgis/postgis:17-3.6-alpine
     container_name: bt-cm-db
     restart: "no"
     environment:
@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     healthcheck:
-      test: ["CMD", "pg_isready"]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -17,10 +17,16 @@ services:
     ports:
       - "${DB_PORT:-5432}:5432"
     volumes:
-      - db_data:/home/postgres/pgdata
+      - db_data:/var/lib/postgresql/data
       # Keycloak database setup
-      - ./docker/keycloak/db/init-db.sql:/docker-entrypoint-initdb.d/init-keycloak-db.sql:ro
-      - ./docker/keycloak/db/init-schema.sql:/docker-entrypoint-initdb.d/init-keycloak-schema.sql:ro
+      - ./docker/keycloak/db:/tmp/init:ro
+    entrypoint:
+      - sh
+      - -c
+      - |
+        cp /tmp/init/*.sql /docker-entrypoint-initdb.d/ && \
+        chmod 644 /docker-entrypoint-initdb.d/*.sql && \
+        exec docker-entrypoint.sh postgres
     networks:
       - bt-search-network
 
