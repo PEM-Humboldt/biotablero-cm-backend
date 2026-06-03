@@ -60,21 +60,23 @@ public class GeneralStatsService(
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetDemographicStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
     {
-        var users = await iamService.GetAllEnabledUsersDataAsync(ct);
+        var externalUsersData = await iamService.GetAllEnabledUsersDataAsync(ct);
+        var internalUsersData = await generalStatsRepository.GetUserNamesAsync(departmentId, initiativeId, ct);
+        var filteredUsersData = externalUsersData.Where(e => internalUsersData.Contains(e.Username));
 
         return new CustomWebResponse
         {
             ResponseBody = new DemographicStatsDto
             {
-                Gender = [.. users
+                Gender = [.. filteredUsersData
                     .GroupBy(e => e.Gender)
                     .Where(group => !string.IsNullOrEmpty(group.Key))
                     .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))],
-                Organization = [.. users
+                Organization = [.. filteredUsersData
                     .GroupBy(e => e.Organization)
                     .Where(group => !string.IsNullOrEmpty(group.Key))
                     .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))],
-                SelfRecognition = [.. users
+                SelfRecognition = [.. filteredUsersData
                     .GroupBy(e => e.SelfRecognition)
                     .Where(group => !string.IsNullOrEmpty(group.Key))
                     .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))],

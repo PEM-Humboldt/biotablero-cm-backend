@@ -58,6 +58,15 @@ public interface IGeneralStatsRepository
     Task<List<Tag>> GetEcosystemsAsync(int? departmentId, int? initiativeId, CancellationToken ct = default);
 
     /// <summary>
+    /// Get the user names involved in initiatives.
+    /// </summary>
+    /// <param name="departmentId">Department identifier (optional).</param>
+    /// <param name="initiativeId">Initiative identifier (optional).</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Involved user names.</returns>
+    Task<List<string>> GetUserNamesAsync(int? departmentId, int? initiativeId, CancellationToken ct = default);
+
+    /// <summary>
     /// Get indicators by scale.
     /// </summary>
     /// <param name="departmentId">Department identifier (optional).</param>

@@ -194,6 +194,18 @@ public class GeneralStatsRepository(GeneralContext dbContext) : IGeneralStatsRep
             .ToListAsync(ct);
 
     /// <inheritdoc/>
+    public async Task<List<string>> GetUserNamesAsync(int? departmentId, int? initiativeId, CancellationToken ct = default) =>
+        await dbContext.InitiativeUsers
+            .Where(e => (departmentId == null ||
+                    e.Initiative.InitiativeLocations.Any(e =>
+                        (e.LocationId == departmentId && e.Location.Level == (byte)LocationLevel.Department) ||
+                        (e.Location.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
+                (initiativeId == null || e.Initiative.Id == initiativeId))
+            .Select(e => e.UserName)
+            .Distinct()
+            .ToListAsync(ct);
+
+    /// <inheritdoc/>
     public async Task<List<KeyValuePair<string, int>>> GetIndicatorsByScaleAsync(int? departmentId, int? initiativeId, CancellationToken ct = default) =>
         await dbContext.IndicatorTags
             .Where(e => e.Tag.CategoryId == (int)TagCategoryEnum.BiologicalGroup &&
