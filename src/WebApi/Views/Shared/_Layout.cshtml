@@ -1,3 +1,7 @@
+@{
+    var baseUrl = Environment.GetEnvironmentVariable("PUBLIC_BASE_URL");
+}
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -7,25 +11,39 @@
     <meta name="viewport" content="width=device-width" />
 </head>
 
-<body style="text-align: center;color: #505050;font-family: 'Open Sans',Arial,sans-serif;background-color: #F1F3F5">
-    <div class="header">
-        <b style="color: #e84a5f;font-size: 30px;">BioTablero</b>
-    </div>
-    <div class="container">
-        <main role="main">
-            <br>
-            @RenderBody()
-            <br>
-        </main>
-    </div>
+<body style="margin: 0;padding: 0;background-color: #f4f4f4;font-family: Arial, Helvetica, sans-serif;">
+    <center style="width: 100%;table-layout: fixed;background-color: #f4f4f4;padding-bottom: 40px;padding-top: 40px;">
+        <table class="main" width="100%" cellspacing="0" cellpadding="0" border="0"
+            style="width: 100%;max-width: 600px;background-color: #ffffff;margin: 0 auto;font-size: 16px;line-height: 1.7;color: #4b5563;">
+            <tr>
+                <td bgcolor="#333333" align="left" style="padding: 16px 28px;line-height: 0;">
+                    <img class="logo" src="@(baseUrl)/img/email/logo.png" alt="Logo BioTablero"
+                        style="width: 118px;height: auto;" />
+                </td>
+            </tr>
 
-    <footer class="border-top footer text-muted">
-        Instituto de Investigación de Recursos Biológicos
-        <br />
-        <b>Alexander von Humboldt</b>
-        <br />
-        @(DateTimeOffset.UtcNow.Year)
-    </footer>
+            <tr>
+                <td>
+                    <img class="hero-img" src="@(baseUrl)/img/email/banner.jpg" style="width: 100%;height: auto;"
+                        alt="Personas trabajando en monitoreo comunitario" />
+                </td>
+            </tr>
+
+            <tr>
+                <td class="content" style="padding: 34px 28px;">
+                    @RenderBody()
+                </td>
+            </tr>
+
+            <tr>
+                <td class="footer" style="padding: 16px;background-color: #efefef;text-align: center;">
+                    <p>
+                        BioTablero - @(DateTimeOffset.UtcNow.Year)
+                    </p>
+                </td>
+            </tr>
+        </table>
+    </center>
 </body>
 
 </html>

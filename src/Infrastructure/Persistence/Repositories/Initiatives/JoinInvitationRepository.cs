@@ -36,6 +36,13 @@ public class JoinInvitationRepository : Repository<JoinInvitation, int>, IJoinIn
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
+    public async Task<bool> AnyAsync(int initiativeId, string[] userNames, CancellationToken ct = default) =>
+        await dbContext.JoinInvitations
+            .Include(e => e.Guests)
+            .Where(e => e.InitiativeId == initiativeId && e.Guests.Any(e => userNames.Contains(e.Email)))
+            .AnyAsync(ct);
+
+    /// <inheritdoc/>
     public IQueryable<JoinInvitation> AddInitiativeFilter(int initiativeId, IQueryable<JoinInvitation> query) =>
         query
             .Where(e => e.InitiativeId == initiativeId);

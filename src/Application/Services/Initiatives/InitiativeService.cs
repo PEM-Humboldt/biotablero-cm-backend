@@ -292,22 +292,21 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
 
         // Validate users in external system
-        var results = new Dictionary<string, bool>();
-        var userTasks = entityData.Users.Select(async user =>
+        var userNames = entityData.Users?
+                .Select(e => e.UserName)
+                .ToArray();
+
+        if (userNames.Length > 0)
         {
-            results[user.UserName] = await iamService.UserExistsAsync(user.UserName, ct);
-        });
+            var externalUsersData = (await iamService.GetUsersDataByEmailsAsync(userNames, ct)).ToList();
 
-        await Task.WhenAll(userTasks);
-
-        var invalidUsers = results.Any(r => !r.Value);
-
-        if (invalidUsers)
-        {
-            return new(true)
+            if (userNames.Length != externalUsersData.Count)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidUsers),
-            };
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidUsers),
+                };
+            }
         }
 
         // Build entity data

@@ -245,6 +245,11 @@ public static class ValidationErrorCodes
         /// Emails sending error.
         /// </summary>
         public const string EmailsSendingError = "IJI_004";
+
+        /// <summary>
+        /// Existing invitations.
+        /// </summary>
+        public const string ExistingInvitations = "IJI_005";
     }
 
     /// <summary>

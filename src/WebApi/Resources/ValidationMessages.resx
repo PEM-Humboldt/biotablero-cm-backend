@@ -266,11 +266,15 @@
     <comment/>
   </data>
   <data name="IJI_003" xml:space="preserve">
-    <value>One or more users with the entered email addresses are already in the system</value>
+    <value>One or more users with the entered email addresses are already in the initiative</value>
     <comment/>
   </data>
   <data name="IJI_004" xml:space="preserve">
     <value>Emails sending failed</value>
+    <comment/>
+  </data>
+  <data name="IJI_005" xml:space="preserve">
+    <value>One or more users with the entered email addresses already have an invitation</value>
     <comment/>
   </data>
   <data name="IJR_001" xml:space="preserve">

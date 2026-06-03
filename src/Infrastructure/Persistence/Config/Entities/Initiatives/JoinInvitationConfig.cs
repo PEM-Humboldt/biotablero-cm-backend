@@ -34,10 +34,16 @@ public class JoinInvitationConfig : IEntityTypeConfiguration<JoinInvitation>
             .HasColumnName("message")
             .HasMaxLength(350);
 
+        builder.Property(i => i.HtmlMessage)
+            .HasColumnName("html_message")
+            .IsRequired();
+
         builder.Property(e => e.CreationDate)
             .HasColumnName("creation_date")
             .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .IsRequired();
+
+        builder.Ignore(i => i.CreatorFullName);
 
         builder.HasOne(e => e.Initiative)
             .WithMany(p => p.JoinInvitations)
