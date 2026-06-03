@@ -1,9 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Indicators;
 
-using System.Threading;
-using System.Threading.Tasks;
-
-using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
@@ -12,14 +8,12 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
 
-using Microsoft.AspNetCore.OData.Query;
-
 /// <summary>
-/// Indicator service.
+/// Indicator Version service.
 /// </summary>
-public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndicatorService
+public class IndicatorVersionService : ServiceRead<IndicatorVersion, IndicatorVersionDto, int>, IIndicatorVersionService
 {
-    private new readonly IIndicatorRepository entityRepository;
+    private new readonly IIndicatorVersionRepository entityRepository;
 
     /// <summary>
     /// Constructor.
@@ -27,21 +21,12 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
-    public IndicatorService(
-        IIndicatorRepository entityRepository,
-        IMapperRead<Indicator, IndicatorDto> mapper,
+    public IndicatorVersionService(
+        IIndicatorVersionRepository entityRepository,
+        IMapperRead<IndicatorVersion, IndicatorVersionDto> mapper,
         IValidationErrorTranslator errorTranslator)
     : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
-    }
-
-    /// <inheritdoc/>
-    public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<Indicator> queryOptions, CancellationToken ct = default)
-    {
-        var query = entityRepository.GetQueryable();
-        query = entityRepository.IncludeOdataEntities(query);
-
-        return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 }

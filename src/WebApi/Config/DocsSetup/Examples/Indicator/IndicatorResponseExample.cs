@@ -5,7 +5,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
-/// Initiative response example.
+/// Indicator response example.
 /// </summary>
 public class IndicatorResponseExample : IExamplesProvider<IndicatorDto>
 {
