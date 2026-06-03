@@ -22,7 +22,7 @@ public class IndicatorVersionDto : IDto
     /// <summary>
     /// Creation date.
     /// </summary>
-    public DateTimeOffset CreationDate { get; set; }
+    public DateTimeOffset? CreationDate { get; set; }
 
     /// <summary>
     /// Version number.

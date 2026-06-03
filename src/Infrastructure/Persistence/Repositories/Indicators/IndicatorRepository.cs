@@ -42,6 +42,14 @@ public class IndicatorRepository : Repository<Indicator, int>, IIndicatorReposit
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
+    public IQueryable<Indicator> IncludeOdataEntities(IQueryable<Indicator> query) =>
+        query
+            .Include(e => e.Type)
+            .Include(e => e.IndicatorTags)
+                .ThenInclude(e => e.Tag)
+            .Include(e => e.Versions);
+
+    /// <inheritdoc/>
     public async Task<int> CountAsync(int initiativeId, CancellationToken ct = default) =>
         await dbContext.Indicators
             .Include(e => e.Initiative)
