@@ -27,5 +27,5 @@ public class MapLegend : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Map Legend Item relationship.
     /// </summary>
-    public ICollection<MapLegendItem> Item { get; init; }
+    public ICollection<MapLegendItem> Items { get; init; }
 }

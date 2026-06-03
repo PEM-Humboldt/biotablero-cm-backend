@@ -12,12 +12,12 @@ public class Category : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Parent identifier.
     /// </summary>
-    public int ParentId { get; set; }
+    public int? ParentId { get; set; }
 
     /// <summary>
-    /// Category title.
+    /// Category name.
     /// </summary>
-    public string Title { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// Category description.
@@ -28,6 +28,11 @@ public class Category : BaseEntity<int>, IAggregateRoot
     /// Parent relationship.
     /// </summary>
     public Category Parent { get; set; }
+
+    /// <summary>
+    /// Child categories relationship.
+    /// </summary>
+    public ICollection<Category> Children { get; } = [];
 
     /// <summary>
     /// Indicator Group relationship.

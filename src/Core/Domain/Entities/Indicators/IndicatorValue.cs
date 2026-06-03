@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 using System;
 
