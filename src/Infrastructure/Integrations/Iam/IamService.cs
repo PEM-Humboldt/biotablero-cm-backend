@@ -70,29 +70,6 @@ public class IamService : IIamService
     }
 
     /// <inheritdoc/>
-    public async Task<ExternalUser> GetUserDataByEmailAsync(string email, CancellationToken ct = default) =>
-        await GetKeycloakUserDataAsync(UserVariable.Email, email, ct);
-
-    /// <inheritdoc/>
-    public async Task<IEnumerable<ExternalUser>> GetUsersDataByEmailsAsync(string[] emails, CancellationToken ct = default)
-    {
-        var results = new List<ExternalUser>();
-        var userTasks = emails.Select(async username =>
-        {
-            var userData = await GetKeycloakUserDataAsync(UserVariable.Email, username, ct);
-
-            if (userData != null)
-            {
-                results.Add(userData);
-            }
-        });
-
-        await Task.WhenAll(userTasks);
-
-        return results;
-    }
-
-    /// <inheritdoc/>
     public async Task<IEnumerable<ExternalUser>> GetAllEnabledUsersDataAsync(CancellationToken ct = default)
     {
         var token = await GetKeycloakAdminTokenAsync(ct);

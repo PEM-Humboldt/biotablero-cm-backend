@@ -111,7 +111,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
                 .Select(e => e.Creator)
                 .ToArray();
 
-            var externalUsersData = await iamService.GetUsersDataByEmailsAsync(userNames, ct);
+            var externalUsersData = await iamService.GetUsersDataAsync(userNames, ct);
 
             if (externalUsersData.Any())
             {

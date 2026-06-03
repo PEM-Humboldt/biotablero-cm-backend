@@ -115,7 +115,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
             if (userNames.Length > 0)
             {
-                var externalUsersData = await iamService.GetUsersDataByEmailsAsync(userNames, ct);
+                var externalUsersData = await iamService.GetUsersDataAsync(userNames, ct);
 
                 if (externalUsersData.Any())
                 {
@@ -293,12 +293,12 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Validate users in external system
         var userNames = entityData.Users?
-                .Select(e => e.UserName)
-                .ToArray();
+            .Select(e => e.UserName)
+            .ToArray();
 
         if (userNames.Length > 0)
         {
-            var externalUsersData = (await iamService.GetUsersDataByEmailsAsync(userNames, ct)).ToList();
+            var externalUsersData = (await iamService.GetUsersDataAsync(userNames, ct)).ToList();
 
             if (userNames.Length != externalUsersData.Count)
             {
