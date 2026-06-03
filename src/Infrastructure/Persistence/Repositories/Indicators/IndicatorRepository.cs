@@ -29,9 +29,29 @@ public class IndicatorRepository : Repository<Indicator, int>, IIndicatorReposit
     }
 
     /// <inheritdoc/>
+    public override async Task<Indicator> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await dbContext.Indicators
+            .Include(e => e.Versions)
+            .Include(e => e.Type)
+            .Include(e => e.IndicatorTags)
+                .ThenInclude(e => e.Tag)
+            .Include(e => e.IndicatorLocations)
+                .ThenInclude(e => e.Location)
+                    .ThenInclude(e => e.Parent)
+            .Where(e => e.Id == id)
+            .FirstOrDefaultAsync(ct);
+
+    /// <inheritdoc/>
     public async Task<int> CountAsync(int initiativeId, CancellationToken ct = default) =>
         await dbContext.Indicators
             .Include(e => e.Initiative)
             .Where(e => e.Initiative.Id == initiativeId)
             .CountAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<int[]> GetVersions(int id, CancellationToken ct = default) =>
+        await dbContext.IndicatorVersions
+            .Where(e => e.IndicatorId == id)
+            .Select(e => e.Version)
+            .ToArrayAsync(ct);
 }

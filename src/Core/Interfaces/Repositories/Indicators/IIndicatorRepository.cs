@@ -17,4 +17,12 @@ public interface IIndicatorRepository : IRepository<Indicator, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<int> CountAsync(int initiativeId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get indicator versions.
+    /// </summary>
+    /// <param name="id">Indicator identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<int[]> GetVersions(int id, CancellationToken ct = default);
 }

@@ -10,7 +10,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
 /// <summary>
-/// Resource Tag mappings.
+/// Initiative Tag mappings.
 /// </summary>
 public class InitiativeTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : MapperRead<InitiativeTag, InitiativeTagDto>
 {

@@ -222,6 +222,41 @@ public sealed class GeneralContext : DbContext
     /// </summary>
     public DbSet<IndicatorVersion> IndicatorVersions { get; set; }
 
+    /// <summary>
+    /// Indicator Version Map DbSet.
+    /// </summary>
+    public DbSet<IndicatorVersionMap> IndicatorVersionMaps { get; set; }
+
+    /// <summary>
+    /// Map Legend DbSet.
+    /// </summary>
+    public DbSet<MapLegend> MapLegends { get; set; }
+
+    /// <summary>
+    /// Map Legend Item DbSet.
+    /// </summary>
+    public DbSet<MapLegendItem> MapLegendItems { get; set; }
+
+    /// <summary>
+    /// Indicator Group DbSet.
+    /// </summary>
+    public DbSet<IndicatorGroup> IndicatorGroups { get; set; }
+
+    /// <summary>
+    /// Category DbSet.
+    /// </summary>
+    public DbSet<Category> Categories { get; set; }
+
+    /// <summary>
+    /// Indicator Value DbSet.
+    /// </summary>
+    public DbSet<IndicatorValue> IndicatorValues { get; set; }
+
+    /// <summary>
+    /// Measure Unit DbSet.
+    /// </summary>
+    public DbSet<MeasureUnit> MeasureUnits { get; set; }
+
     #endregion
 
     /// <summary>
