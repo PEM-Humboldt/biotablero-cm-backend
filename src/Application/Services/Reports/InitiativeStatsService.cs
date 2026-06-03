@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Application.Interfaces.Services.Statistics;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Reports;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
