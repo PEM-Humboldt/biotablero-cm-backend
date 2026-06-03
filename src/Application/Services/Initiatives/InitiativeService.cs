@@ -13,14 +13,15 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Users;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
-using IAVH.BioTablero.CM.Application.Interfaces.Services.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
@@ -52,10 +53,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     private new readonly IMapperCreateReadAndUpdate<Initiative, InitiativeDto> mapper;
     private new readonly IInitiativeRepository entityRepository;
     private readonly ILocationRepository locationRepository;
-    private readonly ILocationService locationService;
     private readonly IIamService iamService;
     private readonly IStorageService storageService;
     private readonly IImageUtilsService imageUtilsService;
+    private readonly IMapperRead<ExternalUser, ExternalUserBaseDto> externalUserMapper;
     private readonly GeoJsonWriter geoJsonWriter;
     private readonly GeoJsonReader geoJsonReader;
 
@@ -68,10 +69,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="locationRepository">Initiative Location repository.</param>
-    /// <param name="locationService">Location service.</param>
     /// <param name="iamService">IAM service.</param>
     /// <param name="storageService">Storage service.</param>
     /// <param name="imageUtilsService">Image utils service.</param>
+    /// <param name="externalUserMapper">External User mapper.</param>
     public InitiativeService(
         IInitiativeRepository entityRepository,
         IMapperCreateReadAndUpdate<Initiative, InitiativeDto> mapper,
@@ -79,10 +80,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         IValidator<InitiativeDto> entityValidator,
         ILogger logger,
         ILocationRepository locationRepository,
-        ILocationService locationService,
         IIamService iamService,
         IStorageService storageService,
-        IImageUtilsService imageUtilsService)
+        IImageUtilsService imageUtilsService,
+        IMapperRead<ExternalUser, ExternalUserBaseDto> externalUserMapper)
         : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
@@ -90,13 +91,63 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         this.entityValidator = entityValidator;
         this.logger = logger;
         this.locationRepository = locationRepository;
-        this.locationService = locationService;
         this.iamService = iamService;
         this.storageService = storageService;
         this.imageUtilsService = imageUtilsService;
+        this.externalUserMapper = externalUserMapper;
 
         geoJsonWriter = new GeoJsonWriter();
         geoJsonReader = new GeoJsonReader();
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetItemAsync(int id, bool userIsAuthenticated, CancellationToken ct = default)
+    {
+        var dataEntity = await entityRepository.GetByIdAsync(id, userIsAuthenticated, ct);
+
+        if (dataEntity != null)
+        {
+            var dataDto = mapper.Map(dataEntity);
+
+            var userNames = dataDto.Users?
+                .Select(e => e.UserName)
+                .ToArray();
+
+            if (userNames.Length > 0)
+            {
+                var externalUsersData = await iamService.GetUsersDataByEmailsAsync(userNames, ct);
+
+                if (externalUsersData.Any())
+                {
+                    var usersFullData = new List<InitiativeUserDto>();
+
+                    foreach (var userData in dataDto.Users)
+                    {
+                        userData.ExternalData = externalUsersData
+                            .Where(i => i.Username == userData.UserName)
+                            .Select(externalUserMapper.Map)
+                            .FirstOrDefault();
+
+                        usersFullData.Add(userData);
+                    }
+
+                    dataDto.Users = usersFullData;
+                }
+            }
+
+            return new()
+            {
+                ResponseBody = dataDto,
+            };
+        }
+        else
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
     }
 
     /// <inheritdoc/>
@@ -262,8 +313,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         // Build entity data
         var entity = mapper.Map(entityData);
         entity.CreationDate = DateTimeOffset.UtcNow;
+
+        // TODO: Add these geographic functions to triggers
         entity.Coordinate = await entityRepository.GetCentroidAsync(locationsIds, ct);
-        entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
+        entity.PolygonArea = await entityRepository.CalcAreaAsync(entity, ct);
         entity.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(entity.Coordinate, ct);
 
         // Save data
@@ -334,9 +387,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Update entity data
         mapper.Update(entity, entityData);
-
-        // Recalculate polygon area if locations might have changed
-        entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
 
         await entityRepository.UpdateAsync(entity, ct);
 
@@ -572,8 +622,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Update entity
         entity.Polygon = polygon;
+
+        // TODO: Add these geographic functions to triggers
         entity.Coordinate = polygon.Centroid;
-        entity.PolygonArea = await CalculatePolygonAreaAsync(entity, ct);
+        entity.PolygonArea = await entityRepository.CalcAreaAsync(entity, ct);
         entity.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(entity.Coordinate, ct);
 
         await entityRepository.UpdateAsync(entity, ct);
@@ -608,37 +660,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             ResponseBody = result,
         };
-    }
-
-    /// <summary>
-    /// Calculate polygon area for an initiative.
-    /// </summary>
-    /// <param name="entity">Initiative entity.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Area in square kilometers.</returns>
-    private async Task<double> CalculatePolygonAreaAsync(Initiative entity, CancellationToken ct = default)
-    {
-        // If initiative has a polygon, calculate its area
-        if (entity.Polygon != null && !entity.Polygon.IsEmpty)
-        {
-            return GeometryUtils.CalculatePolygonAreaInSquareKilometers(entity.Polygon as Polygon);
-        }
-
-        // If no polygon, calculate area from locations
-        if (entity.InitiativeLocations != null && entity.InitiativeLocations.Count > 0)
-        {
-            var locationIds = entity.InitiativeLocations
-                .Where(il => il.LocationId > 0)
-                .Select(il => il.LocationId)
-                .ToList();
-
-            if (locationIds.Count > 0)
-            {
-                return await locationService.CalculateTotalAreaForLocationsAsync(locationIds, ct);
-            }
-        }
-
-        return 0;
     }
 
     /// <summary>

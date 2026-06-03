@@ -2,6 +2,7 @@
 
 using System;
 
+using IAVH.BioTablero.CM.Application.DTOs.Users;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
@@ -41,4 +42,9 @@ public class InitiativeUserDto : IDto
     /// Entity creation date.
     /// </summary>
     public DateTimeOffset? CreationDate { get; set; }
+
+    /// <summary>
+    /// External user data.
+    /// </summary>
+    public ExternalUserBaseDto ExternalData { get; set; }
 }

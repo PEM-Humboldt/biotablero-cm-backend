@@ -130,6 +130,11 @@ public sealed class GeneralContext : DbContext
     /// </summary>
     public DbSet<JoinInvitationGuest> JoinInvitationGuests { get; set; }
 
+    /// <summary>
+    /// Monitoring events DbSet.
+    /// </summary>
+    public DbSet<MonitoringEvents> MonitoringEvents { get; set; }
+
     #endregion
 
     #region Territory Story entities

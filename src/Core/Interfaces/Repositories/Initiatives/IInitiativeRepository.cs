@@ -23,6 +23,15 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     IQueryable<Initiative> IncludeOdataEntities(IQueryable<Initiative> query);
 
     /// <summary>
+    /// Finds an entity with the given primary key value.
+    /// </summary>
+    /// <param name="id">The value of the primary key for the entity to be found.</param>
+    /// <param name="userIsAuthenticated">User authenticated flag.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<Initiative> GetByIdAsync(int id, bool userIsAuthenticated, CancellationToken ct = default);
+
+    /// <summary>
     /// Get elements by user name.
     /// </summary>
     /// <param name="userName">User name.</param>
@@ -84,79 +93,30 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <summary>
     /// Get the number of enabled records.
     /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Number of enabled records.</returns>
-    Task<int> GetEnabledRecordsCountAsync(CancellationToken ct = default);
-
-    /// <summary>
-    /// Get the number of enabled records.
-    /// </summary>
     /// <param name="userName">User name.</param>
+    /// <param name="departmentId">Department identifier (optional).</param>
+    /// <param name="initiativeId">Initiative identifier (optional).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Number of enabled records.</returns>
-    Task<int> GetEnabledRecordsCountAsync(string userName, CancellationToken ct = default);
+    Task<int> GetEnabledRecordsCountAsync(string userName = null, int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
 
     /// <summary>
-    /// Get total area of active initiatives with area.
+    /// Get initiative polygon areas.
     /// </summary>
+    /// <param name="departmentId">Department identifier (optional).</param>
+    /// <param name="initiativeId">Initiative identifier (optional).</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Total area in square kilometers.</returns>
-    Task<double> GetTotalAreaOfActiveInitiativesAsync(CancellationToken ct = default);
+    /// <returns>Area in square kilometers.</returns>
+    Task<double> GetAreaAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
 
     /// <summary>
-    /// Get count of people involved in active initiatives.
+    /// Get the number of people involved in initiatives.
     /// </summary>
+    /// <param name="departmentId">Department identifier (optional).</param>
+    /// <param name="initiativeId">Initiative identifier (optional).</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Count of people involved in active initiatives.</returns>
-    Task<int> GetPeopleInvolvedInActiveInitiativesCountAsync(CancellationToken ct = default);
-
-    /// <summary>
-    /// Get count of active initiatives by department.
-    /// </summary>
-    /// <param name="departmentId">Department identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Count of active initiatives in the department.</returns>
-    Task<int> GetActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default);
-
-    /// <summary>
-    /// Get total area of active initiatives by department.
-    /// </summary>
-    /// <param name="departmentId">Department identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Total area in square kilometers for the department.</returns>
-    Task<double> GetTotalAreaOfActiveInitiativesByDepartmentAsync(int departmentId, CancellationToken ct = default);
-
-    /// <summary>
-    /// Get count of people involved in active initiatives by department.
-    /// </summary>
-    /// <param name="departmentId">Department identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Count of people involved in active initiatives in the department.</returns>
-    Task<int> GetPeopleInvolvedInActiveInitiativesCountByDepartmentAsync(int departmentId, CancellationToken ct = default);
-
-    /// <summary>
-    /// Get count of active initiatives by specific initiative.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Count of active initiatives (should be 1 or 0).</returns>
-    Task<int> GetActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default);
-
-    /// <summary>
-    /// Get total area of active initiatives by specific initiative.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Total area in square kilometers for the initiative.</returns>
-    Task<double> GetTotalAreaOfActiveInitiativesByInitiativeAsync(int initiativeId, CancellationToken ct = default);
-
-    /// <summary>
-    /// Get count of people involved in active initiatives by specific initiative.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Count of people involved in the specific initiative.</returns>
-    Task<int> GetPeopleInvolvedInActiveInitiativesCountByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+    /// <returns>Number of involved people.</returns>
+    Task<int> GetPeopleInvolvedCountAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
 
     /// <summary>
     /// Get active initiatives with coordinates by location.
@@ -173,4 +133,12 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of last created initiatives.</returns>
     Task<IEnumerable<Initiative>> GetLastEntitiesAsync(int count, CancellationToken ct = default);
+
+    /// <summary>
+    /// Calculate initiative polygon area.
+    /// </summary>
+    /// <param name="entity">Initiative data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Area in square kilometers.</returns>
+    Task<double> CalcAreaAsync(Initiative entity, CancellationToken ct = default);
 }

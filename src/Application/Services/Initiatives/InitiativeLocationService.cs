@@ -162,7 +162,10 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         entity = await entityRepository.AddAsync(entity, ct);
 
         // Update initiative data
+        // TODO: Add these geographic functions to triggers
+        initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
         initiative.Coordinate = await initiativeRepository.GetCentroidAsync(initiativeId, ct);
+        initiative.PolygonArea = await initiativeRepository.CalcAreaAsync(initiative, ct);
         initiative.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(initiative.Coordinate, ct);
         await initiativeRepository.UpdateAsync(initiative, ct);
 
@@ -258,7 +261,9 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         mapper.Update(entity, entityData);
 
         // Update initiative data
+        // TODO: Add these geographic functions to triggers
         initiative.Coordinate = await initiativeRepository.GetCentroidAsync(initiativeId, ct);
+        initiative.PolygonArea = await initiativeRepository.CalcAreaAsync(initiative, ct);
         initiative.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(initiative.Coordinate, ct);
         await initiativeRepository.UpdateAsync(initiative, ct);
 
@@ -323,7 +328,9 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         await entityRepository.DeleteAsync(entity, ct);
 
         // Update initiative data
+        // TODO: Add these geographic functions to triggers
         initiative.Coordinate = await initiativeRepository.GetCentroidAsync(initiativeId, ct);
+        initiative.PolygonArea = await initiativeRepository.CalcAreaAsync(initiative, ct);
         initiative.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(initiative.Coordinate, ct);
         await initiativeRepository.UpdateAsync(initiative, ct);
 

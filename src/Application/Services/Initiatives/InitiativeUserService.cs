@@ -361,7 +361,8 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         {
             InitiativeUserLevelEnum.Leader => "líder",
             InitiativeUserLevelEnum.Reader => "lector",
-            _ => "miembro",
+            InitiativeUserLevelEnum.Collaborator => "colaborador",
+            _ => "N/A",
         };
 
         var notificationData = new SendNotificationData()

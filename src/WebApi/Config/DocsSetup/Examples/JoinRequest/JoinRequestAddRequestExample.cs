@@ -16,6 +16,6 @@ public class JoinRequestAddRequestExample : IExamplesProvider<JoinRequestDto>
     public JoinRequestDto GetExamples() => new()
     {
         InitiativeId = 1,
-        Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Member),
+        Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Collaborator),
     };
 }

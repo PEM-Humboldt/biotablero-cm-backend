@@ -518,7 +518,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "Member"
+                            Name = "Collaborator"
                         },
                         new
                         {
@@ -687,6 +687,35 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                             Id = 4,
                             Name = "Cancelled"
                         });
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.MonitoringEvents", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date");
+
+                    b.Property<int>("InitiativeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("initiative_id");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("integer")
+                        .HasColumnName("value");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InitiativeId", "Date")
+                        .IsUnique();
+
+                    b.ToTable("monitoring_events", "initiatives");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Logging.LogEntity", b =>
@@ -1481,6 +1510,17 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("Status");
                 });
 
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.MonitoringEvents", b =>
+                {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", "Initiative")
+                        .WithMany("MonitoringEventsList")
+                        .HasForeignKey("InitiativeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Initiative");
+                });
+
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Resources.Resource", b =>
                 {
                     b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", "Initiative")
@@ -1649,6 +1689,8 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("JoinInvitations");
 
                     b.Navigation("JoinRequests");
+
+                    b.Navigation("MonitoringEventsList");
 
                     b.Navigation("Resources");
 
