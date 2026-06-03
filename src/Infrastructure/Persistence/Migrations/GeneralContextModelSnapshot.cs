@@ -491,9 +491,6 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.HasIndex("Representation")
-                        .IsUnique();
-
                     b.ToTable("measure_unit", "indicators");
                 });
 

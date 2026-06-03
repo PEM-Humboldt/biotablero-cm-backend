@@ -242,13 +242,6 @@ public partial class AddIndicators : Migration
             table: "measure_unit",
             column: "name",
             unique: true);
-
-        migrationBuilder.CreateIndex(
-            name: "IX_measure_unit_representation",
-            schema: "indicators",
-            table: "measure_unit",
-            column: "representation",
-            unique: true);
     }
 
     /// <inheritdoc />

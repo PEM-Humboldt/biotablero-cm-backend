@@ -33,9 +33,5 @@ public class MeasureUnitConfig : IEntityTypeConfiguration<MeasureUnit>
         builder
             .HasIndex(e => e.Name)
             .IsUnique();
-
-        builder
-            .HasIndex(e => e.Representation)
-            .IsUnique();
     }
 }

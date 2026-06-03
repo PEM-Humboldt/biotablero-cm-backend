@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20260602151551_AddIndicators")]
+    [Migration("20260603182208_AddIndicators")]
     partial class AddIndicators
     {
         /// <inheritdoc />
@@ -492,9 +492,6 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.HasIndex("Representation")
                         .IsUnique();
 
                     b.ToTable("measure_unit", "indicators");
