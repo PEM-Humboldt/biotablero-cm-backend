@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Application.DTOs.Indicators;
+﻿namespace IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
 using System;
 
