@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
 using System;
+using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
@@ -53,4 +54,9 @@ public class IndicatorVersionDto : IDto
     /// Indicator autorship.
     /// </summary>
     public string Authorship { get; set; }
+
+    /// <summary>
+    /// Indicator Group relationship.
+    /// </summary>
+    public IEnumerable<IndicatorGroupDto> Groups { get; init; }
 }
