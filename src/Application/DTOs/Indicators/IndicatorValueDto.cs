@@ -1,7 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
-using System;
-
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
@@ -17,12 +15,12 @@ public class IndicatorValueDto : IDto
     /// <summary>
     /// Date.
     /// </summary>
-    public DateTimeOffset Date { get; set; }
+    public IndicatorDateDto Date { get; set; }
 
     /// <summary>
     /// Date end.
     /// </summary>
-    public DateTimeOffset? DateEnd { get; set; }
+    public IndicatorDateDto DateEnd { get; set; }
 
     /// <summary>
     /// Indicator Value.

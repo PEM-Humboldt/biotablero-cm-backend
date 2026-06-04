@@ -18,7 +18,6 @@ public class MeasureUnitMappings() : MapperRead<MeasureUnit, MeasureUnitDto>
 
         return new()
         {
-            Id = entity.Id,
             Name = entity.Name,
             Representation = entity.Representation,
         };

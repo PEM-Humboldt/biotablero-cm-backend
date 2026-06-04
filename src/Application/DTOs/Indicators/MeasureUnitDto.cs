@@ -8,11 +8,6 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 public class MeasureUnitDto : IDto
 {
     /// <summary>
-    /// Item identifier.
-    /// </summary>
-    public int Id { get; set; }
-
-    /// <summary>
     /// Measure Unit name.
     /// </summary>
     public string Name { get; set; }

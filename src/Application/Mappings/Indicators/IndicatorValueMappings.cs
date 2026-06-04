@@ -21,8 +21,8 @@ public class IndicatorValueMappings(
         return new()
         {
             Id = entity.Id,
-            Date = entity.Date,
-            DateEnd = entity.DateEnd,
+            Date = new(entity.Date),
+            DateEnd = entity.DateEnd.HasValue ? new(entity.DateEnd.Value) : null,
             Value = entity.Value,
             UpperLimit = entity.UpperLimit,
             LowerLimit = entity.LowerLimit,
