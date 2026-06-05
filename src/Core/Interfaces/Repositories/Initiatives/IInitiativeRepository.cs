@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 
-using NetTopologySuite.Geometries;
-
 /// <summary>
 /// Initiative repository interface.
 /// </summary>
@@ -75,22 +73,6 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     Task<bool> AnyByTagAsync(int tagId, CancellationToken ct = default);
 
     /// <summary>
-    /// Get centroid from locations set.
-    /// </summary>
-    /// <param name="locationIds">Location identifiers.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Centroid for locations set.</returns>
-    Task<Point> GetCentroidAsync(int[] locationIds, CancellationToken ct = default);
-
-    /// <summary>
-    /// Get centroid from initiative identifier.
-    /// </summary>
-    /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Initiative centroid.</returns>
-    Task<Point> GetCentroidAsync(int initiativeId, CancellationToken ct = default);
-
-    /// <summary>
     /// Get active initiatives with coordinates by location.
     /// </summary>
     /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
@@ -105,12 +87,4 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of last created initiatives.</returns>
     Task<IEnumerable<Initiative>> GetLastEntitiesAsync(int count, CancellationToken ct = default);
-
-    /// <summary>
-    /// Calculate initiative polygon area.
-    /// </summary>
-    /// <param name="entity">Initiative data.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Area in square kilometers.</returns>
-    Task<double> CalcAreaAsync(Initiative entity, CancellationToken ct = default);
 }

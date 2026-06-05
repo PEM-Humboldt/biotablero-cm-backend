@@ -1,20 +1,16 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
 using Microsoft.EntityFrameworkCore;
-
-using NetTopologySuite.Geometries;
 
 using Serilog;
 
@@ -109,31 +105,6 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<Point> GetCentroidAsync(int[] locationIds, CancellationToken ct = default) =>
-        await dbContext
-            .Database
-            .SqlQuery<Point>(
-                @$"
-                    SELECT ST_Centroid(ST_Union(lp.geometry)) AS ""Value""
-                    FROM ""geo"".""location_polygon"" lp
-                    WHERE lp.location_id = ANY ({locationIds})
-                ")
-            .FirstOrDefaultAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<Point> GetCentroidAsync(int initiativeId, CancellationToken ct = default) =>
-        await dbContext
-            .Database
-            .SqlQuery<Point>(
-                @$"
-                    SELECT ST_Centroid(ST_Union(lp.geometry)) AS ""Value""
-                    FROM ""initiatives"".""initiative_location"" il
-                    INNER JOIN ""geo"".""location_polygon"" lp ON il.location_id = lp.location_id 
-                    WHERE il.initiative_id = {initiativeId}
-                ")
-            .FirstOrDefaultAsync(ct);
-
-    /// <inheritdoc/>
     public async Task<IEnumerable<InitiativeGeoData>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default)
     {
         var query = dbContext.Initiatives
@@ -173,38 +144,4 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .OrderByDescending(e => e.CreationDate)
             .Take(count)
             .ToListAsync(ct);
-
-    /// <inheritdoc/>
-    public async Task<double> CalcAreaAsync(Initiative entity, CancellationToken ct = default)
-    {
-        // If initiative has a polygon, calculate its area
-        if (entity.Polygon != null && !entity.Polygon.IsEmpty)
-        {
-            return GeometryUtils.CalculatePolygonAreaInSquareKilometers(entity.Polygon as Polygon);
-        }
-
-        // If doesn´t have a polygon, calculate area from municipalities
-        if (entity.InitiativeLocations != null && entity.InitiativeLocations.Count > 0)
-        {
-            var locationIds = entity.InitiativeLocations
-                .Select(il => il.LocationId)
-                .ToArray();
-
-            var municipalities = await dbContext.LocationPolygons
-                .Include(e => e.Location)
-                    .ThenInclude(e => e.InitiativeLocations)
-                .Where(e => e.Geometry != null &&
-                    !e.Geometry.IsEmpty &&
-                    e.Location.Level == (byte)LocationLevel.Municipality &&
-                    locationIds.Contains(e.LocationId))
-                .Select(e => e.Geometry)
-                .ToListAsync(ct);
-
-            return municipalities
-                .Select(GeometryUtils.CalculateAreaInSquareKilometers)
-                .Sum();
-        }
-
-        return 0;
-    }
 }
