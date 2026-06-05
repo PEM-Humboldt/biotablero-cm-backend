@@ -11,7 +11,6 @@ using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Reports;
-using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Reports;
 
@@ -27,21 +26,17 @@ public class GeneralStatsService(
     IIamService iamService) : IGeneralStatsService
 {
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetGeneralStatsAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
-    {
-        var totalAreaInSquareKm = await generalStatsRepository.GetAreaAsync(departmentId, initiativeId, ct);
-
-        return new CustomWebResponse
+    public async Task<CustomWebResponse> GetGeneralStatsAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
+        new()
         {
             ResponseBody = new GeneralStatsDto
             {
                 EnabledInitiatives = await generalStatsRepository.GetEnabledRecordsCountAsync(departmentId: departmentId, initiativeId: initiativeId, ct: ct),
                 PeopleInvolved = await generalStatsRepository.GetPeopleInvolvedCountAsync(departmentId, initiativeId, ct),
                 AgreementsInvolved = await generalStatsRepository.GetAgreementsInvolvedCountAsync(departmentId, initiativeId, ct),
-                Area = GeometryUtils.ConvertSquareKilometersToHectares(totalAreaInSquareKm),
+                Area = await generalStatsRepository.GetAreaAsync(departmentId, initiativeId, ct),
             },
         };
-    }
 
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetEcosystemsStatsAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)

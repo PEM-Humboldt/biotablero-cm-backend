@@ -6,7 +6,6 @@ using System.Linq;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Mappings.General;
-using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
 /// <summary>
@@ -36,7 +35,7 @@ public class InitiativeMappings(
             BannerUrl = entity.BannerUrl,
             Enabled = entity.Enabled,
             Coordinate = entity.Coordinate != null && !entity.Coordinate.IsEmpty ? [entity.Coordinate.Y, entity.Coordinate.X] : null,
-            PolygonArea = GeometryUtils.ConvertSquareKilometersToHectares(entity.PolygonArea),
+            PolygonArea = entity.PolygonArea,
             Contacts = entity.InitiativeContacts?.Select(initiativeContactMappings.Map),
             Locations = entity.InitiativeLocations?.Select(initiativeLocationMappings.Map),
             Users = entity.InitiativeUsers?.Select(initiativeUserMappings.Map),
@@ -59,7 +58,6 @@ public class InitiativeMappings(
             CreationDate = dto.CreationDate ?? DateTimeOffset.UtcNow,
             ImageUrl = dto.ImageUrl,
             BannerUrl = dto.BannerUrl,
-            PolygonArea = dto.PolygonArea ?? 0,
             Enabled = dto?.Enabled ?? true,
             InitiativeContacts = [.. dto.Contacts?.Select(initiativeContactMappings.Map)],
             InitiativeLocations = [.. dto.Locations?.Select(initiativeLocationMappings.Map)],

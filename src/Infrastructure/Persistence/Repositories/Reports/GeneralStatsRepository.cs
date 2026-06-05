@@ -123,7 +123,7 @@ public class GeneralStatsRepository(GeneralContext dbContext) : IGeneralStatsRep
                             ST_UnaryUnion(geom),
                             3116
                         )
-                    ) / 1000000.0,
+                    ) / 10000.0,
                     0
                 ) AS "Value"
             FROM (
