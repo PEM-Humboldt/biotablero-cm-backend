@@ -63,6 +63,7 @@ public class InitiativeConfig : IEntityTypeConfiguration<Initiative>
         builder.Property(lp => lp.Coordinate)
             .HasColumnName("coordinate")
             .HasColumnType("geometry(Point, 4326)")
+            .HasDefaultValueSql("ST_GeomFromText('POINT EMPTY', 4326)")
             .IsRequired();
 
         builder.Property(i => i.PolygonArea)
@@ -72,6 +73,7 @@ public class InitiativeConfig : IEntityTypeConfiguration<Initiative>
 
         builder.Property(i => i.MainLocationId)
             .HasColumnName("main_location_id")
+            .HasDefaultValue(0)
             .IsRequired();
 
         builder.Property(i => i.Enabled)
