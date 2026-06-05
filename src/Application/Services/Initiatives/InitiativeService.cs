@@ -611,6 +611,16 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             };
         }
 
+        var mainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(polygon.Centroid, ct);
+
+        if (mainLocationId <= 0)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidPolygonLocation),
+            };
+        }
+
         // Check SRID
         polygon.SRID = 4326;
 
