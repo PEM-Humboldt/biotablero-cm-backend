@@ -7,7 +7,7 @@ using Swashbuckle.AspNetCore.Filters;
 /// <summary>
 /// General statistics response example.
 /// </summary>
-public class GeneralStatisticsResponseExample : IExamplesProvider<GeneralStatsDto>
+public class GeneralStatsResponseExample : IExamplesProvider<GeneralStatsDto>
 {
     /// <inheritdoc/>
     public GeneralStatsDto GetExamples() =>

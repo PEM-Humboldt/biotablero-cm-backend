@@ -13,6 +13,7 @@ using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 using IAVH.BioTablero.CM.Core.Domain.Models.User;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Reports;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 
@@ -32,6 +33,7 @@ public class UserService : IUserService
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ITerritoryStoryRepository territoryStoryRepository;
     private readonly IResourceRepository resourceRepository;
+    private readonly IGeneralStatsRepository generalStatsRepository;
 
     /// <summary>
     /// Constructor.
@@ -41,18 +43,21 @@ public class UserService : IUserService
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="territoryStoryRepository">Territory Story repository.</param>
     /// <param name="resourceRepository">Resource repository.</param>
+    /// <param name="generalStatsRepository">General Statistics repository.</param>
     public UserService(
         IIamService iamService,
         IValidationErrorTranslator errorTranslator,
         IInitiativeRepository initiativeRepository,
         ITerritoryStoryRepository territoryStoryRepository,
-        IResourceRepository resourceRepository)
+        IResourceRepository resourceRepository,
+        IGeneralStatsRepository generalStatsRepository)
     {
         this.iamService = iamService;
         this.errorTranslator = errorTranslator;
         this.initiativeRepository = initiativeRepository;
         this.territoryStoryRepository = territoryStoryRepository;
         this.resourceRepository = resourceRepository;
+        this.generalStatsRepository = generalStatsRepository;
     }
 
     /// <inheritdoc/>
@@ -61,7 +66,7 @@ public class UserService : IUserService
         var response = new UserProfile
         {
             Username = userName,
-            TotalInitiatives = await initiativeRepository.GetEnabledRecordsCountAsync(userName: userName, ct: ct),
+            TotalInitiatives = await generalStatsRepository.GetEnabledRecordsCountAsync(userName: userName, ct: ct),
             TotalTerritoryStories = await territoryStoryRepository.GetEnabledRecordsCountAsync(userName, ct),
             TotalResources = await resourceRepository.GetPublishedRecordsCountAsync(userName, ct),
         };

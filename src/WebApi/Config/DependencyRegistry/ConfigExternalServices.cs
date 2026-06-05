@@ -13,6 +13,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Notifications;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Reports;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
@@ -30,6 +31,7 @@ using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Locations;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Logging;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Notifications;
+using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Reports;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Resources;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Tags;
 using IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.TerritoryStories;
@@ -86,6 +88,9 @@ public static class ConfigExternalServices
 
         //// Indicators
         services.AddScoped<IIndicatorRepository, IndicatorRepository>();
+
+        //// Reports
+        services.AddScoped<IGeneralStatsRepository, GeneralStatsRepository>();
 
         // External services
         services.AddScoped(typeof(IReportService<>), typeof(ReportExcelService<>));

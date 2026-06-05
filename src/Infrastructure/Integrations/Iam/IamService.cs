@@ -210,9 +210,9 @@ public class IamService : IIamService
                     user.Organization = org[0].GetString();
                 }
 
-                if (attributes.TryGetProperty("poblacion", out var pob) && pob.ValueKind == JsonValueKind.Array && pob.GetArrayLength() > 0)
+                if (attributes.TryGetProperty("autorreconocimiento", out var selfRec) && selfRec.ValueKind == JsonValueKind.Array && selfRec.GetArrayLength() > 0)
                 {
-                    user.SelfRecognition = pob[0].GetString();
+                    user.SelfRecognition = selfRec[0].GetString();
                 }
 
                 if (attributes.TryGetProperty("genero", out var gen) && gen.ValueKind == JsonValueKind.Array && gen.GetArrayLength() > 0)
