@@ -7,6 +7,7 @@ DECLARE
     v_coordinate GEOMETRY := ST_GeomFromText('POINT EMPTY', 4326);
     v_area_ha DOUBLE PRECISION := 0;
     v_main_location_id INT := 0;
+    v_save_area BOOLEAN := TRUE;
 BEGIN
     -- 1. Determine the initiative ID depending on which table triggered the event.
     IF TG_TABLE_NAME = 'initiative_location' THEN
@@ -26,7 +27,7 @@ BEGIN
 
     -- 2. If the initiative does not have a direct polygon, calculate from the associated locations
     IF v_geom IS NULL THEN
-        -- Try first with the union of associated municipalities (level = 3)
+        -- Try merging associated municipalities (level = 3)
         SELECT ST_Union(lp.geometry) INTO v_geom
         FROM initiatives.initiative_location il
         JOIN geo.location l ON il.location_id = l.id
@@ -35,6 +36,7 @@ BEGIN
 
         -- If you have no municipalities, try merging associated departments (level = 2)
         IF v_geom IS NULL THEN
+            v_save_area := FALSE;
             SELECT ST_Union(lp.geometry) INTO v_geom
             FROM initiatives.initiative_location il
             JOIN geo.location l ON il.location_id = l.id
@@ -49,7 +51,9 @@ BEGIN
         v_coordinate := ST_Centroid(v_geom);
         
         -- Calculate area in hectares. Casting to ::geography gives us an exact calculation in square meters. / 10000 = Hectares
-        v_area_ha := ST_Area(v_geom::geography) / 10000.0;
+        IF v_save_area IS TRUE THEN
+            v_area_ha := ST_Area(v_geom::geography) / 10000.0;
+        END IF;
         
         -- Find the parent department (level = 2) that intersects with the new centroid
         SELECT l.id INTO v_main_location_id
