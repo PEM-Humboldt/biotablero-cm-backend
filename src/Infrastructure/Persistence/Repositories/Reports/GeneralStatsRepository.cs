@@ -118,12 +118,14 @@ public class GeneralStatsRepository(GeneralContext dbContext) : IGeneralStatsRep
         var sql = $"""
             SELECT
                 COALESCE(
-                    ST_Area(
-                        ST_Transform(
-                            ST_UnaryUnion(geom),
-                            3116
-                        )
-                    ) / 10000.0,
+                    SUM(
+                        ST_Area(
+                            ST_Transform(
+                                ST_UnaryUnion(geom),
+                                3116
+                            )
+                        ) / 10000.0
+                    ),
                     0
                 ) AS "Value"
             FROM (
