@@ -129,6 +129,7 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             {
                 InitiativeId = i.Id,
                 InitiativeName = i.Name,
+                InitiativeShortName = i.ShortName,
                 Coordinate = new double[] { i.Coordinate.X, i.Coordinate.Y },
                 MainLocationId = i.MainLocationId,
             })

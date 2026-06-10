@@ -13,7 +13,6 @@
     <EmbeddedResource Include="Persistence\Scripts\fn_update_initiative_computed_fields.sql" />
   </ItemGroup>
 
-
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="4.0.6.4" />
     <PackageReference Include="ClosedXML" Version="0.105.0" />
