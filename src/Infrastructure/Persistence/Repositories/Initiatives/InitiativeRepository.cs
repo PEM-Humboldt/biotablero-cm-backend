@@ -119,9 +119,12 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
         // Filter by location if provided
         if (locationId.HasValue)
         {
-            query = query.Where(i => i.InitiativeLocations.Any(il =>
-                il.LocationId == locationId.Value &&
-                (il.Location.Level == (byte)LocationLevel.Department || il.Location.Level == (byte)LocationLevel.Municipality)));
+            query = query.Where(i =>
+                i.InitiativeLocations.Any(il =>
+                    (il.LocationId == locationId.Value &&
+                        (il.Location.Level == (byte)LocationLevel.Department || il.Location.Level == (byte)LocationLevel.Municipality)) ||
+                    (il.Location.ParentId == locationId.Value && il.Location.Level == (byte)LocationLevel.Municipality)) ||
+                i.MainLocationId == locationId.Value);
         }
 
         var results = await query
