@@ -229,6 +229,10 @@
     <value>Initiative disabled</value>
     <comment/>
   </data>
+  <data name="INI_014" xml:space="preserve">
+    <value>Invalid polygon location</value>
+    <comment/>
+  </data>
   <data name="ICO_001" xml:space="preserve">
     <value>There is already a contact with the same email and/or phone</value>
     <comment/>

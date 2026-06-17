@@ -16,6 +16,11 @@ public class InitiativeGeoData
     public string InitiativeName { get; set; } = string.Empty;
 
     /// <summary>
+    /// Initiative short name.
+    /// </summary>
+    public string InitiativeShortName { get; set; } = string.Empty;
+
+    /// <summary>
     /// Initiative coordinates [longitude, latitude].
     /// </summary>
     public double[] Coordinate { get; set; } = [];

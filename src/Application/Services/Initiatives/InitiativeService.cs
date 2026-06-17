@@ -313,11 +313,6 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         var entity = mapper.Map(entityData);
         entity.CreationDate = DateTimeOffset.UtcNow;
 
-        // TODO: Add these geographic functions to triggers
-        entity.Coordinate = await entityRepository.GetCentroidAsync(locationsIds, ct);
-        entity.PolygonArea = await entityRepository.CalcAreaAsync(entity, ct);
-        entity.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(entity.Coordinate, ct);
-
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
 
@@ -616,17 +611,21 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             };
         }
 
+        var mainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(polygon.Centroid, ct);
+
+        if (mainLocationId <= 0)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.InvalidPolygonLocation),
+            };
+        }
+
         // Check SRID
         polygon.SRID = 4326;
 
         // Update entity
         entity.Polygon = polygon;
-
-        // TODO: Add these geographic functions to triggers
-        entity.Coordinate = polygon.Centroid;
-        entity.PolygonArea = await entityRepository.CalcAreaAsync(entity, ct);
-        entity.MainLocationId = await locationRepository.GetDepartmentIdByCoordinateAsync(entity.Coordinate, ct);
-
         await entityRepository.UpdateAsync(entity, ct);
 
         var entityData = mapper.Map(entity);

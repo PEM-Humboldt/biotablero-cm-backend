@@ -166,6 +166,11 @@ public static class ValidationErrorCodes
         /// Entity disabled.
         /// </summary>
         public const string Disabled = "INI_013";
+
+        /// <summary>
+        /// Invalid polygon location.
+        /// </summary>
+        public const string InvalidPolygonLocation = "INI_014";
     }
 
     /// <summary>
