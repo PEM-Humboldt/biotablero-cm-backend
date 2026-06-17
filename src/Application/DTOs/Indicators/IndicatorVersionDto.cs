@@ -1,24 +1,29 @@
-﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
+﻿namespace IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
 using System;
 using System.Collections.Generic;
 
-using IAVH.BioTablero.CM.Core.Interfaces.Entities;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Indicator Version entity.
+/// Indicator Version dto.
 /// </summary>
-public class IndicatorVersion : BaseEntity<int>, IAggregateRoot
+public class IndicatorVersionDto : IDto
 {
+    /// <summary>
+    /// Item identifier.
+    /// </summary>
+    public int? Id { get; set; }
+
     /// <summary>
     /// Indicator identifier.
     /// </summary>
-    public int IndicatorId { get; set; }
+    public int? IndicatorId { get; set; }
 
     /// <summary>
     /// Creation date.
     /// </summary>
-    public DateTimeOffset CreationDate { get; set; }
+    public DateTimeOffset? CreationDate { get; set; }
 
     /// <summary>
     /// Version number.
@@ -51,17 +56,7 @@ public class IndicatorVersion : BaseEntity<int>, IAggregateRoot
     public string Authorship { get; set; }
 
     /// <summary>
-    /// Indicator relationship.
-    /// </summary>
-    public Indicator Indicator { get; set; }
-
-    /// <summary>
-    /// Indicator Version Map relationship.
-    /// </summary>
-    public ICollection<IndicatorVersionMap> Maps { get; init; }
-
-    /// <summary>
     /// Indicator Group relationship.
     /// </summary>
-    public ICollection<IndicatorGroup> Groups { get; init; }
+    public IEnumerable<IndicatorGroupDto> Groups { get; init; }
 }

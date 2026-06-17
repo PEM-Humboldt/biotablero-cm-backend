@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DependencyRegistry;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Geo;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Indicators;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Notifications;
@@ -10,6 +11,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Users;
 using IAVH.BioTablero.CM.Application.Services.Geo;
+using IAVH.BioTablero.CM.Application.Services.Indicators;
 using IAVH.BioTablero.CM.Application.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Services.Logging;
 using IAVH.BioTablero.CM.Application.Services.Notifications;
@@ -55,6 +57,8 @@ public static class ConfigAppServices
         services.AddScoped<IResourceFileService, ResourceFileService>();
         services.AddScoped<IResourceTagService, ResourceTagService>();
         services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<IIndicatorService, IndicatorService>();
+        services.AddScoped<IIndicatorVersionService, IndicatorVersionService>();
         services.AddSingleton<ISseNotificationDispatcher, SseNotificationDispatcher>();
 
         return services;

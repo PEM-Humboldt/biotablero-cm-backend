@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -263,8 +262,9 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
+        var userIsAdminOrLeader = await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, userIsAdmin, ct);
 
-        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, userIsAdmin, ct))
+        if (!userIsAdminOrLeader && entity?.UserName != userName)
         {
             return new(true)
             {
@@ -292,11 +292,10 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             };
         }
 
-        // Validate number of leaders
-        IEnumerable<InitiativeUser> leaders = null;
         if (entity.LevelId == (int)InitiativeUserLevelEnum.Leader)
         {
-            leaders = await entityRepository.GetByInitiativeAndLevelAsync(entity.InitiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
+            // Validate number of leaders
+            var leaders = await entityRepository.GetByInitiativeAndLevelAsync(entity.InitiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
 
             if (leaders.Count() is <= 1)
             {
