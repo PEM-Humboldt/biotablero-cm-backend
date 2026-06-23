@@ -22,12 +22,12 @@ public class IndicatorValue : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Date.
     /// </summary>
-    public DateTimeOffset Date { get; set; }
+    public DateTime Date { get; set; }
 
     /// <summary>
     /// Date end.
     /// </summary>
-    public DateTimeOffset? DateEnd { get; set; }
+    public DateTime? DateEnd { get; set; }
 
     /// <summary>
     /// Indicator Value.

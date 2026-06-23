@@ -31,9 +31,11 @@ public class IndicatorValueConfig : IEntityTypeConfiguration<IndicatorValue>
 
         builder.Property(i => i.Date)
             .HasColumnName("date")
+            .HasColumnType("timestamp without time zone")
             .IsRequired();
 
         builder.Property(i => i.DateEnd)
+            .HasColumnType("timestamp without time zone")
             .HasColumnName("date_end");
 
         builder.Property(i => i.Value)
@@ -53,5 +55,23 @@ public class IndicatorValueConfig : IEntityTypeConfiguration<IndicatorValue>
         builder.HasOne(e => e.MeasureUnit)
             .WithMany(p => p.IndicatorValues)
             .HasForeignKey(e => e.MeasureUnitId);
+
+        builder
+            .ToTable(t =>
+            t.HasCheckConstraint(
+                "chk_date_end_after_date",
+                "\"date_end\" IS NULL OR \"date_end\" > \"date\""));
+
+        builder
+            .ToTable(t =>
+            t.HasCheckConstraint(
+                "chk_value_greater_than_lower_limit",
+                "\"lower_limit\" IS NULL OR \"value\" > \"lower_limit\""));
+
+        builder
+            .ToTable(t =>
+            t.HasCheckConstraint(
+                "chk_upper_limit_greater_than_value",
+                "\"upper_limit\" IS NULL OR \"upper_limit\" > \"value\""));
     }
 }
