@@ -56,4 +56,18 @@ public class IndicatorController(
         var response = await entityService.GetListAsync(queryOptions, ct);
         return webTools.CustomResponse(response);
     }
+
+    /// <summary>
+    /// Get entities by Initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities list from parameters.</returns>
+    [HttpGet("GetByInitiative/{initiativeId}")]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(IndicatorListResponseExample))]
+    public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
+    {
+        var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
+        return webTools.CustomResponse(response);
+    }
 }

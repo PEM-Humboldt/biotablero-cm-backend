@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Indicators;
 
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -43,5 +44,19 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         query = entityRepository.IncludeOdataEntities(query);
 
         return await GetOdataListByQueryAsync(query, queryOptions, ct);
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default)
+    {
+        var dataListEntity = await entityRepository.GetByInitiativeAsync(initiativeId, ct);
+
+        var dataListDto = dataListEntity
+            .Select(mapper.Map);
+
+        return new()
+        {
+            ResponseBody = dataListDto,
+        };
     }
 }
