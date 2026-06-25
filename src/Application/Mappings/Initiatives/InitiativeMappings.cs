@@ -35,6 +35,7 @@ public class InitiativeMappings(
             BannerUrl = entity.BannerUrl,
             Enabled = entity.Enabled,
             Coordinate = entity.Coordinate != null && !entity.Coordinate.IsEmpty ? [entity.Coordinate.Y, entity.Coordinate.X] : null,
+            MainLocationId = entity.MainLocationId,
             PolygonArea = entity.PolygonArea,
             Contacts = entity.InitiativeContacts?.Select(initiativeContactMappings.Map),
             Locations = entity.InitiativeLocations?.Select(initiativeLocationMappings.Map),
