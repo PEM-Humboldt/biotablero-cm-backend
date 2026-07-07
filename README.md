@@ -14,7 +14,7 @@ Built with .NET 8.0.
 
 Generate a `.env` file with the project parameters. You can generate the file based on the `sample.env` example.
 
-### Run containers
+### Run containers (for development environment)
 
 ```sh
 docker compose -f docker-compose-dev.yml -p cm-local up
@@ -49,7 +49,7 @@ dotnet ef database update --startup-project src/WebApi --project src/Infrastruct
 ### Run development server
 
 ```sh
-dotnet run --project src/WebApi/WebApi.csproj
+dotnet run --environment Development --project src/WebApi/WebApi.csproj
 ```
 
 Check Swagger docs [here](http://localhost:8001/swagger/index.html).
