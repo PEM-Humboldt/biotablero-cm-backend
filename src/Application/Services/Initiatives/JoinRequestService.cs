@@ -457,11 +457,14 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
             .Join(leadersData, initiativeUser => initiativeUser.UserName, externalUser => externalUser.Username, (initiativeUser, externalUser) => new { initiativeUser, externalUser });
 
         var results = new List<bool>();
-        var emailTasks = notificationsData.Select(async data =>
-        {
-            results.Add(await SendNotificationJoinRequestAsync(initiativeId, data.externalUser, emailData, ct));
-        });
 
-        await Task.WhenAll(emailTasks);
+        foreach (var data in notificationsData)
+        {
+            results.Add(await SendNotificationJoinRequestAsync(
+                initiativeId,
+                data.externalUser,
+                emailData,
+                ct));
+        }
     }
 }
