@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +18,14 @@ public interface IIndicatorRepository : IRepository<Indicator, int>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
     IQueryable<Indicator> IncludeOdataEntities(IQueryable<Indicator> query);
+
+    /// <summary>
+    /// Get elements by initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities by selected initiative.</returns>
+    Task<IEnumerable<Indicator>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
     /// Returns the total number of records.

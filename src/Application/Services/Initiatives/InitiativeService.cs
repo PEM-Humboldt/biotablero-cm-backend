@@ -648,15 +648,19 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     public async Task<CustomWebResponse> GetByLocationAsync(int? locationId = null, CancellationToken ct = default)
     {
         var result = await entityRepository.GetActiveInitiativesWithCoordinatesByLocationAsync(locationId, ct);
+        var resultMapped = result
+                .Select(mapper.Map)
+                .ToList();
 
-        foreach (var i in result)
+        foreach (var initiativeData in resultMapped)
         {
-            i.Coordinate = [i.Coordinate[1], i.Coordinate[0]];
+            initiativeData.Enabled = null;
+            initiativeData.PolygonArea = null;
         }
 
         return new CustomWebResponse
         {
-            ResponseBody = result,
+            ResponseBody = resultMapped,
         };
     }
 

@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 
@@ -105,9 +104,11 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<InitiativeGeoData>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default)
+    public async Task<IEnumerable<Initiative>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default)
     {
         var query = dbContext.Initiatives
+            .Include(e => e.InitiativeTags)
+                .ThenInclude(e => e.Tag)
             .Where(i => i.Enabled && i.Coordinate != null);
 
         // Discard filter for default nation identifier
@@ -119,26 +120,25 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
         // Filter by location if provided
         if (locationId.HasValue)
         {
-            query = query.Where(i =>
-                i.InitiativeLocations.Any(il =>
-                    (il.LocationId == locationId.Value &&
-                        (il.Location.Level == (byte)LocationLevel.Department || il.Location.Level == (byte)LocationLevel.Municipality)) ||
-                    (il.Location.ParentId == locationId.Value && il.Location.Level == (byte)LocationLevel.Municipality)) ||
-                i.MainLocationId == locationId.Value);
+            query = query
+                .Where(e =>
+                    e.InitiativeLocations.Any(e =>
+                        (e.LocationId == locationId.Value &&
+                            (e.Location.Level == (byte)LocationLevel.Department || e.Location.Level == (byte)LocationLevel.Municipality)) ||
+                        (e.Location.ParentId == locationId.Value && e.Location.Level == (byte)LocationLevel.Municipality)) ||
+                    e.MainLocationId == locationId.Value);
         }
 
-        var results = await query
-            .Select(i => new InitiativeGeoData
+        return await query
+            .Select(e => new Initiative()
             {
-                InitiativeId = i.Id,
-                InitiativeName = i.Name,
-                InitiativeShortName = i.ShortName,
-                Coordinate = new double[] { i.Coordinate.X, i.Coordinate.Y },
-                MainLocationId = i.MainLocationId,
-            })
-            .ToListAsync(ct);
-
-        return results;
+                Id = e.Id,
+                Name = e.Name,
+                CreationDate = e.CreationDate,
+                Coordinate = e.Coordinate,
+                MainLocationId = e.MainLocationId,
+                InitiativeTags = e.InitiativeTags,
+            }).ToListAsync(ct);
     }
 
     /// <inheritdoc/>

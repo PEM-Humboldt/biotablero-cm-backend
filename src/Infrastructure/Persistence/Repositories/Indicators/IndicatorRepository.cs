@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Indicators;
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,24 +31,21 @@ public class IndicatorRepository : Repository<Indicator, int>, IIndicatorReposit
 
     /// <inheritdoc/>
     public override async Task<Indicator> GetByIdAsync(int id, CancellationToken ct = default) =>
-        await dbContext.Indicators
-            .Include(e => e.Versions)
-            .Include(e => e.Type)
-            .Include(e => e.IndicatorTags)
-                .ThenInclude(e => e.Tag)
+        await IncludeCustomEntities()
             .Include(e => e.IndicatorLocations)
                 .ThenInclude(e => e.Location)
                     .ThenInclude(e => e.Parent)
-            .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
+    public async Task<IEnumerable<Indicator>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
+        await IncludeCustomEntities()
+            .Where(e => e.InitiativeId == initiativeId)
+            .ToListAsync(ct);
+
+    /// <inheritdoc/>
     public IQueryable<Indicator> IncludeOdataEntities(IQueryable<Indicator> query) =>
-        query
-            .Include(e => e.Type)
-            .Include(e => e.IndicatorTags)
-                .ThenInclude(e => e.Tag)
-            .Include(e => e.Versions);
+        IncludeCustomEntities(query);
 
     /// <inheritdoc/>
     public async Task<int> CountAsync(int initiativeId, CancellationToken ct = default) =>
@@ -62,4 +60,19 @@ public class IndicatorRepository : Repository<Indicator, int>, IIndicatorReposit
             .Where(e => e.IndicatorId == id)
             .Select(e => e.Version)
             .ToArrayAsync(ct);
+
+    /// <summary>
+    /// Include custom entities.
+    /// </summary>
+    /// <returns>Modified Linq query.</returns>
+    private IQueryable<Indicator> IncludeCustomEntities(IQueryable<Indicator> query = null)
+    {
+        query ??= dbContext.Indicators;
+
+        return query
+            .Include(e => e.Type)
+            .Include(e => e.Versions)
+            .Include(e => e.IndicatorTags)
+                .ThenInclude(e => e.Tag);
+    }
 }

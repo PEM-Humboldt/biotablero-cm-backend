@@ -66,6 +66,11 @@ public class InitiativeDto : IDto
     public double? PolygonArea { get; set; }
 
     /// <summary>
+    /// Main location identifier.
+    /// </summary>
+    public int? MainLocationId { get; set; }
+
+    /// <summary>
     /// Enabled flag.
     /// </summary>
     public bool? Enabled { get; set; }

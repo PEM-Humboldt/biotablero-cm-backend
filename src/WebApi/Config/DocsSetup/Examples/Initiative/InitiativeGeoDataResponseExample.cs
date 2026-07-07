@@ -1,35 +1,41 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
+using System;
 using System.Collections.Generic;
 
-using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
 using Swashbuckle.AspNetCore.Filters;
+
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 
 /// <summary>
 /// Initiative geo data response example.
 /// </summary>
-public class InitiativeGeoDataResponseExample : IExamplesProvider<List<InitiativeGeoData>>
+public class InitiativeGeoDataResponseExample : IExamplesProvider<List<InitiativeDto>>
 {
     /// <inheritdoc/>
-    public List<InitiativeGeoData> GetExamples() => [
+    public List<InitiativeDto> GetExamples() => [
         new()
         {
-            InitiativeId = 1,
-            InitiativeName = "Iniciativa de Prueba",
+            Id = 1,
+            Name = "Initiative example",
+            CreationDate = DateTime.Now,
             Coordinate = [-74.09423914807002, 4.645238678888821],
-        },
-        new()
-        {
-            InitiativeId = 2,
-            InitiativeName = "Conservacion Amazonas",
-            Coordinate = [-74.04999999999998, 4.6499999999999995],
-        },
-        new()
-        {
-            InitiativeId = 3,
-            InitiativeName = "Reserva Natural Circular",
-            Coordinate = [-74.15, 4.6499999999999995],
+            Tags = [
+                new()
+                {
+                    InitiativeTagId = 0,
+                    Tag = new()
+                    {
+                        Id = 0,
+                        Name = "Tag example",
+                        Url = "https://example.com/tag-data",
+                        Category = new EnumEntityDto<TagCategory>(TagCategory.PoliticalContext),
+                    },
+                },
+            ],
         },
     ];
 }
