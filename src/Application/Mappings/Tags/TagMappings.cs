@@ -24,6 +24,7 @@ public class TagMappings : MapperRead<Tag, TagDto>, IMapperCreateReadAndUpdate<T
         {
             Id = entity.Id,
             Name = entity.Name,
+            FullName = entity.FullName,
             Url = entity.Url?.ToString(),
             Category = new EnumEntityDto<TagCategoryEnum>(entity.CategoryId),
         };
@@ -37,6 +38,7 @@ public class TagMappings : MapperRead<Tag, TagDto>, IMapperCreateReadAndUpdate<T
         return new()
         {
             Name = dto.Name,
+            FullName = dto.FullName,
             Url = dto.Url != null ? new Uri(dto.Url) : null,
             CategoryId = dto.Category.Id,
         };
@@ -49,6 +51,7 @@ public class TagMappings : MapperRead<Tag, TagDto>, IMapperCreateReadAndUpdate<T
         ArgumentNullException.ThrowIfNull(dto);
 
         entity.Name = dto.Name;
+        entity.FullName = dto.FullName;
         entity.Url = dto.Url != null ? new Uri(dto.Url) : null;
     }
 }

@@ -21,6 +21,11 @@ public class TagDto : IDto
     public string Name { get; set; }
 
     /// <summary>
+    /// Tag full name.
+    /// </summary>
+    public string FullName { get; set; }
+
+    /// <summary>
     /// Tag URL.
     /// </summary>
     public string Url { get; set; }

@@ -16,6 +16,7 @@ public class TagAddRequestExample : IExamplesProvider<TagDto>
     public TagDto GetExamples() => new()
     {
         Name = "Tag example",
+        FullName = "Full name example",
         Url = "https://example.com/tag-data",
         Category = new EnumEntityDto<TagCategory>(TagCategory.PoliticalContext),
     };

@@ -13,7 +13,7 @@ public class TagConfig : IEntityTypeConfiguration<Tag>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<Tag> builder)
     {
-        builder.ToTable("tag", "initiatives");
+        builder.ToTable("tag", "tags");
 
         builder?.HasKey(e => e.Id);
 
@@ -25,6 +25,10 @@ public class TagConfig : IEntityTypeConfiguration<Tag>
             .HasColumnName("name")
             .HasMaxLength(40)
             .IsRequired();
+
+        builder.Property(i => i.FullName)
+            .HasColumnName("full_name")
+            .HasMaxLength(120);
 
         builder.Property(i => i.Url)
             .HasColumnName("url")

@@ -32,7 +32,7 @@ public class InitiativeValidator : AbstractValidator<InitiativeDto>
         RuleFor(dto => dto.Description)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
-            .MaximumLength(300)
+            .MaximumLength(1000)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Baseline)

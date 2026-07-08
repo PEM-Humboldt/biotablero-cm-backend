@@ -28,6 +28,10 @@ public class TagValidator : AbstractValidator<TagDto>
             .MaximumLength(40)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
+        RuleFor(dto => dto.FullName)
+            .MaximumLength(120)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
+
         RuleFor(dto => dto.Url)
             .Matches(RegExprConstants.Url)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue)
