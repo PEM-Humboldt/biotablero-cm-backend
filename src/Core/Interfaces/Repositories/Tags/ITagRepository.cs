@@ -11,13 +11,13 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 public interface ITagRepository : IRepository<Tag, int>
 {
     /// <summary>
-    /// Get if elements exists by name and category.
+    /// Get if element is duplicated.
     /// </summary>
     /// <param name="name">Entity name.</param>
     /// <param name="categoryId">Tag Category identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
-    Task<bool> AnyByNameAndCategory(string name, int categoryId, CancellationToken ct = default);
+    Task<bool> IsDuplicated(string name, int categoryId, CancellationToken ct = default);
 
     /// <summary>
     /// Get if element is duplicated.
