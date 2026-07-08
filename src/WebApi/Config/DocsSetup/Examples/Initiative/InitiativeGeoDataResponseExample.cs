@@ -4,11 +4,8 @@ using System;
 using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
-using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
 using Swashbuckle.AspNetCore.Filters;
-
-using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 
 /// <summary>
 /// Initiative geo data response example.
@@ -22,17 +19,24 @@ public class InitiativeGeoDataResponseExample : IExamplesProvider<List<Initiativ
             Id = 1,
             Name = "Initiative example",
             CreationDate = DateTime.Now,
-            Coordinate = [-74.09423914807002, 4.645238678888821],
-            Tags = [
+            Coordinate = [4.645238678888821, -74.09423914807002],
+            Locations = [
                 new()
                 {
-                    InitiativeTagId = 0,
-                    Tag = new()
+                    Id = 0,
+                    LocationId = 0,
+                    Locality = "Locality example",
+                    Location = new()
                     {
                         Id = 0,
-                        Name = "Tag example",
-                        Url = "https://example.com/tag-data",
-                        Category = new EnumEntityDto<TagCategory>(TagCategory.PoliticalContext),
+                        Name = "Example",
+                        Code = "000",
+                        Parent = new()
+                        {
+                            Id = 0,
+                            Name = "Example",
+                            Code = "000",
+                        },
                     },
                 },
             ],
