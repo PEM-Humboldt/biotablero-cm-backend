@@ -35,6 +35,7 @@ public class IndicatorRepository : Repository<Indicator, int>, IIndicatorReposit
             .Include(e => e.IndicatorLocations)
                 .ThenInclude(e => e.Location)
                     .ThenInclude(e => e.Parent)
+            .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
