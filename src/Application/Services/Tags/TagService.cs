@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Services.Tag;
+﻿namespace IAVH.BioTablero.CM.Application.Services.Tags;
 
 using System.Threading;
 using System.Threading.Tasks;

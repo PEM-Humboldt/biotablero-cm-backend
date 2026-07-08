@@ -17,7 +17,7 @@ using IAVH.BioTablero.CM.Application.Services.Logging;
 using IAVH.BioTablero.CM.Application.Services.Notifications;
 using IAVH.BioTablero.CM.Application.Services.Reports;
 using IAVH.BioTablero.CM.Application.Services.Resources;
-using IAVH.BioTablero.CM.Application.Services.Tag;
+using IAVH.BioTablero.CM.Application.Services.Tags;
 using IAVH.BioTablero.CM.Application.Services.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Services.Users;
 
