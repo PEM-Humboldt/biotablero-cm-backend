@@ -28,6 +28,7 @@ public class InitiativeResponseExample : IExamplesProvider<InitiativeDto>
         Coordinate = [-75.3, 5.3],
         PolygonArea = 62.7,
         Enabled = true,
+        HasPolygon = false,
         Locations = [
             new()
             {

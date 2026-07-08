@@ -25,6 +25,7 @@ public class InitiativeListResponseExample : IExamplesProvider<List<InitiativeDt
             Objective = "Objective example",
             CreationDate = DateTimeOffset.UtcNow,
             Enabled = true,
+            HasPolygon = false,
             Locations = null,
             Contacts = null,
             Users = null,

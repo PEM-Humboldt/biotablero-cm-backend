@@ -76,6 +76,11 @@ public class InitiativeDto : IDto
     public bool? Enabled { get; set; }
 
     /// <summary>
+    /// Has polygon flag.
+    /// </summary>
+    public bool? HasPolygon { get; set; }
+
+    /// <summary>
     /// Initiative Locations relationship.
     /// </summary>
     public IEnumerable<InitiativeLocationDto> Locations { get; init; }
