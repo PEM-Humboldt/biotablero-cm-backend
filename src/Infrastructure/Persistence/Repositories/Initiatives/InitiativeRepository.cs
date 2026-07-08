@@ -107,8 +107,9 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     public async Task<IEnumerable<Initiative>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default)
     {
         var query = dbContext.Initiatives
-            .Include(e => e.InitiativeTags)
-                .ThenInclude(e => e.Tag)
+            .Include(e => e.InitiativeLocations)
+                .ThenInclude(e => e.Location)
+                    .ThenInclude(e => e.Parent)
             .Where(i => i.Enabled && i.Coordinate != null);
 
         // Discard filter for default nation identifier
@@ -137,8 +138,9 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
                 CreationDate = e.CreationDate,
                 Coordinate = e.Coordinate,
                 MainLocationId = e.MainLocationId,
-                InitiativeTags = e.InitiativeTags,
-            }).ToListAsync(ct);
+                InitiativeLocations = e.InitiativeLocations,
+            })
+            .ToListAsync(ct);
     }
 
     /// <inheritdoc/>

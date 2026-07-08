@@ -656,6 +656,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         {
             initiativeData.Enabled = null;
             initiativeData.PolygonArea = null;
+            initiativeData.HasPolygon = null;
         }
 
         return new CustomWebResponse
