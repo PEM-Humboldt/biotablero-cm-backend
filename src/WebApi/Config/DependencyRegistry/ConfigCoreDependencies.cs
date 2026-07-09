@@ -52,6 +52,8 @@ public static class ConfigCoreDependencies
 
         services.ConfigureFormOptions();
 
+        services.AddMemoryCache();
+
         services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
         services.AddSingleton<IWebTools, WebTools>();
         services.AddSingleton<IWebViewTools, WebViewTools>();

@@ -24,7 +24,8 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
-using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam.Services;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam.TokenProviders;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.ImageUtils;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Config.Entities;
@@ -102,7 +103,13 @@ public static class ConfigExternalServices
         // External services
         services.AddScoped(typeof(IReportService<>), typeof(ReportExcelService<>));
         services.AddScoped<IStorageService, StorageService>();
-        services.AddSingleton<IIamService, IamService>();
+
+        services.AddHttpClient<IKeycloakTokenProvider, KeycloakTokenProvider>();
+        services.AddHttpClient<IIamService, IamService>(client =>
+        {
+            client.BaseAddress = new Uri($"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/admin/realms/{Environment.GetEnvironmentVariable("KC_REALM")}");
+        });
+
         services.AddSingleton<IEmailService, EmailService>();
         services.AddScoped<IReportConfig<LogDto>, LogReportConfig>();
         services.AddScoped<IVideoHelperService, VideoHelperService>();

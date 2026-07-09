@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Iam;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Iam.Services;
 
 using System;
 using System.Collections.Generic;
@@ -21,22 +21,19 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IamEnums;
 public class IamService : IIamService
 {
     private readonly HttpClient httpClient;
-    private readonly string baseUrl;
-    private readonly string baseUrlAdmin;
-    private readonly string clientId;
-    private readonly string clientSecret;
+    private readonly IKeycloakTokenProvider tokenProvider;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="httpClient">HTTP Client.</param>
-    public IamService(HttpClient httpClient)
+    /// <param name="tokenProvider">Keycloak token provider.</param>
+    public IamService(
+        HttpClient httpClient,
+        IKeycloakTokenProvider tokenProvider)
     {
         this.httpClient = httpClient;
-        baseUrl = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}";
-        baseUrlAdmin = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/admin/realms/{Environment.GetEnvironmentVariable("KC_REALM")}";
-        clientId = Environment.GetEnvironmentVariable("KC_CLIENT_BACKEND");
-        clientSecret = Environment.GetEnvironmentVariable("KC_CLIENT_BACKEND_PASS");
+        this.tokenProvider = tokenProvider;
     }
 
     /// <inheritdoc/>
@@ -72,13 +69,11 @@ public class IamService : IIamService
     /// <inheritdoc/>
     public async Task<IEnumerable<ExternalUser>> GetAllEnabledUsersDataAsync(CancellationToken ct = default)
     {
-        var token = await GetKeycloakAdminTokenAsync(ct);
+        var token = await tokenProvider.GetTokenAsync(ct);
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var url = new Uri($"{baseUrlAdmin}/users?enabled=true&emailVerified=true");
-
-        var response = await httpClient.GetAsync(url, ct);
+        var response = await httpClient.GetAsync($"/users?enabled=true&emailVerified=true", ct);
 
         response.EnsureSuccessStatusCode();
 
@@ -96,11 +91,11 @@ public class IamService : IIamService
     /// <returns>User data.</returns>
     private async Task<ExternalUser> GetKeycloakUserDataAsync(UserVariable userVariableName, string userVariableValue, CancellationToken ct = default)
     {
-        var token = await GetKeycloakAdminTokenAsync(ct);
+        var token = await tokenProvider.GetTokenAsync(ct);
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var url = new Uri($"{baseUrlAdmin}/users?exact=true&{userVariableName.ToString().ToLowerInvariant()}={Uri.EscapeDataString(userVariableValue)}");
+        var url = new Uri($"/users?exact=true&{userVariableName.ToString().ToLowerInvariant()}={Uri.EscapeDataString(userVariableValue)}");
 
         var response = await httpClient.GetAsync(url, ct);
 
@@ -116,30 +111,6 @@ public class IamService : IIamService
         var users = MapKeycloakUsers(content);
 
         return users.FirstOrDefault();
-    }
-
-    /// <summary>
-    /// Get IAM admin token.
-    /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>JWT value.</returns>
-    private async Task<string> GetKeycloakAdminTokenAsync(CancellationToken ct = default)
-    {
-        var tokenUrl = new Uri($"{baseUrl}/protocol/openid-connect/token");
-
-        using var content = new FormUrlEncodedContent(
-        [
-            new KeyValuePair<string, string>("client_id", clientId),
-            new KeyValuePair<string, string>("client_secret", clientSecret),
-            new KeyValuePair<string, string>("grant_type", "client_credentials"),
-        ]);
-
-        var response = await httpClient.PostAsync(tokenUrl, content, ct);
-        response.EnsureSuccessStatusCode();
-
-        var json = await response.Content.ReadAsStringAsync(ct);
-        using var doc = JsonDocument.Parse(json);
-        return doc.RootElement.GetProperty("access_token").GetString()!;
     }
 
     /// <summary>
