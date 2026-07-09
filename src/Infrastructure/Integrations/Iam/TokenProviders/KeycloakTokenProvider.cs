@@ -68,7 +68,7 @@ public class KeycloakTokenProvider : IKeycloakTokenProvider
             };
 
             var response = await httpClient.PostAsync(
-                $"{options.BaseUrl}/realms/{options.Realm}/protocol/openid-connect/token",
+                $"{options.BaseUrl}/protocol/openid-connect/token",
                 new FormUrlEncodedContent(form),
                 ct);
 

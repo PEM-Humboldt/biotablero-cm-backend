@@ -73,7 +73,7 @@ public class IamService : IIamService
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var response = await httpClient.GetAsync($"/users?enabled=true&emailVerified=true", ct);
+        var response = await httpClient.GetAsync($"users?enabled=true&emailVerified=true", ct);
 
         response.EnsureSuccessStatusCode();
 
@@ -95,9 +95,7 @@ public class IamService : IIamService
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var url = new Uri($"/users?exact=true&{userVariableName.ToString().ToLowerInvariant()}={Uri.EscapeDataString(userVariableValue)}");
-
-        var response = await httpClient.GetAsync(url, ct);
+        var response = await httpClient.GetAsync($"users?exact=true&{userVariableName.ToString().ToLowerInvariant()}={Uri.EscapeDataString(userVariableValue)}", ct);
 
         if (response.StatusCode == HttpStatusCode.NotFound)
         {

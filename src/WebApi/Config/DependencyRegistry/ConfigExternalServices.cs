@@ -107,7 +107,7 @@ public static class ConfigExternalServices
         services.AddHttpClient<IKeycloakTokenProvider, KeycloakTokenProvider>();
         services.AddHttpClient<IIamService, IamService>(client =>
         {
-            client.BaseAddress = new Uri($"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/admin/realms/{Environment.GetEnvironmentVariable("KC_REALM")}");
+            client.BaseAddress = new Uri($"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/admin/realms/{Environment.GetEnvironmentVariable("KC_REALM")}/");
         });
 
         services.AddSingleton<IEmailService, EmailService>();
