@@ -34,6 +34,7 @@ public class IndicatorMappings(
                 {
                     Id = v.Id,
                     Version = v.Version,
+                    CreationDate = v.CreationDate,
                 })
             ],
         };

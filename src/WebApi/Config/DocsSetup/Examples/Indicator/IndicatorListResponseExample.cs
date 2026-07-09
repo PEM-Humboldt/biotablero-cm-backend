@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Indicator;
 
+using System;
 using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Indicators;
@@ -29,6 +30,7 @@ public class IndicatorListResponseExample : IExamplesProvider<List<IndicatorDto>
                 {
                     Id = 0,
                     Version = 0,
+                    CreationDate = DateTime.Now,
                 }
             ],
             Locations = [
