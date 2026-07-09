@@ -10,7 +10,7 @@ using System.Reflection;
 using ClosedXML.Excel;
 
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Reports;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Config.General;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Interfaces;

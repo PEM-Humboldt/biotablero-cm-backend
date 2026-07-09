@@ -7,7 +7,13 @@ using Amazon.Runtime;
 using Amazon.S3;
 
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Email;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Iam;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.ImageUtils;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Reports;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Storage;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Video;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Web;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
