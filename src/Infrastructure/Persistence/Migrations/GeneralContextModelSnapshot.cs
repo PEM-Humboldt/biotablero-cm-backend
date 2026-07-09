@@ -146,6 +146,12 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("initiative_id");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(240)
+                        .HasColumnType("character varying(240)")
+                        .HasColumnName("name");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IndicatorTypeId");

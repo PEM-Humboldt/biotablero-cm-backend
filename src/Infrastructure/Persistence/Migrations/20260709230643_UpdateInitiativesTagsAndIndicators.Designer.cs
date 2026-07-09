@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20260708203859_UpdateInitiativesAndTags2")]
-    partial class UpdateInitiativesAndTags2
+    [Migration("20260709230643_UpdateInitiativesTagsAndIndicators")]
+    partial class UpdateInitiativesTagsAndIndicators
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,6 +148,12 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Property<int>("InitiativeId")
                         .HasColumnType("integer")
                         .HasColumnName("initiative_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(240)
+                        .HasColumnType("character varying(240)")
+                        .HasColumnName("name");
 
                     b.HasKey("Id");
 

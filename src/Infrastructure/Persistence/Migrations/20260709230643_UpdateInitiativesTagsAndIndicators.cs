@@ -5,7 +5,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 /// <inheritdoc />
-public partial class UpdateInitiativesAndTags2 : Migration
+public partial class UpdateInitiativesTagsAndIndicators : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,6 +37,15 @@ public partial class UpdateInitiativesAndTags2 : Migration
             oldMaxLength: 300);
 
         migrationBuilder.AddColumn<string>(
+            name: "name",
+            schema: "indicators",
+            table: "indicator",
+            type: "character varying(240)",
+            maxLength: 240,
+            nullable: false,
+            defaultValue: string.Empty);
+
+        migrationBuilder.AddColumn<string>(
             name: "full_name",
             schema: "tags",
             table: "tag",
@@ -48,6 +57,11 @@ public partial class UpdateInitiativesAndTags2 : Migration
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
+        migrationBuilder.DropColumn(
+            name: "name",
+            schema: "indicators",
+            table: "indicator");
+
         migrationBuilder.DropColumn(
             name: "full_name",
             schema: "tags",
