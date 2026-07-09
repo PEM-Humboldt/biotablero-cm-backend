@@ -75,8 +75,8 @@ public static class ConfigCoreDependencies
     private static IServiceCollection AddAuthService(this IServiceCollection services, bool isDevelopment)
     {
         var clientId = Environment.GetEnvironmentVariable("KC_CLIENT");
-
         var useHttpsStr = Environment.GetEnvironmentVariable("KC_USE_HTTPS");
+
         if (!bool.TryParse(useHttpsStr, out bool useHttps))
         {
             useHttps = !isDevelopment;

@@ -59,6 +59,7 @@ public static class ConfigLogProperties
                     .Enrich.WithProperty(LogConstants.CustomRecord, false)
                     .Enrich.WithProperty(LogConstants.CustomType, (int)LogType.System)
                     .Enrich.With(new UserEnricher(serviceProvider.GetRequiredService<IHttpContextAccessor>()))
+                    .Enrich.WithMachineName()
                     .Enrich.With(new ClientIpEnricher())
                     .Enrich.With(new ClientHeaderEnricher("User-Agent", "ClientAgent"))
                     .ReadFrom.Configuration(context.Configuration)
