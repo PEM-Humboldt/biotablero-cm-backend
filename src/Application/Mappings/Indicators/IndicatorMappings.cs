@@ -24,6 +24,7 @@ public class IndicatorMappings(
         return new()
         {
             Id = entity.Id,
+            Name = entity.Name,
             InitiativeId = entity.InitiativeId,
             Type = indicatorTypeMappings.Map(entity.Type),
             Tags = entity.IndicatorTags?.Select(indicatorTagMappings.Map),

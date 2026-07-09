@@ -11,6 +11,7 @@ public class IndicatorOdataResponseExample : BaseOdataResponseExample<IndicatorD
     protected override IndicatorDto CreateExampleDto() => new()
     {
         Id = 0,
+        Name = "Indicator example",
         InitiativeId = 0,
         Type = new()
         {

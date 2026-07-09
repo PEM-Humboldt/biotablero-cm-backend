@@ -13,6 +13,7 @@ public class IndicatorResponseExample : IExamplesProvider<IndicatorDto>
     public IndicatorDto GetExamples() => new()
     {
         Id = 0,
+        Name = "Indicator example",
         InitiativeId = 0,
         Type = new()
         {

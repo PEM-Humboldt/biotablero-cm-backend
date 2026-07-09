@@ -17,6 +17,7 @@ public class IndicatorListResponseExample : IExamplesProvider<List<IndicatorDto>
         new()
         {
             Id = 0,
+            Name = "Indicator example",
             InitiativeId = 0,
             Type = new()
             {
