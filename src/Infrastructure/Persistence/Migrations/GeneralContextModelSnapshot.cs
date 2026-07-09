@@ -535,8 +535,8 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
                         .HasColumnName("description");
 
                     b.Property<bool>("Enabled")
@@ -1306,11 +1306,6 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("tag_category_id");
 
-                    b.Property<string>("FullName")
-                        .HasMaxLength(120)
-                        .HasColumnType("character varying(120)")
-                        .HasColumnName("full_name");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -1329,7 +1324,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.HasIndex("Name", "CategoryId")
                         .IsUnique();
 
-                    b.ToTable("tag", "tags");
+                    b.ToTable("tag", "initiatives");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Tags.TagCategory", b =>
@@ -1352,7 +1347,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("tag_category", "tags");
+                    b.ToTable("tag_category", "initiatives");
 
                     b.HasData(
                         new
