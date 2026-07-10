@@ -11,9 +11,9 @@ using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 using Microsoft.Extensions.Caching.Memory;
 
 /// <summary>
-/// Keycloak token provider.
+/// Keycloak token provider for Custom API.
 /// </summary>
-public class KeycloakTokenProvider : BaseKeycloakTokenProvider, IKeycloakTokenProvider
+public class CustomApiKeycloakTokenProvider : BaseKeycloakTokenProvider, ICustomApiKeycloakTokenProvider
 {
     private readonly KeycloakOptions options;
 
@@ -22,7 +22,7 @@ public class KeycloakTokenProvider : BaseKeycloakTokenProvider, IKeycloakTokenPr
     /// </summary>
     /// <param name="httpClient">HTTP Client.</param>
     /// <param name="cache">Local cache.</param>
-    public KeycloakTokenProvider(
+    public CustomApiKeycloakTokenProvider(
         HttpClient httpClient,
         IMemoryCache cache)
         : base(httpClient, cache)
@@ -31,8 +31,8 @@ public class KeycloakTokenProvider : BaseKeycloakTokenProvider, IKeycloakTokenPr
         {
             BaseUrl = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}",
             Realm = Environment.GetEnvironmentVariable("KC_REALM"),
-            ClientId = Environment.GetEnvironmentVariable("KC_CLIENT_BACKEND"),
-            ClientSecret = Environment.GetEnvironmentVariable("KC_CLIENT_BACKEND_PASS"),
+            ClientId = Environment.GetEnvironmentVariable("KC_CLIENT_CUSTOM_API"),
+            ClientSecret = Environment.GetEnvironmentVariable("KC_CLIENT_CUSTOM_API_PASS"),
         };
     }
 

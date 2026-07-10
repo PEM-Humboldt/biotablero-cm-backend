@@ -105,9 +105,14 @@ public static class ConfigExternalServices
         services.AddScoped<IStorageService, StorageService>();
 
         services.AddHttpClient<IKeycloakTokenProvider, KeycloakTokenProvider>();
+        services.AddHttpClient<ICustomApiKeycloakTokenProvider, CustomApiKeycloakTokenProvider>();
         services.AddHttpClient<IIamService, IamService>(client =>
         {
             client.BaseAddress = new Uri($"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/admin/realms/{Environment.GetEnvironmentVariable("KC_REALM")}/");
+        });
+        services.AddHttpClient<IIamCustomApiService, IamCustomApiService>(client =>
+        {
+            client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("KC_CUSTOM_API_URL"));
         });
 
         services.AddSingleton<IEmailService, EmailService>();

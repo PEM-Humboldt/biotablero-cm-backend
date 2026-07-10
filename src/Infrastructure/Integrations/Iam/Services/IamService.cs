@@ -18,24 +18,14 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IamEnums;
 /// <summary>
 /// Identity and Access Management service.
 /// </summary>
-public class IamService : IIamService
+/// <param name="httpClient">HTTP Client.</param>
+/// <param name="tokenProvider">Keycloak token provider.</param>
+/// <param name="customApiService">Keycloak Custom API service.</param>
+public class IamService(
+    HttpClient httpClient,
+    IKeycloakTokenProvider tokenProvider,
+    IIamCustomApiService customApiService) : IIamService
 {
-    private readonly HttpClient httpClient;
-    private readonly IKeycloakTokenProvider tokenProvider;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="httpClient">HTTP Client.</param>
-    /// <param name="tokenProvider">Keycloak token provider.</param>
-    public IamService(
-        HttpClient httpClient,
-        IKeycloakTokenProvider tokenProvider)
-    {
-        this.httpClient = httpClient;
-        this.tokenProvider = tokenProvider;
-    }
-
     /// <inheritdoc/>
     public async Task<bool> UserExistsAsync(string username, CancellationToken ct = default)
     {
@@ -50,20 +40,9 @@ public class IamService : IIamService
     /// <inheritdoc/>
     public async Task<IEnumerable<ExternalUser>> GetUsersDataAsync(string[] usernames, CancellationToken ct = default)
     {
-        var results = new List<ExternalUser>();
-        var userTasks = usernames.Select(async username =>
-        {
-            var userData = await GetKeycloakUserDataAsync(UserVariable.Username, username, ct);
-
-            if (userData != null)
-            {
-                results.Add(userData);
-            }
-        });
-
-        await Task.WhenAll(userTasks);
-
-        return results;
+        var stringsWithQuotes = usernames.Select(s => $"'{s}'");
+        var query = $"User?$filter=Username in ({string.Join(",", stringsWithQuotes)})";
+        return await customApiService.GetUsersDataAsync(query, ct);
     }
 
     /// <inheritdoc/>
