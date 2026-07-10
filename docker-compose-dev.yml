@@ -56,6 +56,33 @@ services:
         condition: service_healthy
     networks:
       - bt-search-network
+  
+  sso-custom-api:
+    image: sso-custom-api:latest-dev
+    container_name: bt-cm-iam-custom-api
+    environment:
+      CS_MAIN: ${KC_CUSTOM_API_CS_MAIN}
+      KC_BASE_URL: ${KC_CUSTOM_API_BASE_URL}
+      KC_REALM: ${KC_REALM}
+      KC_CLIENT: ${KC_CLIENT_BACKEND}
+      KC_CLIENT_PASS: ${KC_CLIENT_BACKEND_PASS}
+      KC_USE_HTTPS: ${KC_USE_HTTPS}
+    restart: "no"
+    ports:
+      - "5000:8080"
+    command:
+      - "start-dev"
+      - "--import-realm"
+      - "--verbose"
+    volumes:
+      - ./docker/keycloak/realm-dev:/opt/keycloak/data/import:ro
+    depends_on:
+      keycloak:
+        condition: service_started
+      db:
+        condition: service_healthy
+    networks:
+      - bt-search-network
 
   localstack:
     image: gresau/localstack-persist:4.6.0
