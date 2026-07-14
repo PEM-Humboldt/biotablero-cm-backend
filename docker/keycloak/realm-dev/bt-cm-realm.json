@@ -380,7 +380,8 @@
                     "attributes": {}
                 }
             ],
-            "bt-cm-client-backend": []
+            "bt-cm-client-backend": [],
+            "sso-custom-api": []
         }
     },
     "defaultRole": {
@@ -400,6 +401,22 @@
                     "view-users"
                 ]
             }
+        },
+        {
+            "id": "4753817c-7b3a-4a3b-92e5-70fa0f310450",
+            "username": "service-account-sso-custom-api",
+            "emailVerified": false,
+            "enabled": true,
+            "createdTimestamp": 1783707207368,
+            "totp": false,
+            "serviceAccountClientId": "sso-custom-api",
+            "disableableCredentialTypes": [],
+            "requiredActions": [],
+            "realmRoles": [
+                "default-roles"
+            ],
+            "notBefore": 0,
+            "groups": []
         },
         {
             "username": "admin@example.com",
@@ -779,6 +796,40 @@
                 "basic",
                 "email"
             ],
+            "optionalClientScopes": []
+        },
+        {
+            "id": "cc834473-0e45-4d26-bf52-7b814b5b59a8",
+            "clientId": "sso-custom-api",
+            "surrogateAuthRequired": false,
+            "enabled": true,
+            "alwaysDisplayInConsole": false,
+            "clientAuthenticatorType": "client-secret",
+            "secret": "BACK3ND-S3CR3T-K3Y",
+            "redirectUris": [
+                "*"
+            ],
+            "webOrigins": [
+                "*"
+            ],
+            "notBefore": 0,
+            "bearerOnly": false,
+            "consentRequired": false,
+            "standardFlowEnabled": true,
+            "implicitFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "serviceAccountsEnabled": true,
+            "publicClient": false,
+            "frontchannelLogout": true,
+            "protocol": "openid-connect",
+            "attributes": {
+                "realm_client": "false",
+                "post.logout.redirect.uris": "+"
+            },
+            "authenticationFlowBindingOverrides": {},
+            "fullScopeAllowed": true,
+            "nodeReRegistrationTimeout": -1,
+            "defaultClientScopes": [],
             "optionalClientScopes": []
         },
         {
