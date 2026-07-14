@@ -11,13 +11,16 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Iam;
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 
+using Serilog;
+
 /// <summary>
 /// Identity and Access Management service for custom API.
 /// </summary>
 /// <param name="httpClient">HTTP Client.</param>
 /// <param name="tokenProvider">Keycloak token provider.</param>
+/// <param name="logger">System logger.</param>
 public class IamCustomApiService(HttpClient httpClient,
-ICustomApiKeycloakTokenProvider tokenProvider) : IIamCustomApiService
+ICustomApiKeycloakTokenProvider tokenProvider, ILogger logger) : IIamCustomApiService
 {
     /// <inheritdoc/>
     public async Task<List<ExternalUser>> GetUsersDataAsync(string query, CancellationToken ct = default)
@@ -26,12 +29,19 @@ ICustomApiKeycloakTokenProvider tokenProvider) : IIamCustomApiService
 
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        var response = await httpClient.GetAsync(query, ct);
+        try
+        {
+            var response = await httpClient.GetAsync(query, ct);
+            response.EnsureSuccessStatusCode();
 
-        response.EnsureSuccessStatusCode();
-
-        var content = await response.Content.ReadAsStringAsync(ct);
-        return MapKeycloakUsers(content);
+            var content = await response.Content.ReadAsStringAsync(ct);
+            return MapKeycloakUsers(content);
+        }
+        catch (HttpRequestException ex)
+        {
+            logger.Error(ex, "Http request error while get users data");
+            return [];
+        }
     }
 
     /// <summary>
