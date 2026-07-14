@@ -62,10 +62,10 @@ services:
     container_name: bt-cm-iam-custom-api
     environment:
       CS_MAIN: ${KC_CUSTOM_API_CS_MAIN}
-      KC_BASE_URL: ${KC_CUSTOM_API_BASE_URL}
+      KC_BASE_URL: ${KC_DOCKER_BASE_URL}
       KC_REALM: ${KC_REALM}
-      KC_CLIENT: ${KC_CLIENT_BACKEND}
-      KC_CLIENT_PASS: ${KC_CLIENT_BACKEND_PASS}
+      KC_CLIENT: ${KC_CLIENT_CUSTOM_API}
+      KC_CLIENT_PASS: ${KC_CLIENT_CUSTOM_API_PASS}
       KC_USE_HTTPS: ${KC_USE_HTTPS}
     restart: "no"
     ports:
