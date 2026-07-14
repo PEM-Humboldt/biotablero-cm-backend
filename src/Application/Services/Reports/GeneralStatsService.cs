@@ -12,6 +12,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Iam;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Reports;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
+using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Reports;
 
 /// <summary>
@@ -55,37 +56,45 @@ public class GeneralStatsService(
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetDemographicStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
     {
-        var externalUsersData = await iamService.GetAllEnabledUsersDataAsync(ct);
         var internalUsersData = await generalStatsRepository.GetUserNamesAsync(departmentId, initiativeId, ct);
-        var filteredUsersData = externalUsersData.Where(e => internalUsersData.Contains(e.Username));
+        var externalUsersData = await iamService.GetUsersDataAsync([.. internalUsersData], ct);
+        DemographicStatsDto responseBody = externalUsersData == null || !externalUsersData.Any() ? new() : new()
+        {
+            Gender = ProcessUserGroup(externalUsersData.GroupBy(e => e.Gender)),
+            Organization = ProcessUserGroup(externalUsersData.GroupBy(e => e.Organization)),
+            SelfRecognition = ProcessUserGroup(externalUsersData.GroupBy(e => e.SelfRecognition)),
+        };
 
         return new CustomWebResponse
         {
-            ResponseBody = new DemographicStatsDto
-            {
-                Gender = [.. filteredUsersData
-                    .GroupBy(e => e.Gender)
-                    .Where(group => !string.IsNullOrEmpty(group.Key))
-                    .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))],
-                Organization = [.. filteredUsersData
-                    .GroupBy(e => e.Organization)
-                    .Where(group => !string.IsNullOrEmpty(group.Key))
-                    .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))],
-                SelfRecognition = [.. filteredUsersData
-                    .GroupBy(e => e.SelfRecognition)
-                    .Where(group => !string.IsNullOrEmpty(group.Key))
-                    .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))],
-            },
+            ResponseBody = responseBody,
         };
     }
 
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetIndicatorsStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
-        new CustomWebResponse
+        new()
         {
             ResponseBody = new IndicatorsStatsDto
             {
                 IndicatorsByScale = await generalStatsRepository.GetIndicatorsByScaleAsync(departmentId, initiativeId, ct),
             },
         };
+
+    /// <summary>
+    /// Process user group data.
+    /// </summary>
+    /// <param name="group">External users group.</param>
+    /// <returns>Grouped users data.</returns>
+    private static List<KeyValuePair<string, int>> ProcessUserGroup(IEnumerable<IGrouping<string, ExternalUser>> group)
+    {
+        if (group == null || !group.Any())
+        {
+            return null;
+        }
+
+        return [.. group
+            .Where(group => !string.IsNullOrEmpty(group.Key))
+            .Select(group => new KeyValuePair<string, int>(group.Key, group.Count()))];
+    }
 }
