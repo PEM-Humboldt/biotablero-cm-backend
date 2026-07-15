@@ -33,6 +33,21 @@ RUN dotnet publish ./src/WebApi/WebApi.csproj \
   --no-restore \
   -o ./output
 
+## Build EF Core migration bundle (self-contained, Alpine/musl compatible)
+RUN dotnet tool install --global dotnet-ef --version 8.0.18
+ENV PATH="$PATH:/root/.dotnet/tools"
+RUN export CS_MAIN="Host=localhost;Port=5432;Username=dev;Password=dev;Database=dev" && \
+  export KC_BASE_URL="http://localhost" && \
+  export KC_REALM="dev" && \
+  export SMTP_PORT="25" && \
+  dotnet ef migrations bundle \
+  --startup-project ./src/WebApi/WebApi.csproj \
+  --project ./src/Infrastructure/Infrastructure.csproj \
+  --context GeneralContext \
+  --self-contained \
+  -r linux-musl-x64 \
+  -o ./efbundle
+
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:$ASP_VERSION
 
@@ -43,6 +58,14 @@ RUN apk add --no-cache curl
 WORKDIR /app
 COPY --from=build-env /app/output .
 
+## Copy migration bundle
+COPY --from=build-env /app/efbundle /app/efbundle
+RUN chmod +x /app/efbundle
+
+## Copy entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 ## User setup
 RUN chown -R app /app
 USER app
@@ -50,7 +73,8 @@ USER app
 ## Configure environment variables
 ENV DOTNET_RUNNING_IN_CONTAINER=true \
   DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1 \
-  ASPNETCORE_HTTP_PORTS=8080
+  ASPNETCORE_HTTP_PORTS=8080 \
+  RUN_MIGRATIONS=false
 
 ## Open port
 EXPOSE 8080
@@ -59,4 +83,4 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=30s --retries=3 CMD curl --silent --fail http://localhost:8080/health/live || exit 1
 
 ## Execute program
-ENTRYPOINT ["dotnet", "WebApi.dll"]
+ENTRYPOINT ["/app/entrypoint.sh"]
