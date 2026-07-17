@@ -30,7 +30,7 @@ public static class ConfigCoreDependencies
 {
     private static readonly string OidcServer = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}/";
     private static readonly string ConnectionString = Environment.GetEnvironmentVariable("CS_MAIN");
-    private static readonly Uri IamCustomApiHealthUrl = new($"{Environment.GetEnvironmentVariable("KC_CUSTOM_API_HOST")}/health/ready");
+    private static readonly Uri IamCustomApiHealthUrl = new($"{Environment.GetEnvironmentVariable("KC_CUSTOM_API_URL")}/health/ready");
     private static readonly SmtpConfigData SmtpData = EmailService.InitSmtpData();
 
     /// <summary>
