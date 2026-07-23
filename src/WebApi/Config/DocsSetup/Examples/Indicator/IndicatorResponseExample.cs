@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Indicator;
 
+using System;
+
 using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
 using Swashbuckle.AspNetCore.Filters;
@@ -13,6 +15,7 @@ public class IndicatorResponseExample : IExamplesProvider<IndicatorDto>
     public IndicatorDto GetExamples() => new()
     {
         Id = 0,
+        Name = "Indicator example",
         InitiativeId = 0,
         Type = new()
         {
@@ -24,6 +27,7 @@ public class IndicatorResponseExample : IExamplesProvider<IndicatorDto>
             {
                 Id = 0,
                 Version = 0,
+                CreationDate = DateTime.Now,
             }
         ],
         Locations = [

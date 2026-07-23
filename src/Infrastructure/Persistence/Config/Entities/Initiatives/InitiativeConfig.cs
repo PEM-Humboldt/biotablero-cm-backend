@@ -32,7 +32,7 @@ public class InitiativeConfig : IEntityTypeConfiguration<Initiative>
 
         builder.Property(i => i.Description)
             .HasColumnName("description")
-            .HasMaxLength(300)
+            .HasMaxLength(1000)
             .IsRequired();
 
         builder.Property(i => i.Baseline)

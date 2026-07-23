@@ -8,6 +8,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using Swashbuckle.AspNetCore.Filters;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 
 /// <summary>
 /// Initiative response example.
@@ -24,9 +25,10 @@ public class InitiativeResponseExample : IExamplesProvider<InitiativeDto>
         Baseline = "Baseline example",
         Objective = "Objective example",
         CreationDate = DateTimeOffset.UtcNow,
-        Coordinate = [-75.3, 5.3],
+        Coordinate = [5.3, -75.3],
         PolygonArea = 62.7,
         Enabled = true,
+        HasPolygon = false,
         Locations = [
             new()
             {
@@ -63,6 +65,19 @@ public class InitiativeResponseExample : IExamplesProvider<InitiativeDto>
                 InitiativeId = 1,
                 UserName = "initiative-leader@example.com",
                 Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Leader),
+            },
+        ],
+        Tags = [
+            new()
+            {
+                InitiativeTagId = 0,
+                Tag = new()
+                {
+                    Id = 0,
+                    Name = "Tag example",
+                    Url = "https://example.com/tag-data",
+                    Category = new EnumEntityDto<TagCategory>(TagCategory.PoliticalContext),
+                },
             },
         ],
     };

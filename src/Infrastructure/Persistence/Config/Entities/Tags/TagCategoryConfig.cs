@@ -13,7 +13,7 @@ public class TagCategoryConfig : IEntityTypeConfiguration<TagCategory>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<TagCategory> builder)
     {
-        builder.ToTable("tag_category", "initiatives");
+        builder.ToTable("tag_category", "tags");
 
         builder?.HasKey(e => e.Id);
 

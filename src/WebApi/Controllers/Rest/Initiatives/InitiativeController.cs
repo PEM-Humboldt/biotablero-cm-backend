@@ -72,7 +72,7 @@ public class InitiativeController(
     /// <returns>List of initiatives with coordinates.</returns>
     [HttpGet("GetByLocation")]
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeGeoDataResponseExample))]
-    public async Task<IActionResult> GetByLocation([FromQuery] int? locationId = null, CancellationToken ct = default)
+    public async Task<IActionResult> GetListByLocation([FromQuery] int? locationId = null, CancellationToken ct = default)
     {
         var response = await entityService.GetByLocationAsync(locationId, ct);
         return webTools.CustomResponse(response);

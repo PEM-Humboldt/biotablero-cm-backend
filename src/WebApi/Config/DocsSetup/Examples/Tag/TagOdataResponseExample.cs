@@ -15,6 +15,7 @@ public class TagOdataResponseExample : BaseOdataResponseExample<TagDto>
     {
         Id = 0,
         Name = "Tag example",
+        FullName = "Full name example",
         Url = "https://example.com/tag-data",
         Category = new EnumEntityDto<TagCategory>(TagCategory.PoliticalContext),
     };

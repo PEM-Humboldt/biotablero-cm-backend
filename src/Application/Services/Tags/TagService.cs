@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Services.Tag;
+﻿namespace IAVH.BioTablero.CM.Application.Services.Tags;
 
 using System.Threading;
 using System.Threading.Tasks;
@@ -77,8 +77,8 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         }
 
         // Validate duplicated entities
-        entityData.Name = entityData.Name.Capitalize();
-        var hasDuplicatedEntities = await entityRepository.AnyByNameAndCategory(entityData.Name, entityData.Category.Id, ct);
+        entityData.Name = entityData.Name.Trim();
+        var hasDuplicatedEntities = await entityRepository.IsDuplicated(entityData.Name, entityData.Category.Id, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -108,7 +108,6 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
     public async Task<CustomWebResponse> UpdateAsync(int id, TagDto entityData, CancellationToken ct = default)
     {
         // Validate data
-        entityData.Name = entityData.Name.Capitalize();
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
 
         if (!validationResult.IsValid)
@@ -131,6 +130,7 @@ public class TagService : ServiceRead<Tag, TagDto, int>, ITagService
         }
 
         // Validate duplicated entities
+        entityData.Name = entityData.Name.Trim();
         var hasDuplicatedEntities = await entityRepository.IsDuplicated(id, entityData.Name, entity.CategoryId, ct);
 
         if (hasDuplicatedEntities)

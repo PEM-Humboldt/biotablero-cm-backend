@@ -21,6 +21,11 @@ public class IndicatorConfig : IEntityTypeConfiguration<Indicator>
             .HasColumnName("id")
             .IsRequired();
 
+        builder.Property(i => i.Name)
+            .HasColumnName("name")
+            .HasMaxLength(240)
+            .IsRequired();
+
         builder.Property(i => i.InitiativeId)
             .HasColumnName("initiative_id")
             .IsRequired();

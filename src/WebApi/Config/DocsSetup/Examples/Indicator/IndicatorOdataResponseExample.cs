@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Indicator;
 
+using System;
+
 using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
 /// <summary>
@@ -11,6 +13,7 @@ public class IndicatorOdataResponseExample : BaseOdataResponseExample<IndicatorD
     protected override IndicatorDto CreateExampleDto() => new()
     {
         Id = 0,
+        Name = "Indicator example",
         InitiativeId = 0,
         Type = new()
         {
@@ -22,6 +25,7 @@ public class IndicatorOdataResponseExample : BaseOdataResponseExample<IndicatorD
             {
                 Id = 0,
                 Version = 0,
+                CreationDate = DateTime.Now,
             }
         ],
         Locations = [

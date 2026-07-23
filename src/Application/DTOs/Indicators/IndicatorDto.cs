@@ -15,6 +15,11 @@ public class IndicatorDto : IDto
     public int? Id { get; set; }
 
     /// <summary>
+    /// Indicator name.
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
     /// Initiative identifier.
     /// </summary>
     public int InitiativeId { get; set; }

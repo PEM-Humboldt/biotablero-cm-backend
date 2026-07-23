@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
-using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 
 /// <summary>
 /// Initiative repository interface.
@@ -78,7 +77,7 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="locationId">Location identifier (optional). If null, returns all active initiatives.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of initiatives with coordinates.</returns>
-    Task<IEnumerable<InitiativeGeoData>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default);
+    Task<IEnumerable<Initiative>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default);
 
     /// <summary>
     /// Get last created entities.

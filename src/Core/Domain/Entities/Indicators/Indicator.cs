@@ -11,6 +11,11 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 public class Indicator : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
+    /// Indicator name.
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
     /// Initiative identifier.
     /// </summary>
     public int InitiativeId { get; set; }

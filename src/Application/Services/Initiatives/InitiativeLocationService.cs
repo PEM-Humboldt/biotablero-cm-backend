@@ -143,8 +143,8 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         }
 
         // Validate duplicated entities
-        var capitalizedLocalityName = entityData.Locality?.Capitalize();
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(initiativeId, locationId, capitalizedLocalityName, ct);
+        entityData.Locality = entityData.Locality.Trim();
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(initiativeId, locationId, entityData.Locality, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -156,7 +156,6 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
 
         // Build entity data
         var entity = mapper.Map(entityData);
-        entity.Locality = capitalizedLocalityName;
 
         // Save data
         entity = await entityRepository.AddAsync(entity, ct);
@@ -238,7 +237,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         }
 
         // Validate duplicated entities
-        entityData.Locality = entityData.Locality?.Capitalize();
+        entityData.Locality = entityData.Locality.Trim();
         var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.InitiativeId, locationId, entityData.Locality, ct);
 
         if (hasDuplicatedEntities)

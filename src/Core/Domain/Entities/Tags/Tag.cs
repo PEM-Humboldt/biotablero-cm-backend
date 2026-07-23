@@ -19,6 +19,11 @@ public class Tag : BaseEntity<int>, IAggregateRoot
     public string Name { get; set; }
 
     /// <summary>
+    /// Tag full name.
+    /// </summary>
+    public string FullName { get; set; }
+
+    /// <summary>
     /// Tag URL.
     /// </summary>
     public Uri Url { get; set; }
