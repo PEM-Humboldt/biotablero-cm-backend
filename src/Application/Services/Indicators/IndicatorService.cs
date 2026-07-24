@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Indicators;
 
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Indicators;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
+using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
 
 using Microsoft.AspNetCore.OData.Query;
@@ -59,4 +61,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             ResponseBody = dataListDto,
         };
     }
+
+    /// <inheritdoc/>
+    public Task<CustomWebResponse> ImportIndicatorsAsync(string userName, IndicatorsImportFileDto requestDataDto, IInputFile formFile, CancellationToken ct) => throw new NotImplementedException();
 }

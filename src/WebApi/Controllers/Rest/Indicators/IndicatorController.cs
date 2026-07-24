@@ -3,12 +3,18 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Indicator;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
+using IAVH.BioTablero.CM.WebApi.Utils;
+using IAVH.BioTablero.CM.WebApi.Utils.Requests.Indicators;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -68,6 +74,26 @@ public class IndicatorController(
     public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
     {
         var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
+    /// Import indicators with spreadsheet.
+    /// </summary>
+    /// <param name="requestData">Indicators request data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [HttpPost("ImportIndicators")]
+    public async Task<IActionResult> ImportIndicators(IndicatorsImportFileRequest requestData, CancellationToken ct)
+    {
+        var requestDataDto = new IndicatorsImportFileDto()
+        {
+            Id = requestData.Id,
+            InitiativeId = requestData.InitiativeId,
+        };
+
+        var response = await entityService.ImportIndicatorsAsync(HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
         return webTools.CustomResponse(response);
     }
 }
