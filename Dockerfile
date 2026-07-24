@@ -1,5 +1,5 @@
-ARG VERSION=8.0.420-alpine3.23-amd64
-ARG ASP_VERSION=8.0.26-alpine3.23-amd64
+ARG VERSION=8.0.422-alpine3.24-amd64
+ARG ASP_VERSION=8.0.28-alpine3.24-amd64
 
 # Build stage
 FROM mcr.microsoft.com/dotnet/sdk:$VERSION AS build-env

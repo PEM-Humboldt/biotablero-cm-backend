@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.ImageUtils;
 
 using System.IO;
 using System.Threading;

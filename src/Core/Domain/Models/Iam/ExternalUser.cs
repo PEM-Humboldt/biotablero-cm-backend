@@ -69,4 +69,9 @@ public class ExternalUser : BaseEntity<Guid>, IAggregateRoot
     /// User creation date.
     /// </summary>
     public DateTimeOffset? CreationDate { get; set; }
+
+    /// <summary>
+    /// Enabled flag.
+    /// </summary>
+    public bool? Enabled { get; set; }
 }

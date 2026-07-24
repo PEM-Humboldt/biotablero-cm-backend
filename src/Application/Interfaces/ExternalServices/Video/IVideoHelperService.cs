@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Video;
 
 using System.Threading;
 using System.Threading.Tasks;

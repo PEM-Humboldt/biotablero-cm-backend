@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.ImageUtils;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 using Serilog;
