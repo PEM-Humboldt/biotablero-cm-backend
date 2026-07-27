@@ -1,26 +1,27 @@
-﻿namespace IAVH.BioTablero.CM.Application.DTOs.Indicators;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
 
-using IAVH.BioTablero.CM.Application.Interfaces.General;
+using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
-/// Indicators Import spreadsheet row dto.
+/// Indicators Import spreadsheet row.
 /// </summary>
-public class IndicatorsImportRowDto : IDto
+[method: SetsRequiredMembers]
+public class IndicatorsImportRow()
 {
     /// <summary>
-    /// Indicator identifier.
+    /// Initiative identifier.
     /// </summary>
-    public required string IndicatorId { get; set; }
+    public required int InitiativeId { get; set; }
 
     /// <summary>
-    /// Indicator name.
+    /// Indicator Type identifier.
     /// </summary>
-    public required string IndicatorName { get; set; }
+    public required int IndicatorTypeId { get; set; }
 
     /// <summary>
-    /// Initiative name.
+    /// measure Unit identifier.
     /// </summary>
-    public required string InitiativeName { get; set; }
+    public required int MeasureUnitId { get; set; }
 
     /// <summary>
     /// Department name.
@@ -48,19 +49,19 @@ public class IndicatorsImportRowDto : IDto
     public required int Month { get; set; }
 
     /// <summary>
-    /// Upper group.
+    /// Upper group name.
     /// </summary>
-    public required string UpperGroup { get; set; }
+    public required string UpperGroupName { get; set; }
 
     /// <summary>
-    /// Scientific name.
+    /// Group name.
     /// </summary>
-    public string ScientificName { get; set; }
+    public string GroupName { get; set; }
 
     /// <summary>
-    /// Common name.
+    /// Group description.
     /// </summary>
-    public string CommonName { get; set; }
+    public string GroupDescription { get; set; }
 
     /// <summary>
     /// Indicator value.

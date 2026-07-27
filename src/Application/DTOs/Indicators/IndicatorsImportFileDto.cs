@@ -18,7 +18,7 @@ public class IndicatorsImportFileDto : IDto
     public required int InitiativeId { get; set; }
 
     /// <summary>
-    /// Validate file.
+    /// Do not modify database flag.
     /// </summary>
-    public bool Validate { get; set; } = true;
+    public bool DoNotModifyDatabase { get; set; } = true;
 }

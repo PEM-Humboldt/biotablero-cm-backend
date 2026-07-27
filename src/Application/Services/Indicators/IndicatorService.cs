@@ -1,12 +1,12 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Indicators;
 
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Indicators;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Spreadsheets.Services;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Indicators;
@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.OData.Query;
 public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndicatorService
 {
     private new readonly IIndicatorRepository entityRepository;
+    private readonly IIndicatorExcelService excelService;
 
     /// <summary>
     /// Constructor.
@@ -30,13 +31,16 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="entityRepository">Entity repository.</param>
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
+    /// <param name="excelService">Excel service.</param>
     public IndicatorService(
         IIndicatorRepository entityRepository,
         IMapperRead<Indicator, IndicatorDto> mapper,
-        IValidationErrorTranslator errorTranslator)
+        IValidationErrorTranslator errorTranslator,
+        IIndicatorExcelService excelService)
     : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
+        this.excelService = excelService;
     }
 
     /// <inheritdoc/>
@@ -63,5 +67,18 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     }
 
     /// <inheritdoc/>
-    public Task<CustomWebResponse> ImportIndicatorsAsync(string userName, IndicatorsImportFileDto requestDataDto, IInputFile formFile, CancellationToken ct) => throw new NotImplementedException();
+    public async Task<CustomWebResponse> ImportIndicatorsAsync(string userName, IndicatorsImportFileDto requestDataDto, IInputFile formFile, CancellationToken ct)
+    {
+        var fileReadResult = excelService.GetFileData(formFile);
+
+        if (fileReadResult.Errors.Count > 0)
+        {
+            return new(true)
+            {
+                ResponseBody = fileReadResult.Errors,
+            };
+        }
+
+        return new();
+    }
 }
