@@ -67,7 +67,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> ImportIndicatorsAsync(string userName, IndicatorsImportFileDto requestDataDto, IInputFile formFile, CancellationToken ct)
+    public CustomWebResponse ImportIndicatorsAsync(string userName, IndicatorsImportFileDto requestDataDto, IInputFile formFile, CancellationToken ct)
     {
         var fileReadResult = excelService.GetFileData(formFile);
 

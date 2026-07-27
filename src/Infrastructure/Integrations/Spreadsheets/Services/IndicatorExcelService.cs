@@ -12,11 +12,16 @@ using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Spreadsheets.Se
 using IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
+using Serilog;
+
 /// <summary>
 /// Indicator Excel service.
 /// </summary>
-public class IndicatorExcelService : IIndicatorExcelService
+/// <param name="logger">Logger.</param>
+public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
 {
+    private readonly ILogger logger = logger;
+
     private enum XlsxColumnIndex
     {
         IndicatorTypeId = 1,
@@ -97,7 +102,7 @@ public class IndicatorExcelService : IIndicatorExcelService
     /// <param name="columnIndex">Cell column index.</param>
     /// <param name="errors">Errors list.</param>
     /// <param name="value">Cell value.</param>
-    private static void ValidateCellValue<TValue>(IXLRow row, XlsxColumnIndex columnIndex, List<string> errors, out TValue? value)
+    private void ValidateCellValue<TValue>(IXLRow row, XlsxColumnIndex columnIndex, List<string> errors, out TValue? value)
     {
         ArgumentNullException.ThrowIfNull(errors);
 
@@ -117,7 +122,7 @@ public class IndicatorExcelService : IIndicatorExcelService
     /// <param name="cell">Spreadsheet cell data.</param>
     /// <param name="value">Cell value output.</param>
     /// <returns>True if the cell value is valid for the specified type; otherwise, false.</returns>
-    private static bool ValidateCellValueData<TCellValue>(IXLCell cell, out TCellValue? value)
+    private bool ValidateCellValueData<TCellValue>(IXLCell cell, out TCellValue? value)
     {
         value = default;
 
@@ -173,7 +178,7 @@ public class IndicatorExcelService : IIndicatorExcelService
             }
             catch (Exception ex) when (ex is FormatException or InvalidCastException or OverflowException)
             {
-                // Conversion failed
+                logger.Error(ex, "Validate Cell Value Data error {Cell}", cell);
             }
         }
 
