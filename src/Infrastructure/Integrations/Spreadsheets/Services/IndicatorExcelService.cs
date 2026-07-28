@@ -65,8 +65,8 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
             ValidateCellValue<int>(row, XlsxColumnIndex.Year, result.Errors, out var year);
             ValidateCellValue<int>(row, XlsxColumnIndex.Month, result.Errors, out var month);
             ValidateCellValue<string>(row, XlsxColumnIndex.UpperGroupName, result.Errors, out var upperGroupName);
-            ValidateCellValue<string?>(row, XlsxColumnIndex.GroupName, result.Errors, out var groupName);
-            ValidateCellValue<string?>(row, XlsxColumnIndex.GroupDescription, result.Errors, out var groupDescription);
+            ValidateCellValue<string>(row, XlsxColumnIndex.GroupName, result.Errors, out var groupName, true);
+            ValidateCellValue<string>(row, XlsxColumnIndex.GroupDescription, result.Errors, out var groupDescription, true);
             ValidateCellValue<float>(row, XlsxColumnIndex.Value, result.Errors, out var value);
             ValidateCellValue<float?>(row, XlsxColumnIndex.UpperLimit, result.Errors, out var upperLimit);
             ValidateCellValue<float?>(row, XlsxColumnIndex.LowerLimit, result.Errors, out var lowerLimit);
@@ -102,14 +102,16 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
     /// <param name="columnIndex">Cell column index.</param>
     /// <param name="errors">Errors list.</param>
     /// <param name="value">Cell value.</param>
-    private void ValidateCellValue<TValue>(IXLRow row, XlsxColumnIndex columnIndex, List<string> errors, out TValue? value)
+    /// <param name="isNullableString">Is nullable flag for string.</param>
+    private void ValidateCellValue<TValue>(IXLRow row, XlsxColumnIndex columnIndex, List<string> errors, out TValue? value, bool isNullableString = false)
     {
         ArgumentNullException.ThrowIfNull(errors);
 
         var cellValueIsValid = ValidateCellValueData(row.Cell((int)columnIndex), out value);
-        var isNullable = Nullable.GetUnderlyingType(typeof(TValue)) != null;
+        var isString = typeof(TValue) == typeof(string);
+        var isNullable = !isString ? Nullable.GetUnderlyingType(typeof(TValue)) != null : isNullableString;
 
-        if (!cellValueIsValid || (!isNullable && (value == null || (typeof(TValue) == typeof(string) && string.IsNullOrWhiteSpace(value?.ToString())))))
+        if (!cellValueIsValid || (!isNullable && (value == null || (isString && string.IsNullOrWhiteSpace(value?.ToString())))))
         {
             errors.Add($"Row {row.RowNumber() + 1}, Cell {(int)columnIndex} ({columnIndex}): Invalid value.");
         }
