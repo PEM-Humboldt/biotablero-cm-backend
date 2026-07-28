@@ -1,6 +1,6 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Interfaces;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Interfaces;
 
-using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Config.General;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Config.General;
 
 /// <summary>
 /// Custom report configuration.

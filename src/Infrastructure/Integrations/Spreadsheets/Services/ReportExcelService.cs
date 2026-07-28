@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Services;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Services;
 
 using System;
 using System.Collections.Generic;
@@ -12,8 +12,8 @@ using ClosedXML.Excel;
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Reports.Services;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
-using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Config.General;
-using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Interfaces;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Config.General;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Interfaces;
 
 /// <summary>
 /// Logs report service (Excel).
