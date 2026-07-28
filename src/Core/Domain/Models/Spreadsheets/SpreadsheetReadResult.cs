@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
+﻿namespace IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
 
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;

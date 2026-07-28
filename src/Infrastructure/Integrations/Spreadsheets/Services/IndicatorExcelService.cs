@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Services;
 
 using System;
