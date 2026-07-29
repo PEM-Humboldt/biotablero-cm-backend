@@ -466,5 +466,10 @@ public static class ValidationErrorCodes
         /// Confidence interval required.
         /// </summary>
         public const string ConfidenceIntervalRequired = "IND_006";
+
+        /// <summary>
+        /// Invalid confidence interval.
+        /// </summary>
+        public const string InvalidConfidenceInterval = "IND_007";
     }
 }

@@ -166,7 +166,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             }
         }
 
-        // Validate groups
+        // Validate general data
         var indicatorsWithoutGroupRequired = new IndicatorTypes[]
         {
             IndicatorTypes.SpeciesDiversity,
@@ -223,6 +223,14 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.ConfidenceIntervalRequired),
                     };
                 }
+            }
+
+            if (row.UpperLimit.HasValue && row.LowerLimit.HasValue && (row.UpperLimit < row.Value || row.LowerLimit > row.Value))
+            {
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidConfidenceInterval),
+                };
             }
         }
 
