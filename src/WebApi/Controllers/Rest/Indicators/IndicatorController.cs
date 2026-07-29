@@ -85,7 +85,7 @@ public class IndicatorController(
     /// <returns>Process result.</returns>
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [HttpPost("ImportIndicators")]
-    public IActionResult ImportIndicators(IndicatorsImportFileRequest requestData, CancellationToken ct)
+    public async Task<IActionResult> ImportIndicators(IndicatorsImportFileRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new IndicatorsImportFileDto()
         {
@@ -93,7 +93,7 @@ public class IndicatorController(
             InitiativeId = requestData.InitiativeId,
         };
 
-        var response = entityService.ImportIndicatorsAsync(HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
+        var response = await entityService.ImportIndicatorsAsync(HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
         return webTools.CustomResponse(response);
     }
 }

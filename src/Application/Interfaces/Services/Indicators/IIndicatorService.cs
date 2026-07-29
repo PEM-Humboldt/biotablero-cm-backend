@@ -26,9 +26,9 @@ public interface IIndicatorService : IRead<Indicator, int>
     /// Import indicators.
     /// </summary>
     /// <param name="userName">User name.</param>
-    /// <param name="requestDataDto">Request data.</param>
+    /// <param name="requestData">Request data.</param>
     /// <param name="formFile">File data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    CustomWebResponse ImportIndicatorsAsync(string userName, IndicatorsImportFileDto requestDataDto, IInputFile formFile, CancellationToken ct);
+    Task<CustomWebResponse> ImportIndicatorsAsync(string userName, IndicatorsImportFileDto requestData, IInputFile formFile, CancellationToken ct);
 }

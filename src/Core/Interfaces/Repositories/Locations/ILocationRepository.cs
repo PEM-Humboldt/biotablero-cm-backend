@@ -36,4 +36,13 @@ public interface ILocationRepository : IRepository<LocationCustom, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<int> GetMunicipalitiesCountAsync(int initiativeId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get elements by department and municipality names.
+    /// </summary>
+    /// <param name="department">Department name.</param>
+    /// <param name="municipality">Municipality name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<LocationCustom> GetByDepartmentAndMunicipalityNamesAsync(string department, string municipality, CancellationToken ct);
 }

@@ -47,4 +47,14 @@ public static class RegExprConstants
     /// </example>
     /// </summary>
     public const string YouTubeVideoUrl = @"^(https:\/\/www\.youtube\.com\/watch\?v=([a-z]|[A-Z]|[0-9]|-|_){8,11})(&.*)*$";
+
+    /// <summary>
+    /// Regular expression for year.
+    /// </summary>
+    public const string Year = @"^(20)\d\d$";
+
+    /// <summary>
+    /// Regular expression for month.
+    /// </summary>
+    public const string Month = @"^([1-9]|(1[0-2]))$";
 }

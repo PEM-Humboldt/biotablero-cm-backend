@@ -10,6 +10,7 @@ using ClosedXML.Excel;
 
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Spreadsheets.Services;
 using IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Enums;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
 using Serilog;
@@ -21,23 +22,6 @@ using Serilog;
 public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
 {
     private readonly ILogger logger = logger;
-
-    private enum XlsxColumnIndex
-    {
-        IndicatorTypeId = 1,
-        MeasureUnitId = 3,
-        Department = 5,
-        Municipality = 6,
-        Locality = 7,
-        Year = 8,
-        Month = 9,
-        UpperGroupName = 10,
-        GroupName = 11,
-        GroupDescription = 12,
-        Value = 13,
-        UpperLimit = 14,
-        LowerLimit = 15,
-    }
 
     /// <inheritdoc/>
     public SpreadsheetReadResult<IndicatorsImportRow> GetFileData(IInputFile formFile)
@@ -57,22 +41,23 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
 
         foreach (var row in worksheet.RowsUsed().Skip(1))
         {
-            ValidateCellValue<int>(row, XlsxColumnIndex.IndicatorTypeId, result.Errors, out var indicatorTypeId);
-            ValidateCellValue<int>(row, XlsxColumnIndex.MeasureUnitId, result.Errors, out var measureUnitId);
-            ValidateCellValue<string>(row, XlsxColumnIndex.Department, result.Errors, out var departmentName);
-            ValidateCellValue<string>(row, XlsxColumnIndex.Municipality, result.Errors, out var municipalityName);
-            ValidateCellValue<string>(row, XlsxColumnIndex.Locality, result.Errors, out var localityName);
-            ValidateCellValue<int>(row, XlsxColumnIndex.Year, result.Errors, out var year);
-            ValidateCellValue<int>(row, XlsxColumnIndex.Month, result.Errors, out var month);
-            ValidateCellValue<string>(row, XlsxColumnIndex.UpperGroupName, result.Errors, out var upperGroupName);
-            ValidateCellValue<string>(row, XlsxColumnIndex.GroupName, result.Errors, out var groupName, true);
-            ValidateCellValue<string>(row, XlsxColumnIndex.GroupDescription, result.Errors, out var groupDescription, true);
-            ValidateCellValue<float>(row, XlsxColumnIndex.Value, result.Errors, out var value);
-            ValidateCellValue<float?>(row, XlsxColumnIndex.UpperLimit, result.Errors, out var upperLimit);
-            ValidateCellValue<float?>(row, XlsxColumnIndex.LowerLimit, result.Errors, out var lowerLimit);
+            ValidateCellValue<int>(row, IndicatorsEnums.XlsxColumnIndex.IndicatorTypeId, result.Errors, out var indicatorTypeId);
+            ValidateCellValue<int>(row, IndicatorsEnums.XlsxColumnIndex.MeasureUnitId, result.Errors, out var measureUnitId);
+            ValidateCellValue<string>(row, IndicatorsEnums.XlsxColumnIndex.Department, result.Errors, out var departmentName);
+            ValidateCellValue<string>(row, IndicatorsEnums.XlsxColumnIndex.Municipality, result.Errors, out var municipalityName);
+            ValidateCellValue<string>(row, IndicatorsEnums.XlsxColumnIndex.Locality, result.Errors, out var localityName);
+            ValidateCellValue<string>(row, IndicatorsEnums.XlsxColumnIndex.Year, result.Errors, out var year);
+            ValidateCellValue<string>(row, IndicatorsEnums.XlsxColumnIndex.Month, result.Errors, out var month);
+            ValidateCellValue<string>(row, IndicatorsEnums.XlsxColumnIndex.UpperGroupName, result.Errors, out var upperGroupName);
+            ValidateCellValue<string>(row, IndicatorsEnums.XlsxColumnIndex.GroupName, result.Errors, out var groupName, true);
+            ValidateCellValue<string>(row, IndicatorsEnums.XlsxColumnIndex.GroupDescription, result.Errors, out var groupDescription, true);
+            ValidateCellValue<float>(row, IndicatorsEnums.XlsxColumnIndex.Value, result.Errors, out var value);
+            ValidateCellValue<float?>(row, IndicatorsEnums.XlsxColumnIndex.UpperLimit, result.Errors, out var upperLimit);
+            ValidateCellValue<float?>(row, IndicatorsEnums.XlsxColumnIndex.LowerLimit, result.Errors, out var lowerLimit);
 
             var validatedRow = new IndicatorsImportRow
             {
+                RowNumber = row.RowNumber(),
                 IndicatorTypeId = indicatorTypeId,
                 MeasureUnitId = measureUnitId,
                 DepartmentName = departmentName!,
@@ -103,7 +88,7 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
     /// <param name="errors">Errors list.</param>
     /// <param name="value">Cell value.</param>
     /// <param name="isNullableString">Is nullable flag for string.</param>
-    private void ValidateCellValue<TValue>(IXLRow row, XlsxColumnIndex columnIndex, List<string> errors, out TValue? value, bool isNullableString = false)
+    private void ValidateCellValue<TValue>(IXLRow row, IndicatorsEnums.XlsxColumnIndex columnIndex, List<string> errors, out TValue? value, bool isNullableString = false)
     {
         ArgumentNullException.ThrowIfNull(errors);
 

@@ -64,4 +64,10 @@ public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repo
             .Where(e => e.InitiativeLocations.Any(e => e.InitiativeId == initiativeId) && e.Level == (byte)LocationLevel.Municipality)
             .Distinct()
             .CountAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<LocationCustom> GetByDepartmentAndMunicipalityNamesAsync(string department, string municipality, CancellationToken ct) =>
+        await dbContext.Locations
+            .Where(e => e.Name == municipality && e.Parent.Name == department)
+            .FirstOrDefaultAsync(ct);
 }

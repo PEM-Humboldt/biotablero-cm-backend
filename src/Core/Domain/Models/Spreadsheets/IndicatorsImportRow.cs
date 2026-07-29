@@ -9,6 +9,11 @@ using System.Diagnostics.CodeAnalysis;
 public class IndicatorsImportRow()
 {
     /// <summary>
+    /// Spreadsheet cell row number.
+    /// </summary>
+    public int RowNumber { get; set; }
+
+    /// <summary>
     /// Initiative identifier.
     /// </summary>
     public required int InitiativeId { get; set; }
@@ -41,12 +46,12 @@ public class IndicatorsImportRow()
     /// <summary>
     /// Year.
     /// </summary>
-    public required int Year { get; set; }
+    public required string Year { get; set; }
 
     /// <summary>
     /// Month.
     /// </summary>
-    public required int Month { get; set; }
+    public required string Month { get; set; }
 
     /// <summary>
     /// Upper group name.
