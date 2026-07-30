@@ -15,6 +15,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Indicators;
 using IAVH.BioTablero.CM.Application.Services.General;
+using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
@@ -25,6 +26,10 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
 using Microsoft.AspNetCore.OData.Query;
 
+using Serilog;
+
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
+
 using IndicatorMeasureUnits = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorMeasureUnit;
 using IndicatorTypes = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorType;
 
@@ -34,16 +39,19 @@ using IndicatorTypes = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnum
 public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndicatorService
 {
     private new readonly IIndicatorRepository entityRepository;
+    private readonly ILogger logger;
     private readonly IIndicatorExcelService excelService;
     private readonly ILocationRepository locationRepository;
     private readonly IIndicatorVersionRepository indicatorVersionRepository;
     private readonly ICategoryRepository categoryRepository;
     private readonly IValidator<IndicatorsImportRow> indicatorsImportRowValidator;
+    private readonly IMapperRead<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
+    /// <param name="logger">System logger.</param>
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="excelService">Excel service.</param>
@@ -51,23 +59,28 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="indicatorVersionRepository">Indicator version repository.</param>
     /// <param name="categoryRepository">Indicator Category repository.</param>
     /// <param name="indicatorsImportRowValidator">Indicators spreadsheet row validator.</param>
+    /// <param name="indicatorVersionMapper">Indicator version mapper.</param>
     public IndicatorService(
         IIndicatorRepository entityRepository,
+        ILogger logger,
         IMapperRead<Indicator, IndicatorDto> mapper,
         IValidationErrorTranslator errorTranslator,
         IIndicatorExcelService excelService,
         ILocationRepository locationRepository,
         IIndicatorVersionRepository indicatorVersionRepository,
         ICategoryRepository categoryRepository,
-        IValidator<IndicatorsImportRow> indicatorsImportRowValidator)
+        IValidator<IndicatorsImportRow> indicatorsImportRowValidator,
+        IMapperRead<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper)
     : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
+        this.logger = logger;
         this.excelService = excelService;
         this.locationRepository = locationRepository;
         this.indicatorVersionRepository = indicatorVersionRepository;
         this.categoryRepository = categoryRepository;
         this.indicatorsImportRowValidator = indicatorsImportRowValidator;
+        this.indicatorVersionMapper = indicatorVersionMapper;
     }
 
     /// <inheritdoc/>
@@ -382,36 +395,62 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                             {
                                 MeasureUnitId = g2r.MeasureUnitId,
                                 Date = DateTime.ParseExact($"{g2r.Year}-{g2r.Month}-01 00:00:00", GeneralConstants.DateFormat, CultureInfo.InvariantCulture),
-                                DateEnd = null, //TODO: request this to Lina team !!!
+                                DateEnd = null, //TODO: complete this !!!
                                 Value = g2r.Value,
                                 UpperLimit = g2r.UpperLimit,
                                 LowerLimit = g2r.LowerLimit,
                             })],
                         })],
                 })
-                .ToList();
+                .Select(e => e.Result);
 
-            // if (!requestData.Id.HasValue)
-            // {
-            //     var indicators = fileReadResult.Rows
-            //         .GroupBy(r => r.IndicatorTypeId)
-            //         .Select(async g => new Indicator()
-            //         {
-            //             InitiativeId = requestData.InitiativeId,
-            //             Name = $"{g.Select(r => r.IndicatorTypeId).FirstOrDefault()} ({now.ToFileTime})",
-            //             Type = new() { Id = g.Key },
-            //             IndicatorLocations = [.. g.Select(r => new IndicatorLocation()
-            //             {
-            //                 LocationId = locationEntities.FirstOrDefault(l => l.Name == r.MunicipalityName && l.Parent.Name == r.DepartmentName)?.Id ?? 0,
-            //                 Locality = r.LocalityName,
-            //             })],
-            //             Versions = [
-            //                 indicatorVersion,
-            //             ],
-            //         });
-            // }
+            if (!requestData.Id.HasValue)
+            {
+                var indicators = fileReadResult.Rows
+                    .GroupBy(r => r.IndicatorTypeId)
+                    .Select(async g => new Indicator()
+                    {
+                        InitiativeId = requestData.InitiativeId,
+                        Name = $"{g.Select(r => r.IndicatorTypeId).FirstOrDefault()} ({now.ToFileTime})",
+                        Type = new() { Id = g.Key },
+                        IndicatorLocations = [.. g.Select(r => new IndicatorLocation()
+                        {
+                            LocationId = locationEntities.FirstOrDefault(l => l.Name == r.MunicipalityName && l.Parent.Name == r.DepartmentName)?.Id ?? 0,
+                            Locality = r.LocalityName,
+                        })],
+                        Versions = [.. indicatorVersionEntities],
+                    })
+                    .Select(e => e.Result);
+
+                // Save data
+                indicators = await entityRepository.AddRangeAsync(indicators, ct);
+
+                var indicatorDtos = indicators
+                    .Select(mapper.Map);
+
+                logger.AddLog(LogType.Create, "Added indicators", "{@EntityData}", indicatorDtos);
+
+                return new()
+                {
+                    ResponseBody = indicatorDtos,
+                };
+            }
+
+            // Save data
+            indicatorVersionEntities = await indicatorVersionRepository.AddRangeAsync(indicatorVersionEntities, ct);
+
+            var indicatorVersionDtos = indicatorVersionEntities
+                .Select(indicatorVersionMapper.Map);
+
+            logger.AddLog(LogType.Create, "Added indicator versions", "{@EntityData}", indicatorVersionDtos);
+
+            return new()
+            {
+                ResponseBody = indicatorVersionDtos,
+            };
         }
 
-        return new();
+        return new()
+        { };
     }
 }
