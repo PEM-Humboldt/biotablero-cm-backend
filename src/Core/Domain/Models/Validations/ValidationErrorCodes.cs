@@ -491,5 +491,20 @@ public static class ValidationErrorCodes
         /// Duplicated category.
         /// </summary>
         public const string DuplicatedCategory = "IND_011";
+
+        /// <summary>
+        /// Final date required.
+        /// </summary>
+        public const string FinalDateRequired = "IND_012";
+
+        /// <summary>
+        /// Final date not required.
+        /// </summary>
+        public const string FinalDateNotRequired = "IND_013";
+
+        /// <summary>
+        /// Invalid date range.
+        /// </summary>
+        public const string InvalidDateRange = "IND_014";
     }
 }

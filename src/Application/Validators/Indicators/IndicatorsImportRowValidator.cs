@@ -51,6 +51,24 @@ public class IndicatorsImportRowValidator : AbstractValidator<IndicatorsImportRo
             .Matches(RegExprConstants.Month)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue);
 
+        When(dto => !string.IsNullOrEmpty(dto.FinalYear), () =>
+        {
+            RuleFor(dto => dto.FinalYear)
+                .MaximumLength(4)
+                    .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength)
+                .Matches(RegExprConstants.Year)
+                    .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue);
+        });
+
+        When(dto => !string.IsNullOrEmpty(dto.FinalMonth), () =>
+        {
+            RuleFor(dto => dto.FinalMonth)
+                .MaximumLength(2)
+                    .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength)
+                .Matches(RegExprConstants.Month)
+                    .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue);
+        });
+
         RuleFor(dto => dto.UpperGroupName)
             .NotNull()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)

@@ -54,6 +54,16 @@ public class IndicatorsImportRow()
     public required string Month { get; set; }
 
     /// <summary>
+    /// Final year.
+    /// </summary>
+    public string FinalYear { get; set; }
+
+    /// <summary>
+    /// Final month.
+    /// </summary>
+    public string FinalMonth { get; set; }
+
+    /// <summary>
     /// Upper group name.
     /// </summary>
     public required string UpperGroupName { get; set; }

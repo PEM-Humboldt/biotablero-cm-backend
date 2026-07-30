@@ -168,6 +168,12 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             IndicatorTypes.SpeciesDiversity,
         };
 
+        var indicatorsWithFinalDate = new IndicatorTypes[]
+        {
+            IndicatorTypes.RelativeUseByBiologicalGroup,
+            IndicatorTypes.CollectiveActionParticipation,
+        };
+
         foreach (var row in fileReadResult.Rows)
         {
             if (!Enum.GetValues<IndicatorTypes>().Select(e => (int)e).Contains(row.IndicatorTypeId))
@@ -234,6 +240,41 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidConfidenceInterval),
                     Message = $"Errors in row {row.RowNumber}",
                 };
+            }
+
+            if (indicatorsWithFinalDate.Contains((IndicatorTypes)row.IndicatorTypeId))
+            {
+                if (row.FinalYear == null || row.FinalMonth == null)
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.FinalDateRequired),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+
+                var initDate = DateTime.ParseExact($"{row.Year}-{row.Month}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture);
+                var endDate = DateTime.ParseExact($"{row.FinalYear}-{row.FinalMonth}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture);
+
+                if (!(initDate < endDate))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidDateRange),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+            else
+            {
+                if (row.FinalYear != null || row.FinalMonth != null)
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.FinalDateNotRequired),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
             }
         }
 
@@ -391,14 +432,19 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                                     Description = i.Description,
                                 })
                                 .FirstOrDefault(),
-                            Values = [.. g2.Select(g2r => new IndicatorValue()
+                            Values = [.. g2.Select(g2r =>
                             {
-                                MeasureUnitId = g2r.MeasureUnitId,
-                                Date = DateTime.ParseExact($"{g2r.Year}-{g2r.Month}-01 00:00:00", GeneralConstants.DateFormat, CultureInfo.InvariantCulture),
-                                DateEnd = null, //TODO: complete this !!!
-                                Value = g2r.Value,
-                                UpperLimit = g2r.UpperLimit,
-                                LowerLimit = g2r.LowerLimit,
+                                var enabledFinalDate = DateTime.TryParseExact($"{g2r.FinalYear}-{g2r.FinalMonth}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var finalDate);
+
+                                return new IndicatorValue()
+                                {
+                                    MeasureUnitId = g2r.MeasureUnitId,
+                                    Date = DateTime.ParseExact($"{g2r.Year}-{g2r.Month}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture),
+                                    DateEnd = enabledFinalDate ? finalDate : null,
+                                    Value = g2r.Value,
+                                    UpperLimit = g2r.UpperLimit,
+                                    LowerLimit = g2r.LowerLimit,
+                                };
                             })],
                         })],
                 })
@@ -408,7 +454,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             {
                 var indicators = fileReadResult.Rows
                     .GroupBy(r => r.IndicatorTypeId)
-                    .Select(async g => new Indicator()
+                    .Select(g => new Indicator()
                     {
                         InitiativeId = requestData.InitiativeId,
                         Name = $"{g.Select(r => r.IndicatorTypeId).FirstOrDefault()} ({now.ToFileTime})",
@@ -419,8 +465,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                             Locality = r.LocalityName,
                         })],
                         Versions = [.. indicatorVersionEntities],
-                    })
-                    .Select(e => e.Result);
+                    });
 
                 // Save data
                 indicators = await entityRepository.AddRangeAsync(indicators, ct);

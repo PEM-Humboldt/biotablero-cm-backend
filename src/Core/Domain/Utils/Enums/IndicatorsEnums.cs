@@ -139,34 +139,44 @@ public static class IndicatorsEnums
         Month = 9,
 
         /// <summary>
+        /// Final year.
+        /// </summary>
+        FinalYear = 10,
+
+        /// <summary>
+        /// Final month.
+        /// </summary>
+        FinalMonth = 11,
+
+        /// <summary>
         /// Upper group name.
         /// </summary>
-        UpperGroupName = 10,
+        UpperGroupName = 12,
 
         /// <summary>
         /// Group name.
         /// </summary>
-        GroupName = 11,
+        GroupName = 13,
 
         /// <summary>
         /// Group description.
         /// </summary>
-        GroupDescription = 12,
+        GroupDescription = 14,
 
         /// <summary>
         /// Indicator value.
         /// </summary>
-        Value = 13,
+        Value = 15,
 
         /// <summary>
         /// Value upper limit.
         /// </summary>
-        LowerLimit = 14,
+        LowerLimit = 16,
 
         /// <summary>
         /// Value lower limit.
         /// </summary>
-        UpperLimit = 15,
+        UpperLimit = 17,
     }
 
     #endregion

@@ -8,5 +8,5 @@ public static class GeneralConstants
     /// <summary>
     /// Date format.
     /// </summary>
-    public const string DateFormat = "yyyy-MM-dd HH:mm:ss";
+    public const string DateFormat = "yyyy-MM-dd";
 }
