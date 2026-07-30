@@ -91,6 +91,7 @@ public class IndicatorController(
         {
             Id = requestData.Id,
             InitiativeId = requestData.InitiativeId,
+            DoNotModifyDatabase = requestData.DoNotModifyDatabase,
         };
 
         var response = await entityService.ImportIndicatorsAsync(HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);

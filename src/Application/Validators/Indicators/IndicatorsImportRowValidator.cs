@@ -43,7 +43,7 @@ public class IndicatorsImportRowValidator : AbstractValidator<IndicatorsImportRo
             .Matches(RegExprConstants.Year)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue);
 
-        RuleFor(dto => dto.Year)
+        RuleFor(dto => dto.Month)
             .NotNull()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)
             .MaximumLength(2)

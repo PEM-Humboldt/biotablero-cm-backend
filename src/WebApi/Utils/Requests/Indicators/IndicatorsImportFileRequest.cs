@@ -18,9 +18,9 @@ public class IndicatorsImportFileRequest
     public required int InitiativeId { get; set; }
 
     /// <summary>
-    /// Validate file.
+    /// Do not modify database flag.
     /// </summary>
-    public bool Validate { get; set; } = true;
+    public bool DoNotModifyDatabase { get; set; } = true;
 
     /// <summary>
     /// General file.

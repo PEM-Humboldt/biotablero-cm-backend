@@ -35,46 +35,54 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
             return result;
         }
 
-        using var stream = formFile.OpenStream();
-        using var workbook = new XLWorkbook(stream);
-
-        var worksheet = workbook.Worksheet(1);
-
-        foreach (var row in worksheet.RowsUsed().Skip(1))
+        try
         {
-            ValidateCellValue<int>(row, XlsxColumnIndex.IndicatorTypeId, result.Errors, out var indicatorTypeId);
-            ValidateCellValue<int>(row, XlsxColumnIndex.MeasureUnitId, result.Errors, out var measureUnitId);
-            ValidateCellValue<string>(row, XlsxColumnIndex.Department, result.Errors, out var departmentName);
-            ValidateCellValue<string>(row, XlsxColumnIndex.Municipality, result.Errors, out var municipalityName);
-            ValidateCellValue<string>(row, XlsxColumnIndex.Locality, result.Errors, out var localityName);
-            ValidateCellValue<string>(row, XlsxColumnIndex.Year, result.Errors, out var year);
-            ValidateCellValue<string>(row, XlsxColumnIndex.Month, result.Errors, out var month);
-            ValidateCellValue<string>(row, XlsxColumnIndex.UpperGroupName, result.Errors, out var upperGroupName);
-            ValidateCellValue<string>(row, XlsxColumnIndex.GroupName, result.Errors, out var groupName, true);
-            ValidateCellValue<string>(row, XlsxColumnIndex.GroupDescription, result.Errors, out var groupDescription, true);
-            ValidateCellValue<float>(row, XlsxColumnIndex.Value, result.Errors, out var value);
-            ValidateCellValue<float?>(row, XlsxColumnIndex.UpperLimit, result.Errors, out var upperLimit);
-            ValidateCellValue<float?>(row, XlsxColumnIndex.LowerLimit, result.Errors, out var lowerLimit);
+            using var stream = formFile.OpenStream();
+            using var workbook = new XLWorkbook(stream);
 
-            var validatedRow = new IndicatorsImportRow
+            var worksheet = workbook.Worksheet(1);
+
+            foreach (var row in worksheet.RowsUsed().Skip(1))
             {
-                RowNumber = row.RowNumber(),
-                IndicatorTypeId = indicatorTypeId,
-                MeasureUnitId = measureUnitId,
-                DepartmentName = departmentName!,
-                MunicipalityName = municipalityName!,
-                LocalityName = localityName!,
-                Year = year,
-                Month = month,
-                UpperGroupName = upperGroupName!,
-                GroupName = groupName ?? string.Empty,
-                GroupDescription = groupDescription ?? string.Empty,
-                Value = value,
-                UpperLimit = upperLimit,
-                LowerLimit = lowerLimit,
-            };
+                ValidateCellValue<int>(row, XlsxColumnIndex.IndicatorTypeId, result.Errors, out var indicatorTypeId);
+                ValidateCellValue<int>(row, XlsxColumnIndex.MeasureUnitId, result.Errors, out var measureUnitId);
+                ValidateCellValue<string>(row, XlsxColumnIndex.Department, result.Errors, out var departmentName);
+                ValidateCellValue<string>(row, XlsxColumnIndex.Municipality, result.Errors, out var municipalityName);
+                ValidateCellValue<string>(row, XlsxColumnIndex.Locality, result.Errors, out var localityName);
+                ValidateCellValue<string>(row, XlsxColumnIndex.Year, result.Errors, out var year);
+                ValidateCellValue<string>(row, XlsxColumnIndex.Month, result.Errors, out var month);
+                ValidateCellValue<string>(row, XlsxColumnIndex.UpperGroupName, result.Errors, out var upperGroupName);
+                ValidateCellValue<string>(row, XlsxColumnIndex.GroupName, result.Errors, out var groupName, true);
+                ValidateCellValue<string>(row, XlsxColumnIndex.GroupDescription, result.Errors, out var groupDescription, true);
+                ValidateCellValue<float>(row, XlsxColumnIndex.Value, result.Errors, out var value);
+                ValidateCellValue<float?>(row, XlsxColumnIndex.UpperLimit, result.Errors, out var upperLimit);
+                ValidateCellValue<float?>(row, XlsxColumnIndex.LowerLimit, result.Errors, out var lowerLimit);
 
-            result.Rows.Add(validatedRow);
+                var validatedRow = new IndicatorsImportRow
+                {
+                    RowNumber = row.RowNumber(),
+                    IndicatorTypeId = indicatorTypeId,
+                    MeasureUnitId = measureUnitId,
+                    DepartmentName = departmentName!,
+                    MunicipalityName = municipalityName!,
+                    LocalityName = localityName!,
+                    Year = year,
+                    Month = month,
+                    UpperGroupName = upperGroupName!,
+                    GroupName = groupName ?? string.Empty,
+                    GroupDescription = groupDescription ?? string.Empty,
+                    Value = value,
+                    UpperLimit = upperLimit,
+                    LowerLimit = lowerLimit,
+                };
+
+                result.Rows.Add(validatedRow);
+            }
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.Error(ex, "Invalid .Xlsx file");
+            result.Errors.Add("Invalid .Xlsx file. It may be corrupted.");
         }
 
         return result;
@@ -99,7 +107,7 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
 
         if (!cellValueIsValid || (!isNullable && (value == null || (isString && string.IsNullOrWhiteSpace(value?.ToString())))))
         {
-            errors.Add($"Row {row.RowNumber() + 1}, Cell {(int)columnIndex} ({columnIndex}): Invalid value.");
+            errors.Add($"Row {row.RowNumber()}, Column '{columnIndex}': Invalid value.");
         }
     }
 
