@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
 using Microsoft.EntityFrameworkCore;
@@ -66,8 +67,8 @@ public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repo
             .CountAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<LocationCustom> GetByDepartmentAndMunicipalityNamesAsync(string department, string municipality, CancellationToken ct) =>
+    public async Task<List<LocationCustom>> GetByNamesAsync(LocationDataHelper[] locations, CancellationToken ct) =>
         await dbContext.Locations
-            .Where(e => e.Name == municipality && e.Parent.Name == department)
-            .FirstOrDefaultAsync(ct);
+            .Where(e => locations.Select(e => e.Municipality).Contains(e.Name) && locations.Select(e => e.Department).Contains(e.Parent.Name))
+            .ToListAsync(ct);
 }

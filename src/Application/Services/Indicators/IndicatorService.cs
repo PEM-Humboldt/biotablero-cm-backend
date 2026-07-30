@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Indicators;
 
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -135,31 +136,6 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             }
         }
 
-        // Validate upper groups
-        var upperGroups = fileReadResult.Rows
-            .Select(r => r.UpperGroupName)
-            .Distinct()
-            .ToArray();
-
-        var upperGroupEntities = await categoryRepository.GetUpperGroupsAsync(upperGroups, ct);
-
-        if (upperGroups.Length != upperGroupEntities.Count)
-        {
-            var upperGroupEntitiesStr = upperGroupEntities
-                .Select(e => e.Name);
-
-            foreach (var upperGroup in upperGroups)
-            {
-                if (!upperGroupEntitiesStr.Contains(upperGroup))
-                {
-                    return new(true)
-                    {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.UpperGroupNotFound, data: $"{upperGroup}"),
-                    };
-                }
-            }
-        }
-
         // Validate general data
         var indicatorsWithoutGroupRequired = new IndicatorTypes[]
         {
@@ -178,9 +154,6 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             IndicatorTypes.DetectionOccupancyProbability,
             IndicatorTypes.SpeciesDiversity,
         };
-
-        var groupedGroups = fileReadResult.Rows
-            .GroupBy(e => new { e.GroupName, e.GroupDescription });
 
         foreach (var row in fileReadResult.Rows)
         {
@@ -207,11 +180,11 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
             if (indicatorsWithSpecies.Contains((IndicatorTypes)row.IndicatorTypeId))
             {
-                if (string.IsNullOrEmpty(row.GroupName))
+                if (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription))
                 {
                     return new(true)
                     {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.GroupRequired),
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.GroupAndDescriptionRequired),
                         Message = $"Errors in row {row.RowNumber}",
                     };
                 }
@@ -251,13 +224,6 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             }
         }
 
-        // Get locations data
-        var locationEntities = fileReadResult.Rows
-            .GroupBy(r => new { r.DepartmentName, r.MunicipalityName })
-            .Select(async g => await locationRepository.GetByDepartmentAndMunicipalityNamesAsync(g.Key.DepartmentName, g.Key.MunicipalityName, ct))
-            .Select(r => r.Result)
-            .Where(e => e != null);
-
         var totalIndicators = fileReadResult.Rows
             .GroupBy(r => r.IndicatorTypeId)
             .Count();
@@ -270,34 +236,182 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             };
         }
 
-        // var now = DateTimeOffset.Now;
+        /* DATABASE VALIDATIONS */
+        // TODO: add this section in a private function
 
-        // var indicators = fileReadResult.Rows
-        //     .GroupBy(r => r.IndicatorTypeId)
-        //     .Select(async g => new Indicator()
-        //     {
-        //         InitiativeId = requestData.InitiativeId,
-        //         Name = $"{g.Select(r => r.IndicatorTypeId).FirstOrDefault()} ({now.ToFileTime})",
-        //         Type = new() { Id = g.Key },
-        //         IndicatorLocations = [.. g.Select(r => new IndicatorLocation()
-        //         {
-        //             LocationId = locationEntities.FirstOrDefault(l => l.Name == r.MunicipalityName && l.Parent.Name == r.DepartmentName)?.Id ?? 0,
-        //             Locality = r.LocalityName,
-        //         })],
-        //         Versions = [
-        //             new()
-        //             {
-        //                 CreationDate = now,
-        //                 Version = indicator == null ? 1 : await indicatorVersionRepository.GetLastVersion(indicator.Id, ct),
-        //                 Groups = [
-        //                     new()
-        //                     {
-        //                         CategoryId =
-        //                     }
-        //                 ],
-        //             },
-        //         ],
-        //     });
+        // Validate upper groups
+        var upperGroups = fileReadResult.Rows
+            .Select(r => r.UpperGroupName)
+            .Distinct()
+            .ToArray();
+
+        var upperGroupEntities = await categoryRepository.GetUpperGroupsAsync(upperGroups, ct);
+
+        if (upperGroups.Length != upperGroupEntities.Count)
+        {
+            var upperGroupEntitiesStr = upperGroupEntities
+                .Select(e => e.Name);
+
+            foreach (var upperGroup in upperGroups)
+            {
+                if (!upperGroupEntitiesStr.Contains(upperGroup))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.UpperGroupNotFound, data: $"{upperGroup}"),
+                    };
+                }
+            }
+        }
+
+        // Get locations data
+        var locations = fileReadResult.Rows
+            .Select(r => new LocationDataHelper
+            {
+                Department = r.DepartmentName,
+                Municipality = r.MunicipalityName,
+            })
+            .DistinctBy(r => new { r.Department, r.Municipality })
+            .ToArray();
+
+        var locationEntities = await locationRepository.GetByNamesAsync(locations, ct);
+
+        if (locations.Length != locationEntities.Count)
+        {
+            var locationEntitiesKeyValuePairs = locationEntities
+                .Select(e => new LocationDataHelper
+                {
+                    Department = e.Parent.Name,
+                    Municipality = e.Name,
+                });
+
+            foreach (var location in locations)
+            {
+                if (!locationEntitiesKeyValuePairs.Contains(location))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.LocationNotFound, data: $"{location}"),
+                    };
+                }
+            }
+        }
+
+        var now = DateTimeOffset.Now;
+
+        // Get groups (categories) data
+        var spreadsheetCategories = fileReadResult.Rows
+            .Select(r => new GroupDataHelper
+            {
+                Name = r.GroupName,
+                Description = r.GroupDescription,
+                ParentName = r.UpperGroupName,
+            })
+            .DistinctBy(r => new { r.Name, r.Description, r.ParentName })
+            .ToArray();
+
+        var allCategoryEntities = (await categoryRepository.ListAsync(ct))
+            .Select(e => new GroupDataHelper
+            {
+                Id = e.Id,
+                ParentId = e.ParentId,
+                Name = e.Name,
+                Description = e.Description,
+                ParentName = e.Parent.Name,
+            })
+            .ToArray();
+
+        foreach (var category in spreadsheetCategories)
+        {
+            var duplicatedCategory = allCategoryEntities
+                .FirstOrDefault(e =>
+                    category.Name.Trim().Equals(e.Name, StringComparison.OrdinalIgnoreCase) &&
+                    category.ParentName.Trim().Equals(e.ParentName, StringComparison.OrdinalIgnoreCase));
+
+            if (duplicatedCategory != null)
+            {
+                var comparisonData = new
+                {
+                    categorySpreadsheet = category,
+                    categoryDb = duplicatedCategory,
+                };
+
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.DuplicatedCategory, data: $"{comparisonData}"),
+                };
+            }
+        }
+
+        if (!requestData.DoNotModifyDatabase)
+        {
+            var existentCategories = allCategoryEntities
+                .Where(i => spreadsheetCategories.Contains(i))
+                .ToList();
+
+            var newCategories = allCategoryEntities
+                .Where(i => !spreadsheetCategories.Contains(i))
+                .ToList();
+
+            // Generate IndicatorVersion entities
+            var indicatorVersionEntities = fileReadResult.Rows
+                .GroupBy(r => r.IndicatorTypeId)
+                .Select(async g => new IndicatorVersion()
+                {
+                    CreationDate = now,
+                    Version = indicator == null ? 1 : await indicatorVersionRepository.GetLastVersion(indicator.Id, ct),
+                    Groups = [.. g.GroupBy(g => new { g.UpperGroupName, g.GroupName, g.GroupDescription })
+                        .Select(g2 => new IndicatorGroup()
+                        {
+                            CategoryId =
+                                existentCategories
+                                    .FirstOrDefault(i => i.ParentName == g2.Key.UpperGroupName && i.Name == g2.Key.GroupName && i.Description == g2.Key.GroupDescription)?.Id ??
+                                existentCategories
+                                    .FirstOrDefault(i => i.Name == g2.Key.UpperGroupName && i.ParentName == null && g2.Key.GroupName == null && i.Description == null && g2.Key.GroupDescription == null)?.Id ??
+                                0,
+                            Category = newCategories
+                                .Where(i => i.ParentName == g2.Key.UpperGroupName && i.Name == g2.Key.GroupName && i.Description == g2.Key.GroupDescription)
+                                .Select(i => new Category()
+                                {
+                                    ParentId = i.ParentId,
+                                    Name = i.Name,
+                                    Description = i.Description,
+                                })
+                                .FirstOrDefault(),
+                            Values = [.. g2.Select(g2r => new IndicatorValue()
+                            {
+                                MeasureUnitId = g2r.MeasureUnitId,
+                                Date = DateTime.ParseExact($"{g2r.Year}-{g2r.Month}-01 00:00:00", GeneralConstants.DateFormat, CultureInfo.InvariantCulture),
+                                DateEnd = null, //TODO: request this to Lina team !!!
+                                Value = g2r.Value,
+                                UpperLimit = g2r.UpperLimit,
+                                LowerLimit = g2r.LowerLimit,
+                            })],
+                        })],
+                })
+                .ToList();
+
+            // if (!requestData.Id.HasValue)
+            // {
+            //     var indicators = fileReadResult.Rows
+            //         .GroupBy(r => r.IndicatorTypeId)
+            //         .Select(async g => new Indicator()
+            //         {
+            //             InitiativeId = requestData.InitiativeId,
+            //             Name = $"{g.Select(r => r.IndicatorTypeId).FirstOrDefault()} ({now.ToFileTime})",
+            //             Type = new() { Id = g.Key },
+            //             IndicatorLocations = [.. g.Select(r => new IndicatorLocation()
+            //             {
+            //                 LocationId = locationEntities.FirstOrDefault(l => l.Name == r.MunicipalityName && l.Parent.Name == r.DepartmentName)?.Id ?? 0,
+            //                 Locality = r.LocalityName,
+            //             })],
+            //             Versions = [
+            //                 indicatorVersion,
+            //             ],
+            //         });
+            // }
+        }
+
         return new();
     }
 }

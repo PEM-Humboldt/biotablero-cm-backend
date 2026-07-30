@@ -455,7 +455,7 @@ public static class ValidationErrorCodes
         /// <summary>
         /// Group and description required.
         /// </summary>
-        public const string GroupRequired = "IND_004";
+        public const string GroupAndDescriptionRequired = "IND_004";
 
         /// <summary>
         /// Group and description not required.
@@ -481,5 +481,15 @@ public static class ValidationErrorCodes
         /// Invalid measure unit.
         /// </summary>
         public const string InvalidMeasureUnit = "IND_009";
+
+        /// <summary>
+        /// Location not found.
+        /// </summary>
+        public const string LocationNotFound = "IND_010";
+
+        /// <summary>
+        /// Duplicated category.
+        /// </summary>
+        public const string DuplicatedCategory = "IND_011";
     }
 }

@@ -33,8 +33,13 @@ public class CategoryRepository : Repository<Category, int>, ICategoryRepository
     public override async Task<Category> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.Categories
             .Include(e => e.Parent)
-                .ThenInclude(e => e.Parent)
             .FirstOrDefaultAsync(ct);
+
+    /// <inheritdoc/>
+    public override async Task<List<Category>> ListAsync(CancellationToken ct = default) =>
+        await dbContext.Categories
+            .Include(e => e.Parent)
+            .ToListAsync(ct);
 
     /// <inheritdoc/>
     public async Task<List<Category>> GetUpperGroupsAsync(string[] categoryNames, CancellationToken ct) =>

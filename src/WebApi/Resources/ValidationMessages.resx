@@ -386,7 +386,7 @@
     <comment/>
   </data>
   <data name="IND_004" xml:space="preserve">
-    <value>Group is required</value>
+    <value>Group and description are required</value>
     <comment/>
   </data>
   <data name="IND_005" xml:space="preserve">
@@ -407,6 +407,14 @@
   </data>
   <data name="IND_009" xml:space="preserve">
     <value>Invalid measure unit</value>
+    <comment/>
+  </data>
+  <data name="IND_010" xml:space="preserve">
+    <value>Location not found</value>
+    <comment/>
+  </data>
+  <data name="IND_011" xml:space="preserve">
+    <value>Duplicated category</value>
     <comment/>
   </data>
 </root>
