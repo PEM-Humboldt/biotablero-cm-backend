@@ -471,5 +471,15 @@ public static class ValidationErrorCodes
         /// Invalid confidence interval.
         /// </summary>
         public const string InvalidConfidenceInterval = "IND_007";
+
+        /// <summary>
+        /// Invalid indicator type.
+        /// </summary>
+        public const string InvalidIndicatorType = "IND_008";
+
+        /// <summary>
+        /// Invalid measure unit.
+        /// </summary>
+        public const string InvalidMeasureUnit = "IND_009";
     }
 }

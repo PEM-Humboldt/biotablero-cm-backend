@@ -7,6 +7,93 @@ public static class IndicatorsEnums
 {
     #region Indicators
 
+    /// <summary>
+    /// Indicator types.
+    /// </summary>
+    public enum IndicatorType
+    {
+        /// <summary>
+        /// Percentage of the study area occupied by the species.
+        /// </summary>
+        OccupiedAreaPercent = 1,
+
+        /// <summary>
+        /// Probability of detection and occupancy of the species in the study area (without covariates).
+        /// </summary>
+        DetectionOccupancyProbability = 2,
+
+        /// <summary>
+        /// Species diversity in the study area.
+        /// </summary>
+        SpeciesDiversity = 3,
+
+        /// <summary>
+        /// Relative use of species by biological group.
+        /// </summary>
+        RelativeUseByBiologicalGroup = 4,
+
+        /// <summary>
+        /// Relational intensity index of the central actor.
+        /// </summary>
+        CentralRelationalIntensity = 5,
+
+        /// <summary>
+        /// Composition of participation in active collective action processes.
+        /// </summary>
+        CollectiveActionParticipation = 6,
+    }
+
+    /// <summary>
+    /// Indicator Measure Units.
+    /// </summary>
+    public enum IndicatorMeasureUnit
+    {
+        /// <summary>
+        /// Percentage of area occupied.
+        /// </summary>
+        OccupiedAreaPercent,
+
+        /// <summary>
+        ///  Probability of detection.
+        /// </summary>
+        DetectionProbability,
+
+        /// <summary>
+        /// Probability of occupancy.
+        /// </summary>
+        OccupancyProbability,
+
+        /// <summary>
+        /// Species richness.
+        /// </summary>
+        SpeciesRichness,
+
+        /// <summary>
+        /// Shannon index.
+        /// </summary>
+        ShannonIndex,
+
+        /// <summary>
+        /// Simpson index.
+        /// </summary>
+        SimpsonIndex,
+
+        /// <summary>
+        /// Relative use index.
+        /// </summary>
+        RelativeUseIndex,
+
+        /// <summary>
+        /// Relational intensity.
+        /// </summary>
+        RelationalIntensity,
+
+        /// <summary>
+        /// Number of people.
+        /// </summary>
+        PersonCount,
+    }
+
     #endregion
 
     #region Spreadsheets

@@ -17,11 +17,15 @@ using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
 using Microsoft.AspNetCore.OData.Query;
+
+using IndicatorMeasureUnits = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorMeasureUnit;
+using IndicatorTypes = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorType;
 
 /// <summary>
 /// Indicator service.
@@ -63,16 +67,6 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         this.indicatorVersionRepository = indicatorVersionRepository;
         this.categoryRepository = categoryRepository;
         this.indicatorsImportRowValidator = indicatorsImportRowValidator;
-    }
-
-    private enum IndicatorTypes
-    {
-        OccupiedAreaPercent = 1,
-        DetectionOccupancyProbability = 2,
-        SpeciesDiversity = 3,
-        RelativeUseByBiologicalGroup = 4,
-        CentralRelationalIntensity = 5,
-        CollectiveActionParticipation = 6,
     }
 
     /// <inheritdoc/>
@@ -192,6 +186,25 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
         foreach (var row in fileReadResult.Rows)
         {
+            if (!Enum.GetValues<IndicatorTypes>().Select(e => (int)e).Contains(row.IndicatorTypeId))
+            {
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
+                };
+            }
+
+            foreach (var measureUnit in IndicatorConstants.UnitMeasuresByIndicatorType)
+            {
+                if (row.IndicatorTypeId == (int)measureUnit.Key && !measureUnit.Value.Contains((IndicatorMeasureUnits)row.MeasureUnitId))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidMeasureUnit),
+                    };
+                }
+            }
+
             if (indicatorsWithSpecies.Contains((IndicatorTypes)row.IndicatorTypeId))
             {
                 if (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription))
@@ -241,30 +254,11 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             .Select(r => r.Result)
             .Where(e => e != null);
 
-        var now = DateTimeOffset.Now;
-
-        var indicators = fileReadResult.Rows
+        var totalIndicators = fileReadResult.Rows
             .GroupBy(r => r.IndicatorTypeId)
-            .Select(async g => new IndicatorDto()
-            {
-                InitiativeId = requestData.InitiativeId,
-                Name = $"{g.Select(r => r.IndicatorTypeId).FirstOrDefault()} ({now.ToFileTime})",
-                Type = new() { Id = g.Key },
-                Locations = g.Select(r => new IndicatorLocationDto()
-                {
-                    LocationId = locationEntities.FirstOrDefault(l => l.Name == r.MunicipalityName && l.Parent.Name == r.DepartmentName)?.Id,
-                    Locality = r.LocalityName,
-                }),
-                Versions = [
-                    new()
-                    {
-                        CreationDate = now,
-                        Version = indicator == null ? 1 : await indicatorVersionRepository.GetLastVersion(indicator.Id, ct),
-                    },
-                ],
-            });
+            .Count();
 
-        if (indicator != null && indicators.Count() != 1)
+        if (indicator != null && totalIndicators != 1)
         {
             return new(true)
             {
@@ -272,6 +266,34 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             };
         }
 
+        // var now = DateTimeOffset.Now;
+
+        // var indicators = fileReadResult.Rows
+        //     .GroupBy(r => r.IndicatorTypeId)
+        //     .Select(async g => new Indicator()
+        //     {
+        //         InitiativeId = requestData.InitiativeId,
+        //         Name = $"{g.Select(r => r.IndicatorTypeId).FirstOrDefault()} ({now.ToFileTime})",
+        //         Type = new() { Id = g.Key },
+        //         IndicatorLocations = [.. g.Select(r => new IndicatorLocation()
+        //         {
+        //             LocationId = locationEntities.FirstOrDefault(l => l.Name == r.MunicipalityName && l.Parent.Name == r.DepartmentName)?.Id ?? 0,
+        //             Locality = r.LocalityName,
+        //         })],
+        //         Versions = [
+        //             new()
+        //             {
+        //                 CreationDate = now,
+        //                 Version = indicator == null ? 1 : await indicatorVersionRepository.GetLastVersion(indicator.Id, ct),
+        //                 Groups = [
+        //                     new()
+        //                     {
+        //                         CategoryId =
+        //                     }
+        //                 ],
+        //             },
+        //         ],
+        //     });
         return new();
     }
 }
