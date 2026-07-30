@@ -51,47 +51,47 @@ public static class IndicatorsEnums
         /// <summary>
         /// Percentage of area occupied.
         /// </summary>
-        OccupiedAreaPercent,
+        OccupiedAreaPercent = 1,
 
         /// <summary>
         ///  Probability of detection.
         /// </summary>
-        DetectionProbability,
+        DetectionProbability = 2,
 
         /// <summary>
         /// Probability of occupancy.
         /// </summary>
-        OccupancyProbability,
+        OccupancyProbability = 3,
 
         /// <summary>
         /// Species richness.
         /// </summary>
-        SpeciesRichness,
+        SpeciesRichness = 4,
 
         /// <summary>
         /// Shannon index.
         /// </summary>
-        ShannonIndex,
+        ShannonIndex = 5,
 
         /// <summary>
         /// Simpson index.
         /// </summary>
-        SimpsonIndex,
+        SimpsonIndex = 6,
 
         /// <summary>
         /// Relative use index.
         /// </summary>
-        RelativeUseIndex,
+        RelativeUseIndex = 7,
 
         /// <summary>
         /// Relational intensity.
         /// </summary>
-        RelationalIntensity,
+        RelationalIntensity = 8,
 
         /// <summary>
         /// Number of people.
         /// </summary>
-        PersonCount,
+        PersonCount = 9,
     }
 
     #endregion
@@ -161,12 +161,12 @@ public static class IndicatorsEnums
         /// <summary>
         /// Value upper limit.
         /// </summary>
-        UpperLimit = 14,
+        LowerLimit = 14,
 
         /// <summary>
         /// Value lower limit.
         /// </summary>
-        LowerLimit = 15,
+        UpperLimit = 15,
     }
 
     #endregion

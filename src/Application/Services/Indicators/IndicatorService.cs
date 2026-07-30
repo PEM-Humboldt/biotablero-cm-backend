@@ -130,7 +130,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 return new(true)
                 {
                     ResponseBody = errorTranslator.Translate(validationResult.Errors),
-                    Message = $"Row: {row.RowNumber + 1}",
+                    Message = $"Errors in row {row.RowNumber}",
                 };
             }
         }
@@ -164,8 +164,6 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         var indicatorsWithoutGroupRequired = new IndicatorTypes[]
         {
             IndicatorTypes.SpeciesDiversity,
-            IndicatorTypes.CentralRelationalIntensity,
-            IndicatorTypes.CollectiveActionParticipation,
         };
 
         var indicatorsWithSpecies = new IndicatorTypes[]
@@ -191,6 +189,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 return new(true)
                 {
                     ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
+                    Message = $"Errors in row {row.RowNumber}",
                 };
             }
 
@@ -201,17 +200,19 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidMeasureUnit),
+                        Message = $"Errors in row {row.RowNumber}",
                     };
                 }
             }
 
             if (indicatorsWithSpecies.Contains((IndicatorTypes)row.IndicatorTypeId))
             {
-                if (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription))
+                if (string.IsNullOrEmpty(row.GroupName))
                 {
                     return new(true)
                     {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.GroupAndDescriptionRequired),
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.GroupRequired),
+                        Message = $"Errors in row {row.RowNumber}",
                     };
                 }
             }
@@ -223,6 +224,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.GroupAndDescriptionNotRequired, data: $"{row.GroupName}, {row.GroupDescription}"),
+                        Message = $"Errors in row {row.RowNumber}",
                     };
                 }
             }
@@ -234,15 +236,17 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.ConfidenceIntervalRequired),
+                        Message = $"Errors in row {row.RowNumber}",
                     };
                 }
             }
 
-            if (row.UpperLimit.HasValue && row.LowerLimit.HasValue && (row.UpperLimit < row.Value || row.LowerLimit > row.Value))
+            if (row.UpperLimit.HasValue && row.LowerLimit.HasValue && (row.Value > row.UpperLimit || row.Value < row.LowerLimit))
             {
                 return new(true)
                 {
                     ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidConfidenceInterval),
+                    Message = $"Errors in row {row.RowNumber}",
                 };
             }
         }

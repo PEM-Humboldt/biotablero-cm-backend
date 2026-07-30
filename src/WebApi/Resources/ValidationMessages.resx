@@ -373,4 +373,40 @@
     <value>User is invalid or does not exist</value>
     <comment/>
   </data>
+  <data name="IND_001" xml:space="preserve">
+    <value>The specified indicator does not exist</value>
+    <comment/>
+  </data>
+  <data name="IND_002" xml:space="preserve">
+    <value>Only one indicator is required</value>
+    <comment/>
+  </data>
+  <data name="IND_003" xml:space="preserve">
+    <value>Upper group not found</value>
+    <comment/>
+  </data>
+  <data name="IND_004" xml:space="preserve">
+    <value>Group is required</value>
+    <comment/>
+  </data>
+  <data name="IND_005" xml:space="preserve">
+    <value>Group and description are not required</value>
+    <comment/>
+  </data>
+  <data name="IND_006" xml:space="preserve">
+    <value>Confidence interval is required</value>
+    <comment/>
+  </data>
+  <data name="IND_007" xml:space="preserve">
+    <value>Invalid confidence interval</value>
+    <comment/>
+  </data>
+  <data name="IND_008" xml:space="preserve">
+    <value>Invalid indicator type</value>
+    <comment/>
+  </data>
+  <data name="IND_009" xml:space="preserve">
+    <value>Invalid measure unit</value>
+    <comment/>
+  </data>
 </root>

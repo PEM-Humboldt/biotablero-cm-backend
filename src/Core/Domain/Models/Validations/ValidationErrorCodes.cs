@@ -455,7 +455,7 @@ public static class ValidationErrorCodes
         /// <summary>
         /// Group and description required.
         /// </summary>
-        public const string GroupAndDescriptionRequired = "IND_004";
+        public const string GroupRequired = "IND_004";
 
         /// <summary>
         /// Group and description not required.
