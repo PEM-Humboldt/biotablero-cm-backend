@@ -414,18 +414,14 @@
     <comment/>
   </data>
   <data name="IND_011" xml:space="preserve">
-    <value>Duplicated category</value>
-    <comment/>
-  </data>
-  <data name="IND_012" xml:space="preserve">
     <value>Final date required</value>
     <comment/>
   </data>
-  <data name="IND_013" xml:space="preserve">
+  <data name="IND_012" xml:space="preserve">
     <value>Final date not required</value>
     <comment/>
   </data>
-  <data name="IND_014" xml:space="preserve">
+  <data name="IND_013" xml:space="preserve">
     <value>Invalid date range</value>
     <comment/>
   </data>

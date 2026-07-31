@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Indicators;
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -109,6 +110,10 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <inheritdoc/>
     public async Task<CustomWebResponse> ImportIndicatorsAsync(string userName, IndicatorsImportFileDto requestData, IInputFile formFile, CancellationToken ct)
     {
+        var result = new SpreadsheetUploadResult()
+        {
+            DoNotModifyDatabase = requestData.DoNotModifyDatabase,
+        };
         var fileReadResult = excelService.GetFileData(formFile);
 
         if (fileReadResult.Errors.Count > 0)
@@ -375,6 +380,8 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             })
             .ToArray();
 
+        var duplicatedCategories = new List<CategoryComparisonHelper>();
+
         foreach (var category in spreadsheetCategories)
         {
             var duplicatedCategory = allCategoryEntities
@@ -384,18 +391,15 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
             if (duplicatedCategory != null)
             {
-                var comparisonData = new
+                duplicatedCategories.Add(new()
                 {
-                    categorySpreadsheet = category,
-                    categoryDb = duplicatedCategory,
-                };
-
-                return new(true)
-                {
-                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.DuplicatedCategory, data: comparisonData),
-                };
+                    CategorySpreadsheet = category,
+                    CategoryDb = duplicatedCategory,
+                });
             }
         }
+
+        result.Warnings.Add("duplicatedCategories", duplicatedCategories);
 
         if (!requestData.DoNotModifyDatabase)
         {
@@ -475,10 +479,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
                 logger.AddLog(LogType.Create, "Added indicators", "{@EntityData}", indicatorDtos);
 
-                return new()
-                {
-                    ResponseBody = indicatorDtos,
-                };
+                result.Result = indicatorDtos;
             }
 
             // Save data
@@ -489,14 +490,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
             logger.AddLog(LogType.Create, "Added indicator versions", "{@EntityData}", indicatorVersionDtos);
 
-            return new()
-            {
-                ResponseBody = indicatorVersionDtos,
-            };
+            result.Result = indicatorVersionDtos;
         }
 
         return new()
-        { };
+        {
+            ResponseBody = result,
+        };
     }
 
     /// <summary>

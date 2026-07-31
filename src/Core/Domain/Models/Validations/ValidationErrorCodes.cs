@@ -488,23 +488,18 @@ public static class ValidationErrorCodes
         public const string LocationNotFound = "IND_010";
 
         /// <summary>
-        /// Duplicated category.
-        /// </summary>
-        public const string DuplicatedCategory = "IND_011";
-
-        /// <summary>
         /// Final date required.
         /// </summary>
-        public const string FinalDateRequired = "IND_012";
+        public const string FinalDateRequired = "IND_011";
 
         /// <summary>
         /// Final date not required.
         /// </summary>
-        public const string FinalDateNotRequired = "IND_013";
+        public const string FinalDateNotRequired = "IND_012";
 
         /// <summary>
         /// Invalid date range.
         /// </summary>
-        public const string InvalidDateRange = "IND_014";
+        public const string InvalidDateRange = "IND_013";
     }
 }
