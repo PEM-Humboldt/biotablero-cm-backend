@@ -69,6 +69,7 @@ public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repo
     /// <inheritdoc/>
     public async Task<List<LocationCustom>> GetByNamesAsync(LocationDataHelper[] locations, CancellationToken ct) =>
         await dbContext.Locations
+            .Include(e => e.Parent)
             .Where(e => locations.Select(e => e.Municipality).Contains(e.Name) && locations.Select(e => e.Department).Contains(e.Parent.Name))
             .ToListAsync(ct);
 }

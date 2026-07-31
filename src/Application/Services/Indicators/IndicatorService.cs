@@ -465,7 +465,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                         Type = new() { Id = g.Key },
                         IndicatorLocations = [.. g.Select(r => new IndicatorLocation()
                         {
-                            LocationId = locationEntities.FirstOrDefault(l => l.Name == r.MunicipalityName && l.Parent.Name == r.DepartmentName)?.Id ?? 0,
+                            LocationId = locationEntities.FirstOrDefault(l => l.Name == r.MunicipalityName && l.Parent?.Name == r.DepartmentName)?.Id ?? 0,
                             Locality = r.LocalityName,
                         })],
                         Versions = [.. indicatorVersionEntities],
@@ -504,5 +504,5 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// </summary>
     /// <param name="month">Month number as string.</param>
     /// <returns>Month with leading zeros.</returns>
-    private static string PrintMonth(string month) => month.PadLeft(2, '0');
+    private static string PrintMonth(string month) => month?.PadLeft(2, '0');
 }
