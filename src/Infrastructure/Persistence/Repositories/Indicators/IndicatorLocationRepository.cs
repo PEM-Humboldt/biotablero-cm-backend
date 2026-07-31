@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Indicators;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Indicators;
 
 using System.Collections.Generic;
 using System.Linq;

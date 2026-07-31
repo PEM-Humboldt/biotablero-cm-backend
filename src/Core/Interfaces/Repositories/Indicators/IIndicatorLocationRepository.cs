@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
+﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
 
 using System.Collections.Generic;
 using System.Threading;
