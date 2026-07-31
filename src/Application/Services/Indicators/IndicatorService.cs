@@ -124,6 +124,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             };
         }
 
+        // Normalize groups (categories) names
+        foreach (var item in fileReadResult.Rows)
+        {
+            item.UpperGroupName = item.UpperGroupName.Trim().CapitalizeFirstOnly();
+            item.GroupName = item.GroupName.Trim().CapitalizeFirstOnly();
+        }
+
         Indicator indicator = null;
 
         if (requestData.Id.HasValue)
@@ -356,60 +363,48 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             }
         }
 
-        var now = DateTimeOffset.Now;
-
-        // Get groups (categories) data
-        var spreadsheetCategories = fileReadResult.Rows
-            .Select(r => new GroupDataHelper
-            {
-                Name = r.GroupName,
-                Description = r.GroupDescription,
-                ParentName = r.UpperGroupName,
-            })
-            .DistinctBy(r => new { r.Name, r.Description, r.ParentName })
-            .ToArray();
-
-        var allCategoryEntities = (await categoryRepository.ListAsync(ct))
-            .Select(e => new GroupDataHelper
-            {
-                Id = e.Id,
-                ParentId = e.ParentId,
-                Name = e.Name,
-                Description = e.Description,
-                ParentName = e.Parent?.Name,
-            })
-            .ToArray();
-
-        var duplicatedCategories = new List<CategoryComparisonHelper>();
-
-        foreach (var category in spreadsheetCategories)
-        {
-            var duplicatedCategory = allCategoryEntities
-                .FirstOrDefault(e =>
-                    category.Name.Trim().Equals(e.Name, StringComparison.OrdinalIgnoreCase) &&
-                    category.ParentName.Trim().Equals(e.ParentName, StringComparison.OrdinalIgnoreCase));
-
-            if (duplicatedCategory != null)
-            {
-                duplicatedCategories.Add(new()
-                {
-                    CategorySpreadsheet = category,
-                    CategoryDb = duplicatedCategory,
-                });
-            }
-        }
-
-        result.Warnings.Add("duplicatedCategories", duplicatedCategories);
-
         if (!requestData.DoNotModifyDatabase)
         {
-            var existentCategories = allCategoryEntities
-                .Where(i => spreadsheetCategories.Contains(i))
+            var now = DateTimeOffset.Now;
+
+            // Get groups (categories) data
+            var spreadsheetCategories = fileReadResult.Rows
+                .Select(r => new GroupDataHelper
+                {
+                    Name = r.GroupName,
+                    Description = r.GroupDescription,
+                    ParentName = r.UpperGroupName,
+                })
+                .DistinctBy(r => new { r.Name, r.Description, r.ParentName })
+                .ToArray();
+
+            var databaseCategories = (await categoryRepository.ListAsync(ct))
+                .Select(e => new GroupDataHelper
+                {
+                    Id = e.Id,
+                    ParentId = e.ParentId,
+                    Name = e.Name.Trim().CapitalizeFirstOnly(),
+                    Description = e.Description,
+                    ParentName = e.Parent?.Name?.Trim()?.CapitalizeFirstOnly(),
+                })
+                .ToArray();
+
+            var existentCategories = spreadsheetCategories
+                .Join(databaseCategories, sc => new { sc.Name, sc.ParentName }, dbc => new { dbc.Name, dbc.ParentName }, (sc, dbc) => new { sc, dbc })
+                .Select(i => i.dbc)
+                .Distinct()
                 .ToList();
 
-            var newCategories = allCategoryEntities
-                .Where(i => !spreadsheetCategories.Contains(i))
-                .ToList();
+            var newCategories = new List<GroupDataHelper>();
+
+            foreach (var category in spreadsheetCategories)
+            {
+                var categoryExists = databaseCategories.Any(i => category.Name == i.Name && category.ParentName == i.ParentName);
+                if (!categoryExists && !newCategories.Contains(category))
+                {
+                    newCategories.Add(category);
+                }
+            }
 
             // Generate IndicatorVersion entities
             var indicatorVersionEntities = fileReadResult.Rows
@@ -419,37 +414,41 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     CreationDate = now,
                     Version = indicator == null ? 1 : await indicatorVersionRepository.GetLastVersion(indicator.Id, ct),
                     Groups = [.. g.GroupBy(g => new { g.UpperGroupName, g.GroupName, g.GroupDescription })
-                        .Select(g2 => new IndicatorGroup()
+                        .Select(g2 =>
                         {
-                            CategoryId =
+                            var categoryId = existentCategories
+                                    .FirstOrDefault(i => i.ParentName == g2.Key.UpperGroupName && i.Name == g2.Key.GroupName)?.Id ??
                                 existentCategories
-                                    .FirstOrDefault(i => i.ParentName == g2.Key.UpperGroupName && i.Name == g2.Key.GroupName && i.Description == g2.Key.GroupDescription)?.Id ??
-                                existentCategories
-                                    .FirstOrDefault(i => i.Name == g2.Key.UpperGroupName && i.ParentName == null && g2.Key.GroupName == null && i.Description == null && g2.Key.GroupDescription == null)?.Id ??
-                                0,
-                            Category = newCategories
-                                .Where(i => i.ParentName == g2.Key.UpperGroupName && i.Name == g2.Key.GroupName && i.Description == g2.Key.GroupDescription)
-                                .Select(i => new Category()
-                                {
-                                    ParentId = i.ParentId,
-                                    Name = i.Name,
-                                    Description = i.Description,
-                                })
-                                .FirstOrDefault(),
-                            Values = [.. g2.Select(g2r =>
-                            {
-                                var enabledFinalDate = DateTime.TryParseExact($"{g2r.FinalYear}-{PrintMonth(g2r.FinalMonth)}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var finalDate);
+                                    .FirstOrDefault(i => i.Name == g2.Key.UpperGroupName.Trim() && i.ParentName == null && g2.Key.GroupName == null && i.Description == null && g2.Key.GroupDescription == null)?.Id ??
+                                0;
 
-                                return new IndicatorValue()
+                            return new IndicatorGroup()
+                            {
+                                CategoryId = categoryId,
+                                Category = categoryId != 0 ? null : newCategories
+                                    .Where(i => i.ParentName == g2.Key.UpperGroupName && i.Name == g2.Key.GroupName && i.Description == g2.Key.GroupDescription)
+                                    .Select(i => new Category()
+                                    {
+                                        ParentId = i.ParentId,
+                                        Name = i.Name,
+                                        Description = i.Description,
+                                    })
+                                    .FirstOrDefault(),
+                                Values = [.. g2.Select(g2r =>
                                 {
-                                    MeasureUnitId = g2r.MeasureUnitId,
-                                    Date = DateTime.ParseExact($"{g2r.Year}-{PrintMonth(g2r.Month)}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture),
-                                    DateEnd = enabledFinalDate ? finalDate : null,
-                                    Value = g2r.Value,
-                                    UpperLimit = g2r.UpperLimit,
-                                    LowerLimit = g2r.LowerLimit,
-                                };
-                            })],
+                                    var enabledFinalDate = DateTime.TryParseExact($"{g2r.FinalYear}-{PrintMonth(g2r.FinalMonth)}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var finalDate);
+
+                                    return new IndicatorValue()
+                                    {
+                                        MeasureUnitId = g2r.MeasureUnitId,
+                                        Date = DateTime.ParseExact($"{g2r.Year}-{PrintMonth(g2r.Month)}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture),
+                                        DateEnd = enabledFinalDate ? finalDate : null,
+                                        Value = g2r.Value,
+                                        UpperLimit = g2r.UpperLimit,
+                                        LowerLimit = g2r.LowerLimit,
+                                    };
+                                })],
+                            };
                         })],
                 })
                 .Select(e => e.Result);
