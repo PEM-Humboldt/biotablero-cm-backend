@@ -344,7 +344,9 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             .DistinctBy(r => new { r.Department, r.Municipality })
             .ToArray();
 
-        var locationEntities = await locationRepository.GetByNamesAsync(spreadsheetLocations, ct);
+        var locationEntities = await locationRepository.GetByNamesAsync([.. spreadsheetLocations.Select(e => e.Department)], [.. spreadsheetLocations.Select(e => e.Municipality)], ct);
+
+        locationEntities = [.. locationEntities.Where(e => spreadsheetLocations.Any(i => i.Municipality == e.Name && i.Department == e.Parent.Name))];
 
         if (spreadsheetLocations.Length != locationEntities.Count)
         {
@@ -420,21 +422,30 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 })
                 .DistinctBy(r => new { r.Department, r.Municipality, r.Locality })];
 
-            var existentIndicatorLocations = await indicatorLocationRepository.GetByNamesAsync(spreadsheetLocations, ct);
+            var existentIndicatorLocations = indicator != null ? await indicatorLocationRepository.GetByIndicatorAsync(indicator?.Id ?? 0, ct) : [];
+
+            if (existentIndicatorLocations.Count > 0)
+            {
+                existentIndicatorLocations = [.. existentIndicatorLocations.Where(e => spreadsheetLocations.Any(i => i.Municipality == e.Location.Name && i.Department == e.Location.Parent.Name && i.Locality == e.Locality))];
+            }
 
             var newIndicatorLocations = new List<IndicatorLocation>();
 
             foreach (var indicatorLocation in spreadsheetLocations)
             {
-                var entity = existentIndicatorLocations.FirstOrDefault(i => i.Locality == indicatorLocation.Locality && i.Location.Name == indicatorLocation.Municipality && i.Location.Name == indicatorLocation.Department);
+                var entityExists = existentIndicatorLocations
+                    .Any(i => i.Locality == indicatorLocation.Locality && i.Location.Name == indicatorLocation.Municipality && i.Location.Name == indicatorLocation.Department);
 
-                if (entity != null)
+                if (!entityExists)
                 {
+                    var locationEntity = locationEntities
+                        .FirstOrDefault(i => i.Name == indicatorLocation.Municipality && i.Parent.Name == indicatorLocation.Department);
+
                     var newEntity = new IndicatorLocation()
                     {
                         IndicatorId = indicator?.Id ?? 0,
-                        LocationId = entity.LocationId,
-                        Locality = entity.Locality,
+                        LocationId = locationEntity.Id,
+                        Locality = indicatorLocation.Locality,
                     };
 
                     if (!newIndicatorLocations.Contains(newEntity))

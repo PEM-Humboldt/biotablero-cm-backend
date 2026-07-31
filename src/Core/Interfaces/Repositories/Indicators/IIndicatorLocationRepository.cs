@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
-using IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
 
 /// <summary>
 /// Indicator Location repository interface.
@@ -13,10 +12,10 @@ using IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
 public interface IIndicatorLocationRepository : IRepository<IndicatorLocation, int>
 {
     /// <summary>
-    /// Get elements by department, municipality and locality names.
+    /// Get elements by indicator identifier.
     /// </summary>
-    /// <param name="locations">Locations data.</param>
+    /// <param name="indicatorId">Indicator identifier.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Filtered indicator locations by names.</returns>
-    Task<List<IndicatorLocation>> GetByNamesAsync(LocationDataHelper[] locations, CancellationToken ct);
+    /// <returns>Entities by selected indicator.</returns>
+    Task<List<IndicatorLocation>> GetByIndicatorAsync(int indicatorId, CancellationToken ct);
 }

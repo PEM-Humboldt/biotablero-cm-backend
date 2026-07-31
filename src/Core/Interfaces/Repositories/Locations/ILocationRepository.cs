@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
-
 using NetTopologySuite.Geometries;
 
 using LocationCustom = IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location;
@@ -42,8 +40,9 @@ public interface ILocationRepository : IRepository<LocationCustom, int>
     /// <summary>
     /// Get elements by department and municipality names.
     /// </summary>
-    /// <param name="locations">Locations data.</param>
+    /// <param name="departments">Department names.</param>
+    /// <param name="municipalities">Municipality names.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Filtered locations by names.</returns>
-    Task<List<LocationCustom>> GetByNamesAsync(LocationDataHelper[] locations, CancellationToken ct);
+    Task<List<LocationCustom>> GetByNamesAsync(string[] departments, string[] municipalities, CancellationToken ct);
 }
