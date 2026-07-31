@@ -445,6 +445,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     {
                         IndicatorId = indicator?.Id ?? 0,
                         LocationId = locationEntity.Id,
+                        Location = locationEntity,
                         Locality = indicatorLocation.Locality,
                     };
 
@@ -512,8 +513,18 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                         InitiativeId = requestData.InitiativeId,
                         Name = $"{g.Select(r => r.IndicatorTypeId).FirstOrDefault()} ({now.ToFileTime})",
                         IndicatorTypeId = g.Key,
-                        IndicatorLocations = [.. g.Select(r => newIndicatorLocations
-                            .FirstOrDefault(i => i.Location.Name == r.MunicipalityName && i.Location.Parent.Name == r.DepartmentName))],
+                        IndicatorLocations = [.. g.Select(r =>
+                        {
+                            IndicatorLocation indicatorLocation = null;
+
+                            indicatorLocation = existentIndicatorLocations
+                                .FirstOrDefault(i => i.Location.Name == r.MunicipalityName && i.Location.Parent.Name == r.DepartmentName);
+
+                            indicatorLocation ??= newIndicatorLocations
+                                .FirstOrDefault(i => i.Location.Name == r.MunicipalityName && i.Location.Parent.Name == r.DepartmentName);
+
+                            return indicatorLocation;
+                        })],
                         Versions = [.. indicatorVersionEntities],
                     });
 
