@@ -129,7 +129,6 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             };
         }
 
-        // Normalize names
         NormalizeNames(fileReadResult.Rows);
 
         // Validate indicator
@@ -220,6 +219,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             foreach (var category in spreadsheetCategories)
             {
                 var entityExists = databaseCategories.Any(i => category.Name == i.Name && category.ParentName == i.ParentName);
+
                 if (!entityExists && !newCategories.Contains(category))
                 {
                     newCategories.Add(category);
@@ -230,7 +230,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
             if (existentIndicatorLocations.Count > 0)
             {
-                existentIndicatorLocations = [.. existentIndicatorLocations.Where(e => spreadsheetLocations.Any(i => i.Municipality == e.Location.Name && i.Department == e.Location.Parent.Name && i.Locality == e.Locality))];
+                existentIndicatorLocations = [..
+                    existentIndicatorLocations
+                        .Where(e =>
+                            spreadsheetLocations.Any(i =>
+                                i.Municipality == e.Location.Name &&
+                                i.Department == e.Location.Parent.Name &&
+                                i.Locality == e.Locality))];
             }
 
             // Generate IndicatorVersion entities
@@ -246,16 +252,26 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                         .Select(g2 =>
                         {
                             var categoryId = existentCategories
-                                    .FirstOrDefault(i => i.ParentName == g2.Key.UpperGroupName && i.Name == g2.Key.GroupName)?.Id ??
+                                    .FirstOrDefault(i =>
+                                        i.ParentName == g2.Key.UpperGroupName &&
+                                        i.Name == g2.Key.GroupName)?.Id ??
                                 existentCategories
-                                    .FirstOrDefault(i => i.Name == g2.Key.UpperGroupName.Trim() && i.ParentName == null && g2.Key.GroupName == null && i.Description == null && g2.Key.GroupDescription == null)?.Id ??
+                                    .FirstOrDefault(i =>
+                                        i.Name == g2.Key.UpperGroupName.Trim() &&
+                                        i.ParentName == null &&
+                                        g2.Key.GroupName == null &&
+                                        i.Description == null &&
+                                        g2.Key.GroupDescription == null)?.Id ??
                                 0;
 
                             return new IndicatorGroup()
                             {
                                 CategoryId = categoryId,
                                 Category = categoryId != 0 ? null : newCategories
-                                    .Where(i => i.ParentName == g2.Key.UpperGroupName && i.Name == g2.Key.GroupName && i.Description == g2.Key.GroupDescription)
+                                    .Where(i =>
+                                        i.ParentName == g2.Key.UpperGroupName &&
+                                        i.Name == g2.Key.GroupName &&
+                                        i.Description == g2.Key.GroupDescription)
                                     .Select(i => new Category()
                                     {
                                         ParentId = i.ParentId,
@@ -414,8 +430,25 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <returns>Validation result.</returns>
     private async Task<CustomWebResponse> ValidateStructureData(List<IndicatorsImportRow> rows, bool edition, CancellationToken ct = default)
     {
+        // Validate total indicators for edition
+        if (edition)
+        {
+            var totalIndicators = rows
+            .GroupBy(r => r.IndicatorTypeId)
+            .Count();
+
+            if (totalIndicators != 1)
+            {
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.OnlyOneIndicatorRequired),
+                };
+            }
+        }
+
         foreach (var row in rows)
         {
+            // Check FluentValidation validations
             var validationResult = await indicatorsImportRowValidator.ValidateAsync(row, ct);
 
             if (!validationResult.IsValid)
@@ -426,10 +459,8 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     Message = $"Errors in row {row.RowNumber}",
                 };
             }
-        }
 
-        foreach (var row in rows)
-        {
+            // Check indicator types
             if (!Enum.GetValues<IndicatorTypes>().Select(e => (int)e).Contains(row.IndicatorTypeId))
             {
                 return new(true)
@@ -439,6 +470,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 };
             }
 
+            // Check indicator measure units
             foreach (var measureUnit in IndicatorConstants.UnitMeasuresByIndicatorType)
             {
                 if (row.IndicatorTypeId == (int)measureUnit.Key && !measureUnit.Value.Contains((IndicatorMeasureUnits)row.MeasureUnitId))
@@ -451,6 +483,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 }
             }
 
+            // Check indicators with species
             if (IndicatorConstants.IndicatorsWithSpecies.Contains((IndicatorTypes)row.IndicatorTypeId))
             {
                 if (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription))
@@ -463,6 +496,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 }
             }
 
+            // Check indicators without group required
             if (IndicatorConstants.IndicatorsWithoutGroupRequired.Contains((IndicatorTypes)row.IndicatorTypeId))
             {
                 if (!string.IsNullOrEmpty(row.GroupName) || !string.IsNullOrEmpty(row.GroupDescription))
@@ -475,6 +509,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 }
             }
 
+            // Check indicators with confidence interval
             if (IndicatorConstants.IndicatorsWithConfidenceInterval.Contains((IndicatorTypes)row.IndicatorTypeId))
             {
                 if (row.UpperLimit == null || row.LowerLimit == null)
@@ -487,6 +522,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 }
             }
 
+            // Check confidence intervals
             if (row.UpperLimit.HasValue && row.LowerLimit.HasValue && (row.Value > row.UpperLimit || row.Value < row.LowerLimit))
             {
                 return new(true)
@@ -496,6 +532,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 };
             }
 
+            // Check indicators with date ranges
             if (IndicatorConstants.IndicatorsWithDateRange.Contains((IndicatorTypes)row.IndicatorTypeId))
             {
                 if (row.FinalYear == null || row.FinalMonth == null)
@@ -521,6 +558,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             }
             else
             {
+                // Check indicators without date ranges
                 if (row.FinalYear != null || row.FinalMonth != null)
                 {
                     return new(true)
@@ -530,18 +568,6 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     };
                 }
             }
-        }
-
-        var totalIndicators = rows
-            .GroupBy(r => r.IndicatorTypeId)
-            .Count();
-
-        if (edition && totalIndicators != 1)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.OnlyOneIndicatorRequired),
-            };
         }
 
         return new();
@@ -581,7 +607,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             }
         }
 
-        // Get locations data
+        // Validate locations data
         var spreadsheetLocations = rows
             .Select(r => new LocationDataHelper
             {
