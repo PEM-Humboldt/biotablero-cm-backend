@@ -105,8 +105,14 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
     {
         ArgumentNullException.ThrowIfNull(errors);
 
-        var cellValueIsValid = ValidateCellValueData(row.Cell((int)columnIndex), out value);
         var isString = typeof(TValue) == typeof(string);
+        var cellValueIsValid = ValidateCellValueData(row.Cell((int)columnIndex), out value);
+
+        if (isString && value?.ToString() == string.Empty)
+        {
+            value = default;
+        }
+
         var isNullable = !isString ? Nullable.GetUnderlyingType(typeof(TValue)) != null : isNullableString;
 
         if (!cellValueIsValid || (!isNullable && (value == null || (isString && string.IsNullOrWhiteSpace(value?.ToString())))))
