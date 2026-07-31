@@ -17,6 +17,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Indicators;
 using IAVH.BioTablero.CM.Application.Services.General;
 using IAVH.BioTablero.CM.Application.Utils;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
@@ -129,13 +130,9 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         }
 
         // Normalize names
-        foreach (var item in fileReadResult.Rows)
-        {
-            item.UpperGroupName = item.UpperGroupName.Trim().CapitalizeFirstOnly();
-            item.GroupName = item.GroupName.Trim().CapitalizeFirstOnly();
-            item.LocalityName = item.LocalityName.Trim().CapitalizeFirstOnly();
-        }
+        NormalizeNames(fileReadResult.Rows);
 
+        // Validate indicator
         Indicator indicator = null;
         var indicatorLastVersion = 1;
 
@@ -154,225 +151,38 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             indicatorLastVersion = await indicatorVersionRepository.GetLastVersion(indicator.Id, ct);
         }
 
-        // Validate data
-        foreach (var row in fileReadResult.Rows)
-        {
-            var validationResult = await indicatorsImportRowValidator.ValidateAsync(row, ct);
+        // Make structure validations
+        var structureDataValidations = await ValidateStructureData(fileReadResult.Rows, requestData.Id.HasValue, ct);
 
-            if (!validationResult.IsValid)
-            {
-                return new(true)
-                {
-                    ResponseBody = errorTranslator.Translate(validationResult.Errors),
-                    Message = $"Errors in row {row.RowNumber}",
-                };
-            }
+        if (!structureDataValidations.Success)
+        {
+            return structureDataValidations;
         }
 
-        // Validate general data
-        var indicatorsWithoutGroupRequired = new IndicatorTypes[]
-        {
-            IndicatorTypes.SpeciesDiversity,
-        };
-
-        var indicatorsWithSpecies = new IndicatorTypes[]
-        {
-            IndicatorTypes.OccupiedAreaPercent,
-            IndicatorTypes.DetectionOccupancyProbability,
-            IndicatorTypes.RelativeUseByBiologicalGroup,
-        };
-
-        var indicatorsWithConfidenceInterval = new IndicatorTypes[]
-        {
-            IndicatorTypes.DetectionOccupancyProbability,
-            IndicatorTypes.SpeciesDiversity,
-        };
-
-        var indicatorsWithFinalDate = new IndicatorTypes[]
-        {
-            IndicatorTypes.RelativeUseByBiologicalGroup,
-            IndicatorTypes.CollectiveActionParticipation,
-        };
-
-        foreach (var row in fileReadResult.Rows)
-        {
-            if (!Enum.GetValues<IndicatorTypes>().Select(e => (int)e).Contains(row.IndicatorTypeId))
-            {
-                return new(true)
-                {
-                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
-                    Message = $"Errors in row {row.RowNumber}",
-                };
-            }
-
-            foreach (var measureUnit in IndicatorConstants.UnitMeasuresByIndicatorType)
-            {
-                if (row.IndicatorTypeId == (int)measureUnit.Key && !measureUnit.Value.Contains((IndicatorMeasureUnits)row.MeasureUnitId))
-                {
-                    return new(true)
-                    {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidMeasureUnit),
-                        Message = $"Errors in row {row.RowNumber}",
-                    };
-                }
-            }
-
-            if (indicatorsWithSpecies.Contains((IndicatorTypes)row.IndicatorTypeId))
-            {
-                if (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription))
-                {
-                    return new(true)
-                    {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.GroupAndDescriptionRequired),
-                        Message = $"Errors in row {row.RowNumber}",
-                    };
-                }
-            }
-
-            if (indicatorsWithoutGroupRequired.Contains((IndicatorTypes)row.IndicatorTypeId))
-            {
-                if (!string.IsNullOrEmpty(row.GroupName) || !string.IsNullOrEmpty(row.GroupDescription))
-                {
-                    return new(true)
-                    {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.GroupAndDescriptionNotRequired, data: $"{row.GroupName}, {row.GroupDescription}"),
-                        Message = $"Errors in row {row.RowNumber}",
-                    };
-                }
-            }
-
-            if (indicatorsWithConfidenceInterval.Contains((IndicatorTypes)row.IndicatorTypeId))
-            {
-                if (row.UpperLimit == null || row.LowerLimit == null)
-                {
-                    return new(true)
-                    {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.ConfidenceIntervalRequired),
-                        Message = $"Errors in row {row.RowNumber}",
-                    };
-                }
-            }
-
-            if (row.UpperLimit.HasValue && row.LowerLimit.HasValue && (row.Value > row.UpperLimit || row.Value < row.LowerLimit))
-            {
-                return new(true)
-                {
-                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidConfidenceInterval),
-                    Message = $"Errors in row {row.RowNumber}",
-                };
-            }
-
-            if (indicatorsWithFinalDate.Contains((IndicatorTypes)row.IndicatorTypeId))
-            {
-                if (row.FinalYear == null || row.FinalMonth == null)
-                {
-                    return new(true)
-                    {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.FinalDateRequired),
-                        Message = $"Errors in row {row.RowNumber}",
-                    };
-                }
-
-                var initDate = DateTime.ParseExact($"{row.Year}-{PrintMonth(row.Month)}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture);
-                var endDate = DateTime.ParseExact($"{row.FinalYear}-{PrintMonth(row.FinalMonth)}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture);
-
-                if (!(initDate < endDate))
-                {
-                    return new(true)
-                    {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidDateRange),
-                        Message = $"Errors in row {row.RowNumber}",
-                    };
-                }
-            }
-            else
-            {
-                if (row.FinalYear != null || row.FinalMonth != null)
-                {
-                    return new(true)
-                    {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.FinalDateNotRequired),
-                        Message = $"Errors in row {row.RowNumber}",
-                    };
-                }
-            }
-        }
-
-        var totalIndicators = fileReadResult.Rows
-            .GroupBy(r => r.IndicatorTypeId)
-            .Count();
-
-        if (indicator != null && totalIndicators != 1)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.OnlyOneIndicatorRequired),
-            };
-        }
-
-        /* DATABASE VALIDATIONS */
-        // TODO: add this section in a private function
-
-        // Validate upper groups
-        var upperGroups = fileReadResult.Rows
-            .Select(r => r.UpperGroupName)
-            .Distinct()
-            .ToArray();
-
-        var upperGroupEntities = await categoryRepository.GetUpperGroupsAsync(upperGroups, ct);
-
-        if (upperGroups.Length != upperGroupEntities.Count)
-        {
-            var upperGroupEntitiesStr = upperGroupEntities
-                .Select(e => e.Name);
-
-            foreach (var upperGroup in upperGroups)
-            {
-                if (!upperGroupEntitiesStr.Contains(upperGroup))
-                {
-                    return new(true)
-                    {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.UpperGroupNotFound, data: $"{upperGroup}"),
-                    };
-                }
-            }
-        }
-
-        // Get locations data
+        // Make database validations
         var spreadsheetLocations = fileReadResult.Rows
             .Select(r => new LocationDataHelper
             {
                 Department = r.DepartmentName,
                 Municipality = r.MunicipalityName,
+                Locality = r.LocalityName,
             })
-            .DistinctBy(r => new { r.Department, r.Municipality })
+            .DistinctBy(r => new { r.Department, r.Municipality, r.Locality })
             .ToArray();
 
-        var locationEntities = await locationRepository.GetByNamesAsync([.. spreadsheetLocations.Select(e => e.Department)], [.. spreadsheetLocations.Select(e => e.Municipality)], ct);
+        var locationEntities = await locationRepository.GetByNamesAsync(
+            [.. spreadsheetLocations.Select(e => e.Department)],
+            [.. spreadsheetLocations.Select(e => e.Municipality)],
+            ct);
 
-        locationEntities = [.. locationEntities.Where(e => spreadsheetLocations.Any(i => i.Municipality == e.Name && i.Department == e.Parent.Name))];
+        var databaseValidations = await ValidateDatabase(fileReadResult.Rows, locationEntities, ct);
 
-        if (spreadsheetLocations.Length != locationEntities.Count)
+        if (!databaseValidations.Success)
         {
-            var locationEntitiesKeyValuePairs = locationEntities
-                .Select(e => new LocationDataHelper
-                {
-                    Department = e.Parent.Name,
-                    Municipality = e.Name,
-                });
-
-            foreach (var location in spreadsheetLocations)
-            {
-                if (!locationEntitiesKeyValuePairs.Contains(location))
-                {
-                    return new(true)
-                    {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.LocationNotFound, data: $"{location}"),
-                    };
-                }
-            }
+            return databaseValidations;
         }
 
+        // Save data
         if (!requestData.DoNotModifyDatabase)
         {
             var now = DateTimeOffset.Now;
@@ -416,16 +226,6 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 }
             }
 
-            // Generate IndicatorLocation entities
-            spreadsheetLocations = [.. fileReadResult.Rows
-                .Select(r => new LocationDataHelper
-                {
-                    Department = r.DepartmentName,
-                    Municipality = r.MunicipalityName,
-                    Locality = r.LocalityName,
-                })
-                .DistinctBy(r => new { r.Department, r.Municipality, r.Locality })];
-
             var existentIndicatorLocations = indicator != null ? await indicatorLocationRepository.GetByIndicatorAsync(indicator?.Id ?? 0, ct) : [];
 
             if (existentIndicatorLocations.Count > 0)
@@ -465,13 +265,11 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                                     .FirstOrDefault(),
                                 Values = [.. g2.Select(g2r =>
                                 {
-                                    var enabledFinalDate = DateTime.TryParseExact($"{g2r.FinalYear}-{PrintMonth(g2r.FinalMonth)}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var finalDate);
-
                                     return new IndicatorValue()
                                     {
                                         MeasureUnitId = g2r.MeasureUnitId,
-                                        Date = DateTime.ParseExact($"{g2r.Year}-{PrintMonth(g2r.Month)}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture),
-                                        DateEnd = enabledFinalDate ? finalDate : null,
+                                        Date = CastDate(g2r.Year, g2r.Month) ?? default,
+                                        DateEnd = CastDate(g2r.FinalYear, g2r.FinalMonth),
                                         Value = g2r.Value,
                                         UpperLimit = g2r.UpperLimit,
                                         LowerLimit = g2r.LowerLimit,
@@ -557,10 +355,267 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         };
     }
 
+    #region Import Indicators functions
+
     /// <summary>
-    /// Print formatted month.
+    /// Cast indicator value date.
     /// </summary>
-    /// <param name="month">Month number as string.</param>
-    /// <returns>Month with leading zeros.</returns>
-    private static string PrintMonth(string month) => month?.PadLeft(2, '0');
+    /// <param name="year">Indicator value year.</param>
+    /// <param name="month">Indicator value month.</param>
+    /// <returns>DateTime from strings.</returns>
+    /// <exception cref="InvalidCastException">Cast date error.</exception>
+    private static DateTime? CastDate(string year, string month)
+    {
+        if (string.IsNullOrEmpty(year) || string.IsNullOrEmpty(month))
+        {
+            return null;
+        }
+
+        var formattedMont = month?.PadLeft(2, '0');
+        var parseSuccessful = DateTime.TryParseExact(
+            string.Format(
+                GeneralConstants.DefaultFormatProvider,
+                IndicatorConstants.IndicatorDateFormat,
+                year,
+                formattedMont),
+            GeneralConstants.DateFormat,
+            GeneralConstants.DefaultFormatProvider,
+            DateTimeStyles.None,
+            out var date);
+
+        if (!parseSuccessful)
+        {
+            throw new InvalidCastException($"Cast date error. year: {year}, month: {month} ");
+        }
+
+        return date;
+    }
+
+    /// <summary>
+    /// Normalize spreadsheet rows names.
+    /// </summary>
+    /// <param name="rows">Spreadsheet rows.</param>
+    private static void NormalizeNames(List<IndicatorsImportRow> rows)
+    {
+        foreach (var item in rows)
+        {
+            item.UpperGroupName = item.UpperGroupName.Trim().CapitalizeFirstOnly();
+            item.GroupName = item.GroupName.Trim().CapitalizeFirstOnly();
+            item.LocalityName = item.LocalityName.Trim().CapitalizeFirstOnly();
+        }
+    }
+
+    /// <summary>
+    /// Spreadsheet structure data validations.
+    /// </summary>
+    /// <param name="rows">Spreadsheet rows.</param>
+    /// <param name="edition">indicator edition flag.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Validation result.</returns>
+    private async Task<CustomWebResponse> ValidateStructureData(List<IndicatorsImportRow> rows, bool edition, CancellationToken ct = default)
+    {
+        foreach (var row in rows)
+        {
+            var validationResult = await indicatorsImportRowValidator.ValidateAsync(row, ct);
+
+            if (!validationResult.IsValid)
+            {
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(validationResult.Errors),
+                    Message = $"Errors in row {row.RowNumber}",
+                };
+            }
+        }
+
+        foreach (var row in rows)
+        {
+            if (!Enum.GetValues<IndicatorTypes>().Select(e => (int)e).Contains(row.IndicatorTypeId))
+            {
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
+                    Message = $"Errors in row {row.RowNumber}",
+                };
+            }
+
+            foreach (var measureUnit in IndicatorConstants.UnitMeasuresByIndicatorType)
+            {
+                if (row.IndicatorTypeId == (int)measureUnit.Key && !measureUnit.Value.Contains((IndicatorMeasureUnits)row.MeasureUnitId))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidMeasureUnit),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+
+            if (IndicatorConstants.IndicatorsWithSpecies.Contains((IndicatorTypes)row.IndicatorTypeId))
+            {
+                if (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.GroupAndDescriptionRequired),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+
+            if (IndicatorConstants.IndicatorsWithoutGroupRequired.Contains((IndicatorTypes)row.IndicatorTypeId))
+            {
+                if (!string.IsNullOrEmpty(row.GroupName) || !string.IsNullOrEmpty(row.GroupDescription))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.GroupAndDescriptionNotRequired, data: $"{row.GroupName}, {row.GroupDescription}"),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+
+            if (IndicatorConstants.IndicatorsWithConfidenceInterval.Contains((IndicatorTypes)row.IndicatorTypeId))
+            {
+                if (row.UpperLimit == null || row.LowerLimit == null)
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.ConfidenceIntervalRequired),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+
+            if (row.UpperLimit.HasValue && row.LowerLimit.HasValue && (row.Value > row.UpperLimit || row.Value < row.LowerLimit))
+            {
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidConfidenceInterval),
+                    Message = $"Errors in row {row.RowNumber}",
+                };
+            }
+
+            if (IndicatorConstants.IndicatorsWithDateRange.Contains((IndicatorTypes)row.IndicatorTypeId))
+            {
+                if (row.FinalYear == null || row.FinalMonth == null)
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.FinalDateRequired),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+
+                var initDate = CastDate(row.Year, row.Month);
+                var endDate = CastDate(row.FinalYear, row.FinalMonth);
+
+                if (!(initDate < endDate))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidDateRange),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+            else
+            {
+                if (row.FinalYear != null || row.FinalMonth != null)
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.FinalDateNotRequired),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+        }
+
+        var totalIndicators = rows
+            .GroupBy(r => r.IndicatorTypeId)
+            .Count();
+
+        if (edition && totalIndicators != 1)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.OnlyOneIndicatorRequired),
+            };
+        }
+
+        return new();
+    }
+
+    /// <summary>
+    /// Spreadsheet database validations.
+    /// </summary>
+    /// <param name="rows">Spreadsheet rows.</param>
+    /// <param name="locationEntities">Location entities list.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Validation result.</returns>
+    private async Task<CustomWebResponse> ValidateDatabase(List<IndicatorsImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
+    {
+        // Validate upper groups
+        var upperGroups = rows
+            .Select(r => r.UpperGroupName)
+            .Distinct()
+            .ToArray();
+
+        var upperGroupEntities = await categoryRepository.GetUpperGroupsAsync(upperGroups, ct);
+
+        if (upperGroups.Length != upperGroupEntities.Count)
+        {
+            var upperGroupEntitiesStr = upperGroupEntities
+                .Select(e => e.Name);
+
+            foreach (var upperGroup in upperGroups)
+            {
+                if (!upperGroupEntitiesStr.Contains(upperGroup))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.UpperGroupNotFound, data: $"{upperGroup}"),
+                    };
+                }
+            }
+        }
+
+        // Get locations data
+        var spreadsheetLocations = rows
+            .Select(r => new LocationDataHelper
+            {
+                Department = r.DepartmentName,
+                Municipality = r.MunicipalityName,
+            })
+            .DistinctBy(r => new { r.Department, r.Municipality })
+            .ToArray();
+
+        locationEntities = [.. locationEntities.Where(e => spreadsheetLocations.Any(i => i.Municipality == e.Name && i.Department == e.Parent.Name))];
+
+        if (spreadsheetLocations.Length != locationEntities.Count)
+        {
+            var locationEntitiesKeyValuePairs = locationEntities
+                .Select(e => new LocationDataHelper
+                {
+                    Department = e.Parent.Name,
+                    Municipality = e.Name,
+                });
+
+            foreach (var location in spreadsheetLocations)
+            {
+                if (!locationEntitiesKeyValuePairs.Contains(location))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.LocationNotFound, data: $"{location}"),
+                    };
+                }
+            }
+        }
+
+        return new();
+    }
+
+    #endregion
 }
