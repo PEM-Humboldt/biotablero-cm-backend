@@ -515,7 +515,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     .Select(g => new Indicator()
                     {
                         InitiativeId = requestData.InitiativeId,
-                        Name = $"{g.Select(r => r.IndicatorTypeId).FirstOrDefault()} ({now.ToFileTime})",
+                        Name = $"Indicador tipo {g.Key} ({now.ToString(GeneralConstants.DatetimeFormat, CultureInfo.CurrentCulture)})",
                         IndicatorTypeId = g.Key,
                         IndicatorLocations = [.. g.Select(r =>
                         {
@@ -537,7 +537,14 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 await entityRepository.AddRangeAsync(indicators, ct);
 
                 var indicatorDtos = indicators
-                    .Select(mapper.Map);
+                    .Select(mapper.Map)
+                    .ToList();
+
+                // Patch: fix duplicated locations data
+                foreach (var indicatorDto in indicatorDtos)
+                {
+                    indicatorDto.Locations = [.. indicatorDto.Locations.DistinctBy(e => new { e.Id })];
+                }
 
                 logger.AddLog(LogType.Create, "Added indicators", "{@EntityData}", indicatorDtos);
 

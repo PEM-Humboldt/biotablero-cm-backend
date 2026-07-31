@@ -32,7 +32,7 @@ public class IndicatorDto : IDto
     /// <summary>
     /// Indicator Locations relationship.
     /// </summary>
-    public IEnumerable<IndicatorLocationDto> Locations { get; init; }
+    public IEnumerable<IndicatorLocationDto> Locations { get; set; }
 
     /// <summary>
     /// Indicator versions list.
@@ -42,5 +42,5 @@ public class IndicatorDto : IDto
     /// <summary>
     /// Tags relationship.
     /// </summary>
-    public IEnumerable<IndicatorTagDto> Tags { get; init; }
+    public IEnumerable<IndicatorTagDto> Tags { get; set; }
 }
