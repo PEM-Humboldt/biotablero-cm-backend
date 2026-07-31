@@ -253,8 +253,8 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     };
                 }
 
-                var initDate = DateTime.ParseExact($"{row.Year}-{row.Month}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture);
-                var endDate = DateTime.ParseExact($"{row.FinalYear}-{row.FinalMonth}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture);
+                var initDate = DateTime.ParseExact($"{row.Year}-{PrintMonth(row.Month)}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture);
+                var endDate = DateTime.ParseExact($"{row.FinalYear}-{PrintMonth(row.FinalMonth)}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture);
 
                 if (!(initDate < endDate))
                 {
@@ -371,7 +371,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 ParentId = e.ParentId,
                 Name = e.Name,
                 Description = e.Description,
-                ParentName = e.Parent.Name,
+                ParentName = e.Parent?.Name,
             })
             .ToArray();
 
@@ -392,7 +392,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
                 return new(true)
                 {
-                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.DuplicatedCategory, data: $"{comparisonData}"),
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.DuplicatedCategory, data: comparisonData),
                 };
             }
         }
@@ -434,12 +434,12 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                                 .FirstOrDefault(),
                             Values = [.. g2.Select(g2r =>
                             {
-                                var enabledFinalDate = DateTime.TryParseExact($"{g2r.FinalYear}-{g2r.FinalMonth}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var finalDate);
+                                var enabledFinalDate = DateTime.TryParseExact($"{g2r.FinalYear}-{PrintMonth(g2r.FinalMonth)}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var finalDate);
 
                                 return new IndicatorValue()
                                 {
                                     MeasureUnitId = g2r.MeasureUnitId,
-                                    Date = DateTime.ParseExact($"{g2r.Year}-{g2r.Month}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture),
+                                    Date = DateTime.ParseExact($"{g2r.Year}-{PrintMonth(g2r.Month)}-01", GeneralConstants.DateFormat, CultureInfo.InvariantCulture),
                                     DateEnd = enabledFinalDate ? finalDate : null,
                                     Value = g2r.Value,
                                     UpperLimit = g2r.UpperLimit,
@@ -498,4 +498,11 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         return new()
         { };
     }
+
+    /// <summary>
+    /// Print formatted month.
+    /// </summary>
+    /// <param name="month">Month number as string.</param>
+    /// <returns>Month with leading zeros.</returns>
+    private static string PrintMonth(string month) => month.PadLeft(2, '0');
 }
