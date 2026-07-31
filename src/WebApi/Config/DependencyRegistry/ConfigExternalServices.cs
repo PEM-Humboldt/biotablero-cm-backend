@@ -98,6 +98,7 @@ public static class ConfigExternalServices
         services.AddScoped<IIndicatorRepository, IndicatorRepository>();
         services.AddScoped<IIndicatorVersionRepository, IndicatorVersionRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IIndicatorLocationRepository, IndicatorLocationRepository>();
 
         //// Reports
         services.AddScoped<IGeneralStatsRepository, GeneralStatsRepository>();

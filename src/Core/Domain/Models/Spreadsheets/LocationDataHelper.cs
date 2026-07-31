@@ -14,4 +14,9 @@ public class LocationDataHelper()
     /// Municipality name.
     /// </summary>
     public string Municipality { get; set; }
+
+    /// <summary>
+    /// Locality name.
+    /// </summary>
+    public string Locality { get; set; }
 }

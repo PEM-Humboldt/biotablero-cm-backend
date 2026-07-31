@@ -45,6 +45,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     private readonly ILocationRepository locationRepository;
     private readonly IIndicatorVersionRepository indicatorVersionRepository;
     private readonly ICategoryRepository categoryRepository;
+    private readonly IIndicatorLocationRepository indicatorLocationRepository;
     private readonly IValidator<IndicatorsImportRow> indicatorsImportRowValidator;
     private readonly IMapperRead<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper;
 
@@ -59,6 +60,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="locationRepository">Location repository.</param>
     /// <param name="indicatorVersionRepository">Indicator version repository.</param>
     /// <param name="categoryRepository">Indicator Category repository.</param>
+    /// <param name="indicatorLocationRepository">Indicator Location repository.</param>
     /// <param name="indicatorsImportRowValidator">Indicators spreadsheet row validator.</param>
     /// <param name="indicatorVersionMapper">Indicator version mapper.</param>
     public IndicatorService(
@@ -70,6 +72,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         ILocationRepository locationRepository,
         IIndicatorVersionRepository indicatorVersionRepository,
         ICategoryRepository categoryRepository,
+        IIndicatorLocationRepository indicatorLocationRepository,
         IValidator<IndicatorsImportRow> indicatorsImportRowValidator,
         IMapperRead<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper)
     : base(entityRepository, mapper, errorTranslator)
@@ -80,6 +83,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         this.locationRepository = locationRepository;
         this.indicatorVersionRepository = indicatorVersionRepository;
         this.categoryRepository = categoryRepository;
+        this.indicatorLocationRepository = indicatorLocationRepository;
         this.indicatorsImportRowValidator = indicatorsImportRowValidator;
         this.indicatorVersionMapper = indicatorVersionMapper;
     }
@@ -331,7 +335,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         }
 
         // Get locations data
-        var locations = fileReadResult.Rows
+        var spreadsheetLocations = fileReadResult.Rows
             .Select(r => new LocationDataHelper
             {
                 Department = r.DepartmentName,
@@ -340,9 +344,9 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             .DistinctBy(r => new { r.Department, r.Municipality })
             .ToArray();
 
-        var locationEntities = await locationRepository.GetByNamesAsync(locations, ct);
+        var locationEntities = await locationRepository.GetByNamesAsync(spreadsheetLocations, ct);
 
-        if (locations.Length != locationEntities.Count)
+        if (spreadsheetLocations.Length != locationEntities.Count)
         {
             var locationEntitiesKeyValuePairs = locationEntities
                 .Select(e => new LocationDataHelper
@@ -351,7 +355,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     Municipality = e.Name,
                 });
 
-            foreach (var location in locations)
+            foreach (var location in spreadsheetLocations)
             {
                 if (!locationEntitiesKeyValuePairs.Contains(location))
                 {
@@ -399,10 +403,44 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
             foreach (var category in spreadsheetCategories)
             {
-                var categoryExists = databaseCategories.Any(i => category.Name == i.Name && category.ParentName == i.ParentName);
-                if (!categoryExists && !newCategories.Contains(category))
+                var entityExists = databaseCategories.Any(i => category.Name == i.Name && category.ParentName == i.ParentName);
+                if (!entityExists && !newCategories.Contains(category))
                 {
                     newCategories.Add(category);
+                }
+            }
+
+            // Generate IndicatorLocation entities
+            spreadsheetLocations = [.. fileReadResult.Rows
+                .Select(r => new LocationDataHelper
+                {
+                    Department = r.DepartmentName,
+                    Municipality = r.MunicipalityName,
+                    Locality = r.LocalityName,
+                })
+                .DistinctBy(r => new { r.Department, r.Municipality, r.Locality })];
+
+            var existentIndicatorLocations = await indicatorLocationRepository.GetByNamesAsync(spreadsheetLocations, ct);
+
+            var newIndicatorLocations = new List<IndicatorLocation>();
+
+            foreach (var indicatorLocation in spreadsheetLocations)
+            {
+                var entity = existentIndicatorLocations.FirstOrDefault(i => i.Locality == indicatorLocation.Locality && i.Location.Name == indicatorLocation.Municipality && i.Location.Name == indicatorLocation.Department);
+
+                if (entity != null)
+                {
+                    var newEntity = new IndicatorLocation()
+                    {
+                        IndicatorId = indicator?.Id ?? 0,
+                        LocationId = entity.LocationId,
+                        Locality = entity.Locality,
+                    };
+
+                    if (!newIndicatorLocations.Contains(newEntity))
+                    {
+                        newIndicatorLocations.Add(newEntity);
+                    }
                 }
             }
 
@@ -411,6 +449,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 .GroupBy(r => r.IndicatorTypeId)
                 .Select(async g => new IndicatorVersion()
                 {
+                    IndicatorId = indicator?.Id ?? 0,
                     CreationDate = now,
                     Version = indicator == null ? 1 : await indicatorVersionRepository.GetLastVersion(indicator.Id, ct),
                     Groups = [.. g.GroupBy(g => new { g.UpperGroupName, g.GroupName, g.GroupDescription })
@@ -461,12 +500,9 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     {
                         InitiativeId = requestData.InitiativeId,
                         Name = $"{g.Select(r => r.IndicatorTypeId).FirstOrDefault()} ({now.ToFileTime})",
-                        Type = new() { Id = g.Key },
-                        IndicatorLocations = [.. g.Select(r => new IndicatorLocation()
-                        {
-                            LocationId = locationEntities.FirstOrDefault(l => l.Name == r.MunicipalityName && l.Parent?.Name == r.DepartmentName)?.Id ?? 0,
-                            Locality = r.LocalityName,
-                        })],
+                        IndicatorTypeId = g.Key,
+                        IndicatorLocations = [.. g.Select(r => newIndicatorLocations
+                            .FirstOrDefault(i => i.Location.Name == r.MunicipalityName && i.Location.Parent.Name == r.DepartmentName))],
                         Versions = [.. indicatorVersionEntities],
                     });
 
