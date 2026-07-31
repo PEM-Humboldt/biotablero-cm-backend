@@ -136,6 +136,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         }
 
         Indicator indicator = null;
+        var indicatorLastVersion = 1;
 
         if (requestData.Id.HasValue)
         {
@@ -148,6 +149,8 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.NotFound),
                 };
             }
+
+            indicatorLastVersion = await indicatorVersionRepository.GetLastVersion(indicator.Id, ct);
         }
 
         // Validate data
@@ -459,11 +462,12 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             // Generate IndicatorVersion entities
             var indicatorVersionEntities = fileReadResult.Rows
                 .GroupBy(r => r.IndicatorTypeId)
-                .Select(async g => new IndicatorVersion()
+                .Select(g => new IndicatorVersion()
                 {
+                    IndicatorTypeId = g.Key,
                     IndicatorId = indicator?.Id ?? 0,
                     CreationDate = now,
-                    Version = indicator == null ? 1 : await indicatorVersionRepository.GetLastVersion(indicator.Id, ct),
+                    Version = indicator == null ? 1 : indicatorLastVersion + 1,
                     Groups = [.. g.GroupBy(g => new { g.UpperGroupName, g.GroupName, g.GroupDescription })
                         .Select(g2 =>
                         {
@@ -502,7 +506,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                             };
                         })],
                 })
-                .Select(e => e.Result);
+                .ToList();
 
             if (!requestData.Id.HasValue)
             {
@@ -525,11 +529,12 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
                             return indicatorLocation;
                         })],
-                        Versions = [.. indicatorVersionEntities],
-                    });
+                        Versions = [.. indicatorVersionEntities.Where(e => e.IndicatorTypeId == g.Key)],
+                    })
+                    .ToList();
 
                 // Save data
-                indicators = await entityRepository.AddRangeAsync(indicators, ct);
+                await entityRepository.AddRangeAsync(indicators, ct);
 
                 var indicatorDtos = indicators
                     .Select(mapper.Map);
@@ -538,16 +543,18 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
                 result.Result = indicatorDtos;
             }
+            else
+            {
+                // Save data
+                await indicatorVersionRepository.AddRangeAsync(indicatorVersionEntities, ct);
 
-            // Save data
-            indicatorVersionEntities = await indicatorVersionRepository.AddRangeAsync(indicatorVersionEntities, ct);
+                var indicatorVersionDtos = indicatorVersionEntities
+                    .Select(indicatorVersionMapper.Map);
 
-            var indicatorVersionDtos = indicatorVersionEntities
-                .Select(indicatorVersionMapper.Map);
+                logger.AddLog(LogType.Create, "Added indicator versions", "{@EntityData}", indicatorVersionDtos);
 
-            logger.AddLog(LogType.Create, "Added indicator versions", "{@EntityData}", indicatorVersionDtos);
-
-            result.Result = indicatorVersionDtos;
+                result.Result = indicatorVersionDtos;
+            }
         }
 
         return new()
