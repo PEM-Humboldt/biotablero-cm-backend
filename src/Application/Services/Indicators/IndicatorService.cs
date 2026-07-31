@@ -128,11 +128,12 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             };
         }
 
-        // Normalize groups (categories) names
+        // Normalize names
         foreach (var item in fileReadResult.Rows)
         {
             item.UpperGroupName = item.UpperGroupName.Trim().CapitalizeFirstOnly();
             item.GroupName = item.GroupName.Trim().CapitalizeFirstOnly();
+            item.LocalityName = item.LocalityName.Trim().CapitalizeFirstOnly();
         }
 
         Indicator indicator = null;
@@ -432,33 +433,6 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 existentIndicatorLocations = [.. existentIndicatorLocations.Where(e => spreadsheetLocations.Any(i => i.Municipality == e.Location.Name && i.Department == e.Location.Parent.Name && i.Locality == e.Locality))];
             }
 
-            var newIndicatorLocations = new List<IndicatorLocation>();
-
-            foreach (var indicatorLocation in spreadsheetLocations)
-            {
-                var entityExists = existentIndicatorLocations
-                    .Any(i => i.Locality == indicatorLocation.Locality && i.Location.Name == indicatorLocation.Municipality && i.Location.Name == indicatorLocation.Department);
-
-                if (!entityExists)
-                {
-                    var locationEntity = locationEntities
-                        .FirstOrDefault(i => i.Name == indicatorLocation.Municipality && i.Parent.Name == indicatorLocation.Department);
-
-                    var newEntity = new IndicatorLocation()
-                    {
-                        IndicatorId = indicator?.Id ?? 0,
-                        LocationId = locationEntity.Id,
-                        Location = locationEntity,
-                        Locality = indicatorLocation.Locality,
-                    };
-
-                    if (!newIndicatorLocations.Contains(newEntity))
-                    {
-                        newIndicatorLocations.Add(newEntity);
-                    }
-                }
-            }
-
             // Generate IndicatorVersion entities
             var indicatorVersionEntities = fileReadResult.Rows
                 .GroupBy(r => r.IndicatorTypeId)
@@ -512,24 +486,43 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             {
                 var indicators = fileReadResult.Rows
                     .GroupBy(r => r.IndicatorTypeId)
-                    .Select(g => new Indicator()
+                    .Select(g =>
                     {
-                        InitiativeId = requestData.InitiativeId,
-                        Name = $"Indicador tipo {g.Key} ({now.ToString(GeneralConstants.DatetimeFormat, CultureInfo.CurrentCulture)})",
-                        IndicatorTypeId = g.Key,
-                        IndicatorLocations = [.. g.Select(r =>
+                        var indicatorsLocations = g
+                            .Select(r =>
+                            {
+                                IndicatorLocation indicatorLocation = null;
+
+                                indicatorLocation = existentIndicatorLocations
+                                    .FirstOrDefault(i => i.Location.Name == r.MunicipalityName && i.Location.Parent.Name == r.DepartmentName);
+
+                                if (indicatorLocation == null)
+                                {
+                                    var locationEntity = locationEntities
+                                        .FirstOrDefault(i => i.Name == r.MunicipalityName && i.Parent.Name == r.DepartmentName);
+
+                                    indicatorLocation = new IndicatorLocation()
+                                    {
+                                        IndicatorId = indicator?.Id ?? 0,
+                                        LocationId = locationEntity.Id,
+                                        Location = locationEntity,
+                                        Locality = r.LocalityName,
+                                    };
+                                }
+
+                                return indicatorLocation;
+                            })
+                            .DistinctBy(e => new { e.Id, e.LocationId })
+                            .ToList();
+
+                        return new Indicator()
                         {
-                            IndicatorLocation indicatorLocation = null;
-
-                            indicatorLocation = existentIndicatorLocations
-                                .FirstOrDefault(i => i.Location.Name == r.MunicipalityName && i.Location.Parent.Name == r.DepartmentName);
-
-                            indicatorLocation ??= newIndicatorLocations
-                                .FirstOrDefault(i => i.Location.Name == r.MunicipalityName && i.Location.Parent.Name == r.DepartmentName);
-
-                            return indicatorLocation;
-                        })],
-                        Versions = [.. indicatorVersionEntities.Where(e => e.IndicatorTypeId == g.Key)],
+                            InitiativeId = requestData.InitiativeId,
+                            Name = $"Indicador tipo {g.Key} ({now.ToString(GeneralConstants.DatetimeFormat, CultureInfo.CurrentCulture)})",
+                            IndicatorTypeId = g.Key,
+                            IndicatorLocations = indicatorsLocations,
+                            Versions = [.. indicatorVersionEntities.Where(e => e.IndicatorTypeId == g.Key)],
+                        };
                     })
                     .ToList();
 
@@ -539,12 +532,6 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 var indicatorDtos = indicators
                     .Select(mapper.Map)
                     .ToList();
-
-                // Patch: fix duplicated locations data
-                foreach (var indicatorDto in indicatorDtos)
-                {
-                    indicatorDto.Locations = [.. indicatorDto.Locations.DistinctBy(e => new { e.Id })];
-                }
 
                 logger.AddLog(LogType.Create, "Added indicators", "{@EntityData}", indicatorDtos);
 
