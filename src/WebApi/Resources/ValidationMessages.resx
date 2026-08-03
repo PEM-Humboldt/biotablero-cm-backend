@@ -425,4 +425,8 @@
     <value>Invalid date range</value>
     <comment/>
   </data>
+  <data name="IND_014" xml:space="preserve">
+    <value>Category not found</value>
+    <comment/>
+  </data>
 </root>

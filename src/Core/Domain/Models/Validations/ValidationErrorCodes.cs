@@ -501,5 +501,10 @@ public static class ValidationErrorCodes
         /// Invalid date range.
         /// </summary>
         public const string InvalidDateRange = "IND_013";
+
+        /// <summary>
+        /// Category not found.
+        /// </summary>
+        public const string CategoryNotFound = "IND_014";
     }
 }

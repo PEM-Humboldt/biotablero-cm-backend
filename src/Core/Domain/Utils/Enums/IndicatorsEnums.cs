@@ -94,6 +94,32 @@ public static class IndicatorsEnums
         PersonCount = 9,
     }
 
+    /// <summary>
+    /// Indicator base categories.
+    /// </summary>
+    public enum IndicatorBaseCategory
+    {
+        /// <summary>
+        /// Species category type.
+        /// </summary>
+        Species = 1,
+
+        /// <summary>
+        /// Actor category type.
+        /// </summary>
+        Actor = 2,
+
+        /// <summary>
+        /// Gender category type.
+        /// </summary>
+        Gender = 3,
+
+        /// <summary>
+        /// Agre group category type.
+        /// </summary>
+        AgeGroup = 4,
+    }
+
     #endregion
 
     #region Spreadsheets

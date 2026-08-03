@@ -30,6 +30,7 @@ using Microsoft.AspNetCore.OData.Query;
 
 using Serilog;
 
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 using IndicatorMeasureUnits = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorMeasureUnit;
@@ -214,6 +215,9 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 .Distinct()
                 .ToList();
 
+            // Build new categories list
+            var parentSpeciesCategories = await categoryRepository.GetByParentsAsync([(int)IndicatorBaseCategory.Species], ct);
+
             var newCategories = new List<GroupDataHelper>();
 
             foreach (var category in spreadsheetCategories)
@@ -222,6 +226,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
                 if (!entityExists && !newCategories.Contains(category))
                 {
+                    category.ParentId = parentSpeciesCategories.FirstOrDefault(e => e.Name == category.ParentName)?.Id;
                     newCategories.Add(category);
                 }
             }
@@ -635,6 +640,32 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.LocationNotFound, data: $"{location}"),
+                    };
+                }
+            }
+        }
+
+        // Validate categories
+        var baseCategoriesArray = Enum.GetValues<IndicatorBaseCategory>()
+            .Select(i => (int)i)
+            .ToArray();
+
+        var predefinedCategories = await categoryRepository.GetByParentsAsync(baseCategoriesArray, ct);
+
+        foreach (var row in rows)
+        {
+            if (IndicatorConstants.IndicatorsWithPredefinedCategories.Contains((IndicatorTypes)row.IndicatorTypeId))
+            {
+                var categoryError = row.IndicatorTypeId == (int)IndicatorTypes.SpeciesDiversity ?
+                    !predefinedCategories.Any(e => e.Name == row.UpperGroupName) :
+                    !predefinedCategories.Any(e => e.Name == row.GroupName && e.Parent.Name == row.UpperGroupName);
+
+                if (categoryError)
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.CategoryNotFound),
+                        Message = $"Errors in row {row.RowNumber}",
                     };
                 }
             }

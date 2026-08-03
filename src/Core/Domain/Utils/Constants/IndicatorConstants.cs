@@ -43,7 +43,7 @@ public static class IndicatorConstants
     /// </summary>
     public static readonly IndicatorTypes[] IndicatorsWithSpecies =
     [
-            IndicatorTypes.OccupiedAreaPercent,
+        IndicatorTypes.OccupiedAreaPercent,
         IndicatorTypes.DetectionOccupancyProbability,
         IndicatorTypes.RelativeUseByBiologicalGroup,
     ];
@@ -53,7 +53,7 @@ public static class IndicatorConstants
     /// </summary>
     public static readonly IndicatorTypes[] IndicatorsWithConfidenceInterval =
     [
-            IndicatorTypes.DetectionOccupancyProbability,
+        IndicatorTypes.DetectionOccupancyProbability,
         IndicatorTypes.SpeciesDiversity,
     ];
 
@@ -62,7 +62,17 @@ public static class IndicatorConstants
     /// </summary>
     public static readonly IndicatorTypes[] IndicatorsWithDateRange =
     [
-            IndicatorTypes.RelativeUseByBiologicalGroup,
+        IndicatorTypes.RelativeUseByBiologicalGroup,
+        IndicatorTypes.CollectiveActionParticipation,
+    ];
+
+    /// <summary>
+    /// Indicators with predefined categories.
+    /// </summary>
+    public static readonly IndicatorTypes[] IndicatorsWithPredefinedCategories =
+    [
+        IndicatorTypes.SpeciesDiversity,
+        IndicatorTypes.CentralRelationalIntensity,
         IndicatorTypes.CollectiveActionParticipation,
     ];
 }

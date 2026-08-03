@@ -16,6 +16,14 @@ public interface ICategoryRepository : IRepository<Category, int>
     /// </summary>
     /// <param name="categoryNames">Category names list.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Filtered categories by names.</returns>
+    /// <returns>Filtered categories.</returns>
     Task<List<Category>> GetUpperGroupsAsync(string[] categoryNames, CancellationToken ct);
+
+    /// <summary>
+    /// Get categories by parents.
+    /// </summary>
+    /// <param name="parentsIds">Parents identifiers.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Filtered categories.</returns>
+    Task<List<Category>> GetByParentsAsync(int[] parentsIds, CancellationToken ct);
 }
