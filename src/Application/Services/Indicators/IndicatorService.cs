@@ -131,6 +131,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         }
 
         NormalizeNames(fileReadResult.Rows);
+        RemoveUselessRows(fileReadResult.Rows);
 
         // Validate indicator
         Indicator indicator = null;
@@ -427,6 +428,21 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     }
 
     /// <summary>
+    /// Remove useless rows.
+    /// </summary>
+    /// <param name="rows">Spreadsheet rows.</param>
+    private static void RemoveUselessRows(List<IndicatorsImportRow> rows)
+    {
+        for (int i = 0; i < rows.Count; i++)
+        {
+            if (rows[i].GroupName == IndicatorConstants.TotalGroupName)
+            {
+                rows.RemoveAt(i);
+            }
+        }
+    }
+
+    /// <summary>
     /// Spreadsheet structure data validations.
     /// </summary>
     /// <param name="rows">Spreadsheet rows.</param>
@@ -656,16 +672,18 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         {
             if (IndicatorConstants.IndicatorsWithPredefinedCategories.Contains((IndicatorTypes)row.IndicatorTypeId))
             {
-                var categoryError = row.IndicatorTypeId == (int)IndicatorTypes.SpeciesDiversity ?
-                    !predefinedCategories.Any(e => e.Name == row.UpperGroupName) :
-                    !predefinedCategories.Any(e => e.Name == row.GroupName && e.Parent.Name == row.UpperGroupName);
+                var indicatorTypeIsSpeciesDiversity = row.IndicatorTypeId == (int)IndicatorTypes.SpeciesDiversity;
+                var groupName = indicatorTypeIsSpeciesDiversity ? row.UpperGroupName : row.GroupName;
+                var categoryError = indicatorTypeIsSpeciesDiversity ?
+                    !predefinedCategories.Any(e => e.Name == groupName) :
+                    !predefinedCategories.Any(e => e.Name == groupName && e.Parent.Name == row.UpperGroupName);
 
                 if (categoryError)
                 {
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.CategoryNotFound),
-                        Message = $"Errors in row {row.RowNumber}",
+                        Message = $"Errors in row {row.RowNumber}. Value: '{groupName}'",
                     };
                 }
             }

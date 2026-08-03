@@ -13,6 +13,11 @@ using IndicatorTypes = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnum
 public static class IndicatorConstants
 {
     /// <summary>
+    /// "Total" group name.
+    /// </summary>
+    public const string TotalGroupName = "Total";
+
+    /// <summary>
     /// Indicator date format.
     /// </summary>
     public static readonly CompositeFormat IndicatorDateFormat = CompositeFormat.Parse("{0}-{1}-01");
