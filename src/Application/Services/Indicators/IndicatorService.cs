@@ -114,7 +114,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> ImportIndicatorsAsync(string userName, IndicatorsImportFileDto requestData, IInputFile formFile, CancellationToken ct)
+    public async Task<CustomWebResponse> ImportIndicatorsAsync(string userName, IndicatorsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default)
     {
         var result = new SpreadsheetUploadResult()
         {
@@ -149,11 +149,11 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 };
             }
 
-            indicatorLastVersion = await indicatorVersionRepository.GetLastVersion(indicator.Id, ct);
+            indicatorLastVersion = await indicatorVersionRepository.GetLastVersionAsync(indicator.Id, ct);
         }
 
         // Make structure validations
-        var structureDataValidations = await ValidateStructureData(fileReadResult.Rows, requestData.Id.HasValue, ct);
+        var structureDataValidations = await ValidateStructureDataAsync(fileReadResult.Rows, requestData.Id.HasValue, ct);
 
         if (!structureDataValidations.Success)
         {
@@ -176,7 +176,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             [.. spreadsheetLocations.Select(e => e.Municipality)],
             ct);
 
-        var databaseValidations = await ValidateDatabase(fileReadResult.Rows, locationEntities, ct);
+        var databaseValidations = await ValidateDatabaseAsync(fileReadResult.Rows, locationEntities, ct);
 
         if (!databaseValidations.Success)
         {
@@ -188,177 +188,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         {
             var now = DateTimeOffset.Now;
 
-            // Get groups (categories) data
-            var spreadsheetCategories = fileReadResult.Rows
-                .Select(r => new GroupDataHelper
-                {
-                    Name = r.GroupName,
-                    Description = r.GroupDescription,
-                    ParentName = r.UpperGroupName,
-                })
-                .DistinctBy(r => new { r.Name, r.Description, r.ParentName })
-                .ToArray();
-
-            var databaseCategories = (await categoryRepository.ListAsync(ct))
-                .Select(e => new GroupDataHelper
-                {
-                    Id = e.Id,
-                    ParentId = e.ParentId,
-                    Name = e.Name.Trim().CapitalizeFirstOnly(),
-                    Description = e.Description,
-                    ParentName = e.Parent?.Name?.Trim()?.CapitalizeFirstOnly(),
-                })
-                .ToArray();
-
-            var existentCategories = spreadsheetCategories
-                .Join(databaseCategories, sc => new { sc.Name, sc.ParentName }, dbc => new { dbc.Name, dbc.ParentName }, (sc, dbc) => new { sc, dbc })
-                .Select(i => i.dbc)
-                .Distinct()
-                .ToList();
-
-            // Build new categories list
-            var parentSpeciesCategories = await categoryRepository.GetByParentsAsync([(int)IndicatorBaseCategory.Species], ct);
-
-            var newCategories = new List<GroupDataHelper>();
-
-            foreach (var category in spreadsheetCategories)
-            {
-                var entityExists = databaseCategories.Any(i => category.Name == i.Name && category.ParentName == i.ParentName);
-
-                if (!entityExists)
-                {
-                    category.ParentId = parentSpeciesCategories.FirstOrDefault(e => e.Name == category.ParentName)?.Id;
-                    newCategories.Add(category);
-                }
-            }
-
-            newCategories = [.. newCategories.DistinctBy(e => new { e.ParentId, e.Name })];
-
-            var existentIndicatorLocations = indicator != null ? await indicatorLocationRepository.GetByIndicatorAsync(indicator?.Id ?? 0, ct) : [];
-
-            if (existentIndicatorLocations.Count > 0)
-            {
-                existentIndicatorLocations = [..
-                    existentIndicatorLocations
-                        .Where(e =>
-                            spreadsheetLocations.Any(i =>
-                                i.Municipality == e.Location.Name &&
-                                i.Department == e.Location.Parent.Name &&
-                                i.Locality == e.Locality))];
-            }
-
-            // Save categories entities
-            var newCategoriesEntities = newCategories.Select(i => new Category()
-            {
-                ParentId = i.ParentId,
-                Name = i.Name,
-                Description = i.Description,
-            });
-
-            await categoryRepository.AddRangeAsync(newCategoriesEntities, ct);
-
-            //DUPLICATED
-            databaseCategories = [.. (await categoryRepository.ListAsync(ct))
-                .Select(e => new GroupDataHelper
-                {
-                    Id = e.Id,
-                    ParentId = e.ParentId,
-                    Name = e.Name.Trim().CapitalizeFirstOnly(),
-                    Description = e.Description,
-                    ParentName = e.Parent?.Name?.Trim()?.CapitalizeFirstOnly(),
-                })];
-
-            var finalCategories = spreadsheetCategories
-                .Join(databaseCategories, sc => new { sc.Name, sc.ParentName }, dbc => new { dbc.Name, dbc.ParentName }, (sc, dbc) => new { sc, dbc })
-                .Select(i => i.dbc)
-                .Distinct()
-                .ToList();
-
-            // Generate IndicatorVersion entities
-            var indicatorVersionEntities = fileReadResult.Rows
-                .GroupBy(r => r.IndicatorTypeId)
-                .Select(g => new IndicatorVersion()
-                {
-                    IndicatorTypeId = g.Key,
-                    IndicatorId = indicator?.Id ?? 0,
-                    CreationDate = now,
-                    Version = indicator == null ? 1 : indicatorLastVersion + 1,
-                    Groups = [.. g.GroupBy(g => new { g.UpperGroupName, g.GroupName, g.GroupDescription })
-                        .Select(g2 =>
-                        {
-                            var categoryId = finalCategories
-                                .FirstOrDefault(i =>
-                                    i.ParentName == g2.Key.UpperGroupName &&
-                                    i.Name == g2.Key.GroupName)?.Id ??
-                                finalCategories
-                                    .FirstOrDefault(i =>
-                                        i.Name == g2.Key.UpperGroupName &&
-                                        string.IsNullOrEmpty(g2.Key.GroupName))?.Id ??
-                                0;
-
-                            return new IndicatorGroup()
-                            {
-                                CategoryId = categoryId,
-                                Values = [.. g2.Select(g2r =>
-                                {
-                                    return new IndicatorValue()
-                                    {
-                                        MeasureUnitId = g2r.MeasureUnitId,
-                                        Date = CastDate(g2r.Year, g2r.Month) ?? default,
-                                        DateEnd = CastDate(g2r.FinalYear, g2r.FinalMonth),
-                                        Value = g2r.Value,
-                                        UpperLimit = g2r.UpperLimit,
-                                        LowerLimit = g2r.LowerLimit,
-                                    };
-                                })],
-                            };
-                        })],
-                })
-                .ToList();
+            var existentIndicatorLocations = await GetExistentIndicatorLocationsAsync(indicator, spreadsheetLocations, ct);
+            var categories = await SaveAndGetCategoriesAsync(fileReadResult.Rows, ct);
+            var indicatorVersionEntities = GenerateIndicatorVersions(indicator, fileReadResult.Rows, categories, now, indicatorLastVersion);
 
             if (!requestData.Id.HasValue)
             {
-                var indicators = fileReadResult.Rows
-                    .GroupBy(r => r.IndicatorTypeId)
-                    .Select(g =>
-                    {
-                        var indicatorsLocations = g
-                            .Select(r =>
-                            {
-                                IndicatorLocation indicatorLocation = null;
-
-                                indicatorLocation = existentIndicatorLocations
-                                    .FirstOrDefault(i => i.Location.Name == r.MunicipalityName && i.Location.Parent.Name == r.DepartmentName);
-
-                                if (indicatorLocation == null)
-                                {
-                                    var locationEntity = locationEntities
-                                        .FirstOrDefault(i => i.Name == r.MunicipalityName && i.Parent.Name == r.DepartmentName);
-
-                                    indicatorLocation = new IndicatorLocation()
-                                    {
-                                        IndicatorId = indicator?.Id ?? 0,
-                                        LocationId = locationEntity.Id,
-                                        Location = locationEntity,
-                                        Locality = r.LocalityName,
-                                    };
-                                }
-
-                                return indicatorLocation;
-                            })
-                            .DistinctBy(e => new { e.Id, e.LocationId })
-                            .ToList();
-
-                        return new Indicator()
-                        {
-                            InitiativeId = requestData.InitiativeId,
-                            Name = $"Indicador tipo {g.Key} ({now.ToString(GeneralConstants.DatetimeFormat, CultureInfo.CurrentCulture)})",
-                            IndicatorTypeId = g.Key,
-                            IndicatorLocations = indicatorsLocations,
-                            Versions = [.. indicatorVersionEntities.Where(e => e.IndicatorTypeId == g.Key)],
-                        };
-                    })
-                    .ToList();
+                var indicators = GenerateIndicators(requestData.InitiativeId, indicator, fileReadResult.Rows, indicatorVersionEntities, existentIndicatorLocations, locationEntities, now);
 
                 // Save data
                 await entityRepository.AddRangeAsync(indicators, ct);
@@ -463,7 +299,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="edition">indicator edition flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateStructureData(List<IndicatorsImportRow> rows, bool edition, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<IndicatorsImportRow> rows, bool edition, CancellationToken ct = default)
     {
         // Validate total indicators for edition
         if (edition)
@@ -615,7 +451,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="locationEntities">Location entities list.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateDatabase(List<IndicatorsImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateDatabaseAsync(List<IndicatorsImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
     {
         // Validate upper groups
         var upperGroups = rows
@@ -705,6 +541,193 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
         return new();
     }
+
+    #endregion
+
+    #region Database update functions
+
+    private static GroupDataHelper MapToHelper(Category category) =>
+        new()
+        {
+            Id = category.Id,
+            ParentId = category.ParentId,
+            Name = category.Name.Trim().CapitalizeFirstOnly(),
+            Description = category.Description,
+            ParentName = category.Parent?.Name?.Trim()?.CapitalizeFirstOnly(),
+        };
+
+    private async Task<List<GroupDataHelper>> GetExistentCategoriesAsync(GroupDataHelper[] spreadsheetCategories, CancellationToken ct = default)
+    {
+        var databaseCategories = (await categoryRepository.ListAsync(ct))
+            .Select(MapToHelper)
+            .ToArray();
+
+        return [.. spreadsheetCategories
+            .Join(databaseCategories, sc => new { sc.Name, sc.ParentName }, dbc => new { dbc.Name, dbc.ParentName }, (sc, dbc) => new { sc, dbc })
+            .Select(i => i.dbc)
+            .Distinct()];
+    }
+
+    private async Task<List<IndicatorLocation>> GetExistentIndicatorLocationsAsync(Indicator indicator, LocationDataHelper[] spreadsheetLocations, CancellationToken ct = default)
+    {
+        var existentIndicatorLocations = indicator != null ? await indicatorLocationRepository.GetByIndicatorAsync(indicator?.Id ?? 0, ct) : [];
+
+        if (existentIndicatorLocations.Count > 0)
+        {
+            existentIndicatorLocations = [..
+                existentIndicatorLocations
+                    .Where(e =>
+                        spreadsheetLocations.Any(i =>
+                            i.Municipality == e.Location.Name &&
+                            i.Department == e.Location.Parent.Name &&
+                            i.Locality == e.Locality))];
+        }
+
+        return existentIndicatorLocations;
+    }
+
+    private async Task<List<GroupDataHelper>> SaveAndGetCategoriesAsync(List<IndicatorsImportRow> rows, CancellationToken ct = default)
+    {
+        // Get categories from spreadsheet
+        var spreadsheetCategories = rows
+            .Select(r => new GroupDataHelper
+            {
+                Name = r.GroupName,
+                Description = r.GroupDescription,
+                ParentName = r.UpperGroupName,
+            })
+            .DistinctBy(r => new { r.Name, r.Description, r.ParentName })
+            .ToArray();
+
+        // Get categories from database
+        var databaseCategories = await GetExistentCategoriesAsync(spreadsheetCategories, ct);
+
+        // Build new categories list
+        var parentSpeciesCategories = await categoryRepository.GetByParentsAsync([(int)IndicatorBaseCategory.Species], ct);
+
+        var newCategories = new List<GroupDataHelper>();
+
+        foreach (var category in spreadsheetCategories)
+        {
+            var entityExists = databaseCategories.Any(i => category.Name == i.Name && category.ParentName == i.ParentName);
+
+            if (!entityExists)
+            {
+                category.ParentId = parentSpeciesCategories.FirstOrDefault(e => e.Name == category.ParentName)?.Id;
+                newCategories.Add(category);
+            }
+        }
+
+        newCategories = [.. newCategories.DistinctBy(e => new { e.ParentId, e.Name })];
+
+        // Save categories entities
+        var newCategoriesEntities = newCategories.Select(i => new Category()
+        {
+            ParentId = i.ParentId,
+            Name = i.Name,
+            Description = i.Description,
+        });
+
+        await categoryRepository.AddRangeAsync(newCategoriesEntities, ct);
+
+        return await GetExistentCategoriesAsync(spreadsheetCategories, ct);
+    }
+
+    private static List<IndicatorVersion> GenerateIndicatorVersions(
+        Indicator indicator,
+        List<IndicatorsImportRow> rows,
+        List<GroupDataHelper> categories,
+        DateTimeOffset now,
+        int indicatorLastVersion) =>
+        [.. rows
+            .GroupBy(r => r.IndicatorTypeId)
+            .Select(g => new IndicatorVersion()
+            {
+                IndicatorTypeId = g.Key,
+                IndicatorId = indicator?.Id ?? 0,
+                CreationDate = now,
+                Version = indicator == null ? 1 : indicatorLastVersion + 1,
+                Groups = [.. g.GroupBy(g => new { g.UpperGroupName, g.GroupName, g.GroupDescription })
+                        .Select(g2 =>
+                        {
+                            var categoryId = categories
+                                .FirstOrDefault(i =>
+                                    i.ParentName == g2.Key.UpperGroupName &&
+                                    i.Name == g2.Key.GroupName)?.Id ??
+                                categories
+                                    .FirstOrDefault(i =>
+                                        i.Name == g2.Key.UpperGroupName &&
+                                        string.IsNullOrEmpty(g2.Key.GroupName))?.Id ??
+                                0;
+
+                            return new IndicatorGroup()
+                            {
+                                CategoryId = categoryId,
+                                Values = [.. g2.Select(g2r =>
+                                {
+                                    return new IndicatorValue()
+                                    {
+                                        MeasureUnitId = g2r.MeasureUnitId,
+                                        Date = CastDate(g2r.Year, g2r.Month) ?? default,
+                                        DateEnd = CastDate(g2r.FinalYear, g2r.FinalMonth),
+                                        Value = g2r.Value,
+                                        UpperLimit = g2r.UpperLimit,
+                                        LowerLimit = g2r.LowerLimit,
+                                    };
+                                })],
+                            };
+                        })],
+            })];
+
+    private static List<Indicator> GenerateIndicators(
+        int initiativeId,
+        Indicator indicator,
+        List<IndicatorsImportRow> rows,
+        List<IndicatorVersion> indicatorVersions,
+        List<IndicatorLocation> indicatorLocations,
+        List<Location> locations,
+        DateTimeOffset now) =>
+        rows
+            .GroupBy(r => r.IndicatorTypeId)
+            .Select(g =>
+            {
+                var indicatorsLocations = g
+                    .Select(r =>
+                    {
+                        IndicatorLocation indicatorLocation = null;
+
+                        indicatorLocation = indicatorLocations
+                            .FirstOrDefault(i => i.Location.Name == r.MunicipalityName && i.Location.Parent.Name == r.DepartmentName);
+
+                        if (indicatorLocation == null)
+                        {
+                            var locationEntity = locations
+                                .FirstOrDefault(i => i.Name == r.MunicipalityName && i.Parent.Name == r.DepartmentName);
+
+                            indicatorLocation = new IndicatorLocation()
+                            {
+                                IndicatorId = indicator?.Id ?? 0,
+                                LocationId = locationEntity.Id,
+                                Location = locationEntity,
+                                Locality = r.LocalityName,
+                            };
+                        }
+
+                        return indicatorLocation;
+                    })
+                    .DistinctBy(e => new { e.Id, e.LocationId })
+                    .ToList();
+
+                return new Indicator()
+                {
+                    InitiativeId = initiativeId,
+                    Name = $"Indicador tipo {g.Key} ({now.ToString(GeneralConstants.DatetimeFormat, CultureInfo.CurrentCulture)})",
+                    IndicatorTypeId = g.Key,
+                    IndicatorLocations = indicatorsLocations,
+                    Versions = [.. indicatorVersions.Where(e => e.IndicatorTypeId == g.Key)],
+                };
+            })
+            .ToList();
 
     #endregion
 }
