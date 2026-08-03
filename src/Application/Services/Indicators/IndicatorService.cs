@@ -225,12 +225,14 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             {
                 var entityExists = databaseCategories.Any(i => category.Name == i.Name && category.ParentName == i.ParentName);
 
-                if (!entityExists && !newCategories.Contains(category))
+                if (!entityExists)
                 {
                     category.ParentId = parentSpeciesCategories.FirstOrDefault(e => e.Name == category.ParentName)?.Id;
                     newCategories.Add(category);
                 }
             }
+
+            newCategories = [.. newCategories.DistinctBy(e => new { e.ParentId, e.Name })];
 
             var existentIndicatorLocations = indicator != null ? await indicatorLocationRepository.GetByIndicatorAsync(indicator?.Id ?? 0, ct) : [];
 
@@ -245,6 +247,33 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                                 i.Locality == e.Locality))];
             }
 
+            // Save categories entities
+            var newCategoriesEntities = newCategories.Select(i => new Category()
+            {
+                ParentId = i.ParentId,
+                Name = i.Name,
+                Description = i.Description,
+            });
+
+            await categoryRepository.AddRangeAsync(newCategoriesEntities, ct);
+
+            //DUPLICATED
+            databaseCategories = [.. (await categoryRepository.ListAsync(ct))
+                .Select(e => new GroupDataHelper
+                {
+                    Id = e.Id,
+                    ParentId = e.ParentId,
+                    Name = e.Name.Trim().CapitalizeFirstOnly(),
+                    Description = e.Description,
+                    ParentName = e.Parent?.Name?.Trim()?.CapitalizeFirstOnly(),
+                })];
+
+            var finalCategories = spreadsheetCategories
+                .Join(databaseCategories, sc => new { sc.Name, sc.ParentName }, dbc => new { dbc.Name, dbc.ParentName }, (sc, dbc) => new { sc, dbc })
+                .Select(i => i.dbc)
+                .Distinct()
+                .ToList();
+
             // Generate IndicatorVersion entities
             var indicatorVersionEntities = fileReadResult.Rows
                 .GroupBy(r => r.IndicatorTypeId)
@@ -257,34 +286,19 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     Groups = [.. g.GroupBy(g => new { g.UpperGroupName, g.GroupName, g.GroupDescription })
                         .Select(g2 =>
                         {
-                            var categoryId = existentCategories
+                            var categoryId = finalCategories
+                                .FirstOrDefault(i =>
+                                    i.ParentName == g2.Key.UpperGroupName &&
+                                    i.Name == g2.Key.GroupName)?.Id ??
+                                finalCategories
                                     .FirstOrDefault(i =>
-                                        i.ParentName == g2.Key.UpperGroupName &&
-                                        i.Name == g2.Key.GroupName)?.Id ??
-                                existentCategories
-                                    .FirstOrDefault(i =>
-                                        i.Name == g2.Key.UpperGroupName.Trim() &&
-                                        i.ParentName == null &&
-                                        g2.Key.GroupName == null &&
-                                        i.Description == null &&
-                                        g2.Key.GroupDescription == null)?.Id ??
+                                        i.Name == g2.Key.UpperGroupName &&
+                                        string.IsNullOrEmpty(g2.Key.GroupName))?.Id ??
                                 0;
 
                             return new IndicatorGroup()
                             {
                                 CategoryId = categoryId,
-                                Category = categoryId != 0 ? null : newCategories
-                                    .Where(i =>
-                                        i.ParentName == g2.Key.UpperGroupName &&
-                                        i.Name == g2.Key.GroupName &&
-                                        i.Description == g2.Key.GroupDescription)
-                                    .Select(i => new Category()
-                                    {
-                                        ParentId = i.ParentId,
-                                        Name = i.Name,
-                                        Description = i.Description,
-                                    })
-                                    .FirstOrDefault(),
                                 Values = [.. g2.Select(g2r =>
                                 {
                                     return new IndicatorValue()

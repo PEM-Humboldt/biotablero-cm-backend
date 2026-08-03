@@ -17,7 +17,7 @@ public interface ICategoryRepository : IRepository<Category, int>
     /// <param name="categoryNames">Category names list.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Filtered categories.</returns>
-    Task<List<Category>> GetUpperGroupsAsync(string[] categoryNames, CancellationToken ct);
+    Task<List<Category>> GetUpperGroupsAsync(string[] categoryNames, CancellationToken ct = default);
 
     /// <summary>
     /// Get categories by parents.
@@ -25,5 +25,5 @@ public interface ICategoryRepository : IRepository<Category, int>
     /// <param name="parentsIds">Parents identifiers.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Filtered categories.</returns>
-    Task<List<Category>> GetByParentsAsync(int[] parentsIds, CancellationToken ct);
+    Task<List<Category>> GetByParentsAsync(int[] parentsIds, CancellationToken ct = default);
 }

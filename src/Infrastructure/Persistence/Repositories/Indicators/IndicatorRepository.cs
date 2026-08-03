@@ -56,7 +56,7 @@ public class IndicatorRepository : Repository<Indicator, int>, IIndicatorReposit
             .CountAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<int[]> GetVersions(int id, CancellationToken ct = default) =>
+    public async Task<int[]> GetVersionsAsync(int id, CancellationToken ct = default) =>
         await dbContext.IndicatorVersions
             .Where(e => e.IndicatorId == id)
             .Select(e => e.Version)
