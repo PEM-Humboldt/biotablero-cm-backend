@@ -188,13 +188,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         {
             var now = DateTimeOffset.Now;
 
-            var existentIndicatorLocations = await GetExistentIndicatorLocationsAsync(indicator, spreadsheetLocations, ct);
+            var existingIndicatorLocations = await GetExistingIndicatorLocationsAsync(indicator, spreadsheetLocations, ct);
             var categories = await SaveAndGetCategoriesAsync(fileReadResult.Rows, ct);
             var indicatorVersionEntities = GenerateIndicatorVersions(indicator, fileReadResult.Rows, categories, now, indicatorLastVersion);
 
             if (!requestData.Id.HasValue)
             {
-                var indicators = GenerateIndicators(requestData.InitiativeId, indicator, fileReadResult.Rows, indicatorVersionEntities, existentIndicatorLocations, locationEntities, now);
+                var indicators = GenerateIndicators(requestData.InitiativeId, indicator, fileReadResult.Rows, indicatorVersionEntities, existingIndicatorLocations, locationEntities, now);
 
                 // Save data
                 await entityRepository.AddRangeAsync(indicators, ct);
@@ -546,6 +546,11 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
     #region Database update functions
 
+    /// <summary>
+    /// Map Category to GroupDataHelper.
+    /// </summary>
+    /// <param name="category">Category entity.</param>
+    /// <returns>GroupDataHelper DTO.</returns>
     private static GroupDataHelper MapToHelper(Category category) =>
         new()
         {
@@ -556,7 +561,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             ParentName = category.Parent?.Name?.Trim()?.CapitalizeFirstOnly(),
         };
 
-    private async Task<List<GroupDataHelper>> GetExistentCategoriesAsync(GroupDataHelper[] spreadsheetCategories, CancellationToken ct = default)
+    /// <summary>
+    /// Get existing categories.
+    /// </summary>
+    /// <param name="spreadsheetCategories">Categories from spreadsheet.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Existing categories.</returns>
+    private async Task<List<GroupDataHelper>> GetExistingCategoriesAsync(GroupDataHelper[] spreadsheetCategories, CancellationToken ct = default)
     {
         var databaseCategories = (await categoryRepository.ListAsync(ct))
             .Select(MapToHelper)
@@ -568,14 +579,21 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             .Distinct()];
     }
 
-    private async Task<List<IndicatorLocation>> GetExistentIndicatorLocationsAsync(Indicator indicator, LocationDataHelper[] spreadsheetLocations, CancellationToken ct = default)
+    /// <summary>
+    /// Get existing indicator locations.
+    /// </summary>
+    /// <param name="indicator">Indicator entity.</param>
+    /// <param name="spreadsheetLocations">Locations from spreadsheets.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Existing indicator locations.</returns>
+    private async Task<List<IndicatorLocation>> GetExistingIndicatorLocationsAsync(Indicator indicator, LocationDataHelper[] spreadsheetLocations, CancellationToken ct = default)
     {
-        var existentIndicatorLocations = indicator != null ? await indicatorLocationRepository.GetByIndicatorAsync(indicator?.Id ?? 0, ct) : [];
+        var existingIndicatorLocations = indicator != null ? await indicatorLocationRepository.GetByIndicatorAsync(indicator?.Id ?? 0, ct) : [];
 
-        if (existentIndicatorLocations.Count > 0)
+        if (existingIndicatorLocations.Count > 0)
         {
-            existentIndicatorLocations = [..
-                existentIndicatorLocations
+            existingIndicatorLocations = [..
+                existingIndicatorLocations
                     .Where(e =>
                         spreadsheetLocations.Any(i =>
                             i.Municipality == e.Location.Name &&
@@ -583,9 +601,15 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                             i.Locality == e.Locality))];
         }
 
-        return existentIndicatorLocations;
+        return existingIndicatorLocations;
     }
 
+    /// <summary>
+    /// Save and get categories.
+    /// </summary>
+    /// <param name="rows">Spreadsheet rows data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated categories.</returns>
     private async Task<List<GroupDataHelper>> SaveAndGetCategoriesAsync(List<IndicatorsImportRow> rows, CancellationToken ct = default)
     {
         // Get categories from spreadsheet
@@ -600,7 +624,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             .ToArray();
 
         // Get categories from database
-        var databaseCategories = await GetExistentCategoriesAsync(spreadsheetCategories, ct);
+        var databaseCategories = await GetExistingCategoriesAsync(spreadsheetCategories, ct);
 
         // Build new categories list
         var parentSpeciesCategories = await categoryRepository.GetByParentsAsync([(int)IndicatorBaseCategory.Species], ct);
@@ -630,9 +654,18 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
         await categoryRepository.AddRangeAsync(newCategoriesEntities, ct);
 
-        return await GetExistentCategoriesAsync(spreadsheetCategories, ct);
+        return await GetExistingCategoriesAsync(spreadsheetCategories, ct);
     }
 
+    /// <summary>
+    /// Generate IndicatorVersion entities.
+    /// </summary>
+    /// <param name="indicator">Indicator entity.</param>
+    /// <param name="rows">Spreadsheet rows.</param>
+    /// <param name="categories">Categories entities.</param>
+    /// <param name="now">Current date and time.</param>
+    /// <param name="indicatorLastVersion">Last indicator version.</param>
+    /// <returns>IndicatorVersion entities.</returns>
     private static List<IndicatorVersion> GenerateIndicatorVersions(
         Indicator indicator,
         List<IndicatorsImportRow> rows,
@@ -648,37 +681,48 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 CreationDate = now,
                 Version = indicator == null ? 1 : indicatorLastVersion + 1,
                 Groups = [.. g.GroupBy(g => new { g.UpperGroupName, g.GroupName, g.GroupDescription })
-                        .Select(g2 =>
-                        {
-                            var categoryId = categories
+                    .Select(g2 =>
+                    {
+                        var categoryId = categories
+                            .FirstOrDefault(i =>
+                                i.ParentName == g2.Key.UpperGroupName &&
+                                i.Name == g2.Key.GroupName)?.Id ??
+                            categories
                                 .FirstOrDefault(i =>
-                                    i.ParentName == g2.Key.UpperGroupName &&
-                                    i.Name == g2.Key.GroupName)?.Id ??
-                                categories
-                                    .FirstOrDefault(i =>
-                                        i.Name == g2.Key.UpperGroupName &&
-                                        string.IsNullOrEmpty(g2.Key.GroupName))?.Id ??
-                                0;
+                                    i.Name == g2.Key.UpperGroupName &&
+                                    string.IsNullOrEmpty(g2.Key.GroupName))?.Id ??
+                            0;
 
-                            return new IndicatorGroup()
+                        return new IndicatorGroup()
+                        {
+                            CategoryId = categoryId,
+                            Values = [.. g2.Select(g2r =>
                             {
-                                CategoryId = categoryId,
-                                Values = [.. g2.Select(g2r =>
+                                return new IndicatorValue()
                                 {
-                                    return new IndicatorValue()
-                                    {
-                                        MeasureUnitId = g2r.MeasureUnitId,
-                                        Date = CastDate(g2r.Year, g2r.Month) ?? default,
-                                        DateEnd = CastDate(g2r.FinalYear, g2r.FinalMonth),
-                                        Value = g2r.Value,
-                                        UpperLimit = g2r.UpperLimit,
-                                        LowerLimit = g2r.LowerLimit,
-                                    };
-                                })],
-                            };
-                        })],
+                                    MeasureUnitId = g2r.MeasureUnitId,
+                                    Date = CastDate(g2r.Year, g2r.Month) ?? default,
+                                    DateEnd = CastDate(g2r.FinalYear, g2r.FinalMonth),
+                                    Value = g2r.Value,
+                                    UpperLimit = g2r.UpperLimit,
+                                    LowerLimit = g2r.LowerLimit,
+                                };
+                            })],
+                        };
+                    })],
             })];
 
+    /// <summary>
+    /// Generate Indicator entities.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="indicator">Indicator entity.</param>
+    /// <param name="rows">Spreadsheet rows.</param>
+    /// <param name="indicatorVersions">IndicatorVersion entities.</param>
+    /// <param name="indicatorLocations">IndicatorLocation entities.</param>
+    /// <param name="locations">Location entities.</param>
+    /// <param name="now">Current date and time.</param>
+    /// <returns>Indicator entities.</returns>
     private static List<Indicator> GenerateIndicators(
         int initiativeId,
         Indicator indicator,
@@ -687,7 +731,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         List<IndicatorLocation> indicatorLocations,
         List<Location> locations,
         DateTimeOffset now) =>
-        rows
+        [.. rows
             .GroupBy(r => r.IndicatorTypeId)
             .Select(g =>
             {
@@ -726,8 +770,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     IndicatorLocations = indicatorsLocations,
                     Versions = [.. indicatorVersions.Where(e => e.IndicatorTypeId == g.Key)],
                 };
-            })
-            .ToList();
+            })];
 
     #endregion
 }
