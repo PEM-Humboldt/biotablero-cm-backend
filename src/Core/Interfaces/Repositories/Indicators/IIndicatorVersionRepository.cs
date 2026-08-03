@@ -16,5 +16,5 @@ public interface IIndicatorVersionRepository : IRepository<IndicatorVersion, int
     /// <param name="indicatorId">Indicator identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>The last version for the specified indicator.</returns>
-    Task<int> GetLastVersion(int indicatorId, CancellationToken ct);
+    Task<int> GetLastVersion(int indicatorId, CancellationToken ct = default);
 }

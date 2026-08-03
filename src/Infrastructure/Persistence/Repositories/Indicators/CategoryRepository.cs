@@ -45,13 +45,13 @@ public class CategoryRepository : Repository<Category, int>, ICategoryRepository
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<List<Category>> GetUpperGroupsAsync(string[] categoryNames, CancellationToken ct) =>
+    public async Task<List<Category>> GetUpperGroupsAsync(string[] categoryNames, CancellationToken ct = default) =>
         await dbContext.Categories
             .Where(e => (e.ParentId == null || e.ParentId == (int)IndicatorBaseCategory.Species) && categoryNames.Contains(e.Name))
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<List<Category>> GetByParentsAsync(int[] parentsIds, CancellationToken ct) =>
+    public async Task<List<Category>> GetByParentsAsync(int[] parentsIds, CancellationToken ct = default) =>
         await dbContext.Categories
             .Include(e => e.Parent)
             .Where(e => e.ParentId != null && parentsIds.Contains(e.ParentId.Value))

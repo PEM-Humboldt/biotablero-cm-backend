@@ -44,7 +44,7 @@ public class IndicatorVersionRepository : Repository<IndicatorVersion, int>, IIn
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<int> GetLastVersion(int indicatorId, CancellationToken ct) =>
+    public async Task<int> GetLastVersion(int indicatorId, CancellationToken ct = default) =>
         await dbContext.IndicatorVersions
             .Where(e => e.IndicatorId == indicatorId)
             .OrderByDescending(e => e.Version)

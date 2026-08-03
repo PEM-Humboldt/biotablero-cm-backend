@@ -17,5 +17,5 @@ public interface IIndicatorLocationRepository : IRepository<IndicatorLocation, i
     /// <param name="indicatorId">Indicator identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities by selected indicator.</returns>
-    Task<List<IndicatorLocation>> GetByIndicatorAsync(int indicatorId, CancellationToken ct);
+    Task<List<IndicatorLocation>> GetByIndicatorAsync(int indicatorId, CancellationToken ct = default);
 }

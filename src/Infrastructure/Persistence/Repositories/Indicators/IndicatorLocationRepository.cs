@@ -22,7 +22,7 @@ using Serilog;
 public class IndicatorLocationRepository(GeneralContext dbContext, ILogger logger) : Repository<IndicatorLocation, int>(dbContext, logger), IIndicatorLocationRepository
 {
     /// <inheritdoc/>
-    public async Task<List<IndicatorLocation>> GetByIndicatorAsync(int indicatorId, CancellationToken ct) =>
+    public async Task<List<IndicatorLocation>> GetByIndicatorAsync(int indicatorId, CancellationToken ct = default) =>
         await dbContext.IndicatorLocations
             .Include(e => e.Location)
                 .ThenInclude(e => e.Parent)
