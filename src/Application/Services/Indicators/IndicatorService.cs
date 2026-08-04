@@ -486,7 +486,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 {
                     return new(true)
                     {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.UpperGroupNotFound, data: $"{upperGroup}"),
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.UpperGroupNotFound, data: upperGroup),
                     };
                 }
             }
@@ -519,7 +519,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 {
                     return new(true)
                     {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.LocationNotFound, data: $"{location}"),
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.LocationNotFound, data: location),
                     };
                 }
             }
