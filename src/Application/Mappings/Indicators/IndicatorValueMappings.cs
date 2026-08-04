@@ -26,7 +26,7 @@ public class IndicatorValueMappings(
             Value = entity.Value,
             UpperLimit = entity.UpperLimit,
             LowerLimit = entity.LowerLimit,
-            MeasureUnit = measureUnitMappings.Map(entity.MeasureUnit),
+            MeasureUnit = entity.MeasureUnit != null ? measureUnitMappings.Map(entity.MeasureUnit) : null,
         };
     }
 }
