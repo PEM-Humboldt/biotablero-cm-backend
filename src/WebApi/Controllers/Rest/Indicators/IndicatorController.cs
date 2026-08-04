@@ -84,8 +84,8 @@ public class IndicatorController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [HttpPost("ImportIndicators")]
-    public async Task<IActionResult> ImportIndicators(IndicatorsImportFileRequest requestData, CancellationToken ct)
+    [HttpPost("Import")]
+    public async Task<IActionResult> Import(IndicatorsImportFileRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new IndicatorsImportFileDto()
         {
