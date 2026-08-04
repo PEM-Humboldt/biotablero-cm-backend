@@ -36,6 +36,7 @@ public class CategoryRepository : Repository<Category, int>, ICategoryRepository
     public override async Task<Category> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.Categories
             .Include(e => e.Parent)
+            .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
