@@ -130,8 +130,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             };
         }
 
-        NormalizeNames(fileReadResult.Rows);
-        RemoveUselessRows(fileReadResult.Rows);
+        AdjustRowsData(fileReadResult.Rows);
 
         // Validate indicator
         Indicator indicator = null;
@@ -264,30 +263,31 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     }
 
     /// <summary>
-    /// Normalize spreadsheet rows names.
+    /// Adjust rows data.
     /// </summary>
     /// <param name="rows">Spreadsheet rows.</param>
-    private static void NormalizeNames(List<IndicatorsImportRow> rows)
-    {
-        foreach (var item in rows)
-        {
-            item.UpperGroupName = item.UpperGroupName.Trim().CapitalizeFirstOnly();
-            item.GroupName = item.GroupName.Trim().CapitalizeFirstOnly();
-            item.LocalityName = item.LocalityName.Trim().CapitalizeFirstOnly();
-        }
-    }
-
-    /// <summary>
-    /// Remove useless rows.
-    /// </summary>
-    /// <param name="rows">Spreadsheet rows.</param>
-    private static void RemoveUselessRows(List<IndicatorsImportRow> rows)
+    private static void AdjustRowsData(List<IndicatorsImportRow> rows)
     {
         for (int i = 0; i < rows.Count; i++)
         {
-            if (rows[i].GroupName == IndicatorConstants.TotalGroupName)
+            var row = rows[i];
+
+            // Normalize names
+            row.UpperGroupName = row.UpperGroupName.Trim().CapitalizeFirstOnly();
+            row.GroupName = row.GroupName.Trim().CapitalizeFirstOnly();
+            row.LocalityName = row.LocalityName.Trim().CapitalizeFirstOnly();
+
+            // Remove rows with "Total" group
+            if (row.GroupName == IndicatorConstants.TotalGroupName)
             {
                 rows.RemoveAt(i);
+            }
+
+            // Adjust data for "SpeciesDiversity" indicator
+            if (row.IndicatorTypeId == (int)IndicatorTypes.SpeciesDiversity)
+            {
+                row.GroupName = row.UpperGroupName;
+                row.UpperGroupName = IndicatorConstants.SpeciesCategoryName;
             }
         }
     }
@@ -362,19 +362,6 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.GroupAndDescriptionRequired),
-                        Message = $"Errors in row {row.RowNumber}",
-                    };
-                }
-            }
-
-            // Check indicators without group required
-            if (IndicatorConstants.IndicatorsWithoutGroupRequired.Contains((IndicatorTypes)row.IndicatorTypeId))
-            {
-                if (!string.IsNullOrEmpty(row.GroupName) || !string.IsNullOrEmpty(row.GroupDescription))
-                {
-                    return new(true)
-                    {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.GroupAndDescriptionNotRequired, data: $"{row.GroupName}, {row.GroupDescription}"),
                         Message = $"Errors in row {row.RowNumber}",
                     };
                 }
@@ -522,18 +509,14 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         {
             if (IndicatorConstants.IndicatorsWithPredefinedCategories.Contains((IndicatorTypes)row.IndicatorTypeId))
             {
-                var indicatorTypeIsSpeciesDiversity = row.IndicatorTypeId == (int)IndicatorTypes.SpeciesDiversity;
-                var groupName = indicatorTypeIsSpeciesDiversity ? row.UpperGroupName : row.GroupName;
-                var categoryError = indicatorTypeIsSpeciesDiversity ?
-                    !predefinedCategories.Any(e => e.Name == groupName) :
-                    !predefinedCategories.Any(e => e.Name == groupName && e.Parent.Name == row.UpperGroupName);
+                var categoryError = !predefinedCategories.Any(e => e.Name == row.GroupName && e.Parent.Name == row.UpperGroupName);
 
                 if (categoryError)
                 {
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.CategoryNotFound),
-                        Message = $"Errors in row {row.RowNumber}. Value: '{groupName}'",
+                        Message = $"Errors in row {row.RowNumber}. Value: '{row.GroupName}'",
                     };
                 }
             }
@@ -635,7 +618,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         {
             var entityExists = databaseCategories.Any(i => category.Name == i.Name && category.ParentName == i.ParentName);
 
-            if (!entityExists)
+            if (!entityExists && !string.IsNullOrEmpty(category.Name))
             {
                 category.ParentId = parentSpeciesCategories.FirstOrDefault(e => e.Name == category.ParentName)?.Id;
                 newCategories.Add(category);

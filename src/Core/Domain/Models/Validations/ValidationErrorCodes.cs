@@ -458,53 +458,48 @@ public static class ValidationErrorCodes
         public const string GroupAndDescriptionRequired = "IND_004";
 
         /// <summary>
-        /// Group and description not required.
-        /// </summary>
-        public const string GroupAndDescriptionNotRequired = "IND_005";
-
-        /// <summary>
         /// Confidence interval required.
         /// </summary>
-        public const string ConfidenceIntervalRequired = "IND_006";
+        public const string ConfidenceIntervalRequired = "IND_005";
 
         /// <summary>
         /// Invalid confidence interval.
         /// </summary>
-        public const string InvalidConfidenceInterval = "IND_007";
+        public const string InvalidConfidenceInterval = "IND_006";
 
         /// <summary>
         /// Invalid indicator type.
         /// </summary>
-        public const string InvalidIndicatorType = "IND_008";
+        public const string InvalidIndicatorType = "IND_007";
 
         /// <summary>
         /// Invalid measure unit.
         /// </summary>
-        public const string InvalidMeasureUnit = "IND_009";
+        public const string InvalidMeasureUnit = "IND_008";
 
         /// <summary>
         /// Location not found.
         /// </summary>
-        public const string LocationNotFound = "IND_010";
+        public const string LocationNotFound = "IND_009";
 
         /// <summary>
         /// Final date required.
         /// </summary>
-        public const string FinalDateRequired = "IND_011";
+        public const string FinalDateRequired = "IND_010";
 
         /// <summary>
         /// Final date not required.
         /// </summary>
-        public const string FinalDateNotRequired = "IND_012";
+        public const string FinalDateNotRequired = "IND_011";
 
         /// <summary>
         /// Invalid date range.
         /// </summary>
-        public const string InvalidDateRange = "IND_013";
+        public const string InvalidDateRange = "IND_012";
 
         /// <summary>
         /// Category not found.
         /// </summary>
-        public const string CategoryNotFound = "IND_014";
+        public const string CategoryNotFound = "IND_013";
     }
 }

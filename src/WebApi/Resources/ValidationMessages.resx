@@ -390,42 +390,38 @@
     <comment/>
   </data>
   <data name="IND_005" xml:space="preserve">
-    <value>Group and description are not required</value>
-    <comment/>
-  </data>
-  <data name="IND_006" xml:space="preserve">
     <value>Confidence interval is required</value>
     <comment/>
   </data>
-  <data name="IND_007" xml:space="preserve">
+  <data name="IND_006" xml:space="preserve">
     <value>Invalid confidence interval</value>
     <comment/>
   </data>
-  <data name="IND_008" xml:space="preserve">
+  <data name="IND_007" xml:space="preserve">
     <value>Invalid indicator type</value>
     <comment/>
   </data>
-  <data name="IND_009" xml:space="preserve">
+  <data name="IND_008" xml:space="preserve">
     <value>Invalid measure unit</value>
     <comment/>
   </data>
-  <data name="IND_010" xml:space="preserve">
+  <data name="IND_009" xml:space="preserve">
     <value>Location not found</value>
     <comment/>
   </data>
-  <data name="IND_011" xml:space="preserve">
+  <data name="IND_010" xml:space="preserve">
     <value>Final date required</value>
     <comment/>
   </data>
-  <data name="IND_012" xml:space="preserve">
+  <data name="IND_011" xml:space="preserve">
     <value>Final date not required</value>
     <comment/>
   </data>
-  <data name="IND_013" xml:space="preserve">
+  <data name="IND_012" xml:space="preserve">
     <value>Invalid date range</value>
     <comment/>
   </data>
-  <data name="IND_014" xml:space="preserve">
+  <data name="IND_013" xml:space="preserve">
     <value>Category not found</value>
     <comment/>
   </data>

@@ -18,6 +18,11 @@ public static class IndicatorConstants
     public const string TotalGroupName = "Total";
 
     /// <summary>
+    /// "Species" category name.
+    /// </summary>
+    public const string SpeciesCategoryName = "Especie";
+
+    /// <summary>
     /// Indicator date format.
     /// </summary>
     public static readonly CompositeFormat IndicatorDateFormat = CompositeFormat.Parse("{0}-{1}-01");
@@ -34,14 +39,6 @@ public static class IndicatorConstants
         { IndicatorTypes.CentralRelationalIntensity, [IndicatorMeasureUnit.RelationalIntensity] },
         { IndicatorTypes.CollectiveActionParticipation, [IndicatorMeasureUnit.PersonCount] },
     };
-
-    /// <summary>
-    /// Indicators without group required.
-    /// </summary>
-    public static readonly IndicatorTypes[] IndicatorsWithoutGroupRequired =
-    [
-        IndicatorTypes.SpeciesDiversity,
-    ];
 
     /// <summary>
     /// Indicators with species.
