@@ -285,28 +285,20 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="rows">Spreadsheet rows.</param>
     private static void AdjustRowsData(List<IndicatorsImportRow> rows)
     {
-        for (int i = 0; i < rows.Count; i++)
+        foreach (var row in rows)
         {
-            var row = rows[i];
+            row.UpperGroupName = row.UpperGroupName?.Trim()?.CapitalizeFirstOnly();
+            row.GroupName = row.GroupName?.Trim()?.CapitalizeFirstOnly();
+            row.LocalityName = row.LocalityName?.Trim()?.CapitalizeFirstOnly();
 
-            // Normalize names
-            row.UpperGroupName = row.UpperGroupName.Trim().CapitalizeFirstOnly();
-            row.GroupName = row.GroupName.Trim().CapitalizeFirstOnly();
-            row.LocalityName = row.LocalityName.Trim().CapitalizeFirstOnly();
-
-            // Remove rows with "Total" group
-            if (row.GroupName == IndicatorConstants.TotalGroupName)
-            {
-                rows.RemoveAt(i);
-            }
-
-            // Adjust data for "SpeciesDiversity" indicator
             if (row.IndicatorTypeId == (int)IndicatorTypes.SpeciesDiversity)
             {
                 row.GroupName = row.UpperGroupName;
                 row.UpperGroupName = IndicatorConstants.SpeciesCategoryName;
             }
         }
+
+        rows.RemoveAll(r => r.GroupName?.Equals(IndicatorConstants.TotalGroupName, StringComparison.OrdinalIgnoreCase) == true);
     }
 
     /// <summary>
