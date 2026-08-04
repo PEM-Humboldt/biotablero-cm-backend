@@ -259,13 +259,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             return null;
         }
 
-        var formattedMont = month?.PadLeft(2, '0');
+        var formattedMonth = month?.PadLeft(2, '0');
         var parseSuccessful = DateTime.TryParseExact(
             string.Format(
                 GeneralConstants.DefaultFormatProvider,
                 IndicatorConstants.IndicatorDateFormat,
                 year,
-                formattedMont),
+                formattedMonth),
             GeneralConstants.DateFormat,
             GeneralConstants.DefaultFormatProvider,
             DateTimeStyles.None,
@@ -765,7 +765,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                             indicatorLocation = new IndicatorLocation()
                             {
                                 IndicatorId = indicator?.Id ?? 0,
-                                LocationId = locationEntity.Id,
+                                LocationId = locationEntity?.Id ?? 0,
                                 Location = locationEntity,
                                 Locality = r.LocalityName,
                             };
