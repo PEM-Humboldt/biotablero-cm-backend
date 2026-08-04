@@ -24,6 +24,7 @@ using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 
 using Microsoft.AspNetCore.OData.Query;
@@ -44,6 +45,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     private new readonly IIndicatorRepository entityRepository;
     private readonly ILogger logger;
     private readonly IIndicatorExcelService excelService;
+    private readonly IInitiativeRepository initiativeRepository;
     private readonly ILocationRepository locationRepository;
     private readonly IIndicatorVersionRepository indicatorVersionRepository;
     private readonly ICategoryRepository categoryRepository;
@@ -59,6 +61,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="excelService">Excel service.</param>
+    /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="locationRepository">Location repository.</param>
     /// <param name="indicatorVersionRepository">Indicator version repository.</param>
     /// <param name="categoryRepository">Indicator Category repository.</param>
@@ -71,6 +74,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         IMapperRead<Indicator, IndicatorDto> mapper,
         IValidationErrorTranslator errorTranslator,
         IIndicatorExcelService excelService,
+        IInitiativeRepository initiativeRepository,
         ILocationRepository locationRepository,
         IIndicatorVersionRepository indicatorVersionRepository,
         ICategoryRepository categoryRepository,
@@ -82,6 +86,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         this.entityRepository = entityRepository;
         this.logger = logger;
         this.excelService = excelService;
+        this.initiativeRepository = initiativeRepository;
         this.locationRepository = locationRepository;
         this.indicatorVersionRepository = indicatorVersionRepository;
         this.categoryRepository = categoryRepository;
@@ -130,7 +135,14 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             };
         }
 
-        AdjustRowsData(fileReadResult.Rows);
+        // Validate initiative
+        if (!await initiativeRepository.AnyAsync(requestData.InitiativeId, ct))
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.NotFound),
+            };
+        }
 
         // Validate indicator
         Indicator indicator = null;
@@ -150,6 +162,9 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
             indicatorLastVersion = await indicatorVersionRepository.GetLastVersionAsync(indicator.Id, ct);
         }
+
+        // Adjust spreadsheet rows data
+        AdjustRowsData(fileReadResult.Rows);
 
         // Make structure validations
         var structureDataValidations = await ValidateStructureDataAsync(fileReadResult.Rows, requestData.Id.HasValue, ct);
@@ -218,6 +233,8 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
                 result.Result = indicatorVersionDtos;
             }
+
+            result.SuccessfulProcess = true;
         }
 
         return new()
