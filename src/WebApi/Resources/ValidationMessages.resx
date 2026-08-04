@@ -425,4 +425,8 @@
     <value>Category not found</value>
     <comment/>
   </data>
+  <data name="IND_014" xml:space="preserve">
+    <value>The current indicator does not have the geographical data supplied in the spreadsheet</value>
+    <comment/>
+  </data>
 </root>

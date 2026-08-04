@@ -168,7 +168,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         AdjustRowsData(fileReadResult.Rows);
 
         // Make structure validations
-        var structureDataValidations = await ValidateStructureDataAsync(fileReadResult.Rows, indicator?.Type, ct);
+        var structureDataValidations = await ValidateStructureDataAsync(fileReadResult.Rows, indicator, ct);
 
         if (!structureDataValidations.Success)
         {
@@ -313,13 +313,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// Spreadsheet structure data validations.
     /// </summary>
     /// <param name="rows">Spreadsheet rows.</param>
-    /// <param name="type">Indicator type (optional).</param>
+    /// <param name="indicator">Indicator type (optional).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<IndicatorsImportRow> rows, IndicatorType type, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<IndicatorsImportRow> rows, Indicator indicator, CancellationToken ct = default)
     {
         // Validate total indicators for edition
-        if (type != null)
+        if (indicator != null)
         {
             var totalIndicators = rows
             .GroupBy(r => r.IndicatorTypeId)
@@ -355,16 +355,6 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 {
                     ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
                     Message = $"Errors in row {row.RowNumber}",
-                };
-            }
-
-            // Check type from original indicator
-            if (type != null && row.IndicatorTypeId != type.Id)
-            {
-                return new(true)
-                {
-                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
-                    Message = $"Errors in row {row.RowNumber}. Original type id: {type.Id}, Spreadsheet type id: {row.IndicatorTypeId}",
                 };
             }
 
@@ -449,6 +439,28 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.FinalDateNotRequired),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+
+            // Validations for indicators editions
+            if (indicator != null)
+            {
+                if (row.IndicatorTypeId != indicator.IndicatorTypeId)
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
+                        Message = $"Errors in row {row.RowNumber}. Original type id: {indicator.Id}, Spreadsheet type id: {row.IndicatorTypeId}",
+                    };
+                }
+
+                if (!indicator?.IndicatorLocations?.Any(e => e.Locality == row.LocalityName && e.Location?.Name == row.MunicipalityName && row.DepartmentName == e.Location?.Parent?.Name) ?? false)
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidLocationData),
                         Message = $"Errors in row {row.RowNumber}",
                     };
                 }

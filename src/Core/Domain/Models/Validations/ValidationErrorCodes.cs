@@ -501,5 +501,10 @@ public static class ValidationErrorCodes
         /// Category not found.
         /// </summary>
         public const string CategoryNotFound = "IND_013";
+
+        /// <summary>
+        /// Invalid location data.
+        /// </summary>
+        public const string InvalidLocationData = "IND_014";
     }
 }
