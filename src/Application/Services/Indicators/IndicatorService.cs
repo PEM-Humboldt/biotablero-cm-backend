@@ -31,9 +31,9 @@ using Microsoft.AspNetCore.OData.Query;
 
 using Serilog;
 
-using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
+using IndicatorBaseCategory = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorBaseCategory;
 using IndicatorMeasureUnits = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorMeasureUnit;
 using IndicatorTypes = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorType;
 
@@ -129,9 +129,10 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
         if (fileReadResult.Errors.Count > 0)
         {
+            result.Errors = fileReadResult.Errors;
             return new(true)
             {
-                ResponseBody = fileReadResult.Errors,
+                ResponseBody = result,
             };
         }
 
@@ -167,7 +168,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         AdjustRowsData(fileReadResult.Rows);
 
         // Make structure validations
-        var structureDataValidations = await ValidateStructureDataAsync(fileReadResult.Rows, requestData.Id.HasValue, ct);
+        var structureDataValidations = await ValidateStructureDataAsync(fileReadResult.Rows, indicator?.Type, ct);
 
         if (!structureDataValidations.Success)
         {
@@ -202,13 +203,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         {
             var now = DateTimeOffset.Now;
 
-            var existingIndicatorLocations = await GetExistingIndicatorLocationsAsync(indicator, spreadsheetLocations, ct);
+            var indicatorLocations = await GetExistingIndicatorLocationsAsync(indicator, spreadsheetLocations, ct);
             var categories = await SaveAndGetCategoriesAsync(fileReadResult.Rows, ct);
             var indicatorVersionEntities = GenerateIndicatorVersions(indicator, fileReadResult.Rows, categories, now, indicatorLastVersion);
 
             if (!requestData.Id.HasValue)
             {
-                var indicators = GenerateIndicators(requestData.InitiativeId, indicator, fileReadResult.Rows, indicatorVersionEntities, existingIndicatorLocations, locationEntities, now);
+                var indicators = GenerateIndicators(requestData.InitiativeId, indicator, fileReadResult.Rows, indicatorVersionEntities, indicatorLocations, locationEntities, now);
 
                 // Save data
                 await entityRepository.AddRangeAsync(indicators, ct);
@@ -233,10 +234,9 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
                 result.Result = indicatorVersionDtos;
             }
-
-            result.SuccessfulProcess = true;
         }
 
+        result.SuccessfulProcess = true;
         return new()
         {
             ResponseBody = result,
@@ -313,13 +313,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// Spreadsheet structure data validations.
     /// </summary>
     /// <param name="rows">Spreadsheet rows.</param>
-    /// <param name="edition">indicator edition flag.</param>
+    /// <param name="type">Indicator type (optional).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<IndicatorsImportRow> rows, bool edition, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<IndicatorsImportRow> rows, IndicatorType type, CancellationToken ct = default)
     {
         // Validate total indicators for edition
-        if (edition)
+        if (type != null)
         {
             var totalIndicators = rows
             .GroupBy(r => r.IndicatorTypeId)
@@ -355,6 +355,16 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 {
                     ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
                     Message = $"Errors in row {row.RowNumber}",
+                };
+            }
+
+            // Check type from original indicator
+            if (type != null && row.IndicatorTypeId != type.Id)
+            {
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
+                    Message = $"Errors in row {row.RowNumber}. Original type id: {type.Id}, Spreadsheet type id: {row.IndicatorTypeId}",
                 };
             }
 
