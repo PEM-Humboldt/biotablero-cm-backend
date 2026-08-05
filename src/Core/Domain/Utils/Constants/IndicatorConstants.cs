@@ -65,7 +65,6 @@ public static class IndicatorConstants
     public static readonly IndicatorTypes[] IndicatorsWithDateRange =
     [
         IndicatorTypes.RelativeUseByBiologicalGroup,
-        IndicatorTypes.CollectiveActionParticipation,
     ];
 
     /// <summary>
