@@ -5,6 +5,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.DTOs.Notifications;
+using IAVH.BioTablero.CM.Application.DTOs.Reports;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
@@ -15,6 +16,7 @@ using IAVH.BioTablero.CM.Application.Mappings.Indicators;
 using IAVH.BioTablero.CM.Application.Mappings.Initiatives;
 using IAVH.BioTablero.CM.Application.Mappings.Logging;
 using IAVH.BioTablero.CM.Application.Mappings.Notifications;
+using IAVH.BioTablero.CM.Application.Mappings.Reports;
 using IAVH.BioTablero.CM.Application.Mappings.Resources;
 using IAVH.BioTablero.CM.Application.Mappings.Tags;
 using IAVH.BioTablero.CM.Application.Mappings.TerritoryStories;
@@ -24,6 +26,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Reports;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
@@ -89,6 +92,9 @@ public static class ConfigMappings
         services.AddSingleton<IMapperRead<IndicatorValue, IndicatorValueDto>, IndicatorValueMappings>();
         services.AddSingleton<IMapperRead<IndicatorVersion, IndicatorVersionDto>, IndicatorVersionMappings>();
         services.AddSingleton<IMapperRead<MeasureUnit, MeasureUnitDto>, MeasureUnitMappings>();
+
+        // Reports
+        services.AddSingleton<IMapperCreateAndRead<ReportData, ReportDataDto>, ReportDataMappings>();
 
         return services;
     }
