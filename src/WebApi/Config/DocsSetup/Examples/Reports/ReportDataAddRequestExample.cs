@@ -12,7 +12,6 @@ public class ReportDataAddRequestExample : IExamplesProvider<ReportDataDto>
     /// <inheritdoc/>
     public ReportDataDto GetExamples() => new()
     {
-        UserName = "user-example@example.com",
         Description = "Description example",
         Data = "Data example",
     };
