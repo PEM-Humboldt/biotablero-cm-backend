@@ -10,6 +10,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Reports;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
@@ -256,6 +257,15 @@ public sealed class GeneralContext : DbContext
     /// Measure Unit DbSet.
     /// </summary>
     public DbSet<MeasureUnit> MeasureUnits { get; set; }
+
+    #endregion
+
+    #region Reports entities
+
+    /// <summary>
+    /// Report Data DbSet.
+    /// </summary>
+    public DbSet<ReportData> ReportData { get; set; }
 
     #endregion
 
