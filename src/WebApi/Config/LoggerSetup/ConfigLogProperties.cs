@@ -31,9 +31,8 @@ public static class ConfigLogProperties
     /// System log configuration.
     /// </summary>
     /// <param name="host">Host builder.</param>
-    /// <param name="services">Application services.</param>
     /// <returns>Host builder configuration.</returns>
-    public static ConfigureHostBuilder AddLogConfig(this ConfigureHostBuilder host, IServiceCollection services)
+    public static ConfigureHostBuilder AddLogConfig(this ConfigureHostBuilder host)
     {
         var columnWriters = new Dictionary<string, ColumnWriterBase>
         {
@@ -81,7 +80,11 @@ public static class ConfigLogProperties
                             tableName: LogConstants.DefaultTableName,
                             needAutoCreateTable: false,
                             columnOptions: columnWriters,
-                            formatProvider: CultureInfo.CurrentCulture));
+                            formatProvider: CultureInfo.CurrentCulture))
+
+                        .WriteTo.Console(
+                            outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}",
+                            formatProvider: CultureInfo.CurrentCulture);
             });
 
         return host;
