@@ -8,6 +8,8 @@ using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
+using NetTopologySuite.Geometries;
+
 /// <summary>
 /// Initiative mappings.
 /// </summary>
@@ -33,7 +35,9 @@ public class InitiativeMappings(
             CreationDate = entity.CreationDate.ToUniversalTime(),
             ImageUrl = entity.ImageUrl,
             BannerUrl = entity.BannerUrl,
-            Coordinate = entity.Coordinate != null && !entity.Coordinate.IsEmpty ? [entity.Coordinate.Y, entity.Coordinate.X] : null,
+            Coordinate = entity.Coordinate is Point point && !point.IsEmpty
+                ? [point.Y, point.X]
+                : null,
             MainLocationId = entity.MainLocationId,
             PolygonArea = entity.PolygonArea,
             Enabled = entity.Enabled,
