@@ -62,18 +62,21 @@ public static class ConfigLogProperties
                     .Enrich.With(new ClientIpEnricher())
                     .Enrich.With(new ClientHeaderEnricher("User-Agent", "ClientAgent"))
                     .ReadFrom.Configuration(context.Configuration)
+
+                    // Discard SQL Command logs
+                    .Filter.ByExcluding(
+                        e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
+                            .Contains("Microsoft.EntityFrameworkCore.Database.Command", StringComparison.CurrentCultureIgnoreCase))
+
+                    // Discard HTTP Requests logs
+                    .Filter.ByExcluding(
+                        e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
+                            .Contains("Serilog.AspNetCore.RequestLoggingMiddleware", StringComparison.CurrentCultureIgnoreCase))
+                    .Filter.ByExcluding(
+                        e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
+                            .Contains("Microsoft.AspNetCore", StringComparison.CurrentCultureIgnoreCase))
+
                     .WriteTo.Logger(lc => lc
-
-                        // Discard SQL Command logs
-                        .Filter.ByExcluding(
-                            e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
-                                .Contains("Microsoft.EntityFrameworkCore.Database.Command", StringComparison.CurrentCultureIgnoreCase))
-
-                        // Discard HTTP Requests logs
-                        .Filter.ByExcluding(
-                            e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
-                                .Contains("Serilog.AspNetCore.RequestLoggingMiddleware", StringComparison.CurrentCultureIgnoreCase))
-
                         .WriteTo.PostgreSQL(
                             connectionString: Environment.GetEnvironmentVariable("CS_MAIN"),
                             schemaName: LogConstants.DefaultSchemaName,
