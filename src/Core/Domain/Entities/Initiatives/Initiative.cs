@@ -66,7 +66,7 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiative polygon centroid.
     /// </summary>
-    public Point Coordinate { get; set; }
+    public Geometry Coordinate { get; set; }
 
     /// <summary>
     /// Initiative polygon area in square kilometers.
