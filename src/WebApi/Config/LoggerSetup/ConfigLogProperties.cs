@@ -86,7 +86,7 @@ public static class ConfigLogProperties
                             formatProvider: CultureInfo.CurrentCulture))
 
                         .WriteTo.Console(
-                            outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}",
+                            outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] [{Id}] {Message:lj}{NewLine}",
                             formatProvider: CultureInfo.CurrentCulture);
             });
 
