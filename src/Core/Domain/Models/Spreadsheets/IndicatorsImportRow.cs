@@ -56,12 +56,12 @@ public class IndicatorsImportRow()
     /// <summary>
     /// Final year.
     /// </summary>
-    public string FinalYear { get; set; }
+    public string? FinalYear { get; set; }
 
     /// <summary>
     /// Final month.
     /// </summary>
-    public string FinalMonth { get; set; }
+    public string? FinalMonth { get; set; }
 
     /// <summary>
     /// Upper group name.
@@ -71,12 +71,12 @@ public class IndicatorsImportRow()
     /// <summary>
     /// Group name.
     /// </summary>
-    public string GroupName { get; set; }
+    public string? GroupName { get; set; }
 
     /// <summary>
     /// Group description.
     /// </summary>
-    public string GroupDescription { get; set; }
+    public string? GroupDescription { get; set; }
 
     /// <summary>
     /// Indicator value.

@@ -8,7 +8,7 @@ public class TokenResponse
     /// <summary>
     /// Access token.
     /// </summary>
-    public string AccessToken { get; set; }
+    public required string AccessToken { get; set; }
 
     /// <summary>
     /// Validity period.

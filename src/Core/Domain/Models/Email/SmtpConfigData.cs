@@ -8,7 +8,7 @@ public class SmtpConfigData
     /// <summary>
     /// SMTP Host.
     /// </summary>
-    public string Host { get; set; }
+    public required string Host { get; set; }
 
     /// <summary>
     /// SMTP Port.
@@ -23,20 +23,20 @@ public class SmtpConfigData
     /// <summary>
     /// SMTP User.
     /// </summary>
-    public string User { get; set; }
+    public string? User { get; set; }
 
     /// <summary>
     /// /SMTP Password.
     /// </summary>
-    public string Password { get; set; }
+    public string? Password { get; set; }
 
     /// <summary>
     /// Sender's email.
     /// </summary>
-    public string From { get; set; }
+    public string? From { get; set; }
 
     /// <summary>
     /// Sender's name.
     /// </summary>
-    public string FromName { get; set; }
+    public string? FromName { get; set; }
 }

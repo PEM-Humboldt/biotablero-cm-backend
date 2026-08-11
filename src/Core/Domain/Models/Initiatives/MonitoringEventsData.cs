@@ -13,7 +13,7 @@ public class MonitoringEventsData
     /// <summary>
     /// Monitoring events date or group.
     /// </summary>
-    public string GroupName { get; set; }
+    public required string GroupName { get; set; }
 
     /// <summary>
     /// Number of monitoring events by date.

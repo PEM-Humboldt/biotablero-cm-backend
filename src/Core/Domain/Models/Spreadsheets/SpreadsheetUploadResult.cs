@@ -20,7 +20,7 @@ public class SpreadsheetUploadResult()
     /// <summary>
     /// Process result (saved entities in database).
     /// </summary>
-    public object Result { get; set; }
+    public object? Result { get; set; }
 
     /// <summary>
     /// Result errors.
