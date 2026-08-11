@@ -13,36 +13,36 @@ public class InitiativeContactConfig : IEntityTypeConfiguration<InitiativeContac
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<InitiativeContact> builder)
     {
-        builder.ToTable("initiative_contact", "initiatives");
+        builder?.ToTable("initiative_contact", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.InitiativeId)
+        builder?.Property(e => e.InitiativeId)
             .HasColumnName("initiative_id")
             .IsRequired();
 
-        builder.Property(i => i.Phone)
+        builder?.Property(e => e.Phone)
             .HasColumnName("phone")
             .HasMaxLength(15);
 
-        builder.Property(i => i.Email)
+        builder?.Property(e => e.Email)
             .HasColumnName("email")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.HasOne(e => e.Initiative)
+        builder?.HasOne(e => e.Initiative)
             .WithMany(p => p.InitiativeContacts)
             .HasForeignKey(e => e.InitiativeId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.InitiativeId, e.Email })
             .IsUnique();
 
-        builder
+        builder?
             .HasIndex(e => new { e.InitiativeId, e.Phone })
             .IsUnique();
     }

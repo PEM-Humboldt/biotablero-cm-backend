@@ -16,17 +16,17 @@ public class Tag : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Tag name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Tag full name.
     /// </summary>
-    public string FullName { get; set; }
+    public string? FullName { get; set; }
 
     /// <summary>
     /// Tag URL.
     /// </summary>
-    public Uri Url { get; set; }
+    public Uri? Url { get; set; }
 
     /// <summary>
     /// Tag Category identifier.
@@ -36,20 +36,20 @@ public class Tag : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Tag Category relationship.
     /// </summary>
-    public TagCategory Category { get; set; }
+    public TagCategory? Category { get; set; }
 
     /// <summary>
     /// Tag Initiative relationship.
     /// </summary>
-    public ICollection<InitiativeTag> TagInitiatives { get; init; }
+    public ICollection<InitiativeTag>? TagInitiatives { get; init; }
 
     /// <summary>
     /// Tag Resource relationship.
     /// </summary>
-    public ICollection<ResourceTag> TagResources { get; init; }
+    public ICollection<ResourceTag>? TagResources { get; init; }
 
     /// <summary>
     /// Tag Indicator relationship.
     /// </summary>
-    public ICollection<IndicatorTag> TagIndicators { get; init; }
+    public ICollection<IndicatorTag>? TagIndicators { get; init; }
 }

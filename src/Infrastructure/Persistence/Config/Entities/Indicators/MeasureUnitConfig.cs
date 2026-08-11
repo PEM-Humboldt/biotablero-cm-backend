@@ -13,24 +13,24 @@ public class MeasureUnitConfig : IEntityTypeConfiguration<MeasureUnit>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<MeasureUnit> builder)
     {
-        builder.ToTable("measure_unit", "indicators");
+        builder?.ToTable("measure_unit", "indicators");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.Name)
+        builder?.Property(e => e.Name)
             .HasColumnName("name")
             .HasMaxLength(70)
             .IsRequired();
 
-        builder.Property(i => i.Representation)
+        builder?.Property(e => e.Representation)
             .HasColumnName("representation")
             .HasMaxLength(10);
 
-        builder
+        builder?
             .HasIndex(e => e.Name)
             .IsUnique();
     }

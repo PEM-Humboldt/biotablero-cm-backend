@@ -13,10 +13,10 @@ public class JoinRequestStatus : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Join Request Status name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Join request relationship.
     /// </summary>
-    public ICollection<JoinRequest> JoinRequests { get; init; }
+    public ICollection<JoinRequest>? JoinRequests { get; init; }
 }

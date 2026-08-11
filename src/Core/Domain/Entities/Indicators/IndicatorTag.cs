@@ -21,10 +21,10 @@ public class IndicatorTag : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Indicator relationship.
     /// </summary>
-    public Indicator Indicator { get; set; }
+    public Indicator? Indicator { get; set; }
 
     /// <summary>
     /// Tag relationship.
     /// </summary>
-    public Tag Tag { get; set; }
+    public Tag? Tag { get; set; }
 }

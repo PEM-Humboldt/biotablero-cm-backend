@@ -272,7 +272,7 @@ public sealed class GeneralContext : DbContext
     /// <summary>
     /// Configure conventions for custom DbContext.
     /// </summary>
-    /// <param name="modelBuilder">Database model builder.</param>
+    /// <param name="modelBuilder">Database model builder?.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

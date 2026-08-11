@@ -16,15 +16,15 @@ public class InitiativeContact : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Phone number.
     /// </summary>
-    public string Phone { get; set; }
+    public string? Phone { get; set; }
 
     /// <summary>
     /// Email address.
     /// </summary>
-    public string Email { get; set; }
+    public required string Email { get; set; }
 
     /// <summary>
     /// Initiative relationship.
     /// </summary>
-    public Initiative Initiative { get; set; }
+    public Initiative? Initiative { get; set; }
 }

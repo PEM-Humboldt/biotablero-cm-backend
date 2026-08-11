@@ -13,31 +13,31 @@ public class IndicatorGroupConfig : IEntityTypeConfiguration<IndicatorGroup>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<IndicatorGroup> builder)
     {
-        builder.ToTable("indicator_group", "indicators");
+        builder?.ToTable("indicator_group", "indicators");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.IndicatorVersionId)
+        builder?.Property(e => e.IndicatorVersionId)
             .HasColumnName("indicator_version_id")
             .IsRequired();
 
-        builder.Property(i => i.CategoryId)
+        builder?.Property(e => e.CategoryId)
             .HasColumnName("category_id")
             .IsRequired();
 
-        builder.HasOne(e => e.IndicatorVersion)
+        builder?.HasOne(e => e.IndicatorVersion)
             .WithMany(p => p.Groups)
             .HasForeignKey(e => e.IndicatorVersionId);
 
-        builder.HasOne(e => e.Category)
+        builder?.HasOne(e => e.Category)
             .WithMany(p => p.IndicatorGroups)
             .HasForeignKey(e => e.CategoryId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.IndicatorVersionId, e.CategoryId })
             .IsUnique();
     }

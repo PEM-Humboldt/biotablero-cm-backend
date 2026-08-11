@@ -20,7 +20,7 @@ public class Resource : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Author User Name identifier.
     /// </summary>
-    public string AuthorUserName { get; set; }
+    public required string AuthorUserName { get; set; }
 
     /// <summary>
     /// Resource Type identifier.
@@ -30,12 +30,12 @@ public class Resource : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Entity name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Entity description.
     /// </summary>
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
     /// <summary>
     /// Entity creation date.
@@ -75,30 +75,30 @@ public class Resource : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiative relationship.
     /// </summary>
-    public Initiative Initiative { get; set; }
+    public Initiative? Initiative { get; set; }
 
     /// <summary>
     /// Resource Type relationship.
     /// </summary>
-    public ResourceType ResourceType { get; set; }
+    public ResourceType? ResourceType { get; set; }
 
     /// <summary>
     /// Resource Like relationship.
     /// </summary>
-    public ICollection<ResourceLike> Likes { get; init; }
+    public ICollection<ResourceLike>? Likes { get; init; }
 
     /// <summary>
     /// Resource File relationship.
     /// </summary>
-    public ICollection<ResourceFile> Files { get; init; }
+    public ICollection<ResourceFile>? Files { get; init; }
 
     /// <summary>
     /// Resource Link relationship.
     /// </summary>
-    public ICollection<ResourceLink> Links { get; init; }
+    public ICollection<ResourceLink>? Links { get; init; }
 
     /// <summary>
     /// Resource Tag relationship.
     /// </summary>
-    public ICollection<ResourceTag> ResourceTags { get; init; }
+    public ICollection<ResourceTag>? ResourceTags { get; init; }
 }

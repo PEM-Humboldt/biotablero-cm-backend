@@ -30,17 +30,17 @@ public class LogEntity : BaseEntity<Guid>, IAggregateRoot
     /// <summary>
     /// Log short message.
     /// </summary>
-    public string ShortMessage { get; set; }
+    public string? ShortMessage { get; set; }
 
     /// <summary>
     /// Log message.
     /// </summary>
-    public string Message { get; set; }
+    public string? Message { get; set; }
 
     /// <summary>
     /// Event user name.
     /// </summary>
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
 
     /// <summary>
     /// Indicates whether the record was created manually or not.
@@ -50,15 +50,15 @@ public class LogEntity : BaseEntity<Guid>, IAggregateRoot
     /// <summary>
     /// Event client IP.
     /// </summary>
-    public string ClientIp { get; set; }
+    public string? ClientIp { get; set; }
 
     /// <summary>
     /// Event client agent (web browser).
     /// </summary>
-    public string ClientAgent { get; set; }
+    public string? ClientAgent { get; set; }
 
     /// <summary>
     /// Log details.
     /// </summary>
-    public string Properties { get; set; }
+    public string? Properties { get; set; }
 }

@@ -28,27 +28,27 @@ public class IndicatorVersion : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Indicator description.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Indicator methodology.
     /// </summary>
-    public string Methodology { get; set; }
+    public string? Methodology { get; set; }
 
     /// <summary>
     /// Indicator interpretation.
     /// </summary>
-    public string Interpretation { get; set; }
+    public string? Interpretation { get; set; }
 
     /// <summary>
     /// Indicator considerations.
     /// </summary>
-    public string Considerations { get; set; }
+    public string? Considerations { get; set; }
 
     /// <summary>
     /// Indicator autorship.
     /// </summary>
-    public string Authorship { get; set; }
+    public string? Authorship { get; set; }
 
     /// <summary>
     /// Indicator Type identifier.
@@ -58,15 +58,15 @@ public class IndicatorVersion : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Indicator relationship.
     /// </summary>
-    public Indicator Indicator { get; set; }
+    public Indicator? Indicator { get; set; }
 
     /// <summary>
     /// Indicator Version Map relationship.
     /// </summary>
-    public ICollection<IndicatorVersionMap> Maps { get; init; }
+    public ICollection<IndicatorVersionMap>? Maps { get; init; }
 
     /// <summary>
     /// Indicator Group relationship.
     /// </summary>
-    public ICollection<IndicatorGroup> Groups { get; init; }
+    public ICollection<IndicatorGroup>? Groups { get; init; }
 }

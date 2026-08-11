@@ -13,31 +13,31 @@ public class IndicatorTagConfig : IEntityTypeConfiguration<IndicatorTag>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<IndicatorTag> builder)
     {
-        builder.ToTable("indicator_tag", "indicators");
+        builder?.ToTable("indicator_tag", "indicators");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.TagId)
+        builder?.Property(e => e.TagId)
             .HasColumnName("tag_id")
             .IsRequired();
 
-        builder.Property(i => i.IndicatorId)
+        builder?.Property(e => e.IndicatorId)
             .HasColumnName("indicator_id")
             .IsRequired();
 
-        builder.HasOne(e => e.Tag)
+        builder?.HasOne(e => e.Tag)
             .WithMany(p => p.TagIndicators)
             .HasForeignKey(e => e.TagId);
 
-        builder.HasOne(e => e.Indicator)
+        builder?.HasOne(e => e.Indicator)
             .WithMany(p => p.IndicatorTags)
             .HasForeignKey(e => e.IndicatorId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.IndicatorId, e.TagId })
             .IsUnique();
     }

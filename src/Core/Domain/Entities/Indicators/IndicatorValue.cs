@@ -47,10 +47,10 @@ public class IndicatorValue : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Indicator Group relationship.
     /// </summary>
-    public IndicatorGroup Group { get; set; }
+    public IndicatorGroup? Group { get; set; }
 
     /// <summary>
     /// Measure Unit relationship.
     /// </summary>
-    public MeasureUnit MeasureUnit { get; set; }
+    public MeasureUnit? MeasureUnit { get; set; }
 }

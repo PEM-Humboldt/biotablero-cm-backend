@@ -13,33 +13,33 @@ public class MapLegendItemConfig : IEntityTypeConfiguration<MapLegendItem>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<MapLegendItem> builder)
     {
-        builder.ToTable("map_legend_item", "indicators");
+        builder?.ToTable("map_legend_item", "indicators");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.MapLegendId)
+        builder?.Property(e => e.MapLegendId)
             .HasColumnName("map_legend_id")
             .IsRequired();
 
-        builder.Property(e => e.ColorCode)
+        builder?.Property(e => e.ColorCode)
             .HasColumnName("color_code")
             .HasMaxLength(6)
             .IsRequired();
 
-        builder.Property(e => e.Value)
+        builder?.Property(e => e.Value)
             .HasColumnName("value")
             .HasMaxLength(10)
             .IsRequired();
 
-        builder.HasOne(e => e.MapLegend)
+        builder?.HasOne(e => e.MapLegend)
             .WithMany(p => p.Items)
             .HasForeignKey(e => e.MapLegendId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.MapLegendId, e.ColorCode })
             .IsUnique();
     }

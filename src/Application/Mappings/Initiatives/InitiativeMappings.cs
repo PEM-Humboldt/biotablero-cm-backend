@@ -65,6 +65,7 @@ public class InitiativeMappings(
             ImageUrl = dto.ImageUrl,
             BannerUrl = dto.BannerUrl,
             Enabled = dto?.Enabled ?? true,
+            Coordinate = Point.Empty,
             InitiativeContacts = [.. dto.Contacts?.Select(initiativeContactMappings.Map)],
             InitiativeLocations = [.. dto.Locations?.Select(initiativeLocationMappings.Map)],
             InitiativeUsers = [.. dto.Users?.Select(initiativeUserMappings.Map)],

@@ -35,7 +35,7 @@ public class ReportExcelService<TDto>(IServiceProvider serviceProvider) : IRepor
         var map = serviceProvider.GetService(typeof(IReportConfig<TDto>)) as IReportConfig<TDto>;
         var builder = new ReportMapBuilder<TDto>();
         map?.Configure(builder);
-        var mappings = builder.GetMappings();
+        var mappings = builder?.GetMappings();
 
         var properties = typeof(TDto).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
