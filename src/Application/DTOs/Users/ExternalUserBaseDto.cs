@@ -1,13 +1,15 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Users;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// External User DTO Base (IAM).
 /// </summary>
-public class ExternalUserBaseDto : IDto
+[method: SetsRequiredMembers]
+public class ExternalUserBaseDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -17,20 +19,20 @@ public class ExternalUserBaseDto : IDto
     /// <summary>
     /// User email.
     /// </summary>
-    public string Email { get; set; }
+    public required string Email { get; set; } = string.Empty;
 
     /// <summary>
     /// User name.
     /// </summary>
-    public string Username { get; set; }
+    public required string Username { get; set; } = string.Empty;
 
     /// <summary>
     /// User full name.
     /// </summary>
-    public string FullName { get; set; }
+    public string? FullName { get; set; }
 
     /// <summary>
     /// User picture.
     /// </summary>
-    public string Picture { get; set; }
+    public string? Picture { get; set; }
 }
