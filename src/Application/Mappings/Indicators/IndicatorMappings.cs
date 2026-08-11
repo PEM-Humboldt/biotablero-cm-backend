@@ -26,6 +26,7 @@ public class IndicatorMappings(
             Id = entity.Id,
             Name = entity.Name,
             InitiativeId = entity.InitiativeId,
+            InitiativeName = entity.Initiative?.Name,
             Type = entity.Type != null ? indicatorTypeMappings.Map(entity.Type) : null,
             Tags = entity.IndicatorTags?.Select(indicatorTagMappings.Map),
             Locations = entity.IndicatorLocations?.Select(indicatorLocationMappings.Map),

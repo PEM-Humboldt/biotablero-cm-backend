@@ -74,6 +74,7 @@ public class IndicatorRepository : Repository<Indicator, int>, IIndicatorReposit
             .Include(e => e.Type)
             .Include(e => e.Versions)
             .Include(e => e.IndicatorTags)
-                .ThenInclude(e => e.Tag);
+                .ThenInclude(e => e.Tag)
+            .Include(e => e.Initiative);
     }
 }
