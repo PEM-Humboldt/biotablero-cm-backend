@@ -13,31 +13,31 @@ public class ResourceTagConfig : IEntityTypeConfiguration<ResourceTag>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<ResourceTag> builder)
     {
-        builder.ToTable("resource_tag", "initiatives");
+        builder?.ToTable("resource_tag", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.TagId)
+        builder?.Property(e => e.TagId)
             .HasColumnName("tag_id")
             .IsRequired();
 
-        builder.Property(i => i.ResourceId)
+        builder?.Property(e => e.ResourceId)
             .HasColumnName("resource_id")
             .IsRequired();
 
-        builder.HasOne(e => e.Tag)
+        builder?.HasOne(e => e.Tag)
             .WithMany(p => p.TagResources)
             .HasForeignKey(e => e.TagId);
 
-        builder.HasOne(e => e.Resource)
+        builder?.HasOne(e => e.Resource)
             .WithMany(p => p.ResourceTags)
             .HasForeignKey(e => e.ResourceId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.ResourceId, e.TagId })
             .IsUnique();
     }

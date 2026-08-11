@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 
 /// <summary>
-/// Custom report map builder.
+/// Custom report map builder?.
 /// </summary>
 /// <typeparam name="T">Class type.</typeparam>
 public class ReportMapBuilder<T>
@@ -22,7 +22,7 @@ public class ReportMapBuilder<T>
     /// <param name="header">Property header.</param>
     /// <param name="index">Property index.</param>
     /// <param name="visible">Property visible flag.</param>
-    /// <returns>Report map builder.</returns>
+    /// <returns>Report map builder?.</returns>
     /// <exception cref="ArgumentException">Property argument exception.</exception>
     public ReportMapBuilder<T> Property<TProp>(
         Expression<Func<T, TProp>> property,

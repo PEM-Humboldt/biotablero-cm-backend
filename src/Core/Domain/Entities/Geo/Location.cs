@@ -15,12 +15,12 @@ public class Location : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Location name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Location code.
     /// </summary>
-    public string Code { get; set; }
+    public required string Code { get; set; }
 
     /// <summary>
     /// Parent location identifier.
@@ -35,12 +35,12 @@ public class Location : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Parent location relationship.
     /// </summary>
-    public Location Parent { get; set; }
+    public Location? Parent { get; set; }
 
     /// <summary>
     /// Location polygon relationship.
     /// </summary>
-    public LocationPolygon LocationPolygon { get; set; }
+    public LocationPolygon? LocationPolygon { get; set; }
 
     /// <summary>
     /// Child locations relationship.
@@ -55,10 +55,10 @@ public class Location : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiatives relationship.
     /// </summary>
-    public ICollection<Initiative> Initiatives { get; set; }
+    public ICollection<Initiative>? Initiatives { get; set; }
 
     /// <summary>
     /// Indicator Locations relationship.
     /// </summary>
-    public ICollection<IndicatorLocation> IndicatorLocations { get; set; }
+    public ICollection<IndicatorLocation>? IndicatorLocations { get; set; }
 }

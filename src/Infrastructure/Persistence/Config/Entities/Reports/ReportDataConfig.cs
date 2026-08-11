@@ -13,29 +13,29 @@ public class ReportDataConfig : IEntityTypeConfiguration<ReportData>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<ReportData> builder)
     {
-        builder.ToTable("report_data", "reports");
+        builder?.ToTable("report_data", "reports");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(e => e.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(e => e.CreationDate)
+        builder?.Property(e => e.CreationDate)
             .HasColumnName("creation_date")
             .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .IsRequired();
 
-        builder.Property(e => e.UserName)
+        builder?.Property(e => e.UserName)
             .HasColumnName("user_name")
             .HasMaxLength(75)
             .IsRequired();
 
-        builder.Property(e => e.Description)
+        builder?.Property(e => e.Description)
             .HasColumnName("description")
             .HasMaxLength(500);
 
-        builder.Property(e => e.Data)
+        builder?.Property(e => e.Data)
             .HasColumnName("data")
             .HasMaxLength(280);
     }

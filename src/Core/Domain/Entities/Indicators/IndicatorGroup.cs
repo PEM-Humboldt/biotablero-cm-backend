@@ -22,15 +22,15 @@ public class IndicatorGroup : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Indicator Version relationship.
     /// </summary>
-    public IndicatorVersion IndicatorVersion { get; set; }
+    public IndicatorVersion? IndicatorVersion { get; set; }
 
     /// <summary>
     /// Category relationship.
     /// </summary>
-    public Category Category { get; set; }
+    public Category? Category { get; set; }
 
     /// <summary>
     /// Indicator Value relationship.
     /// </summary>
-    public ICollection<IndicatorValue> Values { get; init; }
+    public ICollection<IndicatorValue>? Values { get; init; }
 }

@@ -12,7 +12,7 @@ public class LogReportConfig : IReportConfig<LogDto>
     /// <summary>
     /// Configure entity.
     /// </summary>
-    /// <param name="builder">Entity builder.</param>
+    /// <param name="builder">Entity builder?.</param>
     public void Configure(ReportMapBuilder<LogDto> builder)
     {
         builder

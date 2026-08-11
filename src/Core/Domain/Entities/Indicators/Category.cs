@@ -17,17 +17,17 @@ public class Category : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Category name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Category description.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Parent relationship.
     /// </summary>
-    public Category Parent { get; set; }
+    public Category? Parent { get; set; }
 
     /// <summary>
     /// Child categories relationship.
@@ -37,5 +37,5 @@ public class Category : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Indicator Group relationship.
     /// </summary>
-    public ICollection<IndicatorGroup> IndicatorGroups { get; init; }
+    public ICollection<IndicatorGroup>? IndicatorGroups { get; init; }
 }

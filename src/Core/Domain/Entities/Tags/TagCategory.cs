@@ -12,10 +12,10 @@ public class TagCategory : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Tag Category name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Tags relationship.
     /// </summary>
-    public ICollection<Tag> Tags { get; init; }
+    public ICollection<Tag>? Tags { get; init; }
 }

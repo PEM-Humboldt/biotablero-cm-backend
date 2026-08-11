@@ -21,15 +21,15 @@ public class IndicatorLocation : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Locality name.
     /// </summary>
-    public string Locality { get; set; }
+    public string? Locality { get; set; }
 
     /// <summary>
     /// Indicator relationship.
     /// </summary>
-    public Indicator Indicator { get; set; }
+    public Indicator? Indicator { get; set; }
 
     /// <summary>
     /// Location relationship.
     /// </summary>
-    public Location Location { get; set; }
+    public Location? Location { get; set; }
 }

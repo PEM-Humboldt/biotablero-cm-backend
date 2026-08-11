@@ -18,7 +18,7 @@ public class ResourceLike : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// User Name identifier.
     /// </summary>
-    public string UserName { get; set; }
+    public required string UserName { get; set; }
 
     /// <summary>
     /// Entity creation date.
@@ -28,5 +28,5 @@ public class ResourceLike : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Resource relationship.
     /// </summary>
-    public Resource Resource { get; set; }
+    public Resource? Resource { get; set; }
 }

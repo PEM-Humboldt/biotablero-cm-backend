@@ -18,7 +18,7 @@ public class TerritoryStoryLike : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// User Name identifier.
     /// </summary>
-    public string UserName { get; set; }
+    public required string UserName { get; set; }
 
     /// <summary>
     /// Entity creation date.
@@ -28,5 +28,5 @@ public class TerritoryStoryLike : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Territory Story relationship.
     /// </summary>
-    public TerritoryStory TerritoryStory { get; set; }
+    public TerritoryStory? TerritoryStory { get; set; }
 }

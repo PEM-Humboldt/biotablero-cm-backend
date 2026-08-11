@@ -12,10 +12,10 @@ public class IndicatorType : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Entity name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Indicator relationship.
     /// </summary>
-    public ICollection<Indicator> Indicators { get; init; }
+    public ICollection<Indicator>? Indicators { get; init; }
 }

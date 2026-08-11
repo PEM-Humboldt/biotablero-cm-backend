@@ -13,31 +13,31 @@ public class InitiativeTagConfig : IEntityTypeConfiguration<InitiativeTag>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<InitiativeTag> builder)
     {
-        builder.ToTable("initiative_tag", "initiatives");
+        builder?.ToTable("initiative_tag", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.TagId)
+        builder?.Property(e => e.TagId)
             .HasColumnName("tag_id")
             .IsRequired();
 
-        builder.Property(i => i.InitiativeId)
+        builder?.Property(e => e.InitiativeId)
             .HasColumnName("initiative_id")
             .IsRequired();
 
-        builder.HasOne(e => e.Tag)
+        builder?.HasOne(e => e.Tag)
             .WithMany(p => p.TagInitiatives)
             .HasForeignKey(e => e.TagId);
 
-        builder.HasOne(e => e.Initiative)
+        builder?.HasOne(e => e.Initiative)
             .WithMany(p => p.InitiativeTags)
             .HasForeignKey(e => e.InitiativeId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.InitiativeId, e.TagId })
             .IsUnique();
     }

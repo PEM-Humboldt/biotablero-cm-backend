@@ -17,15 +17,15 @@ public class MapLegend : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Map Legend title.
     /// </summary>
-    public string Title { get; set; }
+    public required string Title { get; set; }
 
     /// <summary>
     /// Indicator Version Map relationship.
     /// </summary>
-    public IndicatorVersionMap IndicatorVersionMap { get; set; }
+    public IndicatorVersionMap? IndicatorVersionMap { get; set; }
 
     /// <summary>
     /// Map Legend Item relationship.
     /// </summary>
-    public ICollection<MapLegendItem> Items { get; init; }
+    public ICollection<MapLegendItem>? Items { get; init; }
 }

@@ -64,7 +64,7 @@ public class EmailService : IEmailService
         using var mail = new MimeMessage()
         {
             Subject = subject,
-            Body = builder.ToMessageBody(),
+            Body = builder?.ToMessageBody(),
         };
         mail.From.Add(new MailboxAddress(smtpData.FromName, smtpData.From));
         mail.Cc.AddRange(receivers.Select(r => new MailboxAddress(r.Name, r.Email)));

@@ -21,27 +21,27 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiative name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Initiative short name.
     /// </summary>
-    public string ShortName { get; set; }
+    public string? ShortName { get; set; }
 
     /// <summary>
     /// Initiative description.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Initiative base line.
     /// </summary>
-    public string Baseline { get; set; }
+    public string? Baseline { get; set; }
 
     /// <summary>
     /// Initiative objective.
     /// </summary>
-    public string Objective { get; set; }
+    public string? Objective { get; set; }
 
     /// <summary>
     /// Initiative creation date.
@@ -51,22 +51,22 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiative image URL.
     /// </summary>
-    public Uri ImageUrl { get; set; }
+    public Uri? ImageUrl { get; set; }
 
     /// <summary>
     /// Initiative banner URL.
     /// </summary>
-    public Uri BannerUrl { get; set; }
+    public Uri? BannerUrl { get; set; }
 
     /// <summary>
     /// Initiative polygon.
     /// </summary>
-    public Geometry Polygon { get; set; }
+    public Geometry? Polygon { get; set; }
 
     /// <summary>
     /// Initiative polygon centroid.
     /// </summary>
-    public Geometry Coordinate { get; set; }
+    public required Geometry Coordinate { get; set; }
 
     /// <summary>
     /// Initiative polygon area in square kilometers.
@@ -86,55 +86,55 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiative Location relationship.
     /// </summary>
-    public ICollection<InitiativeLocation> InitiativeLocations { get; init; }
+    public ICollection<InitiativeLocation>? InitiativeLocations { get; init; }
 
     /// <summary>
     /// Initiative Contact relationship.
     /// </summary>
-    public ICollection<InitiativeContact> InitiativeContacts { get; init; }
+    public ICollection<InitiativeContact>? InitiativeContacts { get; init; }
 
     /// <summary>
     /// Initiative User relationship.
     /// </summary>
-    public ICollection<InitiativeUser> InitiativeUsers { get; init; }
+    public ICollection<InitiativeUser>? InitiativeUsers { get; init; }
 
     /// <summary>
     /// Initiative Tag relationship.
     /// </summary>
-    public ICollection<InitiativeTag> InitiativeTags { get; init; }
+    public ICollection<InitiativeTag>? InitiativeTags { get; init; }
 
     /// <summary>
     /// Join Request relationship.
     /// </summary>
-    public ICollection<JoinRequest> JoinRequests { get; init; }
+    public ICollection<JoinRequest>? JoinRequests { get; init; }
 
     /// <summary>
     /// Join Invitation relationship.
     /// </summary>
-    public ICollection<JoinInvitation> JoinInvitations { get; init; }
+    public ICollection<JoinInvitation>? JoinInvitations { get; init; }
 
     /// <summary>
     /// Territory Story relationship.
     /// </summary>
-    public ICollection<TerritoryStory> TerritoryStories { get; init; }
+    public ICollection<TerritoryStory>? TerritoryStories { get; init; }
 
     /// <summary>
     /// Resource relationship.
     /// </summary>
-    public ICollection<Resource> Resources { get; init; }
+    public ICollection<Resource>? Resources { get; init; }
 
     /// <summary>
     /// Main location relationship.
     /// </summary>
-    public LocationCustom MainLocation { get; set; }
+    public LocationCustom? MainLocation { get; set; }
 
     /// <summary>
     /// Indicator relationship.
     /// </summary>
-    public ICollection<Indicator> Indicators { get; init; }
+    public ICollection<Indicator>? Indicators { get; init; }
 
     /// <summary>
     /// Monitoring Events relationship.
     /// </summary>
-    public ICollection<MonitoringEvents> MonitoringEventsList { get; set; }
+    public ICollection<MonitoringEvents>? MonitoringEventsList { get; set; }
 }
