@@ -2,13 +2,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Initiative dto.
 /// </summary>
-public class InitiativeDto : IDto
+[method: SetsRequiredMembers]
+public class InitiativeDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -18,27 +20,27 @@ public class InitiativeDto : IDto
     /// <summary>
     /// Initiative name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Initiative short name.
     /// </summary>
-    public string ShortName { get; set; }
+    public string? ShortName { get; set; }
 
     /// <summary>
     /// Initiative description.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Initiative baseline.
     /// </summary>
-    public string Baseline { get; set; }
+    public string? Baseline { get; set; }
 
     /// <summary>
     /// Initiative objective.
     /// </summary>
-    public string Objective { get; set; }
+    public string? Objective { get; set; }
 
     /// <summary>
     /// Initiative creation date.
@@ -48,17 +50,17 @@ public class InitiativeDto : IDto
     /// <summary>
     /// Initiative image URL.
     /// </summary>
-    public Uri ImageUrl { get; set; }
+    public Uri? ImageUrl { get; set; }
 
     /// <summary>
     /// Initiative banner URL.
     /// </summary>
-    public Uri BannerUrl { get; set; }
+    public Uri? BannerUrl { get; set; }
 
     /// <summary>
     /// Initiative polygon centroid.
     /// </summary>
-    public double[] Coordinate { get; set; }
+    public double[]? Coordinate { get; set; }
 
     /// <summary>
     /// Initiative polygon area in square kilometers.
@@ -83,20 +85,20 @@ public class InitiativeDto : IDto
     /// <summary>
     /// Initiative Locations relationship.
     /// </summary>
-    public IEnumerable<InitiativeLocationDto> Locations { get; init; }
+    public IEnumerable<InitiativeLocationDto>? Locations { get; init; }
 
     /// <summary>
     /// Initiative Contacts relationship.
     /// </summary>
-    public IEnumerable<InitiativeContactDto> Contacts { get; init; }
+    public IEnumerable<InitiativeContactDto>? Contacts { get; init; }
 
     /// <summary>
     /// Initiative Users relationship.
     /// </summary>
-    public IEnumerable<InitiativeUserDto> Users { get; set; }
+    public IEnumerable<InitiativeUserDto>? Users { get; set; }
 
     /// <summary>
     /// Tags relationship.
     /// </summary>
-    public IEnumerable<InitiativeTagDto> Tags { get; init; }
+    public IEnumerable<InitiativeTagDto>? Tags { get; init; }
 }

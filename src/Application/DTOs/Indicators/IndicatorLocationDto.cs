@@ -26,10 +26,10 @@ public class IndicatorLocationDto : IDto
     /// <summary>
     /// Locality name.
     /// </summary>
-    public string Locality { get; set; }
+    public string? Locality { get; set; }
 
     /// <summary>
     /// Location relationship.
     /// </summary>
-    public LocationDto Location { get; set; }
+    public LocationDto? Location { get; set; }
 }

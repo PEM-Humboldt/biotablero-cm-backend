@@ -33,30 +33,30 @@ public class IndicatorVersionDto : IDto
     /// <summary>
     /// Indicator description.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Indicator methodology.
     /// </summary>
-    public string Methodology { get; set; }
+    public string? Methodology { get; set; }
 
     /// <summary>
     /// Indicator interpretation.
     /// </summary>
-    public string Interpretation { get; set; }
+    public string? Interpretation { get; set; }
 
     /// <summary>
     /// Indicator considerations.
     /// </summary>
-    public string Considerations { get; set; }
+    public string? Considerations { get; set; }
 
     /// <summary>
     /// Indicator autorship.
     /// </summary>
-    public string Authorship { get; set; }
+    public string? Authorship { get; set; }
 
     /// <summary>
     /// Indicator Group relationship.
     /// </summary>
-    public IEnumerable<IndicatorGroupDto> Groups { get; init; }
+    public IEnumerable<IndicatorGroupDto>? Groups { get; init; }
 }

@@ -1,11 +1,14 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
+using System.Diagnostics.CodeAnalysis;
+
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Join Invitation Guest dto.
 /// </summary>
-public class JoinInvitationGuestDto : IDto
+[method: SetsRequiredMembers]
+public class JoinInvitationGuestDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -20,5 +23,5 @@ public class JoinInvitationGuestDto : IDto
     /// <summary>
     /// Guest Email.
     /// </summary>
-    public string Email { get; set; }
+    public required string Email { get; set; } = string.Empty;
 }

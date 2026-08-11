@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Tags;
 
+using System.Diagnostics.CodeAnalysis;
+
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
@@ -8,7 +10,8 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 /// <summary>
 /// Tag dto.
 /// </summary>
-public class TagDto : IDto
+[method: SetsRequiredMembers]
+public class TagDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -18,20 +21,20 @@ public class TagDto : IDto
     /// <summary>
     /// Tag name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Tag full name.
     /// </summary>
-    public string FullName { get; set; }
+    public string? FullName { get; set; }
 
     /// <summary>
     /// Tag URL.
     /// </summary>
-    public string Url { get; set; }
+    public string? Url { get; set; }
 
     /// <summary>
     /// Tag Category relationship.
     /// </summary>
-    public EnumEntityDto<TagCategory> Category { get; set; }
+    public required EnumEntityDto<TagCategory> Category { get; set; } = new();
 }

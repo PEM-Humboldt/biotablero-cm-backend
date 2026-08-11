@@ -1,21 +1,23 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Notifications;
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Notification Properties dto.
 /// </summary>
-public class NotificationPropertiesDto : IDto
+[method: SetsRequiredMembers]
+public class NotificationPropertiesDto() : IDto
 {
     /// <summary>
     /// HTML Template Name.
     /// </summary>
-    public string TemplateName { get; set; }
+    public required string TemplateName { get; set; } = string.Empty;
 
     /// <summary>
     /// Message Metadata.
     /// </summary>
-    public Dictionary<string, object> Data { get; set; }
+    public required Dictionary<string, object> Data { get; set; } = [];
 }

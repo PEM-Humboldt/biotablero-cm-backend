@@ -1,13 +1,15 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Indicator dto.
 /// </summary>
-public class IndicatorDto : IDto
+[method: SetsRequiredMembers]
+public class IndicatorDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -17,7 +19,7 @@ public class IndicatorDto : IDto
     /// <summary>
     /// Indicator name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Initiative identifier.
@@ -27,25 +29,25 @@ public class IndicatorDto : IDto
     /// <summary>
     /// Initiative name.
     /// </summary>
-    public string InitiativeName { get; set; }
+    public string? InitiativeName { get; set; }
 
     /// <summary>
     /// Indicator Type.
     /// </summary>
-    public IndicatorTypeDto Type { get; set; }
+    public IndicatorTypeDto? Type { get; set; }
 
     /// <summary>
     /// Indicator Locations relationship.
     /// </summary>
-    public IEnumerable<IndicatorLocationDto> Locations { get; set; }
+    public IEnumerable<IndicatorLocationDto>? Locations { get; set; }
 
     /// <summary>
     /// Indicator versions list.
     /// </summary>
-    public List<IndicatorVersionDto> Versions { get; set; }
+    public List<IndicatorVersionDto>? Versions { get; set; }
 
     /// <summary>
     /// Tags relationship.
     /// </summary>
-    public IEnumerable<IndicatorTagDto> Tags { get; set; }
+    public IEnumerable<IndicatorTagDto>? Tags { get; set; }
 }
