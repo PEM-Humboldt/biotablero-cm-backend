@@ -15,6 +15,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Spreadsheets.Se
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Storage;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Video;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Web;
+using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
@@ -111,11 +112,11 @@ public static class ConfigExternalServices
         services.AddHttpClient<ICustomApiKeycloakTokenProvider, CustomApiKeycloakTokenProvider>();
         services.AddHttpClient<IIamService, IamService>(client =>
         {
-            client.BaseAddress = new Uri($"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/admin/realms/{Environment.GetEnvironmentVariable("KC_REALM")}/");
+            client.BaseAddress = new Uri($"{EnvUtils.GetRequiredEnv("KC_BASE_URL")}/admin/realms/{EnvUtils.GetRequiredEnv("KC_REALM")}/");
         });
         services.AddHttpClient<IIamCustomApiService, IamCustomApiService>(client =>
         {
-            client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("KC_CUSTOM_API_URL"));
+            client.BaseAddress = new Uri(EnvUtils.GetRequiredEnv("KC_CUSTOM_API_URL"));
         });
 
         services.AddSingleton<IEmailService, EmailService>();
@@ -126,10 +127,10 @@ public static class ConfigExternalServices
         services.AddScoped<IWebHelperService, WebHelperService>();
         services.AddSingleton<IAmazonS3>(_ =>
         {
-            var accessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY");
-            var secretKey = Environment.GetEnvironmentVariable("AWS_SECRET_KEY");
-            var region = Environment.GetEnvironmentVariable("AWS_REGION");
-            var endpoint = Environment.GetEnvironmentVariable("S3_ENDPOINT_URL");
+            var accessKey = EnvUtils.GetRequiredEnv("AWS_ACCESS_KEY");
+            var secretKey = EnvUtils.GetRequiredEnv("AWS_SECRET_KEY");
+            var region = EnvUtils.GetRequiredEnv("AWS_REGION");
+            var endpoint = EnvUtils.GetRequiredEnv("S3_ENDPOINT_URL");
 
             var config = new AmazonS3Config()
             {

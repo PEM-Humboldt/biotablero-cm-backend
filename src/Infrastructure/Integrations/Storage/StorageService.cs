@@ -11,6 +11,7 @@ using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Storage;
+using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Models.Storage;
 
 using Serilog;
@@ -38,8 +39,8 @@ public class StorageService : IStorageService
         this.logger = logger;
         this.client = client;
 
-        endpointUrl = Environment.GetEnvironmentVariable("S3_ENDPOINT_URL");
-        bucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME");
+        endpointUrl = EnvUtils.GetRequiredEnv("S3_ENDPOINT_URL");
+        bucketName = EnvUtils.GetRequiredEnv("S3_BUCKET_NAME");
     }
 
     /// <inheritdoc/>

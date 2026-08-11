@@ -84,8 +84,8 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         this.webViewTools = webViewTools;
         this.emailService = emailService;
         this.iamService = iamService;
-        iamSignInUrl = Environment.GetEnvironmentVariable("IAM_SIGN_IN_URL");
-        frontEndInitiativeUrl = Environment.GetEnvironmentVariable("FRONTEND_INITIATIVE_URL");
+        iamSignInUrl = EnvUtils.GetRequiredEnv("IAM_SIGN_IN_URL");
+        frontEndInitiativeUrl = EnvUtils.GetRequiredEnv("FRONTEND_INITIATIVE_URL");
     }
 
     /// <inheritdoc/>

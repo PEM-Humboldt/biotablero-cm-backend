@@ -1,5 +1,6 @@
+@using IAVH.BioTablero.CM.Application.Utils
 @{
-    var baseUrl = Environment.GetEnvironmentVariable("PUBLIC_BASE_URL");
+    var baseUrl = EnvUtils.GetRequiredEnv("PUBLIC_BASE_URL");
 }
 
 <!DOCTYPE html>
@@ -14,18 +15,18 @@
 <body style="margin: 0;padding: 0;background-color: #f4f4f4;font-family: Arial, Helvetica, sans-serif;">
     <center style="width: 100%;table-layout: fixed;background-color: #f4f4f4;padding-bottom: 40px;padding-top: 40px;">
         <table class="main" width="100%" cellspacing="0" cellpadding="0" border="0"
-            style="width: 100%;max-width: 600px;background-color: #ffffff;margin: 0 auto;font-size: 16px;line-height: 1.7;color: #4b5563;">
+               style="width: 100%;max-width: 600px;background-color: #ffffff;margin: 0 auto;font-size: 16px;line-height: 1.7;color: #4b5563;">
             <tr>
                 <td bgcolor="#333333" align="left" style="padding: 16px 28px;line-height: 0;">
                     <img class="logo" src="@(baseUrl)/img/email/logo.png" alt="Logo BioTablero"
-                        style="width: 118px;height: auto;" />
+                         style="width: 118px;height: auto;" />
                 </td>
             </tr>
 
             <tr>
                 <td>
                     <img class="hero-img" src="@(baseUrl)/img/email/banner.jpg" style="width: 100%;height: auto;"
-                        alt="Personas trabajando en monitoreo comunitario" />
+                         alt="Personas trabajando en monitoreo comunitario" />
                 </td>
             </tr>
 
