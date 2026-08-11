@@ -215,6 +215,6 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
             return [.. leadersData.Select(e => new CustomEmailAddress(e.FullName, e.Email))];
         }
 
-        return null;
+        return [];
     }
 }

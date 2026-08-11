@@ -18,15 +18,15 @@ public class GroupDataHelper()
     /// <summary>
     /// Group name.
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     /// Group description.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Parent name.
     /// </summary>
-    public string ParentName { get; set; }
+    public string? ParentName { get; set; }
 }

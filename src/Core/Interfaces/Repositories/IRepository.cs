@@ -15,6 +15,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 /// <typeparam name="TE">Entity class type.</typeparam>
 /// <typeparam name="TI">Entity identifier type.</typeparam>
 public interface IRepository<TE, TI>
+    where TI : notnull
     where TE : BaseEntity<TI>, IAggregateRoot
 {
     /// <summary>
