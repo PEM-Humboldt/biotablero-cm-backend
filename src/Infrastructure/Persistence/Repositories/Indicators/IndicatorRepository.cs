@@ -46,7 +46,10 @@ public class IndicatorRepository : Repository<Indicator, int>, IIndicatorReposit
 
     /// <inheritdoc/>
     public IQueryable<Indicator> IncludeOdataEntities(IQueryable<Indicator> query) =>
-        IncludeCustomEntities(query);
+        IncludeCustomEntities(query)
+            .Include(e => e.IndicatorLocations)
+                .ThenInclude(e => e.Location)
+                    .ThenInclude(e => e.Parent);
 
     /// <inheritdoc/>
     public async Task<int> CountAsync(int initiativeId, CancellationToken ct = default) =>
