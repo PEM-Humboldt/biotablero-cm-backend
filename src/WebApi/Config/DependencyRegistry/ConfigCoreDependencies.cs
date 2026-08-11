@@ -7,6 +7,7 @@ using global::HealthChecks.Network.Core;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
 using IAVH.BioTablero.CM.Application.Services.General;
+using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
@@ -28,9 +29,9 @@ using Microsoft.IdentityModel.Tokens;
 /// </summary>
 public static class ConfigCoreDependencies
 {
-    private static readonly string OidcServer = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}/";
-    private static readonly string ConnectionString = Environment.GetEnvironmentVariable("CS_MAIN");
-    private static readonly Uri IamCustomApiHealthUrl = new($"{Environment.GetEnvironmentVariable("KC_CUSTOM_API_URL")}/health/ready");
+    private static readonly string OidcServer = $"{EnvUtils.GetRequiredEnv("KC_BASE_URL")}/realms/{EnvUtils.GetRequiredEnv("KC_REALM")}/";
+    private static readonly string ConnectionString = EnvUtils.GetRequiredEnv("CS_MAIN");
+    private static readonly Uri IamCustomApiHealthUrl = new($"{EnvUtils.GetRequiredEnv("KC_CUSTOM_API_URL")}/health/ready");
     private static readonly SmtpConfigData SmtpData = EmailService.InitSmtpData();
 
     /// <summary>
@@ -77,8 +78,8 @@ public static class ConfigCoreDependencies
     /// <returns>Service descriptors collection with authentication service.</returns>
     private static IServiceCollection AddAuthService(this IServiceCollection services, bool isDevelopment)
     {
-        var clientId = Environment.GetEnvironmentVariable("KC_CLIENT");
-        var useHttpsStr = Environment.GetEnvironmentVariable("KC_USE_HTTPS");
+        var clientId = EnvUtils.GetRequiredEnv("KC_CLIENT");
+        var useHttpsStr = EnvUtils.GetRequiredEnv("KC_USE_HTTPS");
 
         if (!bool.TryParse(useHttpsStr, out bool useHttps))
         {

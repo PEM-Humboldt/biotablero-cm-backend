@@ -1,11 +1,12 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.HealthChecks;
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Amazon.S3;
 using Amazon.S3.Model;
+
+using IAVH.BioTablero.CM.Application.Utils;
 
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -16,7 +17,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 public class S3HealthCheck(IAmazonS3 client) : IHealthCheck
 {
     private readonly IAmazonS3 client = client;
-    private readonly string bucketName = Environment.GetEnvironmentVariable("S3_BUCKET_NAME");
+    private readonly string bucketName = EnvUtils.GetRequiredEnv("S3_BUCKET_NAME");
 
     /// <inheritdoc/>
     public async Task<HealthCheckResult> CheckHealthAsync(
