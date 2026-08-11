@@ -25,6 +25,11 @@ public class IndicatorDto : IDto
     public int InitiativeId { get; set; }
 
     /// <summary>
+    /// Initiative name.
+    /// </summary>
+    public string InitiativeName { get; set; }
+
+    /// <summary>
     /// Indicator Type.
     /// </summary>
     public IndicatorTypeDto Type { get; set; }
