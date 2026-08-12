@@ -26,7 +26,7 @@ public class ReportMapBuilder<T>
     /// <exception cref="ArgumentException">Property argument exception.</exception>
     public ReportMapBuilder<T> Property<TProp>(
         Expression<Func<T, TProp>> property,
-        string header = null,
+        string? header = null,
         int? index = null,
         bool visible = false)
     {

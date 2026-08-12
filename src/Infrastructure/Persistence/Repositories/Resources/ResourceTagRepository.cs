@@ -30,9 +30,9 @@ public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagR
     }
 
     /// <inheritdoc/>
-    public override async Task<ResourceTag> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<ResourceTag?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.ResourceTags
-                .Include(e => e.Tag)
+            .Include(e => e.Tag)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
@@ -44,7 +44,7 @@ public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagR
 
     /// <inheritdoc/>
     public override async Task<ResourceTag> AddAsync(ResourceTag entity, CancellationToken ct = default) =>
-        await ExecuteInTransactionAsync(
+        (await ExecuteInTransactionAsync(
             async ct =>
             {
                 await dbContext.ResourceTags.AddAsync(entity, ct);
@@ -55,16 +55,16 @@ public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagR
                     .Where(e => e.Id == entity.ResourceId)
                     .FirstOrDefaultAsync(ct);
 
-                if (!resource.IsDraft)
+                if (!(resource?.IsDraft ?? false))
                 {
-                    resource.PublicationDate = DateTimeOffset.UtcNow;
+                    resource!.PublicationDate = DateTimeOffset.UtcNow;
                     await dbContext.SaveChangesAsync(ct);
                 }
 
                 return await GetByIdAsync(entity.Id, ct);
             },
             "Resource tag add transaction error",
-            ct);
+            ct))!;
 
     /// <inheritdoc/>
     public override async Task<int> DeleteAsync(ResourceTag entity, CancellationToken ct = default) =>
@@ -79,9 +79,9 @@ public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagR
                     .Where(e => e.Id == entity.ResourceId)
                     .FirstOrDefaultAsync(ct);
 
-                if (!resource.IsDraft)
+                if (!(resource?.IsDraft ?? false))
                 {
-                    resource.PublicationDate = DateTimeOffset.UtcNow;
+                    resource!.PublicationDate = DateTimeOffset.UtcNow;
                     await dbContext.SaveChangesAsync(ct);
                 }
 

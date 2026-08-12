@@ -29,15 +29,15 @@ public class GeneralStatsRepository(GeneralContext dbContext) : IGeneralStatsRep
     private protected readonly GeneralContext dbContext = dbContext;
 
     /// <inheritdoc/>
-    public async Task<int> GetEnabledRecordsCountAsync(string userName = null, int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
+    public async Task<int> GetEnabledRecordsCountAsync(string? userName = null, int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
         await dbContext.Initiatives
             .Where(e => e.Enabled &&
-                (userName == null || e.InitiativeUsers.Any(e => e.UserName == userName)) &&
+                (userName == null || e.InitiativeUsers!.Any(e => e.UserName == userName)) &&
                 (departmentId == null ||
                     e.MainLocationId == departmentId ||
-                    e.InitiativeLocations.Any(e =>
-                        (e.LocationId == departmentId && e.Location.Level == (byte)LocationLevel.Department) ||
-                        (e.Location.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
+                    e.InitiativeLocations!.Any(e =>
+                        (e.LocationId == departmentId && e.Location!.Level == (byte)LocationLevel.Department) ||
+                        (e.Location!.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
                 (initiativeId == null || e.Id == initiativeId))
             .Distinct()
             .CountAsync(ct);
@@ -154,12 +154,12 @@ public class GeneralStatsRepository(GeneralContext dbContext) : IGeneralStatsRep
     /// <inheritdoc/>
     public async Task<int> GetPeopleInvolvedCountAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
         await dbContext.InitiativeUsers
-            .Where(e => e.Initiative.Enabled &&
+            .Where(e => e.Initiative!.Enabled &&
                 (departmentId == null ||
                 e.Initiative.MainLocationId == departmentId ||
-                e.Initiative.InitiativeLocations.Any(e =>
-                    (e.LocationId == departmentId && e.Location.Level == (byte)LocationLevel.Department) ||
-                    (e.Location.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
+                e.Initiative.InitiativeLocations!.Any(e =>
+                    (e.LocationId == departmentId && e.Location!.Level == (byte)LocationLevel.Department) ||
+                    (e.Location!.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
                 (initiativeId == null || e.InitiativeId == initiativeId))
             .Select(e => e.UserName)
             .Distinct()
@@ -168,13 +168,13 @@ public class GeneralStatsRepository(GeneralContext dbContext) : IGeneralStatsRep
     /// <inheritdoc/>
     public async Task<int> GetAgreementsInvolvedCountAsync(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
         await dbContext.InitiativeTags
-            .Where(e => e.Initiative.Enabled &&
-                (e.Tag.CategoryId == (int)TagCategoryEnum.PoliticalContext || e.Tag.CategoryId == (int)TagCategoryEnum.SocialContext) &&
+            .Where(e => e.Initiative!.Enabled &&
+                (e.Tag!.CategoryId == (int)TagCategoryEnum.PoliticalContext || e.Tag.CategoryId == (int)TagCategoryEnum.SocialContext) &&
                 (departmentId == null ||
                     e.Initiative.MainLocationId == departmentId ||
-                    e.Initiative.InitiativeLocations.Any(e =>
-                        (e.LocationId == departmentId && e.Location.Level == (byte)LocationLevel.Department) ||
-                        (e.Location.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
+                    e.Initiative.InitiativeLocations!.Any(e =>
+                        (e.LocationId == departmentId && e.Location!.Level == (byte)LocationLevel.Department) ||
+                        (e.Location!.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
                 (initiativeId == null || e.InitiativeId == initiativeId))
             .Select(e => e.TagId)
             .Distinct()
@@ -183,24 +183,24 @@ public class GeneralStatsRepository(GeneralContext dbContext) : IGeneralStatsRep
     /// <inheritdoc/>
     public async Task<List<Tag>> GetEcosystemsAsync(int? departmentId, int? initiativeId, CancellationToken ct = default) =>
         await dbContext.InitiativeTags
-            .Where(e => e.Initiative.Enabled && e.Tag.CategoryId == (int)TagCategoryEnum.Ecosystem &&
+            .Where(e => e.Initiative!.Enabled && e.Tag!.CategoryId == (int)TagCategoryEnum.Ecosystem &&
                 (departmentId == null ||
                     e.Initiative.MainLocationId == departmentId ||
-                    e.Initiative.InitiativeLocations.Any(e =>
-                        (e.LocationId == departmentId && e.Location.Level == (byte)LocationLevel.Department) ||
-                        (e.Location.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
+                    e.Initiative.InitiativeLocations!.Any(e =>
+                        (e.LocationId == departmentId && e.Location!.Level == (byte)LocationLevel.Department) ||
+                        (e.Location!.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
                 (initiativeId == null || e.InitiativeId == initiativeId))
-            .Select(e => e.Tag)
+            .Select(e => e.Tag!)
             .Distinct()
             .ToListAsync(ct);
 
     /// <inheritdoc/>
     public async Task<List<string>> GetUserNamesAsync(int? departmentId, int? initiativeId, CancellationToken ct = default) =>
         await dbContext.InitiativeUsers
-            .Where(e => e.Initiative.Enabled && (departmentId == null ||
-                    e.Initiative.InitiativeLocations.Any(e =>
-                        (e.LocationId == departmentId && e.Location.Level == (byte)LocationLevel.Department) ||
-                        (e.Location.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
+            .Where(e => e.Initiative!.Enabled && (departmentId == null ||
+                    e.Initiative.InitiativeLocations!.Any(e =>
+                        (e.LocationId == departmentId && e.Location!.Level == (byte)LocationLevel.Department) ||
+                        (e.Location!.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
                 (initiativeId == null || e.Initiative.Id == initiativeId))
             .Select(e => e.UserName)
             .Distinct()
@@ -209,13 +209,13 @@ public class GeneralStatsRepository(GeneralContext dbContext) : IGeneralStatsRep
     /// <inheritdoc/>
     public async Task<List<KeyValuePair<string, int>>> GetIndicatorsByScaleAsync(int? departmentId, int? initiativeId, CancellationToken ct = default) =>
         await dbContext.IndicatorTags
-            .Where(e => e.Indicator.Initiative.Enabled && e.Tag.CategoryId == (int)TagCategoryEnum.BiologicalGroup &&
+            .Where(e => e.Indicator!.Initiative!.Enabled && e.Tag!.CategoryId == (int)TagCategoryEnum.BiologicalGroup &&
                 (departmentId == null ||
-                    e.Indicator.IndicatorLocations.Any(e =>
-                        (e.LocationId == departmentId && e.Location.Level == (byte)LocationLevel.Department) ||
-                        (e.Location.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
+                    e.Indicator.IndicatorLocations!.Any(e =>
+                        (e.LocationId == departmentId && e.Location!.Level == (byte)LocationLevel.Department) ||
+                        (e.Location!.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
                 (initiativeId == null || e.Indicator.InitiativeId == initiativeId))
-            .GroupBy(e => e.Tag.Name)
+            .GroupBy(e => e.Tag!.Name)
             .Select(e => new KeyValuePair<string, int>(e.Key, e.Count()))
             .ToListAsync(ct);
 }

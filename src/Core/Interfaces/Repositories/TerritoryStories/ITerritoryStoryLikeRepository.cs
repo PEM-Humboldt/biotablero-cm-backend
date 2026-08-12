@@ -26,5 +26,5 @@ public interface ITerritoryStoryLikeRepository : IRepository<TerritoryStoryLike,
     /// <param name="username">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<TerritoryStoryLike> GetByTerritoryStoryAndUserNameAsync(int territoryStoryId, string username, CancellationToken ct = default);
+    Task<TerritoryStoryLike?> GetByTerritoryStoryAndUserNameAsync(int territoryStoryId, string username, CancellationToken ct = default);
 }

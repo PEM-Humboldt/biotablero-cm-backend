@@ -23,17 +23,17 @@ public class SmtpConfigData
     /// <summary>
     /// SMTP User.
     /// </summary>
-    public string? User { get; set; }
+    public required string User { get; set; }
 
     /// <summary>
     /// /SMTP Password.
     /// </summary>
-    public string? Password { get; set; }
+    public required string Password { get; set; }
 
     /// <summary>
     /// Sender's email.
     /// </summary>
-    public string? From { get; set; }
+    public required string From { get; set; }
 
     /// <summary>
     /// Sender's name.

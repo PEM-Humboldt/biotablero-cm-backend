@@ -56,7 +56,7 @@ public interface IInitiativeUserRepository : IRepository<InitiativeUser, int>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities by selected parameters.</returns>
-    Task<InitiativeUser> GetByInitiativeAndUserNameAsync(int initiativeId, string userName, CancellationToken ct = default);
+    Task<InitiativeUser?> GetByInitiativeAndUserNameAsync(int initiativeId, string userName, CancellationToken ct = default);
 
     /// <summary>
     /// Get elements by initiative.

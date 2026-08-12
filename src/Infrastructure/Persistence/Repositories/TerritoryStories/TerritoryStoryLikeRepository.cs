@@ -35,7 +35,7 @@ public class TerritoryStoryLikeRepository : Repository<TerritoryStoryLike, int>,
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<TerritoryStoryLike> GetByTerritoryStoryAndUserNameAsync(int territoryStoryId, string username, CancellationToken ct = default) =>
+    public async Task<TerritoryStoryLike?> GetByTerritoryStoryAndUserNameAsync(int territoryStoryId, string username, CancellationToken ct = default) =>
         await dbContext.TerritoryStoryLikes
             .Where(e => e.TerritoryStoryId == territoryStoryId && e.UserName == username)
             .FirstOrDefaultAsync(ct);
