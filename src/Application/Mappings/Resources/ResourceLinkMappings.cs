@@ -13,7 +13,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 public class ResourceLinkMappings : MapperRead<ResourceLink, ResourceLinkDto>, IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto>
 {
     /// <inheritdoc/>
-    public override ResourceLinkDto Map(ResourceLink entity)
+    public override ResourceLinkDto Map(ResourceLink? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -27,7 +27,7 @@ public class ResourceLinkMappings : MapperRead<ResourceLink, ResourceLinkDto>, I
     }
 
     /// <inheritdoc/>
-    public ResourceLink Map(ResourceLinkDto dto)
+    public ResourceLink Map(ResourceLinkDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 

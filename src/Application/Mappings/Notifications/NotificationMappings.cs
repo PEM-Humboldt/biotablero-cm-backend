@@ -14,7 +14,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
 public class NotificationMappings : MapperRead<Notification, NotificationDto>, IMapperCreateAndRead<Notification, NotificationDto>
 {
     /// <inheritdoc/>
-    public override NotificationDto Map(Notification entity)
+    public override NotificationDto Map(Notification? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -32,7 +32,7 @@ public class NotificationMappings : MapperRead<Notification, NotificationDto>, I
     }
 
     /// <inheritdoc/>
-    public Notification Map(NotificationDto dto)
+    public Notification Map(NotificationDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 

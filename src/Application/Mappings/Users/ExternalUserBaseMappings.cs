@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 public class ExternalUserBaseMappings : MapperRead<ExternalUser, ExternalUserBaseDto>
 {
     /// <inheritdoc/>
-    public override ExternalUserBaseDto Map(ExternalUser entity)
+    public override ExternalUserBaseDto Map(ExternalUser? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

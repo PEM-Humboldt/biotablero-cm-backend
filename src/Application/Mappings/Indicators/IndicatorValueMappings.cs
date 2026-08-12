@@ -14,7 +14,7 @@ public class IndicatorValueMappings(
     IMapperRead<MeasureUnit, MeasureUnitDto> measureUnitMappings) : MapperRead<IndicatorValue, IndicatorValueDto>
 {
     /// <inheritdoc/>
-    public override IndicatorValueDto Map(IndicatorValue entity)
+    public override IndicatorValueDto Map(IndicatorValue? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

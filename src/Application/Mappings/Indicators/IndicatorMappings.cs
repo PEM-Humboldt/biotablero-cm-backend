@@ -17,7 +17,7 @@ public class IndicatorMappings(
     IMapperRead<IndicatorLocation, IndicatorLocationDto> indicatorLocationMappings) : MapperRead<Indicator, IndicatorDto>
 {
     /// <inheritdoc/>
-    public override IndicatorDto Map(Indicator entity)
+    public override IndicatorDto Map(Indicator? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -30,14 +30,14 @@ public class IndicatorMappings(
             Type = entity.Type != null ? indicatorTypeMappings.Map(entity.Type) : null,
             Tags = entity.IndicatorTags?.Select(indicatorTagMappings.Map),
             Locations = entity.IndicatorLocations?.Select(indicatorLocationMappings.Map),
-            Versions = [.. entity.Versions.Select(v =>
-                new IndicatorVersionDto()
+            Versions = entity.Versions?
+                .Select(v => new IndicatorVersionDto()
                 {
                     Id = v.Id,
                     Version = v.Version,
                     CreationDate = v.CreationDate,
                 })
-            ],
+                .ToList(),
         };
     }
 }

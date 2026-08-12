@@ -15,7 +15,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 public class InitiativeTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : MapperRead<InitiativeTag, InitiativeTagDto>
 {
     /// <inheritdoc/>
-    public override InitiativeTagDto Map(InitiativeTag entity)
+    public override InitiativeTagDto Map(InitiativeTag? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

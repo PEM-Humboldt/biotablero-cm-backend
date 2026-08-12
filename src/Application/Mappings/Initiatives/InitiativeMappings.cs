@@ -20,7 +20,7 @@ public class InitiativeMappings(
     IMapperRead<InitiativeTag, InitiativeTagDto> initiativeTagMappings) : MapperRead<Initiative, InitiativeDto>, IMapperCreateReadAndUpdate<Initiative, InitiativeDto>
 {
     /// <inheritdoc/>
-    public override InitiativeDto Map(Initiative entity)
+    public override InitiativeDto Map(Initiative? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -41,7 +41,7 @@ public class InitiativeMappings(
             MainLocationId = entity.MainLocationId,
             PolygonArea = entity.PolygonArea,
             Enabled = entity.Enabled,
-            HasPolygon = entity?.Polygon != null,
+            HasPolygon = entity.Polygon != null,
             Contacts = entity.InitiativeContacts?.Select(initiativeContactMappings.Map),
             Locations = entity.InitiativeLocations?.Select(initiativeLocationMappings.Map),
             Users = entity.InitiativeUsers?.Select(initiativeUserMappings.Map),
@@ -50,7 +50,7 @@ public class InitiativeMappings(
     }
 
     /// <inheritdoc/>
-    public Initiative Map(InitiativeDto dto)
+    public Initiative Map(InitiativeDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 
@@ -64,11 +64,11 @@ public class InitiativeMappings(
             CreationDate = dto.CreationDate ?? DateTimeOffset.UtcNow,
             ImageUrl = dto.ImageUrl,
             BannerUrl = dto.BannerUrl,
-            Enabled = dto?.Enabled ?? true,
+            Enabled = dto.Enabled ?? true,
             Coordinate = Point.Empty,
-            InitiativeContacts = [.. dto.Contacts?.Select(initiativeContactMappings.Map)],
-            InitiativeLocations = [.. dto.Locations?.Select(initiativeLocationMappings.Map)],
-            InitiativeUsers = [.. dto.Users?.Select(initiativeUserMappings.Map)],
+            InitiativeContacts = dto.Contacts?.Select(initiativeContactMappings.Map).ToList(),
+            InitiativeLocations = dto.Locations?.Select(initiativeLocationMappings.Map).ToList(),
+            InitiativeUsers = dto.Users?.Select(initiativeUserMappings.Map).ToList(),
         };
     }
 

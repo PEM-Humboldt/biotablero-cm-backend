@@ -16,7 +16,7 @@ public class IndicatorLocationMappings(
     IMapperRead<Location, LocationDto> locationMappings) : MapperRead<IndicatorLocation, IndicatorLocationDto>
 {
     /// <inheritdoc/>
-    public override IndicatorLocationDto Map(IndicatorLocation entity)
+    public override IndicatorLocationDto Map(IndicatorLocation? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

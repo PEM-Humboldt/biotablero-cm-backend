@@ -16,7 +16,7 @@ using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums.TagC
 public class TagMappings : MapperRead<Tag, TagDto>, IMapperCreateReadAndUpdate<Tag, TagDto>
 {
     /// <inheritdoc/>
-    public override TagDto Map(Tag entity)
+    public override TagDto Map(Tag? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -31,7 +31,7 @@ public class TagMappings : MapperRead<Tag, TagDto>, IMapperCreateReadAndUpdate<T
     }
 
     /// <inheritdoc/>
-    public Tag Map(TagDto dto)
+    public Tag Map(TagDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 

@@ -16,7 +16,7 @@ public class IndicatorVersionMappings(
     IMapperRead<IndicatorValue, IndicatorValueDto> indicatorValueMappings) : MapperRead<IndicatorVersion, IndicatorVersionDto>
 {
     /// <inheritdoc/>
-    public override IndicatorVersionDto Map(IndicatorVersion entity)
+    public override IndicatorVersionDto Map(IndicatorVersion? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
