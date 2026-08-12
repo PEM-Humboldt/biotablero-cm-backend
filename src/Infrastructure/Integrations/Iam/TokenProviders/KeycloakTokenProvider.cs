@@ -37,5 +37,5 @@ public class KeycloakTokenProvider : BaseKeycloakTokenProvider, IKeycloakTokenPr
     }
 
     /// <inheritdoc/>
-    public async Task<string> GetTokenAsync(CancellationToken ct = default) => await GetTokenInternalAsync(options, ct);
+    public async Task<string?> GetTokenAsync(CancellationToken ct = default) => await GetTokenInternalAsync(options, ct);
 }

@@ -13,5 +13,5 @@ public interface IKeycloakTokenProvider
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Client token.</returns>
-    Task<string> GetTokenAsync(CancellationToken ct = default);
+    Task<string?> GetTokenAsync(CancellationToken ct = default);
 }
