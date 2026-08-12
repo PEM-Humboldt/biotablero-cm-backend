@@ -13,7 +13,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Reports;
 public class ReportDataMappings : MapperRead<ReportData, ReportDataDto>, IMapperCreateAndRead<ReportData, ReportDataDto>
 {
     /// <inheritdoc/>
-    public override ReportDataDto Map(ReportData entity)
+    public override ReportDataDto Map(ReportData? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -28,7 +28,7 @@ public class ReportDataMappings : MapperRead<ReportData, ReportDataDto>, IMapper
     }
 
     /// <inheritdoc/>
-    public ReportData Map(ReportDataDto dto)
+    public ReportData Map(ReportDataDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 

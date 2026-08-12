@@ -13,7 +13,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 public class InitiativeContactMappings : MapperRead<InitiativeContact, InitiativeContactDto>, IMapperCreateReadAndUpdate<InitiativeContact, InitiativeContactDto>
 {
     /// <inheritdoc/>
-    public override InitiativeContactDto Map(InitiativeContact entity)
+    public override InitiativeContactDto Map(InitiativeContact? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -27,13 +27,13 @@ public class InitiativeContactMappings : MapperRead<InitiativeContact, Initiativ
     }
 
     /// <inheritdoc/>
-    public InitiativeContact Map(InitiativeContactDto dto)
+    public InitiativeContact Map(InitiativeContactDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 
         return new()
         {
-            InitiativeId = dto?.InitiativeId ?? 0,
+            InitiativeId = dto.InitiativeId ?? 0,
             Phone = dto.Phone,
             Email = dto.Email,
         };

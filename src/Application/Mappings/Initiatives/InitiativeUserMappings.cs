@@ -16,7 +16,7 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 public class InitiativeUserMappings : MapperRead<InitiativeUser, InitiativeUserDto>, IMapperCreateReadAndUpdate<InitiativeUser, InitiativeUserDto>
 {
     /// <inheritdoc/>
-    public override InitiativeUserDto Map(InitiativeUser entity)
+    public override InitiativeUserDto Map(InitiativeUser? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -32,13 +32,13 @@ public class InitiativeUserMappings : MapperRead<InitiativeUser, InitiativeUserD
     }
 
     /// <inheritdoc/>
-    public InitiativeUser Map(InitiativeUserDto dto)
+    public InitiativeUser Map(InitiativeUserDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 
         return new()
         {
-            InitiativeId = dto?.InitiativeId ?? 0,
+            InitiativeId = dto.InitiativeId ?? 0,
             UserName = dto.UserName,
             FocusArea = dto.FocusArea,
             LevelId = dto.Level.Id,

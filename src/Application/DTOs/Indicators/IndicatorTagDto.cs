@@ -19,5 +19,5 @@ public class IndicatorTagDto() : IDto
     /// <summary>
     /// Entity Tag.
     /// </summary>
-    public required TagDto Tag { get; set; } = new();
+    public TagDto? Tag { get; set; } = new();
 }

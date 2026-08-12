@@ -15,7 +15,7 @@ public class JoinInvitationMappings(
     IMapperCreateAndRead<JoinInvitationGuest, JoinInvitationGuestDto> joinInvitationGuestMappings) : MapperRead<JoinInvitation, JoinInvitationDto>, IMapperCreateAndRead<JoinInvitation, JoinInvitationDto>
 {
     /// <inheritdoc/>
-    public override JoinInvitationDto Map(JoinInvitation entity)
+    public override JoinInvitationDto Map(JoinInvitation? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -34,7 +34,7 @@ public class JoinInvitationMappings(
     }
 
     /// <inheritdoc/>
-    public JoinInvitation Map(JoinInvitationDto dto)
+    public JoinInvitation Map(JoinInvitationDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 
