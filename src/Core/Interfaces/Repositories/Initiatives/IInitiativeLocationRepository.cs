@@ -35,7 +35,7 @@ public interface IInitiativeLocationRepository : IRepository<InitiativeLocation,
     /// <param name="locality">Locality name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
-    Task<bool> IsDuplicatedAsync(int initiativeId, int locationId, string locality, CancellationToken ct = default);
+    Task<bool> IsDuplicatedAsync(int initiativeId, int locationId, string? locality, CancellationToken ct = default);
 
     /// <summary>
     /// Check if element is duplicated.
@@ -46,5 +46,5 @@ public interface IInitiativeLocationRepository : IRepository<InitiativeLocation,
     /// <param name="locality">Locality name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
-    Task<bool> IsDuplicatedAsync(int id, int initiativeId, int locationId, string locality, CancellationToken ct = default);
+    Task<bool> IsDuplicatedAsync(int id, int initiativeId, int locationId, string? locality, CancellationToken ct = default);
 }

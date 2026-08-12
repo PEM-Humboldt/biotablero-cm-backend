@@ -19,5 +19,5 @@ public class NotificationPropertiesDto() : IDto
     /// <summary>
     /// Message Metadata.
     /// </summary>
-    public required Dictionary<string, object> Data { get; set; } = [];
+    public required Dictionary<string, object?> Data { get; set; } = [];
 }

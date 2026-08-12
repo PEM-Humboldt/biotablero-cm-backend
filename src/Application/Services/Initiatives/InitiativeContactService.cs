@@ -170,7 +170,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         // Validate initiative
         var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
 
-        if (!initiative.Enabled)
+        if (!(initiative?.Enabled ?? false))
         {
             return new(true)
             {
@@ -242,7 +242,7 @@ public class InitiativeContactService : ServiceRead<InitiativeContact, Initiativ
         // Validate initiative
         var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
 
-        if (!initiative.Enabled)
+        if (!(initiative?.Enabled ?? false))
         {
             return new(true)
             {

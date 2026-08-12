@@ -110,13 +110,13 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
 
             var userNames = odataResponse.DataList?
                 .Select(e => e.Creator)
-                .ToArray();
+                .ToArray() ?? [];
 
             var externalUsersData = await iamService.GetUsersDataAsync(userNames, ct);
 
             if (externalUsersData.Any())
             {
-                foreach (var joinInvitationData in odataResponse.DataList)
+                foreach (var joinInvitationData in odataResponse.DataList ?? [])
                 {
                     joinInvitationData.CreatorFullName = externalUsersData
                         .Where(i => i.Username == joinInvitationData.Creator)
@@ -171,7 +171,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         }
 
         // Validate duplicate emails
-        bool hasDuplicateEmails = entityData.Guests
+        bool hasDuplicateEmails = (entityData.Guests ?? [])
             .GroupBy(e => e.Email)
             .Any(g => g.Count() > 1);
 
@@ -184,7 +184,7 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
         }
 
         // Check if one or more users already belong to the initiative
-        var emails = entityData.Guests
+        var emails = (entityData.Guests ?? [])
             .Select(e => e.Email)
             .ToArray();
 
