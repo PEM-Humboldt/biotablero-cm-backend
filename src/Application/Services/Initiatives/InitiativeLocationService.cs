@@ -143,7 +143,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         }
 
         // Validate duplicated entities
-        entityData.Locality = entityData.Locality.Trim();
+        entityData.Locality = entityData.Locality?.Trim();
         var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(initiativeId, locationId, entityData.Locality, ct);
 
         if (hasDuplicatedEntities)
@@ -208,7 +208,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         // Validate initiative
         var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
 
-        if (!initiative.Enabled)
+        if (!(initiative?.Enabled ?? false))
         {
             return new(true)
             {
@@ -237,7 +237,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         }
 
         // Validate duplicated entities
-        entityData.Locality = entityData.Locality.Trim();
+        entityData.Locality = entityData.Locality?.Trim();
         var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.InitiativeId, locationId, entityData.Locality, ct);
 
         if (hasDuplicatedEntities)
@@ -289,7 +289,7 @@ public class InitiativeLocationService : ServiceRead<InitiativeLocation, Initiat
         // Validate initiative
         var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
 
-        if (!initiative.Enabled)
+        if (!(initiative?.Enabled ?? false))
         {
             return new(true)
             {

@@ -196,7 +196,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         entity = await entityRepository.AddAsync(entity, ct);
 
         // Send notifications to initiative leaders
-        var emailData = new Dictionary<string, object>()
+        var emailData = new Dictionary<string, object?>()
         {
             { "InitiativeName", initiative.Name },
             { "UserName", userData.Username },
@@ -223,7 +223,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
 
-        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, entityData.ReviewerUserName, false, ct))
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, entityData.ReviewerUserName ?? string.Empty, false, ct))
         {
             return new(true)
             {
@@ -279,7 +279,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         }
 
         // Update entity data
-        entity = await entityRepository.ReviewRequestAsync(id, entityData.ReviewerUserName, entityData.Status.Id, ct);
+        entity = await entityRepository.ReviewRequestAsync(id, entityData.ReviewerUserName ?? string.Empty, entityData.Status.Id, ct);
 
         if (entity == null)
         {
@@ -295,7 +295,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
 
-        var emailObject = new Dictionary<string, object>()
+        var emailObject = new Dictionary<string, object?>()
         {
             { "InitiativeName", initiative.Name },
             { "UserName", userData.Username },
@@ -381,7 +381,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <param name="userData">External user data.</param>
     /// <param name="emailData">Email data.</param>
     /// <param name="ct">Cancellation token.</param>
-    private async Task<bool> SendNotificationJoinRequestAsync(int initiativeId, ExternalUser userData, Dictionary<string, object> emailData, CancellationToken ct = default)
+    private async Task<bool> SendNotificationJoinRequestAsync(int initiativeId, ExternalUser userData, Dictionary<string, object?> emailData, CancellationToken ct = default)
     {
         var notificationData = new SendNotificationData()
         {
@@ -443,7 +443,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     /// <param name="emailData">Email data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    private async Task SendRequestNotificationToLeadersAsync(int initiativeId, Dictionary<string, object> emailData, CancellationToken ct = default)
+    private async Task SendRequestNotificationToLeadersAsync(int initiativeId, Dictionary<string, object?> emailData, CancellationToken ct = default)
     {
         var leaders = await initiativeUserRepository.GetByInitiativeAndLevelAsync(initiativeId, (int)InitiativeUserLevelEnum.Leader, ct);
 

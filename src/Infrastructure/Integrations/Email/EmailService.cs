@@ -38,7 +38,7 @@ public class EmailService : IEmailService
     }
 
     /// <inheritdoc/>
-    public async Task<string> SendEmailAsync(string subject, CustomEmailAddress[] receivers, CustomEmailAddress[] hiddenReceivers, string body, CancellationToken ct = default)
+    public async Task<string> SendEmailAsync(string subject, CustomEmailAddress[] receivers, CustomEmailAddress[]? hiddenReceivers, string body, CancellationToken ct = default)
     {
         var options = SecureSocketOptions.StartTls;
 
