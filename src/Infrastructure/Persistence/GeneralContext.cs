@@ -276,7 +276,7 @@ public sealed class GeneralContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder?.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         // Seeding data
         modelBuilder.Entity<TagCategory>().HasData(GetDefaultTagCategories());
