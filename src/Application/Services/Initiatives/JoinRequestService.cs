@@ -295,15 +295,20 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
 
+        if (userData == null)
+        {
+            logger.Error("User data not found: {UserName}", entityData.UserName);
+        }
+
         var emailObject = new Dictionary<string, object?>()
         {
             { "InitiativeName", initiative.Name },
-            { "UserName", userData.Username },
+            { "UserName", userData?.Username },
             { "JoinRequestStatus", (JoinRequestStatusEnum)entity.StatusId },
             { "LeaveInitiative", entityData.Level == null },
         };
 
-        await SendNotificationJoinRequestAsync(entityData.InitiativeId, userData, emailObject, ct);
+        await SendNotificationJoinRequestAsync(entityData.InitiativeId, userData!, emailObject, ct);
 
         logger.AddLog(LogType.Update, "Updated initiative join request", "{@EntityData}", entityData);
 
