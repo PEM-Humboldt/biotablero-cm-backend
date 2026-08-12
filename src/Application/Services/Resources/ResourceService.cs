@@ -158,7 +158,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     public async Task<CustomWebResponse> AddAsync(ResourceDto entityData, CancellationToken ct = default)
     {
         // Validate user permissions
-        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId.Value, entityData.AuthorUserName, null, ct);
+        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId ?? 0, entityData.AuthorUserName, null, ct);
 
         if (!authorizedUserAction)
         {
@@ -180,7 +180,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId.Value, ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId ?? 0, ct);
 
         if (!initiativeExists)
         {
@@ -191,7 +191,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate Resource Type
-        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType.Id.Value, ct);
+        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType?.Id ?? 0, ct);
 
         if (!resourceTypeExists)
         {
@@ -284,7 +284,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate Resource Type
-        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType.Id.Value, ct);
+        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType?.Id ?? 0, ct);
 
         if (!resourceTypeExists)
         {
