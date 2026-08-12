@@ -24,7 +24,7 @@ public interface IRepository<TE, TI>
     /// <param name="id">The value of the primary key for the entity to be found.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<TE> GetByIdAsync(TI id, CancellationToken ct = default);
+    Task<TE?> GetByIdAsync(TI id, CancellationToken ct = default);
 
     /// <summary>
     /// Finds all entities of <typeparamref name="TE" /> from the database.
@@ -140,7 +140,7 @@ public interface IRepository<TE, TI>
     /// <param name="errorContext">Error message for context.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<TR> ExecuteInTransactionAsync<TR>(
+    Task<TR?> ExecuteInTransactionAsync<TR>(
     Func<CancellationToken, Task<TR>> action,
     string errorContext,
     CancellationToken ct = default);

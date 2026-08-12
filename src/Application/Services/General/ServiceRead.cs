@@ -32,6 +32,7 @@ public abstract class ServiceRead<TE, TDto, TI>(
     IRepository<TE, TI> entityRepository,
     IMapperRead<TE, TDto> mapper,
     IValidationErrorTranslator errorTranslator) : IRead<TE, TI>
+    where TI : notnull
     where TDto : class, IDto
     where TE : BaseEntity<TI>, IAggregateRoot
 {

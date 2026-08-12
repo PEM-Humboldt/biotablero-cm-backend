@@ -146,7 +146,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         }
 
         // Validate indicator
-        Indicator indicator = null;
+        Indicator? indicator = null;
         var indicatorLastVersion = 1;
 
         if (requestData.Id.HasValue)
@@ -187,8 +187,8 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             .ToArray();
 
         var locationEntities = await locationRepository.GetByNamesAsync(
-            [.. spreadsheetLocations.Select(e => e.Department)],
-            [.. spreadsheetLocations.Select(e => e.Municipality)],
+            spreadsheetLocations?.Select(e => e.Department)?.ToArray() ?? [],
+            spreadsheetLocations?.Select(e => e.Municipality)?.ToArray() ?? [],
             ct);
 
         var databaseValidations = await ValidateDatabaseAsync(fileReadResult.Rows, locationEntities, ct);
@@ -203,7 +203,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         {
             var now = DateTimeOffset.Now;
 
-            var indicatorLocations = await GetExistingIndicatorLocationsAsync(indicator, spreadsheetLocations, ct);
+            var indicatorLocations = await GetExistingIndicatorLocationsAsync(indicator, spreadsheetLocations ?? [], ct);
             var categories = await SaveAndGetCategoriesAsync(fileReadResult.Rows, ct);
             var indicatorVersionEntities = GenerateIndicatorVersions(indicator, fileReadResult.Rows, categories, now, indicatorLastVersion);
 
@@ -287,9 +287,9 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     {
         foreach (var row in rows)
         {
-            row.UpperGroupName = row.UpperGroupName?.Trim()?.CapitalizeFirstOnly();
+            row.UpperGroupName = row.UpperGroupName?.Trim()?.CapitalizeFirstOnly() ?? string.Empty;
             row.GroupName = row.GroupName?.Trim()?.CapitalizeFirstOnly();
-            row.LocalityName = row.LocalityName?.Trim()?.CapitalizeFirstOnly();
+            row.LocalityName = row.LocalityName?.Trim()?.CapitalizeFirstOnly() ?? string.Empty;
 
             if (row.IndicatorTypeId == (int)IndicatorTypes.SpeciesDiversity)
             {
@@ -308,7 +308,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="indicator">Indicator type (optional).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<IndicatorsImportRow> rows, Indicator indicator, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<IndicatorsImportRow> rows, Indicator? indicator, CancellationToken ct = default)
     {
         // Validate total indicators for edition
         if (indicator != null)
@@ -506,14 +506,14 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             .DistinctBy(r => new { r.Department, r.Municipality })
             .ToArray();
 
-        locationEntities = [.. locationEntities.Where(e => spreadsheetLocations.Any(i => i.Municipality == e.Name && i.Department == e.Parent.Name))];
+        locationEntities = [.. locationEntities.Where(e => spreadsheetLocations.Any(i => i.Municipality == e.Name && i.Department == e.Parent?.Name))];
 
         if (spreadsheetLocations.Length != locationEntities.Count)
         {
             var locationEntitiesKeyValuePairs = locationEntities
                 .Select(e => new LocationDataHelper
                 {
-                    Department = e.Parent.Name,
+                    Department = e.Parent?.Name,
                     Municipality = e.Name,
                 });
 
@@ -540,7 +540,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         {
             if (IndicatorConstants.IndicatorsWithPredefinedCategories.Contains((IndicatorTypes)row.IndicatorTypeId))
             {
-                var categoryError = !predefinedCategories.Any(e => e.Name == row.GroupName && e.Parent.Name == row.UpperGroupName);
+                var categoryError = !predefinedCategories.Any(e => e.Name == row.GroupName && e.Parent?.Name == row.UpperGroupName);
 
                 if (categoryError)
                 {
@@ -600,7 +600,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="spreadsheetLocations">Locations from spreadsheets.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Existing indicator locations.</returns>
-    private async Task<List<IndicatorLocation>> GetExistingIndicatorLocationsAsync(Indicator indicator, LocationDataHelper[] spreadsheetLocations, CancellationToken ct = default)
+    private async Task<List<IndicatorLocation>> GetExistingIndicatorLocationsAsync(Indicator? indicator, LocationDataHelper[] spreadsheetLocations, CancellationToken ct = default)
     {
         var existingIndicatorLocations = indicator != null ? await indicatorLocationRepository.GetByIndicatorAsync(indicator?.Id ?? 0, ct) : [];
 
@@ -610,8 +610,8 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 existingIndicatorLocations
                     .Where(e =>
                         spreadsheetLocations.Any(i =>
-                            i.Municipality == e.Location.Name &&
-                            i.Department == e.Location.Parent.Name &&
+                            i.Municipality == e.Location?.Name &&
+                            i.Department == e.Location?.Parent?.Name &&
                             i.Locality == e.Locality))];
         }
 
@@ -662,7 +662,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         var newCategoriesEntities = newCategories.Select(i => new Category()
         {
             ParentId = i.ParentId,
-            Name = i.Name,
+            Name = i.Name ?? string.Empty,
             Description = i.Description,
         });
 
@@ -681,7 +681,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="indicatorLastVersion">Last indicator version.</param>
     /// <returns>IndicatorVersion entities.</returns>
     private static List<IndicatorVersion> GenerateIndicatorVersions(
-        Indicator indicator,
+        Indicator? indicator,
         List<IndicatorsImportRow> rows,
         List<GroupDataHelper> categories,
         DateTimeOffset now,
@@ -716,7 +716,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                                 {
                                     MeasureUnitId = g2r.MeasureUnitId,
                                     Date = CastDate(g2r.Year, g2r.Month) ?? default,
-                                    DateEnd = CastDate(g2r.FinalYear, g2r.FinalMonth),
+                                    DateEnd = CastDate(g2r.FinalYear ?? string.Empty, g2r.FinalMonth ?? string.Empty),
                                     Value = g2r.Value,
                                     UpperLimit = g2r.UpperLimit,
                                     LowerLimit = g2r.LowerLimit,
@@ -739,7 +739,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <returns>Indicator entities.</returns>
     private static List<Indicator> GenerateIndicators(
         int initiativeId,
-        Indicator indicator,
+        Indicator? indicator,
         List<IndicatorsImportRow> rows,
         List<IndicatorVersion> indicatorVersions,
         List<IndicatorLocation> indicatorLocations,
@@ -752,15 +752,15 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 var indicatorsLocations = g
                     .Select(r =>
                     {
-                        IndicatorLocation indicatorLocation = null;
+                        IndicatorLocation? indicatorLocation = null;
 
                         indicatorLocation = indicatorLocations
-                            .FirstOrDefault(i => i.Location.Name == r.MunicipalityName && i.Location.Parent.Name == r.DepartmentName);
+                            .FirstOrDefault(i => i.Location?.Name == r.MunicipalityName && i.Location?.Parent?.Name == r.DepartmentName);
 
                         if (indicatorLocation == null)
                         {
                             var locationEntity = locations
-                                .FirstOrDefault(i => i.Name == r.MunicipalityName && i.Parent.Name == r.DepartmentName);
+                                .FirstOrDefault(i => i.Name == r.MunicipalityName && i.Parent?.Name == r.DepartmentName);
 
                             indicatorLocation = new IndicatorLocation()
                             {
