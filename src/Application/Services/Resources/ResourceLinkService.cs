@@ -87,8 +87,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
     public async Task<CustomWebResponse> AddAsync(string userName, ResourceLinkDto entityData, CancellationToken ct = default)
     {
         // Validate user permissions
-        var resourceId = entityData?.ResourceId ?? 0;
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entityData.ResourceId ?? 0, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -110,7 +109,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate resource
-        var resource = await resourceRepository.GetByIdAsync(entityData.ResourceId.Value, ct);
+        var resource = await resourceRepository.GetByIdAsync(entityData.ResourceId ?? 0, ct);
 
         if (resource == null)
         {
@@ -121,7 +120,7 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
         }
 
         // Validate number of items
-        if (resource.Links.Count >= MaxItemsPerResource)
+        if (resource.Links?.Count >= MaxItemsPerResource)
         {
             return new(true)
             {
@@ -236,6 +235,15 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         // Send email
         var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+
+        if (resource == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
+            };
+        }
+
         await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         entityData = mapper.Map(entity);
@@ -278,6 +286,15 @@ public class ResourceLinkService : ServiceRead<ResourceLink, ResourceLinkDto, in
 
         // Send email
         var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+
+        if (resource == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
+            };
+        }
+
         await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         var entityData = mapper.Map(entity);

@@ -82,9 +82,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     public async Task<CustomWebResponse> AddAsync(string userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
         // Validate user permissions
-        var resourceId = entityData?.ResourceId ?? 0;
-
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entityData.ResourceId, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -117,7 +115,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         }
 
         // Validate number of items
-        if (resource.Files.Count >= MaxItemsPerResource)
+        if (resource.Files?.Count >= MaxItemsPerResource)
         {
             return new(true)
             {
@@ -241,6 +239,15 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         // Send email
         var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+
+        if (resource == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
+            };
+        }
+
         await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         entityData = mapper.Map(entity);
@@ -283,6 +290,15 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         // Send email
         var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+
+        if (resource == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
+            };
+        }
+
         await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         var entityData = mapper.Map(entity);

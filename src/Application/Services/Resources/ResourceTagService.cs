@@ -160,6 +160,15 @@ public class ResourceTagService : IResourceTagService
 
         // Send email
         var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+
+        if (resource == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
+            };
+        }
+
         await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         logger.AddLog(LogType.Delete, "Deleted resource tag relationship", "{@EntityData}", entityData);
