@@ -32,7 +32,7 @@ public sealed class WebTools(IHttpContextAccessor httpContextAccessor) : IWebToo
     [ApiExplorerSettings(IgnoreApi = true)]
     public IActionResult CustomResponse(CustomWebResponse response)
     {
-        if (response?.Success ?? false)
+        if (response.Success)
         {
             return new OkObjectResult(response.ResponseBody);
         }

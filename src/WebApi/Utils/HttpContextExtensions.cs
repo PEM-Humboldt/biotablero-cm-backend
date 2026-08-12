@@ -19,8 +19,8 @@ public static class HttpContextExtensions
     /// <returns>User name.</returns>
     public static string GetUserName(this HttpContext httpContext)
     {
-        var username = httpContext?.User.FindAll(IamConstants.UserName);
-        return username.FirstOrDefault()?.Value;
+        var username = httpContext.User.FindAll(IamConstants.UserName);
+        return username.FirstOrDefault()?.Value ?? LogConstants.UserAnonymous;
     }
 
     /// <summary>
@@ -29,10 +29,9 @@ public static class HttpContextExtensions
     /// <param name="httpContext">Current HTTP Context.</param>
     /// <returns>User roles.</returns>
     public static string[] GetRoles(this HttpContext httpContext) =>
-        httpContext?.User
+        [.. httpContext.User
             .FindAll(ClaimTypes.Role)
-            .Select(r => r.Value)
-            .ToArray();
+            .Select(r => r.Value)];
 
     /// <summary>
     /// Checks if the current user is an administrator.

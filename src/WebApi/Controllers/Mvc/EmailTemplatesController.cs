@@ -26,7 +26,7 @@ public class EmailTemplatesController : Controller
     /// <returns>Role assignment view.</returns>
     [HttpGet]
     [Route("RoleAssignment")]
-    public IActionResult RoleAssignment(string content = null)
+    public IActionResult RoleAssignment(string? content = null)
     {
         var model = !string.IsNullOrEmpty(content)
             ? new NotificationDto { Body = content }
@@ -42,7 +42,7 @@ public class EmailTemplatesController : Controller
     /// <returns>User removal view.</returns>
     [HttpGet]
     [Route("UserRemoval")]
-    public IActionResult UserRemoval(string content = null)
+    public IActionResult UserRemoval(string? content = null)
     {
         var model = !string.IsNullOrEmpty(content)
             ? new NotificationDto { Body = content }
@@ -58,7 +58,7 @@ public class EmailTemplatesController : Controller
     /// <returns>Join invitation view.</returns>
     [HttpGet]
     [Route("JoinInvitation")]
-    public IActionResult JoinInvitation(string content = null)
+    public IActionResult JoinInvitation(string? content = null)
     {
         var model = !string.IsNullOrEmpty(content)
             ? new NotificationDto { Body = content }
@@ -74,7 +74,7 @@ public class EmailTemplatesController : Controller
     /// <returns>Join request view.</returns>
     [HttpGet]
     [Route("JoinRequest")]
-    public IActionResult JoinRequest(string content = null)
+    public IActionResult JoinRequest(string? content = null)
     {
         var model = !string.IsNullOrEmpty(content)
             ? new NotificationDto { Body = content }
@@ -90,7 +90,7 @@ public class EmailTemplatesController : Controller
     /// <returns>Pending requests reminder view.</returns>
     [HttpGet]
     [Route("PendingRequestsReminder")]
-    public IActionResult PendingRequestsReminder(string content = null)
+    public IActionResult PendingRequestsReminder(string? content = null)
     {
         var model = !string.IsNullOrEmpty(content)
             ? new NotificationDto { Body = content }

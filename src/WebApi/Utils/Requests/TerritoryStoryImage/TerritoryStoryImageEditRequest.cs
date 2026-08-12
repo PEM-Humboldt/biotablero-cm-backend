@@ -10,10 +10,10 @@ public class TerritoryStoryImageEditRequest
     /// <summary>
     /// File description.
     /// </summary>
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
     /// <summary>
     /// General file.
     /// </summary>
-    public IFormFile File { get; set; }
+    public required IFormFile File { get; set; }
 }
