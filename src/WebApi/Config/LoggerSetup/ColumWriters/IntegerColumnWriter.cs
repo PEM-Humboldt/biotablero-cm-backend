@@ -17,7 +17,7 @@ public class IntegerColumnWriter(string propertyName, NpgsqlDbType dbType = Npgs
     private readonly string propertyName = propertyName;
 
     /// <inheritdoc/>
-    public override object GetValue(LogEvent logEvent, IFormatProvider formatProvider = null)
+    public override object GetValue(LogEvent logEvent, IFormatProvider? formatProvider = null)
     {
         if (logEvent != null && logEvent.Properties.TryGetValue(propertyName, out var value) && value is ScalarValue scalar && scalar.Value is int intValue)
         {

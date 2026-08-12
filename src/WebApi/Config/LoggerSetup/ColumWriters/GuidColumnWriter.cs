@@ -17,7 +17,7 @@ public class GuidColumnWriter(string propertyName, NpgsqlDbType dbType = NpgsqlD
     private readonly string propertyName = propertyName;
 
     /// <inheritdoc/>
-    public override object GetValue(LogEvent logEvent, IFormatProvider formatProvider = null)
+    public override object GetValue(LogEvent logEvent, IFormatProvider? formatProvider = null)
     {
         if (logEvent != null && logEvent.Properties.TryGetValue(propertyName, out var value) && value is ScalarValue scalar && scalar.Value is Guid guidValue)
         {

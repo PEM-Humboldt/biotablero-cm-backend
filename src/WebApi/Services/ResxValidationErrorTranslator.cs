@@ -32,13 +32,13 @@ public class ResxValidationErrorTranslator
     }
 
     /// <inheritdoc/>
-    public IEnumerable<ApiValidationError> Translate(string errorCode, string propertyName = null, object data = null) =>
+    public IEnumerable<ApiValidationError> Translate(string errorCode, string? propertyName = null, object? data = null) =>
         [
             new()
             {
                 Code = errorCode,
                 Description = localizer[errorCode],
-                Field = propertyName.LowerCaseFirstChar(),
+                Field = propertyName?.LowerCaseFirstChar(),
                 Data = data,
             }
         ];

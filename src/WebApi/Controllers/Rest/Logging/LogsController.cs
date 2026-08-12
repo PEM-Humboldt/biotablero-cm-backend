@@ -77,7 +77,7 @@ public class LogsController(IWebTools webTools,
         }
 
         return File(
-                (byte[])response.ResponseBody,
+                (byte[])response.ResponseBody!,
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 "report.xlsx");
     }

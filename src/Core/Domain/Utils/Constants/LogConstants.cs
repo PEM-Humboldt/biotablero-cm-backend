@@ -47,4 +47,18 @@ public static class LogConstants
     public const string CustomType = "Type";
 
     #endregion
+
+    #region Default user data
+
+    /// <summary>
+    /// Anonymous user default name.
+    /// </summary>
+    public const string UserAnonymous = "anonymous";
+
+    /// <summary>
+    /// User system default name.
+    /// </summary>
+    public const string UserSystem = "SYSTEM";
+
+    #endregion
 }
