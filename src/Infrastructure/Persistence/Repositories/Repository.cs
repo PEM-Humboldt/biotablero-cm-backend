@@ -24,6 +24,7 @@ using Serilog;
 /// <typeparam name="TE">Entity class type.</typeparam>
 /// <typeparam name="TI">Entity identifier type.</typeparam>
 public class Repository<TE, TI> : IRepository<TE, TI>
+    where TI : notnull
     where TE : BaseEntity<TI>, IAggregateRoot
 {
     /// <summary>
@@ -50,7 +51,7 @@ public class Repository<TE, TI> : IRepository<TE, TI>
     }
 
     /// <inheritdoc/>
-    public virtual async Task<TE> GetByIdAsync(TI id, CancellationToken ct = default) => await dbContext.Set<TE>().FindAsync([id], ct);
+    public virtual async Task<TE?> GetByIdAsync(TI id, CancellationToken ct = default) => await dbContext.Set<TE>().FindAsync([id], ct);
 
     /// <inheritdoc/>
     public virtual async Task<List<TE>> ListAsync(CancellationToken ct = default) => await dbContext.Set<TE>().ToListAsync(ct);
@@ -140,7 +141,7 @@ public class Repository<TE, TI> : IRepository<TE, TI>
     public virtual async Task<List<TE>> QueryToListAsync(IQueryable<TE> query, CancellationToken ct = default) => await query.ToListAsync(ct);
 
     /// <inheritdoc/>
-    public virtual async Task<TR> ExecuteInTransactionAsync<TR>(Func<CancellationToken, Task<TR>> action, string errorContext, CancellationToken ct = default)
+    public virtual async Task<TR?> ExecuteInTransactionAsync<TR>(Func<CancellationToken, Task<TR>> action, string errorContext, CancellationToken ct = default)
     {
         using var transaction = await dbContext.Database.BeginTransactionAsync(ct);
 
