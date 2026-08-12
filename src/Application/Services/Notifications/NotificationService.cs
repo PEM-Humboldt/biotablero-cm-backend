@@ -151,15 +151,17 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     /// <inheritdoc/>
     public async Task SendNotificationAsync(SendNotificationData notificationData, CancellationToken ct = default)
     {
+        ArgumentNullException.ThrowIfNull(notificationData.NotificationDto);
+
         // Build HTML body
         var htmlBody = string.Empty;
-        if (!string.IsNullOrEmpty(notificationData.NotificationDto.Properties.TemplateName))
+        if (!string.IsNullOrEmpty(notificationData.NotificationDto?.Properties?.TemplateName))
         {
             htmlBody = await webViewTools.RenderViewToStringAsync(notificationData.NotificationDto.Properties.TemplateName, notificationData.NotificationDto);
         }
 
         // Validate data
-        var validationResult = await entityValidator.ValidateAsync(notificationData.NotificationDto, ct);
+        var validationResult = await entityValidator.ValidateAsync(notificationData.NotificationDto ?? new(), ct);
 
         if (!validationResult.IsValid)
         {
@@ -168,7 +170,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         }
 
         // Build entity data
-        var entity = mapper.Map(notificationData.NotificationDto);
+        var entity = mapper.Map(notificationData.NotificationDto ?? new());
         entity.CreationDate = DateTimeOffset.UtcNow;
 
         // Save data
@@ -178,9 +180,9 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         logger.AddLog(LogType.Create, "Added notification", "{@EntityData}", notificationData.NotificationDto);
 
         // Send email
-        if (notificationData.SendEmail && !string.IsNullOrEmpty(notificationData.NotificationDto.Properties.TemplateName))
+        if (notificationData.SendEmail && !string.IsNullOrEmpty(notificationData?.NotificationDto?.Properties?.TemplateName))
         {
-            CustomEmailAddress[] hiddenReceivers = null;
+            CustomEmailAddress[] hiddenReceivers = [];
 
             if (notificationData.SendToHiddenReceivers && notificationData.InitiativeId != null)
             {
@@ -191,7 +193,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         }
 
         // Dispatch SSE Notification
-        await sseNotificationDispatcher.DispatchAsync(entity.Receiver, notificationData.NotificationDto);
+        await sseNotificationDispatcher.DispatchAsync(entity.Receiver, notificationData?.NotificationDto ?? new());
     }
 
     /// <summary>
