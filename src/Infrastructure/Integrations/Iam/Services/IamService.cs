@@ -34,7 +34,7 @@ public class IamService(
     }
 
     /// <inheritdoc/>
-    public async Task<ExternalUser> GetUserDataAsync(string username, CancellationToken ct = default) =>
+    public async Task<ExternalUser?> GetUserDataAsync(string username, CancellationToken ct = default) =>
         await GetKeycloakUserDataAsync(UserVariable.Username, username, ct);
 
     /// <inheritdoc/>
@@ -68,7 +68,7 @@ public class IamService(
     /// <param name="userVariableValue">User variable value.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>User data.</returns>
-    private async Task<ExternalUser> GetKeycloakUserDataAsync(UserVariable userVariableName, string userVariableValue, CancellationToken ct = default)
+    private async Task<ExternalUser?> GetKeycloakUserDataAsync(UserVariable userVariableName, string userVariableValue, CancellationToken ct = default)
     {
         var token = await tokenProvider.GetTokenAsync(ct);
 
@@ -110,9 +110,9 @@ public class IamService(
             var user = new ExternalUser
             {
                 Id = element.TryGetProperty("id", out var id) && id.ValueKind == JsonValueKind.String && Guid.TryParse(id.GetString(), out var guidId) ? guidId : Guid.Empty,
-                Email = element.TryGetProperty("email", out var email) && email.ValueKind == JsonValueKind.String ? email.GetString() : null,
+                Email = element.TryGetProperty("email", out var email) && email.ValueKind == JsonValueKind.String ? email.GetString() ?? string.Empty : string.Empty,
                 EmailVerified = element.TryGetProperty("emailVerified", out var emailVerified) && emailVerified.ValueKind == JsonValueKind.True,
-                Username = element.TryGetProperty("username", out var username) && username.ValueKind == JsonValueKind.String ? username.GetString() : null,
+                Username = element.TryGetProperty("username", out var username) && username.ValueKind == JsonValueKind.String ? username.GetString() ?? string.Empty : string.Empty,
                 FirstName = element.TryGetProperty("firstName", out var firstName) && firstName.ValueKind == JsonValueKind.String ? firstName.GetString() : null,
                 LastName = element.TryGetProperty("lastName", out var lastName) && lastName.ValueKind == JsonValueKind.String ? lastName.GetString() : null,
                 CreationDate = element.TryGetProperty("createdTimestamp", out var createdTs) && createdTs.ValueKind == JsonValueKind.Number ? DateTimeOffset.FromUnixTimeMilliseconds(createdTs.GetInt64()).UtcDateTime : null,

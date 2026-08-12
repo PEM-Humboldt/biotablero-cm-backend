@@ -30,13 +30,13 @@ public abstract class BaseKeycloakTokenProvider(
     /// <param name="options">Keycloak options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Client token.</returns>
-    protected async Task<string> GetTokenInternalAsync(KeycloakOptions options, CancellationToken ct = default)
+    protected async Task<string?> GetTokenInternalAsync(KeycloakOptions options, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(options);
 
         string cacheKey = $"{CacheKeyPrefix}_{options.ClientId}_{options.Realm}";
 
-        if (cache.TryGetValue(cacheKey, out string token))
+        if (cache.TryGetValue(cacheKey, out string? token))
         {
             return token;
         }

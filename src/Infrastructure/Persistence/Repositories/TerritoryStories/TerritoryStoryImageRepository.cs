@@ -47,13 +47,13 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
     {
         var initiative = await dbContext.Initiatives
             .Include(e => e.InitiativeUsers)
-            .Include(e => e.TerritoryStories)
+            .Include(e => e.TerritoryStories!)
                 .ThenInclude(e => e.Images)
-            .Where(e => e.TerritoryStories.Any(e => e.Images.Any(e => e.Id == id)))
+            .Where(e => e.TerritoryStories!.Any(e => e.Images!.Any(e => e.Id == id)))
             .FirstOrDefaultAsync(ct);
 
         var userBelongsToInitiative = await dbContext.InitiativeUsers
-            .Where(e => e.UserName == userName && e.InitiativeId == initiative.Id)
+            .Where(e => e.UserName == userName && e.InitiativeId == initiative!.Id)
             .AnyAsync(ct);
 
         if (userBelongsToInitiative)
@@ -65,7 +65,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
 
         return await dbContext.TerritoryStoryImages
             .Include(e => e.TerritoryStory)
-            .Where(e => e.Id == id && !e.TerritoryStory.Restricted)
+            .Where(e => e.Id == id && !e.TerritoryStory!.Restricted)
             .AnyAsync(ct);
     }
 
@@ -79,10 +79,10 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
             .FirstOrDefaultAsync(ct);
 
         var initiativeUser = await dbContext.InitiativeUsers
-            .Where(e => e.InitiativeId == territoryStory.InitiativeId && e.UserName == userName)
+            .Where(e => e.InitiativeId == territoryStory!.InitiativeId && e.UserName == userName)
             .FirstOrDefaultAsync(ct);
 
-        return initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader || userName == territoryStory.AuthorUserName;
+        return initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader || userName == territoryStory!.AuthorUserName;
     }
 
     /// <inheritdoc/>
@@ -93,7 +93,7 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
 
     /// <inheritdoc/>
     public async Task<TerritoryStoryImage> MarkAsFeaturedContentAsync(int id, CancellationToken ct = default) =>
-        await ExecuteInTransactionAsync(
+        (await ExecuteInTransactionAsync(
             async ct =>
             {
                 var entity = await dbContext.TerritoryStoryImages
@@ -124,11 +124,11 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
                 return entity;
             },
             "Territory Story Image transaction error",
-            ct);
+            ct))!;
 
     /// <inheritdoc/>
     public async Task<TerritoryStoryImage> AddAsync(TerritoryStoryImage entity, Stream imageStream, string contentType, CancellationToken ct = default) =>
-        await ExecuteInTransactionAsync(
+        (await ExecuteInTransactionAsync(
             async ct =>
             {
                 await UploadImage(entity, imageStream, contentType, ct);
@@ -137,18 +137,18 @@ public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int
                 return entity;
             },
             "Territory Story Image transaction error",
-            ct);
+            ct))!;
 
     /// <inheritdoc/>
     public async Task<TerritoryStoryImage> UpdateAsync(TerritoryStoryImage entity, Stream imageStream, string contentType, CancellationToken ct = default) =>
-        await ExecuteInTransactionAsync(
+        (await ExecuteInTransactionAsync(
             async ct =>
             {
                 await UploadImage(entity, imageStream, contentType, ct);
                 return entity;
             },
             "Territory Story Image transaction error",
-            ct);
+            ct))!;
 
     /// <summary>
     /// Upload Territory Story Image.

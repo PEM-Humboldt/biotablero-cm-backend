@@ -67,10 +67,10 @@ ICustomApiKeycloakTokenProvider tokenProvider, ILogger logger) : IIamCustomApiSe
             var user = new ExternalUser
             {
                 Id = element.TryGetProperty("id", out var id) && id.ValueKind == JsonValueKind.String && Guid.TryParse(id.GetString(), out var guidId) ? guidId : Guid.Empty,
-                Username = element.TryGetProperty("username", out var username) && username.ValueKind == JsonValueKind.String ? username.GetString() : null,
+                Username = element.TryGetProperty("username", out var username) && username.ValueKind == JsonValueKind.String ? username.GetString() ?? string.Empty : string.Empty,
                 FirstName = element.TryGetProperty("firstName", out var firstName) && firstName.ValueKind == JsonValueKind.String ? firstName.GetString() : null,
                 LastName = element.TryGetProperty("lastName", out var lastName) && lastName.ValueKind == JsonValueKind.String ? lastName.GetString() : null,
-                Email = element.TryGetProperty("email", out var email) && email.ValueKind == JsonValueKind.String ? email.GetString() : null,
+                Email = element.TryGetProperty("email", out var email) && email.ValueKind == JsonValueKind.String ? email.GetString() ?? string.Empty : string.Empty,
                 EmailVerified = element.TryGetProperty("emailVerified", out var emailVerified) && emailVerified.ValueKind == JsonValueKind.True,
                 Enabled = element.TryGetProperty("enabled", out var enabled) && enabled.ValueKind == JsonValueKind.True,
                 Phone = element.TryGetProperty("phone", out var phone) && phone.ValueKind == JsonValueKind.String ? phone.GetString() : null,

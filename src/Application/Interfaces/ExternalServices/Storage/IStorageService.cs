@@ -34,7 +34,7 @@ public interface IStorageService
     /// <param name="fileName">File name.</param>
     /// <param name="ct">Cancellation token (optional).</param>
     /// <returns>Downloaded file data. Null otherwise.</returns>
-    Task<FileData> DownloadFileAsync(string fileName, CancellationToken ct = default);
+    Task<FileData?> DownloadFileAsync(string fileName, CancellationToken ct = default);
 
     /// <summary>
     /// Delete file.

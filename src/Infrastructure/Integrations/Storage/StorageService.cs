@@ -83,9 +83,9 @@ public class StorageService : IStorageService
     }
 
     /// <inheritdoc/>
-    public async Task<FileData> DownloadFileAsync(string fileName, CancellationToken ct = default)
+    public async Task<FileData?> DownloadFileAsync(string fileName, CancellationToken ct = default)
     {
-        MemoryStream ms = null;
+        MemoryStream? ms = null;
         var fileData = new FileData();
 
         try

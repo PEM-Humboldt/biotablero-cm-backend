@@ -16,5 +16,5 @@ public interface IImageUtilsService
     /// <param name="quality">Image quality.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Compressed image format.</returns>
-    Task<Stream> CompressToWebpAsync(Stream input, int quality = 75, CancellationToken ct = default);
+    Task<Stream?> CompressToWebpAsync(Stream input, int quality = 75, CancellationToken ct = default);
 }

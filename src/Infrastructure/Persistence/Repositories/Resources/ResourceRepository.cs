@@ -29,7 +29,7 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
     }
 
     /// <inheritdoc/>
-    public override async Task<Resource> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<Resource?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await IncludeCustomEntities()
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
@@ -38,15 +38,15 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
     public IQueryable<Resource> GetQueryByUserName(string userName, IQueryable<Resource> query) =>
         IncludeCustomEntities(query)
             .Include(e => e.Initiative)
-                .ThenInclude(e => e.InitiativeUsers)
-            .Where(e => !e.IsDraft || e.Initiative.InitiativeUsers.Any(e => e.UserName == userName));
+                .ThenInclude(e => e!.InitiativeUsers)
+            .Where(e => !e.IsDraft || e.Initiative!.InitiativeUsers!.Any(e => e.UserName == userName));
 
     /// <inheritdoc/>
     public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default) =>
         await dbContext.Resources
             .Include(e => e.Initiative)
-                .ThenInclude(e => e.InitiativeUsers)
-            .Where(e => e.Id == id && e.Initiative.InitiativeUsers.Any(e => e.UserName == userName))
+                .ThenInclude(e => e!.InitiativeUsers)
+            .Where(e => e.Id == id && e.Initiative!.InitiativeUsers!.Any(e => e.UserName == userName))
             .AnyAsync(ct);
 
     /// <inheritdoc/>
@@ -64,14 +64,14 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
     /// <inheritdoc/>
     public async Task<bool> AnyByTagAsync(int tagId, CancellationToken ct = default) =>
         await dbContext.Resources
-            .Where(e => e.ResourceTags.Any(e => e.TagId == tagId))
+            .Where(e => e.ResourceTags!.Any(e => e.TagId == tagId))
             .AnyAsync(ct);
 
     /// <inheritdoc/>
     public override async Task<Resource> AddAsync(Resource entity, CancellationToken ct = default)
     {
         await base.AddAsync(entity, ct);
-        return await GetByIdAsync(entity.Id, ct);
+        return (await GetByIdAsync(entity.Id, ct))!;
     }
 
     /// <inheritdoc/>
@@ -84,7 +84,7 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
     /// Include custom entities.
     /// </summary>
     /// <returns>Modified Linq query.</returns>
-    private IQueryable<Resource> IncludeCustomEntities(IQueryable<Resource> query = null)
+    private IQueryable<Resource> IncludeCustomEntities(IQueryable<Resource>? query = null)
     {
         query ??= dbContext.Resources;
 
@@ -94,7 +94,7 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
             .Include(e => e.Files)
             .Include(e => e.Links)
             .Include(e => e.ResourceType)
-            .Include(e => e.ResourceTags)
+            .Include(e => e.ResourceTags!)
                 .ThenInclude(e => e.Tag);
     }
 }

@@ -60,7 +60,7 @@ public class InitiativeUserRepository : Repository<InitiativeUser, int>, IInitia
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<InitiativeUser> GetByInitiativeAndUserNameAsync(int initiativeId, string userName, CancellationToken ct = default) =>
+    public async Task<InitiativeUser?> GetByInitiativeAndUserNameAsync(int initiativeId, string userName, CancellationToken ct = default) =>
         await dbContext.InitiativeUsers
             .Where(e => e.InitiativeId == initiativeId && e.UserName == userName)
             .FirstOrDefaultAsync(ct);
