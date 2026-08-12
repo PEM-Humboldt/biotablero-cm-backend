@@ -24,7 +24,7 @@ public class TerritoryStoryImageDto() : IDto
     /// <summary>
     /// File URL.
     /// </summary>
-    public required Uri FileUrl { get; set; } = new(string.Empty);
+    public required Uri FileUrl { get; set; } = new("/");
 
     /// <summary>
     /// Entity description.
