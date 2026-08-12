@@ -29,5 +29,5 @@ public class ResourceFileDto() : IDto
     /// <summary>
     /// Entity URL.
     /// </summary>
-    public required Uri Url { get; set; } = new(string.Empty);
+    public required Uri Url { get; set; } = new("/");
 }
