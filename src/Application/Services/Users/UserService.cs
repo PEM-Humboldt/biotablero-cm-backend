@@ -98,7 +98,7 @@ public class UserService : IUserService
             var odataResponse = new ODataResponse<ExternalUser>()
             {
                 TotalItems = totalItems,
-                DataList = [.. dataList],
+                DataList = dataList?.ToList() ?? [],
             };
 
             return new()
