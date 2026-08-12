@@ -248,7 +248,13 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
-        await SendNotificationChangedLevelAsync(userData, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, ct);
+
+        if (userData == null)
+        {
+            logger.Error("User data not found: {UserName}", entityData.UserName);
+        }
+
+        await SendNotificationChangedLevelAsync(userData!, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, ct);
 
         return new()
         {
@@ -314,7 +320,13 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
-        await SendNotificationUserBannedAsync(userData, initiative, ct);
+
+        if (userData == null)
+        {
+            logger.Error("User data not found: {UserName}", entityData.UserName);
+        }
+
+        await SendNotificationUserBannedAsync(userData!, initiative, ct);
 
         return new();
     }

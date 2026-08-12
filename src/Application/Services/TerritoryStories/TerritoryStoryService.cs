@@ -346,7 +346,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         if (hasDuplicatedEntities)
         {
             var like = await territoryStoryLikeRepository.GetByTerritoryStoryAndUserNameAsync(entityData.TerritoryStoryId, entityData.UserName, ct);
-            await territoryStoryLikeRepository.DeleteAsync(like, ct);
+            await territoryStoryLikeRepository.DeleteAsync(like!, ct);
             logger.AddLog(LogType.Delete, $"Unliked territory story", "{@EntityData}", entityData);
         }
         else

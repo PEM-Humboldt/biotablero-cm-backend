@@ -339,7 +339,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         if (hasDuplicatedEntities)
         {
             var like = await resourceLikeRepository.GetByResourceAndUserNameAsync(entityData.ResourceId, entityData.UserName, ct);
-            await resourceLikeRepository.DeleteAsync(like, ct);
+            await resourceLikeRepository.DeleteAsync(like!, ct);
             logger.AddLog(LogType.Delete, $"Unliked resource", "{@EntityData}", entityData);
         }
         else
