@@ -22,13 +22,13 @@ public static class ODataUtils
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="settings">OData query settings.</param>
     /// <returns>Modified Linq query.</returns>
-    public static IQueryable<T> AddOdataQueryFilterAndOrder<T>(IQueryable<T> query, ODataQueryOptions<T> queryOptions, ODataQuerySettings settings = null)
+    public static IQueryable<T> AddOdataQueryFilterAndOrder<T>(IQueryable<T> query, ODataQueryOptions<T> queryOptions, ODataQuerySettings? settings = null)
         where T : class
     {
         settings ??= DefaultOdataQuerySettings;
 
         // Apply order and filter settings
-        if (queryOptions?.Filter != null)
+        if (queryOptions.Filter != null)
         {
             query = (IQueryable<T>)queryOptions.Filter.ApplyTo(query, settings);
         }
@@ -49,7 +49,7 @@ public static class ODataUtils
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="settings">OData query settings.</param>
     /// <returns>Modified Linq query.</returns>
-    public static IQueryable<T> AddOdataQueryPagination<T>(IQueryable<T> query, ODataQueryOptions<T> queryOptions, ODataQuerySettings settings = null)
+    public static IQueryable<T> AddOdataQueryPagination<T>(IQueryable<T> query, ODataQueryOptions<T> queryOptions, ODataQuerySettings? settings = null)
         where T : class
     {
         const int maxPageSize = 20;
