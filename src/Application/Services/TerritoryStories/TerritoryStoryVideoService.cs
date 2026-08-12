@@ -104,7 +104,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     public async Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default)
     {
         // Validate user permissions
-        var territoryStoryId = entityData?.TerritoryStoryId ?? 0;
+        var territoryStoryId = entityData.TerritoryStoryId ?? 0;
         var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(territoryStoryId, userName, ct);
 
         if (!authorizedUserAction)
@@ -222,7 +222,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         // Validate territory story
         var territoryStory = await territoryStoryRepository.GetByIdAsync(entity.TerritoryStoryId, ct);
 
-        if (!territoryStory.Enabled)
+        if (!(territoryStory?.Enabled ?? false))
         {
             return new(true)
             {
@@ -295,7 +295,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         // Validate territory story
         var territoryStory = await territoryStoryRepository.GetByIdAsync(entity.TerritoryStoryId, ct);
 
-        if (!territoryStory.Enabled)
+        if (!(territoryStory?.Enabled ?? false))
         {
             return new(true)
             {

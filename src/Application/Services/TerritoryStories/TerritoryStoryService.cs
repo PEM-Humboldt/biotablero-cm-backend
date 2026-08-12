@@ -153,9 +153,8 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     public async Task<CustomWebResponse> AddAsync(TerritoryStoryDto entityData, CancellationToken ct = default)
     {
         // Validate user permissions
-        var initiativeId = entityData?.InitiativeId ?? 0;
         var authorizedLevels = new int[] { (int)InitiativeUserLevelEnum.Leader, (int)InitiativeUserLevelEnum.Collaborator };
-        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelsAsync(initiativeId, entityData.AuthorUserName, authorizedLevels, ct);
+        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelsAsync(entityData.InitiativeId ?? 0, entityData.AuthorUserName, authorizedLevels, ct);
 
         if (!authorizedUserAction)
         {
@@ -177,7 +176,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         }
 
         // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId.Value, ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId ?? 0, ct);
 
         if (!initiativeExists)
         {
