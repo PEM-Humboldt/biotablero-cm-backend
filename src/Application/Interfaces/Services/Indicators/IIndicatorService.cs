@@ -30,5 +30,5 @@ public interface IIndicatorService : IRead<Indicator, int>
     /// <param name="formFile">File data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> ImportIndicatorsAsync(string userName, IndicatorsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default);
+    Task<CustomWebResponse> ImportIndicatorsAsync(string? userName, IndicatorsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default);
 }

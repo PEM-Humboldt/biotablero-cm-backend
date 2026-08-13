@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Resources;
 
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -79,8 +80,10 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(string userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string? userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entityData.ResourceId, userName, ct);
 
@@ -168,8 +171,10 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
@@ -261,8 +266,10 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;

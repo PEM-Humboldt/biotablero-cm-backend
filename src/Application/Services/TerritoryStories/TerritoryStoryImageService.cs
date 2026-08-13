@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.TerritoryStories;
 
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -71,8 +72,10 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entityExists = await entityRepository.AnyAsync(id, ct);
 
@@ -107,8 +110,10 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string? userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var territoryStoryId = entityData.TerritoryStoryId ?? 0;
         var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(territoryStoryId, userName, ct);
@@ -206,8 +211,10 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
@@ -309,8 +316,10 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
@@ -367,8 +376,10 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 

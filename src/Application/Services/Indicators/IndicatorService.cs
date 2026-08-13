@@ -119,8 +119,10 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> ImportIndicatorsAsync(string userName, IndicatorsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> ImportIndicatorsAsync(string? userName, IndicatorsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var result = new SpreadsheetUploadResult()
         {
             DoNotModifyDatabase = requestData.DoNotModifyDatabase,

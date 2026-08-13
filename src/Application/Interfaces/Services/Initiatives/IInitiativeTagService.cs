@@ -19,7 +19,7 @@ public interface IInitiativeTagService
     /// <param name="tagId">Tag identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> AddAsync(string userName, bool userIsAdmin, int initiativeId, int tagId, CancellationToken ct = default);
+    Task<CustomWebResponse> AddAsync(string? userName, bool userIsAdmin, int initiativeId, int tagId, CancellationToken ct = default);
 
     /// <summary>
     /// Delete element.
@@ -29,5 +29,5 @@ public interface IInitiativeTagService
     /// <param name="userIsAdmin">User administrator flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default);
+    Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAdmin, CancellationToken ct = default);
 }

@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.TerritoryStories;
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -74,7 +75,10 @@ public class TerritoryStoryController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
     public async Task<IActionResult> Post([FromBody] TerritoryStoryDto requestData, CancellationToken ct)
     {
-        requestData.AuthorUserName = HttpContext.GetUserName();
+        var userName = HttpContext.GetUserName();
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
+        requestData.AuthorUserName = userName;
         var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }
@@ -107,10 +111,13 @@ public class TerritoryStoryController(
     [Authorize]
     public async Task<IActionResult> Like(int id, CancellationToken ct)
     {
+        var userName = HttpContext.GetUserName();
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var requestData = new TerritoryStoryLikeDto()
         {
             TerritoryStoryId = id,
-            UserName = HttpContext.GetUserName(),
+            UserName = userName,
         };
 
         var response = await entityService.LikeActionAsync(requestData, ct);

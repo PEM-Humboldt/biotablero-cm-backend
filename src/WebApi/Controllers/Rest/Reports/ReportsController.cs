@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Reports;
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -75,7 +76,10 @@ public class ReportsController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ReportDataResponseExample))]
     public async Task<IActionResult> Post([FromBody] ReportDataDto requestData, CancellationToken ct)
     {
-        requestData.UserName = HttpContext.GetUserName();
+        var userName = HttpContext.GetUserName();
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
+        requestData.UserName = userName;
         var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }

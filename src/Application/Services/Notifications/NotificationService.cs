@@ -85,8 +85,10 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetTotalNotReadByUserNameAsync(string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetTotalNotReadByUserNameAsync(string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var total = await entityRepository.CountNotReadByUserNameAsync(userName, ct);
 
         return new()
@@ -99,8 +101,10 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
         if (entity != null)
@@ -141,8 +145,10 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetByUserNameAsync(string userName, ODataQueryOptions<Notification> queryOptions, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByUserNameAsync(string? userName, ODataQueryOptions<Notification> queryOptions, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var query = entityRepository.GetQueryable();
         query = entityRepository.GetQueryWithUserName(userName, query);
         return await GetOdataListByQueryAsync(query, queryOptions, ct);

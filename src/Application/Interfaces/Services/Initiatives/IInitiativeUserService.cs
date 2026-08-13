@@ -30,7 +30,7 @@ public interface IInitiativeUserService : IRead<InitiativeUser, int>, IAdd<Initi
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string reviewerUserName, bool userIsAdmin, InitiativeUserDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string? reviewerUserName, bool userIsAdmin, InitiativeUserDto entityData, CancellationToken ct = default);
 
     /// <summary>
     /// Delete element.
@@ -40,7 +40,7 @@ public interface IInitiativeUserService : IRead<InitiativeUser, int>, IAdd<Initi
     /// <param name="userIsAdmin">User administrator flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default);
+    Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAdmin, CancellationToken ct = default);
 
     /// <summary>
     /// Update focus area.
@@ -50,5 +50,5 @@ public interface IInitiativeUserService : IRead<InitiativeUser, int>, IAdd<Initi
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateFocusAreaAsync(int initiativeId, string userName, InitiativeUserDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateFocusAreaAsync(int initiativeId, string? userName, InitiativeUserDto entityData, CancellationToken ct = default);
 }
