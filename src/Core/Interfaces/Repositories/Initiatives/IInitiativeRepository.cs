@@ -44,7 +44,7 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="userIsAdmin">User administrator flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if the modification is authorized. False otherwise.</returns>
-    Task<bool> AuthorizedEntityModifyAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default);
+    Task<bool> AuthorizedEntityModifyAsync(int id, string? userName, bool userIsAdmin, CancellationToken ct = default);
 
     /// <summary>
     /// Get if elements exists by name.
