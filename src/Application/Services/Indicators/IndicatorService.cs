@@ -289,9 +289,9 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     {
         foreach (var row in rows)
         {
-            row.UpperGroupName = row.UpperGroupName?.Trim()?.CapitalizeFirstOnly() ?? string.Empty;
+            row.UpperGroupName = row.UpperGroupName?.Trim()?.CapitalizeFirstOnly()!;
             row.GroupName = row.GroupName?.Trim()?.CapitalizeFirstOnly();
-            row.LocalityName = row.LocalityName?.Trim()?.CapitalizeFirstOnly() ?? string.Empty;
+            row.LocalityName = row.LocalityName?.Trim()?.CapitalizeFirstOnly()!;
 
             if (row.IndicatorTypeId == (int)IndicatorTypes.SpeciesDiversity)
             {
@@ -664,7 +664,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         var newCategoriesEntities = newCategories.Select(i => new Category()
         {
             ParentId = i.ParentId,
-            Name = i.Name ?? string.Empty,
+            Name = i.Name!,
             Description = i.Description,
         });
 
@@ -718,7 +718,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                                 {
                                     MeasureUnitId = g2r.MeasureUnitId,
                                     Date = CastDate(g2r.Year, g2r.Month) ?? default,
-                                    DateEnd = CastDate(g2r.FinalYear ?? string.Empty, g2r.FinalMonth ?? string.Empty),
+                                    DateEnd = CastDate(g2r.FinalYear!, g2r.FinalMonth!),
                                     Value = g2r.Value,
                                     UpperLimit = g2r.UpperLimit,
                                     LowerLimit = g2r.LowerLimit,

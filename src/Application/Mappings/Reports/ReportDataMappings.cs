@@ -35,7 +35,7 @@ public class ReportDataMappings : MapperRead<ReportData, ReportDataDto>, IMapper
         return new()
         {
             CreationDate = dto.CreationDate ?? DateTimeOffset.UtcNow,
-            UserName = dto.UserName,
+            UserName = dto.UserName ?? string.Empty,
             Description = dto.Description,
             Data = dto.Data,
         };
