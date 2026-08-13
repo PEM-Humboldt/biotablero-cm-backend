@@ -22,7 +22,7 @@ public interface IResourceService : IRead<Resource, int>, IAdd<ResourceDto>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Get elements list (OData).
@@ -31,7 +31,7 @@ public interface IResourceService : IRead<Resource, int>, IAdd<ResourceDto>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetListAsync(string userName, ODataQueryOptions<Resource> queryOptions, CancellationToken ct = default);
+    Task<CustomWebResponse> GetListAsync(string? userName, ODataQueryOptions<Resource> queryOptions, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.
@@ -41,7 +41,7 @@ public interface IResourceService : IRead<Resource, int>, IAdd<ResourceDto>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceDto entityData, CancellationToken ct = default);
 
     /// <summary>
     /// Like action.
@@ -58,7 +58,7 @@ public interface IResourceService : IRead<Resource, int>, IAdd<ResourceDto>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Send notification for resource update.
@@ -67,5 +67,5 @@ public interface IResourceService : IRead<Resource, int>, IAdd<ResourceDto>
     /// <param name="userName">Editor user name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if the process is successful. False otherwise.</returns>
-    Task<bool> SendUpdateNotificationAsync(Resource resource, string userName, CancellationToken ct = default);
+    Task<bool> SendUpdateNotificationAsync(Resource resource, string? userName, CancellationToken ct = default);
 }

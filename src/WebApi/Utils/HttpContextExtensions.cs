@@ -17,10 +17,10 @@ public static class HttpContextExtensions
     /// </summary>
     /// <param name="httpContext">Current HTTP Context.</param>
     /// <returns>User name.</returns>
-    public static string GetUserName(this HttpContext httpContext)
+    public static string? GetUserName(this HttpContext httpContext)
     {
         var username = httpContext.User.FindAll(IamConstants.UserName);
-        return username.FirstOrDefault()?.Value ?? LogConstants.UserAnonymous;
+        return username.FirstOrDefault()?.Value;
     }
 
     /// <summary>

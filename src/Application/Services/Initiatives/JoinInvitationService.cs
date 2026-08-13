@@ -89,8 +89,10 @@ public class JoinInvitationService : ServiceRead<JoinInvitation, JoinInvitationD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetListAsync(int initiativeId, string? userName, ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user level
         if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, false, ct))
         {

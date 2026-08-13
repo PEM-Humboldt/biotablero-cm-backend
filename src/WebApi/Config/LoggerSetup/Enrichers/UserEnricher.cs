@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.Enrichers;
 
-using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Utils;
 
 using Microsoft.AspNetCore.Http;
@@ -14,6 +13,8 @@ using Serilog.Events;
 public class UserEnricher(IHttpContextAccessor httpContextAccessor) : ILogEventEnricher
 {
     private const string ClientUserPropertyName = "UserName";
+    private const string UserAnonymous = "anonymous";
+    private const string UserSystem = "SYSTEM";
 
     private readonly IHttpContextAccessor httpContextAccessor = httpContextAccessor;
 
@@ -21,7 +22,7 @@ public class UserEnricher(IHttpContextAccessor httpContextAccessor) : ILogEventE
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
         var httpContext = httpContextAccessor.HttpContext;
-        var userName = httpContext == null ? LogConstants.UserSystem : httpContext.GetUserName() ?? LogConstants.UserAnonymous;
+        var userName = httpContext == null ? UserSystem : httpContext.GetUserName() ?? UserAnonymous;
         var userNameProperty = new LogEventProperty(ClientUserPropertyName, new ScalarValue(userName));
 
         logEvent?.AddOrUpdateProperty(userNameProperty);

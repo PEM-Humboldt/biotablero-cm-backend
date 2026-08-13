@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -173,8 +174,10 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string reviewerUserName, bool userIsAdmin, InitiativeUserDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? reviewerUserName, bool userIsAdmin, InitiativeUserDto entityData, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(reviewerUserName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
@@ -263,8 +266,10 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAdmin, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
@@ -332,8 +337,10 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateFocusAreaAsync(int initiativeId, string userName, InitiativeUserDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateFocusAreaAsync(int initiativeId, string? userName, InitiativeUserDto entityData, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var entity = await entityRepository.GetByInitiativeAndUserNameAsync(initiativeId, userName, ct);
 
         if (entity == null)

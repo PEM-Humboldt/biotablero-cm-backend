@@ -82,8 +82,10 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetListAsync(int initiativeId, string? userName, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user level
         if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, false, ct))
         {
@@ -100,8 +102,10 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByUserNameAsync(string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var dataListEntity = await entityRepository.GetByUserNameAsync(userName, ct);
 
         var dataListDto = dataListEntity
@@ -223,7 +227,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
 
-        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, entityData.ReviewerUserName, false, ct))
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, entityData.ReviewerUserName!, false, ct))
         {
             return new(true)
             {
@@ -319,8 +323,10 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> CancelAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> CancelAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate entity
         var entity = await entityRepository.GetByIdAsync(id, ct);
 

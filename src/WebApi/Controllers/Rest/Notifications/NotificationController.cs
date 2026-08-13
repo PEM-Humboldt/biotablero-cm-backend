@@ -88,6 +88,7 @@ public class NotificationController(
     {
         var userName = HttpContext.GetUserName();
         var connectionId = Guid.NewGuid();
+        ArgumentException.ThrowIfNullOrEmpty(userName);
 
         Response.Headers.Append("Content-Type", "text/event-stream");
         Response.Headers.Append("Cache-Control", "no-cache");
