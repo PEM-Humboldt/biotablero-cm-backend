@@ -24,7 +24,7 @@ public class ReportDataDto() : IDto
     /// <summary>
     /// Creator user name.
     /// </summary>
-    public required string UserName { get; set; } = string.Empty;
+    public string? UserName { get; set; }
 
     /// <summary>
     /// Report generation description.
