@@ -32,7 +32,7 @@ public class JoinRequestValidator : AbstractValidator<JoinRequestDto>
             RuleFor(dto => dto.Level)
                 .ChildRules(level =>
                 {
-                    level.RuleFor(levelEnumDto => levelEnumDto != null ? levelEnumDto.Name : string.Empty)
+                    level.RuleFor(levelEnumDto => levelEnumDto!.Name)
                         .Must(levelName =>
                         {
                             if (Enum.TryParse(levelName, true, out InitiativeUserLevel userLevel))

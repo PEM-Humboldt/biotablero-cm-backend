@@ -223,7 +223,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
 
-        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, entityData.ReviewerUserName ?? string.Empty, false, ct))
+        if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, entityData.ReviewerUserName, false, ct))
         {
             return new(true)
             {
@@ -279,7 +279,7 @@ public class JoinRequestService : ServiceRead<JoinRequest, JoinRequestDto, int>,
         }
 
         // Update entity data
-        entity = await entityRepository.ReviewRequestAsync(id, entityData.ReviewerUserName ?? string.Empty, entityData.Status.Id, ct);
+        entity = await entityRepository.ReviewRequestAsync(id, entityData.ReviewerUserName, entityData.Status.Id, ct);
 
         if (entity == null)
         {

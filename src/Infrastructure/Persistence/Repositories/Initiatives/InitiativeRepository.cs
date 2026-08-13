@@ -70,11 +70,16 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default)
+    public async Task<bool> AuthorizedEntityModifyAsync(int id, string? userName, bool userIsAdmin, CancellationToken ct = default)
     {
         if (userIsAdmin)
         {
             return true;
+        }
+
+        if (string.IsNullOrEmpty(userName))
+        {
+            return false;
         }
 
         return await dbContext.Initiatives

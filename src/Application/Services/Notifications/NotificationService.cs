@@ -151,8 +151,6 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     /// <inheritdoc/>
     public async Task SendNotificationAsync(SendNotificationData notificationData, CancellationToken ct = default)
     {
-        ArgumentNullException.ThrowIfNull(notificationData.NotificationDto);
-
         // Build HTML body
         var htmlBody = string.Empty;
         if (!string.IsNullOrEmpty(notificationData.NotificationDto?.Properties?.TemplateName))
@@ -161,7 +159,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         }
 
         // Validate data
-        var validationResult = await entityValidator.ValidateAsync(notificationData.NotificationDto ?? new(), ct);
+        var validationResult = await entityValidator.ValidateAsync(notificationData.NotificationDto!, ct);
 
         if (!validationResult.IsValid)
         {
@@ -170,7 +168,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         }
 
         // Build entity data
-        var entity = mapper.Map(notificationData.NotificationDto ?? new());
+        var entity = mapper.Map(notificationData.NotificationDto!);
         entity.CreationDate = DateTimeOffset.UtcNow;
 
         // Save data
@@ -193,7 +191,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         }
 
         // Dispatch SSE Notification
-        await sseNotificationDispatcher.DispatchAsync(entity.Receiver, notificationData?.NotificationDto ?? new());
+        await sseNotificationDispatcher.DispatchAsync(entity.Receiver, notificationData?.NotificationDto!);
     }
 
     /// <summary>
