@@ -21,11 +21,10 @@ public static class LogUtils
     /// <param name="logLevel">System log level.</param>
     public static void AddLog(this ILogger logger, LogType logType, string shortMessage, string? messageTemplate = null, object? propertyValues = null, LogEventLevel logLevel = LogEventLevel.Information)
     {
-        string? finalMessageTemplate;
-
+        string finalMessageTemplate;
         if (string.IsNullOrEmpty(shortMessage))
         {
-            finalMessageTemplate = messageTemplate;
+            finalMessageTemplate = messageTemplate!;
         }
         else if (string.IsNullOrEmpty(messageTemplate))
         {
@@ -40,6 +39,6 @@ public static class LogUtils
             .ForContext("CustomRecord", true)
             .ForContext("Type", (int)logType)
             .ForContext("ShortMessage", shortMessage)
-            .Write(logLevel, finalMessageTemplate ?? string.Empty, propertyValues);
+            .Write(logLevel, finalMessageTemplate, propertyValues);
     }
 }

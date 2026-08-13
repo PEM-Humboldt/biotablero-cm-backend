@@ -110,9 +110,9 @@ public class IamService(
             var user = new ExternalUser
             {
                 Id = element.TryGetProperty("id", out var id) && id.ValueKind == JsonValueKind.String && Guid.TryParse(id.GetString(), out var guidId) ? guidId : Guid.Empty,
-                Email = element.TryGetProperty("email", out var email) && email.ValueKind == JsonValueKind.String ? email.GetString() ?? string.Empty : string.Empty,
+                Email = element.TryGetProperty("email", out var email) && email.ValueKind == JsonValueKind.String ? email.GetString()! : string.Empty,
                 EmailVerified = element.TryGetProperty("emailVerified", out var emailVerified) && emailVerified.ValueKind == JsonValueKind.True,
-                Username = element.TryGetProperty("username", out var username) && username.ValueKind == JsonValueKind.String ? username.GetString() ?? string.Empty : string.Empty,
+                Username = element.TryGetProperty("username", out var username) && username.ValueKind == JsonValueKind.String ? username.GetString()! : string.Empty,
                 FirstName = element.TryGetProperty("firstName", out var firstName) && firstName.ValueKind == JsonValueKind.String ? firstName.GetString() : null,
                 LastName = element.TryGetProperty("lastName", out var lastName) && lastName.ValueKind == JsonValueKind.String ? lastName.GetString() : null,
                 CreationDate = element.TryGetProperty("createdTimestamp", out var createdTs) && createdTs.ValueKind == JsonValueKind.Number ? DateTimeOffset.FromUnixTimeMilliseconds(createdTs.GetInt64()).UtcDateTime : null,
