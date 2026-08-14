@@ -21,12 +21,12 @@ public class IndicatorsImportRowValidator : AbstractValidator<IndicatorsImportRo
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.DepartmentName)
-            .NotNull()
+            .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)
             .MaximumLength(80);
 
         RuleFor(dto => dto.MunicipalityName)
-            .NotNull()
+            .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)
             .MaximumLength(80)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
@@ -36,7 +36,7 @@ public class IndicatorsImportRowValidator : AbstractValidator<IndicatorsImportRo
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Year)
-            .NotNull()
+            .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)
             .MaximumLength(4)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength)
@@ -44,7 +44,7 @@ public class IndicatorsImportRowValidator : AbstractValidator<IndicatorsImportRo
                 .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue);
 
         RuleFor(dto => dto.Month)
-            .NotNull()
+            .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)
             .MaximumLength(2)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength)
@@ -70,7 +70,7 @@ public class IndicatorsImportRowValidator : AbstractValidator<IndicatorsImportRo
         });
 
         RuleFor(dto => dto.UpperGroupName)
-            .NotNull()
+            .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)
             .MaximumLength(70)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);

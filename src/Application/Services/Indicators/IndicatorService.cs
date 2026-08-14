@@ -446,7 +446,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
-                        Message = $"Errors in row {row.RowNumber}. Original type id: {indicator.Id}, Spreadsheet type id: {row.IndicatorTypeId}",
+                        Message = $"Errors in row {row.RowNumber}. Original type id: {indicator.IndicatorTypeId}, Spreadsheet type id: {row.IndicatorTypeId}",
                     };
                 }
 
