@@ -45,7 +45,7 @@ public class JoinInvitationMappings(
             Message = dto.Message,
             HtmlMessage = dto.HtmlMessage,
             CreationDate = dto.CreationDate ?? DateTimeOffset.UtcNow,
-            Guests = [.. dto.Guests?.Select(joinInvitationGuestMappings.Map)],
+            Guests = dto.Guests?.Select(joinInvitationGuestMappings.Map).ToList(),
         };
     }
 }
