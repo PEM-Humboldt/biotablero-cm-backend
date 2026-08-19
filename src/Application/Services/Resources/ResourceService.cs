@@ -420,6 +420,11 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
             .Select(e => new CustomEmailAddress(e.FullName, e.Email))
             .ToArray();
 
+        if (!(receivers.Length > 0))
+        {
+            return true;
+        }
+
         var notificationData = new SendNotificationData()
         {
             NotificationDto = new()
