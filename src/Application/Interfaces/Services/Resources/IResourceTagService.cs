@@ -18,7 +18,7 @@ public interface IResourceTagService
     /// <param name="tagId">Tag identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> AddAsync(string userName, int resourceId, int tagId, CancellationToken ct = default);
+    Task<CustomWebResponse> AddAsync(string? userName, int resourceId, int tagId, CancellationToken ct = default);
 
     /// <summary>
     /// Delete element.
@@ -27,5 +27,5 @@ public interface IResourceTagService
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default);
 }

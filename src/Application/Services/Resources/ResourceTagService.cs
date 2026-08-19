@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Resources;
 
+using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -61,8 +62,10 @@ public class ResourceTagService : IResourceTagService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(string userName, int resourceId, int tagId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string? userName, int resourceId, int tagId, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
 
@@ -130,8 +133,10 @@ public class ResourceTagService : IResourceTagService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
