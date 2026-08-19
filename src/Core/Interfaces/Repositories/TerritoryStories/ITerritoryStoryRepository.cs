@@ -19,7 +19,7 @@ public interface ITerritoryStoryRepository : IRepository<TerritoryStory, int>
     /// <param name="query">Linq Query.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Custom query.</returns>
-    Task<IQueryable<TerritoryStory>> GetQueryWithInitiativeAndUserNameAsync(int initiativeId, string userName, IQueryable<TerritoryStory> query, CancellationToken ct = default);
+    Task<IQueryable<TerritoryStory>> GetQueryWithInitiativeAndUserNameAsync(int initiativeId, string? userName, IQueryable<TerritoryStory> query, CancellationToken ct = default);
 
     /// <summary>
     /// Check authorized entity reading.
@@ -28,7 +28,7 @@ public interface ITerritoryStoryRepository : IRepository<TerritoryStory, int>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if the reading is authorized. False otherwise.</returns>
-    Task<bool> AuthorizedEntityReadAsync(int id, string userName, CancellationToken ct = default);
+    Task<bool> AuthorizedEntityReadAsync(int id, string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Check authorized entity modification.

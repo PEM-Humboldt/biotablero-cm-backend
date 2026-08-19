@@ -37,7 +37,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<IQueryable<TerritoryStory>> GetQueryWithInitiativeAndUserNameAsync(int initiativeId, string userName, IQueryable<TerritoryStory> query, CancellationToken ct = default)
+    public async Task<IQueryable<TerritoryStory>> GetQueryWithInitiativeAndUserNameAsync(int initiativeId, string? userName, IQueryable<TerritoryStory> query, CancellationToken ct = default)
     {
         var userBelongsToInitiative = await dbContext.InitiativeUsers
             .Where(e => e.UserName == userName && e.InitiativeId == initiativeId)
@@ -54,7 +54,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     }
 
     /// <inheritdoc/>
-    public async Task<bool> AuthorizedEntityReadAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<bool> AuthorizedEntityReadAsync(int id, string? userName, CancellationToken ct = default)
     {
         var userBelongsToInitiative = await dbContext.InitiativeUsers
             .Include(e => e.Initiative)
