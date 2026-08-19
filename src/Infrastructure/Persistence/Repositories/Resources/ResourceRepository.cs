@@ -35,14 +35,14 @@ public class ResourceRepository : Repository<Resource, int>, IResourceRepository
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public IQueryable<Resource> GetQueryByUserName(string userName, IQueryable<Resource> query) =>
+    public IQueryable<Resource> GetQueryByUserName(string? userName, IQueryable<Resource> query) =>
         IncludeCustomEntities(query)
             .Include(e => e.Initiative)
                 .ThenInclude(e => e!.InitiativeUsers)
             .Where(e => !e.IsDraft || e.Initiative!.InitiativeUsers!.Any(e => e.UserName == userName));
 
     /// <inheritdoc/>
-    public async Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default) =>
+    public async Task<bool> AuthorizedEntityModifyAsync(int id, string? userName, CancellationToken ct = default) =>
         await dbContext.Resources
             .Include(e => e.Initiative)
                 .ThenInclude(e => e!.InitiativeUsers)

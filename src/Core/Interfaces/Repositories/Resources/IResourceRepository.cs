@@ -17,7 +17,7 @@ public interface IResourceRepository : IRepository<Resource, int>
     /// <param name="userName">User name.</param>
     /// <param name="query">Linq Query.</param>
     /// <returns>Custom query.</returns>
-    IQueryable<Resource> GetQueryByUserName(string userName, IQueryable<Resource> query);
+    IQueryable<Resource> GetQueryByUserName(string? userName, IQueryable<Resource> query);
 
     /// <summary>
     /// Check authorized entity modification.
@@ -26,7 +26,7 @@ public interface IResourceRepository : IRepository<Resource, int>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if the modification is authorized. False otherwise.</returns>
-    Task<bool> AuthorizedEntityModifyAsync(int id, string userName, CancellationToken ct = default);
+    Task<bool> AuthorizedEntityModifyAsync(int id, string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Check if element is duplicated.

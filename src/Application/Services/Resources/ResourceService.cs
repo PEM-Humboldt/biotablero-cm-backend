@@ -90,8 +90,6 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default)
     {
-        ArgumentException.ThrowIfNullOrEmpty(userName);
-
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -130,8 +128,6 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetListAsync(string? userName, ODataQueryOptions<Resource> queryOptions, CancellationToken ct = default)
     {
-        ArgumentException.ThrowIfNullOrEmpty(userName);
-
         var query = entityRepository.GetQueryable();
         query = entityRepository.GetQueryByUserName(userName, query);
 
