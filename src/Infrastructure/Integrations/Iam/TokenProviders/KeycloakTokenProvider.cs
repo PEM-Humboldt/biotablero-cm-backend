@@ -10,6 +10,8 @@ using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 
 using Microsoft.Extensions.Caching.Memory;
 
+using Serilog;
+
 /// <summary>
 /// Keycloak token provider.
 /// </summary>
@@ -22,10 +24,12 @@ public class KeycloakTokenProvider : BaseKeycloakTokenProvider, IKeycloakTokenPr
     /// </summary>
     /// <param name="httpClient">HTTP Client.</param>
     /// <param name="cache">Local cache.</param>
+    /// <param name="logger">System logger.</param>
     public KeycloakTokenProvider(
         HttpClient httpClient,
-        IMemoryCache cache)
-        : base(httpClient, cache)
+        IMemoryCache cache,
+        ILogger logger)
+        : base(httpClient, cache, logger)
     {
         options = new()
         {

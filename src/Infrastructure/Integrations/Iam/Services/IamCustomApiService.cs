@@ -25,12 +25,11 @@ ICustomApiKeycloakTokenProvider tokenProvider, ILogger logger) : IIamCustomApiSe
     /// <inheritdoc/>
     public async Task<List<ExternalUser>> GetUsersDataAsync(string query, CancellationToken ct = default)
     {
-        var token = await tokenProvider.GetTokenAsync(ct);
-
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
         try
         {
+            var token = await tokenProvider.GetTokenAsync(ct);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             var response = await httpClient.GetAsync(query, ct);
             response.EnsureSuccessStatusCode();
 
