@@ -31,9 +31,8 @@ public static class ConfigLogProperties
     /// System log configuration.
     /// </summary>
     /// <param name="host">Host builder.</param>
-    /// <param name="services">Application services.</param>
     /// <returns>Host builder configuration.</returns>
-    public static ConfigureHostBuilder AddLogConfig(this ConfigureHostBuilder host, IServiceCollection services)
+    public static ConfigureHostBuilder AddLogConfig(this ConfigureHostBuilder host)
     {
         var columnWriters = new Dictionary<string, ColumnWriterBase>
         {
@@ -63,25 +62,32 @@ public static class ConfigLogProperties
                     .Enrich.With(new ClientIpEnricher())
                     .Enrich.With(new ClientHeaderEnricher("User-Agent", "ClientAgent"))
                     .ReadFrom.Configuration(context.Configuration)
+
+                    // Discard SQL Command logs
+                    .Filter.ByExcluding(
+                        e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
+                            .Contains("Microsoft.EntityFrameworkCore.Database.Command", StringComparison.CurrentCultureIgnoreCase))
+
+                    // Discard HTTP Requests logs
+                    .Filter.ByExcluding(
+                        e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
+                            .Contains("Serilog.AspNetCore.RequestLoggingMiddleware", StringComparison.CurrentCultureIgnoreCase))
+                    .Filter.ByExcluding(
+                        e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
+                            .Contains("Microsoft.AspNetCore", StringComparison.CurrentCultureIgnoreCase))
+
                     .WriteTo.Logger(lc => lc
-
-                        // Discard SQL Command logs
-                        .Filter.ByExcluding(
-                            e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
-                                .Contains("Microsoft.EntityFrameworkCore.Database.Command", StringComparison.CurrentCultureIgnoreCase))
-
-                        // Discard HTTP Requests logs
-                        .Filter.ByExcluding(
-                            e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
-                                .Contains("Serilog.AspNetCore.RequestLoggingMiddleware", StringComparison.CurrentCultureIgnoreCase))
-
                         .WriteTo.PostgreSQL(
                             connectionString: Environment.GetEnvironmentVariable("CS_MAIN"),
                             schemaName: LogConstants.DefaultSchemaName,
                             tableName: LogConstants.DefaultTableName,
                             needAutoCreateTable: false,
                             columnOptions: columnWriters,
-                            formatProvider: CultureInfo.CurrentCulture));
+                            formatProvider: CultureInfo.CurrentCulture))
+
+                        .WriteTo.Console(
+                            outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] [{Id}] {Message:lj}{NewLine}",
+                            formatProvider: CultureInfo.CurrentCulture);
             });
 
         return host;

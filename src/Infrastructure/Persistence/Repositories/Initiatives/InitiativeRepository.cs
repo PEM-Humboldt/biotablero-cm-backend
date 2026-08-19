@@ -38,12 +38,12 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     public async Task<Initiative> GetByIdAsync(int id, bool userIsAuthenticated, CancellationToken ct = default)
     {
         IQueryable<Initiative> query = dbContext.Initiatives
-                    .Include(e => e.InitiativeUsers)
-                    .Include(e => e.InitiativeLocations)
-                        .ThenInclude(e => e.Location)
-                            .ThenInclude(e => e.Parent)
-                    .Include(e => e.InitiativeTags)
-                        .ThenInclude(e => e.Tag);
+            .Include(e => e.InitiativeUsers)
+            .Include(e => e.InitiativeLocations)
+                .ThenInclude(e => e.Location)
+                    .ThenInclude(e => e.Parent)
+            .Include(e => e.InitiativeTags)
+                .ThenInclude(e => e.Tag);
 
         if (userIsAuthenticated)
         {
