@@ -67,6 +67,8 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entityExists = await entityRepository.AnyAsync(id, ct);
 
