@@ -1,8 +1,8 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Config.Entities;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Config.Entities;
 
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
-using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Config.General;
-using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Interfaces;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Config.General;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Interfaces;
 
 /// <summary>
 /// Log report configuration.

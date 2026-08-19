@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Config.General;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Config.General;
 
 using System;
 using System.Collections.Generic;

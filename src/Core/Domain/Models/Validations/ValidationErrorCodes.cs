@@ -431,4 +431,80 @@ public static class ValidationErrorCodes
         /// </summary>
         public const string Invalid = "USR_001";
     }
+
+    /// <summary>
+    /// Indicators errors.
+    /// </summary>
+    public static class Indicators
+    {
+        /// <summary>
+        /// Entity not found.
+        /// </summary>
+        public const string NotFound = "IND_001";
+
+        /// <summary>
+        /// Only one indicator is required.
+        /// </summary>
+        public const string OnlyOneIndicatorRequired = "IND_002";
+
+        /// <summary>
+        /// Upper ground not found.
+        /// </summary>
+        public const string UpperGroupNotFound = "IND_003";
+
+        /// <summary>
+        /// Group and description required.
+        /// </summary>
+        public const string GroupAndDescriptionRequired = "IND_004";
+
+        /// <summary>
+        /// Confidence interval required.
+        /// </summary>
+        public const string ConfidenceIntervalRequired = "IND_005";
+
+        /// <summary>
+        /// Invalid confidence interval.
+        /// </summary>
+        public const string InvalidConfidenceInterval = "IND_006";
+
+        /// <summary>
+        /// Invalid indicator type.
+        /// </summary>
+        public const string InvalidIndicatorType = "IND_007";
+
+        /// <summary>
+        /// Invalid measure unit.
+        /// </summary>
+        public const string InvalidMeasureUnit = "IND_008";
+
+        /// <summary>
+        /// Location not found.
+        /// </summary>
+        public const string LocationNotFound = "IND_009";
+
+        /// <summary>
+        /// Final date required.
+        /// </summary>
+        public const string FinalDateRequired = "IND_010";
+
+        /// <summary>
+        /// Final date not required.
+        /// </summary>
+        public const string FinalDateNotRequired = "IND_011";
+
+        /// <summary>
+        /// Invalid date range.
+        /// </summary>
+        public const string InvalidDateRange = "IND_012";
+
+        /// <summary>
+        /// Category not found.
+        /// </summary>
+        public const string CategoryNotFound = "IND_013";
+
+        /// <summary>
+        /// Invalid location data.
+        /// </summary>
+        public const string InvalidLocationData = "IND_014";
+    }
 }

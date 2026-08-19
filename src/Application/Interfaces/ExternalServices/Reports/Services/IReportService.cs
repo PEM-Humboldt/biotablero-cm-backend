@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Reports;
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Reports.Services;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 

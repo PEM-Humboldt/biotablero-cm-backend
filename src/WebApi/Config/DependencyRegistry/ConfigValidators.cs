@@ -2,6 +2,7 @@
 
 using FluentValidation;
 
+using IAVH.BioTablero.CM.Application.Validators.Indicators;
 using IAVH.BioTablero.CM.Application.Validators.Initiatives;
 using IAVH.BioTablero.CM.Application.Validators.Notifications;
 using IAVH.BioTablero.CM.Application.Validators.Resources;
@@ -35,6 +36,7 @@ public static class ConfigValidators
         services.AddValidatorsFromAssemblyContaining<ResourceFileValidator>();
         services.AddValidatorsFromAssemblyContaining<ResourceLinkValidator>();
         services.AddValidatorsFromAssemblyContaining<NotificationValidator>();
+        services.AddValidatorsFromAssemblyContaining<IndicatorsImportRowValidator>();
 
         return services;
     }

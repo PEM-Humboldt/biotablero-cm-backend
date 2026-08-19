@@ -10,7 +10,8 @@ using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Email;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Iam;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.ImageUtils;
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Reports;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Reports.Services;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Spreadsheets.Services;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Storage;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Video;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Web;
@@ -27,9 +28,9 @@ using IAVH.BioTablero.CM.Infrastructure.Integrations.Email;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam.Services;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Iam.TokenProviders;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.ImageUtils;
-using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports;
-using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Config.Entities;
-using IAVH.BioTablero.CM.Infrastructure.Integrations.Reports.Interfaces;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Config.Entities;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Interfaces;
+using IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Services;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Video;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Web;
@@ -96,6 +97,8 @@ public static class ConfigExternalServices
         //// Indicators
         services.AddScoped<IIndicatorRepository, IndicatorRepository>();
         services.AddScoped<IIndicatorVersionRepository, IndicatorVersionRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IIndicatorLocationRepository, IndicatorLocationRepository>();
 
         //// Reports
         services.AddScoped<IGeneralStatsRepository, GeneralStatsRepository>();
@@ -117,6 +120,7 @@ public static class ConfigExternalServices
 
         services.AddSingleton<IEmailService, EmailService>();
         services.AddScoped<IReportConfig<LogDto>, LogReportConfig>();
+        services.AddScoped<IIndicatorExcelService, IndicatorExcelService>();
         services.AddScoped<IVideoHelperService, VideoHelperService>();
         services.AddScoped<IImageUtilsService, ImageUtilsService>();
         services.AddScoped<IWebHelperService, WebHelperService>();

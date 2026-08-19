@@ -51,6 +51,11 @@ public class IndicatorVersion : BaseEntity<int>, IAggregateRoot
     public string Authorship { get; set; }
 
     /// <summary>
+    /// Indicator Type identifier.
+    /// </summary>
+    public int? IndicatorTypeId { get; set; }
+
+    /// <summary>
     /// Indicator relationship.
     /// </summary>
     public Indicator Indicator { get; set; }

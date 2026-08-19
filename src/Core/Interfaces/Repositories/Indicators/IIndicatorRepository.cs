@@ -41,5 +41,5 @@ public interface IIndicatorRepository : IRepository<Indicator, int>
     /// <param name="id">Indicator identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<int[]> GetVersions(int id, CancellationToken ct = default);
+    Task<int[]> GetVersionsAsync(int id, CancellationToken ct = default);
 }

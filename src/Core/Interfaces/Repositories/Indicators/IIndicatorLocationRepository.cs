@@ -1,20 +1,21 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
 
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Indicator Version repository interface.
+/// Indicator Location repository interface.
 /// </summary>
-public interface IIndicatorVersionRepository : IRepository<IndicatorVersion, int>
+public interface IIndicatorLocationRepository : IRepository<IndicatorLocation, int>
 {
     /// <summary>
-    /// Get last version number.
+    /// Get elements by indicator identifier.
     /// </summary>
     /// <param name="indicatorId">Indicator identifier.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>The last version for the specified indicator.</returns>
-    Task<int> GetLastVersionAsync(int indicatorId, CancellationToken ct = default);
+    /// <returns>Entities by selected indicator.</returns>
+    Task<List<IndicatorLocation>> GetByIndicatorAsync(int indicatorId, CancellationToken ct = default);
 }

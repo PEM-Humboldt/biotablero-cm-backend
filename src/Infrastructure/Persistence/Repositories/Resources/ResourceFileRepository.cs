@@ -140,7 +140,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
     private async Task UploadAndSetFileAsync(
         ResourceFile entity,
         IInputFile inputFile,
-        CancellationToken ct)
+        CancellationToken ct = default)
     {
         var fileName = $"{StoragePrefix}/{entity.Id}{inputFile.Extension.ToLower(CultureInfo.CurrentCulture)}";
         var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");

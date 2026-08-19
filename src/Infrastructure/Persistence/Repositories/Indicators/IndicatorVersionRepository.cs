@@ -42,4 +42,12 @@ public class IndicatorVersionRepository : Repository<IndicatorVersion, int>, IIn
                     .ThenInclude(e => e.Parent)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<int> GetLastVersionAsync(int indicatorId, CancellationToken ct = default) =>
+        await dbContext.IndicatorVersions
+            .Where(e => e.IndicatorId == indicatorId)
+            .OrderByDescending(e => e.Version)
+            .Select(e => e.Version)
+            .FirstOrDefaultAsync(ct);
 }
