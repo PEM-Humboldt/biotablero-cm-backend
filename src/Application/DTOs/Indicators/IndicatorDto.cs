@@ -24,7 +24,7 @@ public class IndicatorDto() : IDto
     /// <summary>
     /// Initiative identifier.
     /// </summary>
-    public int InitiativeId { get; set; }
+    public int? InitiativeId { get; set; }
 
     /// <summary>
     /// Initiative name.
