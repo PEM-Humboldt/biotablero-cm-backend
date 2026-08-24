@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 /// <summary>
 /// Indicator service interface.
 /// </summary>
-public interface IIndicatorService : IRead<Indicator, int>
+public interface IIndicatorService : IRead<Indicator, int>, IUpdate<IndicatorDto, int>
 {
     /// <summary>
     /// Get entities by initiative.

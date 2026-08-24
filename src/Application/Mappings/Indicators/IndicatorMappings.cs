@@ -14,7 +14,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 public class IndicatorMappings(
     IMapperRead<IndicatorTag, IndicatorTagDto> indicatorTagMappings,
     IMapperRead<IndicatorType, IndicatorTypeDto> indicatorTypeMappings,
-    IMapperRead<IndicatorLocation, IndicatorLocationDto> indicatorLocationMappings) : MapperRead<Indicator, IndicatorDto>
+    IMapperRead<IndicatorLocation, IndicatorLocationDto> indicatorLocationMappings) : MapperRead<Indicator, IndicatorDto>, IMapperReadAndUpdate<Indicator, IndicatorDto>
 {
     /// <inheritdoc/>
     public override IndicatorDto Map(Indicator? entity)
@@ -39,5 +39,14 @@ public class IndicatorMappings(
                 })
                 .ToList(),
         };
+    }
+
+    /// <inheritdoc/>
+    public void Update(Indicator entity, IndicatorDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.Name = dto.Name;
     }
 }
