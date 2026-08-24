@@ -38,6 +38,8 @@ public static class ConfigValidators
         services.AddValidatorsFromAssemblyContaining<ResourceLinkValidator>();
         services.AddValidatorsFromAssemblyContaining<NotificationValidator>();
         services.AddValidatorsFromAssemblyContaining<IndicatorsImportRowValidator>();
+        services.AddValidatorsFromAssemblyContaining<IndicatorValidator>();
+        services.AddValidatorsFromAssemblyContaining<IndicatorVersionValidator>();
         services.AddValidatorsFromAssemblyContaining<ReportDataValidator>();
 
         return services;

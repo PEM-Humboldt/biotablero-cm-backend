@@ -53,7 +53,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     private readonly ICategoryRepository categoryRepository;
     private readonly IIndicatorLocationRepository indicatorLocationRepository;
     private readonly IValidator<IndicatorsImportRow> indicatorsImportRowValidator;
-    private readonly IMapperRead<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper;
+    private readonly IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper;
 
     /// <summary>
     /// Constructor.
@@ -84,7 +84,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         ICategoryRepository categoryRepository,
         IIndicatorLocationRepository indicatorLocationRepository,
         IValidator<IndicatorsImportRow> indicatorsImportRowValidator,
-        IMapperRead<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper)
+        IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper)
     : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
