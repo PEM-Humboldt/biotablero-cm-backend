@@ -31,7 +31,7 @@ public class InitiativeTagRepository : Repository<InitiativeTag, int>, IInitiati
     /// <inheritdoc/>
     public override async Task<InitiativeTag?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.InitiativeTags
-                .Include(e => e.Tag)
+            .Include(e => e.Tag)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
