@@ -29,7 +29,7 @@ public class IamService(
     /// <inheritdoc/>
     public async Task<bool> UserExistsAsync(string username, CancellationToken ct = default)
     {
-        var user = await GetKeycloakUserDataAsync(UserVariable.Username, username, ct);
+        var user = await GetUserDataAsync(username, ct);
         return user != null;
     }
 
@@ -40,6 +40,23 @@ public class IamService(
     /// <inheritdoc/>
     public async Task<IEnumerable<ExternalUser>> GetUsersDataAsync(string[] usernames, CancellationToken ct = default)
     {
+        if (usernames.Length == 0)
+        {
+            return [];
+        }
+
+        if (usernames.Length == 1)
+        {
+            var userData = await GetUserDataAsync(usernames[0], ct);
+
+            if (userData != null)
+            {
+                return [userData];
+            }
+
+            return [];
+        }
+
         var stringsWithQuotes = usernames.Select(s => $"'{s}'");
         var query = $"User?$filter=Username in ({string.Join(",", stringsWithQuotes)})";
         return await customApiService.GetUsersDataAsync(query, ct);

@@ -33,7 +33,7 @@ public class TerritoryStoryVideoRepository : Repository<TerritoryStoryVideo, int
     }
 
     /// <inheritdoc/>
-    public async Task<bool> AuthorizedEntityReadAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<bool> AuthorizedEntityReadAsync(int id, string? userName, CancellationToken ct = default)
     {
         var initiative = await dbContext.Initiatives
             .Include(e => e.InitiativeUsers)

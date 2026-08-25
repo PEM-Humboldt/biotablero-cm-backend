@@ -12,14 +12,18 @@ using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 
 using Microsoft.Extensions.Caching.Memory;
 
+using Serilog;
+
 /// <summary>
 /// Base class for Keycloak token providers.
 /// </summary>
 /// <param name="httpClient">HTTP Client.</param>
 /// <param name="cache">Local cache.</param>
+/// <param name="logger">System logger.</param>
 public abstract class BaseKeycloakTokenProvider(
     HttpClient httpClient,
-    IMemoryCache cache)
+    IMemoryCache cache,
+    ILogger logger)
 {
     private const string CacheKeyPrefix = "KEYCLOAK_TOKEN";
     private static readonly ConcurrentDictionary<string, SemaphoreSlim> Locks = new();
@@ -81,6 +85,11 @@ public abstract class BaseKeycloakTokenProvider(
                 TimeSpan.FromSeconds(tokenResponse.ExpiresIn - 30));
 
             return token;
+        }
+        catch (HttpRequestException ex)
+        {
+            logger.Error(ex, "Http request error while get keycloak token.");
+            throw;
         }
         finally
         {
