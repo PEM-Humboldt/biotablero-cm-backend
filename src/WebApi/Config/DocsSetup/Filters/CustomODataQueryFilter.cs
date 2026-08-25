@@ -4,149 +4,165 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Nodes;
+using System.Threading;
+using System.Threading.Tasks;
 
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 
-using Swashbuckle.AspNetCore.SwaggerGen;
-
 /// <summary>
-/// Custom ODataQuery filter for Swashbuckle.
+/// Custom OpenAPI transformer for OData query options.
 /// </summary>
-public class CustomODataQueryFilter : IOperationFilter
+public sealed class CustomODataQueryFilter : IOpenApiOperationTransformer
 {
     /// <summary>
-    /// Apply custom Swashbuckle settings.
+    /// Transforms an OpenAPI operation to customize OData query parameters
+    /// and responses.
     /// </summary>
-    /// <param name="operation">OpenAPi operation.</param>
-    /// <param name="context">Swashbuckle operation filter context.</param>
-    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+    /// <param name="operation">OpenAPI operation.</param>
+    /// <param name="context">OpenAPI operation transformer context.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    public Task TransformAsync(
+        OpenApiOperation operation,
+        OpenApiOperationTransformerContext context,
+        CancellationToken cancellationToken)
     {
-        // Remove odata params
-        var odataParams = context.ApiDescription.ParameterDescriptions
-            .Where(p => p.Type.IsGenericType && p.Type.GetGenericTypeDefinition() == typeof(ODataQueryOptions<>))
-            .ToList() ?? [];
-
-        if (operation.Parameters != null)
+        if (context.Description.ActionDescriptor is not ControllerActionDescriptor controllerAction)
         {
-            foreach (var param in odataParams)
+            return Task.CompletedTask;
+        }
+
+        var methodInfo = controllerAction.MethodInfo;
+
+        var isOdataEndpoint = methodInfo
+            .GetParameters()
+            .Any(p =>
+                p.ParameterType.IsGenericType &&
+                p.ParameterType.GetGenericTypeDefinition() == typeof(ODataQueryOptions<>));
+
+        if (!isOdataEndpoint)
+        {
+            return Task.CompletedTask;
+        }
+
+        var isReportEndpoint = methodInfo.Name.Contains("Report", StringComparison.InvariantCultureIgnoreCase);
+
+        if (isReportEndpoint)
+        {
+            return Task.CompletedTask;
+        }
+
+        // Remove automatically generated OData parameters.
+        if (operation.Parameters is not null)
+        {
+            var parametersToRemove = operation.Parameters
+                .Where(p =>
+                    p.Name is "$filter" or "$orderby" or "$top" or "$skip")
+                .ToList();
+
+            foreach (var parameter in parametersToRemove)
             {
-                var toRemove = operation.Parameters
-                    .FirstOrDefault(p => p.Name == param.Name);
-                if (toRemove != null)
-                {
-                    operation.Parameters.Remove(toRemove);
-                }
+                operation.Parameters.Remove(parameter);
             }
         }
 
-        var isOdataEndpoint = context.MethodInfo.GetParameters()
-            .Any(p => p.ParameterType.IsGenericType &&
-                      p.ParameterType.GetGenericTypeDefinition() == typeof(ODataQueryOptions<>));
+        operation.Parameters ??= [];
 
-        var isReportEndpoint = context.MethodInfo.Name
-            .Contains("Report", StringComparison.InvariantCultureIgnoreCase);
-
-        if (isOdataEndpoint && !isReportEndpoint)
+        // $filter
+        operation.Parameters.Add(new OpenApiParameter
         {
-            operation.Parameters ??= [];
+            Name = "$filter",
+            In = ParameterLocation.Query,
+            Description = "OData filter expression",
+            Required = false,
+            Schema = new OpenApiSchema
+            {
+                Type = JsonSchemaType.String,
+            },
+        });
 
-            // Add custom params
-            operation.Parameters.Add(new OpenApiParameter
+        // $orderby
+        operation.Parameters.Add(new OpenApiParameter
+        {
+            Name = "$orderby",
+            In = ParameterLocation.Query,
+            Description = "OData 'order by' expression",
+            Required = false,
+            Schema = new OpenApiSchema
             {
-                Name = "$filter",
-                In = ParameterLocation.Query,
-                Description = "OData filter expression",
-                Required = false,
-                Schema = new OpenApiSchema { Type = JsonSchemaType.String },
-            });
+                Type = JsonSchemaType.String,
+            },
+        });
 
-            operation.Parameters.Add(new OpenApiParameter
+        // $top
+        operation.Parameters.Add(new OpenApiParameter
+        {
+            Name = "$top",
+            In = ParameterLocation.Query,
+            Description = "OData top count",
+            Required = false,
+            Schema = new OpenApiSchema
             {
-                Name = "$orderby",
-                In = ParameterLocation.Query,
-                Description = "OData 'order by' expression",
-                Required = false,
-                Schema = new OpenApiSchema { Type = JsonSchemaType.String },
-            });
+                Type = JsonSchemaType.Integer,
+                Format = "int32",
+            },
+        });
 
-            operation.Parameters.Add(new OpenApiParameter
+        // $skip
+        operation.Parameters.Add(new OpenApiParameter
+        {
+            Name = "$skip",
+            In = ParameterLocation.Query,
+            Description = "OData skip count",
+            Required = false,
+            Schema = new OpenApiSchema
             {
-                Name = "$top",
-                In = ParameterLocation.Query,
-                Description = "OData top count",
-                Required = false,
-                Schema = new OpenApiSchema { Type = JsonSchemaType.Integer, Format = "int32" },
-            });
+                Type = JsonSchemaType.Integer,
+                Format = "int32",
+            },
+        });
 
-            operation.Parameters.Add(new OpenApiParameter
-            {
-                Name = "$skip",
-                In = ParameterLocation.Query,
-                Description = "OData skip count",
-                Required = false,
-                Schema = new OpenApiSchema { Type = JsonSchemaType.Integer, Format = "int32" },
-            });
+        // Custom OData response.
+        operation.Responses ??= [];
 
-            // Add custom response
-            IOpenApiSchema schema;
-            if (context.SchemaRepository.TryLookupByType(typeof(Dictionary<string, object>), out var refSchema))
+        operation.Responses.Remove("200");
+
+        operation.Responses["200"] = new OpenApiResponse
+        {
+            Description = "OK",
+            Content = new Dictionary<string, OpenApiMediaType>
             {
-                schema = refSchema;
-            }
-            else
-            {
-                var generatedSchema = context.SchemaGenerator.GenerateSchema(typeof(Dictionary<string, object>), context.SchemaRepository);
-                if (generatedSchema is OpenApiSchema openApiSchema)
+                ["application/json"] = new OpenApiMediaType
                 {
-                    openApiSchema.AdditionalPropertiesAllowed = false;
-                    openApiSchema.Properties = new Dictionary<string, IOpenApiSchema>
+                    Schema = new OpenApiSchema
                     {
+                        Type = JsonSchemaType.Object,
+                        Properties = new Dictionary<string, IOpenApiSchema>
                         {
-                            "@odata.count",
-                            new OpenApiSchema
+                            ["@odata.count"] = new OpenApiSchema
                             {
                                 Type = JsonSchemaType.Integer,
                                 Format = "int32",
                                 Default = JsonValue.Create(1),
-                            }
-                        },
-                        {
-                            "value",
-                            new OpenApiSchema
+                            },
+                            ["value"] = new OpenApiSchema
                             {
                                 Type = JsonSchemaType.Array,
                                 Items = new OpenApiSchema
                                 {
                                     Type = JsonSchemaType.Object,
-                                    Default = JsonNode.Parse("{\"id\":1,\"name\":\"string\"}"),
+                                    Default = JsonNode.Parse("""{"id":1,"name":"string"}"""),
                                 },
-                            }
+                            },
                         },
-                    };
-                    schema = openApiSchema;
-                }
-                else
-                {
-                    schema = generatedSchema;
-                }
-            }
-
-            var content = new Dictionary<string, OpenApiMediaType>
-            {
-                {
-                    "application/json",
-                    new OpenApiMediaType
-                    {
-                        Schema = schema,
-                    }
+                    },
                 },
-            };
+            },
+        };
 
-            operation.Responses ??= [];
-            operation.Responses.Remove($"{StatusCodes.Status200OK}");
-            operation.Responses.Add($"{StatusCodes.Status200OK}", new OpenApiResponse { Content = content });
-        }
+        return Task.CompletedTask;
     }
 }
