@@ -2,11 +2,11 @@
 
 Backend for BioTablero's Community Monitoring module.
 
-Built with .NET 8.0.
+Built with .NET 10.0.
 
 ## Requirements
 
-* [.NET 8.0 (SDK)](https://dotnet.microsoft.com/en-us/download)
+* [.NET 10.0 (SDK)](https://dotnet.microsoft.com/en-us/download)
 
 ## Getting Started
 
