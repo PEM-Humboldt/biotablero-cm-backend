@@ -28,7 +28,7 @@ public class IndicatorVersionDto : IDto
     /// <summary>
     /// Version number.
     /// </summary>
-    public int Version { get; set; }
+    public int? Version { get; set; }
 
     /// <summary>
     /// Indicator description.
