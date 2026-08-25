@@ -8,7 +8,7 @@ public class UserProfile
     /// <summary>
     /// User name.
     /// </summary>
-    public string Username { get; set; }
+    public required string Username { get; set; }
 
     /// <summary>
     /// Total initiatives.

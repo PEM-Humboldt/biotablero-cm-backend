@@ -25,7 +25,7 @@ public interface IIamService
     /// <param name="username">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>User data.</returns>
-    Task<ExternalUser> GetUserDataAsync(string username, CancellationToken ct = default);
+    Task<ExternalUser?> GetUserDataAsync(string username, CancellationToken ct = default);
 
     /// <summary>
     /// Get users data.

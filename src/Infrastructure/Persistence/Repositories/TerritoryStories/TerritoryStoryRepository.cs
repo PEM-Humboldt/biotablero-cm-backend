@@ -31,7 +31,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     }
 
     /// <inheritdoc/>
-    public override async Task<TerritoryStory> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<TerritoryStory?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await IncludeCustomEntities()
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
@@ -58,8 +58,8 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     {
         var userBelongsToInitiative = await dbContext.InitiativeUsers
             .Include(e => e.Initiative)
-                .ThenInclude(e => e.TerritoryStories)
-            .Where(e => e.UserName == userName && e.Initiative.TerritoryStories.Any(e => e.Id == id))
+                .ThenInclude(e => e!.TerritoryStories)
+            .Where(e => e.UserName == userName && e.Initiative!.TerritoryStories!.Any(e => e.Id == id))
             .AnyAsync(ct);
 
         if (userBelongsToInitiative)
@@ -82,10 +82,10 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
                 .FirstOrDefaultAsync(ct);
 
         var initiativeUser = await dbContext.InitiativeUsers
-            .Where(e => e.InitiativeId == territoryStory.InitiativeId && e.UserName == userName)
+            .Where(e => e.InitiativeId == territoryStory!.InitiativeId && e.UserName == userName)
             .FirstOrDefaultAsync(ct);
 
-        return initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader || userName == territoryStory.AuthorUserName;
+        return initiativeUser?.LevelId is (int)InitiativeUserLevelEnum.Leader || userName == territoryStory!.AuthorUserName;
     }
 
     /// <inheritdoc/>
@@ -102,7 +102,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
 
     /// <inheritdoc/>
     public async Task<TerritoryStory> MarkAsFeaturedContentAsync(int id, CancellationToken ct = default) =>
-        await ExecuteInTransactionAsync(
+        (await ExecuteInTransactionAsync(
             async ct =>
             {
                 var entity = await dbContext.TerritoryStories
@@ -133,7 +133,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
                 return entity;
             },
             "Territory Story Image error",
-            ct);
+            ct))!;
 
     /// <inheritdoc/>
     public async Task<int> GetEnabledRecordsCountAsync(string userName, CancellationToken ct = default) =>
@@ -145,7 +145,7 @@ public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerrit
     /// Include custom entities.
     /// </summary>
     /// <returns>Modified Linq query.</returns>
-    private IQueryable<TerritoryStory> IncludeCustomEntities(IQueryable<TerritoryStory> query = null)
+    private IQueryable<TerritoryStory> IncludeCustomEntities(IQueryable<TerritoryStory>? query = null)
     {
         query ??= dbContext.TerritoryStories;
 

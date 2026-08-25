@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Initiatives;
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -57,7 +58,10 @@ public class JoinInvitationController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinInvitationResponseExample))]
     public async Task<IActionResult> Post([FromBody] JoinInvitationDto requestData, CancellationToken ct)
     {
-        requestData.Creator = HttpContext.GetUserName();
+        var userName = HttpContext.GetUserName();
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
+        requestData.Creator = userName;
         var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }

@@ -8,20 +8,20 @@ public class KeycloakOptions
     /// <summary>
     /// Base URL.
     /// </summary>
-    public string BaseUrl { get; set; }
+    public required string BaseUrl { get; set; }
 
     /// <summary>
     /// Keycloak realm.
     /// </summary>
-    public string Realm { get; set; }
+    public required string Realm { get; set; }
 
     /// <summary>
     /// Client identifier.
     /// </summary>
-    public string ClientId { get; set; }
+    public required string ClientId { get; set; }
 
     /// <summary>
     /// Client secret.
     /// </summary>
-    public string ClientSecret { get; set; }
+    public required string ClientSecret { get; set; }
 }

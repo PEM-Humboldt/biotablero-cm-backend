@@ -18,12 +18,12 @@ public class TerritoryStoryImage : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// File URL.
     /// </summary>
-    public Uri FileUrl { get; set; }
+    public required Uri FileUrl { get; set; }
 
     /// <summary>
     /// Entity description.
     /// </summary>
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
     /// <summary>
     /// Featured Content flag.
@@ -33,5 +33,5 @@ public class TerritoryStoryImage : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Territory Story relationship.
     /// </summary>
-    public TerritoryStory TerritoryStory { get; set; }
+    public TerritoryStory? TerritoryStory { get; set; }
 }

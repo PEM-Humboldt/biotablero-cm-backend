@@ -13,28 +13,28 @@ public class JoinInvitationGuestConfig : IEntityTypeConfiguration<JoinInvitation
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<JoinInvitationGuest> builder)
     {
-        builder.ToTable("join_invitation_guest", "initiatives");
+        builder?.ToTable("join_invitation_guest", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.JoinInvitationId)
+        builder?.Property(e => e.JoinInvitationId)
             .HasColumnName("join_invitation_id")
             .IsRequired();
 
-        builder.Property(i => i.Email)
+        builder?.Property(e => e.Email)
             .HasColumnName("email")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.HasOne(e => e.JoinInvitation)
+        builder?.HasOne(e => e.JoinInvitation)
             .WithMany(p => p.Guests)
             .HasForeignKey(e => e.JoinInvitationId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.JoinInvitationId, e.Email })
             .IsUnique();
     }

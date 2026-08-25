@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Resources;
 
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -79,12 +80,12 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(string userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string? userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
-        // Validate user permissions
-        var resourceId = entityData?.ResourceId ?? 0;
+        ArgumentException.ThrowIfNullOrEmpty(userName);
 
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
+        // Validate user permissions
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entityData.ResourceId, userName, ct);
 
         if (!authorizedUserAction)
         {
@@ -117,7 +118,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         }
 
         // Validate number of items
-        if (resource.Files.Count >= MaxItemsPerResource)
+        if (resource.Files?.Count >= MaxItemsPerResource)
         {
             return new(true)
             {
@@ -170,8 +171,10 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
@@ -241,6 +244,15 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         // Send email
         var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+
+        if (resource == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
+            };
+        }
+
         await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         entityData = mapper.Map(entity);
@@ -254,8 +266,10 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
@@ -283,6 +297,15 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
 
         // Send email
         var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+
+        if (resource == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
+            };
+        }
+
         await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         var entityData = mapper.Map(entity);

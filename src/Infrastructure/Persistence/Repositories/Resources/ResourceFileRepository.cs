@@ -47,7 +47,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<ResourceFile> AddAsync(ResourceFile entity, IInputFile inputFile, CancellationToken ct = default) =>
+    public async Task<ResourceFile?> AddAsync(ResourceFile entity, IInputFile inputFile, CancellationToken ct = default) =>
         await ExecuteInTransactionAsync(
             async ct =>
             {
@@ -63,9 +63,9 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
                     .Where(e => e.Id == entity.ResourceId)
                     .FirstOrDefaultAsync(ct);
 
-                if (!resource.IsDraft)
+                if (!(resource?.IsDraft ?? false))
                 {
-                    resource.PublicationDate = DateTimeOffset.UtcNow;
+                    resource!.PublicationDate = DateTimeOffset.UtcNow;
                     await dbContext.SaveChangesAsync(ct);
                 }
 
@@ -87,9 +87,9 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
                     .Where(e => e.Id == entity.ResourceId)
                     .FirstOrDefaultAsync(ct);
 
-                if (!resource.IsDraft)
+                if (!(resource?.IsDraft ?? false))
                 {
-                    resource.PublicationDate = DateTimeOffset.UtcNow;
+                    resource!.PublicationDate = DateTimeOffset.UtcNow;
                     result = await dbContext.SaveChangesAsync(ct);
                 }
 
@@ -113,9 +113,9 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
                     .Where(e => e.Id == entity.ResourceId)
                     .FirstOrDefaultAsync(ct);
 
-                if (!resource.IsDraft)
+                if (!(resource?.IsDraft ?? false))
                 {
-                    resource.PublicationDate = DateTimeOffset.UtcNow;
+                    resource!.PublicationDate = DateTimeOffset.UtcNow;
                     result = await dbContext.SaveChangesAsync(ct);
                 }
 

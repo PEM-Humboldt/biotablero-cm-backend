@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Initiatives;
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -75,7 +76,10 @@ public class JoinRequestController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
     public async Task<IActionResult> Post([FromBody] JoinRequestDto requestData, CancellationToken ct)
     {
-        requestData.UserName = HttpContext.GetUserName();
+        var userName = HttpContext.GetUserName();
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
+        requestData.UserName = userName;
         var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }
@@ -92,10 +96,13 @@ public class JoinRequestController(
     [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
     public async Task<IActionResult> Put(int id, JoinRequestStatusEnum requestStatus, CancellationToken ct)
     {
+        var userName = HttpContext.GetUserName();
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var requestData = new JoinRequestDto()
         {
             Status = new EnumEntityDto<JoinRequestStatusEnum>(requestStatus),
-            ReviewerUserName = HttpContext.GetUserName(),
+            ReviewerUserName = userName,
         };
 
         var response = await entityService.UpdateAsync(id, requestData, ct);

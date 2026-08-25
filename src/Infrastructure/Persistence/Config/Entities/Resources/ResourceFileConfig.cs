@@ -13,33 +13,33 @@ public class ResourceFileConfig : IEntityTypeConfiguration<ResourceFile>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<ResourceFile> builder)
     {
-        builder.ToTable("resource_file", "initiatives");
+        builder?.ToTable("resource_file", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.Name)
+        builder?.Property(e => e.Name)
             .HasColumnName("name")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(i => i.Url)
+        builder?.Property(e => e.Url)
             .HasColumnName("url")
             .HasMaxLength(250)
             .IsRequired();
 
-        builder.Property(i => i.ResourceId)
+        builder?.Property(e => e.ResourceId)
             .HasColumnName("resource_id")
             .IsRequired();
 
-        builder.HasOne(e => e.Resource)
+        builder?.HasOne(e => e.Resource)
             .WithMany(p => p.Files)
             .HasForeignKey(e => e.ResourceId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.ResourceId, e.Url })
             .IsUnique();
     }

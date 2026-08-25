@@ -15,7 +15,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 public class IndicatorTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : MapperRead<IndicatorTag, IndicatorTagDto>
 {
     /// <inheritdoc/>
-    public override IndicatorTagDto Map(IndicatorTag entity)
+    public override IndicatorTagDto Map(IndicatorTag? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

@@ -12,17 +12,17 @@ public class Notification : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Notification receiver.
     /// </summary>
-    public string Receiver { get; set; }
+    public required string Receiver { get; set; }
 
     /// <summary>
     /// Notification subject.
     /// </summary>
-    public string Subject { get; set; }
+    public required string Subject { get; set; }
 
     /// <summary>
     /// Notification body.
     /// </summary>
-    public string Body { get; set; }
+    public required string Body { get; set; }
 
     /// <summary>
     /// Entity creation date.
@@ -42,5 +42,5 @@ public class Notification : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Entity properties.
     /// </summary>
-    public string Properties { get; set; }
+    public string? Properties { get; set; }
 }

@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 public class MeasureUnitMappings() : MapperRead<MeasureUnit, MeasureUnitDto>
 {
     /// <inheritdoc/>
-    public override MeasureUnitDto Map(MeasureUnit entity)
+    public override MeasureUnitDto Map(MeasureUnit? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

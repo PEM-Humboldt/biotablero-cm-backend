@@ -1,13 +1,15 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Notifications;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Notification dto.
 /// </summary>
-public class NotificationDto : IDto
+[method: SetsRequiredMembers]
+public class NotificationDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -17,17 +19,17 @@ public class NotificationDto : IDto
     /// <summary>
     /// Notification receiver.
     /// </summary>
-    public string Receiver { get; set; }
+    public required string Receiver { get; set; } = string.Empty;
 
     /// <summary>
     /// Notification subject.
     /// </summary>
-    public string Subject { get; set; }
+    public required string Subject { get; set; } = string.Empty;
 
     /// <summary>
     /// Notification body.
     /// </summary>
-    public string Body { get; set; }
+    public required string Body { get; set; } = string.Empty;
 
     /// <summary>
     /// Entity creation date.
@@ -47,5 +49,5 @@ public class NotificationDto : IDto
     /// <summary>
     /// Entity properties.
     /// </summary>
-    public NotificationPropertiesDto Properties { get; set; }
+    public NotificationPropertiesDto? Properties { get; set; }
 }

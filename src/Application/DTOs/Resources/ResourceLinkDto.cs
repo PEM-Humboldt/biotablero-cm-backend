@@ -1,11 +1,14 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Resources;
 
+using System.Diagnostics.CodeAnalysis;
+
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Resource Link dto.
 /// </summary>
-public class ResourceLinkDto : IDto
+[method: SetsRequiredMembers]
+public class ResourceLinkDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -20,10 +23,10 @@ public class ResourceLinkDto : IDto
     /// <summary>
     /// Entity name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Entity URL.
     /// </summary>
-    public string Url { get; set; }
+    public required string Url { get; set; } = string.Empty;
 }

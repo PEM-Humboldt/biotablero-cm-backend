@@ -13,7 +13,7 @@ public class Indicator : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Indicator name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Initiative identifier.
@@ -28,25 +28,25 @@ public class Indicator : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiative relationship.
     /// </summary>
-    public Initiative Initiative { get; set; }
+    public Initiative? Initiative { get; set; }
 
     /// <summary>
     /// Indicator Type relationship.
     /// </summary>
-    public IndicatorType Type { get; set; }
+    public IndicatorType? Type { get; set; }
 
     /// <summary>
     /// Indicator Tag relationship.
     /// </summary>
-    public ICollection<IndicatorTag> IndicatorTags { get; init; }
+    public ICollection<IndicatorTag>? IndicatorTags { get; init; }
 
     /// <summary>
     /// Indicator Location relationship.
     /// </summary>
-    public ICollection<IndicatorLocation> IndicatorLocations { get; init; }
+    public ICollection<IndicatorLocation>? IndicatorLocations { get; init; }
 
     /// <summary>
     /// Indicator Version relationship.
     /// </summary>
-    public ICollection<IndicatorVersion> Versions { get; init; }
+    public ICollection<IndicatorVersion>? Versions { get; init; }
 }

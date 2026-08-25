@@ -65,8 +65,10 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entityExists = await entityRepository.AnyAsync(id, ct);
 
@@ -101,10 +103,12 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string? userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
-        var territoryStoryId = entityData?.TerritoryStoryId ?? 0;
+        var territoryStoryId = entityData.TerritoryStoryId ?? 0;
         var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(territoryStoryId, userName, ct);
 
         if (!authorizedUserAction)
@@ -184,8 +188,10 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
@@ -222,7 +228,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         // Validate territory story
         var territoryStory = await territoryStoryRepository.GetByIdAsync(entity.TerritoryStoryId, ct);
 
-        if (!territoryStory.Enabled)
+        if (!(territoryStory?.Enabled ?? false))
         {
             return new(true)
             {
@@ -268,8 +274,10 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
@@ -295,7 +303,7 @@ public class TerritoryStoryVideoService : ServiceRead<TerritoryStoryVideo, Terri
         // Validate territory story
         var territoryStory = await territoryStoryRepository.GetByIdAsync(entity.TerritoryStoryId, ct);
 
-        if (!territoryStory.Enabled)
+        if (!(territoryStory?.Enabled ?? false))
         {
             return new(true)
             {

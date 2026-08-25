@@ -17,10 +17,10 @@ public class IndicatorGroupDto : IDto
     /// <summary>
     /// Category relationship.
     /// </summary>
-    public CategoryDto Category { get; set; }
+    public CategoryDto? Category { get; set; }
 
     /// <summary>
     /// Indicator Value relationship.
     /// </summary>
-    public IEnumerable<IndicatorValueDto> Values { get; init; }
+    public IEnumerable<IndicatorValueDto>? Values { get; init; }
 }

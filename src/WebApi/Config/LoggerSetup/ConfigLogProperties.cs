@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
+using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.ColumWriters;
 using IAVH.BioTablero.CM.WebApi.Config.LoggerSetup.Enrichers;
@@ -78,7 +79,7 @@ public static class ConfigLogProperties
 
                     .WriteTo.Logger(lc => lc
                         .WriteTo.PostgreSQL(
-                            connectionString: Environment.GetEnvironmentVariable("CS_MAIN"),
+                            connectionString: EnvUtils.GetRequiredEnv("CS_MAIN"),
                             schemaName: LogConstants.DefaultSchemaName,
                             tableName: LogConstants.DefaultTableName,
                             needAutoCreateTable: false,

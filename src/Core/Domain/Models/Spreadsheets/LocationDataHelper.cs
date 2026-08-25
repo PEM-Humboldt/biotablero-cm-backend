@@ -8,15 +8,15 @@ public class LocationDataHelper()
     /// <summary>
     /// Department name.
     /// </summary>
-    public string Department { get; set; }
+    public string? Department { get; set; }
 
     /// <summary>
     /// Municipality name.
     /// </summary>
-    public string Municipality { get; set; }
+    public string? Municipality { get; set; }
 
     /// <summary>
     /// Locality name.
     /// </summary>
-    public string Locality { get; set; }
+    public string? Locality { get; set; }
 }

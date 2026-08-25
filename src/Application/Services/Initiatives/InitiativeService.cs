@@ -115,7 +115,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
                 .Select(e => e.UserName)
                 .ToArray();
 
-            if (userNames.Length > 0)
+            if (userNames?.Length > 0)
             {
                 var externalUsersData = await iamService.GetUsersDataAsync(userNames, ct);
 
@@ -123,7 +123,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
                 {
                     var usersFullData = new List<InitiativeUserDto>();
 
-                    foreach (var userData in dataDto.Users)
+                    foreach (var userData in dataDto.Users ?? [])
                     {
                         userData.ExternalData = externalUsersData
                             .Where(i => i.Username == userData.UserName)
@@ -162,8 +162,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByUserNameAsync(string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var dataListEntity = await entityRepository.GetByUserNameAsync(userName, ct);
 
         var dataListDto = dataListEntity
@@ -236,7 +238,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
 
         // Validate users data
-        var leaderCount = entityData.Users
+        var leaderCount = entityData.Users?
             .Select(u => u.Level.Id == (int)InitiativeUserLevelEnum.Leader)
             .Count();
 
@@ -249,10 +251,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
 
         // Validate locations data
-        var locationsIds = entityData.Locations
+        var locationsIds = entityData.Locations?
             .Select(l => l.LocationId ?? 0)
             .Distinct()
-            .ToArray();
+            .ToArray() ?? [];
 
         var initiativeLocationQuery = locationRepository
             .GetQueryable()
@@ -268,7 +270,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             };
         }
 
-        var duplicatedLocations = entityData.Locations.Count() > entityData.Locations
+        var duplicatedLocations = entityData.Locations?.Count() > entityData.Locations?
             .DistinctBy(l => (l.LocationId, l.Locality))
             .Count();
 
@@ -280,10 +282,9 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             };
         }
 
-        var hasDepartmentsWithLocalities = entityData.Locations
+        var hasDepartmentsWithLocalities = entityData.Locations?
             .Join(locationsDb, il => il.LocationId, l => l.Id, (il, l) => new { il, l })
-            .Where(lil => !string.IsNullOrWhiteSpace(lil.il.Locality) && lil.l.Level != (byte)LocationLevel.Municipality)
-            .Any();
+            .Any(lil => !string.IsNullOrWhiteSpace(lil.il.Locality) && lil.l.Level != (byte)LocationLevel.Municipality) ?? false;
 
         if (hasDepartmentsWithLocalities)
         {
@@ -296,7 +297,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         // Validate users in external system
         var userNames = entityData.Users?
             .Select(e => e.UserName)
-            .ToArray();
+            .ToArray() ?? [];
 
         if (userNames.Length > 0)
         {
@@ -329,8 +330,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, bool userIsAdmin, InitiativeDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, bool userIsAdmin, InitiativeDto entityData, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         if (!await entityRepository.AuthorizedEntityModifyAsync(id, userName, userIsAdmin, ct))
         {
@@ -455,7 +458,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (uploadSuccessful)
         {
-            Uri oldImageUrl = null;
+            Uri? oldImageUrl = null;
             switch (imageType)
             {
                 case InitiativeImageType.Image:
@@ -521,7 +524,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
 
         // Validate image
-        Uri fileName;
+        Uri? fileName;
         switch (imageType)
         {
             case InitiativeImageType.Image:

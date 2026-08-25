@@ -30,7 +30,7 @@ public class ImageUtilsService : IImageUtilsService
     }
 
     /// <inheritdoc/>
-    public async Task<Stream> CompressToWebpAsync(Stream input, int quality = 75, CancellationToken ct = default)
+    public async Task<Stream?> CompressToWebpAsync(Stream input, int quality = 75, CancellationToken ct = default)
     {
         try
         {

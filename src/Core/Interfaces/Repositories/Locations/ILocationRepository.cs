@@ -44,5 +44,5 @@ public interface ILocationRepository : IRepository<LocationCustom, int>
     /// <param name="municipalities">Municipality names.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Filtered locations by names.</returns>
-    Task<List<LocationCustom>> GetByNamesAsync(string[] departments, string[] municipalities, CancellationToken ct = default);
+    Task<List<LocationCustom>> GetByNamesAsync(string?[] departments, string?[] municipalities, CancellationToken ct = default);
 }

@@ -13,35 +13,35 @@ public class IndicatorLocationConfig : IEntityTypeConfiguration<IndicatorLocatio
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<IndicatorLocation> builder)
     {
-        builder.ToTable("indicator_location", "indicators");
+        builder?.ToTable("indicator_location", "indicators");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.IndicatorId)
+        builder?.Property(e => e.IndicatorId)
             .HasColumnName("indicator_id")
             .IsRequired();
 
-        builder.Property(i => i.LocationId)
+        builder?.Property(e => e.LocationId)
             .HasColumnName("location_id")
             .IsRequired();
 
-        builder.Property(i => i.Locality)
+        builder?.Property(e => e.Locality)
             .HasColumnName("locality")
             .HasMaxLength(300);
 
-        builder.HasOne(e => e.Indicator)
+        builder?.HasOne(e => e.Indicator)
             .WithMany(p => p.IndicatorLocations)
             .HasForeignKey(e => e.IndicatorId);
 
-        builder.HasOne(e => e.Location)
+        builder?.HasOne(e => e.Location)
             .WithMany(p => p.IndicatorLocations)
             .HasForeignKey(e => e.LocationId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.IndicatorId, e.LocationId, e.Locality })
             .IsUnique();
     }

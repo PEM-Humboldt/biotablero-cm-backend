@@ -52,7 +52,7 @@ public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestR
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, int requestStatusId, CancellationToken ct = default) =>
+    public async Task<JoinRequest?> ReviewRequestAsync(int requestId, string? reviewerUserName, int requestStatusId, CancellationToken ct = default) =>
         await ExecuteInTransactionAsync(
             async ct =>
             {

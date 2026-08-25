@@ -50,7 +50,7 @@ public class ResourceLinkRepository : Repository<ResourceLink, int>, IResourceLi
 
     /// <inheritdoc/>
     public override async Task<ResourceLink> AddAsync(ResourceLink entity, CancellationToken ct = default) =>
-        await ExecuteInTransactionAsync(
+        (await ExecuteInTransactionAsync(
             async ct =>
             {
                 await dbContext.ResourceLinks.AddAsync(entity, ct);
@@ -61,16 +61,21 @@ public class ResourceLinkRepository : Repository<ResourceLink, int>, IResourceLi
                     .Where(e => e.Id == entity.ResourceId)
                     .FirstOrDefaultAsync(ct);
 
-                if (!resource.IsDraft)
+                if (!(resource?.IsDraft ?? false))
                 {
-                    resource.PublicationDate = DateTimeOffset.UtcNow;
+                    resource!.PublicationDate = DateTimeOffset.UtcNow;
                     await dbContext.SaveChangesAsync(ct);
+                }
+
+                if (entity == null)
+                {
+                    throw new DbUpdateException();
                 }
 
                 return entity;
             },
             "Resource link add transaction error",
-            ct);
+            ct))!;
 
     /// <inheritdoc/>
     public override async Task<int> UpdateAsync(ResourceLink entity, CancellationToken ct = default) =>
@@ -85,9 +90,9 @@ public class ResourceLinkRepository : Repository<ResourceLink, int>, IResourceLi
                     .Where(e => e.Id == entity.ResourceId)
                     .FirstOrDefaultAsync(ct);
 
-                if (!resource.IsDraft)
+                if (!(resource?.IsDraft ?? false))
                 {
-                    resource.PublicationDate = DateTimeOffset.UtcNow;
+                    resource!.PublicationDate = DateTimeOffset.UtcNow;
                     result = await dbContext.SaveChangesAsync(ct);
                 }
 

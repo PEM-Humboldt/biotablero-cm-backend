@@ -88,8 +88,10 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -126,8 +128,10 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetListAsync(string userName, ODataQueryOptions<Resource> queryOptions, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetListAsync(string? userName, ODataQueryOptions<Resource> queryOptions, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var query = entityRepository.GetQueryable();
         query = entityRepository.GetQueryByUserName(userName, query);
 
@@ -158,7 +162,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     public async Task<CustomWebResponse> AddAsync(ResourceDto entityData, CancellationToken ct = default)
     {
         // Validate user permissions
-        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId.Value, entityData.AuthorUserName, null, ct);
+        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId ?? 0, entityData.AuthorUserName, null, ct);
 
         if (!authorizedUserAction)
         {
@@ -180,7 +184,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId.Value, ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId ?? 0, ct);
 
         if (!initiativeExists)
         {
@@ -191,7 +195,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate Resource Type
-        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType.Id.Value, ct);
+        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType?.Id ?? 0, ct);
 
         if (!resourceTypeExists)
         {
@@ -237,8 +241,10 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceDto entityData, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
@@ -284,7 +290,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate Resource Type
-        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType.Id.Value, ct);
+        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType?.Id ?? 0, ct);
 
         if (!resourceTypeExists)
         {
@@ -339,8 +345,12 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         if (hasDuplicatedEntities)
         {
             var like = await resourceLikeRepository.GetByResourceAndUserNameAsync(entityData.ResourceId, entityData.UserName, ct);
-            await resourceLikeRepository.DeleteAsync(like, ct);
-            logger.AddLog(LogType.Delete, $"Unliked resource", "{@EntityData}", entityData);
+
+            if (like != null)
+            {
+                await resourceLikeRepository.DeleteAsync(like, ct);
+                logger.AddLog(LogType.Delete, $"Unliked resource", "{@EntityData}", entityData);
+            }
         }
         else
         {
@@ -359,8 +369,10 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
@@ -393,8 +405,10 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<bool> SendUpdateNotificationAsync(Resource resource, string userName, CancellationToken ct = default)
+    public async Task<bool> SendUpdateNotificationAsync(Resource resource, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         if (resource.IsDraft)
         {
             return true;

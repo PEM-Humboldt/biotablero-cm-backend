@@ -1,7 +1,8 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Filters;
 
-using System;
 using System.Collections.Generic;
+
+using IAVH.BioTablero.CM.Application.Utils;
 
 using Microsoft.OpenApi.Models;
 
@@ -25,10 +26,10 @@ public class AuthEndpointsDocumentFilter : IDocumentFilter
 
     private static readonly IList<OpenApiServer> Servers =
     [
-        new() { Url = $"{Environment.GetEnvironmentVariable("KC_BASE_URL")}/realms/{Environment.GetEnvironmentVariable("KC_REALM")}" },
+        new() { Url = $"{EnvUtils.GetRequiredEnv("KC_BASE_URL")}/realms/{EnvUtils.GetRequiredEnv("KC_REALM")}" },
     ];
 
-    private static readonly string ClientId = Environment.GetEnvironmentVariable("KC_CLIENT");
+    private static readonly string ClientId = EnvUtils.GetRequiredEnv("KC_CLIENT");
 
     /// <summary>
     /// Apply custom documentation rules.

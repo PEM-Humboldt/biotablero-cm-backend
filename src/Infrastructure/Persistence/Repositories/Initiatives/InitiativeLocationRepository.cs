@@ -30,7 +30,7 @@ public class InitiativeLocationRepository : Repository<InitiativeLocation, int>,
     }
 
     /// <inheritdoc/>
-    public override async Task<InitiativeLocation> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<InitiativeLocation?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.InitiativeLocations
             .Include(e => e.Location)
             .Where(e => e.Id == id)
@@ -53,17 +53,17 @@ public class InitiativeLocationRepository : Repository<InitiativeLocation, int>,
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Avoid exception when transforming code to SQL")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1862:Use the 'StringComparison' method overloads to perform case-insensitive string comparisons", Justification = "Avoid exception when transforming code to SQL")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1311:Specify a culture or use an invariant version", Justification = "Avoid exception when transforming code to SQL")]
-    public async Task<bool> IsDuplicatedAsync(int initiativeId, int locationId, string locality, CancellationToken ct = default) =>
+    public async Task<bool> IsDuplicatedAsync(int initiativeId, int locationId, string? locality, CancellationToken ct = default) =>
         await dbContext.InitiativeLocations
-            .Where(e => e.InitiativeId == initiativeId && e.LocationId == locationId && e.Locality.ToLower() == locality.ToLower())
+            .Where(e => e.InitiativeId == initiativeId && e.LocationId == locationId && (locality == null ? e.Locality == null : e.Locality != null && e.Locality.ToLower() == locality.ToLower()))
             .AnyAsync(ct);
 
     /// <inheritdoc/>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Avoid exception when transforming code to SQL")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1862:Use the 'StringComparison' method overloads to perform case-insensitive string comparisons", Justification = "Avoid exception when transforming code to SQL")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1311:Specify a culture or use an invariant version", Justification = "Avoid exception when transforming code to SQL")]
-    public async Task<bool> IsDuplicatedAsync(int id, int initiativeId, int locationId, string locality, CancellationToken ct = default) =>
+    public async Task<bool> IsDuplicatedAsync(int id, int initiativeId, int locationId, string? locality, CancellationToken ct = default) =>
         await dbContext.InitiativeLocations
-            .Where(e => e.Id != id && e.InitiativeId == initiativeId && e.LocationId == locationId && e.Locality.ToLower() == locality.ToLower())
+            .Where(e => e.Id != id && e.InitiativeId == initiativeId && e.LocationId == locationId && (locality == null ? e.Locality == null : e.Locality != null && e.Locality.ToLower() == locality.ToLower()))
             .AnyAsync(ct);
 }

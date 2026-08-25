@@ -14,23 +14,27 @@ using Microsoft.AspNetCore.Mvc;
 /// <summary>
 /// Custom web tools.
 /// </summary>
-public sealed class WebTools(IHttpContextAccessor httpContextAccessor) : ControllerBase, IWebTools
+public sealed class WebTools(IHttpContextAccessor httpContextAccessor) : IWebTools
 {
     /// <inheritdoc/>
-    [ApiExplorerSettings(IgnoreApi = true)]
     public Uri GetBaseUrl()
     {
         var context = httpContextAccessor.HttpContext;
-        return new Uri($"{context?.Request.Scheme}://{context?.Request.Host.Value}{context?.Request.PathBase.Value}/");
+        if (context?.Request == null)
+        {
+            return new Uri("http://localhost/");
+        }
+
+        return new Uri($"{context.Request.Scheme}://{context.Request.Host.Value}{context.Request.PathBase.Value}/");
     }
 
     /// <inheritdoc/>
     [ApiExplorerSettings(IgnoreApi = true)]
     public IActionResult CustomResponse(CustomWebResponse response)
     {
-        if (response?.Success ?? false)
+        if (response.Success)
         {
-            return Ok(response.ResponseBody);
+            return new OkObjectResult(response.ResponseBody);
         }
 
         // Add custom error message for validations
@@ -45,6 +49,9 @@ public sealed class WebTools(IHttpContextAccessor httpContextAccessor) : Control
             data = response.ResponseBody,
         };
 
-        return StatusCode((int)response.StatusCode, errorObject);
+        return new ObjectResult(errorObject)
+        {
+            StatusCode = (int)(response?.StatusCode ?? HttpStatusCode.InternalServerError),
+        };
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
+using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,8 +58,10 @@ public class InitiativeTagService : IInitiativeTagService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(string userName, bool userIsAdmin, int initiativeId, int tagId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string? userName, bool userIsAdmin, int initiativeId, int tagId, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         if (!await initiativeRepository.AuthorizedEntityModifyAsync(initiativeId, userName, userIsAdmin, ct))
         {
@@ -129,8 +132,10 @@ public class InitiativeTagService : IInitiativeTagService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAdmin, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
@@ -155,7 +160,7 @@ public class InitiativeTagService : IInitiativeTagService
         // Validate initiative
         var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
 
-        if (!initiative.Enabled)
+        if (!(initiative?.Enabled ?? false))
         {
             return new(true)
             {

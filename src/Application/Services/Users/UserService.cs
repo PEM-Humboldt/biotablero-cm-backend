@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Users;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -61,8 +62,10 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetProfileDataAsync(string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetProfileDataAsync(string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var response = new UserProfile
         {
             Username = userName,
@@ -98,7 +101,7 @@ public class UserService : IUserService
             var odataResponse = new ODataResponse<ExternalUser>()
             {
                 TotalItems = totalItems,
-                DataList = [.. dataList],
+                DataList = dataList?.ToList() ?? [],
             };
 
             return new()

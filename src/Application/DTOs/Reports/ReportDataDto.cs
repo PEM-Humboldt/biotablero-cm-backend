@@ -1,13 +1,15 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Reports;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Report Data dto.
 /// </summary>
-public class ReportDataDto : IDto
+[method: SetsRequiredMembers]
+public class ReportDataDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -22,15 +24,15 @@ public class ReportDataDto : IDto
     /// <summary>
     /// Creator user name.
     /// </summary>
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
 
     /// <summary>
     /// Report generation description.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Report generation data.
     /// </summary>
-    public string Data { get; set; }
+    public string? Data { get; set; }
 }

@@ -83,8 +83,10 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -121,8 +123,10 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string? userName, ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var query = entityRepository.GetQueryable();
         query = await entityRepository.GetQueryWithInitiativeAndUserNameAsync(initiativeId, userName, query, ct);
 
@@ -153,9 +157,8 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     public async Task<CustomWebResponse> AddAsync(TerritoryStoryDto entityData, CancellationToken ct = default)
     {
         // Validate user permissions
-        var initiativeId = entityData?.InitiativeId ?? 0;
         var authorizedLevels = new int[] { (int)InitiativeUserLevelEnum.Leader, (int)InitiativeUserLevelEnum.Collaborator };
-        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelsAsync(initiativeId, entityData.AuthorUserName, authorizedLevels, ct);
+        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelsAsync(entityData.InitiativeId ?? 0, entityData.AuthorUserName, authorizedLevels, ct);
 
         if (!authorizedUserAction)
         {
@@ -177,7 +180,7 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         }
 
         // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId.Value, ct);
+        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId ?? 0, ct);
 
         if (!initiativeExists)
         {
@@ -251,8 +254,10 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, TerritoryStoryDto entityData, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 
@@ -347,8 +352,12 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
         if (hasDuplicatedEntities)
         {
             var like = await territoryStoryLikeRepository.GetByTerritoryStoryAndUserNameAsync(entityData.TerritoryStoryId, entityData.UserName, ct);
-            await territoryStoryLikeRepository.DeleteAsync(like, ct);
-            logger.AddLog(LogType.Delete, $"Unliked territory story", "{@EntityData}", entityData);
+
+            if (like != null)
+            {
+                await territoryStoryLikeRepository.DeleteAsync(like!, ct);
+                logger.AddLog(LogType.Delete, $"Unliked territory story", "{@EntityData}", entityData);
+            }
         }
         else
         {
@@ -367,8 +376,10 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
@@ -423,10 +434,10 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> EnableAsync(int id, string userName, CancellationToken ct = default) => await DisableOrEnableAsync(id, userName, false, ct);
+    public async Task<CustomWebResponse> EnableAsync(int id, string? userName, CancellationToken ct = default) => await DisableOrEnableAsync(id, userName, false, ct);
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DisableAsync(int id, string userName, CancellationToken ct = default) => await DisableOrEnableAsync(id, userName, true, ct);
+    public async Task<CustomWebResponse> DisableAsync(int id, string? userName, CancellationToken ct = default) => await DisableOrEnableAsync(id, userName, true, ct);
 
     /// <summary>
     /// Disable or enable element.
@@ -436,8 +447,10 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <param name="disable">Disable flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    private async Task<CustomWebResponse> DisableOrEnableAsync(int id, string userName, bool disable, CancellationToken ct = default)
+    private async Task<CustomWebResponse> DisableOrEnableAsync(int id, string? userName, bool disable, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
 

@@ -11,12 +11,12 @@ public class SendNotificationData
     /// <summary>
     /// Notification data.
     /// </summary>
-    public NotificationDto NotificationDto { get; set; }
+    public required NotificationDto NotificationDto { get; set; }
 
     /// <summary>
     /// Notification receivers list.
     /// </summary>
-    public CustomEmailAddress[] Receivers { get; set; }
+    public required CustomEmailAddress[] Receivers { get; set; }
 
     /// <summary>
     /// Send email flag.

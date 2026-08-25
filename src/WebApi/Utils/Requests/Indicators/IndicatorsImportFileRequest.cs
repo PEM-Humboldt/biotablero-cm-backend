@@ -25,5 +25,5 @@ public class IndicatorsImportFileRequest
     /// <summary>
     /// General file.
     /// </summary>
-    public IFormFile File { get; set; }
+    public required IFormFile File { get; set; }
 }

@@ -35,14 +35,14 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     }
 
     /// <inheritdoc/>
-    public async Task<Initiative> GetByIdAsync(int id, bool userIsAuthenticated, CancellationToken ct = default)
+    public async Task<Initiative?> GetByIdAsync(int id, bool userIsAuthenticated, CancellationToken ct = default)
     {
         IQueryable<Initiative> query = dbContext.Initiatives
             .Include(e => e.InitiativeUsers)
-            .Include(e => e.InitiativeLocations)
+            .Include(e => e.InitiativeLocations!)
                 .ThenInclude(e => e.Location)
-                    .ThenInclude(e => e.Parent)
-            .Include(e => e.InitiativeTags)
+                    .ThenInclude(e => e!.Parent)
+            .Include(e => e.InitiativeTags!)
                 .ThenInclude(e => e.Tag);
 
         if (userIsAuthenticated)
@@ -58,15 +58,15 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     /// <inheritdoc/>
     public IQueryable<Initiative> IncludeOdataEntities(IQueryable<Initiative> query) =>
         query
-            .Include(e => e.InitiativeLocations)
+            .Include(e => e.InitiativeLocations!)
                 .ThenInclude(e => e.Location)
-                    .ThenInclude(e => e.Parent);
+                    .ThenInclude(e => e!.Parent);
 
     /// <inheritdoc/>
     public async Task<IEnumerable<Initiative>> GetByUserNameAsync(string userName, CancellationToken ct = default) =>
         await dbContext.Initiatives
-            .Include(e => e.InitiativeUsers.Where(u => u.UserName == userName))
-            .Where(e => e.InitiativeUsers.Any(e => e.UserName == userName))
+            .Include(e => e.InitiativeUsers!.Where(u => u.UserName == userName))
+            .Where(e => e.InitiativeUsers!.Any(e => e.UserName == userName))
             .ToListAsync(ct);
 
     /// <inheritdoc/>
@@ -81,7 +81,7 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
             .Include(e => e.InitiativeUsers)
             .Where(e =>
                 e.Id == id &&
-                e.InitiativeUsers.Any(e => e.UserName == userName && e.LevelId == (int)InitiativeUserLevelEnum.Leader))
+                e.InitiativeUsers!.Any(e => e.UserName == userName && e.LevelId == (int)InitiativeUserLevelEnum.Leader))
             .AnyAsync(ct);
     }
 
@@ -100,16 +100,16 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
     /// <inheritdoc/>
     public async Task<bool> AnyByTagAsync(int tagId, CancellationToken ct = default) =>
         await dbContext.Initiatives
-            .Where(e => e.InitiativeTags.Any(e => e.TagId == tagId))
+            .Where(e => e.InitiativeTags!.Any(e => e.TagId == tagId))
             .AnyAsync(ct);
 
     /// <inheritdoc/>
     public async Task<IEnumerable<Initiative>> GetActiveInitiativesWithCoordinatesByLocationAsync(int? locationId = null, CancellationToken ct = default)
     {
         var query = dbContext.Initiatives
-            .Include(e => e.InitiativeLocations)
+            .Include(e => e.InitiativeLocations!)
                 .ThenInclude(e => e.Location)
-                    .ThenInclude(e => e.Parent)
+                    .ThenInclude(e => e!.Parent)
             .Where(i => i.Enabled && i.Coordinate != null);
 
         // Discard filter for default nation identifier
@@ -123,10 +123,10 @@ public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepo
         {
             query = query
                 .Where(e =>
-                    e.InitiativeLocations.Any(e =>
+                    e.InitiativeLocations!.Any(e =>
                         (e.LocationId == locationId.Value &&
-                            (e.Location.Level == (byte)LocationLevel.Department || e.Location.Level == (byte)LocationLevel.Municipality)) ||
-                        (e.Location.ParentId == locationId.Value && e.Location.Level == (byte)LocationLevel.Municipality)) ||
+                            (e.Location!.Level == (byte)LocationLevel.Department || e.Location.Level == (byte)LocationLevel.Municipality)) ||
+                        (e.Location!.ParentId == locationId.Value && e.Location.Level == (byte)LocationLevel.Municipality)) ||
                     e.MainLocationId == locationId.Value);
         }
 

@@ -29,7 +29,7 @@ public interface IInitiativeLocationService : IRead<InitiativeLocation, int>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> AddAsync(string userName, bool userIsAdmin, InitiativeLocationDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> AddAsync(string? userName, bool userIsAdmin, InitiativeLocationDto entityData, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.
@@ -40,7 +40,7 @@ public interface IInitiativeLocationService : IRead<InitiativeLocation, int>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string userName, bool userIsAdmin, InitiativeLocationDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string? userName, bool userIsAdmin, InitiativeLocationDto entityData, CancellationToken ct = default);
 
     /// <summary>
     /// Delete element.
@@ -50,5 +50,5 @@ public interface IInitiativeLocationService : IRead<InitiativeLocation, int>
     /// <param name="userIsAdmin">User administrator flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default);
+    Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAdmin, CancellationToken ct = default);
 }

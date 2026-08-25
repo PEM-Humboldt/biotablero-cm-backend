@@ -1,11 +1,14 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
+using System.Diagnostics.CodeAnalysis;
+
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Indicator Type dto.
 /// </summary>
-public class IndicatorTypeDto : IDto
+[method: SetsRequiredMembers]
+public class IndicatorTypeDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -15,5 +18,5 @@ public class IndicatorTypeDto : IDto
     /// <summary>
     /// Indicator Type name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; } = string.Empty;
 }

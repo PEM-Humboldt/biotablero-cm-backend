@@ -35,12 +35,12 @@ public class ReportExcelService<TDto>(IServiceProvider serviceProvider) : IRepor
         var map = serviceProvider.GetService(typeof(IReportConfig<TDto>)) as IReportConfig<TDto>;
         var builder = new ReportMapBuilder<TDto>();
         map?.Configure(builder);
-        var mappings = builder.GetMappings();
+        var mappings = builder?.GetMappings();
 
         var properties = typeof(TDto).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
         var orderedProperties = properties
-            .OrderBy(p => GetPropertyIndex(p.Name, mappings))
+            .OrderBy(p => GetPropertyIndex(p.Name, mappings!))
             .ToList();
 
         // Add headers
@@ -50,7 +50,7 @@ public class ReportExcelService<TDto>(IServiceProvider serviceProvider) : IRepor
 
         foreach (var propertyName in propertyNames)
         {
-            if (mappings.ContainsKey(propertyName) && mappings[propertyName].Visible)
+            if (mappings!.ContainsKey(propertyName) && mappings[propertyName].Visible)
             {
                 var header = GetPropertyHeader(propertyName, mappings);
                 worksheet.Cell(1, col).Value = header;
@@ -65,7 +65,7 @@ public class ReportExcelService<TDto>(IServiceProvider serviceProvider) : IRepor
             col = 1;
             foreach (var prop in orderedProperties)
             {
-                if (mappings.ContainsKey(prop.Name) && mappings[prop.Name].Visible)
+                if (mappings!.ContainsKey(prop.Name) && mappings[prop.Name].Visible)
                 {
                     var value = prop.GetValue(item);
                     AddCellData(worksheet.Cell(row, col), value);
@@ -78,7 +78,7 @@ public class ReportExcelService<TDto>(IServiceProvider serviceProvider) : IRepor
 
         // Create table
         var lastRow = Math.Max(1, 1 + dataList.Length);
-        var tableRange = worksheet.Range(1, 1, lastRow, mappings.Count);
+        var tableRange = worksheet.Range(1, 1, lastRow, mappings!.Count);
         tableRange.CreateTable();
 
         worksheet.Columns().AdjustToContents();
@@ -112,7 +112,7 @@ public class ReportExcelService<TDto>(IServiceProvider serviceProvider) : IRepor
     /// </summary>
     /// <param name="cell">Spreadsheet cell.</param>
     /// <param name="value">Spreadsheet cell value.</param>
-    private static void AddCellData(IXLCell cell, object value)
+    private static void AddCellData(IXLCell cell, object? value)
     {
         if (value == null)
         {

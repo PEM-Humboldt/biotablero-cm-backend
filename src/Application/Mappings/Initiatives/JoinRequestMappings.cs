@@ -17,7 +17,7 @@ using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initiat
 public class JoinRequestMappings() : MapperRead<JoinRequest, JoinRequestDto>, IMapperCreateAndRead<JoinRequest, JoinRequestDto>
 {
     /// <inheritdoc/>
-    public override JoinRequestDto Map(JoinRequest entity)
+    public override JoinRequestDto Map(JoinRequest? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -35,7 +35,7 @@ public class JoinRequestMappings() : MapperRead<JoinRequest, JoinRequestDto>, IM
     }
 
     /// <inheritdoc/>
-    public JoinRequest Map(JoinRequestDto dto)
+    public JoinRequest Map(JoinRequestDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 

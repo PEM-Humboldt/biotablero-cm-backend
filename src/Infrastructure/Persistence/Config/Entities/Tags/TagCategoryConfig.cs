@@ -13,20 +13,20 @@ public class TagCategoryConfig : IEntityTypeConfiguration<TagCategory>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<TagCategory> builder)
     {
-        builder.ToTable("tag_category", "tags");
+        builder?.ToTable("tag_category", "tags");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.Name)
+        builder?.Property(e => e.Name)
             .HasColumnName("name")
             .HasMaxLength(30)
             .IsRequired();
 
-        builder
+        builder?
             .HasIndex(e => e.Name)
             .IsUnique();
     }

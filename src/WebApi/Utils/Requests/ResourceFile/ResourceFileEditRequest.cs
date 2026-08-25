@@ -10,10 +10,10 @@ public class ResourceFileEditRequest
     /// <summary>
     /// File name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// General file.
     /// </summary>
-    public IFormFile File { get; set; }
+    public required IFormFile File { get; set; }
 }

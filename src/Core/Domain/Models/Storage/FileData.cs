@@ -1,22 +1,25 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Models.Storage;
 
+using System.Diagnostics.CodeAnalysis;
+
 /// <summary>
 /// General file data.
 /// </summary>
-public class FileData
+[method: SetsRequiredMembers]
+public class FileData()
 {
     /// <summary>
     /// File name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; } = "Empty";
 
     /// <summary>
     /// MIME Type.
     /// </summary>
-    public string MimeType { get; set; }
+    public required string MimeType { get; set; } = "Empty";
 
     /// <summary>
     /// File content data.
     /// </summary>
-    public byte[] File { get; set; }
+    public byte[]? File { get; set; }
 }

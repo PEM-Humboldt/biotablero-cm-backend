@@ -1,12 +1,15 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
+using System.Diagnostics.CodeAnalysis;
+
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Indicator Tag dto.
 /// </summary>
-public class IndicatorTagDto : IDto
+[method: SetsRequiredMembers]
+public class IndicatorTagDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -16,5 +19,5 @@ public class IndicatorTagDto : IDto
     /// <summary>
     /// Entity Tag.
     /// </summary>
-    public TagDto Tag { get; set; }
+    public TagDto? Tag { get; set; } = new();
 }

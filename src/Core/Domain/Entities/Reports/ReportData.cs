@@ -18,15 +18,15 @@ public class ReportData : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Creator user name.
     /// </summary>
-    public string UserName { get; set; }
+    public required string UserName { get; set; }
 
     /// <summary>
     /// Report generation description.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Report generation data.
     /// </summary>
-    public string Data { get; set; }
+    public string? Data { get; set; }
 }

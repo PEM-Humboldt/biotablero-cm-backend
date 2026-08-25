@@ -19,7 +19,7 @@ public interface IGeneralStatsRepository
     /// <param name="initiativeId">Initiative identifier (optional).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Number of enabled records.</returns>
-    Task<int> GetEnabledRecordsCountAsync(string userName = null, int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
+    Task<int> GetEnabledRecordsCountAsync(string? userName = null, int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
 
     /// <summary>
     /// Get initiative polygon areas.

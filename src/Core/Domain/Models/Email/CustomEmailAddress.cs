@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Models.Email;
 
+using System.Diagnostics.CodeAnalysis;
+
 /// <summary>
 /// Custom email address data.
 /// </summary>
@@ -10,7 +12,8 @@ public class CustomEmailAddress
     /// </summary>
     /// <param name="name">Receiver name.</param>
     /// <param name="email">Receiver email.</param>
-    public CustomEmailAddress(string name, string email)
+    [SetsRequiredMembers]
+    public CustomEmailAddress(string? name, string email)
     {
         Name = name;
         Email = email;
@@ -20,6 +23,7 @@ public class CustomEmailAddress
     /// Constructor.
     /// </summary>
     /// <param name="email">Receiver email.</param>
+    [SetsRequiredMembers]
     public CustomEmailAddress(string email)
     {
         Email = email;
@@ -28,10 +32,10 @@ public class CustomEmailAddress
     /// <summary>
     /// Receiver name.
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     /// Receiver email.
     /// </summary>
-    public string Email { get; set; }
+    public required string Email { get; set; }
 }

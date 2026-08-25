@@ -18,10 +18,10 @@ public class TerritoryStoryVideo : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// File URL.
     /// </summary>
-    public Uri FileUrl { get; set; }
+    public required Uri FileUrl { get; set; }
 
     /// <summary>
     /// Territory Story relationship.
     /// </summary>
-    public TerritoryStory TerritoryStory { get; set; }
+    public TerritoryStory? TerritoryStory { get; set; }
 }

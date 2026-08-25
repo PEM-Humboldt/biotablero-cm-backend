@@ -11,6 +11,6 @@ public interface IReportConfig<T>
     /// <summary>
     /// Configure entity.
     /// </summary>
-    /// <param name="builder">Entity builder.</param>
+    /// <param name="builder">Entity builder?.</param>
     void Configure(ReportMapBuilder<T> builder);
 }

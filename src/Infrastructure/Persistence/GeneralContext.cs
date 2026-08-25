@@ -21,6 +21,7 @@ using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.Initi
 using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums.TagCategory;
 
+#pragma warning disable CS8618
 /// <summary>
 /// General database context.
 /// </summary>
@@ -272,11 +273,11 @@ public sealed class GeneralContext : DbContext
     /// <summary>
     /// Configure conventions for custom DbContext.
     /// </summary>
-    /// <param name="modelBuilder">Database model builder.</param>
+    /// <param name="modelBuilder">Database model builder?.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder?.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         // Seeding data
         modelBuilder.Entity<TagCategory>().HasData(GetDefaultTagCategories());

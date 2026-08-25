@@ -1,13 +1,15 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Territory Story Image dto.
 /// </summary>
-public class TerritoryStoryImageDto : IDto
+[method: SetsRequiredMembers]
+public class TerritoryStoryImageDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -22,12 +24,12 @@ public class TerritoryStoryImageDto : IDto
     /// <summary>
     /// File URL.
     /// </summary>
-    public Uri FileUrl { get; set; }
+    public required Uri FileUrl { get; set; } = new("/");
 
     /// <summary>
     /// Entity description.
     /// </summary>
-    public string Description { get; set; }
+    public required string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// Featured Content flag.

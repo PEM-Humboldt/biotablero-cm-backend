@@ -18,7 +18,7 @@ public class ResourceMappings(
     IMapperRead<ResourceTag, ResourceTagDto> resourceTagMappings) : MapperRead<Resource, ResourceDto>, IMapperCreateReadAndUpdate<Resource, ResourceDto>
 {
     /// <inheritdoc/>
-    public override ResourceDto Map(Resource entity)
+    public override ResourceDto Map(Resource? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -48,7 +48,7 @@ public class ResourceMappings(
     }
 
     /// <inheritdoc/>
-    public override ResourceDto MapOdata(Resource entity)
+    public override ResourceDto MapOdata(Resource? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -86,7 +86,7 @@ public class ResourceMappings(
             Id = dto.Id ?? 0,
             InitiativeId = dto.InitiativeId ?? 0,
             AuthorUserName = dto.AuthorUserName,
-            ResourceTypeId = dto.ResourceType.Id ?? 0,
+            ResourceTypeId = dto.ResourceType?.Id ?? 0,
             Name = dto.Name,
             Description = dto.Description,
             IsDraft = dto.IsDraft,
@@ -99,7 +99,7 @@ public class ResourceMappings(
         ArgumentNullException.ThrowIfNull(entity);
         ArgumentNullException.ThrowIfNull(dto);
 
-        entity.ResourceTypeId = dto.ResourceType.Id.Value;
+        entity.ResourceTypeId = dto.ResourceType?.Id ?? 0;
         entity.Name = dto.Name;
         entity.Description = dto.Description;
         entity.IsDraft = dto.IsDraft;

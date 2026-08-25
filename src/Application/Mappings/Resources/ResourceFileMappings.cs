@@ -13,7 +13,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 public class ResourceFileMappings : MapperRead<ResourceFile, ResourceFileDto>, IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto>
 {
     /// <inheritdoc/>
-    public override ResourceFileDto Map(ResourceFile entity)
+    public override ResourceFileDto Map(ResourceFile? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -27,7 +27,7 @@ public class ResourceFileMappings : MapperRead<ResourceFile, ResourceFileDto>, I
     }
 
     /// <inheritdoc/>
-    public ResourceFile Map(ResourceFileDto dto)
+    public ResourceFile Map(ResourceFileDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 

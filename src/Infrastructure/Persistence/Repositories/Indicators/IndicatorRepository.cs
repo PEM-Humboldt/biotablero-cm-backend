@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Indicators;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -30,11 +31,11 @@ public class IndicatorRepository : Repository<Indicator, int>, IIndicatorReposit
     }
 
     /// <inheritdoc/>
-    public override async Task<Indicator> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<Indicator?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await IncludeCustomEntities()
-            .Include(e => e.IndicatorLocations)
+            .Include(e => e.IndicatorLocations!)
                 .ThenInclude(e => e.Location)
-                    .ThenInclude(e => e.Parent)
+                    .ThenInclude(e => e!.Parent)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
@@ -46,13 +47,16 @@ public class IndicatorRepository : Repository<Indicator, int>, IIndicatorReposit
 
     /// <inheritdoc/>
     public IQueryable<Indicator> IncludeOdataEntities(IQueryable<Indicator> query) =>
-        IncludeCustomEntities(query);
+        IncludeCustomEntities(query)
+            .Include(e => e.IndicatorLocations!)
+                .ThenInclude(e => e.Location)
+                    .ThenInclude(e => e!.Parent);
 
     /// <inheritdoc/>
     public async Task<int> CountAsync(int initiativeId, CancellationToken ct = default) =>
         await dbContext.Indicators
             .Include(e => e.Initiative)
-            .Where(e => e.Initiative.Id == initiativeId)
+            .Where(e => e.Initiative!.Id == initiativeId)
             .CountAsync(ct);
 
     /// <inheritdoc/>
@@ -66,14 +70,17 @@ public class IndicatorRepository : Repository<Indicator, int>, IIndicatorReposit
     /// Include custom entities.
     /// </summary>
     /// <returns>Modified Linq query.</returns>
-    private IQueryable<Indicator> IncludeCustomEntities(IQueryable<Indicator> query = null)
+    private IQueryable<Indicator> IncludeCustomEntities(IQueryable<Indicator>? query = null)
     {
         query ??= dbContext.Indicators;
+
+        ArgumentNullException.ThrowIfNull(query);
 
         return query
             .Include(e => e.Type)
             .Include(e => e.Versions)
-            .Include(e => e.IndicatorTags)
-                .ThenInclude(e => e.Tag);
+            .Include(e => e.IndicatorTags!)
+                .ThenInclude(e => e.Tag)
+            .Include(e => e.Initiative);
     }
 }

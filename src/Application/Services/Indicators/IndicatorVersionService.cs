@@ -13,8 +13,6 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
 /// </summary>
 public class IndicatorVersionService : ServiceRead<IndicatorVersion, IndicatorVersionDto, int>, IIndicatorVersionService
 {
-    private new readonly IIndicatorVersionRepository entityRepository;
-
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -27,6 +25,5 @@ public class IndicatorVersionService : ServiceRead<IndicatorVersion, IndicatorVe
         IValidationErrorTranslator errorTranslator)
     : base(entityRepository, mapper, errorTranslator)
     {
-        this.entityRepository = entityRepository;
     }
 }

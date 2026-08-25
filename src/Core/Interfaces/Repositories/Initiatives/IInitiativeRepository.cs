@@ -26,7 +26,7 @@ public interface IInitiativeRepository : IRepository<Initiative, int>
     /// <param name="userIsAuthenticated">User authenticated flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<Initiative> GetByIdAsync(int id, bool userIsAuthenticated, CancellationToken ct = default);
+    Task<Initiative?> GetByIdAsync(int id, bool userIsAuthenticated, CancellationToken ct = default);
 
     /// <summary>
     /// Get elements by user name.

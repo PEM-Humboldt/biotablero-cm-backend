@@ -60,9 +60,9 @@ public class GeneralStatsService(
         var externalUsersData = await iamService.GetUsersDataAsync([.. internalUsersData], ct);
         DemographicStatsDto responseBody = externalUsersData == null || !externalUsersData.Any() ? new() : new()
         {
-            Gender = ProcessUserGroup(externalUsersData.GroupBy(e => e.Gender)),
-            Organization = ProcessUserGroup(externalUsersData.GroupBy(e => e.Organization)),
-            SelfRecognition = ProcessUserGroup(externalUsersData.GroupBy(e => e.SelfRecognition)),
+            Gender = ProcessUserGroup(externalUsersData.GroupBy(e => e.Gender!)),
+            Organization = ProcessUserGroup(externalUsersData.GroupBy(e => e.Organization!)),
+            SelfRecognition = ProcessUserGroup(externalUsersData.GroupBy(e => e.SelfRecognition!)),
         };
 
         return new CustomWebResponse
@@ -90,7 +90,7 @@ public class GeneralStatsService(
     {
         if (group == null || !group.Any())
         {
-            return null;
+            return [];
         }
 
         return [.. group

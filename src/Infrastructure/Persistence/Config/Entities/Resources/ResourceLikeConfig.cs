@@ -13,33 +13,33 @@ public class ResourceLikeConfig : IEntityTypeConfiguration<ResourceLike>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<ResourceLike> builder)
     {
-        builder.ToTable("resource_like", "initiatives");
+        builder?.ToTable("resource_like", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.ResourceId)
+        builder?.Property(e => e.ResourceId)
             .HasColumnName("resource_id")
             .IsRequired();
 
-        builder.Property(i => i.UserName)
+        builder?.Property(e => e.UserName)
             .HasColumnName("user_name")
             .HasMaxLength(75)
             .IsRequired();
 
-        builder.Property(e => e.CreationDate)
+        builder?.Property(e => e.CreationDate)
             .HasColumnName("creation_date")
             .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .IsRequired();
 
-        builder.HasOne(e => e.Resource)
+        builder?.HasOne(e => e.Resource)
             .WithMany(p => p.Likes)
             .HasForeignKey(e => e.ResourceId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.ResourceId, e.UserName })
             .IsUnique();
     }

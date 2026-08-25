@@ -29,7 +29,7 @@ public class InitiativeTagRepository : Repository<InitiativeTag, int>, IInitiati
     }
 
     /// <inheritdoc/>
-    public override async Task<InitiativeTag> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<InitiativeTag?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.InitiativeTags
                 .Include(e => e.Tag)
             .Where(e => e.Id == id)
@@ -39,7 +39,7 @@ public class InitiativeTagRepository : Repository<InitiativeTag, int>, IInitiati
     public override async Task<InitiativeTag> AddAsync(InitiativeTag entity, CancellationToken ct = default)
     {
         await base.AddAsync(entity, ct);
-        return await GetByIdAsync(entity.Id, ct);
+        return (await GetByIdAsync(entity.Id, ct))!;
     }
 
     /// <inheritdoc/>

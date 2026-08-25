@@ -16,7 +16,7 @@ public class InitiativeLocationMappings(
     IMapperRead<Location, LocationDto> locationMappings) : MapperRead<InitiativeLocation, InitiativeLocationDto>, IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto>
 {
     /// <inheritdoc/>
-    public override InitiativeLocationDto Map(InitiativeLocation entity)
+    public override InitiativeLocationDto Map(InitiativeLocation? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -30,13 +30,13 @@ public class InitiativeLocationMappings(
     }
 
     /// <inheritdoc/>
-    public InitiativeLocation Map(InitiativeLocationDto dto)
+    public InitiativeLocation Map(InitiativeLocationDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 
         return new()
         {
-            Id = dto?.Id ?? 0,
+            Id = dto.Id ?? 0,
             InitiativeId = dto.InitiativeId ?? 0,
             LocationId = dto.LocationId ?? 0,
             Locality = dto.Locality,

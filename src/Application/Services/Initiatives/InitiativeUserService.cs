@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -173,8 +174,10 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string reviewerUserName, bool userIsAdmin, InitiativeUserDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? reviewerUserName, bool userIsAdmin, InitiativeUserDto entityData, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(reviewerUserName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
@@ -199,7 +202,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         // Validate initiative
         var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
 
-        if (!initiative.Enabled)
+        if (!(initiative?.Enabled ?? false))
         {
             return new(true)
             {
@@ -248,7 +251,13 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
-        await SendNotificationChangedLevelAsync(userData, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, ct);
+
+        if (userData == null)
+        {
+            logger.Error("User data not found: {UserName}", entityData.UserName);
+        }
+
+        await SendNotificationChangedLevelAsync(userData!, initiative, (InitiativeUserLevelEnum)entityData.Level.Id, reviewerUserName, ct);
 
         return new()
         {
@@ -257,8 +266,10 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, bool userIsAdmin, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAdmin, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var initiativeId = entity?.InitiativeId ?? 0;
@@ -284,7 +295,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
         // Validate initiative
         var initiative = await initiativeRepository.GetByIdAsync(initiativeId, ct);
 
-        if (!initiative.Enabled)
+        if (!(initiative?.Enabled ?? false))
         {
             return new(true)
             {
@@ -314,14 +325,22 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
 
         // Send email
         var userData = await iamService.GetUserDataAsync(entityData.UserName, ct);
-        await SendNotificationUserBannedAsync(userData, initiative, ct);
+
+        if (userData == null)
+        {
+            logger.Error("User data not found: {UserName}", entityData.UserName);
+        }
+
+        await SendNotificationUserBannedAsync(userData!, initiative, ct);
 
         return new();
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateFocusAreaAsync(int initiativeId, string userName, InitiativeUserDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateFocusAreaAsync(int initiativeId, string? userName, InitiativeUserDto entityData, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var entity = await entityRepository.GetByInitiativeAndUserNameAsync(initiativeId, userName, ct);
 
         if (entity == null)

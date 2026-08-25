@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 public class ResourceTypeMappings : MapperRead<ResourceType, ResourceTypeDto>
 {
     /// <inheritdoc/>
-    public override ResourceTypeDto Map(ResourceType entity)
+    public override ResourceTypeDto Map(ResourceType? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

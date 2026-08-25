@@ -1,6 +1,6 @@
 @model IAVH.BioTablero.CM.Application.DTOs.Notifications.NotificationDto
 @{
-    var initiativeName = Model?.Properties?.Data["InitiativeName"];
+    var initiativeName = Model.Properties?.Data["InitiativeName"];
     Model.Subject = $"Invitación a unirse a {initiativeName}";
 
     var template = @"<p style=""margin: 0;margin-bottom: 24px;"">Estimado/a <b>{1}</b>,</p>
@@ -26,7 +26,7 @@ Cordialmente,<br />
 {2}
 </i></p>";
 
-    var customMessage = Model?.Properties?.Data["EmailMessage"]?.ToString();
+    var customMessage = Model.Properties?.Data["EmailMessage"]?.ToString();
 
     if (!string.IsNullOrEmpty(customMessage))
     {
