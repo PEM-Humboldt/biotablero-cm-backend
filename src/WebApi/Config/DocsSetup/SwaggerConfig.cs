@@ -7,7 +7,7 @@ using System.Reflection;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Filters;
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -65,28 +65,23 @@ public static class SwaggerConfig
     {
         const string securityDefinitionName = "Bearer";
 
-        options.AddSecurityDefinition(securityDefinitionName, new OpenApiSecurityScheme
-        {
-            In = ParameterLocation.Header,
-            Description = "Please enter a valid token",
-            Name = "Authorization",
-            Type = SecuritySchemeType.Http,
-            BearerFormat = "JWT",
-            Scheme = "bearer",
-        });
+        options.AddSecurityDefinition(
+            securityDefinitionName,
+            new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter a valid token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer",
+            });
 
-        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
         {
             {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = securityDefinitionName,
-                    },
-                },
-                Array.Empty<string>()
+                new OpenApiSecuritySchemeReference(securityDefinitionName, document),
+                []
             },
         });
     }

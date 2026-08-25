@@ -1,10 +1,12 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Filters;
+namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Filters;
 
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text.Json.Nodes;
 
 using IAVH.BioTablero.CM.Application.Utils;
 
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -13,10 +15,9 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 /// </summary>
 public class AuthEndpointsDocumentFilter : IDocumentFilter
 {
-    private const string SwaggerStringType = "string";
     private const string SwaggerPropertyClientId = "client_id";
     private const string SwaggerPropertyGrantType = "grant_type";
-    private static readonly IList<OpenApiTag> OperationTags = [new() { Name = "Auth server" }];
+    private static readonly ISet<OpenApiTagReference> OperationTags = new HashSet<OpenApiTagReference> { new("Auth server") };
 
     private static readonly OpenApiResponses DefaultResponses = new()
     {
@@ -42,9 +43,9 @@ public class AuthEndpointsDocumentFilter : IDocumentFilter
         {
             Description = "Auth server endpoint to obtain a JWT token",
             Servers = Servers,
-            Operations = new Dictionary<OperationType, OpenApiOperation>
+            Operations = new Dictionary<HttpMethod, OpenApiOperation>
             {
-                [OperationType.Post] = new OpenApiOperation
+                [HttpMethod.Post] = new OpenApiOperation
                 {
                     Summary = "Get JWT from auth server with password.",
                     Description = "Authentication using grant_type=password",
@@ -57,13 +58,13 @@ public class AuthEndpointsDocumentFilter : IDocumentFilter
                             {
                                 Schema = new OpenApiSchema
                                 {
-                                    Type = "object",
-                                    Properties = new Dictionary<string, OpenApiSchema>
+                                    Type = JsonSchemaType.Object,
+                                    Properties = new Dictionary<string, IOpenApiSchema>
                                     {
-                                        ["username"] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString(string.Empty) },
-                                        ["password"] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString(string.Empty) },
-                                        [SwaggerPropertyClientId] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString(ClientId) },
-                                        [SwaggerPropertyGrantType] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString("password") },
+                                        ["username"] = new OpenApiSchema { Type = JsonSchemaType.String, Default = JsonValue.Create(string.Empty) },
+                                        ["password"] = new OpenApiSchema { Type = JsonSchemaType.String, Default = JsonValue.Create(string.Empty) },
+                                        [SwaggerPropertyClientId] = new OpenApiSchema { Type = JsonSchemaType.String, Default = JsonValue.Create(ClientId) },
+                                        [SwaggerPropertyGrantType] = new OpenApiSchema { Type = JsonSchemaType.String, Default = JsonValue.Create("password") },
                                     },
                                     Required = new HashSet<string> { "username", "password", SwaggerPropertyClientId, SwaggerPropertyGrantType },
                                 },
@@ -79,9 +80,9 @@ public class AuthEndpointsDocumentFilter : IDocumentFilter
         {
             Description = "Auth server endpoint to obtain a JWT token",
             Servers = Servers,
-            Operations = new Dictionary<OperationType, OpenApiOperation>
+            Operations = new Dictionary<HttpMethod, OpenApiOperation>
             {
-                [OperationType.Post] = new OpenApiOperation
+                [HttpMethod.Post] = new OpenApiOperation
                 {
                     Summary = "Get JWT from auth server with refresh token.",
                     Description = "Authentication using grant_type=refresh_token",
@@ -94,12 +95,12 @@ public class AuthEndpointsDocumentFilter : IDocumentFilter
                             {
                                 Schema = new OpenApiSchema
                                 {
-                                    Type = "object",
-                                    Properties = new Dictionary<string, OpenApiSchema>
+                                    Type = JsonSchemaType.Object,
+                                    Properties = new Dictionary<string, IOpenApiSchema>
                                     {
-                                        ["refresh_token"] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString(string.Empty) },
-                                        [SwaggerPropertyClientId] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString(ClientId) },
-                                        [SwaggerPropertyGrantType] = new() { Type = SwaggerStringType, Default = new Microsoft.OpenApi.Any.OpenApiString("refresh_token") },
+                                        ["refresh_token"] = new OpenApiSchema { Type = JsonSchemaType.String, Default = JsonValue.Create(string.Empty) },
+                                        [SwaggerPropertyClientId] = new OpenApiSchema { Type = JsonSchemaType.String, Default = JsonValue.Create(ClientId) },
+                                        [SwaggerPropertyGrantType] = new OpenApiSchema { Type = JsonSchemaType.String, Default = JsonValue.Create("refresh_token") },
                                     },
                                     Required = new HashSet<string> { "refresh_token", SwaggerPropertyClientId, SwaggerPropertyGrantType },
                                 },

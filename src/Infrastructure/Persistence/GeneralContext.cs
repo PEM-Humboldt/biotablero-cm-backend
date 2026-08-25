@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence;
+namespace IAVH.BioTablero.CM.Infrastructure.Persistence;
 
 using System;
 using System.Collections.Generic;
@@ -295,8 +295,7 @@ public sealed class GeneralContext : DbContext
     /// <returns>Default tag categories list.</returns>
     private static IEnumerable<TagCategory> GetDefaultTagCategories()
     {
-        var enumData = Enum.GetValues(typeof(TagCategoryEnum))
-            .Cast<TagCategoryEnum>()
+        var enumData = Enum.GetValues<TagCategoryEnum>()
             .Select(t => new TagCategory() { Id = (int)t, Name = t.ToString() });
 
         return enumData;
@@ -312,8 +311,7 @@ public sealed class GeneralContext : DbContext
     /// <returns>Default initative user levels list.</returns>
     private static IEnumerable<InitiativeUserLevel> GetDefaultInitiativeUserLevels()
     {
-        var enumData = Enum.GetValues(typeof(InitiativeUserLevelEnum))
-            .Cast<InitiativeUserLevelEnum>()
+        var enumData = Enum.GetValues<InitiativeUserLevelEnum>()
             .Select(t => new InitiativeUserLevel() { Id = (int)t, Name = t.ToString() });
 
         return enumData;
@@ -325,8 +323,7 @@ public sealed class GeneralContext : DbContext
     /// <returns>Default join request statuses list.</returns>
     private static IEnumerable<JoinRequestStatus> GetDefaultJoinRequestStatuses()
     {
-        var enumData = Enum.GetValues(typeof(JoinRequestStatusEnum))
-            .Cast<JoinRequestStatusEnum>()
+        var enumData = Enum.GetValues<JoinRequestStatusEnum>()
             .Select(t => new JoinRequestStatus() { Id = (int)t, Name = t.ToString() });
 
         return enumData;
