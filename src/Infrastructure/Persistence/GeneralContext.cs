@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Infrastructure.Persistence;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence;
 
 using System;
 using System.Collections.Generic;

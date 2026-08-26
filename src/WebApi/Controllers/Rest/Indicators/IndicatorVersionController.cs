@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Indicator;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -14,8 +15,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
-
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Indicator Version controller.

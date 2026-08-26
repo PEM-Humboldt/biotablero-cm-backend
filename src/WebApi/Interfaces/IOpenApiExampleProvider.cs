@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Interfaces;
+﻿namespace IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// OpenAPI Example Provider interface.
