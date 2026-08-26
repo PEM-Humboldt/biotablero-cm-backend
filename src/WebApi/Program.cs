@@ -78,6 +78,7 @@ public class Program
             app.MapScalarApiReference(options =>
             {
                 options.DisableAgent();
+                options.CustomCss = ".scalar-mcp-layer { display: none !important; }";
             });
 
             app.UseDeveloperExceptionPage();
