@@ -40,16 +40,18 @@ public sealed class OpenApiRequestOperationTransformer
             return Task.CompletedTask;
         }
 
-        var provider = Activator.CreateInstance(exampleAttribute.ProviderType);
-
-        if (provider is null)
+        if (operation.RequestBody?.Content is null)
         {
             return Task.CompletedTask;
         }
 
+        var provider = Activator.CreateInstance(exampleAttribute.ProviderType) ??
+            throw new InvalidOperationException($"Could not create OpenAPI example provider " +
+                $"'{exampleAttribute.ProviderType.FullName}'.");
+
         var getExampleMethod = provider.GetType().GetMethod("GetExamples") ??
             throw new InvalidOperationException($"Example provider '{exampleAttribute.ProviderType.FullName}' "
-                + "must contain a public GetExample() method.");
+                + "must contain a public GetExamples() method.");
 
         var example = getExampleMethod.Invoke(provider, null);
 
@@ -58,6 +60,15 @@ public sealed class OpenApiRequestOperationTransformer
         {
             Example = JsonSerializer.SerializeToNode(example, example?.GetType() ?? typeof(object)),
         };
+
+        // Remove unused content types
+        foreach (var (contentType, _) in operation.RequestBody.Content)
+        {
+            if (contentType != "application/json" && contentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
+            {
+                operation.RequestBody.Content.Remove(contentType);
+            }
+        }
 
         return Task.CompletedTask;
     }

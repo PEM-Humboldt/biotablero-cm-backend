@@ -42,16 +42,14 @@ public sealed class OpenApiResponseOperationTransformer
         }
 
         var exampleStatusCode = exampleAttribute.StatusCode;
-        var provider = Activator.CreateInstance(exampleAttribute.ProviderType);
 
-        if (provider is null)
-        {
-            return Task.CompletedTask;
-        }
+        var provider = Activator.CreateInstance(exampleAttribute.ProviderType) ??
+            throw new InvalidOperationException($"Could not create OpenAPI example provider " +
+                $"'{exampleAttribute.ProviderType.FullName}'.");
 
         var getExampleMethod = provider.GetType().GetMethod("GetExamples") ??
             throw new InvalidOperationException($"Example provider '{exampleAttribute.ProviderType.FullName}' "
-                + "must contain a public GetExample() method.");
+                + "must contain a public GetExamples() method.");
 
         var example = getExampleMethod.Invoke(provider, null);
 
