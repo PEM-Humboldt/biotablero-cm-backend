@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Indicators statistics response example.
 /// </summary>
-public class IndicatorsStatsResponseExample : IExamplesProvider<IndicatorsStatsDto>
+public class IndicatorsStatsResponseExample : IOpenApiExampleProvider<IndicatorsStatsDto>
 {
     /// <inheritdoc/>
     public IndicatorsStatsDto GetExamples() =>

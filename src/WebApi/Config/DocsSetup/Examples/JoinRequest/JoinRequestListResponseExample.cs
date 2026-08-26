@@ -6,14 +6,14 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
 /// Join Request list response example.
 /// </summary>
-public class JoinRequestListResponseExample : IExamplesProvider<List<JoinRequestDto>>
+public class JoinRequestListResponseExample : IOpenApiExampleProvider<List<JoinRequestDto>>
 {
     /// <inheritdoc/>
     public List<JoinRequestDto> GetExamples() =>

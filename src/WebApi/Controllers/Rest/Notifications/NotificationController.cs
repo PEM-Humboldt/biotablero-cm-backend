@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Notification controller.
@@ -45,7 +45,7 @@ public class NotificationController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(NotificationResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(NotificationResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, HttpContext.GetUserName(), ct);
@@ -71,7 +71,7 @@ public class NotificationController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(NotificationOdataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(NotificationOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<Notification> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetByUserNameAsync(HttpContext.GetUserName(), queryOptions, ct);

@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Geo;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Location list response example.
 /// </summary>
-public class LocationListResponseExample : IExamplesProvider<List<LocationDto>>
+public class LocationListResponseExample : IOpenApiExampleProvider<List<LocationDto>>
 {
     /// <inheritdoc/>
     public List<LocationDto> GetExamples() =>

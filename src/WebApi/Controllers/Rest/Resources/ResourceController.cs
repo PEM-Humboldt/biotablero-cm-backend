@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Resource controller.
@@ -40,7 +40,7 @@ public class ResourceController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, HttpContext.GetUserName(), ct);
@@ -54,7 +54,7 @@ public class ResourceController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceOdataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<Resource> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(HttpContext.GetUserName(), queryOptions, ct);
@@ -70,8 +70,8 @@ public class ResourceController(
     [HttpPost]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(ResourceDto), typeof(ResourceAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceResponseExample))]
+    [OpenApiRequest(typeof(ResourceAddRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceResponseExample))]
     public async Task<IActionResult> Post([FromBody] ResourceDto requestData, CancellationToken ct)
     {
         var userName = HttpContext.GetUserName();
@@ -92,8 +92,8 @@ public class ResourceController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(ResourceDto), typeof(ResourceEditRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceResponseExample))]
+    [OpenApiRequest(typeof(ResourceEditRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] ResourceDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, ct);

@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Indicator Version controller.
@@ -37,7 +37,7 @@ public class IndicatorVersionController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(IndicatorVersionResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorVersionResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -54,8 +54,8 @@ public class IndicatorVersionController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [SwaggerRequestExample(typeof(IndicatorVersionDto), typeof(IndicatorVersionEditRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(IndicatorVersionResponseExample))]
+    [OpenApiRequest(typeof(IndicatorVersionEditRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorVersionResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] IndicatorVersionDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);

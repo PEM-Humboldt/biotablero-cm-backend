@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Indicator controller.
@@ -42,7 +42,7 @@ public class IndicatorController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(IndicatorResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -56,7 +56,7 @@ public class IndicatorController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(IndicatorOdataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<Indicator> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);
@@ -70,7 +70,7 @@ public class IndicatorController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByInitiative/{initiativeId}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(IndicatorListResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorListResponseExample))]
     public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
     {
         var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
@@ -87,8 +87,8 @@ public class IndicatorController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [SwaggerRequestExample(typeof(IndicatorDto), typeof(IndicatorEditRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(IndicatorResponseExample))]
+    [OpenApiRequest(typeof(IndicatorEditRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] IndicatorDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);

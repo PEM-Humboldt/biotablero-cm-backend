@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Initiative Contact list response example.
 /// </summary>
-public class InitiativeContactListResponseExample : IExamplesProvider<List<InitiativeContactDto>>
+public class InitiativeContactListResponseExample : IOpenApiExampleProvider<List<InitiativeContactDto>>
 {
     /// <inheritdoc/>
     public List<InitiativeContactDto> GetExamples() =>

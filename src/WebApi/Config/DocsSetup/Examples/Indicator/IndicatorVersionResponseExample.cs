@@ -4,12 +4,12 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Indicator Version response example.
 /// </summary>
-public class IndicatorVersionResponseExample : IExamplesProvider<IndicatorVersionDto>
+public class IndicatorVersionResponseExample : IOpenApiExampleProvider<IndicatorVersionDto>
 {
     /// <inheritdoc/>
     public IndicatorVersionDto GetExamples() => new()

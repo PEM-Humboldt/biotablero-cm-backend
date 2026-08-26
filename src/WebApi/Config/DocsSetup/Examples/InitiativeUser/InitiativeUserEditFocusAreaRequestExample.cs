@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Initiative User edit focus area request example.
 /// </summary>
-public class InitiativeUserEditFocusAreaRequestExample : IExamplesProvider<InitiativeUserDto>
+public class InitiativeUserEditFocusAreaRequestExample : IOpenApiExampleProvider<InitiativeUserDto>
 {
     /// <inheritdoc/>
     public InitiativeUserDto GetExamples() => new()

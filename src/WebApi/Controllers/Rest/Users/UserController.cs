@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// User controller.
@@ -37,7 +37,7 @@ public class UserController(IWebTools webTools,
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(UserOdataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(UserOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<ExternalUser> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);

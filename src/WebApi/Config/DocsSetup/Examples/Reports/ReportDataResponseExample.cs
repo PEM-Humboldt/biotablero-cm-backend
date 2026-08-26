@@ -4,12 +4,12 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Report Data response example.
 /// </summary>
-public class ReportDataResponseExample : IExamplesProvider<ReportDataDto>
+public class ReportDataResponseExample : IOpenApiExampleProvider<ReportDataDto>
 {
     /// <inheritdoc/>
     public ReportDataDto GetExamples() => new()

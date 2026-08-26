@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
@@ -42,7 +42,7 @@ public class JoinRequestController(
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [Authorize]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestOdataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(JoinRequestOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(int initiativeId, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(initiativeId, HttpContext.GetUserName(), queryOptions, ct);
@@ -56,7 +56,7 @@ public class JoinRequestController(
     /// <returns>Join Requests list.</returns>
     [Authorize]
     [HttpGet("MyRequests")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestListResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(JoinRequestListResponseExample))]
     public async Task<IActionResult> GetListInitiativesData(CancellationToken ct)
     {
         var response = await entityService.GetByUserNameAsync(HttpContext.GetUserName(), ct);
@@ -72,8 +72,8 @@ public class JoinRequestController(
     [HttpPost]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(JoinRequestDto), typeof(JoinRequestAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
+    [OpenApiRequest(typeof(JoinRequestAddRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
     public async Task<IActionResult> Post([FromBody] JoinRequestDto requestData, CancellationToken ct)
     {
         var userName = HttpContext.GetUserName();
@@ -93,7 +93,7 @@ public class JoinRequestController(
     /// <returns>Updated entity data.</returns>
     [HttpPut("{id}")]
     [Authorize]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
     public async Task<IActionResult> Put(int id, JoinRequestStatusEnum requestStatus, CancellationToken ct)
     {
         var userName = HttpContext.GetUserName();

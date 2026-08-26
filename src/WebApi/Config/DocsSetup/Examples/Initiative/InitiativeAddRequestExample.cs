@@ -3,14 +3,14 @@
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
 /// Initiative add request example.
 /// </summary>
-public class InitiativeAddRequestExample : IExamplesProvider<InitiativeDto>
+public class InitiativeAddRequestExample : IOpenApiExampleProvider<InitiativeDto>
 {
     /// <inheritdoc/>
     public InitiativeDto GetExamples() => new()

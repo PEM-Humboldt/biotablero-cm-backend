@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Initiative Contact controller.
@@ -35,7 +35,7 @@ public class InitiativeContactController(
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
     [Authorize]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeContactResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -50,7 +50,7 @@ public class InitiativeContactController(
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByInitiative/{initiativeId}")]
     [Authorize]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactListResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeContactListResponseExample))]
     public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
     {
         var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
@@ -66,8 +66,8 @@ public class InitiativeContactController(
     [HttpPost]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(InitiativeContactDto), typeof(InitiativeContactAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactResponseExample))]
+    [OpenApiRequest(typeof(InitiativeContactAddRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeContactResponseExample))]
     public async Task<IActionResult> Post([FromBody] InitiativeContactDto requestData, CancellationToken ct)
     {
         var response = await entityService.AddAsync(HttpContext.GetUserName(), HttpContext.UserIsAdmin(), requestData, ct);
@@ -84,8 +84,8 @@ public class InitiativeContactController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(InitiativeContactDto), typeof(InitiativeContactEditRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeContactResponseExample))]
+    [OpenApiRequest(typeof(InitiativeContactEditRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeContactResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] InitiativeContactDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), HttpContext.UserIsAdmin(), requestData, ct);

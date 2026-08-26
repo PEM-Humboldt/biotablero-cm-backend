@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Geo;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Location response example.
 /// </summary>
-public class LocationResponseExample : IExamplesProvider<LocationDto>
+public class LocationResponseExample : IOpenApiExampleProvider<LocationDto>
 {
     /// <inheritdoc/>
     public LocationDto GetExamples() => new()

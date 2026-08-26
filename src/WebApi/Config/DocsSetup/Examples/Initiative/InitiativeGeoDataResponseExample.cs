@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Initiative geo data response example.
 /// </summary>
-public class InitiativeGeoDataResponseExample : IExamplesProvider<List<InitiativeDto>>
+public class InitiativeGeoDataResponseExample : IOpenApiExampleProvider<List<InitiativeDto>>
 {
     /// <inheritdoc/>
     public List<InitiativeDto> GetExamples() => [

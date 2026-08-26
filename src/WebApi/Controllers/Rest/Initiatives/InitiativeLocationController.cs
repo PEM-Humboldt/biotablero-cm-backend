@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 
 /// <summary>
 /// Initiative Location controller.
@@ -34,7 +34,7 @@ public class InitiativeLocationController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeLocationResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeLocationResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -48,7 +48,7 @@ public class InitiativeLocationController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByInitiative/{initiativeId}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeLocationListResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeLocationListResponseExample))]
     public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
     {
         var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
@@ -64,8 +64,8 @@ public class InitiativeLocationController(
     [HttpPost]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(InitiativeLocationDto), typeof(InitiativeLocationAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeLocationResponseExample))]
+    [OpenApiRequest(typeof(InitiativeLocationAddRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeLocationResponseExample))]
     public async Task<IActionResult> Post([FromBody] InitiativeLocationDto requestData, CancellationToken ct)
     {
         var response = await entityService.AddAsync(HttpContext.GetUserName(), HttpContext.UserIsAdmin(), requestData, ct);
@@ -82,8 +82,8 @@ public class InitiativeLocationController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(InitiativeLocationDto), typeof(InitiativeLocationEditRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeLocationResponseExample))]
+    [OpenApiRequest(typeof(InitiativeLocationEditRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeLocationResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] InitiativeLocationDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), HttpContext.UserIsAdmin(), requestData, ct);
