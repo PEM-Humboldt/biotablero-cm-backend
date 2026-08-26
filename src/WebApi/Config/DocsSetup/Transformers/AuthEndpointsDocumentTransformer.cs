@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Filters;
+namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Transformers;
 
 using System.Collections.Generic;
 using System.Net.Http;
@@ -12,9 +12,9 @@ using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 
 /// <summary>
-/// Custom OpenAPI documentation transformer for auth server.
+/// OpenAPI documentation transformer for authentication setup.
 /// </summary>
-public sealed class AuthEndpointsDocumentFilter : IOpenApiDocumentTransformer
+public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransformer
 {
     private const string SwaggerPropertyClientId = "client_id";
     private const string SwaggerPropertyGrantType = "grant_type";

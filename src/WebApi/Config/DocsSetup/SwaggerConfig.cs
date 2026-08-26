@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Filters;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Transformers;
 
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
@@ -40,13 +40,13 @@ public static class SwaggerConfig
         });
 
         // Add custom filters
-        options.AddOperationTransformer<CustomODataQueryFilter>();
+        options.AddOperationTransformer<ODataQueryTransformer>();
 
         // Enable default security
         options.ConfigDefaultSecurity();
 
         // Add custom endpoints docs
-        options.AddDocumentTransformer<AuthEndpointsDocumentFilter>();
+        options.AddDocumentTransformer<AuthEndpointsDocumentTransformer>();
 
         return options;
     }

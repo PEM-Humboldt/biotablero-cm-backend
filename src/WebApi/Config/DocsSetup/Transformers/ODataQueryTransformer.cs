@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Filters;
+namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Transformers;
 
 using System;
 using System.Collections.Generic;
@@ -13,9 +13,9 @@ using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 
 /// <summary>
-/// Custom OpenAPI transformer for OData query options.
+/// OpenAPI operation transformer for OData query options.
 /// </summary>
-public sealed class CustomODataQueryFilter : IOpenApiOperationTransformer
+public sealed class ODataQueryTransformer : IOpenApiOperationTransformer
 {
     /// <summary>
     /// Transforms an OpenAPI operation to customize OData query parameters
