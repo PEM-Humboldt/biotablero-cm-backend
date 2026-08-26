@@ -16,8 +16,8 @@ using Microsoft.OpenApi;
 /// </summary>
 public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransformer
 {
-    private const string SwaggerPropertyClientId = "client_id";
-    private const string SwaggerPropertyGrantType = "grant_type";
+    private const string OpenApiPropertyClientId = "client_id";
+    private const string OpenApiPropertyGrantType = "grant_type";
 
     private static readonly ISet<OpenApiTagReference> OperationTags =
     new HashSet<OpenApiTagReference>
@@ -89,13 +89,13 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
                                                         Type = JsonSchemaType.String,
                                                         Default = JsonValue.Create(string.Empty),
                                                     },
-                                                    [SwaggerPropertyClientId] =
+                                                    [OpenApiPropertyClientId] =
                                                         new OpenApiSchema
                                                         {
                                                             Type = JsonSchemaType.String,
                                                             Default = JsonValue.Create(ClientId),
                                                         },
-                                                    [SwaggerPropertyGrantType] =
+                                                    [OpenApiPropertyGrantType] =
                                                         new OpenApiSchema
                                                         {
                                                             Type = JsonSchemaType.String,
@@ -106,8 +106,8 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
                                             {
                                                 "username",
                                                 "password",
-                                                SwaggerPropertyClientId,
-                                                SwaggerPropertyGrantType,
+                                                OpenApiPropertyClientId,
+                                                OpenApiPropertyGrantType,
                                             },
                                         },
                                     },
@@ -155,7 +155,7 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
                                                                 Default =
                                                                     JsonValue.Create(string.Empty),
                                                             },
-                                                        [SwaggerPropertyClientId] =
+                                                        [OpenApiPropertyClientId] =
                                                             new OpenApiSchema
                                                             {
                                                                 Type =
@@ -163,7 +163,7 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
                                                                 Default =
                                                                     JsonValue.Create(ClientId),
                                                             },
-                                                        [SwaggerPropertyGrantType] =
+                                                        [OpenApiPropertyGrantType] =
                                                             new OpenApiSchema
                                                             {
                                                                 Type =
@@ -175,8 +175,8 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
                                                 Required = new HashSet<string>
                                                 {
                                                     "refresh_token",
-                                                    SwaggerPropertyClientId,
-                                                    SwaggerPropertyGrantType,
+                                                    OpenApiPropertyClientId,
+                                                    OpenApiPropertyGrantType,
                                                 },
                                             },
                                         },

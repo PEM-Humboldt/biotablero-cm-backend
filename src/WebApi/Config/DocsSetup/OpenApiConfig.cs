@@ -10,15 +10,15 @@ using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 
 /// <summary>
-/// OpenAPI and Swagger UI configuration.
+/// OpenAPI setup.
 /// </summary>
-public static class SwaggerConfig
+public static class OpenApiConfig
 {
     /// <summary>
-    /// Add OpenAPI and Swagger UI custom options.
+    /// Add OpenApi options.
     /// </summary>
-    /// <param name="options">Default SwaggerGen options.</param>
-    /// <returns>Custom SwaggerGen options.</returns>
+    /// <param name="options">Default OpenApi options.</param>
+    /// <returns>Custom OpenApi options.</returns>
     public static OpenApiOptions AddCustomOptions(this OpenApiOptions options)
     {
         // Add general options
@@ -54,7 +54,7 @@ public static class SwaggerConfig
     /// <summary>
     /// Default OpenAPI security with JWT.
     /// </summary>
-    /// <param name="options">Swagger options.</param>
+    /// <param name="options">OpenApi options.</param>
     private static void ConfigDefaultSecurity(this OpenApiOptions options)
     {
         const string securityDefinitionName = "Bearer";

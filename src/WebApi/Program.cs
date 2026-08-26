@@ -63,7 +63,6 @@ public class Program
         // Logs setup
         builder.Host.AddLogConfig();
 
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddOpenApi(options =>
         {
