@@ -2,7 +2,7 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Indicator Version edit response example.

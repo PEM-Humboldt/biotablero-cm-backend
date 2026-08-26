@@ -2,7 +2,7 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Tag edit request example.

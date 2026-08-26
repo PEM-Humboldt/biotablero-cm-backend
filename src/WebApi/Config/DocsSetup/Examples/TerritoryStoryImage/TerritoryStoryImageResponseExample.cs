@@ -4,7 +4,7 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Territory Story Image response example.

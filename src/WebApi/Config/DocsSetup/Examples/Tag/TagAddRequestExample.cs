@@ -3,7 +3,7 @@
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 

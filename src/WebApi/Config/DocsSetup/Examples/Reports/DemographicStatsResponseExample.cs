@@ -2,7 +2,7 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Demographic statistics response example.

@@ -1,6 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Initiative polygon edit response example.

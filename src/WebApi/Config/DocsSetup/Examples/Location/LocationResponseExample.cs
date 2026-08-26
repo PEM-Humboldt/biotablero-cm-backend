@@ -2,7 +2,7 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Geo;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Location response example.

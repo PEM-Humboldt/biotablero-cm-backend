@@ -5,7 +5,7 @@ using System;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;

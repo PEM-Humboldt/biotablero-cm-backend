@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Initiative Contact list response example.

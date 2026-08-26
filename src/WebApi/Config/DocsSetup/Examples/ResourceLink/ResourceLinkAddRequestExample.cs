@@ -2,7 +2,7 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Resource Link add request example.

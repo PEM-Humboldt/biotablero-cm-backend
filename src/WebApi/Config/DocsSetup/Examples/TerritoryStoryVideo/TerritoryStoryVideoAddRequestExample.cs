@@ -2,7 +2,7 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Territory Story Video add request example.

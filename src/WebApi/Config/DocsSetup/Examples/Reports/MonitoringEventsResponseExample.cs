@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// General statistics response example.

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// User OData response example.

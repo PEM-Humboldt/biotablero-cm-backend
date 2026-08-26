@@ -2,7 +2,7 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Join Invitation add request example.

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Indicator list response example.
