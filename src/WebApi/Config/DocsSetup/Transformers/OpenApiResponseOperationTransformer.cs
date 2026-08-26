@@ -49,7 +49,7 @@ public sealed class OpenApiResponseOperationTransformer
             return Task.CompletedTask;
         }
 
-        var getExampleMethod = provider.GetType().GetMethod("GetExample") ??
+        var getExampleMethod = provider.GetType().GetMethod("GetExamples") ??
             throw new InvalidOperationException($"Example provider '{exampleAttribute.ProviderType.FullName}' "
                 + "must contain a public GetExample() method.");
 

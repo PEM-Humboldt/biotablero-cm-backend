@@ -75,7 +75,10 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
-            app.MapScalarApiReference();
+            app.MapScalarApiReference(options =>
+            {
+                options.DisableAgent();
+            });
 
             app.UseDeveloperExceptionPage();
 

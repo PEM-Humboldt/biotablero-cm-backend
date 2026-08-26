@@ -39,14 +39,14 @@ public static class OpenApiConfig
             return Task.CompletedTask;
         });
 
-        // Add custom filters
-        options.AddOperationTransformer<ODataQueryTransformer>();
-
         // Enable default security
         options.ConfigDefaultSecurity();
 
-        // Add custom endpoints docs
+        // Add custom transformers
         options.AddDocumentTransformer<AuthEndpointsDocumentTransformer>();
+        options.AddOperationTransformer<ODataQueryTransformer>();
+        options.AddOperationTransformer<OpenApiRequestOperationTransformer>();
+        options.AddOperationTransformer<OpenApiResponseOperationTransformer>();
 
         return options;
     }

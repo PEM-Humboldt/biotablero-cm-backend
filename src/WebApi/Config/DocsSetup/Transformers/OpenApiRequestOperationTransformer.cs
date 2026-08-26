@@ -47,17 +47,17 @@ public sealed class OpenApiRequestOperationTransformer
             return Task.CompletedTask;
         }
 
-        var getExampleMethod = provider.GetType().GetMethod("GetExample") ??
+        var getExampleMethod = provider.GetType().GetMethod("GetExamples") ??
             throw new InvalidOperationException($"Example provider '{exampleAttribute.ProviderType.FullName}' "
                 + "must contain a public GetExample() method.");
 
         var example = getExampleMethod.Invoke(provider, null);
 
         operation.RequestBody ??= new OpenApiRequestBody();
-        operation.RequestBody.Content!.Add("application/json", new OpenApiMediaType
+        operation.RequestBody.Content!["application/json"] = new OpenApiMediaType
         {
             Example = JsonSerializer.SerializeToNode(example, example?.GetType() ?? typeof(object)),
-        });
+        };
 
         return Task.CompletedTask;
     }
