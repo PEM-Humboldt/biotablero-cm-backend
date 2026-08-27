@@ -31,6 +31,10 @@ public class ResourceRepository(
         IncludeCustomEntities(query)
             .Include(e => e.Initiative)
                 .ThenInclude(e => e!.InitiativeUsers)
+            .Include(e => e.Initiative)
+                .ThenInclude(e => e!.InitiativeLocations!)
+                    .ThenInclude(e => e.Location)
+                        .ThenInclude(e => e!.Parent)
             .Where(e => !e.IsDraft || e.Initiative!.InitiativeUsers!.Any(e => e.UserName == userName));
 
     /// <inheritdoc/>
