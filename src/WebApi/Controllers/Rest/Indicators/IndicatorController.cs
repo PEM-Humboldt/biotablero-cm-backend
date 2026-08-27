@@ -102,7 +102,8 @@ public class IndicatorController(
     /// <returns>Process result.</returns>
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [HttpPost("Import")]
-    public async Task<IActionResult> Import(IndicatorsImportFileRequest requestData, CancellationToken ct)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Import([FromForm] IndicatorsImportFileRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new IndicatorsImportFileDto()
         {
