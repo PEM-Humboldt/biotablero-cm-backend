@@ -17,7 +17,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.OData;
 
-using ODataUtilsCustom = IAVH.BioTablero.CM.Application.Utils.ODataUtils;
+using ODataUtilsCustom = Utils.ODataUtils;
 
 /// <summary>
 /// General service for only read functions.

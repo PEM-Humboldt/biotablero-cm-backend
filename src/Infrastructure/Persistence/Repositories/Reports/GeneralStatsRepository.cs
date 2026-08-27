@@ -15,7 +15,7 @@ using Npgsql;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.GeoEnums;
 
-using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums.TagCategory;
+using TagCategoryEnum = Core.Domain.Utils.Enums.TagEnums.TagCategory;
 
 /// <summary>
 /// General Statistics repository.

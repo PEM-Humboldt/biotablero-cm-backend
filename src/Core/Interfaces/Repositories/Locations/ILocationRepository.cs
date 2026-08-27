@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using NetTopologySuite.Geometries;
 
-using LocationCustom = IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location;
+using LocationCustom = Domain.Entities.Geo.Location;
 
 /// <summary>
 /// Location repository interface.

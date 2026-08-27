@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
-using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
+using JoinRequestStatusEnum = Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
 /// <summary>
 /// Join Request controller.

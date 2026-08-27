@@ -5,7 +5,7 @@ using System.Text;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums;
 
-using IndicatorTypes = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorType;
+using IndicatorTypes = Enums.IndicatorsEnums.IndicatorType;
 
 /// <summary>
 /// Constants for indicators.

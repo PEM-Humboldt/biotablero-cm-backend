@@ -17,9 +17,9 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 using Microsoft.EntityFrameworkCore;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
-using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
-using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums.TagCategory;
+using InitiativeUserLevelEnum = Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+using JoinRequestStatusEnum = Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
+using TagCategoryEnum = Core.Domain.Utils.Enums.TagEnums.TagCategory;
 
 #pragma warning disable CS8618
 /// <summary>

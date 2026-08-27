@@ -19,7 +19,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.OData;
 
-using ODataUtilsCustom = IAVH.BioTablero.CM.Application.Utils.ODataUtils;
+using ODataUtilsCustom = Utils.ODataUtils;
 
 /// <summary>
 /// System logs service.

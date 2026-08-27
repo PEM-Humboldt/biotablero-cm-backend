@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
-using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums.TagCategory;
+using TagCategoryEnum = Core.Domain.Utils.Enums.TagEnums.TagCategory;
 
 /// <summary>
 /// Tag mappings.
