@@ -37,7 +37,7 @@ RUN dotnet publish ./src/WebApi/WebApi.csproj \
 FROM mcr.microsoft.com/dotnet/aspnet:$ASP_VERSION
 
 # Install packages
-RUN apk add --no-cache curl
+RUN apk add --no-cache krb5-libs curl
 
 ## Copy compiled project
 WORKDIR /app
