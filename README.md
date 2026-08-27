@@ -33,7 +33,7 @@ docker restart bt-cm-localstack
 
 ```sh
 # Install EF Core tools
-dotnet tool install --global dotnet-ef --version 8.0.18
+dotnet tool install --global dotnet-ef --version 10.0.11
 # Install project dependencies
 dotnet restore
 ```
@@ -52,7 +52,7 @@ dotnet ef database update --startup-project src/WebApi --project src/Infrastruct
 dotnet run --environment Development --project src/WebApi/WebApi.csproj
 ```
 
-Check Swagger docs [here](http://localhost:8001/swagger/index.html).
+Check OpenAPI docs [here](http://localhost:8001/scalar).
 
 ## Code checks
 
@@ -98,7 +98,7 @@ If you need to remove the last generated migration, you can do so with the comma
 
 ```sh
 # Build image
-docker build -t biotablero-cm-backend:latest .
+docker build -t biotablero-cm-backend:latest-dev .
 # Run temporal container
-docker run -it --rm --env-file .env --name bt-cm-backend -p 8001:8080 --network=cm-local_bt-search-network biotablero-cm-backend:latest
+docker run -it --rm --env-file .env --name bt-cm-backend -p 8001:8080 --network=cm-local_bt-search-network biotablero-cm-backend:latest-dev
 ```
