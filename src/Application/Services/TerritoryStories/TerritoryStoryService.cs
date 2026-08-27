@@ -85,8 +85,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default)
     {
-        ArgumentException.ThrowIfNullOrEmpty(userName);
-
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
@@ -125,8 +123,6 @@ public class TerritoryStoryService : ServiceRead<TerritoryStory, TerritoryStoryD
     /// <inheritdoc/>
     public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string? userName, ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct = default)
     {
-        ArgumentException.ThrowIfNullOrEmpty(userName);
-
         var query = entityRepository.GetQueryable();
         query = await entityRepository.GetQueryWithInitiativeAndUserNameAsync(initiativeId, userName, query, ct);
 
