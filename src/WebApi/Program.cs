@@ -77,8 +77,11 @@ public class Program
             app.MapOpenApi();
             app.MapScalarApiReference(options =>
             {
-                options.DisableAgent();
-                options.CustomCss = ".scalar-mcp-layer { display: none !important; }";
+                options
+                    .DisableAgent()
+                    .SortTagsAlphabetically()
+                    .SortOperationsByMethod()
+                    .CustomCss = ".scalar-mcp-layer { display: none !important; }";
             });
 
             app.UseDeveloperExceptionPage();
