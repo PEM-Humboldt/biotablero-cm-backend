@@ -16,20 +16,12 @@ using Serilog;
 /// <summary>
 /// Resource Link repository.
 /// </summary>
-public class ResourceLinkRepository : Repository<ResourceLink, int>, IResourceLinkRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class ResourceLinkRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<ResourceLink, int>(dbContext, logger), IResourceLinkRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public ResourceLinkRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public async Task<IEnumerable<ResourceLink>> GetByResourceAsync(int resourceId, CancellationToken ct = default) =>
         await dbContext.ResourceLinks

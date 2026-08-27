@@ -14,20 +14,12 @@ using Serilog;
 /// <summary>
 /// Initiative Tag repository.
 /// </summary>
-public class IndicatorTagRepository : Repository<IndicatorTag, int>, IIndicatorTagRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class IndicatorTagRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<IndicatorTag, int>(dbContext, logger), IIndicatorTagRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public IndicatorTagRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public override async Task<IndicatorTag?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.IndicatorTags

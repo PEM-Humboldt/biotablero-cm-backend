@@ -14,20 +14,12 @@ using Serilog;
 /// <summary>
 /// Notification repository.
 /// </summary>
-public class NotificationRepository : Repository<Notification, int>, INotificationRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class NotificationRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<Notification, int>(dbContext, logger), INotificationRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public NotificationRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public IQueryable<Notification> GetQueryWithUserName(string userName, IQueryable<Notification> query) =>
         query

@@ -16,20 +16,12 @@ using InitiativeUserLevelEnum = Core.Domain.Utils.Enums.InitiativesEnums.Initiat
 /// <summary>
 /// Territory Story repository.
 /// </summary>
-public class TerritoryStoryRepository : Repository<TerritoryStory, int>, ITerritoryStoryRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">Logger.</param>
+public class TerritoryStoryRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<TerritoryStory, int>(dbContext, logger), ITerritoryStoryRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">Logger.</param>
-    public TerritoryStoryRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public override async Task<TerritoryStory?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await IncludeCustomEntities()

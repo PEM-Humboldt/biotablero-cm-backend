@@ -17,20 +17,12 @@ using Serilog;
 /// <summary>
 /// Monitoring Events repository.
 /// </summary>
-public class MonitoringEventsRepository : Repository<MonitoringEvents, int>, IMonitoringEventsRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class MonitoringEventsRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<MonitoringEvents, int>(dbContext, logger), IMonitoringEventsRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public MonitoringEventsRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public async Task<IEnumerable<MonitoringEventsData>> GetMonitoringEventsData(int initiativeId, int? year = null, CancellationToken ct = default)
     {

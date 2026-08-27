@@ -23,32 +23,23 @@ using Serilog;
 /// </summary>
 /// <typeparam name="TE">Entity class type.</typeparam>
 /// <typeparam name="TI">Entity identifier type.</typeparam>
-public class Repository<TE, TI> : IRepository<TE, TI>
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class Repository<TE, TI>(
+    GeneralContext dbContext,
+    ILogger logger) : IRepository<TE, TI>
     where TI : notnull
     where TE : BaseEntity<TI>, IAggregateRoot
 {
     /// <summary>
     /// General Database context.
     /// </summary>
-    private protected readonly GeneralContext dbContext;
+    private protected readonly GeneralContext dbContext = dbContext;
 
     /// <summary>
     /// Serilog logger.
     /// </summary>
-    private protected readonly ILogger logger;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public Repository(
-        GeneralContext dbContext,
-        ILogger logger)
-    {
-        this.dbContext = dbContext;
-        this.logger = logger;
-    }
+    private protected readonly ILogger logger = logger;
 
     /// <inheritdoc/>
     public virtual async Task<TE?> GetByIdAsync(TI id, CancellationToken ct = default) => await dbContext.Set<TE>().FindAsync([id], ct);

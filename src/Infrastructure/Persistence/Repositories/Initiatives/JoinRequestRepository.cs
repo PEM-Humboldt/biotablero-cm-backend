@@ -19,20 +19,12 @@ using JoinRequestStatusEnum = Core.Domain.Utils.Enums.InitiativesEnums.JoinReque
 /// <summary>
 /// Join Request repository.
 /// </summary>
-public class JoinRequestRepository : Repository<JoinRequest, int>, IJoinRequestRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class JoinRequestRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<JoinRequest, int>(dbContext, logger), IJoinRequestRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public JoinRequestRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public async Task<IEnumerable<JoinRequest>> GetByUserNameAsync(string userName, CancellationToken ct = default) =>
         await dbContext.JoinRequests

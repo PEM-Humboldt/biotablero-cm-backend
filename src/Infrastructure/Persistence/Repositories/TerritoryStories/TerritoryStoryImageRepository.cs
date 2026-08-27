@@ -22,25 +22,16 @@ using InitiativeUserLevelEnum = Core.Domain.Utils.Enums.InitiativesEnums.Initiat
 /// <summary>
 /// Territory Story Image repository.
 /// </summary>
-public class TerritoryStoryImageRepository : Repository<TerritoryStoryImage, int>, ITerritoryStoryImageRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">Logger.</param>
+/// <param name="storageService">Storage service.</param>
+public class TerritoryStoryImageRepository(
+    GeneralContext dbContext,
+    ILogger logger,
+    IStorageService storageService) : Repository<TerritoryStoryImage, int>(dbContext, logger), ITerritoryStoryImageRepository
 {
     private const string StoragePrefix = "territory-stories";
-    private readonly IStorageService storageService;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">Logger.</param>
-    /// <param name="storageService">Storage service.</param>
-    public TerritoryStoryImageRepository(
-        GeneralContext dbContext,
-        ILogger logger,
-        IStorageService storageService)
-        : base(dbContext, logger)
-    {
-        this.storageService = storageService;
-    }
+    private readonly IStorageService storageService = storageService;
 
     /// <inheritdoc/>
     public async Task<bool> AuthorizedEntityReadAsync(int id, string? userName, CancellationToken ct = default)

@@ -15,20 +15,12 @@ using Serilog;
 /// <summary>
 /// Initiative Contact repository.
 /// </summary>
-public class InitiativeContactRepository : Repository<InitiativeContact, int>, IInitiativeContactRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class InitiativeContactRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<InitiativeContact, int>(dbContext, logger), IInitiativeContactRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public InitiativeContactRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public async Task<IEnumerable<InitiativeContact>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
         await dbContext.InitiativeContacts

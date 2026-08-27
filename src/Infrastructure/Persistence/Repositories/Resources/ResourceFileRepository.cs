@@ -20,25 +20,16 @@ using Serilog;
 /// <summary>
 /// Resource File repository.
 /// </summary>
-public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFileRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+/// <param name="storageService">Storage service.</param>
+public class ResourceFileRepository(
+    GeneralContext dbContext,
+    ILogger logger,
+    IStorageService storageService) : Repository<ResourceFile, int>(dbContext, logger), IResourceFileRepository
 {
     private const string StoragePrefix = "resources";
-    private readonly IStorageService storageService;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    /// <param name="storageService">Storage service.</param>
-    public ResourceFileRepository(
-        GeneralContext dbContext,
-        ILogger logger,
-        IStorageService storageService)
-        : base(dbContext, logger)
-    {
-        this.storageService = storageService;
-    }
+    private readonly IStorageService storageService = storageService;
 
     /// <inheritdoc/>
     public async Task<IEnumerable<ResourceFile>> GetByResourceAsync(int resourceId, CancellationToken ct = default) =>

@@ -18,20 +18,12 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums;
 /// <summary>
 /// Category repository.
 /// </summary>
-public class CategoryRepository : Repository<Category, int>, ICategoryRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class CategoryRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<Category, int>(dbContext, logger), ICategoryRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public CategoryRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public override async Task<List<Category>> ListAsync(CancellationToken ct = default) =>
         await dbContext.Categories

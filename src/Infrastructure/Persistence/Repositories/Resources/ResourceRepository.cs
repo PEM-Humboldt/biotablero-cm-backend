@@ -14,20 +14,12 @@ using Serilog;
 /// <summary>
 /// Resource repository.
 /// </summary>
-public class ResourceRepository : Repository<Resource, int>, IResourceRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class ResourceRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<Resource, int>(dbContext, logger), IResourceRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public ResourceRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public override async Task<Resource?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await IncludeCustomEntities()

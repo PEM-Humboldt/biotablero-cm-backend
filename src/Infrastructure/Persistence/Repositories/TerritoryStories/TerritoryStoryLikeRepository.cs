@@ -14,20 +14,12 @@ using Serilog;
 /// <summary>
 /// Territory Story Like repository.
 /// </summary>
-public class TerritoryStoryLikeRepository : Repository<TerritoryStoryLike, int>, ITerritoryStoryLikeRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class TerritoryStoryLikeRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<TerritoryStoryLike, int>(dbContext, logger), ITerritoryStoryLikeRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public TerritoryStoryLikeRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int territoryStoryId, string username, CancellationToken ct = default) =>
         await dbContext.TerritoryStoryLikes

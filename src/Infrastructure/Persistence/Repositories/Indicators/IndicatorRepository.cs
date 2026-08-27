@@ -16,20 +16,12 @@ using Serilog;
 /// <summary>
 /// Indicator repository.
 /// </summary>
-public class IndicatorRepository : Repository<Indicator, int>, IIndicatorRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class IndicatorRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<Indicator, int>(dbContext, logger), IIndicatorRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public IndicatorRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public override async Task<Indicator?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await IncludeCustomEntities()
