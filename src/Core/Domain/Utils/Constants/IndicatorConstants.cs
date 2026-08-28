@@ -76,4 +76,13 @@ public static class IndicatorConstants
         IndicatorTypes.CentralRelationalIntensity,
         IndicatorTypes.CollectiveActionParticipation,
     ];
+
+    /// <summary>
+    /// Indicators with integer values.
+    /// </summary>
+    public static readonly IndicatorTypes[] IndicatorsWithIntegerValues =
+    [
+        IndicatorTypes.RelativeUseByBiologicalGroup,
+        IndicatorTypes.CollectiveActionParticipation,
+    ];
 }

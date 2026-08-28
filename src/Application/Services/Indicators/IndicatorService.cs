@@ -424,6 +424,19 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 }
             }
 
+            // Check indicators with integer values
+            if (IndicatorConstants.IndicatorsWithIntegerValues.Contains((IndicatorTypes)row.IndicatorTypeId))
+            {
+                if (row.Value % 1 != 0)
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIntegerValue, data: row.Value),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+
             // Check indicators with confidence interval
             if (IndicatorConstants.IndicatorsWithConfidenceInterval.Contains((IndicatorTypes)row.IndicatorTypeId))
             {

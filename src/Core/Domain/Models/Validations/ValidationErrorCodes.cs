@@ -506,5 +506,10 @@ public static class ValidationErrorCodes
         /// Invalid location data.
         /// </summary>
         public const string InvalidLocationData = "IND_014";
+
+        /// <summary>
+        /// Invalid integer value.
+        /// </summary>
+        public const string InvalidIntegerValue = "IND_015";
     }
 }

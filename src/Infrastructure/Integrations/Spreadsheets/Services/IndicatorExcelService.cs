@@ -1,5 +1,4 @@
-﻿#nullable enable
-namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Services;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.Spreadsheets.Services;
 
 using System;
 using System.Collections.Generic;
