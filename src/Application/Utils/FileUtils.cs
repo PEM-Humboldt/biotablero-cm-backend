@@ -68,6 +68,20 @@ public static class FileUtils
         return validMimeTypes.Contains(file?.ContentType);
     }
 
+    /// <summary>
+    /// Check if it is a valid spreadsheet.
+    /// </summary>
+    /// <param name="file">Input file.</param>
+    /// <returns>True if is valid. False otherwise.</returns>
+    public static bool ItIsAValidSpreadsheet(this IInputFile file)
+    {
+        var validMimeTypes = new string[]
+        {
+            MediaTypeNames.Spreadsheet.Xlsx,
+        };
+        return validMimeTypes.Contains(file?.ContentType);
+    }
+
     #endregion
 
     #region Territory Story

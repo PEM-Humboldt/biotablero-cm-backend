@@ -173,6 +173,25 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         {
             DoNotModifyDatabase = requestData.DoNotModifyDatabase,
         };
+
+        // Validate file
+        if (formFile.IsEmpty())
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Empty),
+            };
+        }
+
+        if (!formFile.ItIsAValidSpreadsheet())
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
+            };
+        }
+
+        // Validate spreadsheet structure
         var fileReadResult = excelService.GetFileData(formFile);
 
         if (fileReadResult.Errors.Count > 0)
