@@ -430,7 +430,7 @@
     <comment/>
   </data>
   <data name="IND_015" xml:space="preserve">
-    <value>Invalid integer value</value>
+    <value>Invalid value. It must be an integer.</value>
     <comment/>
   </data>
 </root>
