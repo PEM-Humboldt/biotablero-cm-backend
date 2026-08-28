@@ -50,9 +50,6 @@ public static class ConfigLogProperties
             { "properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb) },
         };
 
-        Serilog.Debugging.SelfLog.Enable(message =>
-            Console.Error.WriteLine($"[Serilog SelfLog] {message}"));
-
         // General setup
         host.UseSerilog((context, serviceProvider, loggerConfiguration) =>
             {
