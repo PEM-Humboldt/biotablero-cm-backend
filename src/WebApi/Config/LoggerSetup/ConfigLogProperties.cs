@@ -38,7 +38,7 @@ public static class ConfigLogProperties
         var columnWriters = new Dictionary<string, ColumnWriterBase>
         {
             { "id", new GuidColumnWriter("Id") },
-            { "timestamp", new TimestampColumnWriter(NpgsqlDbType.TimestampTz) },
+            { "timestamp", new UtcTimestampColumnWriter() },
             { "level", new LevelColumnWriter() },
             { "type", new IntegerColumnWriter("Type") },
             { "message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
@@ -49,6 +49,9 @@ public static class ConfigLogProperties
             { "client_agent", new RawStringColumnWriter("ClientAgent") },
             { "properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb) },
         };
+
+        Serilog.Debugging.SelfLog.Enable(message =>
+            Console.Error.WriteLine($"[Serilog SelfLog] {message}"));
 
         // General setup
         host.UseSerilog((context, serviceProvider, loggerConfiguration) =>
@@ -64,20 +67,22 @@ public static class ConfigLogProperties
                     .Enrich.With(new ClientHeaderEnricher("User-Agent", "ClientAgent"))
                     .ReadFrom.Configuration(context.Configuration)
 
-                    // Discard SQL Command logs
-                    .Filter.ByExcluding(
-                        e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
-                            .Contains("Microsoft.EntityFrameworkCore.Database.Command", StringComparison.CurrentCultureIgnoreCase))
-
-                    // Discard HTTP Requests logs
-                    .Filter.ByExcluding(
-                        e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
-                            .Contains("Serilog.AspNetCore.RequestLoggingMiddleware", StringComparison.CurrentCultureIgnoreCase))
-                    .Filter.ByExcluding(
-                        e => e.Properties.ContainsKey(SourceContextName) && e.Properties[SourceContextName].ToString()
-                            .Contains("Microsoft.AspNetCore", StringComparison.CurrentCultureIgnoreCase))
-
                     .WriteTo.Logger(lc => lc
+
+                        // Discard EF Core SQL command logs
+                        .Filter.ByExcluding(e =>
+                            e.Properties.TryGetValue(SourceContextName, out var sourceContext) &&
+                            sourceContext.ToString().Contains(
+                                "Microsoft.EntityFrameworkCore.Database.Command",
+                                StringComparison.OrdinalIgnoreCase))
+
+                        // Discard Serilog HTTP request logs
+                        .Filter.ByExcluding(e =>
+                            e.Properties.TryGetValue(SourceContextName, out var sourceContext) &&
+                            sourceContext.ToString().Contains(
+                                "Serilog.AspNetCore.RequestLoggingMiddleware",
+                                StringComparison.OrdinalIgnoreCase))
+
                         .WriteTo.PostgreSQL(
                             connectionString: EnvUtils.GetRequiredEnv("CS_MAIN"),
                             schemaName: LogConstants.DefaultSchemaName,
@@ -86,9 +91,9 @@ public static class ConfigLogProperties
                             columnOptions: columnWriters,
                             formatProvider: CultureInfo.CurrentCulture))
 
-                        .WriteTo.Console(
-                            outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] [{Id}] {Message:lj}{NewLine}",
-                            formatProvider: CultureInfo.CurrentCulture);
+                    .WriteTo.Console(
+                        outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] [{Id}] {Message:lj}{NewLine}",
+                        formatProvider: CultureInfo.CurrentCulture);
             });
 
         return host;
