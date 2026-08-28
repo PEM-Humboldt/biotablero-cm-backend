@@ -17,6 +17,7 @@ using NpgsqlTypes;
 
 using Serilog;
 using Serilog.Enrichers;
+using Serilog.Events;
 using Serilog.Sinks.PostgreSQL;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
@@ -27,6 +28,35 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 public static class ConfigLogProperties
 {
     private const string SourceContextName = "SourceContext";
+
+    private static readonly string[] ExcludedSourceContexts =
+        [
+
+            // EF Core SQL command logs
+            "Microsoft.EntityFrameworkCore.Database.Command",
+
+            // HTTP logs
+            "Serilog.AspNetCore.RequestLoggingMiddleware",
+            "System.Net.Http.HttpClient.ICustomApiKeycloakTokenProvider.ClientHandler",
+            "System.Net.Http.HttpClient.ICustomApiKeycloakTokenProvider.LogicalHandler",
+            "System.Net.Http.HttpClient.IIamCustomApiService.ClientHandler",
+            "System.Net.Http.HttpClient.IIamCustomApiService.LogicalHandler",
+            "Microsoft.AspNetCore.Cors.Infrastructure.CorsService",
+            "Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker",
+            "Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor",
+            "Microsoft.AspNetCore.Routing.EndpointMiddleware",
+
+            // Hosting logs.
+            "Microsoft.AspNetCore.Hosting.Diagnostics",
+            "Microsoft.Hosting.Lifetime",
+
+            // Key management logs
+            "Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager",
+
+            // Auth logs
+            "Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler",
+            "Microsoft.AspNetCore.Authorization.DefaultAuthorizationService",
+        ];
 
     /// <summary>
     /// System log configuration.
@@ -65,20 +95,10 @@ public static class ConfigLogProperties
                     .ReadFrom.Configuration(context.Configuration)
 
                     .WriteTo.Logger(lc => lc
-
-                        // Discard EF Core SQL command logs
                         .Filter.ByExcluding(e =>
                             e.Properties.TryGetValue(SourceContextName, out var sourceContext) &&
-                            sourceContext.ToString().Contains(
-                                "Microsoft.EntityFrameworkCore.Database.Command",
-                                StringComparison.OrdinalIgnoreCase))
-
-                        // Discard Serilog HTTP request logs
-                        .Filter.ByExcluding(e =>
-                            e.Properties.TryGetValue(SourceContextName, out var sourceContext) &&
-                            sourceContext.ToString().Contains(
-                                "Serilog.AspNetCore.RequestLoggingMiddleware",
-                                StringComparison.OrdinalIgnoreCase))
+                            sourceContext is ScalarValue { Value: string source } &&
+                            ExcludedSourceContexts.Contains(source))
 
                         .WriteTo.PostgreSQL(
                             connectionString: EnvUtils.GetRequiredEnv("CS_MAIN"),
