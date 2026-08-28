@@ -23,7 +23,7 @@ public class LogRepository(GeneralContext dbContext, ILogger logger) : Repositor
             {
                 Id = e.Id,
                 TimeStamp = e.TimeStamp,
-                Type = e.Type,
+                LogType = e.LogType,
                 ShortMessage = e.ShortMessage,
                 Message = e.Message,
                 UserName = e.UserName,

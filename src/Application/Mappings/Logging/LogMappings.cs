@@ -20,7 +20,7 @@ public class LogMappings : MapperRead<LogEntity, LogDto>
         {
             Id = entity.Id,
             Level = entity.Level,
-            Type = entity.Type,
+            Type = entity.LogType,
             TimeStamp = entity.TimeStamp.ToUniversalTime(),
             UserName = entity.UserName,
             CustomRecord = entity.CustomRecord,
@@ -40,7 +40,7 @@ public class LogMappings : MapperRead<LogEntity, LogDto>
         return new()
         {
             Id = entity.Id,
-            Type = entity.Type,
+            Type = entity.LogType,
             TimeStamp = entity.TimeStamp.ToUniversalTime(),
             UserName = entity.UserName,
             ShortMessage = entity.ShortMessage,
