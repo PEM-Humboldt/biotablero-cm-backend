@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
@@ -27,36 +28,34 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// </summary>
 public static class ConfigLogProperties
 {
-    private const string SourceContextName = "SourceContext";
-
     private static readonly string[] ExcludedSourceContexts =
-        [
+    [
+        "Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler",
+        "Microsoft.AspNetCore.Authorization.DefaultAuthorizationService",
+        "Microsoft.AspNetCore.Cors.Infrastructure.CorsService",
+        "Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager",
+        "Microsoft.AspNetCore.Hosting.Diagnostics",
+        "Microsoft.AspNetCore.Routing.EndpointMiddleware",
+        "Microsoft.EntityFrameworkCore.Database.Command",
+        "Microsoft.Hosting.Lifetime",
+        "Serilog.AspNetCore.RequestLoggingMiddleware",
+    ];
 
-            // EF Core SQL command logs
-            "Microsoft.EntityFrameworkCore.Database.Command",
+    private static readonly string[] ExcludedSourceContextPrefixes =
+    [
+        "Microsoft.AspNetCore.Mvc.Infrastructure",
+        "System.Net.Http.HttpClient.ICustomApiKeycloakTokenProvider",
+        "System.Net.Http.HttpClient.IIamCustomApiService",
+        "System.Net.Http.HttpClient.IIamService",
+        "System.Net.Http.HttpClient.IKeycloakTokenProvider",
+    ];
 
-            // HTTP logs
-            "Serilog.AspNetCore.RequestLoggingMiddleware",
-            "System.Net.Http.HttpClient.ICustomApiKeycloakTokenProvider.ClientHandler",
-            "System.Net.Http.HttpClient.ICustomApiKeycloakTokenProvider.LogicalHandler",
-            "System.Net.Http.HttpClient.IIamCustomApiService.ClientHandler",
-            "System.Net.Http.HttpClient.IIamCustomApiService.LogicalHandler",
-            "Microsoft.AspNetCore.Cors.Infrastructure.CorsService",
-            "Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker",
-            "Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor",
-            "Microsoft.AspNetCore.Routing.EndpointMiddleware",
-
-            // Hosting logs.
-            "Microsoft.AspNetCore.Hosting.Diagnostics",
-            "Microsoft.Hosting.Lifetime",
-
-            // Key management logs
-            "Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager",
-
-            // Auth logs
-            "Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler",
-            "Microsoft.AspNetCore.Authorization.DefaultAuthorizationService",
-        ];
+    private static readonly LogEventLevel[] DbLogLevels =
+    [
+        LogEventLevel.Warning,
+        LogEventLevel.Error,
+        LogEventLevel.Fatal,
+    ];
 
     /// <summary>
     /// System log configuration.
@@ -95,10 +94,7 @@ public static class ConfigLogProperties
                     .ReadFrom.Configuration(context.Configuration)
 
                     .WriteTo.Logger(lc => lc
-                        .Filter.ByExcluding(e =>
-                            e.Properties.TryGetValue(SourceContextName, out var sourceContext) &&
-                            sourceContext is ScalarValue { Value: string source } &&
-                            ExcludedSourceContexts.Contains(source))
+                        .Filter.ByExcluding(ShouldExclude)
 
                         .WriteTo.PostgreSQL(
                             connectionString: EnvUtils.GetRequiredEnv("CS_MAIN"),
@@ -114,5 +110,34 @@ public static class ConfigLogProperties
             });
 
         return host;
+    }
+
+    /// <summary>
+    /// Check whether a record should be excluded.
+    /// </summary>
+    /// <param name="logEvent">Serilog log event.</param>
+    /// <returns>True if the log should be excluded. False otherwise.</returns>
+    private static bool ShouldExclude(LogEvent logEvent)
+    {
+        if (DbLogLevels.Contains(logEvent.Level))
+        {
+            return false;
+        }
+
+        if (!logEvent.Properties.TryGetValue(LogConstants.SourceContext, out var sourceContext) ||
+            sourceContext is not ScalarValue { Value: string source })
+        {
+            return false;
+        }
+
+        if (logEvent.Properties[LogConstants.CustomRecord] is ScalarValue { Value: bool customRecordValue } &&
+            customRecordValue)
+        {
+            return false;
+        }
+
+        return ExcludedSourceContexts.Contains(source) ||
+            ExcludedSourceContextPrefixes.Any(prefix =>
+                source.StartsWith(prefix, StringComparison.OrdinalIgnoreCase));
     }
 }

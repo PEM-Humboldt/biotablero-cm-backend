@@ -51,5 +51,10 @@ public static class LogConstants
     /// </summary>
     public const string ShortMessage = "ShortMessage";
 
+    /// <summary>
+    /// Source context property value.
+    /// </summary>
+    public const string SourceContext = "SourceContext";
+
     #endregion
 }
