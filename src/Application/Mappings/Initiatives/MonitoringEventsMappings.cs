@@ -34,7 +34,7 @@ public class MonitoringEventsMappings : MapperRead<MonitoringEvents, MonitoringE
         return new()
         {
             Id = dto.Id ?? 0,
-            InitiativeId = dto.InitiativeId,
+            InitiativeId = dto.InitiativeId ?? 0,
             Date = dto.Date,
             Value = dto.Value,
         };

@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -23,6 +24,12 @@ public class MonitoringEventsRepository(
     GeneralContext dbContext,
     ILogger logger) : Repository<MonitoringEvents, int>(dbContext, logger), IMonitoringEventsRepository
 {
+    /// <inheritdoc/>
+    public async Task<IEnumerable<MonitoringEvents>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
+        await dbContext.MonitoringEvents
+            .Where(e => e.InitiativeId == initiativeId)
+            .ToListAsync(ct);
+
     /// <inheritdoc/>
     public async Task<IEnumerable<MonitoringEventsData>> GetMonitoringEventsData(int initiativeId, int? year = null, CancellationToken ct = default)
     {
@@ -56,4 +63,16 @@ public class MonitoringEventsRepository(
             .OrderBy(e => e.GroupNumber)
             .ToListAsync(ct);
     }
+
+    /// <inheritdoc/>
+    public async Task<bool> IsDuplicatedAsync(int initiativeId, DateTimeOffset monitoringEventsDate, CancellationToken ct = default) =>
+        await dbContext.MonitoringEvents
+            .Where(e => e.InitiativeId == initiativeId && e.Date == monitoringEventsDate)
+            .AnyAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<bool> IsDuplicatedAsync(int id, int initiativeId, DateTimeOffset monitoringEventsDate, CancellationToken ct = default) =>
+        await dbContext.MonitoringEvents
+            .Where(e => e.Id != id && e.InitiativeId == initiativeId && e.Date == monitoringEventsDate)
+            .AnyAsync(ct);
 }

@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+﻿namespace IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
 using System;
 
@@ -17,7 +17,7 @@ public class MonitoringEventsDto() : IDto
     /// <summary>
     /// Initiative identifier.
     /// </summary>
-    public int InitiativeId { get; set; }
+    public int? InitiativeId { get; set; }
 
     /// <summary>
     /// Monitoring events date.
