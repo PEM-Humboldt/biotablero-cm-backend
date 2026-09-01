@@ -44,6 +44,8 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 {
     private new readonly IIndicatorRepository entityRepository;
     private readonly ILogger logger;
+    private new readonly IMapperReadAndUpdate<Indicator, IndicatorDto> mapper;
+    private readonly IValidator<IndicatorDto> entityValidator;
     private readonly IIndicatorExcelService excelService;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ILocationRepository locationRepository;
@@ -51,12 +53,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     private readonly ICategoryRepository categoryRepository;
     private readonly IIndicatorLocationRepository indicatorLocationRepository;
     private readonly IValidator<IndicatorsImportRow> indicatorsImportRowValidator;
-    private readonly IMapperRead<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper;
+    private readonly IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="entityRepository">Entity repository.</param>
+    /// <param name="entityValidator">Entity validator.</param>
     /// <param name="logger">System logger.</param>
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
@@ -70,8 +73,9 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="indicatorVersionMapper">Indicator version mapper.</param>
     public IndicatorService(
         IIndicatorRepository entityRepository,
+        IValidator<IndicatorDto> entityValidator,
         ILogger logger,
-        IMapperRead<Indicator, IndicatorDto> mapper,
+        IMapperReadAndUpdate<Indicator, IndicatorDto> mapper,
         IValidationErrorTranslator errorTranslator,
         IIndicatorExcelService excelService,
         IInitiativeRepository initiativeRepository,
@@ -80,11 +84,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         ICategoryRepository categoryRepository,
         IIndicatorLocationRepository indicatorLocationRepository,
         IValidator<IndicatorsImportRow> indicatorsImportRowValidator,
-        IMapperRead<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper)
+        IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper)
     : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
+        this.entityValidator = entityValidator;
         this.logger = logger;
+        this.mapper = mapper;
         this.excelService = excelService;
         this.initiativeRepository = initiativeRepository;
         this.locationRepository = locationRepository;
@@ -115,6 +121,46 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         return new()
         {
             ResponseBody = dataListDto,
+        };
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> UpdateAsync(int id, IndicatorDto entityData, CancellationToken ct = default)
+    {
+        // Validate data
+        var validationResult = await entityValidator.ValidateAsync(entityData, ct);
+
+        if (!validationResult.IsValid)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
+            };
+        }
+
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        // Update entity data
+        mapper.Update(entity, entityData);
+
+        await entityRepository.UpdateAsync(entity, ct);
+
+        entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Update, "Updated indicator", "{@EntityData}", entityData);
+
+        return new()
+        {
+            ResponseBody = entityData,
         };
     }
 

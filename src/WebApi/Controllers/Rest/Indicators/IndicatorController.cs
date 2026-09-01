@@ -78,6 +78,24 @@ public class IndicatorController(
     }
 
     /// <summary>
+    /// Edit entity.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="requestData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated entity data.</returns>
+    [HttpPut("{id}")]
+    [Consumes("application/json")]
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [SwaggerRequestExample(typeof(IndicatorDto), typeof(IndicatorEditRequestExample))]
+    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(IndicatorResponseExample))]
+    public async Task<IActionResult> Put(int id, [FromBody] IndicatorDto requestData, CancellationToken ct)
+    {
+        var response = await entityService.UpdateAsync(id, requestData, ct);
+        return webTools.CustomResponse(response);
+    }
+
+    /// <summary>
     /// Import indicators with spreadsheet.
     /// </summary>
     /// <param name="requestData">Indicators request data.</param>
