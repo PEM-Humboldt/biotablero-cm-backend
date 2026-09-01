@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Initiatives;
 
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,6 +15,9 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
+
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.OData;
 
 using Serilog;
 
@@ -58,17 +60,24 @@ public class MonitoringEventsService : ServiceRead<MonitoringEvents, MonitoringE
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetListAsync(int initiativeId, ODataQueryOptions<MonitoringEvents> queryOptions, CancellationToken ct = default)
     {
-        var dataListEntity = await entityRepository.GetByInitiativeAsync(initiativeId, ct);
+        var query = entityRepository.GetQueryable();
+        query = entityRepository.AddInitiativeFilter(initiativeId, query);
+        query = entityRepository.IncludeOdataEntities(query);
 
-        var dataListDto = dataListEntity
-            .Select(mapper.Map);
-
-        return new()
+        try
         {
-            ResponseBody = dataListDto,
-        };
+            var odataResponse = await GetOdataDtoListByQueryAsync(query, queryOptions, ct);
+            return GetOdataWebResponse(odataResponse, mapper);
+        }
+        catch (ODataException)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter),
+            };
+        }
     }
 
     /// <inheritdoc/>

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,12 +15,19 @@ using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 public interface IMonitoringEventsRepository : IRepository<MonitoringEvents, int>
 {
     /// <summary>
-    /// Get elements by initiative.
+    /// Include OData custom entities.
+    /// </summary>
+    /// <param name="query">Linq Query.</param>
+    /// <returns>Modified Linq query.</returns>
+    IQueryable<MonitoringEvents> IncludeOdataEntities(IQueryable<MonitoringEvents> query);
+
+    /// <summary>
+    /// Add initiative filter.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>Entities by selected initiative.</returns>
-    Task<IEnumerable<MonitoringEvents>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+    /// <param name="query">Linq Query.</param>
+    /// <returns>Modified Linq query.</returns>
+    IQueryable<MonitoringEvents> AddInitiativeFilter(int initiativeId, IQueryable<MonitoringEvents> query);
 
     /// <summary>
     /// Get Monitoring Events data.

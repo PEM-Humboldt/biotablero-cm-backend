@@ -25,10 +25,14 @@ public class MonitoringEventsRepository(
     ILogger logger) : Repository<MonitoringEvents, int>(dbContext, logger), IMonitoringEventsRepository
 {
     /// <inheritdoc/>
-    public async Task<IEnumerable<MonitoringEvents>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
-        await dbContext.MonitoringEvents
-            .Where(e => e.InitiativeId == initiativeId)
-            .ToListAsync(ct);
+    public IQueryable<MonitoringEvents> IncludeOdataEntities(IQueryable<MonitoringEvents> query) =>
+        query
+            .Include(e => e.Initiative);
+
+    /// <inheritdoc/>
+    public IQueryable<MonitoringEvents> AddInitiativeFilter(int initiativeId, IQueryable<MonitoringEvents> query) =>
+        query
+            .Where(e => e.InitiativeId == initiativeId);
 
     /// <inheritdoc/>
     public async Task<IEnumerable<MonitoringEventsData>> GetMonitoringEventsData(int initiativeId, int? year = null, CancellationToken ct = default)

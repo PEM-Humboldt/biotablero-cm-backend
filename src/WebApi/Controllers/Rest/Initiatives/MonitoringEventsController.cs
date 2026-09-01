@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Reports;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
@@ -14,6 +15,7 @@ using IAVH.BioTablero.CM.WebApi.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 /// <summary>
 /// Monitoring Events controller.
@@ -43,17 +45,17 @@ public class MonitoringEventsController(
     }
 
     /// <summary>
-    /// Get entities by Initiative.
+    /// Get entities (paginated).
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
-    [HttpGet("GetByInitiative/{initiativeId}")]
-    [Authorize]
-    [OpenApiResponse(StatusCodes.Status200OK, typeof(MonitoringEventsListResponseExample))]
-    public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
+    [HttpGet]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(MonitoringEventsOdataResponseExample))]
+    public async Task<IActionResult> GetOdataList(int initiativeId, ODataQueryOptions<MonitoringEvents> queryOptions, CancellationToken ct)
     {
-        var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
+        var response = await entityService.GetListAsync(initiativeId, queryOptions, ct);
         return webTools.CustomResponse(response);
     }
 
