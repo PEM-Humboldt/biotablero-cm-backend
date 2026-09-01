@@ -64,9 +64,13 @@ public class Program
         builder.Host.AddLogConfig();
 
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddOpenApi(options =>
+        builder.Services.AddOpenApi("v1", options =>
         {
             options.AddCustomOptions();
+        });
+        builder.Services.AddOpenApi("auth", options =>
+        {
+            options.AddAuthCustomOptions();
         });
 
         var app = builder.Build();
@@ -81,6 +85,8 @@ public class Program
                     .DisableAgent()
                     .SortTagsAlphabetically()
                     .SortOperationsByMethod()
+                    .AddDocument("v1", "BioTablero API")
+                    .AddDocument("auth", "Keycloak Auth")
                     .CustomCss = ".scalar-mcp-layer { display: none !important; }";
             });
 
