@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
-using IAVH.BioTablero.CM.Application.Services.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Reports;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
@@ -25,7 +25,7 @@ using Microsoft.AspNetCore.Mvc;
 [ApiConventionType(typeof(CustomApiConventions))]
 public class MonitoringEventsController(
     IWebTools webTools,
-    MonitoringEventsService entityService) : ControllerBase
+    IMonitoringEventsService entityService) : ControllerBase
 {
     /// <summary>
     /// Get entity.
