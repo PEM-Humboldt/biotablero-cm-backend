@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Transformers;
 
 using Microsoft.AspNetCore.OpenApi;
@@ -36,6 +37,21 @@ public static class OpenApiConfig
                     Email = "biotablero@humboldt.org.co",
                 },
             };
+
+            document.Servers =
+            [
+                new()
+                {
+                    Url = EnvUtils.GetRequiredEnv("PUBLIC_BASE_URL"),
+                    Description = "API Server",
+                },
+                new()
+                {
+                    Url = $"{EnvUtils.GetRequiredEnv("KC_BASE_URL")}/realms/{EnvUtils.GetRequiredEnv("KC_REALM")}",
+                    Description = "Auth Server",
+                },
+            ];
+
             return Task.CompletedTask;
         });
 

@@ -17,14 +17,7 @@ using Microsoft.OpenApi;
 /// </summary>
 public sealed class ODataQueryTransformer : IOpenApiOperationTransformer
 {
-    /// <summary>
-    /// Transforms an OpenAPI operation to customize OData query parameters
-    /// and responses.
-    /// </summary>
-    /// <param name="operation">OpenAPI operation.</param>
-    /// <param name="context">OpenAPI operation transformer context.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public Task TransformAsync(
         OpenApiOperation operation,
         OpenApiOperationTransformerContext context,

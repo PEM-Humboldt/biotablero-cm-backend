@@ -30,19 +30,14 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
         new()
         {
             Url = $"{EnvUtils.GetRequiredEnv("KC_BASE_URL")}/realms/{EnvUtils.GetRequiredEnv("KC_REALM")}",
+            Description = "Keycloak Auth Server",
         }
     ];
 
     private static readonly string ClientId =
         EnvUtils.GetRequiredEnv("KC_CLIENT");
 
-    /// <summary>
-    /// Applies custom authentication endpoints to the OpenAPI document.
-    /// </summary>
-    /// <param name="document">OpenAPI document.</param>
-    /// <param name="context">OpenAPI document transformer context.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Process result.</returns>
+    /// <inheritdoc/>
     public Task TransformAsync(
         OpenApiDocument document,
         OpenApiDocumentTransformerContext context,
@@ -55,7 +50,7 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
     }
 
     private static void AddPasswordTokenEndpoint(OpenApiDocument document) =>
-        document.Paths["/protocol/openid-connect/token?password"] = new OpenApiPathItem
+        document.Paths["/protocol/openid-connect/token"] = new OpenApiPathItem
         {
             Description = "Auth server endpoint to obtain a JWT token",
             Servers = Servers,
@@ -66,6 +61,7 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
                     Summary = "Get JWT from auth server with password.",
                     Description = "Authentication using grant_type=password",
                     Tags = OperationTags,
+                    Servers = Servers,
                     RequestBody = new OpenApiRequestBody
                     {
                         Content = new Dictionary<string, OpenApiMediaType>
@@ -133,6 +129,7 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
                         Description =
                             "Authentication using grant_type=refresh_token",
                         Tags = OperationTags,
+                        Servers = Servers,
                         RequestBody = new OpenApiRequestBody
                         {
                             Content =
