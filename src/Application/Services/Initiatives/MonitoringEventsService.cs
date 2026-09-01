@@ -121,7 +121,7 @@ public class MonitoringEventsService : ServiceRead<MonitoringEvents, MonitoringE
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeContacts.Duplicated),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.MonitoringEvents.Duplicated),
             };
         }
 
@@ -185,7 +185,7 @@ public class MonitoringEventsService : ServiceRead<MonitoringEvents, MonitoringE
         {
             return new(true)
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.InitiativeContacts.Duplicated),
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.MonitoringEvents.Duplicated),
             };
         }
 
