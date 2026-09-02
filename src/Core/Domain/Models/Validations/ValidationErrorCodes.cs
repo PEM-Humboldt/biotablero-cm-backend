@@ -512,4 +512,15 @@ public static class ValidationErrorCodes
         /// </summary>
         public const string InvalidIntegerValue = "IND_015";
     }
+
+    /// <summary>
+    /// Monitoring Events errors.
+    /// </summary>
+    public static class MonitoringEvents
+    {
+        /// <summary>
+        /// Duplicated.
+        /// </summary>
+        public const string Duplicated = "MEV_001";
+    }
 }

@@ -40,6 +40,7 @@ public static class ConfigValidators
         services.AddValidatorsFromAssemblyContaining<IndicatorsImportRowValidator>();
         services.AddValidatorsFromAssemblyContaining<IndicatorValidator>();
         services.AddValidatorsFromAssemblyContaining<IndicatorVersionValidator>();
+        services.AddValidatorsFromAssemblyContaining<MonitoringEventsValidator>();
         services.AddValidatorsFromAssemblyContaining<ReportDataValidator>();
 
         return services;

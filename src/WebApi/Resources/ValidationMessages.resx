@@ -433,4 +433,8 @@
     <value>Invalid value. It must be an integer.</value>
     <comment/>
   </data>
+  <data name="MEV_001" xml:space="preserve">
+    <value>Duplicate monitoring events.</value>
+    <comment/>
+  </data>
 </root>
