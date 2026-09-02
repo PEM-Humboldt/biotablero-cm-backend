@@ -430,7 +430,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             };
         }
 
-        if (!formFile.IsValidImage())
+        if (!formFile.ItIsAValidImage())
         {
             return new(true)
             {

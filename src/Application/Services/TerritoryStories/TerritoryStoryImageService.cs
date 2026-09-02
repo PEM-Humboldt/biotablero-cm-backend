@@ -163,7 +163,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
             };
         }
 
-        if (!formFile.IsValidImage())
+        if (!formFile.ItIsAValidImage())
         {
             return new(true)
             {
@@ -240,7 +240,7 @@ public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, Terri
 
         if (updateHasFile)
         {
-            if (!formFile.IsValidImage())
+            if (!formFile.ItIsAValidImage())
             {
                 return new(true)
                 {

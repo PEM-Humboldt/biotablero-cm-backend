@@ -429,4 +429,8 @@
     <value>The current indicator does not have the geographical data supplied in the spreadsheet</value>
     <comment/>
   </data>
+  <data name="IND_015" xml:space="preserve">
+    <value>Invalid value. It must be an integer.</value>
+    <comment/>
+  </data>
 </root>

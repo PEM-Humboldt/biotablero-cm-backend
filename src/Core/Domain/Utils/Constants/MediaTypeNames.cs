@@ -27,6 +27,17 @@ public static class MediaTypeNames
     }
 
     /// <summary>
+    /// Spreadsheet data types.
+    /// </summary>
+    public static class Spreadsheet
+    {
+        /// <summary>
+        /// Microsoft Excel Macro-enabled Spreadsheet type.
+        /// </summary>
+        public const string Xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    }
+
+    /// <summary>
     /// Application data types.
     /// </summary>
     public static class Application

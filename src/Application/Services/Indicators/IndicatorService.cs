@@ -173,6 +173,25 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         {
             DoNotModifyDatabase = requestData.DoNotModifyDatabase,
         };
+
+        // Validate file
+        if (formFile.IsEmpty())
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Empty),
+            };
+        }
+
+        if (!formFile.ItIsAValidSpreadsheet())
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
+            };
+        }
+
+        // Validate spreadsheet structure
         var fileReadResult = excelService.GetFileData(formFile);
 
         if (fileReadResult.Errors.Count > 0)
@@ -419,6 +438,19 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.GroupAndDescriptionRequired),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+
+            // Check indicators with integer values
+            if (IndicatorConstants.IndicatorsWithIntegerValues.Contains((IndicatorTypes)row.IndicatorTypeId))
+            {
+                if (row.Value % 1 != 0)
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIntegerValue, data: row.Value),
                         Message = $"Errors in row {row.RowNumber}",
                     };
                 }

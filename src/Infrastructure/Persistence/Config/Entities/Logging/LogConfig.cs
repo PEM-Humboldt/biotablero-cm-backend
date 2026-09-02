@@ -33,7 +33,7 @@ public class LogConfig : IEntityTypeConfiguration<LogEntity>
             .HasConversion<int>()
             .IsRequired();
 
-        builder?.Property(e => e.Type)
+        builder?.Property(e => e.LogType)
             .HasColumnName("type")
             .HasDefaultValue(LogType.System)
             .HasConversion<int>()

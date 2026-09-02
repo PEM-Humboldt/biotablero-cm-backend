@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Utils;
 
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+
 using Serilog;
 using Serilog.Events;
 
@@ -36,9 +38,9 @@ public static class LogUtils
         }
 
         logger
-            .ForContext("CustomRecord", true)
-            .ForContext("Type", (int)logType)
-            .ForContext("ShortMessage", shortMessage)
+            .ForContext(LogConstants.CustomRecord, true)
+            .ForContext(LogConstants.CustomType, (int)logType)
+            .ForContext(LogConstants.ShortMessage, shortMessage)
             .Write(logLevel, finalMessageTemplate, propertyValues);
     }
 }

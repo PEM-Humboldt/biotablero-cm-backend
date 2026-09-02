@@ -3,9 +3,11 @@
 using System;
 using System.Linq;
 
+using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Mappings.General;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 
 /// <summary>
@@ -15,7 +17,8 @@ public class ResourceMappings(
     IMapperRead<ResourceType, ResourceTypeDto> resourceTypeMappings,
     IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto> resourceFileMappings,
     IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto> resourceLinkMappings,
-    IMapperRead<ResourceTag, ResourceTagDto> resourceTagMappings) : MapperRead<Resource, ResourceDto>, IMapperCreateReadAndUpdate<Resource, ResourceDto>
+    IMapperRead<ResourceTag, ResourceTagDto> resourceTagMappings,
+    IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto> initiativeLocationMappings) : MapperRead<Resource, ResourceDto>, IMapperCreateReadAndUpdate<Resource, ResourceDto>
 {
     /// <inheritdoc/>
     public override ResourceDto Map(Resource? entity)
@@ -70,6 +73,7 @@ public class ResourceMappings(
             {
                 Id = entity.Initiative.Id,
                 Name = entity.Initiative.Name,
+                Locations = entity.Initiative.InitiativeLocations?.Select(initiativeLocationMappings.Map),
             }
             : null,
             Tags = entity.ResourceTags?.Select(resourceTagMappings.Map),

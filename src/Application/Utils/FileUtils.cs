@@ -53,16 +53,12 @@ public static class FileUtils
         return builder.ToString();
     }
 
-    #endregion
-
-    #region Territory Story
-
     /// <summary>
-    /// Check if is a valid image.
+    /// Check if it is a valid image.
     /// </summary>
     /// <param name="file">Input file.</param>
     /// <returns>True if is valid. False otherwise.</returns>
-    public static bool IsValidImage(this IInputFile file)
+    public static bool ItIsAValidImage(this IInputFile file)
     {
         var validMimeTypes = new string[]
         {
@@ -71,6 +67,24 @@ public static class FileUtils
         };
         return validMimeTypes.Contains(file?.ContentType);
     }
+
+    /// <summary>
+    /// Check if it is a valid spreadsheet.
+    /// </summary>
+    /// <param name="file">Input file.</param>
+    /// <returns>True if is valid. False otherwise.</returns>
+    public static bool ItIsAValidSpreadsheet(this IInputFile file)
+    {
+        var validMimeTypes = new string[]
+        {
+            MediaTypeNames.Spreadsheet.Xlsx,
+        };
+        return validMimeTypes.Contains(file?.ContentType);
+    }
+
+    #endregion
+
+    #region Territory Story
 
     /// <summary>
     /// Check if file has valid size (Territory Story Image).
