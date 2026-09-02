@@ -165,6 +165,10 @@ dotnet_diagnostic.SA1401.severity = none
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1204.md
 dotnet_diagnostic.SA1204.severity = none
 
+# Using directives must be qualified
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1135.md
+dotnet_diagnostic.SA1135.severity = none
+
 # --------------------- #
 # Unused Code Detection #
 # --------------------- #

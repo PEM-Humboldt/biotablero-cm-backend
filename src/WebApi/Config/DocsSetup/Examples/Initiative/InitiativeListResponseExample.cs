@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Initiative list response example.
 /// </summary>
-public class InitiativeListResponseExample : IExamplesProvider<List<InitiativeDto>>
+public class InitiativeListResponseExample : IOpenApiExampleProvider<List<InitiativeDto>>
 {
     /// <inheritdoc/>
     public List<InitiativeDto> GetExamples() =>

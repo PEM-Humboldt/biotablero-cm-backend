@@ -10,18 +10,10 @@ using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Web;
 /// <summary>
 /// Web Helper service.
 /// </summary>
-public class WebHelperService : IWebHelperService
+/// <param name="httpClient">HTTP Client.</param>
+public class WebHelperService(HttpClient httpClient) : IWebHelperService
 {
-    private readonly HttpClient httpClient;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="httpClient">HTTP Client.</param>
-    public WebHelperService(HttpClient httpClient)
-    {
-        this.httpClient = httpClient;
-    }
+    private readonly HttpClient httpClient = httpClient;
 
     /// <inheritdoc/>
     public async Task<bool> LinkExistsAsync(string url, CancellationToken ct = default)

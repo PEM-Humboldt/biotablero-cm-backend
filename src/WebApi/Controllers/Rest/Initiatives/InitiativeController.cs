@@ -8,6 +8,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -18,8 +19,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
-
-using Swashbuckle.AspNetCore.Filters;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
@@ -43,7 +42,7 @@ public class InitiativeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, !string.IsNullOrEmpty(HttpContext.GetUserName()), ct);
@@ -57,7 +56,7 @@ public class InitiativeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeOdataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<Initiative> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);
@@ -71,7 +70,7 @@ public class InitiativeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>List of initiatives with coordinates.</returns>
     [HttpGet("GetByLocation")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeGeoDataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeGeoDataResponseExample))]
     public async Task<IActionResult> GetListByLocation([FromQuery] int? locationId = null, CancellationToken ct = default)
     {
         var response = await entityService.GetByLocationAsync(locationId, ct);
@@ -84,7 +83,7 @@ public class InitiativeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("Related")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeListResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeListResponseExample))]
     public async Task<IActionResult> GetListRelated(CancellationToken ct)
     {
         var response = await entityService.GetLastEntitiesAsync(ct);
@@ -113,8 +112,8 @@ public class InitiativeController(
     [HttpPost]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [SwaggerRequestExample(typeof(InitiativeDto), typeof(InitiativeAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
+    [OpenApiRequest(typeof(InitiativeAddRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Post([FromBody] InitiativeDto requestData, CancellationToken ct)
     {
         var response = await entityService.AddAsync(requestData, ct);
@@ -131,8 +130,8 @@ public class InitiativeController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(InitiativeDto), typeof(InitiativeEditRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
+    [OpenApiRequest(typeof(InitiativeEditRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] InitiativeDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), HttpContext.UserIsAdmin(), requestData, ct);
@@ -149,10 +148,10 @@ public class InitiativeController(
     [HttpPut("Polygon/{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [SwaggerRequestExample(typeof(string), typeof(InitiativePolygonEditRequestExample))]
+    [OpenApiRequest(typeof(InitiativePolygonEditRequestExample))]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeResponseExample))]
     public async Task<IActionResult> UpdatePolygon(int id, [FromBody] object request, CancellationToken ct)
     {
         var geoJsonString = System.Text.Json.JsonSerializer.Serialize(request);

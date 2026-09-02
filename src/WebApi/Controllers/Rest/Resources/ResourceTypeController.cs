@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.ResourceType;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -13,8 +14,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
-
-using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Resource Type controller.
@@ -36,7 +35,7 @@ public class ResourceTypeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceTypeResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceTypeResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -50,7 +49,7 @@ public class ResourceTypeController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceTypeOdataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceTypeOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<ResourceType> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);

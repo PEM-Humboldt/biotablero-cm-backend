@@ -16,18 +16,10 @@ using SixLabors.ImageSharp.Processing;
 /// <summary>
 /// Image Utils service.
 /// </summary>
-public class ImageUtilsService : IImageUtilsService
+/// <param name="logger">Logger.</param>
+public class ImageUtilsService(ILogger logger) : IImageUtilsService
 {
-    private readonly ILogger logger;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="logger">Logger.</param>
-    public ImageUtilsService(ILogger logger)
-    {
-        this.logger = logger;
-    }
+    private readonly ILogger logger = logger;
 
     /// <inheritdoc/>
     public async Task<Stream?> CompressToWebpAsync(Stream input, int quality = 75, CancellationToken ct = default)

@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 using NetTopologySuite.Geometries;
 
-using LocationCustom = IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location;
+using LocationCustom = Geo.Location;
 
 /// <summary>
 /// Initiative entity.

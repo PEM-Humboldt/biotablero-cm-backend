@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+using InitiativeUserLevelEnum = Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
 /// <summary>
 /// Initiative contact mappings.

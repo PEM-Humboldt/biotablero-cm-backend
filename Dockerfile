@@ -1,5 +1,5 @@
-ARG VERSION=8.0.422-alpine3.24-amd64
-ARG ASP_VERSION=8.0.28-alpine3.24-amd64
+ARG VERSION=10.0.400-alpine3.24-amd64
+ARG ASP_VERSION=10.0.11-alpine3.24-amd64
 
 # Build stage
 FROM mcr.microsoft.com/dotnet/sdk:$VERSION AS build-env
@@ -7,7 +7,7 @@ FROM mcr.microsoft.com/dotnet/sdk:$VERSION AS build-env
 WORKDIR /app
 
 ## Copy solution and project files
-ADD *.sln .
+ADD *.slnx .
 ADD Directory.Build.props .
 ADD /src/Application/*.csproj ./src/Application/
 ADD /src/Core/*.csproj ./src/Core/
@@ -37,7 +37,7 @@ RUN dotnet publish ./src/WebApi/WebApi.csproj \
 FROM mcr.microsoft.com/dotnet/aspnet:$ASP_VERSION
 
 # Install packages
-RUN apk add --no-cache curl
+RUN apk add --no-cache krb5-libs curl
 
 ## Copy compiled project
 WORKDIR /app

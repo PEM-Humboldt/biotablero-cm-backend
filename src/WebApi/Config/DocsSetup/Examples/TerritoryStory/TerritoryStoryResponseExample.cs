@@ -4,12 +4,12 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Territory Story response example.
 /// </summary>
-public class TerritoryStoryResponseExample : IExamplesProvider<TerritoryStoryDto>
+public class TerritoryStoryResponseExample : IOpenApiExampleProvider<TerritoryStoryDto>
 {
     /// <inheritdoc/>
     public TerritoryStoryDto GetExamples() => new()

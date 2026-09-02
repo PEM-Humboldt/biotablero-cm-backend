@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 
 /// <summary>
 /// Initiative User list response example.
 /// </summary>
-public class InitiativeUserListResponseExample : IExamplesProvider<List<InitiativeUserDto>>
+public class InitiativeUserListResponseExample : IOpenApiExampleProvider<List<InitiativeUserDto>>
 {
     /// <inheritdoc/>
     public List<InitiativeUserDto> GetExamples() =>

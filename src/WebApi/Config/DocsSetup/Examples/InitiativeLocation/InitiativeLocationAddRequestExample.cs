@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Initiative Location add request example.
 /// </summary>
-public class InitiativeLocationAddRequestExample : IExamplesProvider<InitiativeLocationDto>
+public class InitiativeLocationAddRequestExample : IOpenApiExampleProvider<InitiativeLocationDto>
 {
     /// <inheritdoc/>
     public InitiativeLocationDto GetExamples() => new()

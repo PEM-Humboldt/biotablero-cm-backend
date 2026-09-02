@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Demographic statistics response example.
 /// </summary>
-public class DemographicStatsResponseExample : IExamplesProvider<DemographicStatsDto>
+public class DemographicStatsResponseExample : IOpenApiExampleProvider<DemographicStatsDto>
 {
     /// <inheritdoc/>
     public DemographicStatsDto GetExamples() =>

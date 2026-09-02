@@ -14,20 +14,12 @@ using Serilog;
 /// <summary>
 /// Indicator Version repository.
 /// </summary>
-public class IndicatorVersionRepository : Repository<IndicatorVersion, int>, IIndicatorVersionRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class IndicatorVersionRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<IndicatorVersion, int>(dbContext, logger), IIndicatorVersionRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public IndicatorVersionRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public override async Task<IndicatorVersion?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.IndicatorVersions

@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Indicator edit response example.
 /// </summary>
-public class IndicatorEditRequestExample : IExamplesProvider<IndicatorDto>
+public class IndicatorEditRequestExample : IOpenApiExampleProvider<IndicatorDto>
 {
     /// <inheritdoc/>
     public IndicatorDto GetExamples() => new()

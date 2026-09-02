@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Core.Domain.Models.User;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// User profile data response example.
 /// </summary>
-public class ProfileDataResponseExample : IExamplesProvider<UserProfile>
+public class ProfileDataResponseExample : IOpenApiExampleProvider<UserProfile>
 {
     /// <inheritdoc/>
     public UserProfile GetExamples() => new()

@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Core.Domain.Models.Initiatives;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// General statistics response example.
 /// </summary>
-public class MonitoringEventsResponseExample : IExamplesProvider<List<MonitoringEventsData>>
+public class MonitoringEventsResponseExample : IOpenApiExampleProvider<List<MonitoringEventsData>>
 {
     /// <inheritdoc/>
     public List<MonitoringEventsData> GetExamples() =>

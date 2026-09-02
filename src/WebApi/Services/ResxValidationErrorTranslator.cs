@@ -16,20 +16,12 @@ using Microsoft.Extensions.Localization;
 /// <summary>
 /// Validator error translator for resx files.
 /// </summary>
-public class ResxValidationErrorTranslator
-    : IValidationErrorTranslator
+/// <param name="localizer">String localizer.</param>
+public class ResxValidationErrorTranslator(
+    IStringLocalizer<ValidationMessages> localizer)
+        : IValidationErrorTranslator
 {
-    private readonly IStringLocalizer<ValidationMessages> localizer;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="localizer">String localizer.</param>
-    public ResxValidationErrorTranslator(
-        IStringLocalizer<ValidationMessages> localizer)
-    {
-        this.localizer = localizer;
-    }
+    private readonly IStringLocalizer<ValidationMessages> localizer = localizer;
 
     /// <inheritdoc/>
     public IEnumerable<ApiValidationError> Translate(string errorCode, string? propertyName = null, object? data = null) =>

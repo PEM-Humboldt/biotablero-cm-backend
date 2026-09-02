@@ -1,6 +1,5 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Resources;
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -40,10 +39,7 @@ public class ResourceTagController(
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Post(int resourceId, int tagId, CancellationToken ct)
     {
-        var userName = HttpContext.GetUserName();
-        ArgumentException.ThrowIfNullOrEmpty(userName);
-
-        var response = await entityService.AddAsync(userName, resourceId, tagId, ct);
+        var response = await entityService.AddAsync(HttpContext.GetUserName(), resourceId, tagId, ct);
         return webTools.CustomResponse(response);
     }
 
@@ -57,10 +53,7 @@ public class ResourceTagController(
     [Authorize]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var userName = HttpContext.GetUserName();
-        ArgumentException.ThrowIfNullOrEmpty(userName);
-
-        var response = await entityService.DeleteAsync(id, userName, ct);
+        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), ct);
         return webTools.CustomResponse(response);
     }
 }

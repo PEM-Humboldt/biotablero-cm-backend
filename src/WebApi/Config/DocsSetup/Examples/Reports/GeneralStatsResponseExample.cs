@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// General statistics response example.
 /// </summary>
-public class GeneralStatsResponseExample : IExamplesProvider<GeneralStatsDto>
+public class GeneralStatsResponseExample : IOpenApiExampleProvider<GeneralStatsDto>
 {
     /// <inheritdoc/>
     public GeneralStatsDto GetExamples() =>

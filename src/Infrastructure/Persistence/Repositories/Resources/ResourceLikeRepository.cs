@@ -14,20 +14,12 @@ using Serilog;
 /// <summary>
 /// Resource Like repository.
 /// </summary>
-public class ResourceLikeRepository : Repository<ResourceLike, int>, IResourceLikeRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class ResourceLikeRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<ResourceLike, int>(dbContext, logger), IResourceLikeRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public ResourceLikeRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int resourceId, string username, CancellationToken ct = default) =>
         await dbContext.ResourceLikes

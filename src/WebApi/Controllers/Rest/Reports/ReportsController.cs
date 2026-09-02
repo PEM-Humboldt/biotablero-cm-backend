@@ -8,6 +8,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Reports;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Reports;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Reports;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Reports;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -17,8 +18,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
-
-using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Reports controller.
@@ -41,7 +40,7 @@ public class ReportsController(
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ReportDataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ReportDataResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -56,7 +55,7 @@ public class ReportsController(
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ReportDataOdataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ReportDataOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<ReportData> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);
@@ -72,8 +71,8 @@ public class ReportsController(
     [HttpPost]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(ReportDataDto), typeof(ReportDataAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ReportDataResponseExample))]
+    [OpenApiRequest(typeof(ReportDataAddRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ReportDataResponseExample))]
     public async Task<IActionResult> Post([FromBody] ReportDataDto requestData, CancellationToken ct)
     {
         var userName = HttpContext.GetUserName();

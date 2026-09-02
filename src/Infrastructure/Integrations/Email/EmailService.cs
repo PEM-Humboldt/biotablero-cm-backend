@@ -21,21 +21,12 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <summary>
 /// Email service.
 /// </summary>
-public class EmailService : IEmailService
+/// <param name="logger">System logger.</param>
+/// <exception cref="InvalidCastException">SMTP Port cast exception.</exception>
+public class EmailService(ILogger logger) : IEmailService
 {
-    private readonly ILogger logger;
-    private readonly SmtpConfigData smtpData;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="logger">System logger.</param>
-    /// <exception cref="InvalidCastException">SMTP Port cast exception.</exception>
-    public EmailService(ILogger logger)
-    {
-        this.logger = logger;
-        smtpData = InitSmtpData();
-    }
+    private readonly ILogger logger = logger;
+    private readonly SmtpConfigData smtpData = InitSmtpData();
 
     /// <inheritdoc/>
     public async Task<string> SendEmailAsync(string subject, CustomEmailAddress[] receivers, CustomEmailAddress[]? hiddenReceivers, string body, CancellationToken ct = default)

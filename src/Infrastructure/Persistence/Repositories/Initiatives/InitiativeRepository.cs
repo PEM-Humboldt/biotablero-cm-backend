@@ -15,25 +15,17 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.GeoEnums;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+using InitiativeUserLevelEnum = Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
 /// <summary>
 /// Initiative repository.
 /// </summary>
-public class InitiativeRepository : Repository<Initiative, int>, IInitiativeRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class InitiativeRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<Initiative, int>(dbContext, logger), IInitiativeRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public InitiativeRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public async Task<Initiative?> GetByIdAsync(int id, bool userIsAuthenticated, CancellationToken ct = default)
     {

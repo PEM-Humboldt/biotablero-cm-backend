@@ -3,14 +3,14 @@
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 
 /// <summary>
 /// Tag response example.
 /// </summary>
-public class TagResponseExample : IExamplesProvider<TagDto>
+public class TagResponseExample : IOpenApiExampleProvider<TagDto>
 {
     /// <inheritdoc/>
     public TagDto GetExamples() => new()

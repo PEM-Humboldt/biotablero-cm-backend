@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Resource Link add request example.
 /// </summary>
-public class ResourceLinkEditRequestExample : IExamplesProvider<ResourceLinkDto>
+public class ResourceLinkEditRequestExample : IOpenApiExampleProvider<ResourceLinkDto>
 {
     /// <inheritdoc/>
     public ResourceLinkDto GetExamples() => new()

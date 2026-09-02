@@ -5,7 +5,7 @@ using System;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
@@ -13,7 +13,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 /// <summary>
 /// Initiative response example.
 /// </summary>
-public class InitiativeResponseExample : IExamplesProvider<InitiativeDto>
+public class InitiativeResponseExample : IOpenApiExampleProvider<InitiativeDto>
 {
     /// <inheritdoc/>
     public InitiativeDto GetExamples() => new()

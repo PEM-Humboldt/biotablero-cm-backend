@@ -33,9 +33,9 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using IndicatorBaseCategory = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorBaseCategory;
-using IndicatorMeasureUnits = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorMeasureUnit;
-using IndicatorTypes = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorType;
+using IndicatorBaseCategory = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorBaseCategory;
+using IndicatorMeasureUnits = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorMeasureUnit;
+using IndicatorTypes = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorType;
 
 /// <summary>
 /// Indicator service.

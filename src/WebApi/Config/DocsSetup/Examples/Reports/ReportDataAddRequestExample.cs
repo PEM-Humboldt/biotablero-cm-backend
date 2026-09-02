@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Report Data add request example.
 /// </summary>
-public class ReportDataAddRequestExample : IExamplesProvider<ReportDataDto>
+public class ReportDataAddRequestExample : IOpenApiExampleProvider<ReportDataDto>
 {
     /// <inheritdoc/>
     public ReportDataDto GetExamples() => new()

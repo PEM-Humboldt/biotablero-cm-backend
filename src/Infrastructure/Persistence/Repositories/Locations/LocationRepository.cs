@@ -16,7 +16,7 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.GeoEnums;
 
-using LocationCustom = IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location;
+using LocationCustom = Core.Domain.Entities.Geo.Location;
 
 /// <summary>
 /// Location repository.

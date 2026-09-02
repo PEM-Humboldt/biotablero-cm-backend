@@ -13,25 +13,17 @@ using Microsoft.EntityFrameworkCore;
 
 using Serilog;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+using InitiativeUserLevelEnum = Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
 /// <summary>
 /// Territory Story Video repository.
 /// </summary>
-public class TerritoryStoryVideoRepository : Repository<TerritoryStoryVideo, int>, ITerritoryStoryVideoRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">Logger.</param>
+public class TerritoryStoryVideoRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<TerritoryStoryVideo, int>(dbContext, logger), ITerritoryStoryVideoRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">Logger.</param>
-    public TerritoryStoryVideoRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public async Task<bool> AuthorizedEntityReadAsync(int id, string? userName, CancellationToken ct = default)
     {

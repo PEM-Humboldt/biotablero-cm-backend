@@ -4,12 +4,12 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Join Invitation response example.
 /// </summary>
-public class JoinInvitationResponseExample : IExamplesProvider<JoinInvitationDto>
+public class JoinInvitationResponseExample : IOpenApiExampleProvider<JoinInvitationDto>
 {
     /// <inheritdoc/>
     public JoinInvitationDto GetExamples() => new()

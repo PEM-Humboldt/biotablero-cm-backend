@@ -4,12 +4,12 @@ using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Resource file response example.
 /// </summary>
-public class ResourceFileResponseExample : IExamplesProvider<ResourceFileDto>
+public class ResourceFileResponseExample : IOpenApiExampleProvider<ResourceFileDto>
 {
     /// <inheritdoc/>
     public ResourceFileDto GetExamples() => new()

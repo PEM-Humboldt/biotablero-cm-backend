@@ -15,20 +15,12 @@ using Serilog;
 /// <summary>
 /// Initiative Location repository.
 /// </summary>
-public class InitiativeLocationRepository : Repository<InitiativeLocation, int>, IInitiativeLocationRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class InitiativeLocationRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<InitiativeLocation, int>(dbContext, logger), IInitiativeLocationRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public InitiativeLocationRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public override async Task<InitiativeLocation?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.InitiativeLocations

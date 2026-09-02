@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Reports;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Reports;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// General statistics controller.
@@ -36,7 +35,7 @@ public class GeneralStatsController(
     /// <returns>General statistics data.</returns>
     [HttpGet("General")]
     [ProducesResponseType(typeof(GeneralStatsDto), StatusCodes.Status200OK)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(GeneralStatsResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(GeneralStatsResponseExample))]
     public async Task<IActionResult> GetGeneralStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
     {
         var response = await generalStatsService.GetGeneralStatsAsync(departmentId, initiativeId, ct);
@@ -52,7 +51,7 @@ public class GeneralStatsController(
     /// <returns>Ecosystems statistics data.</returns>
     [HttpGet("Ecosystems")]
     [ProducesResponseType(typeof(EcosystemsStatsDto), StatusCodes.Status200OK)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(EcosystemsStatsResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(EcosystemsStatsResponseExample))]
     public async Task<IActionResult> GetEcosystemsStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
     {
         var response = await generalStatsService.GetEcosystemsStatsAsync(departmentId, initiativeId, ct);
@@ -68,7 +67,7 @@ public class GeneralStatsController(
     /// <returns>Demographic statistics data.</returns>
     [HttpGet("Demographic")]
     [ProducesResponseType(typeof(DemographicStatsDto), StatusCodes.Status200OK)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(DemographicStatsResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(DemographicStatsResponseExample))]
     public async Task<IActionResult> GetDemographicStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
     {
         var response = await generalStatsService.GetDemographicStats(departmentId, initiativeId, ct);
@@ -84,7 +83,7 @@ public class GeneralStatsController(
     /// <returns>Indicators statistics data.</returns>
     [HttpGet("Indicators")]
     [ProducesResponseType(typeof(IndicatorsStatsDto), StatusCodes.Status200OK)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(IndicatorsStatsResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorsStatsResponseExample))]
     public async Task<IActionResult> GetIndicatorsStats(int? departmentId = null, int? initiativeId = null, CancellationToken ct = default)
     {
         var response = await generalStatsService.GetIndicatorsStats(departmentId, initiativeId, ct);

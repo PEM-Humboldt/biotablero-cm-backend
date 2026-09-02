@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Indicator list response example.
 /// </summary>
-public class IndicatorListResponseExample : IExamplesProvider<List<IndicatorDto>>
+public class IndicatorListResponseExample : IOpenApiExampleProvider<List<IndicatorDto>>
 {
     /// <inheritdoc/>
     public List<IndicatorDto> GetExamples() =>

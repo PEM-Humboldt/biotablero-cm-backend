@@ -37,6 +37,7 @@ public class LogConfig : IEntityTypeConfiguration<LogEntity>
             .HasColumnName("type")
             .HasDefaultValue(LogType.System)
             .HasConversion<int>()
+            .HasSentinel(LogType.Unknown)
             .IsRequired();
 
         builder?.Property(e => e.ShortMessage)

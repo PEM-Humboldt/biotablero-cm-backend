@@ -14,20 +14,12 @@ using Serilog;
 /// <summary>
 /// Tag repository.
 /// </summary>
-public class TagRepository : Repository<Tag, int>, ITagRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class TagRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<Tag, int>(dbContext, logger), ITagRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public TagRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Avoid exception when transforming code to SQL")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1862:Use the 'StringComparison' method overloads to perform case-insensitive string comparisons", Justification = "Avoid exception when transforming code to SQL")]

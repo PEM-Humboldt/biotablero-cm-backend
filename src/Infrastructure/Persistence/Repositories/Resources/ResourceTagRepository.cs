@@ -15,20 +15,12 @@ using Serilog;
 /// <summary>
 /// Resource Tag repository.
 /// </summary>
-public class ResourceTagRepository : Repository<ResourceTag, int>, IResourceTagRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class ResourceTagRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<ResourceTag, int>(dbContext, logger), IResourceTagRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public ResourceTagRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public override async Task<ResourceTag?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.ResourceTags
