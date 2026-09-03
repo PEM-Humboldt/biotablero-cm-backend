@@ -64,6 +64,8 @@ public class Program
         builder.Host.AddLogConfig();
 
         builder.Services.AddEndpointsApiExplorer();
+
+        // OpenApi setup
         builder.Services.AddOpenApi("v1", options =>
         {
             options.AddCustomOptions();
