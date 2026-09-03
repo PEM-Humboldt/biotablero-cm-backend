@@ -18,6 +18,9 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
 {
     private const string OpenApiPropertyClientId = "client_id";
     private const string OpenApiPropertyGrantType = "grant_type";
+    private const string OpenApiPropertyUsername = "username";
+    private const string OpenApiPropertyPassword = "password";
+    private const string OpenApiPropertyRefreshToken = "refresh_token";
 
     private static readonly ISet<OpenApiTagReference> OperationTags =
     new HashSet<OpenApiTagReference>
@@ -75,12 +78,12 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
                                             Properties =
                                                 new Dictionary<string, IOpenApiSchema>
                                                 {
-                                                    ["username"] = new OpenApiSchema
+                                                    [OpenApiPropertyUsername] = new OpenApiSchema
                                                     {
                                                         Type = JsonSchemaType.String,
                                                         Default = JsonValue.Create(string.Empty),
                                                     },
-                                                    ["password"] = new OpenApiSchema
+                                                    [OpenApiPropertyPassword] = new OpenApiSchema
                                                     {
                                                         Type = JsonSchemaType.String,
                                                         Default = JsonValue.Create(string.Empty),
@@ -95,13 +98,13 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
                                                         new OpenApiSchema
                                                         {
                                                             Type = JsonSchemaType.String,
-                                                            Default = JsonValue.Create("password"),
+                                                            Default = JsonValue.Create(OpenApiPropertyPassword),
                                                         },
                                                 },
                                             Required = new HashSet<string>
                                             {
-                                                "username",
-                                                "password",
+                                                OpenApiPropertyUsername,
+                                                OpenApiPropertyPassword,
                                                 OpenApiPropertyClientId,
                                                 OpenApiPropertyGrantType,
                                             },
@@ -144,7 +147,7 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
                                                 Properties =
                                                     new Dictionary<string, IOpenApiSchema>
                                                     {
-                                                        ["refresh_token"] =
+                                                        [OpenApiPropertyRefreshToken] =
                                                             new OpenApiSchema
                                                             {
                                                                 Type =
@@ -166,12 +169,12 @@ public sealed class AuthEndpointsDocumentTransformer : IOpenApiDocumentTransform
                                                                 Type =
                                                                     JsonSchemaType.String,
                                                                 Default =
-                                                                    JsonValue.Create("refresh_token"),
+                                                                    JsonValue.Create(OpenApiPropertyRefreshToken),
                                                             },
                                                     },
                                                 Required = new HashSet<string>
                                                 {
-                                                    "refresh_token",
+                                                    OpenApiPropertyRefreshToken,
                                                     OpenApiPropertyClientId,
                                                     OpenApiPropertyGrantType,
                                                 },
