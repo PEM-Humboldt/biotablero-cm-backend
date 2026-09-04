@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.ImageUtils;
+namespace IAVH.BioTablero.CM.Infrastructure.Integrations.ImageUtils;
 
 using System.IO;
 using System.Threading;
@@ -9,9 +9,7 @@ using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 using Serilog;
 
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Webp;
-using SixLabors.ImageSharp.Processing;
+using SkiaSharp;
 
 /// <summary>
 /// Image Utils service.
@@ -22,49 +20,42 @@ public class ImageUtilsService(ILogger logger) : IImageUtilsService
     private readonly ILogger logger = logger;
 
     /// <inheritdoc/>
-    public async Task<Stream?> CompressToWebpAsync(Stream input, int quality = 75, CancellationToken ct = default)
-    {
-        try
-        {
-            var output = new MemoryStream();
-
-            input.Position = 0;
-
-            using var image = await Image.LoadAsync(input, ct);
-
-            if (image.Size.Width > FileConstants.WebpMaxDimension || image.Size.Height > FileConstants.WebpMaxDimension)
+    public async Task<Stream?> CompressToWebpAsync(Stream input, int quality = 75, CancellationToken ct = default) =>
+        await Task.Run(
+            () =>
             {
-                logger.Error("Image is too large to encode WEBP format: {ImageSize}", image.Size);
-                return null;
-            }
+                ct.ThrowIfCancellationRequested();
 
-            image.Mutate(x => x.Resize(new ResizeOptions
-            {
-                Mode = ResizeMode.Max,
-                Size = image.Size,
-                Sampler = KnownResamplers.Lanczos3,
-            }));
+                input.Position = 0;
+                using var inputStream = new SKManagedStream(input, false);
+                using var bitmap = SKBitmap.Decode(inputStream);
 
-            var encoder = new WebpEncoder
-            {
-                Quality = quality,
-            };
+                if (bitmap == null)
+                {
+                    logger.Error("Could not decode image: unsupported or invalid format.");
+                    return null;
+                }
 
-            await image.SaveAsWebpAsync(output, encoder, ct);
+                if (bitmap.Width > FileConstants.WebpMaxDimension || bitmap.Height > FileConstants.WebpMaxDimension)
+                {
+                    logger.Error("Image is too large to encode WEBP format: {Width}x{Height}", bitmap.Width, bitmap.Height);
+                    return null;
+                }
 
-            output.Position = 0;
+                using var image = SKImage.FromBitmap(bitmap);
+                using var data = image.Encode(SKEncodedImageFormat.Webp, quality);
 
-            return output;
-        }
-        catch (UnknownImageFormatException ex)
-        {
-            logger.Error(ex, "Image processing error");
-        }
-        catch (ImageFormatException ex)
-        {
-            logger.Error(ex, "Image format error");
-        }
+                if (data == null)
+                {
+                    logger.Error("Failed to encode image to WEBP format.");
+                    return null;
+                }
 
-        return null;
-    }
+                var output = new MemoryStream();
+                data.SaveTo(output);
+                output.Position = 0;
+
+                return (Stream)output;
+            },
+            ct);
 }
