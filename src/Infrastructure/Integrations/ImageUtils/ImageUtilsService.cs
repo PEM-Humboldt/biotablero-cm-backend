@@ -1,4 +1,4 @@
-namespace IAVH.BioTablero.CM.Infrastructure.Integrations.ImageUtils;
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Integrations.ImageUtils;
 
 using System.IO;
 using System.Threading;
