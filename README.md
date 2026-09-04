@@ -99,6 +99,6 @@ If you need to remove the last generated migration, you can do so with the comma
 ```sh
 # Build image
 docker build -t biotablero-cm-backend:latest-dev .
-# Run temporal container
-docker run -it --rm --env-file .env --name bt-cm-backend -p 8001:8080 --network=cm-local_bt-search-network biotablero-cm-backend:latest-dev
+# Run temporal container for development environment
+docker run -it --rm --env-file .env -e ASPNETCORE_ENVIRONMENT=Development --name bt-cm-backend -p 8001:8080 --network=cm-local_bt-search-network biotablero-cm-backend:latest-dev
 ```
