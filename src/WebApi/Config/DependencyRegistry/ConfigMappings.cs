@@ -64,6 +64,7 @@ public static class ConfigMappings
         services.AddSingleton<IMapperCreateAndRead<JoinRequest, JoinRequestDto>, JoinRequestMappings>();
         services.AddSingleton<IMapperCreateAndRead<JoinInvitation, JoinInvitationDto>, JoinInvitationMappings>();
         services.AddSingleton<IMapperCreateAndRead<JoinInvitationGuest, JoinInvitationGuestDto>, JoinInvitationGuestMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<MonitoringEvents, MonitoringEventsDto>, MonitoringEventsMappings>();
 
         // Territory stories
         services.AddSingleton<IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto>, TerritoryStoryMappings>();
