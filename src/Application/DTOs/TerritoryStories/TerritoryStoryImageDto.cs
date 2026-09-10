@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 /// <summary>
 /// Territory Story Image dto.
@@ -24,7 +25,7 @@ public class TerritoryStoryImageDto() : IDto
     /// <summary>
     /// File URL.
     /// </summary>
-    public required Uri FileUrl { get; set; } = new("/");
+    public required Uri FileUrl { get; set; } = new(FileConstants.DefaultUriValue);
 
     /// <summary>
     /// Entity description.

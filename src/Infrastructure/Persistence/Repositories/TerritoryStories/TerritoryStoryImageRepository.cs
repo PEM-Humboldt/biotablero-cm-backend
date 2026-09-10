@@ -154,7 +154,7 @@ public class TerritoryStoryImageRepository(
     private async Task UploadImage(TerritoryStoryImage entity, Stream imageStream, string contentType, CancellationToken ct = default)
     {
         var oldFileUri = entity.FileUrl;
-        var entityHasEmptyFileUrl = entity.FileUrl == null || entity.FileUrl.AbsoluteUri == FileConstants.DefaultAbsoluteUri;
+        var entityHasEmptyFileUrl = entity.FileUrl == null || entity.FileUrl.OriginalString == FileConstants.DefaultUriValue;
 
         if (entityHasEmptyFileUrl)
         {

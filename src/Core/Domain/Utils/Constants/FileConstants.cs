@@ -15,7 +15,7 @@ public static class FileConstants
     /// <summary>
     /// Default value for Absolute Uri.
     /// </summary>
-    public const string DefaultAbsoluteUri = "file:///";
+    public const string DefaultUriValue = "/";
 
     #endregion
 
