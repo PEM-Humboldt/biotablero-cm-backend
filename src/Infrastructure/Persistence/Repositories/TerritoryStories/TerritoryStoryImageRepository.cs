@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Storage;
 using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 
@@ -153,8 +154,9 @@ public class TerritoryStoryImageRepository(
     private async Task UploadImage(TerritoryStoryImage entity, Stream imageStream, string contentType, CancellationToken ct = default)
     {
         var oldFileUri = entity.FileUrl;
+        var entityHasEmptyFileUrl = entity.FileUrl == null || entity.FileUrl.OriginalString == FileConstants.DefaultUriValue;
 
-        if (entity.FileUrl == null)
+        if (entityHasEmptyFileUrl)
         {
             entity.FileUrl = new Uri($"/temp-uri/{DateTimeOffset.UtcNow.ToFileTime()}");
             await dbContext.TerritoryStoryImages.AddAsync(entity, ct);
@@ -175,7 +177,7 @@ public class TerritoryStoryImageRepository(
 
         await dbContext.SaveChangesAsync(ct);
 
-        if (oldFileUri != null && oldFileUri != entity.FileUrl)
+        if (!entityHasEmptyFileUrl && oldFileUri != entity.FileUrl)
         {
             await storageService.DeleteFileAsync(oldFileUri.ToString(), ct);
         }

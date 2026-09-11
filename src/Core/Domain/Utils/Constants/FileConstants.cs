@@ -12,6 +12,11 @@ public static class FileConstants
     /// </summary>
     public const int WebpMaxDimension = 1600;
 
+    /// <summary>
+    /// Default value for Absolute Uri.
+    /// </summary>
+    public const string DefaultUriValue = "/";
+
     #endregion
 
     #region Territory Story

@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 /// <summary>
 /// Resource File dto.
@@ -29,5 +30,5 @@ public class ResourceFileDto() : IDto
     /// <summary>
     /// Entity URL.
     /// </summary>
-    public required Uri Url { get; set; } = new("/");
+    public required Uri Url { get; set; } = new(FileConstants.DefaultUriValue);
 }
