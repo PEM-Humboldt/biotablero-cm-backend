@@ -8,9 +8,9 @@ public static class IndicatorsEnums
     #region Indicators
 
     /// <summary>
-    /// Indicator types.
+    /// Indicator topics.
     /// </summary>
-    public enum IndicatorType
+    public enum IndicatorTopic
     {
         /// <summary>
         /// Percentage of the study area occupied by the species.
@@ -130,9 +130,9 @@ public static class IndicatorsEnums
     public enum XlsxColumnIndex
     {
         /// <summary>
-        /// Indicator type identifier.
+        /// Indicator topic identifier.
         /// </summary>
-        IndicatorTypeId = 1,
+        IndicatorTopicId = 1,
 
         /// <summary>
         /// Measure unit identifier.

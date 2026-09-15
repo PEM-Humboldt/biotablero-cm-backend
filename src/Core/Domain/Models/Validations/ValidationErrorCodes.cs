@@ -468,9 +468,9 @@ public static class ValidationErrorCodes
         public const string InvalidConfidenceInterval = "IND_006";
 
         /// <summary>
-        /// Invalid indicator type.
+        /// Invalid indicator topic.
         /// </summary>
-        public const string InvalidIndicatorType = "IND_007";
+        public const string InvalidIndicatorTopic = "IND_007";
 
         /// <summary>
         /// Invalid measure unit.

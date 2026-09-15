@@ -35,7 +35,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 using IndicatorBaseCategory = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorBaseCategory;
 using IndicatorMeasureUnits = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorMeasureUnit;
-using IndicatorTypes = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorType;
+using IndicatorTopics = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorTopic;
 
 /// <summary>
 /// Indicator service.
@@ -358,7 +358,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             row.GroupName = row.GroupName?.Trim()?.CapitalizeFirstOnly();
             row.LocalityName = row.LocalityName?.Trim()?.CapitalizeFirstOnly()!;
 
-            if (row.IndicatorTypeId == (int)IndicatorTypes.SpeciesDiversity)
+            if (row.IndicatorTopicId == (int)IndicatorTopics.SpeciesDiversity)
             {
                 row.GroupName = row.UpperGroupName;
                 row.UpperGroupName = IndicatorConstants.SpeciesCategoryName;
@@ -372,7 +372,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// Spreadsheet structure data validations.
     /// </summary>
     /// <param name="rows">Spreadsheet rows.</param>
-    /// <param name="indicator">Indicator type (optional).</param>
+    /// <param name="indicator">Indicator (optional).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
     private async Task<CustomWebResponse> ValidateStructureDataAsync(List<IndicatorsImportRow> rows, Indicator? indicator, CancellationToken ct = default)
@@ -381,7 +381,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         if (indicator != null)
         {
             var totalIndicators = rows
-            .GroupBy(r => r.IndicatorTypeId)
+            .GroupBy(r => r.IndicatorTopicId)
             .Count();
 
             if (totalIndicators != 1)
@@ -407,20 +407,20 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 };
             }
 
-            // Check indicator types
-            if (!Enum.GetValues<IndicatorTypes>().Select(e => (int)e).Contains(row.IndicatorTypeId))
+            // Check indicator topics
+            if (!Enum.GetValues<IndicatorTopics>().Select(e => (int)e).Contains(row.IndicatorTopicId))
             {
                 return new(true)
                 {
-                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorTopic),
                     Message = $"Errors in row {row.RowNumber}",
                 };
             }
 
             // Check indicator measure units
-            foreach (var measureUnit in IndicatorConstants.UnitMeasuresByIndicatorType)
+            foreach (var measureUnit in IndicatorConstants.UnitMeasuresByIndicatorTopic)
             {
-                if (row.IndicatorTypeId == (int)measureUnit.Key && !measureUnit.Value.Contains((IndicatorMeasureUnits)row.MeasureUnitId))
+                if (row.IndicatorTopicId == (int)measureUnit.Key && !measureUnit.Value.Contains((IndicatorMeasureUnits)row.MeasureUnitId))
                 {
                     return new(true)
                     {
@@ -431,7 +431,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             }
 
             // Check indicators with species
-            if (IndicatorConstants.IndicatorsWithSpecies.Contains((IndicatorTypes)row.IndicatorTypeId))
+            if (IndicatorConstants.IndicatorsWithSpecies.Contains((IndicatorTopics)row.IndicatorTopicId))
             {
                 if (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription))
                 {
@@ -444,7 +444,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             }
 
             // Check indicators with integer values
-            if (IndicatorConstants.IndicatorsWithIntegerValues.Contains((IndicatorTypes)row.IndicatorTypeId))
+            if (IndicatorConstants.IndicatorsWithIntegerValues.Contains((IndicatorTopics)row.IndicatorTopicId))
             {
                 if (row.Value % 1 != 0)
                 {
@@ -457,7 +457,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             }
 
             // Check indicators with confidence interval
-            if (IndicatorConstants.IndicatorsWithConfidenceInterval.Contains((IndicatorTypes)row.IndicatorTypeId))
+            if (IndicatorConstants.IndicatorsWithConfidenceInterval.Contains((IndicatorTopics)row.IndicatorTopicId))
             {
                 if (row.UpperLimit == null || row.LowerLimit == null)
                 {
@@ -480,7 +480,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             }
 
             // Check indicators with date ranges
-            if (IndicatorConstants.IndicatorsWithDateRange.Contains((IndicatorTypes)row.IndicatorTypeId))
+            if (IndicatorConstants.IndicatorsWithDateRange.Contains((IndicatorTopics)row.IndicatorTopicId))
             {
                 if (row.FinalYear == null || row.FinalMonth == null)
                 {
@@ -519,12 +519,12 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             // Validations for indicators editions
             if (indicator != null)
             {
-                if (row.IndicatorTypeId != indicator.IndicatorTypeId)
+                if (row.IndicatorTopicId != indicator.IndicatorTopicId)
                 {
                     return new(true)
                     {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
-                        Message = $"Errors in row {row.RowNumber}. Original type id: {indicator.IndicatorTypeId}, Spreadsheet type id: {row.IndicatorTypeId}",
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorTopic),
+                        Message = $"Errors in row {row.RowNumber}. Original type id: {indicator.IndicatorTopicId}, Spreadsheet type id: {row.IndicatorTopicId}",
                     };
                 }
 
@@ -618,7 +618,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
         foreach (var row in rows)
         {
-            if (IndicatorConstants.IndicatorsWithPredefinedCategories.Contains((IndicatorTypes)row.IndicatorTypeId))
+            if (IndicatorConstants.IndicatorsWithPredefinedCategories.Contains((IndicatorTopics)row.IndicatorTopicId))
             {
                 var categoryError = !predefinedCategories.Any(e => e.Name == row.GroupName && e.Parent?.Name == row.UpperGroupName);
 
@@ -767,10 +767,10 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         DateTimeOffset now,
         int indicatorLastVersion) =>
         [.. rows
-            .GroupBy(r => r.IndicatorTypeId)
+            .GroupBy(r => r.IndicatorTopicId)
             .Select(g => new IndicatorVersion()
             {
-                IndicatorTypeId = g.Key,
+                IndicatorTopicId = g.Key,
                 IndicatorId = indicator?.Id ?? 0,
                 CreationDate = now,
                 Version = indicator == null ? 1 : indicatorLastVersion + 1,
@@ -826,7 +826,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         List<Location> locations,
         DateTimeOffset now) =>
         [.. rows
-            .GroupBy(r => r.IndicatorTypeId)
+            .GroupBy(r => r.IndicatorTopicId)
             .Select(g =>
             {
                 var indicatorsLocations = g
@@ -860,9 +860,9 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 {
                     InitiativeId = initiativeId,
                     Name = $"Indicador tipo {g.Key} ({now.ToString(GeneralConstants.DatetimeFormat, CultureInfo.CurrentCulture)})",
-                    IndicatorTypeId = g.Key,
+                    IndicatorTopicId = g.Key,
                     IndicatorLocations = indicatorsLocations,
-                    Versions = [.. indicatorVersions.Where(e => e.IndicatorTypeId == g.Key)],
+                    Versions = [.. indicatorVersions.Where(e => e.IndicatorTopicId == g.Key)],
                 };
             })];
 

@@ -5,7 +5,7 @@ using System.Text;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums;
 
-using IndicatorTypes = Enums.IndicatorsEnums.IndicatorType;
+using IndicatorTopics = Enums.IndicatorsEnums.IndicatorTopic;
 
 /// <summary>
 /// Constants for indicators.
@@ -28,61 +28,61 @@ public static class IndicatorConstants
     public static readonly CompositeFormat IndicatorDateFormat = CompositeFormat.Parse("{0}-{1}-01");
 
     /// <summary>
-    /// Unit measures by indicator type.
+    /// Unit measures by indicator topic.
     /// </summary>
-    public static readonly Dictionary<IndicatorTypes, IndicatorMeasureUnit[]> UnitMeasuresByIndicatorType = new()
+    public static readonly Dictionary<IndicatorTopics, IndicatorMeasureUnit[]> UnitMeasuresByIndicatorTopic = new()
     {
-        { IndicatorTypes.OccupiedAreaPercent, [IndicatorMeasureUnit.OccupiedAreaPercent] },
-        { IndicatorTypes.DetectionOccupancyProbability, [IndicatorMeasureUnit.DetectionProbability, IndicatorMeasureUnit.OccupancyProbability] },
-        { IndicatorTypes.SpeciesDiversity, [IndicatorMeasureUnit.SpeciesRichness, IndicatorMeasureUnit.ShannonIndex, IndicatorMeasureUnit.SimpsonIndex] },
-        { IndicatorTypes.RelativeUseByBiologicalGroup, [IndicatorMeasureUnit.RelativeUseIndex] },
-        { IndicatorTypes.CentralRelationalIntensity, [IndicatorMeasureUnit.RelationalIntensity] },
-        { IndicatorTypes.CollectiveActionParticipation, [IndicatorMeasureUnit.PersonCount] },
+        { IndicatorTopics.OccupiedAreaPercent, [IndicatorMeasureUnit.OccupiedAreaPercent] },
+        { IndicatorTopics.DetectionOccupancyProbability, [IndicatorMeasureUnit.DetectionProbability, IndicatorMeasureUnit.OccupancyProbability] },
+        { IndicatorTopics.SpeciesDiversity, [IndicatorMeasureUnit.SpeciesRichness, IndicatorMeasureUnit.ShannonIndex, IndicatorMeasureUnit.SimpsonIndex] },
+        { IndicatorTopics.RelativeUseByBiologicalGroup, [IndicatorMeasureUnit.RelativeUseIndex] },
+        { IndicatorTopics.CentralRelationalIntensity, [IndicatorMeasureUnit.RelationalIntensity] },
+        { IndicatorTopics.CollectiveActionParticipation, [IndicatorMeasureUnit.PersonCount] },
     };
 
     /// <summary>
     /// Indicators with species.
     /// </summary>
-    public static readonly IndicatorTypes[] IndicatorsWithSpecies =
+    public static readonly IndicatorTopics[] IndicatorsWithSpecies =
     [
-        IndicatorTypes.OccupiedAreaPercent,
-        IndicatorTypes.DetectionOccupancyProbability,
-        IndicatorTypes.RelativeUseByBiologicalGroup,
+        IndicatorTopics.OccupiedAreaPercent,
+        IndicatorTopics.DetectionOccupancyProbability,
+        IndicatorTopics.RelativeUseByBiologicalGroup,
     ];
 
     /// <summary>
     /// Indicators with confidence interval.
     /// </summary>
-    public static readonly IndicatorTypes[] IndicatorsWithConfidenceInterval =
+    public static readonly IndicatorTopics[] IndicatorsWithConfidenceInterval =
     [
-        IndicatorTypes.DetectionOccupancyProbability,
-        IndicatorTypes.SpeciesDiversity,
+        IndicatorTopics.DetectionOccupancyProbability,
+        IndicatorTopics.SpeciesDiversity,
     ];
 
     /// <summary>
     /// Indicators with date range.
     /// </summary>
-    public static readonly IndicatorTypes[] IndicatorsWithDateRange =
+    public static readonly IndicatorTopics[] IndicatorsWithDateRange =
     [
-        IndicatorTypes.RelativeUseByBiologicalGroup,
+        IndicatorTopics.RelativeUseByBiologicalGroup,
     ];
 
     /// <summary>
     /// Indicators with predefined categories.
     /// </summary>
-    public static readonly IndicatorTypes[] IndicatorsWithPredefinedCategories =
+    public static readonly IndicatorTopics[] IndicatorsWithPredefinedCategories =
     [
-        IndicatorTypes.SpeciesDiversity,
-        IndicatorTypes.CentralRelationalIntensity,
-        IndicatorTypes.CollectiveActionParticipation,
+        IndicatorTopics.SpeciesDiversity,
+        IndicatorTopics.CentralRelationalIntensity,
+        IndicatorTopics.CollectiveActionParticipation,
     ];
 
     /// <summary>
     /// Indicators with integer values.
     /// </summary>
-    public static readonly IndicatorTypes[] IndicatorsWithIntegerValues =
+    public static readonly IndicatorTopics[] IndicatorsWithIntegerValues =
     [
-        IndicatorTypes.RelativeUseByBiologicalGroup,
-        IndicatorTypes.CollectiveActionParticipation,
+        IndicatorTopics.RelativeUseByBiologicalGroup,
+        IndicatorTopics.CollectiveActionParticipation,
     ];
 }

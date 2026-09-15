@@ -21,9 +21,9 @@ public class Indicator : BaseEntity<int>, IAggregateRoot
     public int InitiativeId { get; set; }
 
     /// <summary>
-    /// Indicator Type identifier.
+    /// Indicator Topic identifier.
     /// </summary>
-    public int IndicatorTypeId { get; set; }
+    public int IndicatorTopicId { get; set; }
 
     /// <summary>
     /// Initiative relationship.
@@ -31,9 +31,9 @@ public class Indicator : BaseEntity<int>, IAggregateRoot
     public Initiative? Initiative { get; set; }
 
     /// <summary>
-    /// Indicator Type relationship.
+    /// Indicator Topic relationship.
     /// </summary>
-    public IndicatorType? Type { get; set; }
+    public IndicatorTopic? Type { get; set; }
 
     /// <summary>
     /// Indicator Tag relationship.

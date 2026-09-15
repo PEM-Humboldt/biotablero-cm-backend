@@ -59,7 +59,7 @@ public class IndicatorVersionConfig : IEntityTypeConfiguration<IndicatorVersion>
             .WithMany(p => p.Versions)
             .HasForeignKey(e => e.IndicatorId);
 
-        builder?.Ignore(i => i.IndicatorTypeId);
+        builder?.Ignore(i => i.IndicatorTopicId);
 
         builder?
             .HasIndex(e => new { e.IndicatorId, e.Version })

@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Indicator Type entity configuration.
+/// Indicator Topic entity configuration.
 /// </summary>
-public class IndicatorTypeConfig : IEntityTypeConfiguration<IndicatorType>
+public class IndicatorTopicConfig : IEntityTypeConfiguration<IndicatorTopic>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<IndicatorType> builder)
+    public void Configure(EntityTypeBuilder<IndicatorTopic> builder)
     {
         builder?.ToTable("indicator_type", "indicators");
 

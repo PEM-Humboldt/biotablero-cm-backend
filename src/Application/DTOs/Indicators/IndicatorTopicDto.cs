@@ -5,10 +5,10 @@ using System.Diagnostics.CodeAnalysis;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Indicator Type dto.
+/// Indicator Topic dto.
 /// </summary>
 [method: SetsRequiredMembers]
-public class IndicatorTypeDto() : IDto
+public class IndicatorTopicDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -16,7 +16,7 @@ public class IndicatorTypeDto() : IDto
     public int? Id { get; set; }
 
     /// <summary>
-    /// Indicator Type name.
+    /// Indicator Topic name.
     /// </summary>
     public required string Name { get; set; } = string.Empty;
 }

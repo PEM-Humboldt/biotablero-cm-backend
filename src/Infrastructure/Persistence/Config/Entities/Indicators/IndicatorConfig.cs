@@ -30,7 +30,7 @@ public class IndicatorConfig : IEntityTypeConfiguration<Indicator>
             .HasColumnName("initiative_id")
             .IsRequired();
 
-        builder?.Property(e => e.IndicatorTypeId)
+        builder?.Property(e => e.IndicatorTopicId)
             .HasColumnName("indicator_type_id")
             .IsRequired();
 
@@ -40,6 +40,6 @@ public class IndicatorConfig : IEntityTypeConfiguration<Indicator>
 
         builder?.HasOne(e => e.Type)
             .WithMany(p => p.Indicators)
-            .HasForeignKey(e => e.IndicatorTypeId);
+            .HasForeignKey(e => e.IndicatorTopicId);
     }
 }

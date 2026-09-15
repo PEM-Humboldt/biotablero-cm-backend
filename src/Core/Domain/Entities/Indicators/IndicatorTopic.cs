@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Indicator Type entity.
+/// Indicator Topic entity.
 /// </summary>
-public class IndicatorType : BaseEntity<int>, IAggregateRoot
+public class IndicatorTopic : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
     /// Entity name.

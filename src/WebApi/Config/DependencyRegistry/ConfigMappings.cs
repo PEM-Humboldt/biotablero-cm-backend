@@ -89,7 +89,7 @@ public static class ConfigMappings
         services.AddSingleton<IMapperRead<IndicatorLocation, IndicatorLocationDto>, IndicatorLocationMappings>();
         services.AddSingleton<IMapperReadAndUpdate<Indicator, IndicatorDto>, IndicatorMappings>();
         services.AddSingleton<IMapperRead<IndicatorTag, IndicatorTagDto>, IndicatorTagMappings>();
-        services.AddSingleton<IMapperRead<IndicatorType, IndicatorTypeDto>, IndicatorTypeMappings>();
+        services.AddSingleton<IMapperRead<IndicatorTopic, IndicatorTopicDto>, IndicatorTopicMappings>();
         services.AddSingleton<IMapperRead<IndicatorValue, IndicatorValueDto>, IndicatorValueMappings>();
         services.AddSingleton<IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto>, IndicatorVersionMappings>();
         services.AddSingleton<IMapperRead<MeasureUnit, MeasureUnitDto>, MeasureUnitMappings>();

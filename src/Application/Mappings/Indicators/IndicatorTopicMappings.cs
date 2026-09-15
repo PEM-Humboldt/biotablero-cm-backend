@@ -7,12 +7,12 @@ using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Indicator Type mappings.
+/// Indicator Topic mappings.
 /// </summary>
-public class IndicatorTypeMappings() : MapperRead<IndicatorType, IndicatorTypeDto>
+public class IndicatorTopicMappings() : MapperRead<IndicatorTopic, IndicatorTopicDto>
 {
     /// <inheritdoc/>
-    public override IndicatorTypeDto Map(IndicatorType? entity)
+    public override IndicatorTopicDto Map(IndicatorTopic? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

@@ -19,9 +19,9 @@ public class IndicatorsImportRow()
     public required int InitiativeId { get; set; }
 
     /// <summary>
-    /// Indicator Type identifier.
+    /// Indicator Topic identifier.
     /// </summary>
-    public required int IndicatorTypeId { get; set; }
+    public required int IndicatorTopicId { get; set; }
 
     /// <summary>
     /// measure Unit identifier.

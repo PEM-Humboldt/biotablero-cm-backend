@@ -20,10 +20,10 @@ public class IndicatorListResponseExample : IOpenApiExampleProvider<List<Indicat
             Id = 0,
             Name = "Indicator example",
             InitiativeId = 0,
-            Type = new()
+            Topic = new()
             {
                 Id = 0,
-                Name = "Indicator type example",
+                Name = "Indicator topic example",
             },
             Versions = [
                 new()

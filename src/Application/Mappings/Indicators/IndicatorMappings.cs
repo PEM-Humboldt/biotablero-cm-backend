@@ -13,7 +13,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 /// </summary>
 public class IndicatorMappings(
     IMapperRead<IndicatorTag, IndicatorTagDto> indicatorTagMappings,
-    IMapperRead<IndicatorType, IndicatorTypeDto> indicatorTypeMappings,
+    IMapperRead<IndicatorTopic, IndicatorTopicDto> indicatorTopicMappings,
     IMapperRead<IndicatorLocation, IndicatorLocationDto> indicatorLocationMappings) : MapperRead<Indicator, IndicatorDto>, IMapperReadAndUpdate<Indicator, IndicatorDto>
 {
     /// <inheritdoc/>
@@ -27,7 +27,7 @@ public class IndicatorMappings(
             Name = entity.Name,
             InitiativeId = entity.InitiativeId,
             InitiativeName = entity.Initiative?.Name,
-            Type = entity.Type != null ? indicatorTypeMappings.Map(entity.Type) : null,
+            Topic = entity.Type != null ? indicatorTopicMappings.Map(entity.Type) : null,
             Tags = entity.IndicatorTags?.Select(indicatorTagMappings.Map),
             Locations = entity.IndicatorLocations?.Select(indicatorLocationMappings.Map),
             Versions = entity.Versions?

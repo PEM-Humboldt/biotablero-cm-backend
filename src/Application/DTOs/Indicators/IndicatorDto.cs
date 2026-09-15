@@ -32,9 +32,9 @@ public class IndicatorDto() : IDto
     public string? InitiativeName { get; set; }
 
     /// <summary>
-    /// Indicator Type.
+    /// Indicator Topic.
     /// </summary>
-    public IndicatorTypeDto? Type { get; set; }
+    public IndicatorTopicDto? Topic { get; set; }
 
     /// <summary>
     /// Indicator Locations relationship.

@@ -205,9 +205,9 @@ public sealed class GeneralContext : DbContext
     public DbSet<Indicator> Indicators { get; set; }
 
     /// <summary>
-    /// Indicator Type DbSet.
+    /// Indicator Topic DbSet.
     /// </summary>
-    public DbSet<IndicatorType> IndicatorTypes { get; set; }
+    public DbSet<IndicatorTopic> IndicatorTopics { get; set; }
 
     /// <summary>
     /// Indicator Tag DbSet.
