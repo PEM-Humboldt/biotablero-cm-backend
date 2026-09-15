@@ -4,14 +4,14 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Indicator Location entity.
+/// Observation Location entity.
 /// </summary>
 public class IndicatorLocation : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Indicator identifier.
+    /// Observation identifier.
     /// </summary>
-    public int IndicatorId { get; set; }
+    public int ObservationId { get; set; }
 
     /// <summary>
     /// Location identifier.
@@ -24,9 +24,9 @@ public class IndicatorLocation : BaseEntity<int>, IAggregateRoot
     public string? Locality { get; set; }
 
     /// <summary>
-    /// Indicator relationship.
+    /// Observation relationship.
     /// </summary>
-    public Indicator? Indicator { get; set; }
+    public Observation? Observation { get; set; }
 
     /// <summary>
     /// Location relationship.

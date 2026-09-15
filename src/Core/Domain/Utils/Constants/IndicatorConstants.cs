@@ -23,9 +23,9 @@ public static class IndicatorConstants
     public const string SpeciesCategoryName = "Especie";
 
     /// <summary>
-    /// Indicator date format.
+    /// Observation date format.
     /// </summary>
-    public static readonly CompositeFormat IndicatorDateFormat = CompositeFormat.Parse("{0}-{1}-01");
+    public static readonly CompositeFormat ObservationDateFormat = CompositeFormat.Parse("{0}-{1}-01");
 
     /// <summary>
     /// Unit measures by indicator topic.

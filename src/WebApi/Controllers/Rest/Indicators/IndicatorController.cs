@@ -32,7 +32,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 [ApiConventionType(typeof(CustomApiConventions))]
 public class IndicatorController(
     IWebTools webTools,
-    IIndicatorService entityService) : ODataController
+    IObservationService entityService) : ODataController
 {
     /// <summary>
     /// Get entity.
@@ -56,7 +56,7 @@ public class IndicatorController(
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorOdataResponseExample))]
-    public async Task<IActionResult> GetOdataList(ODataQueryOptions<Indicator> queryOptions, CancellationToken ct)
+    public async Task<IActionResult> GetOdataList(ODataQueryOptions<Observation> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);
         return webTools.CustomResponse(response);
@@ -88,7 +88,7 @@ public class IndicatorController(
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [OpenApiRequest(typeof(IndicatorEditRequestExample))]
     [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorResponseExample))]
-    public async Task<IActionResult> Put(int id, [FromBody] IndicatorDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Put(int id, [FromBody] ObservationDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);
         return webTools.CustomResponse(response);
@@ -105,14 +105,14 @@ public class IndicatorController(
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Import([FromForm] IndicatorsImportFileRequest requestData, CancellationToken ct)
     {
-        var requestDataDto = new IndicatorsImportFileDto()
+        var requestDataDto = new ObservationsImportFileDto()
         {
             Id = requestData.Id,
             InitiativeId = requestData.InitiativeId,
             DoNotModifyDatabase = requestData.DoNotModifyDatabase,
         };
 
-        var response = await entityService.ImportIndicatorsAsync(HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
+        var response = await entityService.ImportObservationsAsync(HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
         return webTools.CustomResponse(response);
     }
 }

@@ -374,11 +374,11 @@
     <comment/>
   </data>
   <data name="IND_001" xml:space="preserve">
-    <value>The specified indicator does not exist</value>
+    <value>The specified observation does not exist</value>
     <comment/>
   </data>
   <data name="IND_002" xml:space="preserve">
-    <value>Only one indicator is required</value>
+    <value>Only one observation is required</value>
     <comment/>
   </data>
   <data name="IND_003" xml:space="preserve">
@@ -426,7 +426,7 @@
     <comment/>
   </data>
   <data name="IND_014" xml:space="preserve">
-    <value>The current indicator does not have the geographical data supplied in the spreadsheet</value>
+    <value>The current observation does not have the geographical data supplied in the spreadsheet</value>
     <comment/>
   </data>
   <data name="IND_015" xml:space="preserve">

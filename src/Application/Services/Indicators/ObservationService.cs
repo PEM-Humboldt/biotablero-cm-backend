@@ -38,22 +38,22 @@ using IndicatorMeasureUnits = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorM
 using IndicatorTopics = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorTopic;
 
 /// <summary>
-/// Indicator service.
+/// Observation service.
 /// </summary>
-public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndicatorService
+public class ObservationService : ServiceRead<Observation, ObservationDto, int>, IObservationService
 {
-    private new readonly IIndicatorRepository entityRepository;
+    private new readonly IObservationRepository entityRepository;
     private readonly ILogger logger;
-    private new readonly IMapperReadAndUpdate<Indicator, IndicatorDto> mapper;
-    private readonly IValidator<IndicatorDto> entityValidator;
+    private new readonly IMapperReadAndUpdate<Observation, ObservationDto> mapper;
+    private readonly IValidator<ObservationDto> entityValidator;
     private readonly IIndicatorExcelService excelService;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ILocationRepository locationRepository;
-    private readonly IIndicatorVersionRepository indicatorVersionRepository;
+    private readonly IIndicatorVersionRepository observationVersionRepository;
     private readonly ICategoryRepository categoryRepository;
-    private readonly IIndicatorLocationRepository indicatorLocationRepository;
-    private readonly IValidator<IndicatorsImportRow> indicatorsImportRowValidator;
-    private readonly IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper;
+    private readonly IIndicatorLocationRepository observationLocationRepository;
+    private readonly IValidator<ObservationImportRow> observationImportRowValidator;
+    private readonly IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> observationVersionMapper;
 
     /// <summary>
     /// Constructor.
@@ -66,25 +66,25 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="excelService">Excel service.</param>
     /// <param name="initiativeRepository">Initiative repository.</param>
     /// <param name="locationRepository">Location repository.</param>
-    /// <param name="indicatorVersionRepository">Indicator version repository.</param>
-    /// <param name="categoryRepository">Indicator Category repository.</param>
-    /// <param name="indicatorLocationRepository">Indicator Location repository.</param>
-    /// <param name="indicatorsImportRowValidator">Indicators spreadsheet row validator.</param>
-    /// <param name="indicatorVersionMapper">Indicator version mapper.</param>
-    public IndicatorService(
-        IIndicatorRepository entityRepository,
-        IValidator<IndicatorDto> entityValidator,
+    /// <param name="observationVersionRepository">Observation version repository.</param>
+    /// <param name="categoryRepository">Observation Category repository.</param>
+    /// <param name="observationLocationRepository">Observation Location repository.</param>
+    /// <param name="observationImportRowValidator">Observations spreadsheet row validator.</param>
+    /// <param name="observationVersionMapper">Observation version mapper.</param>
+    public ObservationService(
+        IObservationRepository entityRepository,
+        IValidator<ObservationDto> entityValidator,
         ILogger logger,
-        IMapperReadAndUpdate<Indicator, IndicatorDto> mapper,
+        IMapperReadAndUpdate<Observation, ObservationDto> mapper,
         IValidationErrorTranslator errorTranslator,
         IIndicatorExcelService excelService,
         IInitiativeRepository initiativeRepository,
         ILocationRepository locationRepository,
-        IIndicatorVersionRepository indicatorVersionRepository,
+        IIndicatorVersionRepository observationVersionRepository,
         ICategoryRepository categoryRepository,
-        IIndicatorLocationRepository indicatorLocationRepository,
-        IValidator<IndicatorsImportRow> indicatorsImportRowValidator,
-        IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> indicatorVersionMapper)
+        IIndicatorLocationRepository observationLocationRepository,
+        IValidator<ObservationImportRow> observationImportRowValidator,
+        IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> observationVersionMapper)
     : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
@@ -94,15 +94,15 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         this.excelService = excelService;
         this.initiativeRepository = initiativeRepository;
         this.locationRepository = locationRepository;
-        this.indicatorVersionRepository = indicatorVersionRepository;
+        this.observationVersionRepository = observationVersionRepository;
         this.categoryRepository = categoryRepository;
-        this.indicatorLocationRepository = indicatorLocationRepository;
-        this.indicatorsImportRowValidator = indicatorsImportRowValidator;
-        this.indicatorVersionMapper = indicatorVersionMapper;
+        this.observationLocationRepository = observationLocationRepository;
+        this.observationImportRowValidator = observationImportRowValidator;
+        this.observationVersionMapper = observationVersionMapper;
     }
 
     /// <inheritdoc/>
-    public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<Indicator> queryOptions, CancellationToken ct = default)
+    public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<Observation> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();
         query = entityRepository.IncludeOdataEntities(query);
@@ -125,7 +125,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, IndicatorDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, ObservationDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -156,7 +156,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, "Updated indicator", "{@EntityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated observation", "{@EntityData}", entityData);
 
         return new()
         {
@@ -165,7 +165,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> ImportIndicatorsAsync(string? userName, IndicatorsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> ImportObservationsAsync(string? userName, ObservationsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrEmpty(userName);
 
@@ -212,15 +212,15 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             };
         }
 
-        // Validate indicator
-        Indicator? indicator = null;
-        var indicatorLastVersion = 1;
+        // Validate observation
+        Observation? observation = null;
+        var observationLastVersion = 1;
 
         if (requestData.Id.HasValue)
         {
-            indicator = await entityRepository.GetByIdAsync(requestData.Id.Value, ct);
+            observation = await entityRepository.GetByIdAsync(requestData.Id.Value, ct);
 
-            if (indicator == null)
+            if (observation == null)
             {
                 return new(true)
                 {
@@ -228,14 +228,14 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 };
             }
 
-            indicatorLastVersion = await indicatorVersionRepository.GetLastVersionAsync(indicator.Id, ct);
+            observationLastVersion = await observationVersionRepository.GetLastVersionAsync(observation.Id, ct);
         }
 
         // Adjust spreadsheet rows data
         AdjustRowsData(fileReadResult.Rows);
 
         // Make structure validations
-        var structureDataValidations = await ValidateStructureDataAsync(fileReadResult.Rows, indicator, ct);
+        var structureDataValidations = await ValidateStructureDataAsync(fileReadResult.Rows, observation, ct);
 
         if (!structureDataValidations.Success)
         {
@@ -270,36 +270,36 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         {
             var now = DateTimeOffset.Now;
 
-            var indicatorLocations = await GetExistingIndicatorLocationsAsync(indicator, spreadsheetLocations ?? [], ct);
+            var observationLocations = await GetExistingObservationLocationsAsync(observation, spreadsheetLocations ?? [], ct);
             var categories = await SaveAndGetCategoriesAsync(fileReadResult.Rows, ct);
-            var indicatorVersionEntities = GenerateIndicatorVersions(indicator, fileReadResult.Rows, categories, now, indicatorLastVersion);
+            var observationVersionEntities = GenerateObservationVersions(observation, fileReadResult.Rows, categories, now, observationLastVersion);
 
             if (!requestData.Id.HasValue)
             {
-                var indicators = GenerateIndicators(requestData.InitiativeId, indicator, fileReadResult.Rows, indicatorVersionEntities, indicatorLocations, locationEntities, now);
+                var observations = GenerateObservations(requestData.InitiativeId, observation, fileReadResult.Rows, observationVersionEntities, observationLocations, locationEntities, now);
 
                 // Save data
-                await entityRepository.AddRangeAsync(indicators, ct);
+                await entityRepository.AddRangeAsync(observations, ct);
 
-                var indicatorDtos = indicators
+                var observationDtos = observations
                     .Select(mapper.Map)
                     .ToList();
 
-                logger.AddLog(LogType.Create, "Added indicators", "{@EntityData}", indicatorDtos);
+                logger.AddLog(LogType.Create, "Added observations", "{@EntityData}", observationDtos);
 
-                result.Result = indicatorDtos;
+                result.Result = observationDtos;
             }
             else
             {
                 // Save data
-                await indicatorVersionRepository.AddRangeAsync(indicatorVersionEntities, ct);
+                await observationVersionRepository.AddRangeAsync(observationVersionEntities, ct);
 
-                var indicatorVersionDtos = indicatorVersionEntities
-                    .Select(indicatorVersionMapper.Map);
+                var observationVersionDtos = observationVersionEntities
+                    .Select(observationVersionMapper.Map);
 
-                logger.AddLog(LogType.Create, "Added indicator versions", "{@EntityData}", indicatorVersionDtos);
+                logger.AddLog(LogType.Create, "Added observation versions", "{@EntityData}", observationVersionDtos);
 
-                result.Result = indicatorVersionDtos;
+                result.Result = observationVersionDtos;
             }
         }
 
@@ -310,13 +310,13 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         };
     }
 
-    #region Import Indicators functions
+    #region Import Observation functions
 
     /// <summary>
-    /// Cast indicator value date.
+    /// Cast observation value date.
     /// </summary>
-    /// <param name="year">Indicator value year.</param>
-    /// <param name="month">Indicator value month.</param>
+    /// <param name="year">Observation value year.</param>
+    /// <param name="month">Observation value month.</param>
     /// <returns>DateTime from strings.</returns>
     /// <exception cref="InvalidCastException">Cast date error.</exception>
     private static DateTime? CastDate(string year, string month)
@@ -330,7 +330,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         var parseSuccessful = DateTime.TryParseExact(
             string.Format(
                 GeneralConstants.DefaultFormatProvider,
-                IndicatorConstants.IndicatorDateFormat,
+                IndicatorConstants.ObservationDateFormat,
                 year,
                 formattedMonth),
             GeneralConstants.DateFormat,
@@ -350,7 +350,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// Adjust rows data.
     /// </summary>
     /// <param name="rows">Spreadsheet rows.</param>
-    private static void AdjustRowsData(List<IndicatorsImportRow> rows)
+    private static void AdjustRowsData(List<ObservationImportRow> rows)
     {
         foreach (var row in rows)
         {
@@ -372,23 +372,23 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// Spreadsheet structure data validations.
     /// </summary>
     /// <param name="rows">Spreadsheet rows.</param>
-    /// <param name="indicator">Indicator (optional).</param>
+    /// <param name="observation">Observation (optional).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<IndicatorsImportRow> rows, Indicator? indicator, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<ObservationImportRow> rows, Observation? observation, CancellationToken ct = default)
     {
-        // Validate total indicators for edition
-        if (indicator != null)
+        // Validate total observations for edition
+        if (observation != null)
         {
-            var totalIndicators = rows
-            .GroupBy(r => r.IndicatorTopicId)
-            .Count();
+            var totalObservations = rows
+                .GroupBy(r => r.IndicatorTopicId)
+                .Count();
 
-            if (totalIndicators != 1)
+            if (totalObservations != 1)
             {
                 return new(true)
                 {
-                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.OnlyOneIndicatorRequired),
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.OnlyOneObservationRequired),
                 };
             }
         }
@@ -396,7 +396,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
         foreach (var row in rows)
         {
             // Check FluentValidation validations
-            var validationResult = await indicatorsImportRowValidator.ValidateAsync(row, ct);
+            var validationResult = await observationImportRowValidator.ValidateAsync(row, ct);
 
             if (!validationResult.IsValid)
             {
@@ -407,7 +407,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 };
             }
 
-            // Check indicator topics
+            // Check observation topics
             if (!Enum.GetValues<IndicatorTopics>().Select(e => (int)e).Contains(row.IndicatorTopicId))
             {
                 return new(true)
@@ -417,7 +417,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                 };
             }
 
-            // Check indicator measure units
+            // Check observation measure units
             foreach (var measureUnit in IndicatorConstants.UnitMeasuresByIndicatorTopic)
             {
                 if (row.IndicatorTopicId == (int)measureUnit.Key && !measureUnit.Value.Contains((IndicatorMeasureUnits)row.MeasureUnitId))
@@ -517,18 +517,18 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             }
 
             // Validations for indicators editions
-            if (indicator != null)
+            if (observation != null)
             {
-                if (row.IndicatorTopicId != indicator.IndicatorTopicId)
+                if (row.IndicatorTopicId != observation.IndicatorTopicId)
                 {
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorTopic),
-                        Message = $"Errors in row {row.RowNumber}. Original type id: {indicator.IndicatorTopicId}, Spreadsheet type id: {row.IndicatorTopicId}",
+                        Message = $"Errors in row {row.RowNumber}. Original type id: {observation.IndicatorTopicId}, Spreadsheet type id: {row.IndicatorTopicId}",
                     };
                 }
 
-                if (!indicator?.IndicatorLocations?.Any(e => e.Locality == row.LocalityName && e.Location?.Name == row.MunicipalityName && row.DepartmentName == e.Location?.Parent?.Name) ?? false)
+                if (!observation?.ObservationLocations?.Any(e => e.Locality == row.LocalityName && e.Location?.Name == row.MunicipalityName && row.DepartmentName == e.Location?.Parent?.Name) ?? false)
                 {
                     return new(true)
                     {
@@ -549,7 +549,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="locationEntities">Location entities list.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateDatabaseAsync(List<IndicatorsImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateDatabaseAsync(List<ObservationImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
     {
         // Validate upper groups
         var upperGroups = rows
@@ -674,20 +674,20 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     }
 
     /// <summary>
-    /// Get existing indicator locations.
+    /// Get existing observation locations.
     /// </summary>
-    /// <param name="indicator">Indicator entity.</param>
+    /// <param name="observation">Observation entity.</param>
     /// <param name="spreadsheetLocations">Locations from spreadsheets.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Existing indicator locations.</returns>
-    private async Task<List<IndicatorLocation>> GetExistingIndicatorLocationsAsync(Indicator? indicator, LocationDataHelper[] spreadsheetLocations, CancellationToken ct = default)
+    /// <returns>Existing observation locations.</returns>
+    private async Task<List<IndicatorLocation>> GetExistingObservationLocationsAsync(Observation? observation, LocationDataHelper[] spreadsheetLocations, CancellationToken ct = default)
     {
-        var existingIndicatorLocations = indicator != null ? await indicatorLocationRepository.GetByIndicatorAsync(indicator?.Id ?? 0, ct) : [];
+        var existingObservationLocations = observation != null ? await observationLocationRepository.GetByIndicatorAsync(observation?.Id ?? 0, ct) : [];
 
-        if (existingIndicatorLocations.Count > 0)
+        if (existingObservationLocations.Count > 0)
         {
-            existingIndicatorLocations = [..
-                existingIndicatorLocations
+            existingObservationLocations = [..
+                existingObservationLocations
                     .Where(e =>
                         spreadsheetLocations.Any(i =>
                             i.Municipality == e.Location?.Name &&
@@ -695,7 +695,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
                             i.Locality == e.Locality))];
         }
 
-        return existingIndicatorLocations;
+        return existingObservationLocations;
     }
 
     /// <summary>
@@ -704,7 +704,7 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     /// <param name="rows">Spreadsheet rows data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated categories.</returns>
-    private async Task<List<GroupDataHelper>> SaveAndGetCategoriesAsync(List<IndicatorsImportRow> rows, CancellationToken ct = default)
+    private async Task<List<GroupDataHelper>> SaveAndGetCategoriesAsync(List<ObservationImportRow> rows, CancellationToken ct = default)
     {
         // Get categories from spreadsheet
         var spreadsheetCategories = rows
@@ -752,28 +752,28 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
     }
 
     /// <summary>
-    /// Generate IndicatorVersion entities.
+    /// Generate ObservationVersion entities.
     /// </summary>
-    /// <param name="indicator">Indicator entity.</param>
+    /// <param name="observation">Observation entity.</param>
     /// <param name="rows">Spreadsheet rows.</param>
     /// <param name="categories">Categories entities.</param>
     /// <param name="now">Current date and time.</param>
-    /// <param name="indicatorLastVersion">Last indicator version.</param>
-    /// <returns>IndicatorVersion entities.</returns>
-    private static List<IndicatorVersion> GenerateIndicatorVersions(
-        Indicator? indicator,
-        List<IndicatorsImportRow> rows,
+    /// <param name="observationLastVersion">Last observation version.</param>
+    /// <returns>ObservationVersion entities.</returns>
+    private static List<IndicatorVersion> GenerateObservationVersions(
+        Observation? observation,
+        List<ObservationImportRow> rows,
         List<GroupDataHelper> categories,
         DateTimeOffset now,
-        int indicatorLastVersion) =>
+        int observationLastVersion) =>
         [.. rows
             .GroupBy(r => r.IndicatorTopicId)
             .Select(g => new IndicatorVersion()
             {
                 IndicatorTopicId = g.Key,
-                IndicatorId = indicator?.Id ?? 0,
+                ObservationId = observation?.Id ?? 0,
                 CreationDate = now,
-                Version = indicator == null ? 1 : indicatorLastVersion + 1,
+                Version = observation == null ? 1 : observationLastVersion + 1,
                 Groups = [.. g.GroupBy(g => new { g.UpperGroupName, g.GroupName, g.GroupDescription })
                     .Select(g2 =>
                     {
@@ -807,62 +807,62 @@ public class IndicatorService : ServiceRead<Indicator, IndicatorDto, int>, IIndi
             })];
 
     /// <summary>
-    /// Generate Indicator entities.
+    /// Generate Observation entities.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="indicator">Indicator entity.</param>
+    /// <param name="observation">Observation entity.</param>
     /// <param name="rows">Spreadsheet rows.</param>
-    /// <param name="indicatorVersions">IndicatorVersion entities.</param>
-    /// <param name="indicatorLocations">IndicatorLocation entities.</param>
+    /// <param name="observationVersions">ObservationVersion entities.</param>
+    /// <param name="observationLocations">ObservationLocation entities.</param>
     /// <param name="locations">Location entities.</param>
     /// <param name="now">Current date and time.</param>
-    /// <returns>Indicator entities.</returns>
-    private static List<Indicator> GenerateIndicators(
+    /// <returns>Observation entities.</returns>
+    private static List<Observation> GenerateObservations(
         int initiativeId,
-        Indicator? indicator,
-        List<IndicatorsImportRow> rows,
-        List<IndicatorVersion> indicatorVersions,
-        List<IndicatorLocation> indicatorLocations,
+        Observation? observation,
+        List<ObservationImportRow> rows,
+        List<IndicatorVersion> observationVersions,
+        List<IndicatorLocation> observationLocations,
         List<Location> locations,
         DateTimeOffset now) =>
         [.. rows
             .GroupBy(r => r.IndicatorTopicId)
             .Select(g =>
             {
-                var indicatorsLocations = g
+                var observationsLocations = g
                     .Select(r =>
                     {
-                        IndicatorLocation? indicatorLocation = null;
+                        IndicatorLocation? observationLocation = null;
 
-                        indicatorLocation = indicatorLocations
+                        observationLocation = observationLocations
                             .FirstOrDefault(i => i.Location?.Name == r.MunicipalityName && i.Location?.Parent?.Name == r.DepartmentName);
 
-                        if (indicatorLocation == null)
+                        if (observationLocation == null)
                         {
                             var locationEntity = locations
                                 .FirstOrDefault(i => i.Name == r.MunicipalityName && i.Parent?.Name == r.DepartmentName);
 
-                            indicatorLocation = new IndicatorLocation()
+                            observationLocation = new IndicatorLocation()
                             {
-                                IndicatorId = indicator?.Id ?? 0,
+                                ObservationId = observation?.Id ?? 0,
                                 LocationId = locationEntity?.Id ?? 0,
                                 Location = locationEntity,
                                 Locality = r.LocalityName,
                             };
                         }
 
-                        return indicatorLocation;
+                        return observationLocation;
                     })
                     .DistinctBy(e => new { e.Id, e.LocationId })
                     .ToList();
 
-                return new Indicator()
+                return new Observation()
                 {
                     InitiativeId = initiativeId,
                     Name = $"Indicador tipo {g.Key} ({now.ToString(GeneralConstants.DatetimeFormat, CultureInfo.CurrentCulture)})",
                     IndicatorTopicId = g.Key,
-                    IndicatorLocations = indicatorsLocations,
-                    Versions = [.. indicatorVersions.Where(e => e.IndicatorTopicId == g.Key)],
+                    ObservationLocations = observationsLocations,
+                    Versions = [.. observationVersions.Where(e => e.IndicatorTopicId == g.Key)],
                 };
             })];
 

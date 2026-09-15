@@ -98,7 +98,7 @@ public static class ConfigExternalServices
         services.AddScoped<INotificationRepository, NotificationRepository>();
 
         //// Indicators
-        services.AddScoped<IIndicatorRepository, IndicatorRepository>();
+        services.AddScoped<IObservationRepository, ObservationRepository>();
         services.AddScoped<IIndicatorVersionRepository, IndicatorVersionRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IIndicatorLocationRepository, IndicatorLocationRepository>();

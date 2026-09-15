@@ -21,7 +21,7 @@ public class IndicatorLocationConfig : IEntityTypeConfiguration<IndicatorLocatio
             .HasColumnName("id")
             .IsRequired();
 
-        builder?.Property(e => e.IndicatorId)
+        builder?.Property(e => e.ObservationId)
             .HasColumnName("indicator_id")
             .IsRequired();
 
@@ -34,15 +34,15 @@ public class IndicatorLocationConfig : IEntityTypeConfiguration<IndicatorLocatio
             .HasMaxLength(300);
 
         builder?.HasOne(e => e.Indicator)
-            .WithMany(p => p.IndicatorLocations)
-            .HasForeignKey(e => e.IndicatorId);
+            .WithMany(p => p.ObservationLocations)
+            .HasForeignKey(e => e.ObservationId);
 
         builder?.HasOne(e => e.Location)
             .WithMany(p => p.IndicatorLocations)
             .HasForeignKey(e => e.LocationId);
 
         builder?
-            .HasIndex(e => new { e.IndicatorId, e.LocationId, e.Locality })
+            .HasIndex(e => new { e.ObservationId, e.LocationId, e.Locality })
             .IsUnique();
     }
 }

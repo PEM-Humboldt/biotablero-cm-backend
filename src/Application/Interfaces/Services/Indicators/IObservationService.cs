@@ -10,9 +10,9 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 
 /// <summary>
-/// Indicator service interface.
+/// Observation service interface.
 /// </summary>
-public interface IIndicatorService : IRead<Indicator, int>, IUpdate<IndicatorDto, int>
+public interface IObservationService : IRead<Observation, int>, IUpdate<ObservationDto, int>
 {
     /// <summary>
     /// Get entities by initiative.
@@ -23,12 +23,12 @@ public interface IIndicatorService : IRead<Indicator, int>, IUpdate<IndicatorDto
     Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
-    /// Import indicators.
+    /// Import observations.
     /// </summary>
     /// <param name="userName">User name.</param>
     /// <param name="requestData">Request data.</param>
     /// <param name="formFile">File data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> ImportIndicatorsAsync(string? userName, IndicatorsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default);
+    Task<CustomWebResponse> ImportObservationsAsync(string? userName, ObservationsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default);
 }

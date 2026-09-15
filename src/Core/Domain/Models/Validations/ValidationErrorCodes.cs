@@ -445,7 +445,7 @@ public static class ValidationErrorCodes
         /// <summary>
         /// Only one indicator is required.
         /// </summary>
-        public const string OnlyOneIndicatorRequired = "IND_002";
+        public const string OnlyOneObservationRequired = "IND_002";
 
         /// <summary>
         /// Upper ground not found.

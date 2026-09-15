@@ -22,7 +22,7 @@ public class IndicatorVersionRepository(
 {
     /// <inheritdoc/>
     public override async Task<IndicatorVersion?> GetByIdAsync(int id, CancellationToken ct = default) =>
-        await dbContext.IndicatorVersions
+        await dbContext.ObservationVersions
             .Include(e => e.Maps!)
                 .ThenInclude(e => e.Legends!)
                     .ThenInclude(e => e.Items)
@@ -37,8 +37,8 @@ public class IndicatorVersionRepository(
 
     /// <inheritdoc/>
     public async Task<int> GetLastVersionAsync(int indicatorId, CancellationToken ct = default) =>
-        await dbContext.IndicatorVersions
-            .Where(e => e.IndicatorId == indicatorId)
+        await dbContext.ObservationVersions
+            .Where(e => e.ObservationId == indicatorId)
             .OrderByDescending(e => e.Version)
             .Select(e => e.Version)
             .FirstOrDefaultAsync(ct);

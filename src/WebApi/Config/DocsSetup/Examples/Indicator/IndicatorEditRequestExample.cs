@@ -7,10 +7,10 @@ using IAVH.BioTablero.CM.WebApi.Interfaces;
 /// <summary>
 /// Indicator edit response example.
 /// </summary>
-public class IndicatorEditRequestExample : IOpenApiExampleProvider<IndicatorDto>
+public class IndicatorEditRequestExample : IOpenApiExampleProvider<ObservationDto>
 {
     /// <inheritdoc/>
-    public IndicatorDto GetExamples() => new()
+    public ObservationDto GetExamples() => new()
     {
         Name = "Indicator example (edited)",
     };

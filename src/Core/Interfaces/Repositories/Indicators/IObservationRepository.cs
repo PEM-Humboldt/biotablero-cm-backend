@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Indicator repository interface.
+/// Observation repository interface.
 /// </summary>
-public interface IIndicatorRepository : IRepository<Indicator, int>
+public interface IObservationRepository : IRepository<Observation, int>
 {
     /// <summary>
     /// Include OData custom entities.
     /// </summary>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
-    IQueryable<Indicator> IncludeOdataEntities(IQueryable<Indicator> query);
+    IQueryable<Observation> IncludeOdataEntities(IQueryable<Observation> query);
 
     /// <summary>
     /// Get elements by initiative.
@@ -25,7 +25,7 @@ public interface IIndicatorRepository : IRepository<Indicator, int>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities by selected initiative.</returns>
-    Task<IEnumerable<Indicator>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+    Task<IEnumerable<Observation>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
     /// Returns the total number of records.
@@ -36,9 +36,9 @@ public interface IIndicatorRepository : IRepository<Indicator, int>
     Task<int> CountAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
-    /// Get indicator versions.
+    /// Get observation versions.
     /// </summary>
-    /// <param name="id">Indicator identifier.</param>
+    /// <param name="id">Observation identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<int[]> GetVersionsAsync(int id, CancellationToken ct = default);

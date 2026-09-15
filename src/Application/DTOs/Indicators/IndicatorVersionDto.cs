@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Indicator Version dto.
+/// Observation Version dto.
 /// </summary>
 public class IndicatorVersionDto : IDto
 {
@@ -16,9 +16,9 @@ public class IndicatorVersionDto : IDto
     public int? Id { get; set; }
 
     /// <summary>
-    /// Indicator identifier.
+    /// Observation identifier.
     /// </summary>
-    public int? IndicatorId { get; set; }
+    public int? ObservationId { get; set; }
 
     /// <summary>
     /// Creation date.
@@ -31,32 +31,32 @@ public class IndicatorVersionDto : IDto
     public int? Version { get; set; }
 
     /// <summary>
-    /// Indicator description.
+    /// Observation Version description.
     /// </summary>
     public string? Description { get; set; }
 
     /// <summary>
-    /// Indicator methodology.
+    /// Observation Version methodology.
     /// </summary>
     public string? Methodology { get; set; }
 
     /// <summary>
-    /// Indicator interpretation.
+    /// Observation Version interpretation.
     /// </summary>
     public string? Interpretation { get; set; }
 
     /// <summary>
-    /// Indicator considerations.
+    /// Observation Version considerations.
     /// </summary>
     public string? Considerations { get; set; }
 
     /// <summary>
-    /// Indicator autorship.
+    /// Observation Version autorship.
     /// </summary>
     public string? Authorship { get; set; }
 
     /// <summary>
-    /// Indicator Group relationship.
+    /// Observation Group relationship.
     /// </summary>
     public IEnumerable<IndicatorGroupDto>? Groups { get; init; }
 }

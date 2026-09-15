@@ -6,14 +6,14 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Indicator Version entity.
+/// Observation Version entity.
 /// </summary>
 public class IndicatorVersion : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Indicator identifier.
+    /// Observation identifier.
     /// </summary>
-    public int IndicatorId { get; set; }
+    public int ObservationId { get; set; }
 
     /// <summary>
     /// Creation date.
@@ -26,27 +26,27 @@ public class IndicatorVersion : BaseEntity<int>, IAggregateRoot
     public int Version { get; set; }
 
     /// <summary>
-    /// Indicator description.
+    /// Observation Version description.
     /// </summary>
     public string? Description { get; set; }
 
     /// <summary>
-    /// Indicator methodology.
+    /// Observation Version methodology.
     /// </summary>
     public string? Methodology { get; set; }
 
     /// <summary>
-    /// Indicator interpretation.
+    /// Observation Version interpretation.
     /// </summary>
     public string? Interpretation { get; set; }
 
     /// <summary>
-    /// Indicator considerations.
+    /// Observation Version considerations.
     /// </summary>
     public string? Considerations { get; set; }
 
     /// <summary>
-    /// Indicator autorship.
+    /// Observation Version autorship.
     /// </summary>
     public string? Authorship { get; set; }
 
@@ -56,17 +56,17 @@ public class IndicatorVersion : BaseEntity<int>, IAggregateRoot
     public int? IndicatorTopicId { get; set; }
 
     /// <summary>
-    /// Indicator relationship.
+    /// Observation relationship.
     /// </summary>
-    public Indicator? Indicator { get; set; }
+    public Observation? Observation { get; set; }
 
     /// <summary>
-    /// Indicator Version Map relationship.
+    /// Observation Version Map relationship.
     /// </summary>
     public ICollection<IndicatorVersionMap>? Maps { get; init; }
 
     /// <summary>
-    /// Indicator Group relationship.
+    /// Observation Group relationship.
     /// </summary>
     public ICollection<IndicatorGroup>? Groups { get; init; }
 }

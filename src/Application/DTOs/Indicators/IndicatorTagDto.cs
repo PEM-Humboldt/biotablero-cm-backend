@@ -6,7 +6,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Indicator Tag dto.
+/// Observation Tag dto.
 /// </summary>
 [method: SetsRequiredMembers]
 public class IndicatorTagDto() : IDto

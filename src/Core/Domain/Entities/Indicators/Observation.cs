@@ -6,12 +6,12 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Indicator entity.
+/// Observation entity.
 /// </summary>
-public class Indicator : BaseEntity<int>, IAggregateRoot
+public class Observation : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Indicator name.
+    /// Observation name.
     /// </summary>
     public required string Name { get; set; }
 
@@ -21,7 +21,7 @@ public class Indicator : BaseEntity<int>, IAggregateRoot
     public int InitiativeId { get; set; }
 
     /// <summary>
-    /// Indicator Topic identifier.
+    /// Observation Topic identifier.
     /// </summary>
     public int IndicatorTopicId { get; set; }
 
@@ -31,22 +31,22 @@ public class Indicator : BaseEntity<int>, IAggregateRoot
     public Initiative? Initiative { get; set; }
 
     /// <summary>
-    /// Indicator Topic relationship.
+    /// Observation Topic relationship.
     /// </summary>
-    public IndicatorTopic? Type { get; set; }
+    public IndicatorTopic? Topic { get; set; }
 
     /// <summary>
-    /// Indicator Tag relationship.
+    /// Observation Tag relationship.
     /// </summary>
-    public ICollection<IndicatorTag>? IndicatorTags { get; init; }
+    public ICollection<IndicatorTag>? ObservationTags { get; init; }
 
     /// <summary>
-    /// Indicator Location relationship.
+    /// Observation Location relationship.
     /// </summary>
-    public ICollection<IndicatorLocation>? IndicatorLocations { get; init; }
+    public ICollection<IndicatorLocation>? ObservationLocations { get; init; }
 
     /// <summary>
-    /// Indicator Version relationship.
+    /// Observation Version relationship.
     /// </summary>
     public ICollection<IndicatorVersion>? Versions { get; init; }
 }

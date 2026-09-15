@@ -3,9 +3,9 @@
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Indicators Import File dto.
+/// Observations Import File dto.
 /// </summary>
-public class IndicatorsImportFileDto : IDto
+public class ObservationsImportFileDto : IDto
 {
     /// <summary>
     /// Item identifier.

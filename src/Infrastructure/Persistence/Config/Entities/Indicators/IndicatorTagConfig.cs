@@ -25,7 +25,7 @@ public class IndicatorTagConfig : IEntityTypeConfiguration<IndicatorTag>
             .HasColumnName("tag_id")
             .IsRequired();
 
-        builder?.Property(e => e.IndicatorId)
+        builder?.Property(e => e.ObservationId)
             .HasColumnName("indicator_id")
             .IsRequired();
 
@@ -33,12 +33,12 @@ public class IndicatorTagConfig : IEntityTypeConfiguration<IndicatorTag>
             .WithMany(p => p.TagIndicators)
             .HasForeignKey(e => e.TagId);
 
-        builder?.HasOne(e => e.Indicator)
-            .WithMany(p => p.IndicatorTags)
-            .HasForeignKey(e => e.IndicatorId);
+        builder?.HasOne(e => e.Observation)
+            .WithMany(p => p.ObservationTags)
+            .HasForeignKey(e => e.ObservationId);
 
         builder?
-            .HasIndex(e => new { e.IndicatorId, e.TagId })
+            .HasIndex(e => new { e.ObservationId, e.TagId })
             .IsUnique();
     }
 }

@@ -9,10 +9,10 @@ using IAVH.BioTablero.CM.WebApi.Interfaces;
 /// <summary>
 /// Indicator response example.
 /// </summary>
-public class IndicatorResponseExample : IOpenApiExampleProvider<IndicatorDto>
+public class IndicatorResponseExample : IOpenApiExampleProvider<ObservationDto>
 {
     /// <inheritdoc/>
-    public IndicatorDto GetExamples() => new()
+    public ObservationDto GetExamples() => new()
     {
         Id = 0,
         Name = "Indicator example",

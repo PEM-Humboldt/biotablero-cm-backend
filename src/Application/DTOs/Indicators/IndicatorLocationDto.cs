@@ -4,7 +4,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Indicator Location dto.
+/// Observation Location dto.
 /// </summary>
 public class IndicatorLocationDto : IDto
 {
@@ -14,7 +14,7 @@ public class IndicatorLocationDto : IDto
     public int? Id { get; set; }
 
     /// <summary>
-    /// Indicator identifier.
+    /// Observation identifier.
     /// </summary>
     public int? IndicatorId { get; set; }
 

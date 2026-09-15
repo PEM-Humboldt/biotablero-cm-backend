@@ -7,10 +7,10 @@ using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 /// <summary>
 /// Indicator OData response example.
 /// </summary>
-public class IndicatorOdataResponseExample : BaseOdataResponseExample<IndicatorDto>
+public class IndicatorOdataResponseExample : BaseOdataResponseExample<ObservationDto>
 {
     /// <inheritdoc/>
-    protected override IndicatorDto CreateExampleDto() => new()
+    protected override ObservationDto CreateExampleDto() => new()
     {
         Id = 0,
         Name = "Indicator example",

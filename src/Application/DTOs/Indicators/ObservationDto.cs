@@ -6,10 +6,10 @@ using System.Diagnostics.CodeAnalysis;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Indicator dto.
+/// Observation dto.
 /// </summary>
 [method: SetsRequiredMembers]
-public class IndicatorDto() : IDto
+public class ObservationDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -17,7 +17,7 @@ public class IndicatorDto() : IDto
     public int? Id { get; set; }
 
     /// <summary>
-    /// Indicator name.
+    /// Observation name.
     /// </summary>
     public required string Name { get; set; } = string.Empty;
 
@@ -32,17 +32,17 @@ public class IndicatorDto() : IDto
     public string? InitiativeName { get; set; }
 
     /// <summary>
-    /// Indicator Topic.
+    /// Observation Topic.
     /// </summary>
     public IndicatorTopicDto? Topic { get; set; }
 
     /// <summary>
-    /// Indicator Locations relationship.
+    /// Observation Locations relationship.
     /// </summary>
     public IEnumerable<IndicatorLocationDto>? Locations { get; set; }
 
     /// <summary>
-    /// Indicator versions list.
+    /// Observation versions list.
     /// </summary>
     public List<IndicatorVersionDto>? Versions { get; set; }
 

@@ -21,7 +21,7 @@ public class IndicatorVersionConfig : IEntityTypeConfiguration<IndicatorVersion>
             .HasColumnName("id")
             .IsRequired();
 
-        builder?.Property(e => e.IndicatorId)
+        builder?.Property(e => e.ObservationId)
             .HasColumnName("indicator_id")
             .IsRequired();
 
@@ -55,14 +55,14 @@ public class IndicatorVersionConfig : IEntityTypeConfiguration<IndicatorVersion>
             .HasColumnName("authorship")
             .HasMaxLength(1000);
 
-        builder?.HasOne(e => e.Indicator)
+        builder?.HasOne(e => e.Observation)
             .WithMany(p => p.Versions)
-            .HasForeignKey(e => e.IndicatorId);
+            .HasForeignKey(e => e.ObservationId);
 
         builder?.Ignore(i => i.IndicatorTopicId);
 
         builder?
-            .HasIndex(e => new { e.IndicatorId, e.Version })
+            .HasIndex(e => new { e.ObservationId, e.Version })
             .IsUnique();
     }
 }

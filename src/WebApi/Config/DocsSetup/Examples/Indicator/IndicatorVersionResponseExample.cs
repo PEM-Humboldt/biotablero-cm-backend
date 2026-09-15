@@ -15,7 +15,7 @@ public class IndicatorVersionResponseExample : IOpenApiExampleProvider<Indicator
     public IndicatorVersionDto GetExamples() => new()
     {
         Id = 0,
-        IndicatorId = 0,
+        ObservationId = 0,
         Version = 1,
         CreationDate = DateTime.Now,
         Description = "Description example",

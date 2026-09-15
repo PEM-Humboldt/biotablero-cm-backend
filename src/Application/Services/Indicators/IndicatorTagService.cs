@@ -27,7 +27,7 @@ public class IndicatorTagService : IIndicatorTagService
     private readonly IValidationErrorTranslator errorTranslator;
     private readonly ILogger logger;
     private readonly IMapperRead<IndicatorTag, IndicatorTagDto> mapper;
-    private readonly IIndicatorRepository indicatorRepository;
+    private readonly IObservationRepository indicatorRepository;
     private readonly ITagRepository tagRepository;
 
     /// <summary>
@@ -44,7 +44,7 @@ public class IndicatorTagService : IIndicatorTagService
         IMapperRead<IndicatorTag, IndicatorTagDto> mapper,
         IValidationErrorTranslator errorTranslator,
         ILogger logger,
-        IIndicatorRepository indicatorRepository,
+        IObservationRepository indicatorRepository,
         ITagRepository tagRepository)
     {
         this.entityRepository = entityRepository;
@@ -94,7 +94,7 @@ public class IndicatorTagService : IIndicatorTagService
         // Build entity data
         var entity = new IndicatorTag()
         {
-            IndicatorId = indicatorId,
+            ObservationId = indicatorId,
             TagId = tagId,
         };
 

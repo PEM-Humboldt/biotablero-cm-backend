@@ -10,10 +10,10 @@ using IAVH.BioTablero.CM.WebApi.Interfaces;
 /// <summary>
 /// Indicator list response example.
 /// </summary>
-public class IndicatorListResponseExample : IOpenApiExampleProvider<List<IndicatorDto>>
+public class IndicatorListResponseExample : IOpenApiExampleProvider<List<ObservationDto>>
 {
     /// <inheritdoc/>
-    public List<IndicatorDto> GetExamples() =>
+    public List<ObservationDto> GetExamples() =>
     [
         new()
         {

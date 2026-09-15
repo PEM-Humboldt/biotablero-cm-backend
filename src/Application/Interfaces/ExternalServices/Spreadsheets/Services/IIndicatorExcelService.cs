@@ -13,5 +13,5 @@ public interface IIndicatorExcelService
     /// </summary>
     /// <param name="formFile">Spreadsheet data.</param>
     /// <returns>Process result.</returns>
-    SpreadsheetReadResult<IndicatorsImportRow> GetFileData(IInputFile formFile);
+    SpreadsheetReadResult<ObservationImportRow> GetFileData(IInputFile formFile);
 }

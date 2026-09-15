@@ -22,7 +22,7 @@ public class IndicatorTagRepository(
 {
     /// <inheritdoc/>
     public override async Task<IndicatorTag?> GetByIdAsync(int id, CancellationToken ct = default) =>
-        await dbContext.IndicatorTags
+        await dbContext.ObservationTags
             .Include(e => e.Tag)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
@@ -36,7 +36,7 @@ public class IndicatorTagRepository(
 
     /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int indicatorId, int tagId, CancellationToken ct = default) =>
-        await dbContext.IndicatorTags
-            .Where(e => e.IndicatorId == indicatorId && e.TagId == tagId)
+        await dbContext.ObservationTags
+            .Where(e => e.ObservationId == indicatorId && e.TagId == tagId)
             .AnyAsync(ct);
 }

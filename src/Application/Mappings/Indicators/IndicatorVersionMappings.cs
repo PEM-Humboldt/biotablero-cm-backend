@@ -23,7 +23,7 @@ public class IndicatorVersionMappings(
         return new()
         {
             Id = entity.Id,
-            IndicatorId = entity.IndicatorId,
+            ObservationId = entity.ObservationId,
             CreationDate = entity.CreationDate,
             Version = entity.Version,
             Description = entity.Description,

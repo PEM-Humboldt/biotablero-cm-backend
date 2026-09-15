@@ -3,10 +3,10 @@
 using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
-/// Indicators Import spreadsheet row.
+/// Observation Import spreadsheet row.
 /// </summary>
 [method: SetsRequiredMembers]
-public class IndicatorsImportRow()
+public class ObservationImportRow()
 {
     /// <summary>
     /// Spreadsheet cell row number.
@@ -19,7 +19,7 @@ public class IndicatorsImportRow()
     public required int InitiativeId { get; set; }
 
     /// <summary>
-    /// Indicator Topic identifier.
+    /// Observation Topic identifier.
     /// </summary>
     public required int IndicatorTopicId { get; set; }
 
@@ -79,17 +79,17 @@ public class IndicatorsImportRow()
     public string? GroupDescription { get; set; }
 
     /// <summary>
-    /// Indicator value.
+    /// Observation value.
     /// </summary>
     public float Value { get; set; }
 
     /// <summary>
-    /// Indicator Value upper limit.
+    /// Observation Value upper limit.
     /// </summary>
     public float? UpperLimit { get; set; }
 
     /// <summary>
-    /// Indicator Value lower limit.
+    /// Observation Value lower limit.
     /// </summary>
     public float? LowerLimit { get; set; }
 }

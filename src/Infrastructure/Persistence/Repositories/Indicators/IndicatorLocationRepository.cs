@@ -23,9 +23,9 @@ public class IndicatorLocationRepository(GeneralContext dbContext, ILogger logge
 {
     /// <inheritdoc/>
     public async Task<List<IndicatorLocation>> GetByIndicatorAsync(int indicatorId, CancellationToken ct = default) =>
-        await dbContext.IndicatorLocations
+        await dbContext.ObservationLocations
             .Include(e => e.Location)
                 .ThenInclude(e => e!.Parent)
-            .Where(e => e.IndicatorId == indicatorId)
+            .Where(e => e.ObservationId == indicatorId)
             .ToListAsync(ct);
 }

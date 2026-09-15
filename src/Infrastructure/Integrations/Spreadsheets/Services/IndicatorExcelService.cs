@@ -24,9 +24,9 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
     private readonly ILogger logger = logger;
 
     /// <inheritdoc/>
-    public SpreadsheetReadResult<IndicatorsImportRow> GetFileData(IInputFile formFile)
+    public SpreadsheetReadResult<ObservationImportRow> GetFileData(IInputFile formFile)
     {
-        var result = new SpreadsheetReadResult<IndicatorsImportRow>();
+        var result = new SpreadsheetReadResult<ObservationImportRow>();
 
         if (formFile == null || formFile.Size == 0)
         {
@@ -59,7 +59,7 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
                 ValidateCellValue<float?>(row, XlsxColumnIndex.UpperLimit, result.Errors, out var upperLimit);
                 ValidateCellValue<float?>(row, XlsxColumnIndex.LowerLimit, result.Errors, out var lowerLimit);
 
-                var validatedRow = new IndicatorsImportRow
+                var validatedRow = new ObservationImportRow
                 {
                     RowNumber = row.RowNumber(),
                     IndicatorTopicId = indicatorTopicId,

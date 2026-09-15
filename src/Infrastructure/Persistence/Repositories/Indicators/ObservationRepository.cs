@@ -14,47 +14,47 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 /// <summary>
-/// Indicator repository.
+/// Observation repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
 /// <param name="logger">System logger.</param>
-public class IndicatorRepository(
+public class ObservationRepository(
     GeneralContext dbContext,
-    ILogger logger) : Repository<Indicator, int>(dbContext, logger), IIndicatorRepository
+    ILogger logger) : Repository<Observation, int>(dbContext, logger), IObservationRepository
 {
     /// <inheritdoc/>
-    public override async Task<Indicator?> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<Observation?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await IncludeCustomEntities()
-            .Include(e => e.IndicatorLocations!)
+            .Include(e => e.ObservationLocations!)
                 .ThenInclude(e => e.Location)
                     .ThenInclude(e => e!.Parent)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<Indicator>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
+    public async Task<IEnumerable<Observation>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
         await IncludeCustomEntities()
             .Where(e => e.InitiativeId == initiativeId)
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public IQueryable<Indicator> IncludeOdataEntities(IQueryable<Indicator> query) =>
+    public IQueryable<Observation> IncludeOdataEntities(IQueryable<Observation> query) =>
         IncludeCustomEntities(query)
-            .Include(e => e.IndicatorLocations!)
+            .Include(e => e.ObservationLocations!)
                 .ThenInclude(e => e.Location)
                     .ThenInclude(e => e!.Parent);
 
     /// <inheritdoc/>
     public async Task<int> CountAsync(int initiativeId, CancellationToken ct = default) =>
-        await dbContext.Indicators
+        await dbContext.Observations
             .Include(e => e.Initiative)
             .Where(e => e.Initiative!.Id == initiativeId)
             .CountAsync(ct);
 
     /// <inheritdoc/>
     public async Task<int[]> GetVersionsAsync(int id, CancellationToken ct = default) =>
-        await dbContext.IndicatorVersions
-            .Where(e => e.IndicatorId == id)
+        await dbContext.ObservationVersions
+            .Where(e => e.ObservationId == id)
             .Select(e => e.Version)
             .ToArrayAsync(ct);
 
@@ -62,16 +62,16 @@ public class IndicatorRepository(
     /// Include custom entities.
     /// </summary>
     /// <returns>Modified Linq query.</returns>
-    private IQueryable<Indicator> IncludeCustomEntities(IQueryable<Indicator>? query = null)
+    private IQueryable<Observation> IncludeCustomEntities(IQueryable<Observation>? query = null)
     {
-        query ??= dbContext.Indicators;
+        query ??= dbContext.Observations;
 
         ArgumentNullException.ThrowIfNull(query);
 
         return query
-            .Include(e => e.Type)
+            .Include(e => e.Topic)
             .Include(e => e.Versions)
-            .Include(e => e.IndicatorTags!)
+            .Include(e => e.ObservationTags!)
                 .ThenInclude(e => e.Tag)
             .Include(e => e.Initiative);
     }
