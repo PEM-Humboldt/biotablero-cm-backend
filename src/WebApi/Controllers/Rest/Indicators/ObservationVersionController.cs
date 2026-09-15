@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 /// <summary>
-/// Indicator Version controller.
+/// Observation Version controller.
 /// </summary>
 /// <param name="webTools">General web tools.</param>
 /// <param name="entityService">Entity service.</param>
@@ -25,9 +25,9 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 [Route("[controller]")]
 [Produces("application/json")]
 [ApiConventionType(typeof(CustomApiConventions))]
-public class IndicatorVersionController(
+public class ObservationVersionController(
     IWebTools webTools,
-    IIndicatorVersionService entityService) : ODataController
+    IObservationVersionService entityService) : ODataController
 {
     /// <summary>
     /// Get entity.
@@ -36,7 +36,7 @@ public class IndicatorVersionController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorVersionResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ObservationVersionResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -54,8 +54,8 @@ public class IndicatorVersionController(
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [OpenApiRequest(typeof(ObservationVersionEditRequestExample))]
-    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorVersionResponseExample))]
-    public async Task<IActionResult> Put(int id, [FromBody] IndicatorVersionDto requestData, CancellationToken ct)
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ObservationVersionResponseExample))]
+    public async Task<IActionResult> Put(int id, [FromBody] ObservationVersionDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);
         return webTools.CustomResponse(response);

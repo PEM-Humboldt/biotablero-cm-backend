@@ -99,7 +99,7 @@ public static class ConfigExternalServices
 
         //// Indicators
         services.AddScoped<IObservationRepository, ObservationRepository>();
-        services.AddScoped<IIndicatorVersionRepository, IndicatorVersionRepository>();
+        services.AddScoped<IObservationVersionRepository, ObservationVersionRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IObservationLocationRepository, ObservationLocationRepository>();
         services.AddScoped<IObservationTagRepository, ObservationTagRepository>();

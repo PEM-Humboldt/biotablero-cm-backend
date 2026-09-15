@@ -44,7 +44,7 @@ public class ObservationDto() : IDto
     /// <summary>
     /// Observation versions list.
     /// </summary>
-    public List<IndicatorVersionDto>? Versions { get; set; }
+    public List<ObservationVersionDto>? Versions { get; set; }
 
     /// <summary>
     /// Tags relationship.

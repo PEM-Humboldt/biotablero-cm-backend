@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Indicator Version entity configuration.
+/// Observation Version entity configuration.
 /// </summary>
-public class IndicatorVersionConfig : IEntityTypeConfiguration<IndicatorVersion>
+public class ObservationVersionConfig : IEntityTypeConfiguration<ObservationVersion>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<IndicatorVersion> builder)
+    public void Configure(EntityTypeBuilder<ObservationVersion> builder)
     {
         builder?.ToTable("indicator_version", "indicators");
 

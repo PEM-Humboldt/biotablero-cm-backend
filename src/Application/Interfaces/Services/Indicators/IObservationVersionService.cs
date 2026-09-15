@@ -5,8 +5,8 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Indicator Version service interface.
+/// Observation Version service interface.
 /// </summary>
-public interface IIndicatorVersionService : IRead<IndicatorVersion, int>, IUpdate<IndicatorVersionDto, int>
+public interface IObservationVersionService : IRead<ObservationVersion, int>, IUpdate<ObservationVersionDto, int>
 {
 }

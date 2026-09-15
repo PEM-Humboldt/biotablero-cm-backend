@@ -49,11 +49,11 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     private readonly IIndicatorExcelService excelService;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ILocationRepository locationRepository;
-    private readonly IIndicatorVersionRepository observationVersionRepository;
+    private readonly IObservationVersionRepository observationVersionRepository;
     private readonly ICategoryRepository categoryRepository;
     private readonly IObservationLocationRepository observationLocationRepository;
     private readonly IValidator<ObservationImportRow> observationImportRowValidator;
-    private readonly IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> observationVersionMapper;
+    private readonly IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto> observationVersionMapper;
 
     /// <summary>
     /// Constructor.
@@ -80,11 +80,11 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         IIndicatorExcelService excelService,
         IInitiativeRepository initiativeRepository,
         ILocationRepository locationRepository,
-        IIndicatorVersionRepository observationVersionRepository,
+        IObservationVersionRepository observationVersionRepository,
         ICategoryRepository categoryRepository,
         IObservationLocationRepository observationLocationRepository,
         IValidator<ObservationImportRow> observationImportRowValidator,
-        IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> observationVersionMapper)
+        IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto> observationVersionMapper)
     : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
@@ -760,7 +760,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// <param name="now">Current date and time.</param>
     /// <param name="observationLastVersion">Last observation version.</param>
     /// <returns>ObservationVersion entities.</returns>
-    private static List<IndicatorVersion> GenerateObservationVersions(
+    private static List<ObservationVersion> GenerateObservationVersions(
         Observation? observation,
         List<ObservationImportRow> rows,
         List<GroupDataHelper> categories,
@@ -768,7 +768,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         int observationLastVersion) =>
         [.. rows
             .GroupBy(r => r.IndicatorTopicId)
-            .Select(g => new IndicatorVersion()
+            .Select(g => new ObservationVersion()
             {
                 IndicatorTopicId = g.Key,
                 ObservationId = observation?.Id ?? 0,
@@ -821,7 +821,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         int initiativeId,
         Observation? observation,
         List<ObservationImportRow> rows,
-        List<IndicatorVersion> observationVersions,
+        List<ObservationVersion> observationVersions,
         List<ObservationLocation> observationLocations,
         List<Location> locations,
         DateTimeOffset now) =>

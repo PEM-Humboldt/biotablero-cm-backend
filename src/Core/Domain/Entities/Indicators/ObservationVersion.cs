@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 /// <summary>
 /// Observation Version entity.
 /// </summary>
-public class IndicatorVersion : BaseEntity<int>, IAggregateRoot
+public class ObservationVersion : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
     /// Observation identifier.

@@ -21,13 +21,13 @@ using Serilog;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// Indicator Version service.
+/// Observation Version service.
 /// </summary>
-public class IndicatorVersionService : ServiceRead<IndicatorVersion, IndicatorVersionDto, int>, IIndicatorVersionService
+public class ObservationVersionService : ServiceRead<ObservationVersion, ObservationVersionDto, int>, IObservationVersionService
 {
     private readonly ILogger logger;
-    private new readonly IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> mapper;
-    private readonly IValidator<IndicatorVersionDto> entityValidator;
+    private new readonly IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto> mapper;
+    private readonly IValidator<ObservationVersionDto> entityValidator;
 
     /// <summary>
     /// Constructor.
@@ -37,11 +37,11 @@ public class IndicatorVersionService : ServiceRead<IndicatorVersion, IndicatorVe
     /// <param name="logger">System logger.</param>
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
-    public IndicatorVersionService(
-        IIndicatorVersionRepository entityRepository,
-        IValidator<IndicatorVersionDto> entityValidator,
+    public ObservationVersionService(
+        IObservationVersionRepository entityRepository,
+        IValidator<ObservationVersionDto> entityValidator,
         ILogger logger,
-        IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> mapper,
+        IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto> mapper,
         IValidationErrorTranslator errorTranslator)
     : base(entityRepository, mapper, errorTranslator)
     {
@@ -51,7 +51,7 @@ public class IndicatorVersionService : ServiceRead<IndicatorVersion, IndicatorVe
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, IndicatorVersionDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, ObservationVersionDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -82,7 +82,7 @@ public class IndicatorVersionService : ServiceRead<IndicatorVersion, IndicatorVe
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, "Updated indicator", "{@EntityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated observation version", "{@EntityData}", entityData);
 
         return new()
         {

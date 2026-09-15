@@ -48,5 +48,5 @@ public class Observation : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Observation Version relationship.
     /// </summary>
-    public ICollection<IndicatorVersion>? Versions { get; init; }
+    public ICollection<ObservationVersion>? Versions { get; init; }
 }

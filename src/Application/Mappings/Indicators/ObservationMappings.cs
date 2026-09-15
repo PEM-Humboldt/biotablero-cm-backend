@@ -31,7 +31,7 @@ public class ObservationMappings(
             Tags = entity.ObservationTags?.Select(observationTagMappings.Map),
             Locations = entity.ObservationLocations?.Select(observationLocationMappings.Map),
             Versions = entity.Versions?
-                .Select(v => new IndicatorVersionDto()
+                .Select(v => new ObservationVersionDto()
                 {
                     Id = v.Id,
                     Version = v.Version,

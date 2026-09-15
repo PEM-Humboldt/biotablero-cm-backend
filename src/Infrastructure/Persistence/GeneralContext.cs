@@ -222,7 +222,7 @@ public sealed class GeneralContext : DbContext
     /// <summary>
     /// Observation Version DbSet.
     /// </summary>
-    public DbSet<IndicatorVersion> ObservationVersions { get; set; }
+    public DbSet<ObservationVersion> ObservationVersions { get; set; }
 
     /// <summary>
     /// Observation Version Map DbSet.

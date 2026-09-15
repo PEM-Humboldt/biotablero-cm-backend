@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 /// <summary>
 /// Observation Version dto.
 /// </summary>
-public class IndicatorVersionDto : IDto
+public class ObservationVersionDto : IDto
 {
     /// <summary>
     /// Item identifier.

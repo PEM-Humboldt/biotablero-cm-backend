@@ -12,16 +12,16 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 /// <summary>
-/// Indicator Version repository.
+/// Observation Version repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
 /// <param name="logger">System logger.</param>
-public class IndicatorVersionRepository(
+public class ObservationVersionRepository(
     GeneralContext dbContext,
-    ILogger logger) : Repository<IndicatorVersion, int>(dbContext, logger), IIndicatorVersionRepository
+    ILogger logger) : Repository<ObservationVersion, int>(dbContext, logger), IObservationVersionRepository
 {
     /// <inheritdoc/>
-    public override async Task<IndicatorVersion?> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<ObservationVersion?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.ObservationVersions
             .Include(e => e.Maps!)
                 .ThenInclude(e => e.Legends!)
@@ -36,9 +36,9 @@ public class IndicatorVersionRepository(
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<int> GetLastVersionAsync(int indicatorId, CancellationToken ct = default) =>
+    public async Task<int> GetLastVersionAsync(int observationId, CancellationToken ct = default) =>
         await dbContext.ObservationVersions
-            .Where(e => e.ObservationId == indicatorId)
+            .Where(e => e.ObservationId == observationId)
             .OrderByDescending(e => e.Version)
             .Select(e => e.Version)
             .FirstOrDefaultAsync(ct);

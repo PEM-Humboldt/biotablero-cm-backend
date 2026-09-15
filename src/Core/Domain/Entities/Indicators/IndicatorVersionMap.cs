@@ -32,7 +32,7 @@ public class IndicatorVersionMap : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Indicator Version relationship.
     /// </summary>
-    public IndicatorVersion? IndicatorVersion { get; set; }
+    public ObservationVersion? IndicatorVersion { get; set; }
 
     /// <summary>
     /// Map Legend relationship.

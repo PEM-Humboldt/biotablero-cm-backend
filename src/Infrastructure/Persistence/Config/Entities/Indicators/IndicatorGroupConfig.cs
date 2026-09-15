@@ -21,7 +21,7 @@ public class IndicatorGroupConfig : IEntityTypeConfiguration<IndicatorGroup>
             .HasColumnName("id")
             .IsRequired();
 
-        builder?.Property(e => e.IndicatorVersionId)
+        builder?.Property(e => e.ObservationVersionId)
             .HasColumnName("indicator_version_id")
             .IsRequired();
 
@@ -29,16 +29,16 @@ public class IndicatorGroupConfig : IEntityTypeConfiguration<IndicatorGroup>
             .HasColumnName("category_id")
             .IsRequired();
 
-        builder?.HasOne(e => e.IndicatorVersion)
+        builder?.HasOne(e => e.ObservationVersion)
             .WithMany(p => p.Groups)
-            .HasForeignKey(e => e.IndicatorVersionId);
+            .HasForeignKey(e => e.ObservationVersionId);
 
         builder?.HasOne(e => e.Category)
             .WithMany(p => p.IndicatorGroups)
             .HasForeignKey(e => e.CategoryId);
 
         builder?
-            .HasIndex(e => new { e.IndicatorVersionId, e.CategoryId })
+            .HasIndex(e => new { e.ObservationVersionId, e.CategoryId })
             .IsUnique();
     }
 }
