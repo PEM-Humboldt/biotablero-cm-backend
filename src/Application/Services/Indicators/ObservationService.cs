@@ -51,7 +51,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     private readonly ILocationRepository locationRepository;
     private readonly IIndicatorVersionRepository observationVersionRepository;
     private readonly ICategoryRepository categoryRepository;
-    private readonly IIndicatorLocationRepository observationLocationRepository;
+    private readonly IObservationLocationRepository observationLocationRepository;
     private readonly IValidator<ObservationImportRow> observationImportRowValidator;
     private readonly IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> observationVersionMapper;
 
@@ -82,7 +82,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         ILocationRepository locationRepository,
         IIndicatorVersionRepository observationVersionRepository,
         ICategoryRepository categoryRepository,
-        IIndicatorLocationRepository observationLocationRepository,
+        IObservationLocationRepository observationLocationRepository,
         IValidator<ObservationImportRow> observationImportRowValidator,
         IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto> observationVersionMapper)
     : base(entityRepository, mapper, errorTranslator)
@@ -680,9 +680,9 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// <param name="spreadsheetLocations">Locations from spreadsheets.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Existing observation locations.</returns>
-    private async Task<List<IndicatorLocation>> GetExistingObservationLocationsAsync(Observation? observation, LocationDataHelper[] spreadsheetLocations, CancellationToken ct = default)
+    private async Task<List<ObservationLocation>> GetExistingObservationLocationsAsync(Observation? observation, LocationDataHelper[] spreadsheetLocations, CancellationToken ct = default)
     {
-        var existingObservationLocations = observation != null ? await observationLocationRepository.GetByIndicatorAsync(observation?.Id ?? 0, ct) : [];
+        var existingObservationLocations = observation != null ? await observationLocationRepository.GetByObservationAsync(observation?.Id ?? 0, ct) : [];
 
         if (existingObservationLocations.Count > 0)
         {
@@ -822,7 +822,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         Observation? observation,
         List<ObservationImportRow> rows,
         List<IndicatorVersion> observationVersions,
-        List<IndicatorLocation> observationLocations,
+        List<ObservationLocation> observationLocations,
         List<Location> locations,
         DateTimeOffset now) =>
         [.. rows
@@ -832,7 +832,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                 var observationsLocations = g
                     .Select(r =>
                     {
-                        IndicatorLocation? observationLocation = null;
+                        ObservationLocation? observationLocation = null;
 
                         observationLocation = observationLocations
                             .FirstOrDefault(i => i.Location?.Name == r.MunicipalityName && i.Location?.Parent?.Name == r.DepartmentName);
@@ -842,7 +842,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                             var locationEntity = locations
                                 .FirstOrDefault(i => i.Name == r.MunicipalityName && i.Parent?.Name == r.DepartmentName);
 
-                            observationLocation = new IndicatorLocation()
+                            observationLocation = new ObservationLocation()
                             {
                                 ObservationId = observation?.Id ?? 0,
                                 LocationId = locationEntity?.Id ?? 0,

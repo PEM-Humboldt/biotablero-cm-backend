@@ -10,13 +10,13 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Indicator Location mappings.
+/// Observation Location mappings.
 /// </summary>
-public class IndicatorLocationMappings(
-    IMapperRead<Location, LocationDto> locationMappings) : MapperRead<IndicatorLocation, IndicatorLocationDto>
+public class ObservationLocationMappings(
+    IMapperRead<Location, LocationDto> locationMappings) : MapperRead<ObservationLocation, ObservationLocationDto>
 {
     /// <inheritdoc/>
-    public override IndicatorLocationDto Map(IndicatorLocation? entity)
+    public override ObservationLocationDto Map(ObservationLocation? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

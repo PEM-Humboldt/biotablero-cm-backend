@@ -6,7 +6,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 /// <summary>
 /// Observation Location entity.
 /// </summary>
-public class IndicatorLocation : BaseEntity<int>, IAggregateRoot
+public class ObservationLocation : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
     /// Observation identifier.

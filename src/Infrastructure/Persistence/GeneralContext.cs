@@ -217,7 +217,7 @@ public sealed class GeneralContext : DbContext
     /// <summary>
     /// Observation Location DbSet.
     /// </summary>
-    public DbSet<IndicatorLocation> ObservationLocations { get; set; }
+    public DbSet<ObservationLocation> ObservationLocations { get; set; }
 
     /// <summary>
     /// Observation Version DbSet.

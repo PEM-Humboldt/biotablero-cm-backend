@@ -14,7 +14,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 public class ObservationMappings(
     IMapperRead<ObservationTag, ObservationTagDto> observationTagMappings,
     IMapperRead<IndicatorTopic, IndicatorTopicDto> observationTopicMappings,
-    IMapperRead<IndicatorLocation, IndicatorLocationDto> observationLocationMappings) : MapperRead<Observation, ObservationDto>, IMapperReadAndUpdate<Observation, ObservationDto>
+    IMapperRead<ObservationLocation, ObservationLocationDto> observationLocationMappings) : MapperRead<Observation, ObservationDto>, IMapperReadAndUpdate<Observation, ObservationDto>
 {
     /// <inheritdoc/>
     public override ObservationDto Map(Observation? entity)

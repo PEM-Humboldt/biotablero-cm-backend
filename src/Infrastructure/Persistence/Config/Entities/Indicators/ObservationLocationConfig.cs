@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Indicator Location entity configuration.
+/// Observation Location entity configuration.
 /// </summary>
-public class IndicatorLocationConfig : IEntityTypeConfiguration<IndicatorLocation>
+public class ObservationLocationConfig : IEntityTypeConfiguration<ObservationLocation>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<IndicatorLocation> builder)
+    public void Configure(EntityTypeBuilder<ObservationLocation> builder)
     {
         builder?.ToTable("indicator_location", "indicators");
 
@@ -33,12 +33,12 @@ public class IndicatorLocationConfig : IEntityTypeConfiguration<IndicatorLocatio
             .HasColumnName("locality")
             .HasMaxLength(300);
 
-        builder?.HasOne(e => e.Indicator)
+        builder?.HasOne(e => e.Observation)
             .WithMany(p => p.ObservationLocations)
             .HasForeignKey(e => e.ObservationId);
 
         builder?.HasOne(e => e.Location)
-            .WithMany(p => p.IndicatorLocations)
+            .WithMany(p => p.ObservationLocations)
             .HasForeignKey(e => e.LocationId);
 
         builder?

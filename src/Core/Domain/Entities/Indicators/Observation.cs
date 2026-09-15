@@ -43,7 +43,7 @@ public class Observation : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Observation Location relationship.
     /// </summary>
-    public ICollection<IndicatorLocation>? ObservationLocations { get; init; }
+    public ICollection<ObservationLocation>? ObservationLocations { get; init; }
 
     /// <summary>
     /// Observation Version relationship.

@@ -6,7 +6,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 /// <summary>
 /// Observation Location dto.
 /// </summary>
-public class IndicatorLocationDto : IDto
+public class ObservationLocationDto : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -16,7 +16,7 @@ public class IndicatorLocationDto : IDto
     /// <summary>
     /// Observation identifier.
     /// </summary>
-    public int? IndicatorId { get; set; }
+    public int? ObservationId { get; set; }
 
     /// <summary>
     /// Location identifier.

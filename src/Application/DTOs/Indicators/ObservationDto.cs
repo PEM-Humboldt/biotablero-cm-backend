@@ -39,7 +39,7 @@ public class ObservationDto() : IDto
     /// <summary>
     /// Observation Locations relationship.
     /// </summary>
-    public IEnumerable<IndicatorLocationDto>? Locations { get; set; }
+    public IEnumerable<ObservationLocationDto>? Locations { get; set; }
 
     /// <summary>
     /// Observation versions list.

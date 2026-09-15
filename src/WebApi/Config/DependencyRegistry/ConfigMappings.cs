@@ -86,7 +86,7 @@ public static class ConfigMappings
 
         // Indicators
         services.AddSingleton<IMapperRead<Category, CategoryDto>, CategoryMappings>();
-        services.AddSingleton<IMapperRead<IndicatorLocation, IndicatorLocationDto>, IndicatorLocationMappings>();
+        services.AddSingleton<IMapperRead<ObservationLocation, ObservationLocationDto>, ObservationLocationMappings>();
         services.AddSingleton<IMapperReadAndUpdate<Observation, ObservationDto>, ObservationMappings>();
         services.AddSingleton<IMapperRead<ObservationTag, ObservationTagDto>, ObservationTagMappings>();
         services.AddSingleton<IMapperRead<IndicatorTopic, IndicatorTopicDto>, IndicatorTopicMappings>();
