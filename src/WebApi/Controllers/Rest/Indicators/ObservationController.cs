@@ -10,7 +10,7 @@ using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Indicator;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Observation;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 using IAVH.BioTablero.CM.WebApi.Utils;
 using IAVH.BioTablero.CM.WebApi.Utils.Requests.Indicators;
@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 /// <summary>
-/// Indicator controller.
+/// Observation controller.
 /// </summary>
 /// <param name="webTools">General web tools.</param>
 /// <param name="entityService">Entity service.</param>
@@ -30,7 +30,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 [Route("[controller]")]
 [Produces("application/json")]
 [ApiConventionType(typeof(CustomApiConventions))]
-public class IndicatorController(
+public class ObservationController(
     IWebTools webTools,
     IObservationService entityService) : ODataController
 {
@@ -41,7 +41,7 @@ public class IndicatorController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ObservationResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -55,7 +55,7 @@ public class IndicatorController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorOdataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ObservationOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<Observation> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);
@@ -69,7 +69,7 @@ public class IndicatorController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByInitiative/{initiativeId}")]
-    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorListResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ObservationListResponseExample))]
     public async Task<IActionResult> GetListByInitiative(int initiativeId, CancellationToken ct)
     {
         var response = await entityService.GetByInitiativeAsync(initiativeId, ct);
@@ -86,8 +86,8 @@ public class IndicatorController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [OpenApiRequest(typeof(IndicatorEditRequestExample))]
-    [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorResponseExample))]
+    [OpenApiRequest(typeof(ObservationEditRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ObservationResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] ObservationDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);

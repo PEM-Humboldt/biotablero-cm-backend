@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Indicator;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Observation;
 
 using System;
 
@@ -7,9 +7,9 @@ using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
-/// Indicator Version response example.
+/// Observation Version response example.
 /// </summary>
-public class IndicatorVersionResponseExample : IOpenApiExampleProvider<IndicatorVersionDto>
+public class ObservationVersionResponseExample : IOpenApiExampleProvider<IndicatorVersionDto>
 {
     /// <inheritdoc/>
     public IndicatorVersionDto GetExamples() => new()

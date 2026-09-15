@@ -35,11 +35,11 @@ public class ObservationConfig : IEntityTypeConfiguration<Observation>
             .IsRequired();
 
         builder?.HasOne(e => e.Initiative)
-            .WithMany(p => p.Indicators)
+            .WithMany(p => p.Observations)
             .HasForeignKey(e => e.InitiativeId);
 
         builder?.HasOne(e => e.Topic)
-            .WithMany(p => p.Indicators)
+            .WithMany(p => p.Observations)
             .HasForeignKey(e => e.IndicatorTopicId);
     }
 }

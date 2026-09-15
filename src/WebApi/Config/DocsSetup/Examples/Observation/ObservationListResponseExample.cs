@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Indicator;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Observation;
 
 using System;
 using System.Collections.Generic;
@@ -8,9 +8,9 @@ using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
-/// Indicator list response example.
+/// Observation list response example.
 /// </summary>
-public class IndicatorListResponseExample : IOpenApiExampleProvider<List<ObservationDto>>
+public class ObservationListResponseExample : IOpenApiExampleProvider<List<ObservationDto>>
 {
     /// <inheritdoc/>
     public List<ObservationDto> GetExamples() =>
@@ -56,7 +56,7 @@ public class IndicatorListResponseExample : IOpenApiExampleProvider<List<Observa
             Tags = [
                 new()
                 {
-                    IndicatorTagId = 0,
+                    ObservationTagId = 0,
                     Tag = new()
                     {
                         Id = 0,
