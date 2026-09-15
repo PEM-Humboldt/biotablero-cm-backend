@@ -10,18 +10,18 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
 /// <summary>
-/// Indicator Tag mappings.
+/// Observation Tag mappings.
 /// </summary>
-public class IndicatorTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : MapperRead<IndicatorTag, IndicatorTagDto>
+public class ObservationTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : MapperRead<ObservationTag, ObservationTagDto>
 {
     /// <inheritdoc/>
-    public override IndicatorTagDto Map(IndicatorTag? entity)
+    public override ObservationTagDto Map(ObservationTag? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         return new()
         {
-            IndicatorTagId = entity.Id,
+            ObservationTagId = entity.Id,
             Tag = tagMappings.Map(entity.Tag),
         };
     }

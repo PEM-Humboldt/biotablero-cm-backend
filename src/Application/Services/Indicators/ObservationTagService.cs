@@ -19,15 +19,15 @@ using Serilog;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// Indicator Tag service.
+/// Observation Tag service.
 /// </summary>
-public class IndicatorTagService : IIndicatorTagService
+public class ObservationTagService : IObservationTagService
 {
-    private readonly IIndicatorTagRepository entityRepository;
+    private readonly IObservationTagRepository entityRepository;
     private readonly IValidationErrorTranslator errorTranslator;
     private readonly ILogger logger;
-    private readonly IMapperRead<IndicatorTag, IndicatorTagDto> mapper;
-    private readonly IObservationRepository indicatorRepository;
+    private readonly IMapperRead<ObservationTag, ObservationTagDto> mapper;
+    private readonly IObservationRepository observationRepository;
     private readonly ITagRepository tagRepository;
 
     /// <summary>
@@ -37,31 +37,31 @@ public class IndicatorTagService : IIndicatorTagService
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="indicatorRepository">Indicator repository.</param>
+    /// <param name="observationRepository">Observation repository.</param>
     /// <param name="tagRepository">Tag repository.</param>
-    public IndicatorTagService(
-        IIndicatorTagRepository entityRepository,
-        IMapperRead<IndicatorTag, IndicatorTagDto> mapper,
+    public ObservationTagService(
+        IObservationTagRepository entityRepository,
+        IMapperRead<ObservationTag, ObservationTagDto> mapper,
         IValidationErrorTranslator errorTranslator,
         ILogger logger,
-        IObservationRepository indicatorRepository,
+        IObservationRepository observationRepository,
         ITagRepository tagRepository)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
         this.errorTranslator = errorTranslator;
         this.logger = logger;
-        this.indicatorRepository = indicatorRepository;
+        this.observationRepository = observationRepository;
         this.tagRepository = tagRepository;
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(int indicatorId, int tagId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(int observationId, int tagId, CancellationToken ct = default)
     {
-        // Validate indicator
-        var indicator = await indicatorRepository.GetByIdAsync(indicatorId, ct);
+        // Validate observation
+        var observation = await observationRepository.GetByIdAsync(observationId, ct);
 
-        if (indicator == null)
+        if (observation == null)
         {
             return new(true)
             {
@@ -81,7 +81,7 @@ public class IndicatorTagService : IIndicatorTagService
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(indicatorId, tagId, ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(observationId, tagId, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -92,9 +92,9 @@ public class IndicatorTagService : IIndicatorTagService
         }
 
         // Build entity data
-        var entity = new IndicatorTag()
+        var entity = new ObservationTag()
         {
-            ObservationId = indicatorId,
+            ObservationId = observationId,
             TagId = tagId,
         };
 
@@ -102,7 +102,7 @@ public class IndicatorTagService : IIndicatorTagService
         entity = await entityRepository.AddAsync(entity, ct);
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Create, "Added indicator tag relationship", "{@EntityData}", entityData);
+        logger.AddLog(LogType.Create, "Added observation tag relationship", "{@EntityData}", entityData);
 
         return new()
         {
@@ -127,7 +127,7 @@ public class IndicatorTagService : IIndicatorTagService
         await entityRepository.DeleteAsync(entity, ct);
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Delete, "Deleted indicator tag relationship", "{@EntityData}", entityData);
+        logger.AddLog(LogType.Delete, "Deleted observation tag relationship", "{@EntityData}", entityData);
 
         return new();
     }

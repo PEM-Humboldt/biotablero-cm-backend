@@ -51,5 +51,5 @@ public class Tag : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Tag Indicator relationship.
     /// </summary>
-    public ICollection<IndicatorTag>? TagIndicators { get; init; }
+    public ICollection<ObservationTag>? TagObservations { get; init; }
 }

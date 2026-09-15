@@ -9,12 +9,12 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 /// Observation Tag dto.
 /// </summary>
 [method: SetsRequiredMembers]
-public class IndicatorTagDto() : IDto
+public class ObservationTagDto() : IDto
 {
     /// <summary>
     /// Item identifier.
     /// </summary>
-    public int IndicatorTagId { get; set; }
+    public int ObservationTagId { get; set; }
 
     /// <summary>
     /// Entity Tag.

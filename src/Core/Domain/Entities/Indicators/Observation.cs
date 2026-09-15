@@ -38,7 +38,7 @@ public class Observation : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Observation Tag relationship.
     /// </summary>
-    public ICollection<IndicatorTag>? ObservationTags { get; init; }
+    public ICollection<ObservationTag>? ObservationTags { get; init; }
 
     /// <summary>
     /// Observation Location relationship.

@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Indicator Tag repository interface.
+/// Observation Tag repository interface.
 /// </summary>
-public interface IIndicatorTagRepository : IRepository<IndicatorTag, int>
+public interface IObservationTagRepository : IRepository<ObservationTag, int>
 {
     /// <summary>
     /// Check if element is duplicated.
     /// </summary>
-    /// <param name="indicatorId">Indicator identifier.</param>
+    /// <param name="observationId">Observation identifier.</param>
     /// <param name="tagId">Tag identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if any element exists. False otherwise.</returns>
-    Task<bool> IsDuplicatedAsync(int indicatorId, int tagId, CancellationToken ct = default);
+    Task<bool> IsDuplicatedAsync(int observationId, int tagId, CancellationToken ct = default);
 }

@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Indicator;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Observation;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Authorization;
@@ -53,7 +53,7 @@ public class IndicatorVersionController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [OpenApiRequest(typeof(IndicatorVersionEditRequestExample))]
+    [OpenApiRequest(typeof(ObservationVersionEditRequestExample))]
     [OpenApiResponse(StatusCodes.Status200OK, typeof(IndicatorVersionResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] IndicatorVersionDto requestData, CancellationToken ct)
     {

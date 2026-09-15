@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 /// Indicator mappings.
 /// </summary>
 public class ObservationMappings(
-    IMapperRead<IndicatorTag, IndicatorTagDto> observationTagMappings,
+    IMapperRead<ObservationTag, ObservationTagDto> observationTagMappings,
     IMapperRead<IndicatorTopic, IndicatorTopicDto> observationTopicMappings,
     IMapperRead<IndicatorLocation, IndicatorLocationDto> observationLocationMappings) : MapperRead<Observation, ObservationDto>, IMapperReadAndUpdate<Observation, ObservationDto>
 {

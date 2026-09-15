@@ -212,7 +212,7 @@ public sealed class GeneralContext : DbContext
     /// <summary>
     /// Observation Tag DbSet.
     /// </summary>
-    public DbSet<IndicatorTag> ObservationTags { get; set; }
+    public DbSet<ObservationTag> ObservationTags { get; set; }
 
     /// <summary>
     /// Observation Location DbSet.

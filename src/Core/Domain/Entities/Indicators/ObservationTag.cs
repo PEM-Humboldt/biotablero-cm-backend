@@ -6,7 +6,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 /// <summary>
 /// Observation Tag entity.
 /// </summary>
-public class IndicatorTag : BaseEntity<int>, IAggregateRoot
+public class ObservationTag : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
     /// Observation identifier.

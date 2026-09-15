@@ -76,7 +76,7 @@ public static class ConfigAppServices
         // Indicators
         services.AddScoped<IObservationService, ObservationService>();
         services.AddScoped<IIndicatorVersionService, IndicatorVersionService>();
-        services.AddScoped<IIndicatorTagService, IndicatorTagService>();
+        services.AddScoped<IObservationTagService, ObservationTagService>();
 
         // Reports and statistics
         services.AddScoped<IInitiativeStatsService, InitiativeStatsService>();

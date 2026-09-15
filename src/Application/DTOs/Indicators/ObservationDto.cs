@@ -49,5 +49,5 @@ public class ObservationDto() : IDto
     /// <summary>
     /// Tags relationship.
     /// </summary>
-    public IEnumerable<IndicatorTagDto>? Tags { get; set; }
+    public IEnumerable<ObservationTagDto>? Tags { get; set; }
 }
