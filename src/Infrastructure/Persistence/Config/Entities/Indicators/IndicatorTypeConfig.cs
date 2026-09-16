@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Measure Unit entity configuration.
+/// Indicator Type entity configuration.
 /// </summary>
-public class MeasureUnitConfig : IEntityTypeConfiguration<MeasureUnit>
+public class IndicatorTypeConfig : IEntityTypeConfiguration<IndicatorType>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<MeasureUnit> builder)
+    public void Configure(EntityTypeBuilder<IndicatorType> builder)
     {
         builder?.ToTable("measure_unit", "indicators");
 

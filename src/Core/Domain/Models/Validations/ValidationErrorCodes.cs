@@ -473,9 +473,9 @@ public static class ValidationErrorCodes
         public const string InvalidIndicatorTopic = "IND_007";
 
         /// <summary>
-        /// Invalid measure unit.
+        /// Invalid indicator type.
         /// </summary>
-        public const string InvalidMeasureUnit = "IND_008";
+        public const string InvalidIndicatorType = "IND_008";
 
         /// <summary>
         /// Location not found.

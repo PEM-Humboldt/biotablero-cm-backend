@@ -28,7 +28,7 @@ public class ObservationVersionRepository(
                     .ThenInclude(e => e.Items)
             .Include(e => e.Groups!)
                 .ThenInclude(e => e.Values!)
-                    .ThenInclude(e => e!.MeasureUnit)
+                    .ThenInclude(e => e!.IndicatorType)
             .Include(e => e.Groups!)
                 .ThenInclude(e => e.Category)
                     .ThenInclude(e => e!.Parent)

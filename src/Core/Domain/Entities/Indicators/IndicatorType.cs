@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Measure Unit entity.
+/// Indicator Type entity.
 /// </summary>
-public class MeasureUnit : BaseEntity<int>, IAggregateRoot
+public class IndicatorType : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Measure Unit name.
+    /// Indicator Type name.
     /// </summary>
     public required string Name { get; set; }
 

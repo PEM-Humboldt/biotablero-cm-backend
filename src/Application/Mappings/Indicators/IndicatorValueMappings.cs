@@ -11,7 +11,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 /// Indicator Value mappings.
 /// </summary>
 public class IndicatorValueMappings(
-    IMapperRead<MeasureUnit, MeasureUnitDto> measureUnitMappings) : MapperRead<IndicatorValue, IndicatorValueDto>
+    IMapperRead<IndicatorType, IndicatorTypeDto> indicatorTypeMappings) : MapperRead<IndicatorValue, IndicatorValueDto>
 {
     /// <inheritdoc/>
     public override IndicatorValueDto Map(IndicatorValue? entity)
@@ -26,7 +26,7 @@ public class IndicatorValueMappings(
             Value = entity.Value,
             UpperLimit = entity.UpperLimit,
             LowerLimit = entity.LowerLimit,
-            MeasureUnit = entity.MeasureUnit != null ? measureUnitMappings.Map(entity.MeasureUnit) : null,
+            IndicatorType = entity.IndicatorType != null ? indicatorTypeMappings.Map(entity.IndicatorType) : null,
         };
     }
 }

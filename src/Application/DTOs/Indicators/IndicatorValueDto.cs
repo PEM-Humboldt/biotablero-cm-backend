@@ -42,7 +42,7 @@ public class IndicatorValueDto() : IDto
     public float? LowerLimit { get; set; }
 
     /// <summary>
-    /// Measure Unit relationship.
+    /// Indicator Type relationship.
     /// </summary>
-    public MeasureUnitDto? MeasureUnit { get; set; }
+    public IndicatorTypeDto? IndicatorType { get; set; }
 }

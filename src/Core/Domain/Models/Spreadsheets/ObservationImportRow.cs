@@ -24,9 +24,9 @@ public class ObservationImportRow()
     public required int IndicatorTopicId { get; set; }
 
     /// <summary>
-    /// measure Unit identifier.
+    /// Indicator Type identifier.
     /// </summary>
-    public required int MeasureUnitId { get; set; }
+    public required int IndicatorTypeId { get; set; }
 
     /// <summary>
     /// Department name.

@@ -44,9 +44,9 @@ public static class IndicatorsEnums
     }
 
     /// <summary>
-    /// Indicator Measure Units.
+    /// Indicator types.
     /// </summary>
-    public enum IndicatorMeasureUnit
+    public enum IndicatorType
     {
         /// <summary>
         /// Percentage of area occupied.
@@ -135,9 +135,9 @@ public static class IndicatorsEnums
         IndicatorTopicId = 1,
 
         /// <summary>
-        /// Measure unit identifier.
+        /// Indicator Type identifier.
         /// </summary>
-        MeasureUnitId = 3,
+        IndicatorTypeId = 3,
 
         /// <summary>
         /// Department name.

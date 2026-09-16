@@ -28,16 +28,16 @@ public static class IndicatorConstants
     public static readonly CompositeFormat ObservationDateFormat = CompositeFormat.Parse("{0}-{1}-01");
 
     /// <summary>
-    /// Unit measures by indicator topic.
+    /// Indicator types by indicator topic.
     /// </summary>
-    public static readonly Dictionary<IndicatorTopics, IndicatorMeasureUnit[]> UnitMeasuresByIndicatorTopic = new()
+    public static readonly Dictionary<IndicatorTopics, IndicatorType[]> IndicatorTypesByIndicatorTopic = new()
     {
-        { IndicatorTopics.OccupiedAreaPercent, [IndicatorMeasureUnit.OccupiedAreaPercent] },
-        { IndicatorTopics.DetectionOccupancyProbability, [IndicatorMeasureUnit.DetectionProbability, IndicatorMeasureUnit.OccupancyProbability] },
-        { IndicatorTopics.SpeciesDiversity, [IndicatorMeasureUnit.SpeciesRichness, IndicatorMeasureUnit.ShannonIndex, IndicatorMeasureUnit.SimpsonIndex] },
-        { IndicatorTopics.RelativeUseByBiologicalGroup, [IndicatorMeasureUnit.RelativeUseIndex] },
-        { IndicatorTopics.CentralRelationalIntensity, [IndicatorMeasureUnit.RelationalIntensity] },
-        { IndicatorTopics.CollectiveActionParticipation, [IndicatorMeasureUnit.PersonCount] },
+        { IndicatorTopics.OccupiedAreaPercent, [IndicatorType.OccupiedAreaPercent] },
+        { IndicatorTopics.DetectionOccupancyProbability, [IndicatorType.DetectionProbability, IndicatorType.OccupancyProbability] },
+        { IndicatorTopics.SpeciesDiversity, [IndicatorType.SpeciesRichness, IndicatorType.ShannonIndex, IndicatorType.SimpsonIndex] },
+        { IndicatorTopics.RelativeUseByBiologicalGroup, [IndicatorType.RelativeUseIndex] },
+        { IndicatorTopics.CentralRelationalIntensity, [IndicatorType.RelationalIntensity] },
+        { IndicatorTopics.CollectiveActionParticipation, [IndicatorType.PersonCount] },
     };
 
     /// <summary>

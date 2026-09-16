@@ -44,7 +44,7 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
             foreach (var row in worksheet.RowsUsed().Skip(1))
             {
                 ValidateCellValue<int>(row, XlsxColumnIndex.IndicatorTopicId, result.Errors, out var indicatorTopicId);
-                ValidateCellValue<int>(row, XlsxColumnIndex.MeasureUnitId, result.Errors, out var measureUnitId);
+                ValidateCellValue<int>(row, XlsxColumnIndex.IndicatorTypeId, result.Errors, out var indicatorTypeId);
                 ValidateCellValue<string>(row, XlsxColumnIndex.Department, result.Errors, out var departmentName);
                 ValidateCellValue<string>(row, XlsxColumnIndex.Municipality, result.Errors, out var municipalityName);
                 ValidateCellValue<string>(row, XlsxColumnIndex.Locality, result.Errors, out var localityName);
@@ -63,7 +63,7 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
                 {
                     RowNumber = row.RowNumber(),
                     IndicatorTopicId = indicatorTopicId,
-                    MeasureUnitId = measureUnitId,
+                    IndicatorTypeId = indicatorTypeId,
                     DepartmentName = departmentName!,
                     MunicipalityName = municipalityName!,
                     LocalityName = localityName!,

@@ -33,8 +33,8 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using IndicatorMeasureUnits = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorMeasureUnit;
 using IndicatorTopics = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorTopic;
+using IndicatorTypes = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorType;
 using ObservationBaseCategory = Core.Domain.Utils.Enums.IndicatorsEnums.ObservationBaseCategory;
 
 /// <summary>
@@ -418,13 +418,13 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             }
 
             // Check observation measure units
-            foreach (var measureUnit in IndicatorConstants.UnitMeasuresByIndicatorTopic)
+            foreach (var indicatorType in IndicatorConstants.IndicatorTypesByIndicatorTopic)
             {
-                if (row.IndicatorTopicId == (int)measureUnit.Key && !measureUnit.Value.Contains((IndicatorMeasureUnits)row.MeasureUnitId))
+                if (row.IndicatorTopicId == (int)indicatorType.Key && !indicatorType.Value.Contains((IndicatorTypes)row.IndicatorTypeId))
                 {
                     return new(true)
                     {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidMeasureUnit),
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorType),
                         Message = $"Errors in row {row.RowNumber}",
                     };
                 }
@@ -794,7 +794,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                             {
                                 return new IndicatorValue()
                                 {
-                                    MeasureUnitId = g2r.MeasureUnitId,
+                                    IndicatorTypeId = g2r.IndicatorTypeId,
                                     Date = CastDate(g2r.Year, g2r.Month) ?? default,
                                     DateEnd = CastDate(g2r.FinalYear!, g2r.FinalMonth!),
                                     Value = g2r.Value,

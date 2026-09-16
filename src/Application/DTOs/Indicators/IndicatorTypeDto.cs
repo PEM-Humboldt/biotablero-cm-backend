@@ -5,13 +5,13 @@ using System.Diagnostics.CodeAnalysis;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Measure Unit dto.
+/// Indicator Type dto.
 /// </summary>
 [method: SetsRequiredMembers]
-public class MeasureUnitDto() : IDto
+public class IndicatorTypeDto() : IDto
 {
     /// <summary>
-    /// Measure Unit name.
+    /// Indicator Type name.
     /// </summary>
     public required string Name { get; set; } = string.Empty;
 

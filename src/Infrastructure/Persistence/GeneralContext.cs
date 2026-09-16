@@ -255,9 +255,9 @@ public sealed class GeneralContext : DbContext
     public DbSet<IndicatorValue> IndicatorValues { get; set; }
 
     /// <summary>
-    /// Measure Unit DbSet.
+    /// Indicator Type DbSet.
     /// </summary>
-    public DbSet<MeasureUnit> MeasureUnits { get; set; }
+    public DbSet<IndicatorType> IndicatorTypes { get; set; }
 
     #endregion
 
