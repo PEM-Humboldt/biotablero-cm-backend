@@ -64,7 +64,12 @@ public static class IndicatorConstants
     /// </summary>
     public static readonly IndicatorTopics[] ObservationsWithDateRange =
     [
+        IndicatorTopics.OccupiedAreaPercent,
+        IndicatorTopics.DetectionOccupancyProbability,
+        IndicatorTopics.SpeciesDiversity,
         IndicatorTopics.RelativeUseByBiologicalGroup,
+        IndicatorTopics.CentralRelationalIntensity,
+        IndicatorTopics.CollectiveActionParticipation,
     ];
 
     /// <summary>
