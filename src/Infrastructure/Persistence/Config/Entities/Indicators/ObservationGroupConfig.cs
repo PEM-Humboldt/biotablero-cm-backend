@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Indicator Group entity configuration.
+/// Observation Group entity configuration.
 /// </summary>
-public class IndicatorGroupConfig : IEntityTypeConfiguration<IndicatorGroup>
+public class ObservationGroupConfig : IEntityTypeConfiguration<ObservationGroup>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<IndicatorGroup> builder)
+    public void Configure(EntityTypeBuilder<ObservationGroup> builder)
     {
         builder?.ToTable("indicator_group", "indicators");
 
@@ -34,7 +34,7 @@ public class IndicatorGroupConfig : IEntityTypeConfiguration<IndicatorGroup>
             .HasForeignKey(e => e.ObservationVersionId);
 
         builder?.HasOne(e => e.Category)
-            .WithMany(p => p.IndicatorGroups)
+            .WithMany(p => p.ObservationGroups)
             .HasForeignKey(e => e.CategoryId);
 
         builder?

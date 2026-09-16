@@ -58,5 +58,5 @@ public class ObservationVersionDto : IDto
     /// <summary>
     /// Observation Group relationship.
     /// </summary>
-    public IEnumerable<IndicatorGroupDto>? Groups { get; init; }
+    public IEnumerable<ObservationGroupDto>? Groups { get; init; }
 }

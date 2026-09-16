@@ -787,7 +787,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                                     string.IsNullOrEmpty(g2.Key.GroupName))?.Id ??
                             0;
 
-                        return new IndicatorGroup()
+                        return new ObservationGroup()
                         {
                             CategoryId = categoryId,
                             Values = [.. g2.Select(g2r =>

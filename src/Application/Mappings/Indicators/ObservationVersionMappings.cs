@@ -31,7 +31,7 @@ public class ObservationVersionMappings(
             Interpretation = entity.Interpretation,
             Methodology = entity.Methodology,
             Authorship = entity.Authorship,
-            Groups = entity.Groups?.Select(e => new IndicatorGroupDto()
+            Groups = entity.Groups?.Select(e => new ObservationGroupDto()
             {
                 Id = e.Id,
                 Category = categoryMappings.Map(e.Category),

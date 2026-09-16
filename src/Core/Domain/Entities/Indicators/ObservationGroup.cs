@@ -7,7 +7,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 /// <summary>
 /// Observation Group entity.
 /// </summary>
-public class IndicatorGroup : BaseEntity<int>, IAggregateRoot
+public class ObservationGroup : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
     /// Observation Version identifier.

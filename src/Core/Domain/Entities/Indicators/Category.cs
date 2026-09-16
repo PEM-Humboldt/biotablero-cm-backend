@@ -35,7 +35,7 @@ public class Category : BaseEntity<int>, IAggregateRoot
     public ICollection<Category> Children { get; } = [];
 
     /// <summary>
-    /// Indicator Group relationship.
+    /// Observation Group relationship.
     /// </summary>
-    public ICollection<IndicatorGroup>? IndicatorGroups { get; init; }
+    public ICollection<ObservationGroup>? ObservationGroups { get; init; }
 }

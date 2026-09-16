@@ -68,5 +68,5 @@ public class ObservationVersion : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Observation Group relationship.
     /// </summary>
-    public ICollection<IndicatorGroup>? Groups { get; init; }
+    public ICollection<ObservationGroup>? Groups { get; init; }
 }

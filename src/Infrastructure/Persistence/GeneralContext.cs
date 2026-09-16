@@ -242,7 +242,7 @@ public sealed class GeneralContext : DbContext
     /// <summary>
     /// Observation Group DbSet.
     /// </summary>
-    public DbSet<IndicatorGroup> ObservationGroups { get; set; }
+    public DbSet<ObservationGroup> ObservationGroups { get; set; }
 
     /// <summary>
     /// Category DbSet.
