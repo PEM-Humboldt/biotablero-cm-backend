@@ -13,7 +13,7 @@ public class IndicatorsStatsResponseExample : IOpenApiExampleProvider<Indicators
     public IndicatorsStatsDto GetExamples() =>
         new()
         {
-            IndicatorsByScale =
+            ObservationsByScale =
             [
                 new("Genes", 1),
                 new("Especies", 1),

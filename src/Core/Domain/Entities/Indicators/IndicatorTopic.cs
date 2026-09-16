@@ -15,7 +15,7 @@ public class IndicatorTopic : BaseEntity<int>, IAggregateRoot
     public required string Name { get; set; }
 
     /// <summary>
-    /// Indicator relationship.
+    /// Observation relationship.
     /// </summary>
     public ICollection<Observation>? Observations { get; init; }
 }

@@ -18,7 +18,7 @@ public class ObservationListResponseExample : IOpenApiExampleProvider<List<Obser
         new()
         {
             Id = 0,
-            Name = "Indicator example",
+            Name = "Observation example",
             InitiativeId = 0,
             Topic = new()
             {

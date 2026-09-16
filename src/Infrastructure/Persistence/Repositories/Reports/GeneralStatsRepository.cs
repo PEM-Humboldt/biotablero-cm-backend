@@ -207,7 +207,7 @@ public class GeneralStatsRepository(GeneralContext dbContext) : IGeneralStatsRep
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<List<KeyValuePair<string, int>>> GetIndicatorsByScaleAsync(int? departmentId, int? initiativeId, CancellationToken ct = default) =>
+    public async Task<List<KeyValuePair<string, int>>> GetObservationsByScaleAsync(int? departmentId, int? initiativeId, CancellationToken ct = default) =>
         await dbContext.ObservationTags
             .Where(e => e.Observation!.Initiative!.Enabled && e.Tag!.CategoryId == (int)TagCategoryEnum.BiologicalGroup &&
                 (departmentId == null ||

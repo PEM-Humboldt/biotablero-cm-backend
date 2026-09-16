@@ -43,7 +43,7 @@ public static class IndicatorConstants
     /// <summary>
     /// Indicators with species.
     /// </summary>
-    public static readonly IndicatorTopics[] IndicatorsWithSpecies =
+    public static readonly IndicatorTopics[] ObservationsWithSpecies =
     [
         IndicatorTopics.OccupiedAreaPercent,
         IndicatorTopics.DetectionOccupancyProbability,
@@ -51,26 +51,26 @@ public static class IndicatorConstants
     ];
 
     /// <summary>
-    /// Indicators with confidence interval.
+    /// Observations with confidence interval.
     /// </summary>
-    public static readonly IndicatorTopics[] IndicatorsWithConfidenceInterval =
+    public static readonly IndicatorTopics[] ObservationsWithConfidenceInterval =
     [
         IndicatorTopics.DetectionOccupancyProbability,
         IndicatorTopics.SpeciesDiversity,
     ];
 
     /// <summary>
-    /// Indicators with date range.
+    /// Observations with date range.
     /// </summary>
-    public static readonly IndicatorTopics[] IndicatorsWithDateRange =
+    public static readonly IndicatorTopics[] ObservationsWithDateRange =
     [
         IndicatorTopics.RelativeUseByBiologicalGroup,
     ];
 
     /// <summary>
-    /// Indicators with predefined categories.
+    /// Observations with predefined categories.
     /// </summary>
-    public static readonly IndicatorTopics[] IndicatorsWithPredefinedCategories =
+    public static readonly IndicatorTopics[] ObservationsWithPredefinedCategories =
     [
         IndicatorTopics.SpeciesDiversity,
         IndicatorTopics.CentralRelationalIntensity,
@@ -78,9 +78,9 @@ public static class IndicatorConstants
     ];
 
     /// <summary>
-    /// Indicators with integer values.
+    /// Observations with integer values.
     /// </summary>
-    public static readonly IndicatorTopics[] IndicatorsWithIntegerValues =
+    public static readonly IndicatorTopics[] ObservationsWithIntegerValues =
     [
         IndicatorTopics.RelativeUseByBiologicalGroup,
         IndicatorTopics.CollectiveActionParticipation,

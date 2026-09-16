@@ -129,7 +129,7 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     public LocationCustom? MainLocation { get; set; }
 
     /// <summary>
-    /// Indicator relationship.
+    /// Observation relationship.
     /// </summary>
     public ICollection<Observation>? Observations { get; init; }
 

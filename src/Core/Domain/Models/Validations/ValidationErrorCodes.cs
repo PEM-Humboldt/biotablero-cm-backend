@@ -443,7 +443,7 @@ public static class ValidationErrorCodes
         public const string NotFound = "IND_001";
 
         /// <summary>
-        /// Only one indicator is required.
+        /// Only one observation is required.
         /// </summary>
         public const string OnlyOneObservationRequired = "IND_002";
 

@@ -33,9 +33,9 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using IndicatorBaseCategory = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorBaseCategory;
 using IndicatorMeasureUnits = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorMeasureUnit;
 using IndicatorTopics = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorTopic;
+using ObservationBaseCategory = Core.Domain.Utils.Enums.IndicatorsEnums.ObservationBaseCategory;
 
 /// <summary>
 /// Observation service.
@@ -430,8 +430,8 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                 }
             }
 
-            // Check indicators with species
-            if (IndicatorConstants.IndicatorsWithSpecies.Contains((IndicatorTopics)row.IndicatorTopicId))
+            // Check observations with species
+            if (IndicatorConstants.ObservationsWithSpecies.Contains((IndicatorTopics)row.IndicatorTopicId))
             {
                 if (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription))
                 {
@@ -443,8 +443,8 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                 }
             }
 
-            // Check indicators with integer values
-            if (IndicatorConstants.IndicatorsWithIntegerValues.Contains((IndicatorTopics)row.IndicatorTopicId))
+            // Check observations with integer values
+            if (IndicatorConstants.ObservationsWithIntegerValues.Contains((IndicatorTopics)row.IndicatorTopicId))
             {
                 if (row.Value % 1 != 0)
                 {
@@ -456,8 +456,8 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                 }
             }
 
-            // Check indicators with confidence interval
-            if (IndicatorConstants.IndicatorsWithConfidenceInterval.Contains((IndicatorTopics)row.IndicatorTopicId))
+            // Check observations with confidence interval
+            if (IndicatorConstants.ObservationsWithConfidenceInterval.Contains((IndicatorTopics)row.IndicatorTopicId))
             {
                 if (row.UpperLimit == null || row.LowerLimit == null)
                 {
@@ -479,8 +479,8 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                 };
             }
 
-            // Check indicators with date ranges
-            if (IndicatorConstants.IndicatorsWithDateRange.Contains((IndicatorTopics)row.IndicatorTopicId))
+            // Check observations with date ranges
+            if (IndicatorConstants.ObservationsWithDateRange.Contains((IndicatorTopics)row.IndicatorTopicId))
             {
                 if (row.FinalYear == null || row.FinalMonth == null)
                 {
@@ -505,7 +505,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             }
             else
             {
-                // Check indicators without date ranges
+                // Check observations without date ranges
                 if (row.FinalYear != null || row.FinalMonth != null)
                 {
                     return new(true)
@@ -516,7 +516,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                 }
             }
 
-            // Validations for indicators editions
+            // Validations for observations editions
             if (observation != null)
             {
                 if (row.IndicatorTopicId != observation.IndicatorTopicId)
@@ -610,7 +610,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         }
 
         // Validate categories
-        var baseCategoriesArray = Enum.GetValues<IndicatorBaseCategory>()
+        var baseCategoriesArray = Enum.GetValues<ObservationBaseCategory>()
             .Select(i => (int)i)
             .ToArray();
 
@@ -618,7 +618,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
 
         foreach (var row in rows)
         {
-            if (IndicatorConstants.IndicatorsWithPredefinedCategories.Contains((IndicatorTopics)row.IndicatorTopicId))
+            if (IndicatorConstants.ObservationsWithPredefinedCategories.Contains((IndicatorTopics)row.IndicatorTopicId))
             {
                 var categoryError = !predefinedCategories.Any(e => e.Name == row.GroupName && e.Parent?.Name == row.UpperGroupName);
 
@@ -721,7 +721,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         var databaseCategories = await GetExistingCategoriesAsync(spreadsheetCategories, ct);
 
         // Build new categories list
-        var parentSpeciesCategories = await categoryRepository.GetByParentsAsync([(int)IndicatorBaseCategory.Species], ct);
+        var parentSpeciesCategories = await categoryRepository.GetByParentsAsync([(int)ObservationBaseCategory.Species], ct);
 
         var newCategories = new List<GroupDataHelper>();
 

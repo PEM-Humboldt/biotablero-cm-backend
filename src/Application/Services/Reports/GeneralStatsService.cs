@@ -77,7 +77,7 @@ public class GeneralStatsService(
         {
             ResponseBody = new IndicatorsStatsDto
             {
-                IndicatorsByScale = await generalStatsRepository.GetIndicatorsByScaleAsync(departmentId, initiativeId, ct),
+                ObservationsByScale = await generalStatsRepository.GetObservationsByScaleAsync(departmentId, initiativeId, ct),
             },
         };
 

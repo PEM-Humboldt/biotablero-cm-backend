@@ -95,9 +95,9 @@ public static class IndicatorsEnums
     }
 
     /// <summary>
-    /// Indicator base categories.
+    /// Observation base categories.
     /// </summary>
-    public enum IndicatorBaseCategory
+    public enum ObservationBaseCategory
     {
         /// <summary>
         /// Species category type.

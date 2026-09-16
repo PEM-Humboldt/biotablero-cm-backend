@@ -13,7 +13,7 @@ public class InitiativeStatsResponseExample : IOpenApiExampleProvider<Initiative
     public InitiativeStatsDto GetExamples() =>
         new()
         {
-            TotalIndicators = 1,
+            TotalObservations = 1,
             TotalMunicipalities = 1,
         };
 }

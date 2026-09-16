@@ -9,7 +9,7 @@ using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Indicator mappings.
+/// Observation mappings.
 /// </summary>
 public class ObservationMappings(
     IMapperRead<ObservationTag, ObservationTagDto> observationTagMappings,

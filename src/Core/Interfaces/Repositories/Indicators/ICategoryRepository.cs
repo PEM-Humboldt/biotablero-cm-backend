@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Indicator Category repository interface.
+/// Observation Category repository interface.
 /// </summary>
 public interface ICategoryRepository : IRepository<Category, int>
 {
