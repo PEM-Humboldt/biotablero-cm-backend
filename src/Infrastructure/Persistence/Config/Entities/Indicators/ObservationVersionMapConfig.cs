@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Indicator Version Map entity configuration.
+/// Observation Version Map entity configuration.
 /// </summary>
-public class IndicatorVersionMapConfig : IEntityTypeConfiguration<IndicatorVersionMap>
+public class ObservationVersionMapConfig : IEntityTypeConfiguration<ObservationVersionMap>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<IndicatorVersionMap> builder)
+    public void Configure(EntityTypeBuilder<ObservationVersionMap> builder)
     {
         builder?.ToTable("indicator_version_map", "indicators");
 
@@ -21,7 +21,7 @@ public class IndicatorVersionMapConfig : IEntityTypeConfiguration<IndicatorVersi
             .HasColumnName("id")
             .IsRequired();
 
-        builder?.Property(e => e.IndicatorVersionId)
+        builder?.Property(e => e.ObservationVersionId)
             .HasColumnName("indicator_version_id")
             .IsRequired();
 
@@ -39,12 +39,12 @@ public class IndicatorVersionMapConfig : IEntityTypeConfiguration<IndicatorVersi
             .HasMaxLength(1000)
             .IsRequired();
 
-        builder?.HasOne(e => e.IndicatorVersion)
+        builder?.HasOne(e => e.ObservationVersion)
             .WithMany(p => p.Maps)
-            .HasForeignKey(e => e.IndicatorVersionId);
+            .HasForeignKey(e => e.ObservationVersionId);
 
         builder?
-            .HasIndex(e => new { e.IndicatorVersionId, e.Title })
+            .HasIndex(e => new { e.ObservationVersionId, e.Title })
             .IsUnique();
     }
 }

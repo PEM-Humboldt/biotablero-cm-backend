@@ -63,7 +63,7 @@ public class ObservationVersion : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Observation Version Map relationship.
     /// </summary>
-    public ICollection<IndicatorVersionMap>? Maps { get; init; }
+    public ICollection<ObservationVersionMap>? Maps { get; init; }
 
     /// <summary>
     /// Observation Group relationship.

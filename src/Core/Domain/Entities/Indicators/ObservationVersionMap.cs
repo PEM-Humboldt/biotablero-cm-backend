@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Indicator Version Map entity.
+/// Observation Version Map entity.
 /// </summary>
-public class IndicatorVersionMap : BaseEntity<int>, IAggregateRoot
+public class ObservationVersionMap : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Indicator Version identifier.
+    /// Observation Version identifier.
     /// </summary>
-    public int IndicatorVersionId { get; set; }
+    public int ObservationVersionId { get; set; }
 
     /// <summary>
     /// Map title.
@@ -30,9 +30,9 @@ public class IndicatorVersionMap : BaseEntity<int>, IAggregateRoot
     public required string ImageUrl { get; set; }
 
     /// <summary>
-    /// Indicator Version relationship.
+    /// Observation Version relationship.
     /// </summary>
-    public ObservationVersion? IndicatorVersion { get; set; }
+    public ObservationVersion? ObservationVersion { get; set; }
 
     /// <summary>
     /// Map Legend relationship.
