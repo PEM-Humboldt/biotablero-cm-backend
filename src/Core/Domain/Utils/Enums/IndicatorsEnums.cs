@@ -130,79 +130,84 @@ public static class IndicatorsEnums
     public enum XlsxColumnIndex
     {
         /// <summary>
+        /// Observation name.
+        /// </summary>
+        ObservationName = 1,
+
+        /// <summary>
         /// Indicator topic identifier.
         /// </summary>
-        IndicatorTopicId = 1,
+        IndicatorTopicId = 2,
 
         /// <summary>
         /// Indicator Type identifier.
         /// </summary>
-        IndicatorTypeId = 3,
+        IndicatorTypeId = 4,
 
         /// <summary>
         /// Department name.
         /// </summary>
-        Department = 5,
+        Department = 6,
 
         /// <summary>
         /// Municipality name.
         /// </summary>
-        Municipality = 6,
+        Municipality = 7,
 
         /// <summary>
         /// Locality name.
         /// </summary>
-        Locality = 7,
+        Locality = 8,
 
         /// <summary>
         /// Year.
         /// </summary>
-        Year = 8,
+        Year = 9,
 
         /// <summary>
         /// Month.
         /// </summary>
-        Month = 9,
+        Month = 10,
 
         /// <summary>
         /// Final year.
         /// </summary>
-        FinalYear = 10,
+        FinalYear = 11,
 
         /// <summary>
         /// Final month.
         /// </summary>
-        FinalMonth = 11,
+        FinalMonth = 12,
 
         /// <summary>
         /// Upper group name.
         /// </summary>
-        UpperGroupName = 12,
+        UpperGroupName = 13,
 
         /// <summary>
         /// Group name.
         /// </summary>
-        GroupName = 13,
+        GroupName = 14,
 
         /// <summary>
         /// Group description.
         /// </summary>
-        GroupDescription = 14,
+        GroupDescription = 15,
 
         /// <summary>
         /// Indicator value.
         /// </summary>
-        Value = 15,
+        Value = 16,
 
         /// <summary>
         /// Value upper limit.
         /// </summary>
-        LowerLimit = 16,
+        LowerLimit = 17,
 
         /// <summary>
         /// Value lower limit.
         /// </summary>
-        UpperLimit = 17,
+        UpperLimit = 18,
     }
 
     #endregion
