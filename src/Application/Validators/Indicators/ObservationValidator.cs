@@ -6,14 +6,14 @@ using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 
 /// <summary>
-/// Indicator validator.
+/// Observation validator.
 /// </summary>
-public class IndicatorValidator : AbstractValidator<ObservationDto>
+public class ObservationValidator : AbstractValidator<ObservationDto>
 {
     /// <summary>
     /// Constructor.
     /// </summary>
-    public IndicatorValidator()
+    public ObservationValidator()
     {
         RuleFor(dto => dto)
             .NotNull()
