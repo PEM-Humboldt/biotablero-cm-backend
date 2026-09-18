@@ -258,7 +258,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             spreadsheetLocations?.Select(e => e.Municipality)?.ToArray() ?? [],
             ct);
 
-        var databaseValidations = await ValidateDatabaseAsync(fileReadResult.Rows, locationEntities, ct);
+        var databaseValidations = await ValidateDatabaseAsync(observation != null, fileReadResult.Rows, locationEntities, ct);
 
         if (!databaseValidations.Success)
         {
@@ -561,26 +561,30 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// <summary>
     /// Spreadsheet database validations.
     /// </summary>
+    /// <param name="edition">Observation edition flag.</param>
     /// <param name="rows">Spreadsheet rows.</param>
     /// <param name="locationEntities">Location entities list.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateDatabaseAsync(List<ObservationImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateDatabaseAsync(bool edition, List<ObservationImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
     {
-        // Validate observation names
-        var observationNames = rows
-            .Select(r => r.ObservationName)
-            .Distinct()
-            .ToArray();
-
-        var existentObservations = await entityRepository.GetByNamesAsync(observationNames, ct);
-
-        if (existentObservations.Any())
+        if (!edition)
         {
-            return new(true)
+            // Validate observation names
+            var observationNames = rows
+                .Select(r => r.ObservationName)
+                .Distinct()
+                .ToArray();
+
+            var existentObservations = await entityRepository.GetByNamesAsync(observationNames, ct);
+
+            if (existentObservations.Any())
             {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.DuplicatedElements, data: existentObservations),
-            };
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.DuplicatedElements, data: existentObservations),
+                };
+            }
         }
 
         // Validate upper groups
@@ -602,7 +606,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                 {
                     return new(true)
                     {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.DuplicatedElements, data: upperGroup),
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.UpperGroupNotFound, data: upperGroup),
                     };
                 }
             }
