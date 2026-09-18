@@ -567,6 +567,22 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// <returns>Validation result.</returns>
     private async Task<CustomWebResponse> ValidateDatabaseAsync(List<ObservationImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
     {
+        // Validate observation names
+        var observationNames = rows
+            .Select(r => r.ObservationName)
+            .Distinct()
+            .ToArray();
+
+        var existentObservations = await entityRepository.GetByNamesAsync(observationNames, ct);
+
+        if (existentObservations.Any())
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.DuplicatedElements, data: existentObservations),
+            };
+        }
+
         // Validate upper groups
         var upperGroups = rows
             .Select(r => r.UpperGroupName)
@@ -586,7 +602,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                 {
                     return new(true)
                     {
-                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.UpperGroupNotFound, data: upperGroup),
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.DuplicatedElements, data: upperGroup),
                     };
                 }
             }

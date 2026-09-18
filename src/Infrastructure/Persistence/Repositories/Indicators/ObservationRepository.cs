@@ -38,6 +38,12 @@ public class ObservationRepository(
             .ToListAsync(ct);
 
     /// <inheritdoc/>
+    public async Task<IEnumerable<Observation>> GetByNamesAsync(string[] names, CancellationToken ct = default) =>
+        await dbContext.Observations
+            .Where(e => names.Contains(e.Name))
+            .ToListAsync(ct);
+
+    /// <inheritdoc/>
     public IQueryable<Observation> IncludeOdataEntities(IQueryable<Observation> query) =>
         IncludeCustomEntities(query)
             .Include(e => e.ObservationLocations!)

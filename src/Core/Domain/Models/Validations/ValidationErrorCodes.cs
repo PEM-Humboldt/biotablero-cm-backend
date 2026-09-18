@@ -516,6 +516,11 @@ public static class ValidationErrorCodes
         /// Indicators and topics difference error.
         /// </summary>
         public const string ObservationsAndTopicsDifference = "IND_016";
+
+        /// <summary>
+        /// Duplicated elements.
+        /// </summary>
+        public const string DuplicatedElements = "IND_017";
     }
 
     /// <summary>

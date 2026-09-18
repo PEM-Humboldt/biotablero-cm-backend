@@ -28,6 +28,14 @@ public interface IObservationRepository : IRepository<Observation, int>
     Task<IEnumerable<Observation>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
+    /// Get elements by names.
+    /// </summary>
+    /// <param name="names">Names list.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>selected entities.</returns>
+    Task<IEnumerable<Observation>> GetByNamesAsync(string[] names, CancellationToken ct = default);
+
+    /// <summary>
     /// Returns the total number of records.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
