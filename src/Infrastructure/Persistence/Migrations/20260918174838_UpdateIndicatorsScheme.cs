@@ -70,25 +70,25 @@ public partial class UpdateIndicatorsScheme : Migration
             newName: "IX_map_legend_observation_version_map_id_title");
 
         migrationBuilder.RenameColumn(
-            name: "measure_unit_id",
+            name: "indicator_group_id",
             schema: "indicators",
             table: "indicator_value",
             newName: "observation_group_id");
 
         migrationBuilder.RenameColumn(
-            name: "indicator_group_id",
+            name: "measure_unit_id",
             schema: "indicators",
             table: "indicator_value",
             newName: "indicator_type_id");
 
         migrationBuilder.RenameIndex(
-            name: "IX_indicator_value_measure_unit_id",
+            name: "IX_indicator_value_indicator_group_id",
             schema: "indicators",
             table: "indicator_value",
             newName: "IX_indicator_value_observation_group_id");
 
         migrationBuilder.RenameIndex(
-            name: "IX_indicator_value_indicator_group_id",
+            name: "IX_indicator_value_measure_unit_id",
             schema: "indicators",
             table: "indicator_value",
             newName: "IX_indicator_value_indicator_type_id");
@@ -467,25 +467,25 @@ public partial class UpdateIndicatorsScheme : Migration
             name: "observation_group_id",
             schema: "indicators",
             table: "indicator_value",
-            newName: "measure_unit_id");
+            newName: "indicator_group_id");
 
         migrationBuilder.RenameColumn(
             name: "indicator_type_id",
             schema: "indicators",
             table: "indicator_value",
-            newName: "indicator_group_id");
+            newName: "measure_unit_id");
 
         migrationBuilder.RenameIndex(
             name: "IX_indicator_value_observation_group_id",
             schema: "indicators",
             table: "indicator_value",
-            newName: "IX_indicator_value_measure_unit_id");
+            newName: "IX_indicator_value_indicator_group_id");
 
         migrationBuilder.RenameIndex(
             name: "IX_indicator_value_indicator_type_id",
             schema: "indicators",
             table: "indicator_value",
-            newName: "IX_indicator_value_indicator_group_id");
+            newName: "IX_indicator_value_measure_unit_id");
 
         migrationBuilder.AlterColumn<string>(
             name: "name",
