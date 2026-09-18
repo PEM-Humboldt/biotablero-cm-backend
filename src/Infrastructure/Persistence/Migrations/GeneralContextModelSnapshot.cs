@@ -322,6 +322,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("InitiativeId");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("observation", "indicators");
                 });
 
