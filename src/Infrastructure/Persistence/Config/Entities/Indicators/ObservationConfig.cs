@@ -41,5 +41,9 @@ public class ObservationConfig : IEntityTypeConfiguration<Observation>
         builder?.HasOne(e => e.Topic)
             .WithMany(p => p.Observations)
             .HasForeignKey(e => e.IndicatorTopicId);
+
+        builder?
+            .HasIndex(e => e.Name)
+            .IsUnique();
     }
 }

@@ -60,6 +60,7 @@ public class ObservationVersionConfig : IEntityTypeConfiguration<ObservationVers
             .HasForeignKey(e => e.ObservationId);
 
         builder?.Ignore(i => i.IndicatorTopicId);
+        builder?.Ignore(i => i.ObservationName);
 
         builder?
             .HasIndex(e => new { e.ObservationId, e.Version })
