@@ -8,9 +8,9 @@ public static class IndicatorsEnums
     #region Indicators
 
     /// <summary>
-    /// Indicator types.
+    /// Indicator topics.
     /// </summary>
-    public enum IndicatorType
+    public enum IndicatorTopic
     {
         /// <summary>
         /// Percentage of the study area occupied by the species.
@@ -44,9 +44,9 @@ public static class IndicatorsEnums
     }
 
     /// <summary>
-    /// Indicator Measure Units.
+    /// Indicator types.
     /// </summary>
-    public enum IndicatorMeasureUnit
+    public enum IndicatorType
     {
         /// <summary>
         /// Percentage of area occupied.
@@ -95,9 +95,9 @@ public static class IndicatorsEnums
     }
 
     /// <summary>
-    /// Indicator base categories.
+    /// Observation base categories.
     /// </summary>
-    public enum IndicatorBaseCategory
+    public enum ObservationBaseCategory
     {
         /// <summary>
         /// Species category type.
@@ -130,79 +130,84 @@ public static class IndicatorsEnums
     public enum XlsxColumnIndex
     {
         /// <summary>
-        /// Indicator type identifier.
+        /// Observation name.
         /// </summary>
-        IndicatorTypeId = 1,
+        ObservationName = 1,
 
         /// <summary>
-        /// Measure unit identifier.
+        /// Indicator topic identifier.
         /// </summary>
-        MeasureUnitId = 3,
+        IndicatorTopicId = 2,
+
+        /// <summary>
+        /// Indicator Type identifier.
+        /// </summary>
+        IndicatorTypeId = 4,
 
         /// <summary>
         /// Department name.
         /// </summary>
-        Department = 5,
+        Department = 6,
 
         /// <summary>
         /// Municipality name.
         /// </summary>
-        Municipality = 6,
+        Municipality = 7,
 
         /// <summary>
         /// Locality name.
         /// </summary>
-        Locality = 7,
+        Locality = 8,
 
         /// <summary>
         /// Year.
         /// </summary>
-        Year = 8,
+        Year = 9,
 
         /// <summary>
         /// Month.
         /// </summary>
-        Month = 9,
+        Month = 10,
 
         /// <summary>
         /// Final year.
         /// </summary>
-        FinalYear = 10,
+        FinalYear = 11,
 
         /// <summary>
         /// Final month.
         /// </summary>
-        FinalMonth = 11,
+        FinalMonth = 12,
 
         /// <summary>
         /// Upper group name.
         /// </summary>
-        UpperGroupName = 12,
+        UpperGroupName = 13,
 
         /// <summary>
         /// Group name.
         /// </summary>
-        GroupName = 13,
+        GroupName = 14,
 
         /// <summary>
         /// Group description.
         /// </summary>
-        GroupDescription = 14,
+        GroupDescription = 15,
 
         /// <summary>
         /// Indicator value.
         /// </summary>
-        Value = 15,
+        Value = 16,
 
         /// <summary>
         /// Value upper limit.
         /// </summary>
-        LowerLimit = 16,
+        LowerLimit = 17,
 
         /// <summary>
         /// Value lower limit.
         /// </summary>
-        UpperLimit = 17,
+        UpperLimit = 18,
     }
 
     #endregion

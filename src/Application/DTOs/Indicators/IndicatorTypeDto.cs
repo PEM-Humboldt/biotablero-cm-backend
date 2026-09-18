@@ -11,12 +11,12 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 public class IndicatorTypeDto() : IDto
 {
     /// <summary>
-    /// Item identifier.
-    /// </summary>
-    public int? Id { get; set; }
-
-    /// <summary>
     /// Indicator Type name.
     /// </summary>
     public required string Name { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Measure Unit representation.
+    /// </summary>
+    public string? Representation { get; set; }
 }

@@ -207,14 +207,14 @@ public class GeneralStatsRepository(GeneralContext dbContext) : IGeneralStatsRep
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<List<KeyValuePair<string, int>>> GetIndicatorsByScaleAsync(int? departmentId, int? initiativeId, CancellationToken ct = default) =>
-        await dbContext.IndicatorTags
-            .Where(e => e.Indicator!.Initiative!.Enabled && e.Tag!.CategoryId == (int)TagCategoryEnum.BiologicalGroup &&
+    public async Task<List<KeyValuePair<string, int>>> GetObservationsByScaleAsync(int? departmentId, int? initiativeId, CancellationToken ct = default) =>
+        await dbContext.ObservationTags
+            .Where(e => e.Observation!.Initiative!.Enabled && e.Tag!.CategoryId == (int)TagCategoryEnum.BiologicalGroup &&
                 (departmentId == null ||
-                    e.Indicator.IndicatorLocations!.Any(e =>
+                    e.Observation.ObservationLocations!.Any(e =>
                         (e.LocationId == departmentId && e.Location!.Level == (byte)LocationLevel.Department) ||
                         (e.Location!.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
-                (initiativeId == null || e.Indicator.InitiativeId == initiativeId))
+                (initiativeId == null || e.Observation.InitiativeId == initiativeId))
             .GroupBy(e => e.Tag!.Name)
             .Select(e => new KeyValuePair<string, int>(e.Key, e.Count()))
             .ToListAsync(ct);

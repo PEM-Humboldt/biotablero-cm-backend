@@ -200,34 +200,34 @@ public sealed class GeneralContext : DbContext
     #region Indicator entities
 
     /// <summary>
-    /// Indicator DbSet.
+    /// Observation DbSet.
     /// </summary>
-    public DbSet<Indicator> Indicators { get; set; }
+    public DbSet<Observation> Observations { get; set; }
 
     /// <summary>
-    /// Indicator Type DbSet.
+    /// Indicator Topic DbSet.
     /// </summary>
-    public DbSet<IndicatorType> IndicatorTypes { get; set; }
+    public DbSet<IndicatorTopic> IndicatorTopics { get; set; }
 
     /// <summary>
-    /// Indicator Tag DbSet.
+    /// Observation Tag DbSet.
     /// </summary>
-    public DbSet<IndicatorTag> IndicatorTags { get; set; }
+    public DbSet<ObservationTag> ObservationTags { get; set; }
 
     /// <summary>
-    /// Indicator Location DbSet.
+    /// Observation Location DbSet.
     /// </summary>
-    public DbSet<IndicatorLocation> IndicatorLocations { get; set; }
+    public DbSet<ObservationLocation> ObservationLocations { get; set; }
 
     /// <summary>
-    /// Indicator Version DbSet.
+    /// Observation Version DbSet.
     /// </summary>
-    public DbSet<IndicatorVersion> IndicatorVersions { get; set; }
+    public DbSet<ObservationVersion> ObservationVersions { get; set; }
 
     /// <summary>
-    /// Indicator Version Map DbSet.
+    /// Observation Version Map DbSet.
     /// </summary>
-    public DbSet<IndicatorVersionMap> IndicatorVersionMaps { get; set; }
+    public DbSet<ObservationVersionMap> ObservationVersionMaps { get; set; }
 
     /// <summary>
     /// Map Legend DbSet.
@@ -240,9 +240,9 @@ public sealed class GeneralContext : DbContext
     public DbSet<MapLegendItem> MapLegendItems { get; set; }
 
     /// <summary>
-    /// Indicator Group DbSet.
+    /// Observation Group DbSet.
     /// </summary>
-    public DbSet<IndicatorGroup> IndicatorGroups { get; set; }
+    public DbSet<ObservationGroup> ObservationGroups { get; set; }
 
     /// <summary>
     /// Category DbSet.
@@ -255,9 +255,9 @@ public sealed class GeneralContext : DbContext
     public DbSet<IndicatorValue> IndicatorValues { get; set; }
 
     /// <summary>
-    /// Measure Unit DbSet.
+    /// Indicator Type DbSet.
     /// </summary>
-    public DbSet<MeasureUnit> MeasureUnits { get; set; }
+    public DbSet<IndicatorType> IndicatorTypes { get; set; }
 
     #endregion
 

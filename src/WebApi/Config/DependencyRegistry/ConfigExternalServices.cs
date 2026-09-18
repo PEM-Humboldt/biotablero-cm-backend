@@ -98,11 +98,11 @@ public static class ConfigExternalServices
         services.AddScoped<INotificationRepository, NotificationRepository>();
 
         //// Indicators
-        services.AddScoped<IIndicatorRepository, IndicatorRepository>();
-        services.AddScoped<IIndicatorVersionRepository, IndicatorVersionRepository>();
+        services.AddScoped<IObservationRepository, ObservationRepository>();
+        services.AddScoped<IObservationVersionRepository, ObservationVersionRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
-        services.AddScoped<IIndicatorLocationRepository, IndicatorLocationRepository>();
-        services.AddScoped<IIndicatorTagRepository, IndicatorTagRepository>();
+        services.AddScoped<IObservationLocationRepository, ObservationLocationRepository>();
+        services.AddScoped<IObservationTagRepository, ObservationTagRepository>();
 
         //// Reports
         services.AddScoped<IGeneralStatsRepository, GeneralStatsRepository>();

@@ -58,7 +58,7 @@ public class Location : BaseEntity<int>, IAggregateRoot
     public ICollection<Initiative>? Initiatives { get; set; }
 
     /// <summary>
-    /// Indicator Locations relationship.
+    /// Observation Locations relationship.
     /// </summary>
-    public ICollection<IndicatorLocation>? IndicatorLocations { get; set; }
+    public ICollection<ObservationLocation>? ObservationLocations { get; set; }
 }

@@ -21,11 +21,11 @@ public class IndicatorValueConfig : IEntityTypeConfiguration<IndicatorValue>
             .HasColumnName("id")
             .IsRequired();
 
-        builder?.Property(e => e.IndicatorGroupId)
+        builder?.Property(e => e.ObservationGroupId)
             .HasColumnName("indicator_group_id")
             .IsRequired();
 
-        builder?.Property(e => e.MeasureUnitId)
+        builder?.Property(e => e.IndicatorTypeId)
             .HasColumnName("measure_unit_id")
             .IsRequired();
 
@@ -50,11 +50,11 @@ public class IndicatorValueConfig : IEntityTypeConfiguration<IndicatorValue>
 
         builder?.HasOne(e => e.Group)
             .WithMany(p => p.Values)
-            .HasForeignKey(e => e.IndicatorGroupId);
+            .HasForeignKey(e => e.ObservationGroupId);
 
-        builder?.HasOne(e => e.MeasureUnit)
+        builder?.HasOne(e => e.IndicatorType)
             .WithMany(p => p.IndicatorValues)
-            .HasForeignKey(e => e.MeasureUnitId);
+            .HasForeignKey(e => e.IndicatorTypeId);
 
         builder?
             .ToTable(t =>

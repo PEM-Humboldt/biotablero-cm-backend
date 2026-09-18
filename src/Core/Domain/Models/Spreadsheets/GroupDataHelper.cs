@@ -1,7 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Models.Spreadsheets;
 
 /// <summary>
-/// Indicators group (category) data helper.
+/// Observation group (category) data helper.
 /// </summary>
 public class GroupDataHelper()
 {

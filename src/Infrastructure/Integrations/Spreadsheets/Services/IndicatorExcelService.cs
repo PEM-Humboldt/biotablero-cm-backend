@@ -24,9 +24,9 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
     private readonly ILogger logger = logger;
 
     /// <inheritdoc/>
-    public SpreadsheetReadResult<IndicatorsImportRow> GetFileData(IInputFile formFile)
+    public SpreadsheetReadResult<ObservationImportRow> GetFileData(IInputFile formFile)
     {
-        var result = new SpreadsheetReadResult<IndicatorsImportRow>();
+        var result = new SpreadsheetReadResult<ObservationImportRow>();
 
         if (formFile == null || formFile.Size == 0)
         {
@@ -43,8 +43,8 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
 
             foreach (var row in worksheet.RowsUsed().Skip(1))
             {
+                ValidateCellValue<int>(row, XlsxColumnIndex.IndicatorTopicId, result.Errors, out var indicatorTopicId);
                 ValidateCellValue<int>(row, XlsxColumnIndex.IndicatorTypeId, result.Errors, out var indicatorTypeId);
-                ValidateCellValue<int>(row, XlsxColumnIndex.MeasureUnitId, result.Errors, out var measureUnitId);
                 ValidateCellValue<string>(row, XlsxColumnIndex.Department, result.Errors, out var departmentName);
                 ValidateCellValue<string>(row, XlsxColumnIndex.Municipality, result.Errors, out var municipalityName);
                 ValidateCellValue<string>(row, XlsxColumnIndex.Locality, result.Errors, out var localityName);
@@ -59,11 +59,11 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
                 ValidateCellValue<float?>(row, XlsxColumnIndex.UpperLimit, result.Errors, out var upperLimit);
                 ValidateCellValue<float?>(row, XlsxColumnIndex.LowerLimit, result.Errors, out var lowerLimit);
 
-                var validatedRow = new IndicatorsImportRow
+                var validatedRow = new ObservationImportRow
                 {
                     RowNumber = row.RowNumber(),
+                    IndicatorTopicId = indicatorTopicId,
                     IndicatorTypeId = indicatorTypeId,
-                    MeasureUnitId = measureUnitId,
                     DepartmentName = departmentName!,
                     MunicipalityName = municipalityName!,
                     LocalityName = localityName!,

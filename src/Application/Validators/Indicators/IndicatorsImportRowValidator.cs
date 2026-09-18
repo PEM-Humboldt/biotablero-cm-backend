@@ -9,7 +9,7 @@ using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 /// <summary>
 /// Indicators Import Row validator.
 /// </summary>
-public class IndicatorsImportRowValidator : AbstractValidator<IndicatorsImportRow>
+public class IndicatorsImportRowValidator : AbstractValidator<ObservationImportRow>
 {
     /// <summary>
     /// Constructor.

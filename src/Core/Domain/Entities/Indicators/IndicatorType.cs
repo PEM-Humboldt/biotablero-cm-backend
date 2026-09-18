@@ -10,12 +10,17 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 public class IndicatorType : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Entity name.
+    /// Indicator Type name.
     /// </summary>
     public required string Name { get; set; }
 
     /// <summary>
-    /// Indicator relationship.
+    /// Measure Unit representation.
     /// </summary>
-    public ICollection<Indicator>? Indicators { get; init; }
+    public string? Representation { get; set; }
+
+    /// <summary>
+    /// Indicator Value relationship.
+    /// </summary>
+    public ICollection<IndicatorValue>? IndicatorValues { get; init; }
 }

@@ -86,13 +86,13 @@ public static class ConfigMappings
 
         // Indicators
         services.AddSingleton<IMapperRead<Category, CategoryDto>, CategoryMappings>();
-        services.AddSingleton<IMapperRead<IndicatorLocation, IndicatorLocationDto>, IndicatorLocationMappings>();
-        services.AddSingleton<IMapperReadAndUpdate<Indicator, IndicatorDto>, IndicatorMappings>();
-        services.AddSingleton<IMapperRead<IndicatorTag, IndicatorTagDto>, IndicatorTagMappings>();
-        services.AddSingleton<IMapperRead<IndicatorType, IndicatorTypeDto>, IndicatorTypeMappings>();
+        services.AddSingleton<IMapperRead<ObservationLocation, ObservationLocationDto>, ObservationLocationMappings>();
+        services.AddSingleton<IMapperReadAndUpdate<Observation, ObservationDto>, ObservationMappings>();
+        services.AddSingleton<IMapperRead<ObservationTag, ObservationTagDto>, ObservationTagMappings>();
+        services.AddSingleton<IMapperRead<IndicatorTopic, IndicatorTopicDto>, IndicatorTopicMappings>();
         services.AddSingleton<IMapperRead<IndicatorValue, IndicatorValueDto>, IndicatorValueMappings>();
-        services.AddSingleton<IMapperReadAndUpdate<IndicatorVersion, IndicatorVersionDto>, IndicatorVersionMappings>();
-        services.AddSingleton<IMapperRead<MeasureUnit, MeasureUnitDto>, MeasureUnitMappings>();
+        services.AddSingleton<IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto>, ObservationVersionMappings>();
+        services.AddSingleton<IMapperRead<IndicatorType, IndicatorTypeDto>, IndicatorTypeMappings>();
 
         // Reports
         services.AddSingleton<IMapperCreateAndRead<ReportData, ReportDataDto>, ReportDataMappings>();

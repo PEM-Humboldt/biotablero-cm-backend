@@ -13,7 +13,7 @@ public class IndicatorTypeConfig : IEntityTypeConfiguration<IndicatorType>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<IndicatorType> builder)
     {
-        builder?.ToTable("indicator_type", "indicators");
+        builder?.ToTable("measure_unit", "indicators");
 
         builder?.HasKey(e => e.Id);
 
@@ -23,8 +23,12 @@ public class IndicatorTypeConfig : IEntityTypeConfiguration<IndicatorType>
 
         builder?.Property(e => e.Name)
             .HasColumnName("name")
-            .HasMaxLength(200)
+            .HasMaxLength(70)
             .IsRequired();
+
+        builder?.Property(e => e.Representation)
+            .HasColumnName("representation")
+            .HasMaxLength(10);
 
         builder?
             .HasIndex(e => e.Name)

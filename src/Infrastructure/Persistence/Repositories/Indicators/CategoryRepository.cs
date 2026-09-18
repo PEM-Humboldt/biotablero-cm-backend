@@ -33,7 +33,7 @@ public class CategoryRepository(
     /// <inheritdoc/>
     public async Task<List<Category>> GetUpperGroupsAsync(string[] categoryNames, CancellationToken ct = default) =>
         await dbContext.Categories
-            .Where(e => (e.ParentId == null || e.ParentId == (int)IndicatorBaseCategory.Species) && categoryNames.Contains(e.Name))
+            .Where(e => (e.ParentId == null || e.ParentId == (int)ObservationBaseCategory.Species) && categoryNames.Contains(e.Name))
             .ToListAsync(ct);
 
     /// <inheritdoc/>

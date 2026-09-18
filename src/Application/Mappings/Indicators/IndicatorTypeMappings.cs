@@ -18,8 +18,8 @@ public class IndicatorTypeMappings() : MapperRead<IndicatorType, IndicatorTypeDt
 
         return new()
         {
-            Id = entity.Id,
             Name = entity.Name,
+            Representation = entity.Representation,
         };
     }
 }

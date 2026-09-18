@@ -21,7 +21,7 @@ public class MapLegendConfig : IEntityTypeConfiguration<MapLegend>
             .HasColumnName("id")
             .IsRequired();
 
-        builder?.Property(e => e.IndicatorVersionMapId)
+        builder?.Property(e => e.ObservationVersionMapId)
             .HasColumnName("indicator_version_map_id")
             .IsRequired();
 
@@ -30,12 +30,12 @@ public class MapLegendConfig : IEntityTypeConfiguration<MapLegend>
             .HasMaxLength(50)
             .IsRequired();
 
-        builder?.HasOne(e => e.IndicatorVersionMap)
+        builder?.HasOne(e => e.ObservationVersionMap)
             .WithMany(p => p.Legends)
-            .HasForeignKey(e => e.IndicatorVersionMapId);
+            .HasForeignKey(e => e.ObservationVersionMapId);
 
         builder?
-            .HasIndex(e => new { e.IndicatorVersionMapId, e.Title })
+            .HasIndex(e => new { e.ObservationVersionMapId, e.Title })
             .IsUnique();
     }
 }

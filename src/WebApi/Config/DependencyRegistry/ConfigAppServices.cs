@@ -74,9 +74,9 @@ public static class ConfigAppServices
         services.AddSingleton<ISseNotificationDispatcher, SseNotificationDispatcher>();
 
         // Indicators
-        services.AddScoped<IIndicatorService, IndicatorService>();
-        services.AddScoped<IIndicatorVersionService, IndicatorVersionService>();
-        services.AddScoped<IIndicatorTagService, IndicatorTagService>();
+        services.AddScoped<IObservationService, ObservationService>();
+        services.AddScoped<IObservationVersionService, ObservationVersionService>();
+        services.AddScoped<IObservationTagService, ObservationTagService>();
 
         // Reports and statistics
         services.AddScoped<IInitiativeStatsService, InitiativeStatsService>();

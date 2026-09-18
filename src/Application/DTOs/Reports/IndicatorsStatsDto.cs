@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 public class IndicatorsStatsDto()
 {
     /// <summary>
-    /// Indicators by scale data.
+    /// Observations by scale data.
     /// </summary>
-    public List<KeyValuePair<string, int>> IndicatorsByScale { get; set; } = [];
+    public List<KeyValuePair<string, int>> ObservationsByScale { get; set; } = [];
 }

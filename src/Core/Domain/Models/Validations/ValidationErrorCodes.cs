@@ -443,9 +443,9 @@ public static class ValidationErrorCodes
         public const string NotFound = "IND_001";
 
         /// <summary>
-        /// Only one indicator is required.
+        /// Only one observation is required.
         /// </summary>
-        public const string OnlyOneIndicatorRequired = "IND_002";
+        public const string OnlyOneObservationRequired = "IND_002";
 
         /// <summary>
         /// Upper ground not found.
@@ -468,14 +468,14 @@ public static class ValidationErrorCodes
         public const string InvalidConfidenceInterval = "IND_006";
 
         /// <summary>
-        /// Invalid indicator type.
+        /// Invalid indicator topic.
         /// </summary>
-        public const string InvalidIndicatorType = "IND_007";
+        public const string InvalidIndicatorTopic = "IND_007";
 
         /// <summary>
-        /// Invalid measure unit.
+        /// Invalid indicator type.
         /// </summary>
-        public const string InvalidMeasureUnit = "IND_008";
+        public const string InvalidIndicatorType = "IND_008";
 
         /// <summary>
         /// Location not found.
