@@ -43,7 +43,7 @@ public class ObservationConfig : IEntityTypeConfiguration<Observation>
             .HasForeignKey(e => e.IndicatorTopicId);
 
         builder?
-            .HasIndex(e => e.Name)
+            .HasIndex(e => new { e.InitiativeId, e.Name })
             .IsUnique();
     }
 }

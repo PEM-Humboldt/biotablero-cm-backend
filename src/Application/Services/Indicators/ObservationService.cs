@@ -258,7 +258,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             spreadsheetLocations?.Select(e => e.Municipality)?.ToArray() ?? [],
             ct);
 
-        var databaseValidations = await ValidateDatabaseAsync(observation != null, fileReadResult.Rows, locationEntities, ct);
+        var databaseValidations = await ValidateDatabaseAsync(requestData.InitiativeId, observation != null, fileReadResult.Rows, locationEntities, ct);
 
         if (!databaseValidations.Success)
         {
@@ -561,12 +561,13 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// <summary>
     /// Spreadsheet database validations.
     /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="edition">Observation edition flag.</param>
     /// <param name="rows">Spreadsheet rows.</param>
     /// <param name="locationEntities">Location entities list.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateDatabaseAsync(bool edition, List<ObservationImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateDatabaseAsync(int initiativeId, bool edition, List<ObservationImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
     {
         if (!edition)
         {
@@ -576,7 +577,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                 .Distinct()
                 .ToArray();
 
-            var existentObservations = await entityRepository.GetByNamesAsync(observationNames, ct);
+            var existentObservations = await entityRepository.GetByInitiativeAndNamesAsync(initiativeId, observationNames, ct);
 
             if (existentObservations.Any())
             {
