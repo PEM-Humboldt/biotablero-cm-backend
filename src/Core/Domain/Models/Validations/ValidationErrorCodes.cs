@@ -511,6 +511,11 @@ public static class ValidationErrorCodes
         /// Invalid integer value.
         /// </summary>
         public const string InvalidIntegerValue = "IND_015";
+
+        /// <summary>
+        /// Indicators and topics difference error.
+        /// </summary>
+        public const string ObservationsAndTopicsDifference = "IND_016";
     }
 
     /// <summary>

@@ -354,6 +354,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     {
         foreach (var row in rows)
         {
+            row.ObservationName = row.ObservationName?.Trim()?.CapitalizeFirstOnly()!;
             row.UpperGroupName = row.UpperGroupName?.Trim()?.CapitalizeFirstOnly()!;
             row.GroupName = row.GroupName?.Trim()?.CapitalizeFirstOnly();
             row.LocalityName = row.LocalityName?.Trim()?.CapitalizeFirstOnly()!;
@@ -377,13 +378,13 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// <returns>Validation result.</returns>
     private async Task<CustomWebResponse> ValidateStructureDataAsync(List<ObservationImportRow> rows, Observation? observation, CancellationToken ct = default)
     {
+        var totalObservations = rows
+            .GroupBy(r => r.ObservationName)
+            .Count();
+
         // Validate total observations for edition
         if (observation != null)
         {
-            var totalObservations = rows
-                .GroupBy(r => r.IndicatorTopicId)
-                .Count();
-
             if (totalObservations != 1)
             {
                 return new(true)
@@ -391,6 +392,21 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                     ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.OnlyOneObservationRequired),
                 };
             }
+        }
+
+        // Validate unique indicator topic by observations grouped by name
+        var totalTopics = rows
+            .GroupBy(r => r.ObservationName)
+            .SelectMany(g => g.Select(r => r.IndicatorTopicId).Distinct())
+            .Count();
+
+        if (totalObservations != totalTopics)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.ObservationsAndTopicsDifference),
+                Message = $"Observations: {totalObservations}. Topics: {totalTopics}",
+            };
         }
 
         foreach (var row in rows)
@@ -767,11 +783,12 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         DateTimeOffset now,
         int observationLastVersion) =>
         [.. rows
-            .GroupBy(r => r.IndicatorTopicId)
+            .GroupBy(r => r.ObservationName)
             .Select(g => new ObservationVersion()
             {
-                IndicatorTopicId = g.Key,
+                IndicatorTopicId = g.Select(r => r.IndicatorTopicId).FirstOrDefault(),
                 ObservationId = observation?.Id ?? 0,
+                ObservationName = g.Key,
                 CreationDate = now,
                 Version = observation == null ? 1 : observationLastVersion + 1,
                 Groups = [.. g.GroupBy(g => new { g.UpperGroupName, g.GroupName, g.GroupDescription })
@@ -826,7 +843,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         List<Location> locations,
         DateTimeOffset now) =>
         [.. rows
-            .GroupBy(r => r.IndicatorTopicId)
+            .GroupBy(r => r.ObservationName)
             .Select(g =>
             {
                 var observationsLocations = g
@@ -856,13 +873,15 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                     .DistinctBy(e => new { e.Id, e.LocationId })
                     .ToList();
 
+                var indicatorTopicId = g.Select(r => r.IndicatorTopicId).FirstOrDefault();
+
                 return new Observation()
                 {
                     InitiativeId = initiativeId,
-                    Name = $"Indicador tipo {g.Key} ({now.ToString(GeneralConstants.DatetimeFormat, CultureInfo.CurrentCulture)})",
-                    IndicatorTopicId = g.Key,
+                    Name = g.Key,
+                    IndicatorTopicId = indicatorTopicId,
                     ObservationLocations = observationsLocations,
-                    Versions = [.. observationVersions.Where(e => e.IndicatorTopicId == g.Key)],
+                    Versions = [.. observationVersions.Where(e => e.IndicatorTopicId == indicatorTopicId && e.ObservationName == g.Key)],
                 };
             })];
 
