@@ -13,7 +13,7 @@ public class ObservationLocationConfig : IEntityTypeConfiguration<ObservationLoc
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<ObservationLocation> builder)
     {
-        builder?.ToTable("indicator_location", "indicators");
+        builder?.ToTable("observation_location", "indicators");
 
         builder?.HasKey(e => e.Id);
 
@@ -22,7 +22,7 @@ public class ObservationLocationConfig : IEntityTypeConfiguration<ObservationLoc
             .IsRequired();
 
         builder?.Property(e => e.ObservationId)
-            .HasColumnName("indicator_id")
+            .HasColumnName("observation_id")
             .IsRequired();
 
         builder?.Property(e => e.LocationId)

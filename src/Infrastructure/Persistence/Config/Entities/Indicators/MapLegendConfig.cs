@@ -22,7 +22,7 @@ public class MapLegendConfig : IEntityTypeConfiguration<MapLegend>
             .IsRequired();
 
         builder?.Property(e => e.ObservationVersionMapId)
-            .HasColumnName("indicator_version_map_id")
+            .HasColumnName("observation_version_map_id")
             .IsRequired();
 
         builder?.Property(e => e.Title)
