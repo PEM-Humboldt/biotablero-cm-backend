@@ -430,11 +430,19 @@
     <comment/>
   </data>
   <data name="IND_015" xml:space="preserve">
-    <value>Invalid value. It must be an integer.</value>
+    <value>Invalid value. It must be an integer</value>
+    <comment/>
+  </data>
+  <data name="IND_016" xml:space="preserve">
+    <value>The number of observations and topics must be the same</value>
+    <comment/>
+  </data>
+  <data name="IND_017" xml:space="preserve">
+    <value>Duplicated elements</value>
     <comment/>
   </data>
   <data name="MEV_001" xml:space="preserve">
-    <value>Duplicate monitoring events.</value>
+    <value>Duplicate monitoring events</value>
     <comment/>
   </data>
 </root>

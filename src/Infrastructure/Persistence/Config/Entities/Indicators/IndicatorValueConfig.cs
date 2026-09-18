@@ -22,11 +22,11 @@ public class IndicatorValueConfig : IEntityTypeConfiguration<IndicatorValue>
             .IsRequired();
 
         builder?.Property(e => e.ObservationGroupId)
-            .HasColumnName("indicator_group_id")
+            .HasColumnName("observation_group_id")
             .IsRequired();
 
         builder?.Property(e => e.IndicatorTypeId)
-            .HasColumnName("measure_unit_id")
+            .HasColumnName("indicator_type_id")
             .IsRequired();
 
         builder?.Property(e => e.Date)

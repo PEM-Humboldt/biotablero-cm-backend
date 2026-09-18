@@ -13,7 +13,7 @@ public class ObservationVersionMapConfig : IEntityTypeConfiguration<ObservationV
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<ObservationVersionMap> builder)
     {
-        builder?.ToTable("indicator_version_map", "indicators");
+        builder?.ToTable("observation_version_map", "indicators");
 
         builder?.HasKey(e => e.Id);
 
@@ -22,7 +22,7 @@ public class ObservationVersionMapConfig : IEntityTypeConfiguration<ObservationV
             .IsRequired();
 
         builder?.Property(e => e.ObservationVersionId)
-            .HasColumnName("indicator_version_id")
+            .HasColumnName("observation_version_id")
             .IsRequired();
 
         builder?.Property(e => e.Title)

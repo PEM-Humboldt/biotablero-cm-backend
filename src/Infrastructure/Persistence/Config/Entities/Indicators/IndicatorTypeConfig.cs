@@ -13,7 +13,7 @@ public class IndicatorTypeConfig : IEntityTypeConfiguration<IndicatorType>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<IndicatorType> builder)
     {
-        builder?.ToTable("measure_unit", "indicators");
+        builder?.ToTable("indicator_type", "indicators");
 
         builder?.HasKey(e => e.Id);
 

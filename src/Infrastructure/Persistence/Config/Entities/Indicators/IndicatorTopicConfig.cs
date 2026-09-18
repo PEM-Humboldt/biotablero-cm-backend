@@ -13,7 +13,7 @@ public class IndicatorTopicConfig : IEntityTypeConfiguration<IndicatorTopic>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<IndicatorTopic> builder)
     {
-        builder?.ToTable("indicator_type", "indicators");
+        builder?.ToTable("indicator_topic", "indicators");
 
         builder?.HasKey(e => e.Id);
 

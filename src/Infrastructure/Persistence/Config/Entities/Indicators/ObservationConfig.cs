@@ -13,7 +13,7 @@ public class ObservationConfig : IEntityTypeConfiguration<Observation>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<Observation> builder)
     {
-        builder?.ToTable("indicator", "indicators");
+        builder?.ToTable("observation", "indicators");
 
         builder?.HasKey(e => e.Id);
 
@@ -23,7 +23,7 @@ public class ObservationConfig : IEntityTypeConfiguration<Observation>
 
         builder?.Property(e => e.Name)
             .HasColumnName("name")
-            .HasMaxLength(240)
+            .HasMaxLength(500)
             .IsRequired();
 
         builder?.Property(e => e.InitiativeId)
@@ -31,7 +31,7 @@ public class ObservationConfig : IEntityTypeConfiguration<Observation>
             .IsRequired();
 
         builder?.Property(e => e.IndicatorTopicId)
-            .HasColumnName("indicator_type_id")
+            .HasColumnName("indicator_topic_id")
             .IsRequired();
 
         builder?.HasOne(e => e.Initiative)
@@ -41,5 +41,9 @@ public class ObservationConfig : IEntityTypeConfiguration<Observation>
         builder?.HasOne(e => e.Topic)
             .WithMany(p => p.Observations)
             .HasForeignKey(e => e.IndicatorTopicId);
+
+        builder?
+            .HasIndex(e => new { e.InitiativeId, e.Name })
+            .IsUnique();
     }
 }

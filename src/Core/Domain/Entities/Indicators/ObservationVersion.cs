@@ -16,6 +16,11 @@ public class ObservationVersion : BaseEntity<int>, IAggregateRoot
     public int ObservationId { get; set; }
 
     /// <summary>
+    /// Observation name.
+    /// </summary>
+    public string? ObservationName { get; set; }
+
+    /// <summary>
     /// Creation date.
     /// </summary>
     public DateTimeOffset CreationDate { get; set; }

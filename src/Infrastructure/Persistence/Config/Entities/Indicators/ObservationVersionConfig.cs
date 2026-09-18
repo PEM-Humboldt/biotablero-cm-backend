@@ -13,7 +13,7 @@ public class ObservationVersionConfig : IEntityTypeConfiguration<ObservationVers
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<ObservationVersion> builder)
     {
-        builder?.ToTable("indicator_version", "indicators");
+        builder?.ToTable("observation_version", "indicators");
 
         builder?.HasKey(e => e.Id);
 
@@ -22,7 +22,7 @@ public class ObservationVersionConfig : IEntityTypeConfiguration<ObservationVers
             .IsRequired();
 
         builder?.Property(e => e.ObservationId)
-            .HasColumnName("indicator_id")
+            .HasColumnName("observation_id")
             .IsRequired();
 
         builder?.Property(e => e.CreationDate)
@@ -37,29 +37,30 @@ public class ObservationVersionConfig : IEntityTypeConfiguration<ObservationVers
 
         builder?.Property(e => e.Description)
             .HasColumnName("description")
-            .HasMaxLength(1000);
+            .HasMaxLength(3000);
 
         builder?.Property(e => e.Methodology)
             .HasColumnName("methodology")
-            .HasMaxLength(1000);
+            .HasMaxLength(3000);
 
         builder?.Property(e => e.Interpretation)
             .HasColumnName("interpretation")
-            .HasMaxLength(1000);
+            .HasMaxLength(3000);
 
         builder?.Property(e => e.Considerations)
             .HasColumnName("considerations")
-            .HasMaxLength(1000);
+            .HasMaxLength(3000);
 
         builder?.Property(e => e.Authorship)
             .HasColumnName("authorship")
-            .HasMaxLength(1000);
+            .HasMaxLength(3000);
 
         builder?.HasOne(e => e.Observation)
             .WithMany(p => p.Versions)
             .HasForeignKey(e => e.ObservationId);
 
         builder?.Ignore(i => i.IndicatorTopicId);
+        builder?.Ignore(i => i.ObservationName);
 
         builder?
             .HasIndex(e => new { e.ObservationId, e.Version })
