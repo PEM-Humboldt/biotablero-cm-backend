@@ -310,16 +310,10 @@ public partial class UpdateIndicatorsScheme : Migration
             column: "indicator_topic_id");
 
         migrationBuilder.CreateIndex(
-            name: "IX_observation_initiative_id",
+            name: "IX_observation_initiative_id_name",
             schema: "indicators",
             table: "observation",
-            column: "initiative_id");
-
-        migrationBuilder.CreateIndex(
-            name: "IX_observation_name",
-            schema: "indicators",
-            table: "observation",
-            column: "name",
+            columns: new[] { "initiative_id", "name" },
             unique: true);
 
         migrationBuilder.CreateIndex(

@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(GeneralContext))]
-    [Migration("20260918163446_UpdateIndicatorsScheme")]
+    [Migration("20260918174838_UpdateIndicatorsScheme")]
     partial class UpdateIndicatorsScheme
     {
         /// <inheritdoc />
@@ -323,9 +323,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IndicatorTopicId");
 
-                    b.HasIndex("InitiativeId");
-
-                    b.HasIndex("Name")
+                    b.HasIndex("InitiativeId", "Name")
                         .IsUnique();
 
                     b.ToTable("observation", "indicators");

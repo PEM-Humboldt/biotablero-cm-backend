@@ -320,9 +320,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IndicatorTopicId");
 
-                    b.HasIndex("InitiativeId");
-
-                    b.HasIndex("Name")
+                    b.HasIndex("InitiativeId", "Name")
                         .IsUnique();
 
                     b.ToTable("observation", "indicators");
