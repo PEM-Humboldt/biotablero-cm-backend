@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 using System.Collections.Generic;
+using System.Linq;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
@@ -34,6 +35,11 @@ public class Observation : BaseEntity<int>, IAggregateRoot
     /// Observation Topic relationship.
     /// </summary>
     public IndicatorTopic? Topic { get; set; }
+
+    /// <summary>
+    /// Last observation version.
+    /// </summary>
+    public int LastVersion => Versions?.Max(e => e.Version) ?? 0;
 
     /// <summary>
     /// Observation Tag relationship.

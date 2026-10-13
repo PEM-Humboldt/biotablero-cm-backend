@@ -40,6 +40,7 @@ public class ObservationRepository(
     /// <inheritdoc/>
     public async Task<IEnumerable<Observation>> GetByInitiativeAndNamesAsync(int initiativeId, string[] names, CancellationToken ct = default) =>
         await dbContext.Observations
+            .Include(e => e.Versions)
             .Where(e => e.InitiativeId == initiativeId && names.Contains(e.Name))
             .ToListAsync(ct);
 

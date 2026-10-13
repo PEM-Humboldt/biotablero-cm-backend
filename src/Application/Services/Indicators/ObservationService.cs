@@ -212,30 +212,24 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             };
         }
 
-        // Validate observation
-        Observation? observation = null;
-        var observationLastVersion = 1;
+        // Validate existent observations
+        var observationNames = fileReadResult.Rows
+            .Select(r => r.ObservationName)
+            .ToArray();
 
-        if (requestData.Id.HasValue)
+        var existentObservations = await entityRepository.GetByInitiativeAndNamesAsync(requestData.InitiativeId, observationNames, ct);
+
+        foreach (var row in fileReadResult.Rows)
         {
-            observation = await entityRepository.GetByIdAsync(requestData.Id.Value, ct);
-
-            if (observation == null)
-            {
-                return new(true)
-                {
-                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.NotFound),
-                };
-            }
-
-            observationLastVersion = await observationVersionRepository.GetLastVersionAsync(observation.Id, ct);
+            row.ObservationEntity = existentObservations
+                .FirstOrDefault(e => e.Name == row.ObservationName);
         }
 
         // Adjust spreadsheet rows data
         AdjustRowsData(fileReadResult.Rows);
 
         // Make structure validations
-        var structureDataValidations = await ValidateStructureDataAsync(fileReadResult.Rows, observation, ct);
+        var structureDataValidations = await ValidateStructureDataAsync(fileReadResult.Rows, ct);
 
         if (!structureDataValidations.Success)
         {
@@ -258,7 +252,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             spreadsheetLocations?.Select(e => e.Municipality)?.ToArray() ?? [],
             ct);
 
-        var databaseValidations = await ValidateDatabaseAsync(requestData.InitiativeId, observation != null, fileReadResult.Rows, locationEntities, ct);
+        var databaseValidations = await ValidateDatabaseAsync(requestData.InitiativeId, fileReadResult.Rows, locationEntities, ct);
 
         if (!databaseValidations.Success)
         {
@@ -270,36 +264,56 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         {
             var now = DateTimeOffset.Now;
 
-            var observationLocations = await GetExistingObservationLocationsAsync(observation, spreadsheetLocations ?? [], ct);
-            var categories = await SaveAndGetCategoriesAsync(fileReadResult.Rows, ct);
-            var observationVersionEntities = GenerateObservationVersions(observation, fileReadResult.Rows, categories, now, observationLastVersion);
+            var newObservationsRows = fileReadResult.Rows
+                .Where(r => r.ObservationEntity == null)
+                .ToArray();
 
-            if (!requestData.Id.HasValue)
+            var newObservations = new List<Observation>();
+            var editedObservations = new List<ObservationVersion>();
+
+            foreach (var row in fileReadResult.Rows)
             {
-                var observations = GenerateObservations(requestData.InitiativeId, observation, fileReadResult.Rows, observationVersionEntities, observationLocations, locationEntities, now);
+                var observationLocations = await GetExistingObservationLocationsAsync(row.ObservationEntity, spreadsheetLocations ?? [], ct);
+                var categories = await SaveAndGetCategoriesAsync(fileReadResult.Rows, ct);
+                var observationVersionEntities = GenerateObservationVersions(row.ObservationEntity, fileReadResult.Rows, categories, now, row.ObservationEntity?.LastVersion ?? 1);
 
-                // Save data
-                await entityRepository.AddRangeAsync(observations, ct);
+                if (newObservationsRows.Contains(row))
+                {
+                    var observations = GenerateObservations(requestData.InitiativeId, fileReadResult.Rows, observationVersionEntities, observationLocations, locationEntities, now);
 
-                var observationDtos = observations
+                    newObservations.AddRange(observations);
+                }
+                else
+                {
+                    editedObservations.AddRange(observationVersionEntities);
+                }
+            }
+
+            // Save new observations
+            if (newObservations.Count > 0)
+            {
+                await entityRepository.AddRangeAsync(newObservations, ct);
+
+                var observationDtos = newObservations
                     .Select(mapper.Map)
                     .ToList();
 
                 logger.AddLog(LogType.Create, "Added observations", "{@EntityData}", observationDtos);
 
-                result.Result = observationDtos;
+                result.Result.AddRange(observationDtos);
             }
-            else
-            {
-                // Save data
-                await observationVersionRepository.AddRangeAsync(observationVersionEntities, ct);
 
-                var observationVersionDtos = observationVersionEntities
+            // Update observations
+            if (editedObservations.Count > 0)
+            {
+                await observationVersionRepository.AddRangeAsync(editedObservations, ct);
+
+                var observationVersionDtos = editedObservations
                     .Select(observationVersionMapper.Map);
 
                 logger.AddLog(LogType.Create, "Added observation versions", "{@EntityData}", observationVersionDtos);
 
-                result.Result = observationVersionDtos;
+                result.Result.AddRange(observationVersionDtos);
             }
         }
 
@@ -373,26 +387,13 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// Spreadsheet structure data validations.
     /// </summary>
     /// <param name="rows">Spreadsheet rows.</param>
-    /// <param name="observation">Observation (optional).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<ObservationImportRow> rows, Observation? observation, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<ObservationImportRow> rows, CancellationToken ct = default)
     {
         var totalObservations = rows
             .GroupBy(r => r.ObservationName)
             .Count();
-
-        // Validate total observations for edition
-        if (observation != null)
-        {
-            if (totalObservations != 1)
-            {
-                return new(true)
-                {
-                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.OnlyOneObservationRequired),
-                };
-            }
-        }
 
         // Validate unique indicator topic by observations grouped by name
         var totalTopics = rows
@@ -533,18 +534,18 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             }
 
             // Validations for observations editions
-            if (observation != null)
+            if (row.ObservationEntity != null)
             {
-                if (row.IndicatorTopicId != observation.IndicatorTopicId)
+                if (row.IndicatorTopicId != row.ObservationEntity.IndicatorTopicId)
                 {
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorTopic),
-                        Message = $"Errors in row {row.RowNumber}. Original type id: {observation.IndicatorTopicId}, Spreadsheet type id: {row.IndicatorTopicId}",
+                        Message = $"Errors in row {row.RowNumber}. Original type id: {row.ObservationEntity.IndicatorTopicId}, Spreadsheet type id: {row.IndicatorTopicId}",
                     };
                 }
 
-                if (!observation?.ObservationLocations?.Any(e => e.Locality == row.LocalityName && e.Location?.Name == row.MunicipalityName && row.DepartmentName == e.Location?.Parent?.Name) ?? false)
+                if (!row.ObservationEntity?.ObservationLocations?.Any(e => e.Locality == row.LocalityName && e.Location?.Name == row.MunicipalityName && row.DepartmentName == e.Location?.Parent?.Name) ?? false)
                 {
                     return new(true)
                     {
@@ -562,22 +563,21 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// Spreadsheet database validations.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="edition">Observation edition flag.</param>
     /// <param name="rows">Spreadsheet rows.</param>
     /// <param name="locationEntities">Location entities list.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateDatabaseAsync(int initiativeId, bool edition, List<ObservationImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateDatabaseAsync(int initiativeId, List<ObservationImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
     {
-        if (!edition)
-        {
-            // Validate observation names
-            var observationNames = rows
-                .Select(r => r.ObservationName)
-                .Distinct()
-                .ToArray();
+        var newObservationNames = rows
+            .Where(r => r.ObservationEntity == null)
+            .Select(r => r.ObservationName)
+            .Distinct()
+            .ToArray();
 
-            var existentObservations = await entityRepository.GetByInitiativeAndNamesAsync(initiativeId, observationNames, ct);
+        if (newObservationNames.Length > 0)
+        {
+            var existentObservations = await entityRepository.GetByInitiativeAndNamesAsync(initiativeId, newObservationNames, ct);
 
             if (existentObservations.Any())
             {
@@ -848,7 +848,6 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// Generate Observation entities.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="observation">Observation entity.</param>
     /// <param name="rows">Spreadsheet rows.</param>
     /// <param name="observationVersions">ObservationVersion entities.</param>
     /// <param name="observationLocations">ObservationLocation entities.</param>
@@ -857,7 +856,6 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// <returns>Observation entities.</returns>
     private static List<Observation> GenerateObservations(
         int initiativeId,
-        Observation? observation,
         List<ObservationImportRow> rows,
         List<ObservationVersion> observationVersions,
         List<ObservationLocation> observationLocations,
@@ -882,7 +880,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
 
                             observationLocation = new ObservationLocation()
                             {
-                                ObservationId = observation?.Id ?? 0,
+                                ObservationId = r.ObservationEntity?.Id ?? 0,
                                 LocationId = locationEntity?.Id ?? 0,
                                 Location = locationEntity,
                                 Locality = r.LocalityName,
