@@ -260,12 +260,6 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         }
 
         // Prepare data
-        var newObservationsRowsGrouped = fileReadResult.Rows
-            .Where(r => r.ObservationEntity == null)
-            .GroupBy(r => r.ObservationName)
-            .Select(g => g.Select(r => r))
-            .ToArray();
-
         var newObservations = new List<Observation>();
         var editedObservations = new List<ObservationVersion>();
         var now = DateTimeOffset.Now;
@@ -279,7 +273,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             var categories = modifyDatabase ? await SaveAndGetCategoriesAsync([.. group], ct) : [];
             var observationVersionEntities = GenerateObservationVersions(group.Key, [.. group], categories, now, group.Key?.LastVersion ?? 1);
 
-            if (newObservationsRowsGrouped.Contains(group))
+            if (group.Key == null)
             {
                 var observations = GenerateObservations(requestData.InitiativeId, [.. group], observationVersionEntities, observationLocations, locationEntities, now);
 
