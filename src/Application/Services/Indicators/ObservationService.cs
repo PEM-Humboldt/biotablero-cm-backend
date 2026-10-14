@@ -149,6 +149,17 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             };
         }
 
+        // Validate duplicated entities
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(id, entity.InitiativeId, entityData.Name, ct);
+
+        if (hasDuplicatedEntities)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.Duplicated),
+            };
+        }
+
         // Update entity data
         mapper.Update(entity, entityData);
 
