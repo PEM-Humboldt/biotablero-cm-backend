@@ -19,7 +19,12 @@ public class ObservationImportRow()
     public required int InitiativeId { get; set; }
 
     /// <summary>
-    /// Observation Topic identifier.
+    /// Observation name.
+    /// </summary>
+    public required string ObservationName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Indicator Topic identifier.
     /// </summary>
     public required int IndicatorTopicId { get; set; }
 

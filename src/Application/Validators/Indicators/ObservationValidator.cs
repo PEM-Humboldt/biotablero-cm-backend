@@ -22,7 +22,7 @@ public class ObservationValidator : AbstractValidator<ObservationDto>
         RuleFor(dto => dto.Name)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyProperty)
-            .MaximumLength(240)
+            .MaximumLength(500)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
     }
 }

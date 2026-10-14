@@ -13,7 +13,7 @@ public class ObservationGroupConfig : IEntityTypeConfiguration<ObservationGroup>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<ObservationGroup> builder)
     {
-        builder?.ToTable("indicator_group", "indicators");
+        builder?.ToTable("observation_group", "indicators");
 
         builder?.HasKey(e => e.Id);
 
@@ -22,7 +22,7 @@ public class ObservationGroupConfig : IEntityTypeConfiguration<ObservationGroup>
             .IsRequired();
 
         builder?.Property(e => e.ObservationVersionId)
-            .HasColumnName("indicator_version_id")
+            .HasColumnName("observation_version_id")
             .IsRequired();
 
         builder?.Property(e => e.CategoryId)

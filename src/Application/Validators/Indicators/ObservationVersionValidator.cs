@@ -20,23 +20,23 @@ public class ObservationVersionValidator : AbstractValidator<ObservationVersionD
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
         RuleFor(dto => dto.Description)
-            .MaximumLength(1000)
+            .MaximumLength(3000)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Methodology)
-            .MaximumLength(1000)
+            .MaximumLength(3000)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Interpretation)
-            .MaximumLength(1000)
+            .MaximumLength(3000)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Considerations)
-            .MaximumLength(1000)
+            .MaximumLength(3000)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
 
         RuleFor(dto => dto.Authorship)
-            .MaximumLength(1000)
+            .MaximumLength(3000)
                 .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
     }
 }

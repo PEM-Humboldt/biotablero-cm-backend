@@ -18,7 +18,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.18")
+                .HasAnnotation("ProductVersion", "10.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "postgis");
@@ -129,125 +129,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.ToTable("category", "indicators");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Indicator", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("IndicatorTypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("indicator_type_id");
-
-                    b.Property<int>("InitiativeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("initiative_id");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(240)
-                        .HasColumnType("character varying(240)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IndicatorTypeId");
-
-                    b.HasIndex("InitiativeId");
-
-                    b.ToTable("indicator", "indicators");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("integer")
-                        .HasColumnName("category_id");
-
-                    b.Property<int>("IndicatorVersionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("indicator_version_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("IndicatorVersionId", "CategoryId")
-                        .IsUnique();
-
-                    b.ToTable("indicator_group", "indicators");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorLocation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("IndicatorId")
-                        .HasColumnType("integer")
-                        .HasColumnName("indicator_id");
-
-                    b.Property<string>("Locality")
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)")
-                        .HasColumnName("locality");
-
-                    b.Property<int>("LocationId")
-                        .HasColumnType("integer")
-                        .HasColumnName("location_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
-
-                    b.HasIndex("IndicatorId", "LocationId", "Locality")
-                        .IsUnique();
-
-                    b.ToTable("indicator_location", "indicators");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorTag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("IndicatorId")
-                        .HasColumnType("integer")
-                        .HasColumnName("indicator_id");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tag_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TagId");
-
-                    b.HasIndex("IndicatorId", "TagId")
-                        .IsUnique();
-
-                    b.ToTable("indicator_tag", "indicators");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorType", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorTopic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -261,6 +143,34 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
                         .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("indicator_topic", "indicators");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(70)
+                        .HasColumnType("character varying(70)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Representation")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("representation");
 
                     b.HasKey("Id");
 
@@ -287,17 +197,17 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_end");
 
-                    b.Property<int>("IndicatorGroupId")
+                    b.Property<int>("IndicatorTypeId")
                         .HasColumnType("integer")
-                        .HasColumnName("indicator_group_id");
+                        .HasColumnName("indicator_type_id");
 
                     b.Property<float?>("LowerLimit")
                         .HasColumnType("real")
                         .HasColumnName("lower_limit");
 
-                    b.Property<int>("MeasureUnitId")
+                    b.Property<int>("ObservationGroupId")
                         .HasColumnType("integer")
-                        .HasColumnName("measure_unit_id");
+                        .HasColumnName("observation_group_id");
 
                     b.Property<float?>("UpperLimit")
                         .HasColumnType("real")
@@ -309,9 +219,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IndicatorGroupId");
+                    b.HasIndex("IndicatorTypeId");
 
-                    b.HasIndex("MeasureUnitId");
+                    b.HasIndex("ObservationGroupId");
 
                     b.ToTable("indicator_value", "indicators", t =>
                         {
@@ -323,102 +233,6 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorVersion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Authorship")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
-                        .HasColumnName("authorship");
-
-                    b.Property<string>("Considerations")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
-                        .HasColumnName("considerations");
-
-                    b.Property<DateTimeOffset>("CreationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("creation_date")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
-                        .HasColumnName("description");
-
-                    b.Property<int>("IndicatorId")
-                        .HasColumnType("integer")
-                        .HasColumnName("indicator_id");
-
-                    b.Property<string>("Interpretation")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
-                        .HasColumnName("interpretation");
-
-                    b.Property<string>("Methodology")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
-                        .HasColumnName("methodology");
-
-                    b.Property<int>("Version")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1)
-                        .HasColumnName("version");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IndicatorId", "Version")
-                        .IsUnique();
-
-                    b.ToTable("indicator_version", "indicators");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorVersionMap", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("description");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
-                        .HasColumnName("image_url");
-
-                    b.Property<int>("IndicatorVersionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("indicator_version_id");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("title");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IndicatorVersionId", "Title")
-                        .IsUnique();
-
-                    b.ToTable("indicator_version_map", "indicators");
-                });
-
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.MapLegend", b =>
                 {
                     b.Property<int>("Id")
@@ -428,9 +242,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IndicatorVersionMapId")
+                    b.Property<int>("ObservationVersionMapId")
                         .HasColumnType("integer")
-                        .HasColumnName("indicator_version_map_id");
+                        .HasColumnName("observation_version_map_id");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -440,7 +254,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IndicatorVersionMapId", "Title")
+                    b.HasIndex("ObservationVersionMapId", "Title")
                         .IsUnique();
 
                     b.ToTable("map_legend", "indicators");
@@ -479,7 +293,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.ToTable("map_legend_item", "indicators");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.MeasureUnit", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Observation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -488,23 +302,210 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("IndicatorTopicId")
+                        .HasColumnType("integer")
+                        .HasColumnName("indicator_topic_id");
+
+                    b.Property<int>("InitiativeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("initiative_id");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(70)
-                        .HasColumnType("character varying(70)")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
                         .HasColumnName("name");
-
-                    b.Property<string>("Representation")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
-                        .HasColumnName("representation");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("IndicatorTopicId");
+
+                    b.HasIndex("InitiativeId", "Name")
                         .IsUnique();
 
-                    b.ToTable("measure_unit", "indicators");
+                    b.ToTable("observation", "indicators");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer")
+                        .HasColumnName("category_id");
+
+                    b.Property<int>("ObservationVersionId")
+                        .HasColumnType("integer")
+                        .HasColumnName("observation_version_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ObservationVersionId", "CategoryId")
+                        .IsUnique();
+
+                    b.ToTable("observation_group", "indicators");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationLocation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Locality")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasColumnName("locality");
+
+                    b.Property<int>("LocationId")
+                        .HasColumnType("integer")
+                        .HasColumnName("location_id");
+
+                    b.Property<int>("ObservationId")
+                        .HasColumnType("integer")
+                        .HasColumnName("observation_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
+
+                    b.HasIndex("ObservationId", "LocationId", "Locality")
+                        .IsUnique();
+
+                    b.ToTable("observation_location", "indicators");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ObservationId")
+                        .HasColumnType("integer")
+                        .HasColumnName("observation_id");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tag_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TagId");
+
+                    b.HasIndex("ObservationId", "TagId")
+                        .IsUnique();
+
+                    b.ToTable("observation_tag", "indicators");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Authorship")
+                        .HasMaxLength(3000)
+                        .HasColumnType("character varying(3000)")
+                        .HasColumnName("authorship");
+
+                    b.Property<string>("Considerations")
+                        .HasMaxLength(3000)
+                        .HasColumnType("character varying(3000)")
+                        .HasColumnName("considerations");
+
+                    b.Property<DateTimeOffset>("CreationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("creation_date")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(3000)
+                        .HasColumnType("character varying(3000)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Interpretation")
+                        .HasMaxLength(3000)
+                        .HasColumnType("character varying(3000)")
+                        .HasColumnName("interpretation");
+
+                    b.Property<string>("Methodology")
+                        .HasMaxLength(3000)
+                        .HasColumnType("character varying(3000)")
+                        .HasColumnName("methodology");
+
+                    b.Property<int>("ObservationId")
+                        .HasColumnType("integer")
+                        .HasColumnName("observation_id");
+
+                    b.Property<int>("Version")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1)
+                        .HasColumnName("version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ObservationId", "Version")
+                        .IsUnique();
+
+                    b.ToTable("observation_version", "indicators");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersionMap", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("image_url");
+
+                    b.Property<int>("ObservationVersionId")
+                        .HasColumnType("integer")
+                        .HasColumnName("observation_version_id");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ObservationVersionId", "Title")
+                        .IsUnique();
+
+                    b.ToTable("observation_version_map", "indicators");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", b =>
@@ -526,7 +527,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(1000)")
                         .HasColumnName("baseline");
 
-                    b.Property<Point>("Coordinate")
+                    b.Property<Geometry>("Coordinate")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("geometry(Point, 4326)")
@@ -996,6 +997,12 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("level");
 
+                    b.Property<int>("LogType")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1)
+                        .HasColumnName("type");
+
                     b.Property<string>("Message")
                         .HasColumnType("text")
                         .HasColumnName("message");
@@ -1014,12 +1021,6 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("Type")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1)
-                        .HasColumnName("type");
 
                     b.Property<string>("UserName")
                         .HasColumnType("text")
@@ -1619,132 +1620,34 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Indicator", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorValue", b =>
                 {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorType", "Type")
-                        .WithMany("Indicators")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorType", "IndicatorType")
+                        .WithMany("IndicatorValues")
                         .HasForeignKey("IndicatorTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", "Initiative")
-                        .WithMany("Indicators")
-                        .HasForeignKey("InitiativeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Initiative");
-
-                    b.Navigation("Type");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorGroup", b =>
-                {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Category", "Category")
-                        .WithMany("IndicatorGroups")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorVersion", "IndicatorVersion")
-                        .WithMany("Groups")
-                        .HasForeignKey("IndicatorVersionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("IndicatorVersion");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorLocation", b =>
-                {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Indicator", "Indicator")
-                        .WithMany("IndicatorLocations")
-                        .HasForeignKey("IndicatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location", "Location")
-                        .WithMany("IndicatorLocations")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Indicator");
-
-                    b.Navigation("Location");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorTag", b =>
-                {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Indicator", "Indicator")
-                        .WithMany("IndicatorTags")
-                        .HasForeignKey("IndicatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Tags.Tag", "Tag")
-                        .WithMany("TagIndicators")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Indicator");
-
-                    b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorValue", b =>
-                {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorGroup", "Group")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationGroup", "Group")
                         .WithMany("Values")
-                        .HasForeignKey("IndicatorGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.MeasureUnit", "MeasureUnit")
-                        .WithMany("IndicatorValues")
-                        .HasForeignKey("MeasureUnitId")
+                        .HasForeignKey("ObservationGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Group");
 
-                    b.Navigation("MeasureUnit");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorVersion", b =>
-                {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Indicator", "Indicator")
-                        .WithMany("Versions")
-                        .HasForeignKey("IndicatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Indicator");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorVersionMap", b =>
-                {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorVersion", "IndicatorVersion")
-                        .WithMany("Maps")
-                        .HasForeignKey("IndicatorVersionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("IndicatorVersion");
+                    b.Navigation("IndicatorType");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.MapLegend", b =>
                 {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorVersionMap", "IndicatorVersionMap")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersionMap", "ObservationVersionMap")
                         .WithMany("Legends")
-                        .HasForeignKey("IndicatorVersionMapId")
+                        .HasForeignKey("ObservationVersionMapId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("IndicatorVersionMap");
+                    b.Navigation("ObservationVersionMap");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.MapLegendItem", b =>
@@ -1756,6 +1659,104 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("MapLegend");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Observation", b =>
+                {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorTopic", "Topic")
+                        .WithMany("Observations")
+                        .HasForeignKey("IndicatorTopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", "Initiative")
+                        .WithMany("Observations")
+                        .HasForeignKey("InitiativeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Initiative");
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationGroup", b =>
+                {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Category", "Category")
+                        .WithMany("ObservationGroups")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersion", "ObservationVersion")
+                        .WithMany("Groups")
+                        .HasForeignKey("ObservationVersionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("ObservationVersion");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationLocation", b =>
+                {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location", "Location")
+                        .WithMany("ObservationLocations")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Observation", "Observation")
+                        .WithMany("ObservationLocations")
+                        .HasForeignKey("ObservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Location");
+
+                    b.Navigation("Observation");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationTag", b =>
+                {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Observation", "Observation")
+                        .WithMany("ObservationTags")
+                        .HasForeignKey("ObservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Tags.Tag", "Tag")
+                        .WithMany("TagObservations")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Observation");
+
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersion", b =>
+                {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Observation", "Observation")
+                        .WithMany("Versions")
+                        .HasForeignKey("ObservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Observation");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersionMap", b =>
+                {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersion", "ObservationVersion")
+                        .WithMany("Maps")
+                        .HasForeignKey("ObservationVersionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ObservationVersion");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", b =>
@@ -2025,51 +2026,30 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("Children");
 
-                    b.Navigation("IndicatorLocations");
-
                     b.Navigation("InitiativeLocations");
 
                     b.Navigation("Initiatives");
 
                     b.Navigation("LocationPolygon");
+
+                    b.Navigation("ObservationLocations");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Category", b =>
                 {
                     b.Navigation("Children");
 
-                    b.Navigation("IndicatorGroups");
+                    b.Navigation("ObservationGroups");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Indicator", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorTopic", b =>
                 {
-                    b.Navigation("IndicatorLocations");
-
-                    b.Navigation("IndicatorTags");
-
-                    b.Navigation("Versions");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorGroup", b =>
-                {
-                    b.Navigation("Values");
+                    b.Navigation("Observations");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorType", b =>
                 {
-                    b.Navigation("Indicators");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorVersion", b =>
-                {
-                    b.Navigation("Groups");
-
-                    b.Navigation("Maps");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorVersionMap", b =>
-                {
-                    b.Navigation("Legends");
+                    b.Navigation("IndicatorValues");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.MapLegend", b =>
@@ -2077,15 +2057,34 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.MeasureUnit", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Observation", b =>
                 {
-                    b.Navigation("IndicatorValues");
+                    b.Navigation("ObservationLocations");
+
+                    b.Navigation("ObservationTags");
+
+                    b.Navigation("Versions");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationGroup", b =>
+                {
+                    b.Navigation("Values");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersion", b =>
+                {
+                    b.Navigation("Groups");
+
+                    b.Navigation("Maps");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersionMap", b =>
+                {
+                    b.Navigation("Legends");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", b =>
                 {
-                    b.Navigation("Indicators");
-
                     b.Navigation("InitiativeContacts");
 
                     b.Navigation("InitiativeLocations");
@@ -2099,6 +2098,8 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("JoinRequests");
 
                     b.Navigation("MonitoringEventsList");
+
+                    b.Navigation("Observations");
 
                     b.Navigation("Resources");
 
@@ -2140,9 +2141,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Tags.Tag", b =>
                 {
-                    b.Navigation("TagIndicators");
-
                     b.Navigation("TagInitiatives");
+
+                    b.Navigation("TagObservations");
 
                     b.Navigation("TagResources");
                 });

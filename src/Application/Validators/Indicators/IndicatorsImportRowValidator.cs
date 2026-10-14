@@ -20,6 +20,11 @@ public class IndicatorsImportRowValidator : AbstractValidator<ObservationImportR
             .NotNull()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
+        RuleFor(dto => dto.ObservationName)
+            .NotEmpty()
+                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)
+            .MaximumLength(500);
+
         RuleFor(dto => dto.DepartmentName)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)
