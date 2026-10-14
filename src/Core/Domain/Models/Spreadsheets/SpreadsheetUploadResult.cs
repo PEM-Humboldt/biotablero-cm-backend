@@ -23,11 +23,6 @@ public class SpreadsheetUploadResult()
     public SpreadsheetUploadDescription? Description { get; set; }
 
     /// <summary>
-    /// Process result (saved entities in database).
-    /// </summary>
-    public List<object> Result { get; set; } = [];
-
-    /// <summary>
     /// Result errors.
     /// </summary>
     public List<string> Errors { get; set; } = [];

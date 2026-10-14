@@ -285,6 +285,12 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             }
         }
 
+        result.Description = new()
+        {
+            NewObservations = [.. newObservations.Select(e => e.Name)],
+            EditedObservations = [.. editedObservations.Select(e => e.ObservationName ?? string.Empty)],
+        };
+
         // Save data
         if (modifyDatabase)
         {
@@ -298,8 +304,6 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                     .ToList();
 
                 logger.AddLog(LogType.Create, "Added observations", "{@EntityData}", observationDtos);
-
-                result.Result.AddRange(observationDtos);
             }
 
             // Update observations
@@ -311,17 +315,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                     .Select(observationVersionMapper.Map);
 
                 logger.AddLog(LogType.Create, "Added observation versions", "{@EntityData}", observationVersionDtos);
-
-                result.Result.AddRange(observationVersionDtos);
             }
-        }
-        else
-        {
-            result.Description = new()
-            {
-                NewObservations = [.. newObservations.Select(e => e.Name)],
-                EditedObservations = [.. editedObservations.Select(e => e.ObservationName ?? string.Empty)],
-            };
         }
 
         result.SuccessfulProcess = true;
