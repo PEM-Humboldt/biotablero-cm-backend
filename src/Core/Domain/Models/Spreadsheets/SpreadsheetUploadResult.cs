@@ -18,6 +18,11 @@ public class SpreadsheetUploadResult()
     public bool SuccessfulProcess { get; set; }
 
     /// <summary>
+    /// Process description.
+    /// </summary>
+    public SpreadsheetUploadDescription? Description { get; set; }
+
+    /// <summary>
     /// Process result (saved entities in database).
     /// </summary>
     public List<object> Result { get; set; } = [];

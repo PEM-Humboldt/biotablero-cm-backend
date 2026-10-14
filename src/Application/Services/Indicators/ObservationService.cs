@@ -259,36 +259,37 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             return databaseValidations;
         }
 
-        // Save data
-        if (!requestData.DoNotModifyDatabase)
+        // Prepare data
+        var newObservationsRows = fileReadResult.Rows
+            .Where(r => r.ObservationEntity == null)
+            .ToArray();
+
+        var newObservations = new List<Observation>();
+        var editedObservations = new List<ObservationVersion>();
+        var now = DateTimeOffset.Now;
+        var modifyDatabase = !requestData.DoNotModifyDatabase;
+
+        foreach (var row in fileReadResult.Rows)
         {
-            var now = DateTimeOffset.Now;
+            var observationLocations = await GetExistingObservationLocationsAsync(row.ObservationEntity, spreadsheetLocations ?? [], ct);
+            var categories = modifyDatabase ? await SaveAndGetCategoriesAsync(fileReadResult.Rows, ct) : [];
+            var observationVersionEntities = GenerateObservationVersions(row.ObservationEntity, fileReadResult.Rows, categories, now, row.ObservationEntity?.LastVersion ?? 1);
 
-            var newObservationsRows = fileReadResult.Rows
-                .Where(r => r.ObservationEntity == null)
-                .ToArray();
-
-            var newObservations = new List<Observation>();
-            var editedObservations = new List<ObservationVersion>();
-
-            foreach (var row in fileReadResult.Rows)
+            if (newObservationsRows.Contains(row))
             {
-                var observationLocations = await GetExistingObservationLocationsAsync(row.ObservationEntity, spreadsheetLocations ?? [], ct);
-                var categories = await SaveAndGetCategoriesAsync(fileReadResult.Rows, ct);
-                var observationVersionEntities = GenerateObservationVersions(row.ObservationEntity, fileReadResult.Rows, categories, now, row.ObservationEntity?.LastVersion ?? 1);
+                var observations = GenerateObservations(requestData.InitiativeId, fileReadResult.Rows, observationVersionEntities, observationLocations, locationEntities, now);
 
-                if (newObservationsRows.Contains(row))
-                {
-                    var observations = GenerateObservations(requestData.InitiativeId, fileReadResult.Rows, observationVersionEntities, observationLocations, locationEntities, now);
-
-                    newObservations.AddRange(observations);
-                }
-                else
-                {
-                    editedObservations.AddRange(observationVersionEntities);
-                }
+                newObservations.AddRange(observations);
             }
+            else
+            {
+                editedObservations.AddRange(observationVersionEntities);
+            }
+        }
 
+        // Save data
+        if (modifyDatabase)
+        {
             // Save new observations
             if (newObservations.Count > 0)
             {
@@ -315,6 +316,14 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
 
                 result.Result.AddRange(observationVersionDtos);
             }
+        }
+        else
+        {
+            result.Description = new()
+            {
+                NewObservations = [.. newObservations.Select(e => e.Name)],
+                EditedObservations = [.. editedObservations.Select(e => e.ObservationName ?? string.Empty)],
+            };
         }
 
         result.SuccessfulProcess = true;
