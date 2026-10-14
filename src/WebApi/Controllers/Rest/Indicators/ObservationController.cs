@@ -107,7 +107,6 @@ public class ObservationController(
     {
         var requestDataDto = new ObservationsImportFileDto()
         {
-            Id = requestData.Id,
             InitiativeId = requestData.InitiativeId,
             DoNotModifyDatabase = requestData.DoNotModifyDatabase,
         };

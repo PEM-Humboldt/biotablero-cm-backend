@@ -40,6 +40,7 @@ public class ObservationRepository(
     /// <inheritdoc/>
     public async Task<IEnumerable<Observation>> GetByInitiativeAndNamesAsync(int initiativeId, string[] names, CancellationToken ct = default) =>
         await dbContext.Observations
+            .Include(e => e.Versions)
             .Where(e => e.InitiativeId == initiativeId && names.Contains(e.Name))
             .ToListAsync(ct);
 
@@ -56,6 +57,12 @@ public class ObservationRepository(
             .Include(e => e.Initiative)
             .Where(e => e.Initiative!.Id == initiativeId)
             .CountAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<bool> IsDuplicatedAsync(int id, int initiativeId, string name, CancellationToken ct = default) =>
+        await dbContext.Observations
+            .Where(e => e.Id != id && e.InitiativeId == initiativeId && e.Name == name)
+            .AnyAsync(ct);
 
     /// <inheritdoc/>
     public async Task<int[]> GetVersionsAsync(int id, CancellationToken ct = default) =>
