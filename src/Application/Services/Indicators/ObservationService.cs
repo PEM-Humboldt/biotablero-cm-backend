@@ -260,24 +260,28 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         }
 
         // Prepare data
-        var newObservationsRows = fileReadResult.Rows
+        var newObservationsRowsGrouped = fileReadResult.Rows
             .Where(r => r.ObservationEntity == null)
+            .GroupBy(r => r.ObservationName)
+            .Select(g => g.Select(r => r))
             .ToArray();
 
         var newObservations = new List<Observation>();
         var editedObservations = new List<ObservationVersion>();
         var now = DateTimeOffset.Now;
         var modifyDatabase = !requestData.DoNotModifyDatabase;
+        var groupedRows = fileReadResult.Rows
+            .GroupBy(r => r.ObservationEntity);
 
-        foreach (var row in fileReadResult.Rows)
+        foreach (var group in groupedRows)
         {
-            var observationLocations = await GetExistingObservationLocationsAsync(row.ObservationEntity, spreadsheetLocations ?? [], ct);
-            var categories = modifyDatabase ? await SaveAndGetCategoriesAsync(fileReadResult.Rows, ct) : [];
-            var observationVersionEntities = GenerateObservationVersions(row.ObservationEntity, fileReadResult.Rows, categories, now, row.ObservationEntity?.LastVersion ?? 1);
+            var observationLocations = await GetExistingObservationLocationsAsync(group.Key, spreadsheetLocations ?? [], ct);
+            var categories = modifyDatabase ? await SaveAndGetCategoriesAsync([.. group], ct) : [];
+            var observationVersionEntities = GenerateObservationVersions(group.Key, [.. group], categories, now, group.Key?.LastVersion ?? 1);
 
-            if (newObservationsRows.Contains(row))
+            if (newObservationsRowsGrouped.Contains(group))
             {
-                var observations = GenerateObservations(requestData.InitiativeId, fileReadResult.Rows, observationVersionEntities, observationLocations, locationEntities, now);
+                var observations = GenerateObservations(requestData.InitiativeId, [.. group], observationVersionEntities, observationLocations, locationEntities, now);
 
                 newObservations.AddRange(observations);
             }
