@@ -33,7 +33,7 @@ public interface IObservationRepository : IRepository<Observation, int>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="names">Names list.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>selected entities.</returns>
+    /// <returns>Selected entities.</returns>
     Task<IEnumerable<Observation>> GetByInitiativeAndNamesAsync(int initiativeId, string[] names, CancellationToken ct = default);
 
     /// <summary>
