@@ -389,7 +389,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             row.UpperGroupName = row.UpperGroupName?.Trim()?.CapitalizeFirstOnly()!;
             row.GroupName = row.GroupName?.Trim()?.CapitalizeFirstOnly();
             row.LocalityName = row.LocalityName?.Trim()?.CapitalizeFirstOnly()!;
-            row.CentralActorName = row.LocalityName?.Trim()?.CapitalizeFirstOnly()!;
+            row.CentralActorName = row.CentralActorName?.Trim()?.CapitalizeFirstOnly()!;
 
             if (row.IndicatorTopicId == (int)IndicatorTopics.SpeciesDiversity)
             {
