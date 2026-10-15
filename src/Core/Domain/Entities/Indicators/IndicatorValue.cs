@@ -20,6 +20,11 @@ public class IndicatorValue : BaseEntity<int>, IAggregateRoot
     public int IndicatorTypeId { get; set; }
 
     /// <summary>
+    /// Central Actor identifier.
+    /// </summary>
+    public int? CentralActorId { get; set; }
+
+    /// <summary>
     /// Date.
     /// </summary>
     public DateTime Date { get; set; }
@@ -53,4 +58,9 @@ public class IndicatorValue : BaseEntity<int>, IAggregateRoot
     /// Indicator Type relationship.
     /// </summary>
     public IndicatorType? IndicatorType { get; set; }
+
+    /// <summary>
+    /// Central Actor relationship.
+    /// </summary>
+    public CentralActor? CentralActor { get; set; }
 }
