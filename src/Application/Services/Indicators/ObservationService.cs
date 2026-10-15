@@ -384,6 +384,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             row.UpperGroupName = row.UpperGroupName?.Trim()?.CapitalizeFirstOnly()!;
             row.GroupName = row.GroupName?.Trim()?.CapitalizeFirstOnly();
             row.LocalityName = row.LocalityName?.Trim()?.CapitalizeFirstOnly()!;
+            row.CentralActorName = row.LocalityName?.Trim()?.CapitalizeFirstOnly()!;
 
             if (row.IndicatorTopicId == (int)IndicatorTopics.SpeciesDiversity)
             {
@@ -540,6 +541,30 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.FinalDateNotRequired),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+
+            // Check observations with central actors
+            if (IndicatorConstants.ObservationsWithCentralActors.Contains((IndicatorTopics)row.IndicatorTopicId))
+            {
+                if (string.IsNullOrEmpty(row.CentralActorName))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.CentralActorRequired),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(row.CentralActorName))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.CentralActorNotRequired),
                         Message = $"Errors in row {row.RowNumber}",
                     };
                 }

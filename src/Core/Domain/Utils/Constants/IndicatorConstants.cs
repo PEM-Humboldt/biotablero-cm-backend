@@ -90,4 +90,13 @@ public static class IndicatorConstants
         IndicatorTopics.RelativeUseByBiologicalGroup,
         IndicatorTopics.CollectiveActionParticipation,
     ];
+
+    /// <summary>
+    /// Observations with central actors.
+    /// </summary>
+    public static readonly IndicatorTopics[] ObservationsWithCentralActors =
+    [
+        IndicatorTopics.CentralRelationalIntensity,
+        IndicatorTopics.CollectiveActionParticipation,
+    ];
 }
