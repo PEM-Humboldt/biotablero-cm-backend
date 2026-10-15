@@ -76,6 +76,11 @@ public class ObservationImportRow()
     public string? FinalMonth { get; set; }
 
     /// <summary>
+    /// Central actor name.
+    /// </summary>
+    public string? CentralActorName { get; set; }
+
+    /// <summary>
     /// Upper group name.
     /// </summary>
     public required string UpperGroupName { get; set; } = string.Empty;
