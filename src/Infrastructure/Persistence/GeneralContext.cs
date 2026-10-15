@@ -259,6 +259,11 @@ public sealed class GeneralContext : DbContext
     /// </summary>
     public DbSet<IndicatorType> IndicatorTypes { get; set; }
 
+    /// <summary>
+    /// Central Actor DbSet.
+    /// </summary>
+    public DbSet<CentralActor> CentralActors { get; set; }
+
     #endregion
 
     #region Reports entities
