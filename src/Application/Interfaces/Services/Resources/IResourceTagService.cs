@@ -16,16 +16,18 @@ public interface IResourceTagService
     /// <param name="userName">User name.</param>
     /// <param name="resourceId">Resource identifier.</param>
     /// <param name="tagId">Tag identifier.</param>
+    /// <param name="userIsAlly">Ally user role flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> AddAsync(string? userName, int resourceId, int tagId, CancellationToken ct = default);
+    Task<CustomWebResponse> AddAsync(string? userName, int resourceId, int tagId, bool userIsAlly, CancellationToken ct = default);
 
     /// <summary>
     /// Delete element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
     /// <param name="userName">User name.</param>
+    /// <param name="userIsAlly">Ally user role flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default);
+    Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAlly, CancellationToken ct = default);
 }
