@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
 
 using Microsoft.EntityFrameworkCore;
@@ -38,12 +39,21 @@ public class ResourceRepository(
             .Where(e => !e.IsDraft || e.Initiative!.InitiativeUsers!.Any(e => e.UserName == userName));
 
     /// <inheritdoc/>
-    public async Task<bool> AuthorizedEntityModifyAsync(int id, string? userName, CancellationToken ct = default) =>
-        await dbContext.Resources
+    public async Task<bool> AuthorizedEntityModifyAsync(int id, string? userName, bool userIsAlly, CancellationToken ct = default)
+    {
+        if (userIsAlly)
+        {
+            return await dbContext.Resources
+                .Where(e => e.Id == id && e.InitiativeId == InitiativeConstants.AllyRoleDefaultInitiative)
+                .AnyAsync(ct);
+        }
+
+        return await dbContext.Resources
             .Include(e => e.Initiative)
                 .ThenInclude(e => e!.InitiativeUsers)
             .Where(e => e.Id == id && e.Initiative!.InitiativeUsers!.Any(e => e.UserName == userName))
             .AnyAsync(ct);
+    }
 
     /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(string name, CancellationToken ct = default) =>
