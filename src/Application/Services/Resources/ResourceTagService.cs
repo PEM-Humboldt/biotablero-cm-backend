@@ -62,12 +62,12 @@ public class ResourceTagService : IResourceTagService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(string? userName, int resourceId, int tagId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string? userName, int resourceId, int tagId, bool userIsAlly, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrEmpty(userName);
 
         // Validate user permissions
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, userIsAlly, ct);
 
         if (!authorizedUserAction)
         {
@@ -133,7 +133,7 @@ public class ResourceTagService : IResourceTagService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAlly, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrEmpty(userName);
 
@@ -141,7 +141,7 @@ public class ResourceTagService : IResourceTagService
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
 
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, userIsAlly, ct);
 
         if (!authorizedUserAction)
         {
