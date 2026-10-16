@@ -159,7 +159,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     public async Task<CustomWebResponse> AddAsync(ResourceDto entityData, bool userIsAlly, CancellationToken ct = default)
     {
         // Validate user permissions
-        var authorizedUserAction = (userIsAlly && entityData.InitiativeId == null) || await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId ?? 0, entityData.AuthorUserName, null, ct);
+        var authorizedUserAction = (userIsAlly && entityData.InitiativeId == InitiativeConstants.AllyRoleDefaultInitiative) || await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId ?? 0, entityData.AuthorUserName, null, ct);
 
         if (!authorizedUserAction)
         {
