@@ -582,6 +582,38 @@
                     "Otra identidad de g\u00e9nero"
                 ]
             }
+        },
+        {
+            "username": "ally@example.com",
+            "enabled": true,
+            "emailVerified": true,
+            "firstName": "Ally",
+            "lastName": "Example",
+            "email": "ally@example.com",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "pass"
+                }
+            ],
+            "realmRoles": [
+                "Ally",
+                "default-roles"
+            ],
+            "attributes": {
+                "picture": [
+                    "https://ui-avatars.com/api/?name=Ally+Example&background=random"
+                ],
+                "organizacion": [
+                    "Persona independiente"
+                ],
+                "autorreconocimiento": [
+                    "Prefiero no responder"
+                ],
+                "genero": [
+                    "Masculino"
+                ]
+            }
         }
     ],
     "scopeMappings": [
