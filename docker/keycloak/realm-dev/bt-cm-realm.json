@@ -7,7 +7,6 @@
     "roles": {
         "realm": [
             {
-                "id": "db3dcc75-81fd-41e4-aa4c-a04697accb4f",
                 "name": "User",
                 "description": "User role",
                 "composite": false,
@@ -16,7 +15,6 @@
                 "attributes": {}
             },
             {
-                "id": "e981f565-30de-4b6c-8d40-7b8563021b99",
                 "name": "Admin",
                 "description": "Admin role",
                 "composite": false,
@@ -25,7 +23,14 @@
                 "attributes": {}
             },
             {
-                "id": "c10371a3-22f0-4ff6-87d0-da336ff63d23",
+                "name": "Ally",
+                "description": "Ally role",
+                "composite": false,
+                "clientRole": false,
+                "containerId": "234d0115-645b-4854-b84f-f01ba3bbc1c1",
+                "attributes": {}
+            },
+            {
                 "name": "offline_access",
                 "description": "${role_offline-access}",
                 "composite": false,
@@ -34,7 +39,6 @@
                 "attributes": {}
             },
             {
-                "id": "4cf468dc-5646-4c47-b63d-5a50f150e2d0",
                 "name": "default-roles",
                 "composite": true,
                 "composites": {
@@ -55,7 +59,6 @@
                 "attributes": {}
             },
             {
-                "id": "96b86017-ee67-4af2-881d-4b92f957e185",
                 "name": "uma_authorization",
                 "description": "${role_uma_authorization}",
                 "composite": false,
