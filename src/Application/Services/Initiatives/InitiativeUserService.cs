@@ -380,6 +380,7 @@ public class InitiativeUserService : ServiceRead<InitiativeUser, InitiativeUserD
             InitiativeUserLevelEnum.Leader => "líder",
             InitiativeUserLevelEnum.Reader => "lector",
             InitiativeUserLevelEnum.Collaborator => "colaborador",
+            InitiativeUserLevelEnum.Ally => "aliado",
             _ => "N/A",
         };
 
