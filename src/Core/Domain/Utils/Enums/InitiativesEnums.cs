@@ -24,11 +24,6 @@ public static class InitiativesEnums
         /// User reader level.
         /// </summary>
         Reader,
-
-        /// <summary>
-        /// User ally level.
-        /// </summary>
-        Ally,
     }
 
     /// <summary>
