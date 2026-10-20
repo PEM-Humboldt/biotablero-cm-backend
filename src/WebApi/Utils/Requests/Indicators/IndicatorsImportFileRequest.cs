@@ -8,11 +8,6 @@ using Microsoft.AspNetCore.Http;
 public class IndicatorsImportFileRequest
 {
     /// <summary>
-    /// Item identifier.
-    /// </summary>
-    public int? Id { get; set; }
-
-    /// <summary>
     /// Initiative identifier.
     /// </summary>
     public required int InitiativeId { get; set; }

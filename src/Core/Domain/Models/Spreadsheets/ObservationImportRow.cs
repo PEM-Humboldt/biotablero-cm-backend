@@ -2,6 +2,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 
+using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
+
 /// <summary>
 /// Observation Import spreadsheet row.
 /// </summary>
@@ -17,6 +19,11 @@ public class ObservationImportRow()
     /// Initiative identifier.
     /// </summary>
     public required int InitiativeId { get; set; }
+
+    /// <summary>
+    /// Observation entity.
+    /// </summary>
+    public Observation? ObservationEntity { get; set; }
 
     /// <summary>
     /// Observation name.

@@ -18,9 +18,9 @@ public class SpreadsheetUploadResult()
     public bool SuccessfulProcess { get; set; }
 
     /// <summary>
-    /// Process result (saved entities in database).
+    /// Process description.
     /// </summary>
-    public object? Result { get; set; }
+    public SpreadsheetUploadDescription? Description { get; set; }
 
     /// <summary>
     /// Result errors.

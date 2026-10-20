@@ -34,6 +34,8 @@ public class ObservationConfig : IEntityTypeConfiguration<Observation>
             .HasColumnName("indicator_topic_id")
             .IsRequired();
 
+        builder?.Ignore(i => i.LastVersion);
+
         builder?.HasOne(e => e.Initiative)
             .WithMany(p => p.Observations)
             .HasForeignKey(e => e.InitiativeId);

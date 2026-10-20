@@ -8,11 +8,6 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 public class ObservationsImportFileDto : IDto
 {
     /// <summary>
-    /// Item identifier.
-    /// </summary>
-    public int? Id { get; set; }
-
-    /// <summary>
     /// Initiative identifier.
     /// </summary>
     public required int InitiativeId { get; set; }

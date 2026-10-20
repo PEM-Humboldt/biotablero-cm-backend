@@ -45,6 +45,16 @@ public interface IObservationRepository : IRepository<Observation, int>
     Task<int> CountAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
+    /// Check if element is duplicated.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="name">Entity name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    Task<bool> IsDuplicatedAsync(int id, int initiativeId, string name, CancellationToken ct = default);
+
+    /// <summary>
     /// Get observation versions.
     /// </summary>
     /// <param name="id">Observation identifier.</param>
