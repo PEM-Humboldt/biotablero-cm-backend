@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 using IAVH.BioTablero.CM.WebApi.Utils;
@@ -39,7 +40,7 @@ public class ResourceTagController(
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Post(int resourceId, int tagId, CancellationToken ct)
     {
-        var response = await entityService.AddAsync(HttpContext.GetUserName(), resourceId, tagId, ct);
+        var response = await entityService.AddAsync(HttpContext.GetUserName(), resourceId, tagId, HttpContext.UserHasRole(IamConstants.RoleAlly), ct);
         return webTools.CustomResponse(response);
     }
 
@@ -53,7 +54,7 @@ public class ResourceTagController(
     [Authorize]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), ct);
+        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), HttpContext.UserHasRole(IamConstants.RoleAlly), ct);
         return webTools.CustomResponse(response);
     }
 }
