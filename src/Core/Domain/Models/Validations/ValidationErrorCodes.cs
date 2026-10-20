@@ -521,6 +521,16 @@ public static class ValidationErrorCodes
         /// Duplicated elements.
         /// </summary>
         public const string DuplicatedElements = "IND_017";
+
+        /// <summary>
+        /// Central actor required.
+        /// </summary>
+        public const string CentralActorRequired = "IND_018";
+
+        /// <summary>
+        /// Central actor not required.
+        /// </summary>
+        public const string CentralActorNotRequired = "IND_019";
     }
 
     /// <summary>

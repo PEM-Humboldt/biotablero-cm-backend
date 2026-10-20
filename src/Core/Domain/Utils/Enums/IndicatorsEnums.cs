@@ -180,34 +180,39 @@ public static class IndicatorsEnums
         FinalMonth = 12,
 
         /// <summary>
+        /// Central actor name.
+        /// </summary>
+        CentralActorName = 13,
+
+        /// <summary>
         /// Upper group name.
         /// </summary>
-        UpperGroupName = 13,
+        UpperGroupName = 14,
 
         /// <summary>
         /// Group name.
         /// </summary>
-        GroupName = 14,
+        GroupName = 15,
 
         /// <summary>
         /// Group description.
         /// </summary>
-        GroupDescription = 15,
+        GroupDescription = 16,
 
         /// <summary>
         /// Indicator value.
         /// </summary>
-        Value = 16,
+        Value = 17,
 
         /// <summary>
         /// Value upper limit.
         /// </summary>
-        LowerLimit = 17,
+        LowerLimit = 18,
 
         /// <summary>
         /// Value lower limit.
         /// </summary>
-        UpperLimit = 18,
+        UpperLimit = 19,
     }
 
     #endregion

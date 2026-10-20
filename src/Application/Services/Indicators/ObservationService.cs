@@ -52,6 +52,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     private readonly IObservationVersionRepository observationVersionRepository;
     private readonly ICategoryRepository categoryRepository;
     private readonly IObservationLocationRepository observationLocationRepository;
+    private readonly ICentralActorRepository centralActorRepository;
     private readonly IValidator<ObservationImportRow> observationImportRowValidator;
     private readonly IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto> observationVersionMapper;
 
@@ -69,6 +70,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// <param name="observationVersionRepository">Observation version repository.</param>
     /// <param name="categoryRepository">Observation Category repository.</param>
     /// <param name="observationLocationRepository">Observation Location repository.</param>
+    /// <param name="centralActorRepository">Central actor repository.</param>
     /// <param name="observationImportRowValidator">Observations spreadsheet row validator.</param>
     /// <param name="observationVersionMapper">Observation version mapper.</param>
     public ObservationService(
@@ -83,6 +85,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         IObservationVersionRepository observationVersionRepository,
         ICategoryRepository categoryRepository,
         IObservationLocationRepository observationLocationRepository,
+        ICentralActorRepository centralActorRepository,
         IValidator<ObservationImportRow> observationImportRowValidator,
         IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto> observationVersionMapper)
     : base(entityRepository, mapper, errorTranslator)
@@ -97,6 +100,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         this.observationVersionRepository = observationVersionRepository;
         this.categoryRepository = categoryRepository;
         this.observationLocationRepository = observationLocationRepository;
+        this.centralActorRepository = centralActorRepository;
         this.observationImportRowValidator = observationImportRowValidator;
         this.observationVersionMapper = observationVersionMapper;
     }
@@ -282,7 +286,8 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         {
             var observationLocations = await GetExistingObservationLocationsAsync(group.Key, spreadsheetLocations ?? [], ct);
             var categories = modifyDatabase ? await SaveAndGetCategoriesAsync([.. group], ct) : [];
-            var observationVersionEntities = GenerateObservationVersions(group.Key, [.. group], categories, now, group.Key?.LastVersion ?? 1);
+            var centralActors = modifyDatabase ? await SaveAndGetCentralActorsAsync([.. group], ct) : [];
+            var observationVersionEntities = GenerateObservationVersions(group.Key, [.. group], categories, centralActors, now, group.Key?.LastVersion ?? 1);
 
             if (group.Key == null)
             {
@@ -384,6 +389,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
             row.UpperGroupName = row.UpperGroupName?.Trim()?.CapitalizeFirstOnly()!;
             row.GroupName = row.GroupName?.Trim()?.CapitalizeFirstOnly();
             row.LocalityName = row.LocalityName?.Trim()?.CapitalizeFirstOnly()!;
+            row.CentralActorName = row.CentralActorName?.Trim()?.CapitalizeFirstOnly()!;
 
             if (row.IndicatorTopicId == (int)IndicatorTopics.SpeciesDiversity)
             {
@@ -540,6 +546,30 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.FinalDateNotRequired),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+
+            // Check observations with central actors
+            if (IndicatorConstants.ObservationsWithCentralActors.Contains((IndicatorTopics)row.IndicatorTopicId))
+            {
+                if (string.IsNullOrEmpty(row.CentralActorName))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.CentralActorRequired),
+                        Message = $"Errors in row {row.RowNumber}",
+                    };
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(row.CentralActorName))
+                {
+                    return new(true)
+                    {
+                        ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.CentralActorNotRequired),
                         Message = $"Errors in row {row.RowNumber}",
                     };
                 }
@@ -801,11 +831,53 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     }
 
     /// <summary>
+    /// Save and get central actors.
+    /// </summary>
+    /// <param name="rows">Spreadsheet rows data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated central actors.</returns>
+    private async Task<List<CentralActor>> SaveAndGetCentralActorsAsync(List<ObservationImportRow> rows, CancellationToken ct = default)
+    {
+        // Get central actors from spreadsheet
+        var spreadsheetCentralActors = rows
+            .Where(r => r.CentralActorName != null)
+            .Select(r => r.CentralActorName!)
+            .Distinct()
+            .ToArray();
+
+        // Get central actors from database
+        var databaseCentralActors = await centralActorRepository.GetByNamesAsync(spreadsheetCentralActors, ct);
+
+        // Build new central actors list
+        var newCentralActors = new List<CentralActor>();
+
+        foreach (var centralActorName in spreadsheetCentralActors)
+        {
+            var entityExists = databaseCentralActors.Any(e => centralActorName == e.Name);
+
+            if (!entityExists && !string.IsNullOrEmpty(centralActorName))
+            {
+                newCentralActors.Add(new()
+                {
+                    Name = centralActorName,
+                });
+            }
+        }
+
+        newCentralActors = [.. newCentralActors.Distinct()];
+
+        await centralActorRepository.AddRangeAsync(newCentralActors, ct);
+
+        return [.. await centralActorRepository.GetByNamesAsync(spreadsheetCentralActors, ct)];
+    }
+
+    /// <summary>
     /// Generate ObservationVersion entities.
     /// </summary>
     /// <param name="observation">Observation entity.</param>
     /// <param name="rows">Spreadsheet rows.</param>
     /// <param name="categories">Categories entities.</param>
+    /// <param name="centralActors">Central actors entities.</param>
     /// <param name="now">Current date and time.</param>
     /// <param name="observationLastVersion">Last observation version.</param>
     /// <returns>ObservationVersion entities.</returns>
@@ -813,6 +885,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         Observation? observation,
         List<ObservationImportRow> rows,
         List<GroupDataHelper> categories,
+        List<CentralActor> centralActors,
         DateTimeOffset now,
         int observationLastVersion) =>
         [.. rows
@@ -842,9 +915,13 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                             CategoryId = categoryId,
                             Values = [.. g2.Select(g2r =>
                             {
+                                var centralActorId = centralActors
+                                    .FirstOrDefault(i => i.Name == g2r.CentralActorName)?.Id;
+
                                 return new IndicatorValue()
                                 {
                                     IndicatorTypeId = g2r.IndicatorTypeId,
+                                    CentralActorId = centralActorId,
                                     Date = CastDate(g2r.Year, g2r.Month) ?? default,
                                     DateEnd = CastDate(g2r.FinalYear!, g2r.FinalMonth!),
                                     Value = g2r.Value,

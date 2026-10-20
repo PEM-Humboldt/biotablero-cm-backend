@@ -441,6 +441,14 @@
     <value>Duplicated elements</value>
     <comment/>
   </data>
+  <data name="IND_018" xml:space="preserve">
+    <value>Central actor required</value>
+    <comment/>
+  </data>
+  <data name="IND_019" xml:space="preserve">
+    <value>Central actor not required</value>
+    <comment/>
+  </data>
   <data name="MEV_001" xml:space="preserve">
     <value>Duplicate monitoring events</value>
     <comment/>

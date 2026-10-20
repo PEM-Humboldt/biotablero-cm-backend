@@ -129,6 +129,29 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.ToTable("category", "indicators");
                 });
 
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.CentralActor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(70)
+                        .HasColumnType("character varying(70)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("central_actor", "indicators");
+                });
+
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorTopic", b =>
                 {
                     b.Property<int>("Id")
@@ -189,6 +212,10 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CentralActorId")
+                        .HasColumnType("integer")
+                        .HasColumnName("central_actor_id");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("date");
@@ -218,6 +245,8 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnName("value");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CentralActorId");
 
                     b.HasIndex("IndicatorTypeId");
 
@@ -1622,6 +1651,10 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorValue", b =>
                 {
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.CentralActor", "CentralActor")
+                        .WithMany("IndicatorValues")
+                        .HasForeignKey("CentralActorId");
+
                     b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorType", "IndicatorType")
                         .WithMany("IndicatorValues")
                         .HasForeignKey("IndicatorTypeId")
@@ -1633,6 +1666,8 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasForeignKey("ObservationGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CentralActor");
 
                     b.Navigation("Group");
 
@@ -2040,6 +2075,11 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("Children");
 
                     b.Navigation("ObservationGroups");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.CentralActor", b =>
+                {
+                    b.Navigation("IndicatorValues");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorTopic", b =>

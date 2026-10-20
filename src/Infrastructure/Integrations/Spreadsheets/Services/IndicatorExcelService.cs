@@ -53,6 +53,7 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
                 ValidateCellValue<string>(row, XlsxColumnIndex.Month, result.Errors, out var month);
                 ValidateCellValue<string>(row, XlsxColumnIndex.FinalYear, result.Errors, out var finalYear, true);
                 ValidateCellValue<string>(row, XlsxColumnIndex.FinalMonth, result.Errors, out var finalMonth, true);
+                ValidateCellValue<string>(row, XlsxColumnIndex.CentralActorName, result.Errors, out var centralActorName, true);
                 ValidateCellValue<string>(row, XlsxColumnIndex.UpperGroupName, result.Errors, out var upperGroupName);
                 ValidateCellValue<string>(row, XlsxColumnIndex.GroupName, result.Errors, out var groupName, true);
                 ValidateCellValue<string>(row, XlsxColumnIndex.GroupDescription, result.Errors, out var groupDescription, true);
@@ -73,6 +74,7 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
                     Month = month!,
                     FinalYear = finalYear,
                     FinalMonth = finalMonth,
+                    CentralActorName = centralActorName,
                     UpperGroupName = upperGroupName!,
                     GroupName = groupName!,
                     GroupDescription = groupDescription!,
