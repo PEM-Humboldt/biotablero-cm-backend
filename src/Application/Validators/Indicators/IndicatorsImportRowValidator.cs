@@ -74,6 +74,10 @@ public class IndicatorsImportRowValidator : AbstractValidator<ObservationImportR
                     .WithErrorCode(ValidationErrorCodes.General.InvalidPropertyValue);
         });
 
+        RuleFor(dto => dto.CentralActorName)
+            .MaximumLength(70)
+                .WithErrorCode(ValidationErrorCodes.General.InvalidTextLength);
+
         RuleFor(dto => dto.UpperGroupName)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)

@@ -45,4 +45,9 @@ public class IndicatorValueDto() : IDto
     /// Indicator Type relationship.
     /// </summary>
     public IndicatorTypeDto? IndicatorType { get; set; }
+
+    /// <summary>
+    /// Central Actor relationship.
+    /// </summary>
+    public CentralActorDto? CentralActor { get; set; }
 }

@@ -29,6 +29,9 @@ public class IndicatorValueConfig : IEntityTypeConfiguration<IndicatorValue>
             .HasColumnName("indicator_type_id")
             .IsRequired();
 
+        builder?.Property(e => e.CentralActorId)
+            .HasColumnName("central_actor_id");
+
         builder?.Property(e => e.Date)
             .HasColumnName("date")
             .HasColumnType("timestamp without time zone")
@@ -55,6 +58,10 @@ public class IndicatorValueConfig : IEntityTypeConfiguration<IndicatorValue>
         builder?.HasOne(e => e.IndicatorType)
             .WithMany(p => p.IndicatorValues)
             .HasForeignKey(e => e.IndicatorTypeId);
+
+        builder?.HasOne(e => e.CentralActor)
+            .WithMany(p => p.IndicatorValues)
+            .HasForeignKey(e => e.CentralActorId);
 
         builder?
             .ToTable(t =>

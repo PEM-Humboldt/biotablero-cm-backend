@@ -93,6 +93,7 @@ public static class ConfigMappings
         services.AddSingleton<IMapperRead<IndicatorValue, IndicatorValueDto>, IndicatorValueMappings>();
         services.AddSingleton<IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto>, ObservationVersionMappings>();
         services.AddSingleton<IMapperRead<IndicatorType, IndicatorTypeDto>, IndicatorTypeMappings>();
+        services.AddSingleton<IMapperRead<CentralActor, CentralActorDto>, CentralActorMappings>();
 
         // Reports
         services.AddSingleton<IMapperCreateAndRead<ReportData, ReportDataDto>, ReportDataMappings>();

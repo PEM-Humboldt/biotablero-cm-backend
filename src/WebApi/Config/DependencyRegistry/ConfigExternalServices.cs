@@ -103,6 +103,7 @@ public static class ConfigExternalServices
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IObservationLocationRepository, ObservationLocationRepository>();
         services.AddScoped<IObservationTagRepository, ObservationTagRepository>();
+        services.AddScoped<ICentralActorRepository, CentralActorRepository>();
 
         //// Reports
         services.AddScoped<IGeneralStatsRepository, GeneralStatsRepository>();
