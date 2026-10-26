@@ -80,12 +80,12 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(string? userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string? userName, ResourceFileDto entityData, IInputFile formFile, bool userIsAlly, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrEmpty(userName);
 
         // Validate user permissions
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entityData.ResourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(entityData.ResourceId, userName, userIsAlly, ct);
 
         if (!authorizedUserAction)
         {
@@ -171,7 +171,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceFileDto entityData, IInputFile formFile, bool userIsAlly, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrEmpty(userName);
 
@@ -179,7 +179,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
 
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, userIsAlly, ct);
 
         if (!authorizedUserAction)
         {
@@ -266,7 +266,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAlly, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrEmpty(userName);
 
@@ -274,7 +274,7 @@ public class ResourceFileService : ServiceRead<ResourceFile, ResourceFileDto, in
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
 
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, userIsAlly, ct);
 
         if (!authorizedUserAction)
         {

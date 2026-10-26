@@ -20,6 +20,7 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
@@ -88,14 +89,14 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, bool userIsAlly, CancellationToken ct = default)
     {
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
         if (entity != null)
         {
-            var userBelongsToInitiative = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+            var userBelongsToInitiative = await entityRepository.AuthorizedEntityModifyAsync(id, userName, userIsAlly, ct);
 
             if (!userBelongsToInitiative && entity.IsDraft)
             {
@@ -155,10 +156,10 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(ResourceDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(ResourceDto entityData, bool userIsAlly, CancellationToken ct = default)
     {
         // Validate user permissions
-        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId ?? 0, entityData.AuthorUserName, null, ct);
+        var authorizedUserAction = (userIsAlly && entityData.InitiativeId == InitiativeConstants.AllyRoleDefaultInitiative) || await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId ?? 0, entityData.AuthorUserName, null, ct);
 
         if (!authorizedUserAction)
         {
@@ -180,6 +181,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate initiative
+        entityData.InitiativeId = userIsAlly ? InitiativeConstants.AllyRoleDefaultInitiative : entityData.InitiativeId;
         var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId ?? 0, ct);
 
         if (!initiativeExists)
@@ -237,12 +239,12 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceDto entityData, bool userIsAlly, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrEmpty(userName);
 
         // Validate user permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, userIsAlly, ct);
 
         if (!authorizedUserAction)
         {
@@ -365,12 +367,12 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAlly, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrEmpty(userName);
 
         // Validate user permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, userIsAlly, ct);
 
         if (!authorizedUserAction)
         {
