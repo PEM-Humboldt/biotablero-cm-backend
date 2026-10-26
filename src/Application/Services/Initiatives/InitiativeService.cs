@@ -157,6 +157,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     {
         var query = entityRepository.GetQueryable();
         query = entityRepository.IncludeOdataEntities(query);
+        query = query.Where(e => e.Id != InitiativeConstants.AllyRoleDefaultInitiative);
 
         return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }

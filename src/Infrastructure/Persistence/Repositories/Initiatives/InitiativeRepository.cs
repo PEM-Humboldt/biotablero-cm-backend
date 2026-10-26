@@ -102,7 +102,7 @@ public class InitiativeRepository(
             .Include(e => e.InitiativeLocations!)
                 .ThenInclude(e => e.Location)
                     .ThenInclude(e => e!.Parent)
-            .Where(i => i.Enabled && i.Coordinate != null);
+            .Where(e => e.Enabled && e.Id != InitiativeConstants.AllyRoleDefaultInitiative && e.Coordinate != null);
 
         // Discard filter for default nation identifier
         if (locationId.HasValue && locationId == GeoConstants.DefaultNationId)
@@ -138,7 +138,7 @@ public class InitiativeRepository(
     /// <inheritdoc/>
     public async Task<IEnumerable<Initiative>> GetLastEntitiesAsync(int count, CancellationToken ct = default) =>
         await dbContext.Initiatives
-            .Where(e => e.Enabled)
+            .Where(e => e.Enabled && e.Id != InitiativeConstants.AllyRoleDefaultInitiative)
             .OrderByDescending(e => e.CreationDate)
             .Take(count)
             .ToListAsync(ct);
