@@ -31,7 +31,7 @@ services:
       - bt-search-network
 
   keycloak:
-    image: keycloak/keycloak:26.3
+    image: quay.io/keycloak/keycloak:26.8
     container_name: bt-cm-auth
     environment:
       KC_DB: postgres
