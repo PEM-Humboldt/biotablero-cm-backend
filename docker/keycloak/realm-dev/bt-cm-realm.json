@@ -614,6 +614,27 @@
                     "Masculino"
                 ]
             }
+        },
+        {
+            "username": "geb",
+            "enabled": true,
+            "emailVerified": true,
+            "firstName": "Grupo Energía Bogotá",
+            "email": "admin@geb.com.co",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "pass"
+                }
+            ],
+            "realmRoles": [
+                "default-roles"
+            ],
+            "attributes": {
+                "picture": [
+                    "https://ui-avatars.com/api/?name=Grupo+Energía+Bogotá&background=random"
+                ]
+            }
         }
     ],
     "scopeMappings": [
