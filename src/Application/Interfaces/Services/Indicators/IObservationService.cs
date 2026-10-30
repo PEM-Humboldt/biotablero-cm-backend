@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 /// <summary>
 /// Observation service interface.
 /// </summary>
-public interface IObservationService : IRead<Topic, int>, IUpdate<ObservationDto, int>
+public interface IObservationService : IRead<Topic, int>, IUpdate<TopicDto, int>
 {
     /// <summary>
     /// Get entities by initiative.
@@ -30,5 +30,5 @@ public interface IObservationService : IRead<Topic, int>, IUpdate<ObservationDto
     /// <param name="formFile">File data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> ImportObservationsAsync(string? userName, ObservationsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default);
+    Task<CustomWebResponse> ImportObservationsAsync(string? userName, TopicsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default);
 }

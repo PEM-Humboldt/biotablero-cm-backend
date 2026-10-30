@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Observation Version dto.
+/// Topic Version dto.
 /// </summary>
-public class ObservationVersionDto : IDto
+public class TopicVersionDto : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -16,9 +16,9 @@ public class ObservationVersionDto : IDto
     public int? Id { get; set; }
 
     /// <summary>
-    /// Observation identifier.
+    /// Topic identifier.
     /// </summary>
-    public int? ObservationId { get; set; }
+    public int? TopicId { get; set; }
 
     /// <summary>
     /// Creation date.
@@ -31,32 +31,32 @@ public class ObservationVersionDto : IDto
     public int? Version { get; set; }
 
     /// <summary>
-    /// Observation Version description.
+    /// Topic Version description.
     /// </summary>
     public string? Description { get; set; }
 
     /// <summary>
-    /// Observation Version methodology.
+    /// Topic Version methodology.
     /// </summary>
     public string? Methodology { get; set; }
 
     /// <summary>
-    /// Observation Version interpretation.
+    /// Topic Version interpretation.
     /// </summary>
     public string? Interpretation { get; set; }
 
     /// <summary>
-    /// Observation Version considerations.
+    /// Topic Version considerations.
     /// </summary>
     public string? Considerations { get; set; }
 
     /// <summary>
-    /// Observation Version autorship.
+    /// Topic Version autorship.
     /// </summary>
     public string? Authorship { get; set; }
 
     /// <summary>
-    /// Observation Group relationship.
+    /// Topic Group relationship.
     /// </summary>
-    public IEnumerable<ObservationGroupDto>? Groups { get; init; }
+    public IEnumerable<TopicGroupDto>? Groups { get; init; }
 }

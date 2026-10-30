@@ -9,13 +9,13 @@ using IAVH.BioTablero.CM.WebApi.Interfaces;
 /// <summary>
 /// Observation Version response example.
 /// </summary>
-public class ObservationVersionResponseExample : IOpenApiExampleProvider<ObservationVersionDto>
+public class ObservationVersionResponseExample : IOpenApiExampleProvider<TopicVersionDto>
 {
     /// <inheritdoc/>
-    public ObservationVersionDto GetExamples() => new()
+    public TopicVersionDto GetExamples() => new()
     {
         Id = 0,
-        ObservationId = 0,
+        TopicId = 0,
         Version = 1,
         CreationDate = DateTime.Now,
         Description = "Description example",

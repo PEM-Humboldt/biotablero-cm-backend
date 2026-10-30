@@ -88,7 +88,7 @@ public class ObservationController(
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [OpenApiRequest(typeof(ObservationEditRequestExample))]
     [OpenApiResponse(StatusCodes.Status200OK, typeof(ObservationResponseExample))]
-    public async Task<IActionResult> Put(int id, [FromBody] ObservationDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Put(int id, [FromBody] TopicDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);
         return webTools.CustomResponse(response);
@@ -105,7 +105,7 @@ public class ObservationController(
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Import([FromForm] IndicatorsImportFileRequest requestData, CancellationToken ct)
     {
-        var requestDataDto = new ObservationsImportFileDto()
+        var requestDataDto = new TopicsImportFileDto()
         {
             InitiativeId = requestData.InitiativeId,
             DoNotModifyDatabase = requestData.DoNotModifyDatabase,

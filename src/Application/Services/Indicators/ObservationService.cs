@@ -40,12 +40,12 @@ using ObservationBaseCategory = Core.Domain.Utils.Enums.IndicatorsEnums.Observat
 /// <summary>
 /// Observation service.
 /// </summary>
-public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObservationService
+public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservationService
 {
     private new readonly ITopicRepository entityRepository;
     private readonly ILogger logger;
-    private new readonly IMapperReadAndUpdate<Topic, ObservationDto> mapper;
-    private readonly IValidator<ObservationDto> entityValidator;
+    private new readonly IMapperReadAndUpdate<Topic, TopicDto> mapper;
+    private readonly IValidator<TopicDto> entityValidator;
     private readonly IIndicatorExcelService excelService;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ILocationRepository locationRepository;
@@ -54,7 +54,7 @@ public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObse
     private readonly ITopicLocationRepository observationLocationRepository;
     private readonly ICentralActorRepository centralActorRepository;
     private readonly IValidator<ObservationImportRow> observationImportRowValidator;
-    private readonly IMapperReadAndUpdate<TopicVersion, ObservationVersionDto> observationVersionMapper;
+    private readonly IMapperReadAndUpdate<TopicVersion, TopicVersionDto> observationVersionMapper;
 
     /// <summary>
     /// Constructor.
@@ -75,9 +75,9 @@ public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObse
     /// <param name="observationVersionMapper">Observation version mapper.</param>
     public ObservationService(
         ITopicRepository entityRepository,
-        IValidator<ObservationDto> entityValidator,
+        IValidator<TopicDto> entityValidator,
         ILogger logger,
-        IMapperReadAndUpdate<Topic, ObservationDto> mapper,
+        IMapperReadAndUpdate<Topic, TopicDto> mapper,
         IValidationErrorTranslator errorTranslator,
         IIndicatorExcelService excelService,
         IInitiativeRepository initiativeRepository,
@@ -87,7 +87,7 @@ public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObse
         ITopicLocationRepository observationLocationRepository,
         ICentralActorRepository centralActorRepository,
         IValidator<ObservationImportRow> observationImportRowValidator,
-        IMapperReadAndUpdate<TopicVersion, ObservationVersionDto> observationVersionMapper)
+        IMapperReadAndUpdate<TopicVersion, TopicVersionDto> observationVersionMapper)
     : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
@@ -129,7 +129,7 @@ public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObse
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, ObservationDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, TopicDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);
@@ -180,7 +180,7 @@ public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObse
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> ImportObservationsAsync(string? userName, ObservationsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default)
+    public async Task<CustomWebResponse> ImportObservationsAsync(string? userName, TopicsImportFileDto requestData, IInputFile formFile, CancellationToken ct = default)
     {
         ArgumentException.ThrowIfNullOrEmpty(userName);
 

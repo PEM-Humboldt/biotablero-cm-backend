@@ -7,15 +7,15 @@ using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 /// <summary>
 /// Observation OData response example.
 /// </summary>
-public class ObservationOdataResponseExample : BaseOdataResponseExample<ObservationDto>
+public class ObservationOdataResponseExample : BaseOdataResponseExample<TopicDto>
 {
     /// <inheritdoc/>
-    protected override ObservationDto CreateExampleDto() => new()
+    protected override TopicDto CreateExampleDto() => new()
     {
         Id = 0,
         Name = "Observation example",
         InitiativeId = 0,
-        Topic = new()
+        TopicType = new()
         {
             Id = 0,
             Name = "Indicator topic example",
@@ -51,7 +51,7 @@ public class ObservationOdataResponseExample : BaseOdataResponseExample<Observat
         Tags = [
             new()
             {
-                ObservationTagId = 0,
+                TopicTagId = 0,
                 Tag = new()
                 {
                     Id = 0,

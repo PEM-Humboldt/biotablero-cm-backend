@@ -12,12 +12,12 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 /// Observation mappings.
 /// </summary>
 public class ObservationMappings(
-    IMapperRead<TopicTag, ObservationTagDto> observationTagMappings,
-    IMapperRead<TopicType, IndicatorTopicDto> observationTopicMappings,
-    IMapperRead<TopicLocation, ObservationLocationDto> observationLocationMappings) : MapperRead<Topic, ObservationDto>, IMapperReadAndUpdate<Topic, ObservationDto>
+    IMapperRead<TopicTag, TopicTagDto> observationTagMappings,
+    IMapperRead<TopicType, TopicTypeDto> observationTopicMappings,
+    IMapperRead<TopicLocation, TopicLocationDto> observationLocationMappings) : MapperRead<Topic, TopicDto>, IMapperReadAndUpdate<Topic, TopicDto>
 {
     /// <inheritdoc/>
-    public override ObservationDto Map(Topic? entity)
+    public override TopicDto Map(Topic? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -27,11 +27,11 @@ public class ObservationMappings(
             Name = entity.Name,
             InitiativeId = entity.InitiativeId,
             InitiativeName = entity.Initiative?.Name,
-            Topic = entity.TopicType != null ? observationTopicMappings.Map(entity.TopicType) : null,
+            TopicType = entity.TopicType != null ? observationTopicMappings.Map(entity.TopicType) : null,
             Tags = entity.TopicTags?.Select(observationTagMappings.Map),
             Locations = entity.TopicLocations?.Select(observationLocationMappings.Map),
             Versions = entity.Versions?
-                .Select(v => new ObservationVersionDto()
+                .Select(v => new TopicVersionDto()
                 {
                     Id = v.Id,
                     Version = v.Version,
@@ -42,7 +42,7 @@ public class ObservationMappings(
     }
 
     /// <inheritdoc/>
-    public void Update(Topic entity, ObservationDto dto)
+    public void Update(Topic entity, TopicDto dto)
     {
         ArgumentNullException.ThrowIfNull(entity);
         ArgumentNullException.ThrowIfNull(dto);

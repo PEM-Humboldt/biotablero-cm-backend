@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Observation Group dto.
+/// Topic Group dto.
 /// </summary>
-public class ObservationGroupDto : IDto
+public class TopicGroupDto : IDto
 {
     /// <summary>
     /// Item identifier.

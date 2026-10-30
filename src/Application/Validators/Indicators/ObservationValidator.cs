@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
 /// <summary>
 /// Observation validator.
 /// </summary>
-public class ObservationValidator : AbstractValidator<ObservationDto>
+public class ObservationValidator : AbstractValidator<TopicDto>
 {
     /// <summary>
     /// Constructor.

@@ -46,7 +46,7 @@ public class InitiativeStatsService(
             ResponseBody = new InitiativeStatsDto()
             {
                 TotalMunicipalities = totalMunicipalities > 0 ? totalMunicipalities : 1,
-                TotalObservations = await observationRepository.CountAsync(initiativeId, ct),
+                TotalTopics = await observationRepository.CountAsync(initiativeId, ct),
             },
         };
     }

@@ -9,15 +9,15 @@ using IAVH.BioTablero.CM.WebApi.Interfaces;
 /// <summary>
 /// Observation response example.
 /// </summary>
-public class ObservationResponseExample : IOpenApiExampleProvider<ObservationDto>
+public class ObservationResponseExample : IOpenApiExampleProvider<TopicDto>
 {
     /// <inheritdoc/>
-    public ObservationDto GetExamples() => new()
+    public TopicDto GetExamples() => new()
     {
         Id = 0,
         Name = "Observation example",
         InitiativeId = 0,
-        Topic = new()
+        TopicType = new()
         {
             Id = 0,
             Name = "Indicator topic example",
@@ -53,7 +53,7 @@ public class ObservationResponseExample : IOpenApiExampleProvider<ObservationDto
         Tags = [
             new()
             {
-                ObservationTagId = 0,
+                TopicTagId = 0,
                 Tag = new()
                 {
                     Id = 0,

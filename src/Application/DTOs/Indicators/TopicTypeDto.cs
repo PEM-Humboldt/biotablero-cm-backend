@@ -2,22 +2,21 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Observation Tag dto.
+/// Topic Type dto.
 /// </summary>
 [method: SetsRequiredMembers]
-public class ObservationTagDto() : IDto
+public class TopicTypeDto() : IDto
 {
     /// <summary>
     /// Item identifier.
     /// </summary>
-    public int ObservationTagId { get; set; }
+    public int? Id { get; set; }
 
     /// <summary>
-    /// Entity Tag.
+    /// Topic Type name.
     /// </summary>
-    public TagDto? Tag { get; set; } = new();
+    public required string Name { get; set; } = string.Empty;
 }

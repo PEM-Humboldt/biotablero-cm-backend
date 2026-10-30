@@ -23,11 +23,11 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <summary>
 /// Observation Version service.
 /// </summary>
-public class ObservationVersionService : ServiceRead<TopicVersion, ObservationVersionDto, int>, IObservationVersionService
+public class ObservationVersionService : ServiceRead<TopicVersion, TopicVersionDto, int>, IObservationVersionService
 {
     private readonly ILogger logger;
-    private new readonly IMapperReadAndUpdate<TopicVersion, ObservationVersionDto> mapper;
-    private readonly IValidator<ObservationVersionDto> entityValidator;
+    private new readonly IMapperReadAndUpdate<TopicVersion, TopicVersionDto> mapper;
+    private readonly IValidator<TopicVersionDto> entityValidator;
 
     /// <summary>
     /// Constructor.
@@ -39,9 +39,9 @@ public class ObservationVersionService : ServiceRead<TopicVersion, ObservationVe
     /// <param name="errorTranslator">Error translator.</param>
     public ObservationVersionService(
         ITopicVersionRepository entityRepository,
-        IValidator<ObservationVersionDto> entityValidator,
+        IValidator<TopicVersionDto> entityValidator,
         ILogger logger,
-        IMapperReadAndUpdate<TopicVersion, ObservationVersionDto> mapper,
+        IMapperReadAndUpdate<TopicVersion, TopicVersionDto> mapper,
         IValidationErrorTranslator errorTranslator)
     : base(entityRepository, mapper, errorTranslator)
     {
@@ -51,7 +51,7 @@ public class ObservationVersionService : ServiceRead<TopicVersion, ObservationVe
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, ObservationVersionDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, TopicVersionDto entityData, CancellationToken ct = default)
     {
         // Validate data
         var validationResult = await entityValidator.ValidateAsync(entityData, ct);

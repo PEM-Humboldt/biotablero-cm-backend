@@ -6,10 +6,10 @@ using System.Diagnostics.CodeAnalysis;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Observation dto.
+/// Topic dto.
 /// </summary>
 [method: SetsRequiredMembers]
-public class ObservationDto() : IDto
+public class TopicDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -17,7 +17,7 @@ public class ObservationDto() : IDto
     public int? Id { get; set; }
 
     /// <summary>
-    /// Observation name.
+    /// Topic name.
     /// </summary>
     public required string Name { get; set; } = string.Empty;
 
@@ -32,22 +32,22 @@ public class ObservationDto() : IDto
     public string? InitiativeName { get; set; }
 
     /// <summary>
-    /// Observation Topic.
+    /// Topic Topic.
     /// </summary>
-    public IndicatorTopicDto? Topic { get; set; }
+    public TopicTypeDto? TopicType { get; set; }
 
     /// <summary>
-    /// Observation Locations relationship.
+    /// Topic Locations relationship.
     /// </summary>
-    public IEnumerable<ObservationLocationDto>? Locations { get; set; }
+    public IEnumerable<TopicLocationDto>? Locations { get; set; }
 
     /// <summary>
-    /// Observation versions list.
+    /// Topic versions list.
     /// </summary>
-    public List<ObservationVersionDto>? Versions { get; set; }
+    public List<TopicVersionDto>? Versions { get; set; }
 
     /// <summary>
     /// Tags relationship.
     /// </summary>
-    public IEnumerable<ObservationTagDto>? Tags { get; set; }
+    public IEnumerable<TopicTagDto>? Tags { get; set; }
 }

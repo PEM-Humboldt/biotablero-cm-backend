@@ -7,10 +7,10 @@ using IAVH.BioTablero.CM.WebApi.Interfaces;
 /// <summary>
 /// Observation Version edit response example.
 /// </summary>
-public class ObservationVersionEditRequestExample : IOpenApiExampleProvider<ObservationVersionDto>
+public class ObservationVersionEditRequestExample : IOpenApiExampleProvider<TopicVersionDto>
 {
     /// <inheritdoc/>
-    public ObservationVersionDto GetExamples() => new()
+    public TopicVersionDto GetExamples() => new()
     {
         Description = "Description example (edited)",
         Methodology = "Methodology example (edited)",
