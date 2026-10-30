@@ -95,9 +95,9 @@ public static class IndicatorsEnums
     }
 
     /// <summary>
-    /// Observation base categories.
+    /// Topic base categories.
     /// </summary>
-    public enum ObservationBaseCategory
+    public enum TopicBaseCategory
     {
         /// <summary>
         /// Species category type.
@@ -130,14 +130,14 @@ public static class IndicatorsEnums
     public enum XlsxColumnIndex
     {
         /// <summary>
-        /// Observation name.
+        /// Topic name.
         /// </summary>
-        ObservationName = 1,
+        TopicName = 1,
 
         /// <summary>
-        /// Indicator topic identifier.
+        /// Topic type identifier.
         /// </summary>
-        IndicatorTopicId = 2,
+        TopicTypeId = 2,
 
         /// <summary>
         /// Indicator Type identifier.

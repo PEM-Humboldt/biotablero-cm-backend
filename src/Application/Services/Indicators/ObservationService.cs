@@ -35,7 +35,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 using IndicatorTopics = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorTopic;
 using IndicatorTypes = Core.Domain.Utils.Enums.IndicatorsEnums.IndicatorType;
-using ObservationBaseCategory = Core.Domain.Utils.Enums.IndicatorsEnums.ObservationBaseCategory;
+using TopicBaseCategory = Core.Domain.Utils.Enums.IndicatorsEnums.TopicBaseCategory;
 
 /// <summary>
 /// Observation service.
@@ -53,7 +53,7 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
     private readonly ICategoryRepository categoryRepository;
     private readonly ITopicLocationRepository observationLocationRepository;
     private readonly ICentralActorRepository centralActorRepository;
-    private readonly IValidator<ObservationImportRow> observationImportRowValidator;
+    private readonly IValidator<TopicImportRow> observationImportRowValidator;
     private readonly IMapperReadAndUpdate<TopicVersion, TopicVersionDto> observationVersionMapper;
 
     /// <summary>
@@ -86,7 +86,7 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
         ICategoryRepository categoryRepository,
         ITopicLocationRepository observationLocationRepository,
         ICentralActorRepository centralActorRepository,
-        IValidator<ObservationImportRow> observationImportRowValidator,
+        IValidator<TopicImportRow> observationImportRowValidator,
         IMapperReadAndUpdate<TopicVersion, TopicVersionDto> observationVersionMapper)
     : base(entityRepository, mapper, errorTranslator)
     {
@@ -237,15 +237,15 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
 
         // Validate existent observations
         var observationNames = fileReadResult.Rows
-            .Select(r => r.ObservationName)
+            .Select(r => r.TopicName)
             .ToArray();
 
         var existentObservations = await entityRepository.GetByInitiativeAndNamesAsync(requestData.InitiativeId, observationNames, ct);
 
         foreach (var row in fileReadResult.Rows)
         {
-            row.ObservationEntity = existentObservations
-                .FirstOrDefault(e => e.Name == row.ObservationName);
+            row.TopicEntity = existentObservations
+                .FirstOrDefault(e => e.Name == row.TopicName);
         }
 
         // Adjust spreadsheet rows data
@@ -288,7 +288,7 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
         var now = DateTimeOffset.Now;
         var modifyDatabase = !requestData.DoNotModifyDatabase;
         var groupedRows = fileReadResult.Rows
-            .GroupBy(r => r.ObservationEntity);
+            .GroupBy(r => r.TopicEntity);
 
         foreach (var group in groupedRows)
         {
@@ -389,11 +389,11 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
     /// Adjust rows data.
     /// </summary>
     /// <param name="rows">Spreadsheet rows.</param>
-    private static void AdjustRowsData(List<ObservationImportRow> rows)
+    private static void AdjustRowsData(List<TopicImportRow> rows)
     {
         foreach (var row in rows)
         {
-            row.ObservationName = row.ObservationName?.Trim()?.CapitalizeFirstOnly()!;
+            row.TopicName = row.TopicName?.Trim()?.CapitalizeFirstOnly()!;
             row.UpperGroupName = row.UpperGroupName?.Trim()?.CapitalizeFirstOnly()!;
             row.GroupName = row.GroupName?.Trim()?.CapitalizeFirstOnly();
             row.LocalityName = row.LocalityName?.Trim()?.CapitalizeFirstOnly()!;
@@ -415,15 +415,15 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
     /// <param name="rows">Spreadsheet rows.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<ObservationImportRow> rows, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateStructureDataAsync(List<TopicImportRow> rows, CancellationToken ct = default)
     {
         var totalObservations = rows
-            .GroupBy(r => r.ObservationName)
+            .GroupBy(r => r.TopicName)
             .Count();
 
         // Validate unique indicator topic by observations grouped by name
         var totalTopics = rows
-            .GroupBy(r => r.ObservationName)
+            .GroupBy(r => r.TopicName)
             .SelectMany(g => g.Select(r => r.IndicatorTopicId).Distinct())
             .Count();
 
@@ -584,18 +584,18 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
             }
 
             // Validations for observations editions
-            if (row.ObservationEntity != null)
+            if (row.TopicEntity != null)
             {
-                if (row.IndicatorTopicId != row.ObservationEntity.TopicTypeId)
+                if (row.IndicatorTopicId != row.TopicEntity.TopicTypeId)
                 {
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorTopic),
-                        Message = $"Errors in row {row.RowNumber}. Original type id: {row.ObservationEntity.TopicTypeId}, Spreadsheet type id: {row.IndicatorTopicId}",
+                        Message = $"Errors in row {row.RowNumber}. Original type id: {row.TopicEntity.TopicTypeId}, Spreadsheet type id: {row.IndicatorTopicId}",
                     };
                 }
 
-                if (!row.ObservationEntity?.TopicLocations?.Any(e => e.Locality == row.LocalityName && e.Location?.Name == row.MunicipalityName && row.DepartmentName == e.Location?.Parent?.Name) ?? false)
+                if (!row.TopicEntity?.TopicLocations?.Any(e => e.Locality == row.LocalityName && e.Location?.Name == row.MunicipalityName && row.DepartmentName == e.Location?.Parent?.Name) ?? false)
                 {
                     return new(true)
                     {
@@ -617,11 +617,11 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
     /// <param name="locationEntities">Location entities list.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Validation result.</returns>
-    private async Task<CustomWebResponse> ValidateDatabaseAsync(int initiativeId, List<ObservationImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
+    private async Task<CustomWebResponse> ValidateDatabaseAsync(int initiativeId, List<TopicImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
     {
         var newObservationNames = rows
-            .Where(r => r.ObservationEntity == null)
-            .Select(r => r.ObservationName)
+            .Where(r => r.TopicEntity == null)
+            .Select(r => r.TopicName)
             .Distinct()
             .ToArray();
 
@@ -697,7 +697,7 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
         }
 
         // Validate categories
-        var baseCategoriesArray = Enum.GetValues<ObservationBaseCategory>()
+        var baseCategoriesArray = Enum.GetValues<TopicBaseCategory>()
             .Select(i => (int)i)
             .ToArray();
 
@@ -791,7 +791,7 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
     /// <param name="rows">Spreadsheet rows data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated categories.</returns>
-    private async Task<List<GroupDataHelper>> SaveAndGetCategoriesAsync(List<ObservationImportRow> rows, CancellationToken ct = default)
+    private async Task<List<GroupDataHelper>> SaveAndGetCategoriesAsync(List<TopicImportRow> rows, CancellationToken ct = default)
     {
         // Get categories from spreadsheet
         var spreadsheetCategories = rows
@@ -808,7 +808,7 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
         var databaseCategories = await GetExistingCategoriesAsync(spreadsheetCategories, ct);
 
         // Build new categories list
-        var parentSpeciesCategories = await categoryRepository.GetByParentsAsync([(int)ObservationBaseCategory.Species], ct);
+        var parentSpeciesCategories = await categoryRepository.GetByParentsAsync([(int)TopicBaseCategory.Species], ct);
 
         var newCategories = new List<GroupDataHelper>();
 
@@ -844,7 +844,7 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
     /// <param name="rows">Spreadsheet rows data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated central actors.</returns>
-    private async Task<List<CentralActor>> SaveAndGetCentralActorsAsync(List<ObservationImportRow> rows, CancellationToken ct = default)
+    private async Task<List<CentralActor>> SaveAndGetCentralActorsAsync(List<TopicImportRow> rows, CancellationToken ct = default)
     {
         // Get central actors from spreadsheet
         var spreadsheetCentralActors = rows
@@ -891,13 +891,13 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
     /// <returns>ObservationVersion entities.</returns>
     private static List<TopicVersion> GenerateObservationVersions(
         Topic? observation,
-        List<ObservationImportRow> rows,
+        List<TopicImportRow> rows,
         List<GroupDataHelper> categories,
         List<CentralActor> centralActors,
         DateTimeOffset now,
         int observationLastVersion) =>
         [.. rows
-            .GroupBy(r => r.ObservationName)
+            .GroupBy(r => r.TopicName)
             .Select(g => new TopicVersion()
             {
                 IndicatorTopicId = g.Select(r => r.IndicatorTopicId).FirstOrDefault(),
@@ -953,13 +953,13 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
     /// <returns>Observation entities.</returns>
     private static List<Topic> GenerateObservations(
         int initiativeId,
-        List<ObservationImportRow> rows,
+        List<TopicImportRow> rows,
         List<TopicVersion> observationVersions,
         List<TopicLocation> observationLocations,
         List<Location> locations,
         DateTimeOffset now) =>
         [.. rows
-            .GroupBy(r => r.ObservationName)
+            .GroupBy(r => r.TopicName)
             .Select(g =>
             {
                 var observationsLocations = g
@@ -977,7 +977,7 @@ public class ObservationService : ServiceRead<Topic, TopicDto, int>, IObservatio
 
                             observationLocation = new TopicLocation()
                             {
-                                TopicId = r.ObservationEntity?.Id ?? 0,
+                                TopicId = r.TopicEntity?.Id ?? 0,
                                 LocationId = locationEntity?.Id ?? 0,
                                 Location = locationEntity,
                                 Locality = r.LocalityName,

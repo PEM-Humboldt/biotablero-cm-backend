@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 /// Topic Import spreadsheet row.
 /// </summary>
 [method: SetsRequiredMembers]
-public class ObservationImportRow()
+public class TopicImportRow()
 {
     /// <summary>
     /// Spreadsheet cell row number.
@@ -21,14 +21,14 @@ public class ObservationImportRow()
     public required int InitiativeId { get; set; }
 
     /// <summary>
-    /// Observation entity.
+    /// Topic entity.
     /// </summary>
-    public Topic? ObservationEntity { get; set; }
+    public Topic? TopicEntity { get; set; }
 
     /// <summary>
-    /// Observation name.
+    /// Topic name.
     /// </summary>
-    public required string ObservationName { get; set; } = string.Empty;
+    public required string TopicName { get; set; } = string.Empty;
 
     /// <summary>
     /// Indicator Topic identifier.
@@ -96,17 +96,17 @@ public class ObservationImportRow()
     public string? GroupDescription { get; set; }
 
     /// <summary>
-    /// Observation value.
+    /// Topic value.
     /// </summary>
     public float Value { get; set; }
 
     /// <summary>
-    /// Observation Value upper limit.
+    /// Topic Value upper limit.
     /// </summary>
     public float? UpperLimit { get; set; }
 
     /// <summary>
-    /// Observation Value lower limit.
+    /// Topic Value lower limit.
     /// </summary>
     public float? LowerLimit { get; set; }
 }

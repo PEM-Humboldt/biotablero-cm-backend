@@ -24,9 +24,9 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
     private readonly ILogger logger = logger;
 
     /// <inheritdoc/>
-    public SpreadsheetReadResult<ObservationImportRow> GetFileData(IInputFile formFile)
+    public SpreadsheetReadResult<TopicImportRow> GetFileData(IInputFile formFile)
     {
-        var result = new SpreadsheetReadResult<ObservationImportRow>();
+        var result = new SpreadsheetReadResult<TopicImportRow>();
 
         if (formFile == null || formFile.Size == 0)
         {
@@ -43,8 +43,8 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
 
             foreach (var row in worksheet.RowsUsed().Skip(1))
             {
-                ValidateCellValue<string>(row, XlsxColumnIndex.ObservationName, result.Errors, out var observationName);
-                ValidateCellValue<int>(row, XlsxColumnIndex.IndicatorTopicId, result.Errors, out var indicatorTopicId);
+                ValidateCellValue<string>(row, XlsxColumnIndex.TopicName, result.Errors, out var topicName);
+                ValidateCellValue<int>(row, XlsxColumnIndex.TopicTypeId, result.Errors, out var indicatorTopicId);
                 ValidateCellValue<int>(row, XlsxColumnIndex.IndicatorTypeId, result.Errors, out var indicatorTypeId);
                 ValidateCellValue<string>(row, XlsxColumnIndex.Department, result.Errors, out var departmentName);
                 ValidateCellValue<string>(row, XlsxColumnIndex.Municipality, result.Errors, out var municipalityName);
@@ -61,10 +61,10 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
                 ValidateCellValue<float?>(row, XlsxColumnIndex.UpperLimit, result.Errors, out var upperLimit);
                 ValidateCellValue<float?>(row, XlsxColumnIndex.LowerLimit, result.Errors, out var lowerLimit);
 
-                var validatedRow = new ObservationImportRow
+                var validatedRow = new TopicImportRow
                 {
                     RowNumber = row.RowNumber(),
-                    ObservationName = observationName!,
+                    TopicName = topicName!,
                     IndicatorTopicId = indicatorTopicId,
                     IndicatorTypeId = indicatorTypeId,
                     DepartmentName = departmentName!,
