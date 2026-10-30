@@ -9,9 +9,9 @@ using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Observation Version mappings.
+/// Topic Version mappings.
 /// </summary>
-public class ObservationVersionMappings(
+public class TopicVersionMappings(
     IMapperRead<Category, CategoryDto> categoryMappings,
     IMapperRead<IndicatorValue, IndicatorValueDto> indicatorValueMappings) : MapperRead<TopicVersion, TopicVersionDto>, IMapperReadAndUpdate<TopicVersion, TopicVersionDto>
 {

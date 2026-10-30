@@ -9,12 +9,12 @@ using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Observation mappings.
+/// Topic mappings.
 /// </summary>
-public class ObservationMappings(
-    IMapperRead<TopicTag, TopicTagDto> observationTagMappings,
-    IMapperRead<TopicType, TopicTypeDto> observationTopicMappings,
-    IMapperRead<TopicLocation, TopicLocationDto> observationLocationMappings) : MapperRead<Topic, TopicDto>, IMapperReadAndUpdate<Topic, TopicDto>
+public class TopicMappings(
+    IMapperRead<TopicTag, TopicTagDto> topicTagMappings,
+    IMapperRead<TopicType, TopicTypeDto> topicTypeMappings,
+    IMapperRead<TopicLocation, TopicLocationDto> topicLocationMappings) : MapperRead<Topic, TopicDto>, IMapperReadAndUpdate<Topic, TopicDto>
 {
     /// <inheritdoc/>
     public override TopicDto Map(Topic? entity)
@@ -27,9 +27,9 @@ public class ObservationMappings(
             Name = entity.Name,
             InitiativeId = entity.InitiativeId,
             InitiativeName = entity.Initiative?.Name,
-            TopicType = entity.TopicType != null ? observationTopicMappings.Map(entity.TopicType) : null,
-            Tags = entity.TopicTags?.Select(observationTagMappings.Map),
-            Locations = entity.TopicLocations?.Select(observationLocationMappings.Map),
+            TopicType = entity.TopicType != null ? topicTypeMappings.Map(entity.TopicType) : null,
+            Tags = entity.TopicTags?.Select(topicTagMappings.Map),
+            Locations = entity.TopicLocations?.Select(topicLocationMappings.Map),
             Versions = entity.Versions?
                 .Select(v => new TopicVersionDto()
                 {
