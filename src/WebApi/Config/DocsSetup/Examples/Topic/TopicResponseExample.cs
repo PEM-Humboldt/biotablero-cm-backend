@@ -1,24 +1,26 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Observation;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Topic;
 
 using System;
 
 using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
+using IAVH.BioTablero.CM.WebApi.Interfaces;
+
 /// <summary>
-/// Observation OData response example.
+/// Topic response example.
 /// </summary>
-public class ObservationOdataResponseExample : BaseOdataResponseExample<TopicDto>
+public class TopicResponseExample : IOpenApiExampleProvider<TopicDto>
 {
     /// <inheritdoc/>
-    protected override TopicDto CreateExampleDto() => new()
+    public TopicDto GetExamples() => new()
     {
         Id = 0,
-        Name = "Observation example",
+        Name = "Topic example",
         InitiativeId = 0,
         TopicType = new()
         {
             Id = 0,
-            Name = "Indicator topic example",
+            Name = "Topic type example",
         },
         Versions = [
             new()
