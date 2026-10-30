@@ -6,19 +6,19 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Observation Version entity.
+/// Topic Version entity.
 /// </summary>
-public class ObservationVersion : BaseEntity<int>, IAggregateRoot
+public class TopicVersion : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Observation identifier.
+    /// Topic identifier.
     /// </summary>
-    public int ObservationId { get; set; }
+    public int TopicId { get; set; }
 
     /// <summary>
-    /// Observation name.
+    /// Topic name.
     /// </summary>
-    public string? ObservationName { get; set; }
+    public string? TopicName { get; set; }
 
     /// <summary>
     /// Creation date.
@@ -31,27 +31,27 @@ public class ObservationVersion : BaseEntity<int>, IAggregateRoot
     public int Version { get; set; }
 
     /// <summary>
-    /// Observation Version description.
+    /// Topic Version description.
     /// </summary>
     public string? Description { get; set; }
 
     /// <summary>
-    /// Observation Version methodology.
+    /// Topic Version methodology.
     /// </summary>
     public string? Methodology { get; set; }
 
     /// <summary>
-    /// Observation Version interpretation.
+    /// Topic Version interpretation.
     /// </summary>
     public string? Interpretation { get; set; }
 
     /// <summary>
-    /// Observation Version considerations.
+    /// Topic Version considerations.
     /// </summary>
     public string? Considerations { get; set; }
 
     /// <summary>
-    /// Observation Version autorship.
+    /// Topic Version autorship.
     /// </summary>
     public string? Authorship { get; set; }
 
@@ -61,17 +61,17 @@ public class ObservationVersion : BaseEntity<int>, IAggregateRoot
     public int? IndicatorTopicId { get; set; }
 
     /// <summary>
-    /// Observation relationship.
+    /// Topic relationship.
     /// </summary>
-    public Observation? Observation { get; set; }
+    public Topic? Topic { get; set; }
 
     /// <summary>
-    /// Observation Version Map relationship.
+    /// Topic Version Map relationship.
     /// </summary>
-    public ICollection<ObservationVersionMap>? Maps { get; init; }
+    public ICollection<TopicVersionMap>? Maps { get; init; }
 
     /// <summary>
-    /// Observation Group relationship.
+    /// Topic Group relationship.
     /// </summary>
-    public ICollection<ObservationGroup>? Groups { get; init; }
+    public ICollection<TopicGroup>? Groups { get; init; }
 }

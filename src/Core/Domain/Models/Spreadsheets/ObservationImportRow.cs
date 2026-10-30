@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Observation Import spreadsheet row.
+/// Topic Import spreadsheet row.
 /// </summary>
 [method: SetsRequiredMembers]
 public class ObservationImportRow()
@@ -23,7 +23,7 @@ public class ObservationImportRow()
     /// <summary>
     /// Observation entity.
     /// </summary>
-    public Observation? ObservationEntity { get; set; }
+    public Topic? ObservationEntity { get; set; }
 
     /// <summary>
     /// Observation name.

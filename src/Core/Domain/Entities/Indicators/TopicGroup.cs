@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Observation Group entity.
+/// Topic Group entity.
 /// </summary>
-public class ObservationGroup : BaseEntity<int>, IAggregateRoot
+public class TopicGroup : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Observation Version identifier.
+    /// Topic Version identifier.
     /// </summary>
-    public int ObservationVersionId { get; set; }
+    public int TopicVersionId { get; set; }
 
     /// <summary>
     /// Category identifier.
@@ -20,9 +20,9 @@ public class ObservationGroup : BaseEntity<int>, IAggregateRoot
     public int CategoryId { get; set; }
 
     /// <summary>
-    /// Observation Version relationship.
+    /// Topic Version relationship.
     /// </summary>
-    public ObservationVersion? ObservationVersion { get; set; }
+    public TopicVersion? TopicVersion { get; set; }
 
     /// <summary>
     /// Category relationship.

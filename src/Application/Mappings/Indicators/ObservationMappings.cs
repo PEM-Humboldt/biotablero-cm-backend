@@ -12,12 +12,12 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 /// Observation mappings.
 /// </summary>
 public class ObservationMappings(
-    IMapperRead<ObservationTag, ObservationTagDto> observationTagMappings,
-    IMapperRead<IndicatorTopic, IndicatorTopicDto> observationTopicMappings,
-    IMapperRead<ObservationLocation, ObservationLocationDto> observationLocationMappings) : MapperRead<Observation, ObservationDto>, IMapperReadAndUpdate<Observation, ObservationDto>
+    IMapperRead<TopicTag, ObservationTagDto> observationTagMappings,
+    IMapperRead<TopicType, IndicatorTopicDto> observationTopicMappings,
+    IMapperRead<TopicLocation, ObservationLocationDto> observationLocationMappings) : MapperRead<Topic, ObservationDto>, IMapperReadAndUpdate<Topic, ObservationDto>
 {
     /// <inheritdoc/>
-    public override ObservationDto Map(Observation? entity)
+    public override ObservationDto Map(Topic? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -27,9 +27,9 @@ public class ObservationMappings(
             Name = entity.Name,
             InitiativeId = entity.InitiativeId,
             InitiativeName = entity.Initiative?.Name,
-            Topic = entity.Topic != null ? observationTopicMappings.Map(entity.Topic) : null,
-            Tags = entity.ObservationTags?.Select(observationTagMappings.Map),
-            Locations = entity.ObservationLocations?.Select(observationLocationMappings.Map),
+            Topic = entity.TopicType != null ? observationTopicMappings.Map(entity.TopicType) : null,
+            Tags = entity.TopicTags?.Select(observationTagMappings.Map),
+            Locations = entity.TopicLocations?.Select(observationLocationMappings.Map),
             Versions = entity.Versions?
                 .Select(v => new ObservationVersionDto()
                 {
@@ -42,7 +42,7 @@ public class ObservationMappings(
     }
 
     /// <inheritdoc/>
-    public void Update(Observation entity, ObservationDto dto)
+    public void Update(Topic entity, ObservationDto dto)
     {
         ArgumentNullException.ThrowIfNull(entity);
         ArgumentNullException.ThrowIfNull(dto);

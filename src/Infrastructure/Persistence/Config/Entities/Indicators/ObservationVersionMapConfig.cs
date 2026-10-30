@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// <summary>
 /// Observation Version Map entity configuration.
 /// </summary>
-public class ObservationVersionMapConfig : IEntityTypeConfiguration<ObservationVersionMap>
+public class ObservationVersionMapConfig : IEntityTypeConfiguration<TopicVersionMap>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<ObservationVersionMap> builder)
+    public void Configure(EntityTypeBuilder<TopicVersionMap> builder)
     {
         builder?.ToTable("observation_version_map", "indicators");
 
@@ -21,7 +21,7 @@ public class ObservationVersionMapConfig : IEntityTypeConfiguration<ObservationV
             .HasColumnName("id")
             .IsRequired();
 
-        builder?.Property(e => e.ObservationVersionId)
+        builder?.Property(e => e.TopicVersionId)
             .HasColumnName("observation_version_id")
             .IsRequired();
 
@@ -39,12 +39,12 @@ public class ObservationVersionMapConfig : IEntityTypeConfiguration<ObservationV
             .HasMaxLength(1000)
             .IsRequired();
 
-        builder?.HasOne(e => e.ObservationVersion)
+        builder?.HasOne(e => e.TopicVersion)
             .WithMany(p => p.Maps)
-            .HasForeignKey(e => e.ObservationVersionId);
+            .HasForeignKey(e => e.TopicVersionId);
 
         builder?
-            .HasIndex(e => new { e.ObservationVersionId, e.Title })
+            .HasIndex(e => new { e.TopicVersionId, e.Title })
             .IsUnique();
     }
 }

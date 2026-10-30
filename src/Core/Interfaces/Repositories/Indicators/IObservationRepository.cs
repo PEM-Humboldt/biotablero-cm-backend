@@ -10,14 +10,14 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 /// <summary>
 /// Observation repository interface.
 /// </summary>
-public interface IObservationRepository : IRepository<Observation, int>
+public interface IObservationRepository : IRepository<Topic, int>
 {
     /// <summary>
     /// Include OData custom entities.
     /// </summary>
     /// <param name="query">Linq Query.</param>
     /// <returns>Modified Linq query.</returns>
-    IQueryable<Observation> IncludeOdataEntities(IQueryable<Observation> query);
+    IQueryable<Topic> IncludeOdataEntities(IQueryable<Topic> query);
 
     /// <summary>
     /// Get elements by initiative.
@@ -25,7 +25,7 @@ public interface IObservationRepository : IRepository<Observation, int>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities by selected initiative.</returns>
-    Task<IEnumerable<Observation>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+    Task<IEnumerable<Topic>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
     /// Get elements by initiative and observation names.
@@ -34,7 +34,7 @@ public interface IObservationRepository : IRepository<Observation, int>
     /// <param name="names">Names list.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entities.</returns>
-    Task<IEnumerable<Observation>> GetByInitiativeAndNamesAsync(int initiativeId, string[] names, CancellationToken ct = default);
+    Task<IEnumerable<Topic>> GetByInitiativeAndNamesAsync(int initiativeId, string[] names, CancellationToken ct = default);
 
     /// <summary>
     /// Returns the total number of records.

@@ -39,17 +39,17 @@ public class Tag : BaseEntity<int>, IAggregateRoot
     public TagCategory? Category { get; set; }
 
     /// <summary>
-    /// Tag Initiative relationship.
+    /// Initiative Tag relationship.
     /// </summary>
     public ICollection<InitiativeTag>? TagInitiatives { get; init; }
 
     /// <summary>
-    /// Tag Resource relationship.
+    /// Resource Tag relationship.
     /// </summary>
     public ICollection<ResourceTag>? TagResources { get; init; }
 
     /// <summary>
-    /// Tag Observation relationship.
+    /// Topic Tag relationship.
     /// </summary>
-    public ICollection<ObservationTag>? TagObservations { get; init; }
+    public ICollection<TopicTag>? TopicTags { get; init; }
 }

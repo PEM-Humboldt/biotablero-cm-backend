@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// <summary>
 /// Observation Location entity configuration.
 /// </summary>
-public class ObservationLocationConfig : IEntityTypeConfiguration<ObservationLocation>
+public class ObservationLocationConfig : IEntityTypeConfiguration<TopicLocation>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<ObservationLocation> builder)
+    public void Configure(EntityTypeBuilder<TopicLocation> builder)
     {
         builder?.ToTable("observation_location", "indicators");
 
@@ -21,7 +21,7 @@ public class ObservationLocationConfig : IEntityTypeConfiguration<ObservationLoc
             .HasColumnName("id")
             .IsRequired();
 
-        builder?.Property(e => e.ObservationId)
+        builder?.Property(e => e.TopicId)
             .HasColumnName("observation_id")
             .IsRequired();
 
@@ -33,16 +33,16 @@ public class ObservationLocationConfig : IEntityTypeConfiguration<ObservationLoc
             .HasColumnName("locality")
             .HasMaxLength(300);
 
-        builder?.HasOne(e => e.Observation)
-            .WithMany(p => p.ObservationLocations)
-            .HasForeignKey(e => e.ObservationId);
+        builder?.HasOne(e => e.Topic)
+            .WithMany(p => p.TopicLocations)
+            .HasForeignKey(e => e.TopicId);
 
         builder?.HasOne(e => e.Location)
-            .WithMany(p => p.ObservationLocations)
+            .WithMany(p => p.TopicLocations)
             .HasForeignKey(e => e.LocationId);
 
         builder?
-            .HasIndex(e => new { e.ObservationId, e.LocationId, e.Locality })
+            .HasIndex(e => new { e.TopicId, e.LocationId, e.Locality })
             .IsUnique();
     }
 }

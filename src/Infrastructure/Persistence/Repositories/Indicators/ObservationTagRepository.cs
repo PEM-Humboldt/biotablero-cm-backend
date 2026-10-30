@@ -18,17 +18,17 @@ using Serilog;
 /// <param name="logger">System logger.</param>
 public class ObservationTagRepository(
     GeneralContext dbContext,
-    ILogger logger) : Repository<ObservationTag, int>(dbContext, logger), IObservationTagRepository
+    ILogger logger) : Repository<TopicTag, int>(dbContext, logger), IObservationTagRepository
 {
     /// <inheritdoc/>
-    public override async Task<ObservationTag?> GetByIdAsync(int id, CancellationToken ct = default) =>
-        await dbContext.ObservationTags
+    public override async Task<TopicTag?> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await dbContext.TopicTags
             .Include(e => e.Tag)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public override async Task<ObservationTag> AddAsync(ObservationTag entity, CancellationToken ct = default)
+    public override async Task<TopicTag> AddAsync(TopicTag entity, CancellationToken ct = default)
     {
         await base.AddAsync(entity, ct);
         return (await GetByIdAsync(entity.Id, ct))!;
@@ -36,7 +36,7 @@ public class ObservationTagRepository(
 
     /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int observationId, int tagId, CancellationToken ct = default) =>
-        await dbContext.ObservationTags
-            .Where(e => e.ObservationId == observationId && e.TagId == tagId)
+        await dbContext.TopicTags
+            .Where(e => e.TopicId == observationId && e.TagId == tagId)
             .AnyAsync(ct);
 }

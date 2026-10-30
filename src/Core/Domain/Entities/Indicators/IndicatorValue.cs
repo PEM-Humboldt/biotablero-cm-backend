@@ -52,7 +52,7 @@ public class IndicatorValue : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Observation Group relationship.
     /// </summary>
-    public ObservationGroup? Group { get; set; }
+    public TopicGroup? Group { get; set; }
 
     /// <summary>
     /// Indicator Type relationship.

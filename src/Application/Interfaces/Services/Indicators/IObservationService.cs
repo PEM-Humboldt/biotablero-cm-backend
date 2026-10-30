@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 /// <summary>
 /// Observation service interface.
 /// </summary>
-public interface IObservationService : IRead<Observation, int>, IUpdate<ObservationDto, int>
+public interface IObservationService : IRead<Topic, int>, IUpdate<ObservationDto, int>
 {
     /// <summary>
     /// Get entities by initiative.

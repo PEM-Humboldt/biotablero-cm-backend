@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 /// <summary>
 /// Observation Version repository interface.
 /// </summary>
-public interface IObservationVersionRepository : IRepository<ObservationVersion, int>
+public interface IObservationVersionRepository : IRepository<TopicVersion, int>
 {
     /// <summary>
     /// Get last version number.

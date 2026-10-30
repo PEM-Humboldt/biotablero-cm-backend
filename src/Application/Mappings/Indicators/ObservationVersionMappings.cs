@@ -13,17 +13,17 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 /// </summary>
 public class ObservationVersionMappings(
     IMapperRead<Category, CategoryDto> categoryMappings,
-    IMapperRead<IndicatorValue, IndicatorValueDto> indicatorValueMappings) : MapperRead<ObservationVersion, ObservationVersionDto>, IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto>
+    IMapperRead<IndicatorValue, IndicatorValueDto> indicatorValueMappings) : MapperRead<TopicVersion, ObservationVersionDto>, IMapperReadAndUpdate<TopicVersion, ObservationVersionDto>
 {
     /// <inheritdoc/>
-    public override ObservationVersionDto Map(ObservationVersion? entity)
+    public override ObservationVersionDto Map(TopicVersion? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         return new()
         {
             Id = entity.Id,
-            ObservationId = entity.ObservationId,
+            ObservationId = entity.TopicId,
             CreationDate = entity.CreationDate,
             Version = entity.Version,
             Description = entity.Description,
@@ -41,7 +41,7 @@ public class ObservationVersionMappings(
     }
 
     /// <inheritdoc/>
-    public void Update(ObservationVersion entity, ObservationVersionDto dto)
+    public void Update(TopicVersion entity, ObservationVersionDto dto)
     {
         ArgumentNullException.ThrowIfNull(entity);
         ArgumentNullException.ThrowIfNull(dto);

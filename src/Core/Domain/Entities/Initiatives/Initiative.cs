@@ -129,9 +129,9 @@ public class Initiative : BaseEntity<int>, IAggregateRoot
     public LocationCustom? MainLocation { get; set; }
 
     /// <summary>
-    /// Observation relationship.
+    /// Topic relationship.
     /// </summary>
-    public ICollection<Observation>? Observations { get; init; }
+    public ICollection<Topic>? Topics { get; init; }
 
     /// <summary>
     /// Monitoring Events relationship.

@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// <summary>
 /// Observation entity configuration.
 /// </summary>
-public class ObservationConfig : IEntityTypeConfiguration<Observation>
+public class ObservationConfig : IEntityTypeConfiguration<Topic>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<Observation> builder)
+    public void Configure(EntityTypeBuilder<Topic> builder)
     {
         builder?.ToTable("observation", "indicators");
 
@@ -37,11 +37,11 @@ public class ObservationConfig : IEntityTypeConfiguration<Observation>
         builder?.Ignore(i => i.LastVersion);
 
         builder?.HasOne(e => e.Initiative)
-            .WithMany(p => p.Observations)
+            .WithMany(p => p.Topics)
             .HasForeignKey(e => e.InitiativeId);
 
-        builder?.HasOne(e => e.Topic)
-            .WithMany(p => p.Observations)
+        builder?.HasOne(e => e.TopicType)
+            .WithMany(p => p.Topics)
             .HasForeignKey(e => e.IndicatorTopicId);
 
         builder?

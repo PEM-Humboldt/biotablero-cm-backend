@@ -19,13 +19,13 @@ using Serilog;
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
 /// <param name="logger">System logger.</param>
-public class ObservationLocationRepository(GeneralContext dbContext, ILogger logger) : Repository<ObservationLocation, int>(dbContext, logger), IObservationLocationRepository
+public class ObservationLocationRepository(GeneralContext dbContext, ILogger logger) : Repository<TopicLocation, int>(dbContext, logger), IObservationLocationRepository
 {
     /// <inheritdoc/>
-    public async Task<List<ObservationLocation>> GetByObservationAsync(int observationId, CancellationToken ct = default) =>
-        await dbContext.ObservationLocations
+    public async Task<List<TopicLocation>> GetByObservationAsync(int observationId, CancellationToken ct = default) =>
+        await dbContext.TopicLocations
             .Include(e => e.Location)
                 .ThenInclude(e => e!.Parent)
-            .Where(e => e.ObservationId == observationId)
+            .Where(e => e.TopicId == observationId)
             .ToListAsync(ct);
 }

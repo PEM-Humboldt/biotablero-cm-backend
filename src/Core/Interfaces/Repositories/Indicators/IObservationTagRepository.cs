@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 /// <summary>
 /// Observation Tag repository interface.
 /// </summary>
-public interface IObservationTagRepository : IRepository<ObservationTag, int>
+public interface IObservationTagRepository : IRepository<TopicTag, int>
 {
     /// <summary>
     /// Check if element is duplicated.

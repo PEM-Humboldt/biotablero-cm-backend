@@ -9,10 +9,10 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 /// <summary>
 /// Indicator Topic mappings.
 /// </summary>
-public class IndicatorTopicMappings() : MapperRead<IndicatorTopic, IndicatorTopicDto>
+public class IndicatorTopicMappings() : MapperRead<TopicType, IndicatorTopicDto>
 {
     /// <inheritdoc/>
-    public override IndicatorTopicDto Map(IndicatorTopic? entity)
+    public override IndicatorTopicDto Map(TopicType? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

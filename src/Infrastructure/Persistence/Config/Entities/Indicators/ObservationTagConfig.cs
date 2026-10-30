@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// <summary>
 /// Observation Tag entity configuration.
 /// </summary>
-public class ObservationTagConfig : IEntityTypeConfiguration<ObservationTag>
+public class ObservationTagConfig : IEntityTypeConfiguration<TopicTag>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<ObservationTag> builder)
+    public void Configure(EntityTypeBuilder<TopicTag> builder)
     {
         builder?.ToTable("observation_tag", "indicators");
 
@@ -25,20 +25,20 @@ public class ObservationTagConfig : IEntityTypeConfiguration<ObservationTag>
             .HasColumnName("tag_id")
             .IsRequired();
 
-        builder?.Property(e => e.ObservationId)
+        builder?.Property(e => e.TopicId)
             .HasColumnName("observation_id")
             .IsRequired();
 
         builder?.HasOne(e => e.Tag)
-            .WithMany(p => p.TagObservations)
+            .WithMany(p => p.TopicTags)
             .HasForeignKey(e => e.TagId);
 
-        builder?.HasOne(e => e.Observation)
-            .WithMany(p => p.ObservationTags)
-            .HasForeignKey(e => e.ObservationId);
+        builder?.HasOne(e => e.Topic)
+            .WithMany(p => p.TopicTags)
+            .HasForeignKey(e => e.TopicId);
 
         builder?
-            .HasIndex(e => new { e.ObservationId, e.TagId })
+            .HasIndex(e => new { e.TopicId, e.TagId })
             .IsUnique();
     }
 }

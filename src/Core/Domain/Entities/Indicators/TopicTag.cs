@@ -4,14 +4,14 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Observation Tag entity.
+/// Topic Tag entity.
 /// </summary>
-public class ObservationTag : BaseEntity<int>, IAggregateRoot
+public class TopicTag : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Observation identifier.
+    /// Topic identifier.
     /// </summary>
-    public int ObservationId { get; set; }
+    public int TopicId { get; set; }
 
     /// <summary>
     /// Tag identifier.
@@ -19,9 +19,9 @@ public class ObservationTag : BaseEntity<int>, IAggregateRoot
     public int TagId { get; set; }
 
     /// <summary>
-    /// Observation relationship.
+    /// Topic relationship.
     /// </summary>
-    public Observation? Observation { get; set; }
+    public Topic? Topic { get; set; }
 
     /// <summary>
     /// Tag relationship.

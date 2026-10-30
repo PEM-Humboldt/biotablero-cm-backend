@@ -22,7 +22,7 @@ public class MapLegend : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Observation Version Map relationship.
     /// </summary>
-    public ObservationVersionMap? ObservationVersionMap { get; set; }
+    public TopicVersionMap? ObservationVersionMap { get; set; }
 
     /// <summary>
     /// Map Legend Item relationship.

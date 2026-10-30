@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// <summary>
 /// Indicator Topic entity configuration.
 /// </summary>
-public class IndicatorTopicConfig : IEntityTypeConfiguration<IndicatorTopic>
+public class IndicatorTopicConfig : IEntityTypeConfiguration<TopicType>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<IndicatorTopic> builder)
+    public void Configure(EntityTypeBuilder<TopicType> builder)
     {
         builder?.ToTable("indicator_topic", "indicators");
 

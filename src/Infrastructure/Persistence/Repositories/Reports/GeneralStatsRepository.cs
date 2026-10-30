@@ -210,13 +210,13 @@ public class GeneralStatsRepository(GeneralContext dbContext) : IGeneralStatsRep
 
     /// <inheritdoc/>
     public async Task<List<KeyValuePair<string, int>>> GetObservationsByScaleAsync(int? departmentId, int? initiativeId, CancellationToken ct = default) =>
-        await dbContext.ObservationTags
-            .Where(e => e.Observation!.Initiative!.Enabled && e.Tag!.CategoryId == (int)TagCategoryEnum.BiologicalGroup &&
+        await dbContext.TopicTags
+            .Where(e => e.Topic!.Initiative!.Enabled && e.Tag!.CategoryId == (int)TagCategoryEnum.BiologicalGroup &&
                 (departmentId == null ||
-                    e.Observation.ObservationLocations!.Any(e =>
+                    e.Topic.TopicLocations!.Any(e =>
                         (e.LocationId == departmentId && e.Location!.Level == (byte)LocationLevel.Department) ||
                         (e.Location!.ParentId == departmentId && e.Location.Level == (byte)LocationLevel.Municipality))) &&
-                (initiativeId == null || e.Observation.InitiativeId == initiativeId))
+                (initiativeId == null || e.Topic.InitiativeId == initiativeId))
             .GroupBy(e => e.Tag!.Name)
             .Select(e => new KeyValuePair<string, int>(e.Key, e.Count()))
             .ToListAsync(ct);

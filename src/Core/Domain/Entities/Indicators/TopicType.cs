@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Indicator Topic entity.
+/// Topic Type entity.
 /// </summary>
-public class IndicatorTopic : BaseEntity<int>, IAggregateRoot
+public class TopicType : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
     /// Entity name.
@@ -15,7 +15,7 @@ public class IndicatorTopic : BaseEntity<int>, IAggregateRoot
     public required string Name { get; set; }
 
     /// <summary>
-    /// Observation relationship.
+    /// Topic relationship.
     /// </summary>
-    public ICollection<Observation>? Observations { get; init; }
+    public ICollection<Topic>? Topics { get; init; }
 }
