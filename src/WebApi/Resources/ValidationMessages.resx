@@ -377,10 +377,6 @@
     <value>The specified topic does not exist</value>
     <comment/>
   </data>
-  <data name="IND_002" xml:space="preserve">
-    <value>Only one topic is required</value>
-    <comment/>
-  </data>
   <data name="IND_003" xml:space="preserve">
     <value>Upper group not found</value>
     <comment/>

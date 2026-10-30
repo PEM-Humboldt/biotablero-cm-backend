@@ -443,11 +443,6 @@ public static class ValidationErrorCodes
         public const string NotFound = "IND_001";
 
         /// <summary>
-        /// Only one observation is required.
-        /// </summary>
-        public const string OnlyOneObservationRequired = "IND_002";
-
-        /// <summary>
         /// Upper ground not found.
         /// </summary>
         public const string UpperGroupNotFound = "IND_003";

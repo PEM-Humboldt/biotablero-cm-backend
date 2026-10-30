@@ -6,12 +6,12 @@
 public class SpreadsheetUploadDescription
 {
     /// <summary>
-    /// New observations.
+    /// New topics.
     /// </summary>
     public string[] NewTopics { get; set; } = [];
 
     /// <summary>
-    /// Edited observations.
+    /// Edited topics.
     /// </summary>
     public string[] EditedTopics { get; set; } = [];
 }
