@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
-/// Observation Tag controller.
+/// Topic Tag controller.
 /// </summary>
 /// <param name="webTools">General web tools.</param>
 /// <param name="entityService">Entity service.</param>
@@ -20,14 +20,14 @@ using Microsoft.AspNetCore.Mvc;
 [Route("[controller]")]
 [Produces("application/json")]
 [ApiConventionType(typeof(CustomApiConventions))]
-public class ObservationTagController(
+public class TopicTagController(
     IWebTools webTools,
     ITopicTagService entityService) : ControllerBase
 {
     /// <summary>
     /// Add entity.
     /// </summary>
-    /// <param name="observationId">Observation identifier.</param>
+    /// <param name="topicId">Topic identifier.</param>
     /// <param name="tagId">Tag identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Added entity data.</returns>
@@ -36,9 +36,9 @@ public class ObservationTagController(
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Post(int observationId, int tagId, CancellationToken ct)
+    public async Task<IActionResult> Post(int topicId, int tagId, CancellationToken ct)
     {
-        var response = await entityService.AddAsync(observationId, tagId, ct);
+        var response = await entityService.AddAsync(topicId, tagId, ct);
         return webTools.CustomResponse(response);
     }
 
