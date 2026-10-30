@@ -7,12 +7,12 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Observation entity.
+/// Topic entity.
 /// </summary>
-public class Observation : BaseEntity<int>, IAggregateRoot
+public class Topic : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Observation name.
+    /// Topic name.
     /// </summary>
     public required string Name { get; set; }
 
@@ -22,7 +22,7 @@ public class Observation : BaseEntity<int>, IAggregateRoot
     public int InitiativeId { get; set; }
 
     /// <summary>
-    /// Observation Topic identifier.
+    /// Topic Topic identifier.
     /// </summary>
     public int IndicatorTopicId { get; set; }
 
@@ -32,27 +32,27 @@ public class Observation : BaseEntity<int>, IAggregateRoot
     public Initiative? Initiative { get; set; }
 
     /// <summary>
-    /// Observation Topic relationship.
+    /// Topic Type relationship.
     /// </summary>
-    public IndicatorTopic? Topic { get; set; }
+    public TopicType? TopicType { get; set; }
 
     /// <summary>
-    /// Last observation version.
+    /// Last topic version.
     /// </summary>
     public int LastVersion => Versions?.Max(e => e.Version) ?? 0;
 
     /// <summary>
-    /// Observation Tag relationship.
+    /// Topic Tag relationship.
     /// </summary>
-    public ICollection<ObservationTag>? ObservationTags { get; init; }
+    public ICollection<TopicTag>? TopicTags { get; init; }
 
     /// <summary>
-    /// Observation Location relationship.
+    /// Topic Location relationship.
     /// </summary>
-    public ICollection<ObservationLocation>? ObservationLocations { get; init; }
+    public ICollection<TopicLocation>? TopicLocations { get; init; }
 
     /// <summary>
-    /// Observation Version relationship.
+    /// Topic Version relationship.
     /// </summary>
-    public ICollection<ObservationVersion>? Versions { get; init; }
+    public ICollection<TopicVersion>? Versions { get; init; }
 }

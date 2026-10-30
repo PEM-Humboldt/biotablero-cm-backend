@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// <summary>
 /// Observation Version entity configuration.
 /// </summary>
-public class ObservationVersionConfig : IEntityTypeConfiguration<ObservationVersion>
+public class ObservationVersionConfig : IEntityTypeConfiguration<TopicVersion>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<ObservationVersion> builder)
+    public void Configure(EntityTypeBuilder<TopicVersion> builder)
     {
         builder?.ToTable("observation_version", "indicators");
 
@@ -21,7 +21,7 @@ public class ObservationVersionConfig : IEntityTypeConfiguration<ObservationVers
             .HasColumnName("id")
             .IsRequired();
 
-        builder?.Property(e => e.ObservationId)
+        builder?.Property(e => e.TopicId)
             .HasColumnName("observation_id")
             .IsRequired();
 
@@ -55,15 +55,15 @@ public class ObservationVersionConfig : IEntityTypeConfiguration<ObservationVers
             .HasColumnName("authorship")
             .HasMaxLength(3000);
 
-        builder?.HasOne(e => e.Observation)
+        builder?.HasOne(e => e.Topic)
             .WithMany(p => p.Versions)
-            .HasForeignKey(e => e.ObservationId);
+            .HasForeignKey(e => e.TopicId);
 
         builder?.Ignore(i => i.IndicatorTopicId);
-        builder?.Ignore(i => i.ObservationName);
+        builder?.Ignore(i => i.TopicName);
 
         builder?
-            .HasIndex(e => new { e.ObservationId, e.Version })
+            .HasIndex(e => new { e.TopicId, e.Version })
             .IsUnique();
     }
 }

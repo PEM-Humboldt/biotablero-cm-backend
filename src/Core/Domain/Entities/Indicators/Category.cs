@@ -37,5 +37,5 @@ public class Category : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Observation Group relationship.
     /// </summary>
-    public ICollection<ObservationGroup>? ObservationGroups { get; init; }
+    public ICollection<TopicGroup>? ObservationGroups { get; init; }
 }

@@ -12,10 +12,10 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 /// <summary>
 /// Observation Tag mappings.
 /// </summary>
-public class ObservationTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : MapperRead<ObservationTag, ObservationTagDto>
+public class ObservationTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : MapperRead<TopicTag, ObservationTagDto>
 {
     /// <inheritdoc/>
-    public override ObservationTagDto Map(ObservationTag? entity)
+    public override ObservationTagDto Map(TopicTag? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 
 /// <summary>
-/// Observation Version Map entity.
+/// Topic Version Map entity.
 /// </summary>
-public class ObservationVersionMap : BaseEntity<int>, IAggregateRoot
+public class TopicVersionMap : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Observation Version identifier.
+    /// Topic Version identifier.
     /// </summary>
-    public int ObservationVersionId { get; set; }
+    public int TopicVersionId { get; set; }
 
     /// <summary>
     /// Map title.
@@ -30,9 +30,9 @@ public class ObservationVersionMap : BaseEntity<int>, IAggregateRoot
     public required string ImageUrl { get; set; }
 
     /// <summary>
-    /// Observation Version relationship.
+    /// Topic Version relationship.
     /// </summary>
-    public ObservationVersion? ObservationVersion { get; set; }
+    public TopicVersion? TopicVersion { get; set; }
 
     /// <summary>
     /// Map Legend relationship.

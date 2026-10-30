@@ -18,11 +18,11 @@ using Serilog;
 /// <param name="logger">System logger.</param>
 public class ObservationVersionRepository(
     GeneralContext dbContext,
-    ILogger logger) : Repository<ObservationVersion, int>(dbContext, logger), IObservationVersionRepository
+    ILogger logger) : Repository<TopicVersion, int>(dbContext, logger), IObservationVersionRepository
 {
     /// <inheritdoc/>
-    public override async Task<ObservationVersion?> GetByIdAsync(int id, CancellationToken ct = default) =>
-        await dbContext.ObservationVersions
+    public override async Task<TopicVersion?> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await dbContext.TopicVersions
             .Include(e => e.Maps!)
                 .ThenInclude(e => e.Legends!)
                     .ThenInclude(e => e.Items)
@@ -40,8 +40,8 @@ public class ObservationVersionRepository(
 
     /// <inheritdoc/>
     public async Task<int> GetLastVersionAsync(int observationId, CancellationToken ct = default) =>
-        await dbContext.ObservationVersions
-            .Where(e => e.ObservationId == observationId)
+        await dbContext.TopicVersions
+            .Where(e => e.TopicId == observationId)
             .OrderByDescending(e => e.Version)
             .Select(e => e.Version)
             .FirstOrDefaultAsync(ct);

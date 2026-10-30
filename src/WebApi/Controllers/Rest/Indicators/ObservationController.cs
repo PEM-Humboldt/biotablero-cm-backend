@@ -56,7 +56,7 @@ public class ObservationController(
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [OpenApiResponse(StatusCodes.Status200OK, typeof(ObservationOdataResponseExample))]
-    public async Task<IActionResult> GetOdataList(ODataQueryOptions<Observation> queryOptions, CancellationToken ct)
+    public async Task<IActionResult> GetOdataList(ODataQueryOptions<Topic> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);
         return webTools.CustomResponse(response);

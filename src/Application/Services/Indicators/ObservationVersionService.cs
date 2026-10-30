@@ -23,10 +23,10 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <summary>
 /// Observation Version service.
 /// </summary>
-public class ObservationVersionService : ServiceRead<ObservationVersion, ObservationVersionDto, int>, IObservationVersionService
+public class ObservationVersionService : ServiceRead<TopicVersion, ObservationVersionDto, int>, IObservationVersionService
 {
     private readonly ILogger logger;
-    private new readonly IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto> mapper;
+    private new readonly IMapperReadAndUpdate<TopicVersion, ObservationVersionDto> mapper;
     private readonly IValidator<ObservationVersionDto> entityValidator;
 
     /// <summary>
@@ -41,7 +41,7 @@ public class ObservationVersionService : ServiceRead<ObservationVersion, Observa
         IObservationVersionRepository entityRepository,
         IValidator<ObservationVersionDto> entityValidator,
         ILogger logger,
-        IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto> mapper,
+        IMapperReadAndUpdate<TopicVersion, ObservationVersionDto> mapper,
         IValidationErrorTranslator errorTranslator)
     : base(entityRepository, mapper, errorTranslator)
     {

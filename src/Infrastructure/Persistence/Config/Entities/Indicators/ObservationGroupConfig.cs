@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 /// <summary>
 /// Observation Group entity configuration.
 /// </summary>
-public class ObservationGroupConfig : IEntityTypeConfiguration<ObservationGroup>
+public class ObservationGroupConfig : IEntityTypeConfiguration<TopicGroup>
 {
     /// <inheritdoc/>
-    public void Configure(EntityTypeBuilder<ObservationGroup> builder)
+    public void Configure(EntityTypeBuilder<TopicGroup> builder)
     {
         builder?.ToTable("observation_group", "indicators");
 
@@ -21,7 +21,7 @@ public class ObservationGroupConfig : IEntityTypeConfiguration<ObservationGroup>
             .HasColumnName("id")
             .IsRequired();
 
-        builder?.Property(e => e.ObservationVersionId)
+        builder?.Property(e => e.TopicVersionId)
             .HasColumnName("observation_version_id")
             .IsRequired();
 
@@ -29,16 +29,16 @@ public class ObservationGroupConfig : IEntityTypeConfiguration<ObservationGroup>
             .HasColumnName("category_id")
             .IsRequired();
 
-        builder?.HasOne(e => e.ObservationVersion)
+        builder?.HasOne(e => e.TopicVersion)
             .WithMany(p => p.Groups)
-            .HasForeignKey(e => e.ObservationVersionId);
+            .HasForeignKey(e => e.TopicVersionId);
 
         builder?.HasOne(e => e.Category)
             .WithMany(p => p.ObservationGroups)
             .HasForeignKey(e => e.CategoryId);
 
         builder?
-            .HasIndex(e => new { e.ObservationVersionId, e.CategoryId })
+            .HasIndex(e => new { e.TopicVersionId, e.CategoryId })
             .IsUnique();
     }
 }

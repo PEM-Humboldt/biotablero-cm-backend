@@ -40,11 +40,11 @@ using ObservationBaseCategory = Core.Domain.Utils.Enums.IndicatorsEnums.Observat
 /// <summary>
 /// Observation service.
 /// </summary>
-public class ObservationService : ServiceRead<Observation, ObservationDto, int>, IObservationService
+public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObservationService
 {
     private new readonly IObservationRepository entityRepository;
     private readonly ILogger logger;
-    private new readonly IMapperReadAndUpdate<Observation, ObservationDto> mapper;
+    private new readonly IMapperReadAndUpdate<Topic, ObservationDto> mapper;
     private readonly IValidator<ObservationDto> entityValidator;
     private readonly IIndicatorExcelService excelService;
     private readonly IInitiativeRepository initiativeRepository;
@@ -54,7 +54,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     private readonly IObservationLocationRepository observationLocationRepository;
     private readonly ICentralActorRepository centralActorRepository;
     private readonly IValidator<ObservationImportRow> observationImportRowValidator;
-    private readonly IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto> observationVersionMapper;
+    private readonly IMapperReadAndUpdate<TopicVersion, ObservationVersionDto> observationVersionMapper;
 
     /// <summary>
     /// Constructor.
@@ -77,7 +77,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         IObservationRepository entityRepository,
         IValidator<ObservationDto> entityValidator,
         ILogger logger,
-        IMapperReadAndUpdate<Observation, ObservationDto> mapper,
+        IMapperReadAndUpdate<Topic, ObservationDto> mapper,
         IValidationErrorTranslator errorTranslator,
         IIndicatorExcelService excelService,
         IInitiativeRepository initiativeRepository,
@@ -87,7 +87,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         IObservationLocationRepository observationLocationRepository,
         ICentralActorRepository centralActorRepository,
         IValidator<ObservationImportRow> observationImportRowValidator,
-        IMapperReadAndUpdate<ObservationVersion, ObservationVersionDto> observationVersionMapper)
+        IMapperReadAndUpdate<TopicVersion, ObservationVersionDto> observationVersionMapper)
     : base(entityRepository, mapper, errorTranslator)
     {
         this.entityRepository = entityRepository;
@@ -106,7 +106,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     }
 
     /// <inheritdoc/>
-    public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<Observation> queryOptions, CancellationToken ct = default)
+    public override async Task<CustomWebResponse> GetListAsync(ODataQueryOptions<Topic> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();
         query = entityRepository.IncludeOdataEntities(query);
@@ -283,8 +283,8 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         }
 
         // Prepare data
-        var newObservations = new List<Observation>();
-        var editedObservations = new List<ObservationVersion>();
+        var newObservations = new List<Topic>();
+        var editedObservations = new List<TopicVersion>();
         var now = DateTimeOffset.Now;
         var modifyDatabase = !requestData.DoNotModifyDatabase;
         var groupedRows = fileReadResult.Rows
@@ -312,7 +312,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         result.Description = new()
         {
             NewObservations = [.. newObservations.Select(e => e.Name)],
-            EditedObservations = [.. editedObservations.Select(e => e.ObservationName ?? string.Empty)],
+            EditedObservations = [.. editedObservations.Select(e => e.TopicName ?? string.Empty)],
         };
 
         // Save data
@@ -595,7 +595,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                     };
                 }
 
-                if (!row.ObservationEntity?.ObservationLocations?.Any(e => e.Locality == row.LocalityName && e.Location?.Name == row.MunicipalityName && row.DepartmentName == e.Location?.Parent?.Name) ?? false)
+                if (!row.ObservationEntity?.TopicLocations?.Any(e => e.Locality == row.LocalityName && e.Location?.Name == row.MunicipalityName && row.DepartmentName == e.Location?.Parent?.Name) ?? false)
                 {
                     return new(true)
                     {
@@ -767,7 +767,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// <param name="spreadsheetLocations">Locations from spreadsheets.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Existing observation locations.</returns>
-    private async Task<List<ObservationLocation>> GetExistingObservationLocationsAsync(Observation? observation, LocationDataHelper[] spreadsheetLocations, CancellationToken ct = default)
+    private async Task<List<TopicLocation>> GetExistingObservationLocationsAsync(Topic? observation, LocationDataHelper[] spreadsheetLocations, CancellationToken ct = default)
     {
         var existingObservationLocations = observation != null ? await observationLocationRepository.GetByObservationAsync(observation?.Id ?? 0, ct) : [];
 
@@ -889,8 +889,8 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// <param name="now">Current date and time.</param>
     /// <param name="observationLastVersion">Last observation version.</param>
     /// <returns>ObservationVersion entities.</returns>
-    private static List<ObservationVersion> GenerateObservationVersions(
-        Observation? observation,
+    private static List<TopicVersion> GenerateObservationVersions(
+        Topic? observation,
         List<ObservationImportRow> rows,
         List<GroupDataHelper> categories,
         List<CentralActor> centralActors,
@@ -898,11 +898,11 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         int observationLastVersion) =>
         [.. rows
             .GroupBy(r => r.ObservationName)
-            .Select(g => new ObservationVersion()
+            .Select(g => new TopicVersion()
             {
                 IndicatorTopicId = g.Select(r => r.IndicatorTopicId).FirstOrDefault(),
-                ObservationId = observation?.Id ?? 0,
-                ObservationName = g.Key,
+                TopicId = observation?.Id ?? 0,
+                TopicName = g.Key,
                 CreationDate = now,
                 Version = observation == null ? 1 : observationLastVersion + 1,
                 Groups = [.. g.GroupBy(g => new { g.UpperGroupName, g.GroupName, g.GroupDescription })
@@ -918,7 +918,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                                     string.IsNullOrEmpty(g2.Key.GroupName))?.Id ??
                             0;
 
-                        return new ObservationGroup()
+                        return new TopicGroup()
                         {
                             CategoryId = categoryId,
                             Values = [.. g2.Select(g2r =>
@@ -951,11 +951,11 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
     /// <param name="locations">Location entities.</param>
     /// <param name="now">Current date and time.</param>
     /// <returns>Observation entities.</returns>
-    private static List<Observation> GenerateObservations(
+    private static List<Topic> GenerateObservations(
         int initiativeId,
         List<ObservationImportRow> rows,
-        List<ObservationVersion> observationVersions,
-        List<ObservationLocation> observationLocations,
+        List<TopicVersion> observationVersions,
+        List<TopicLocation> observationLocations,
         List<Location> locations,
         DateTimeOffset now) =>
         [.. rows
@@ -965,7 +965,7 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                 var observationsLocations = g
                     .Select(r =>
                     {
-                        ObservationLocation? observationLocation = null;
+                        TopicLocation? observationLocation = null;
 
                         observationLocation = observationLocations
                             .FirstOrDefault(i => i.Location?.Name == r.MunicipalityName && i.Location?.Parent?.Name == r.DepartmentName);
@@ -975,9 +975,9 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
                             var locationEntity = locations
                                 .FirstOrDefault(i => i.Name == r.MunicipalityName && i.Parent?.Name == r.DepartmentName);
 
-                            observationLocation = new ObservationLocation()
+                            observationLocation = new TopicLocation()
                             {
-                                ObservationId = r.ObservationEntity?.Id ?? 0,
+                                TopicId = r.ObservationEntity?.Id ?? 0,
                                 LocationId = locationEntity?.Id ?? 0,
                                 Location = locationEntity,
                                 Locality = r.LocalityName,
@@ -991,13 +991,13 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
 
                 var indicatorTopicId = g.Select(r => r.IndicatorTopicId).FirstOrDefault();
 
-                return new Observation()
+                return new Topic()
                 {
                     InitiativeId = initiativeId,
                     Name = g.Key,
                     IndicatorTopicId = indicatorTopicId,
-                    ObservationLocations = observationsLocations,
-                    Versions = [.. observationVersions.Where(e => e.IndicatorTopicId == indicatorTopicId && e.ObservationName == g.Key)],
+                    TopicLocations = observationsLocations,
+                    Versions = [.. observationVersions.Where(e => e.IndicatorTopicId == indicatorTopicId && e.TopicName == g.Key)],
                 };
             })];
 
