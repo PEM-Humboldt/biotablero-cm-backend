@@ -21,9 +21,9 @@ using Serilog;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// Observation Version service.
+/// Topic Version service.
 /// </summary>
-public class ObservationVersionService : ServiceRead<TopicVersion, TopicVersionDto, int>, IObservationVersionService
+public class TopicVersionService : ServiceRead<TopicVersion, TopicVersionDto, int>, ITopicVersionService
 {
     private readonly ILogger logger;
     private new readonly IMapperReadAndUpdate<TopicVersion, TopicVersionDto> mapper;
@@ -37,7 +37,7 @@ public class ObservationVersionService : ServiceRead<TopicVersion, TopicVersionD
     /// <param name="logger">System logger.</param>
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
-    public ObservationVersionService(
+    public TopicVersionService(
         ITopicVersionRepository entityRepository,
         IValidator<TopicVersionDto> entityValidator,
         ILogger logger,
@@ -82,7 +82,7 @@ public class ObservationVersionService : ServiceRead<TopicVersion, TopicVersionD
 
         entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Update, "Updated observation version", "{@EntityData}", entityData);
+        logger.AddLog(LogType.Update, "Updated topic version", "{@EntityData}", entityData);
 
         return new()
         {

@@ -19,15 +19,15 @@ using Serilog;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
 /// <summary>
-/// Observation Tag service.
+/// Topic Tag service.
 /// </summary>
-public class ObservationTagService : IObservationTagService
+public class TopicTagService : ITopicTagService
 {
     private readonly ITopicTagRepository entityRepository;
     private readonly IValidationErrorTranslator errorTranslator;
     private readonly ILogger logger;
     private readonly IMapperRead<TopicTag, TopicTagDto> mapper;
-    private readonly ITopicRepository observationRepository;
+    private readonly ITopicRepository topicRepository;
     private readonly ITagRepository tagRepository;
 
     /// <summary>
@@ -37,31 +37,31 @@ public class ObservationTagService : IObservationTagService
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
     /// <param name="logger">System logger.</param>
-    /// <param name="observationRepository">Observation repository.</param>
+    /// <param name="topicRepository">Topic repository.</param>
     /// <param name="tagRepository">Tag repository.</param>
-    public ObservationTagService(
+    public TopicTagService(
         ITopicTagRepository entityRepository,
         IMapperRead<TopicTag, TopicTagDto> mapper,
         IValidationErrorTranslator errorTranslator,
         ILogger logger,
-        ITopicRepository observationRepository,
+        ITopicRepository topicRepository,
         ITagRepository tagRepository)
     {
         this.entityRepository = entityRepository;
         this.mapper = mapper;
         this.errorTranslator = errorTranslator;
         this.logger = logger;
-        this.observationRepository = observationRepository;
+        this.topicRepository = topicRepository;
         this.tagRepository = tagRepository;
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(int observationId, int tagId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(int topicId, int tagId, CancellationToken ct = default)
     {
-        // Validate observation
-        var observation = await observationRepository.GetByIdAsync(observationId, ct);
+        // Validate topic
+        var topic = await topicRepository.GetByIdAsync(topicId, ct);
 
-        if (observation == null)
+        if (topic == null)
         {
             return new(true)
             {
@@ -81,7 +81,7 @@ public class ObservationTagService : IObservationTagService
         }
 
         // Validate duplicated entities
-        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(observationId, tagId, ct);
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(topicId, tagId, ct);
 
         if (hasDuplicatedEntities)
         {
@@ -94,7 +94,7 @@ public class ObservationTagService : IObservationTagService
         // Build entity data
         var entity = new TopicTag()
         {
-            TopicId = observationId,
+            TopicId = topicId,
             TagId = tagId,
         };
 
@@ -102,7 +102,7 @@ public class ObservationTagService : IObservationTagService
         entity = await entityRepository.AddAsync(entity, ct);
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Create, "Added observation tag relationship", "{@EntityData}", entityData);
+        logger.AddLog(LogType.Create, "Added topic tag relationship", "{@EntityData}", entityData);
 
         return new()
         {
@@ -127,7 +127,7 @@ public class ObservationTagService : IObservationTagService
         await entityRepository.DeleteAsync(entity, ct);
         var entityData = mapper.Map(entity);
 
-        logger.AddLog(LogType.Delete, "Deleted observation tag relationship", "{@EntityData}", entityData);
+        logger.AddLog(LogType.Delete, "Deleted topic tag relationship", "{@EntityData}", entityData);
 
         return new();
     }

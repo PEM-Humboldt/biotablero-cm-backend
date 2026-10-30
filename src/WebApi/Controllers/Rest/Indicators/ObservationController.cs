@@ -32,7 +32,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 [ApiConventionType(typeof(CustomApiConventions))]
 public class ObservationController(
     IWebTools webTools,
-    IObservationService entityService) : ODataController
+    ITopicService entityService) : ODataController
 {
     /// <summary>
     /// Get entity.
@@ -111,7 +111,7 @@ public class ObservationController(
             DoNotModifyDatabase = requestData.DoNotModifyDatabase,
         };
 
-        var response = await entityService.ImportObservationsAsync(HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
+        var response = await entityService.ImportTopicsAsync(HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
         return webTools.CustomResponse(response);
     }
 }

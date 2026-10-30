@@ -27,7 +27,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 [ApiConventionType(typeof(CustomApiConventions))]
 public class ObservationVersionController(
     IWebTools webTools,
-    IObservationVersionService entityService) : ODataController
+    ITopicVersionService entityService) : ODataController
 {
     /// <summary>
     /// Get entity.

@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Mvc;
 [ApiConventionType(typeof(CustomApiConventions))]
 public class ObservationTagController(
     IWebTools webTools,
-    IObservationTagService entityService) : ControllerBase
+    ITopicTagService entityService) : ControllerBase
 {
     /// <summary>
     /// Add entity.

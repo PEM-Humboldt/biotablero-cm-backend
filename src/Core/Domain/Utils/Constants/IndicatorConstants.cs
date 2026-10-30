@@ -5,7 +5,7 @@ using System.Text;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.IndicatorsEnums;
 
-using IndicatorTopics = Enums.IndicatorsEnums.IndicatorTopic;
+using TopicTypes = Enums.IndicatorsEnums.TopicType;
 
 /// <summary>
 /// Constants for indicators.
@@ -23,80 +23,80 @@ public static class IndicatorConstants
     public const string SpeciesCategoryName = "Especie";
 
     /// <summary>
-    /// Observation date format.
+    /// Topic date format.
     /// </summary>
-    public static readonly CompositeFormat ObservationDateFormat = CompositeFormat.Parse("{0}-{1}-01");
+    public static readonly CompositeFormat TopicDateFormat = CompositeFormat.Parse("{0}-{1}-01");
 
     /// <summary>
     /// Indicator types by indicator topic.
     /// </summary>
-    public static readonly Dictionary<IndicatorTopics, IndicatorType[]> IndicatorTypesByIndicatorTopic = new()
+    public static readonly Dictionary<TopicTypes, IndicatorType[]> IndicatorTypesByTopicType = new()
     {
-        { IndicatorTopics.OccupiedAreaPercent, [IndicatorType.OccupiedAreaPercent] },
-        { IndicatorTopics.DetectionOccupancyProbability, [IndicatorType.DetectionProbability, IndicatorType.OccupancyProbability] },
-        { IndicatorTopics.SpeciesDiversity, [IndicatorType.SpeciesRichness, IndicatorType.ShannonIndex, IndicatorType.SimpsonIndex] },
-        { IndicatorTopics.RelativeUseByBiologicalGroup, [IndicatorType.RelativeUseIndex] },
-        { IndicatorTopics.CentralRelationalIntensity, [IndicatorType.RelationalIntensity] },
-        { IndicatorTopics.CollectiveActionParticipation, [IndicatorType.PersonCount] },
+        { TopicTypes.OccupiedAreaPercent, [IndicatorType.OccupiedAreaPercent] },
+        { TopicTypes.DetectionOccupancyProbability, [IndicatorType.DetectionProbability, IndicatorType.OccupancyProbability] },
+        { TopicTypes.SpeciesDiversity, [IndicatorType.SpeciesRichness, IndicatorType.ShannonIndex, IndicatorType.SimpsonIndex] },
+        { TopicTypes.RelativeUseByBiologicalGroup, [IndicatorType.RelativeUseIndex] },
+        { TopicTypes.CentralRelationalIntensity, [IndicatorType.RelationalIntensity] },
+        { TopicTypes.CollectiveActionParticipation, [IndicatorType.PersonCount] },
     };
 
     /// <summary>
-    /// Indicators with species.
+    /// Topics with species.
     /// </summary>
-    public static readonly IndicatorTopics[] ObservationsWithSpecies =
+    public static readonly TopicTypes[] TopicsWithSpecies =
     [
-        IndicatorTopics.OccupiedAreaPercent,
-        IndicatorTopics.DetectionOccupancyProbability,
-        IndicatorTopics.RelativeUseByBiologicalGroup,
+        TopicTypes.OccupiedAreaPercent,
+        TopicTypes.DetectionOccupancyProbability,
+        TopicTypes.RelativeUseByBiologicalGroup,
     ];
 
     /// <summary>
-    /// Observations with confidence interval.
+    /// Topics with confidence interval.
     /// </summary>
-    public static readonly IndicatorTopics[] ObservationsWithConfidenceInterval =
+    public static readonly TopicTypes[] TopicsWithConfidenceInterval =
     [
-        IndicatorTopics.DetectionOccupancyProbability,
-        IndicatorTopics.SpeciesDiversity,
+        TopicTypes.DetectionOccupancyProbability,
+        TopicTypes.SpeciesDiversity,
     ];
 
     /// <summary>
-    /// Observations with date range.
+    /// Topics with date range.
     /// </summary>
-    public static readonly IndicatorTopics[] ObservationsWithDateRange =
+    public static readonly TopicTypes[] TopicsWithDateRange =
     [
-        IndicatorTopics.OccupiedAreaPercent,
-        IndicatorTopics.DetectionOccupancyProbability,
-        IndicatorTopics.SpeciesDiversity,
-        IndicatorTopics.RelativeUseByBiologicalGroup,
-        IndicatorTopics.CentralRelationalIntensity,
-        IndicatorTopics.CollectiveActionParticipation,
+        TopicTypes.OccupiedAreaPercent,
+        TopicTypes.DetectionOccupancyProbability,
+        TopicTypes.SpeciesDiversity,
+        TopicTypes.RelativeUseByBiologicalGroup,
+        TopicTypes.CentralRelationalIntensity,
+        TopicTypes.CollectiveActionParticipation,
     ];
 
     /// <summary>
-    /// Observations with predefined categories.
+    /// Topics with predefined categories.
     /// </summary>
-    public static readonly IndicatorTopics[] ObservationsWithPredefinedCategories =
+    public static readonly TopicTypes[] TopicsWithPredefinedCategories =
     [
-        IndicatorTopics.SpeciesDiversity,
-        IndicatorTopics.CentralRelationalIntensity,
-        IndicatorTopics.CollectiveActionParticipation,
+        TopicTypes.SpeciesDiversity,
+        TopicTypes.CentralRelationalIntensity,
+        TopicTypes.CollectiveActionParticipation,
     ];
 
     /// <summary>
-    /// Observations with integer values.
+    /// Topics with integer values.
     /// </summary>
-    public static readonly IndicatorTopics[] ObservationsWithIntegerValues =
+    public static readonly TopicTypes[] TopicsWithIntegerValues =
     [
-        IndicatorTopics.RelativeUseByBiologicalGroup,
-        IndicatorTopics.CollectiveActionParticipation,
+        TopicTypes.RelativeUseByBiologicalGroup,
+        TopicTypes.CollectiveActionParticipation,
     ];
 
     /// <summary>
-    /// Observations with central actors.
+    /// Topics with central actors.
     /// </summary>
-    public static readonly IndicatorTopics[] ObservationsWithCentralActors =
+    public static readonly TopicTypes[] TopicsWithCentralActors =
     [
-        IndicatorTopics.CentralRelationalIntensity,
-        IndicatorTopics.CollectiveActionParticipation,
+        TopicTypes.CentralRelationalIntensity,
+        TopicTypes.CollectiveActionParticipation,
     ];
 }

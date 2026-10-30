@@ -374,11 +374,11 @@
     <comment/>
   </data>
   <data name="IND_001" xml:space="preserve">
-    <value>The specified observation does not exist</value>
+    <value>The specified topic does not exist</value>
     <comment/>
   </data>
   <data name="IND_002" xml:space="preserve">
-    <value>Only one observation is required</value>
+    <value>Only one topic is required</value>
     <comment/>
   </data>
   <data name="IND_003" xml:space="preserve">
@@ -398,7 +398,7 @@
     <comment/>
   </data>
   <data name="IND_007" xml:space="preserve">
-    <value>Invalid indicator topic</value>
+    <value>Invalid topic type</value>
     <comment/>
   </data>
   <data name="IND_008" xml:space="preserve">
@@ -426,7 +426,7 @@
     <comment/>
   </data>
   <data name="IND_014" xml:space="preserve">
-    <value>The current observation does not have the geographical data supplied in the spreadsheet</value>
+    <value>The current topic does not have the geographical data supplied in the spreadsheet</value>
     <comment/>
   </data>
   <data name="IND_015" xml:space="preserve">
@@ -434,7 +434,7 @@
     <comment/>
   </data>
   <data name="IND_016" xml:space="preserve">
-    <value>The number of observations and topics must be the same</value>
+    <value>The number of topics and types must be the same</value>
     <comment/>
   </data>
   <data name="IND_017" xml:space="preserve">
