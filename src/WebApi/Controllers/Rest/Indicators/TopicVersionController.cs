@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.Services.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
-using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Observation;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Topic;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 /// <summary>
-/// Observation Version controller.
+/// Topic Version controller.
 /// </summary>
 /// <param name="webTools">General web tools.</param>
 /// <param name="entityService">Entity service.</param>
@@ -25,7 +25,7 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 [Route("[controller]")]
 [Produces("application/json")]
 [ApiConventionType(typeof(CustomApiConventions))]
-public class ObservationVersionController(
+public class TopicVersionController(
     IWebTools webTools,
     ITopicVersionService entityService) : ODataController
 {
@@ -36,7 +36,7 @@ public class ObservationVersionController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [OpenApiResponse(StatusCodes.Status200OK, typeof(ObservationVersionResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TopicVersionResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -53,8 +53,8 @@ public class ObservationVersionController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [OpenApiRequest(typeof(ObservationVersionEditRequestExample))]
-    [OpenApiResponse(StatusCodes.Status200OK, typeof(ObservationVersionResponseExample))]
+    [OpenApiRequest(typeof(TopicVersionEditRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TopicVersionResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] TopicVersionDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);
