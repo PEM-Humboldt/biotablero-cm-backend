@@ -10,9 +10,9 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
 /// <summary>
-/// Observation Tag mappings.
+/// Topic Tag mappings.
 /// </summary>
-public class ObservationTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : MapperRead<TopicTag, TopicTagDto>
+public class TopicTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : MapperRead<TopicTag, TopicTagDto>
 {
     /// <inheritdoc/>
     public override TopicTagDto Map(TopicTag? entity)

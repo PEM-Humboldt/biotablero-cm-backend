@@ -7,9 +7,9 @@ using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Indicator Topic mappings.
+/// Topic Type mappings.
 /// </summary>
-public class IndicatorTopicMappings() : MapperRead<TopicType, TopicTypeDto>
+public class TopicTypeMappings() : MapperRead<TopicType, TopicTypeDto>
 {
     /// <inheritdoc/>
     public override TopicTypeDto Map(TopicType? entity)

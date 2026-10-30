@@ -10,9 +10,9 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Observation Location mappings.
+/// Topic Location mappings.
 /// </summary>
-public class ObservationLocationMappings(
+public class TopicLocationMappings(
     IMapperRead<Location, LocationDto> locationMappings) : MapperRead<TopicLocation, TopicLocationDto>
 {
     /// <inheritdoc/>
