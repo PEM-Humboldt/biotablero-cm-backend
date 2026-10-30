@@ -8,10 +8,10 @@ public class SpreadsheetUploadDescription
     /// <summary>
     /// New observations.
     /// </summary>
-    public string[] NewObservations { get; set; } = [];
+    public string[] NewTopics { get; set; } = [];
 
     /// <summary>
     /// Edited observations.
     /// </summary>
-    public string[] EditedObservations { get; set; } = [];
+    public string[] EditedTopics { get; set; } = [];
 }

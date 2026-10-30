@@ -65,7 +65,7 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
                 {
                     RowNumber = row.RowNumber(),
                     TopicName = topicName!,
-                    IndicatorTopicId = indicatorTopicId,
+                    TopicTypeId = indicatorTopicId,
                     IndicatorTypeId = indicatorTypeId,
                     DepartmentName = departmentName!,
                     MunicipalityName = municipalityName!,

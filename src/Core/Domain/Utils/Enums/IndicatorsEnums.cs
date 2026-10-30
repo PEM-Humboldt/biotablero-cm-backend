@@ -8,9 +8,9 @@ public static class IndicatorsEnums
     #region Indicators
 
     /// <summary>
-    /// Indicator topics.
+    /// Topic types.
     /// </summary>
-    public enum IndicatorTopic
+    public enum TopicType
     {
         /// <summary>
         /// Percentage of the study area occupied by the species.

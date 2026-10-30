@@ -31,9 +31,9 @@ public class TopicImportRow()
     public required string TopicName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Indicator Topic identifier.
+    /// Topic Type identifier.
     /// </summary>
-    public required int IndicatorTopicId { get; set; }
+    public required int TopicTypeId { get; set; }
 
     /// <summary>
     /// Indicator Type identifier.
