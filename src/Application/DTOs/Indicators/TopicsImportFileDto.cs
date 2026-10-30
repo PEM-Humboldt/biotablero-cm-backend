@@ -3,9 +3,9 @@
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Observations Import File dto.
+/// Topics Import File dto.
 /// </summary>
-public class ObservationsImportFileDto : IDto
+public class TopicsImportFileDto : IDto
 {
     /// <summary>
     /// Initiative identifier.

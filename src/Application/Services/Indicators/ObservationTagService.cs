@@ -26,7 +26,7 @@ public class ObservationTagService : IObservationTagService
     private readonly ITopicTagRepository entityRepository;
     private readonly IValidationErrorTranslator errorTranslator;
     private readonly ILogger logger;
-    private readonly IMapperRead<TopicTag, ObservationTagDto> mapper;
+    private readonly IMapperRead<TopicTag, TopicTagDto> mapper;
     private readonly ITopicRepository observationRepository;
     private readonly ITagRepository tagRepository;
 
@@ -41,7 +41,7 @@ public class ObservationTagService : IObservationTagService
     /// <param name="tagRepository">Tag repository.</param>
     public ObservationTagService(
         ITopicTagRepository entityRepository,
-        IMapperRead<TopicTag, ObservationTagDto> mapper,
+        IMapperRead<TopicTag, TopicTagDto> mapper,
         IValidationErrorTranslator errorTranslator,
         ILogger logger,
         ITopicRepository observationRepository,

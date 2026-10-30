@@ -7,10 +7,10 @@ using IAVH.BioTablero.CM.WebApi.Interfaces;
 /// <summary>
 /// Observation edit response example.
 /// </summary>
-public class ObservationEditRequestExample : IOpenApiExampleProvider<ObservationDto>
+public class ObservationEditRequestExample : IOpenApiExampleProvider<TopicDto>
 {
     /// <inheritdoc/>
-    public ObservationDto GetExamples() => new()
+    public TopicDto GetExamples() => new()
     {
         Name = "Observation example (edited)",
     };

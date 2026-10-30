@@ -55,7 +55,7 @@ public class ObservationVersionController(
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
     [OpenApiRequest(typeof(ObservationVersionEditRequestExample))]
     [OpenApiResponse(StatusCodes.Status200OK, typeof(ObservationVersionResponseExample))]
-    public async Task<IActionResult> Put(int id, [FromBody] ObservationVersionDto requestData, CancellationToken ct)
+    public async Task<IActionResult> Put(int id, [FromBody] TopicVersionDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);
         return webTools.CustomResponse(response);

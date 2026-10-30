@@ -4,9 +4,9 @@ using IAVH.BioTablero.CM.Application.DTOs.Geo;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
-/// Observation Location dto.
+/// Topic Location dto.
 /// </summary>
-public class ObservationLocationDto : IDto
+public class TopicLocationDto : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -14,9 +14,9 @@ public class ObservationLocationDto : IDto
     public int? Id { get; set; }
 
     /// <summary>
-    /// Observation identifier.
+    /// Topic identifier.
     /// </summary>
-    public int? ObservationId { get; set; }
+    public int? TopicId { get; set; }
 
     /// <summary>
     /// Location identifier.
