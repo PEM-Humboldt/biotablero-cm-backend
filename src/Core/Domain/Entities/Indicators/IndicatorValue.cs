@@ -10,9 +10,9 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 public class IndicatorValue : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Observation Group identifier.
+    /// Topic Group identifier.
     /// </summary>
-    public int ObservationGroupId { get; set; }
+    public int TopicGroupId { get; set; }
 
     /// <summary>
     /// Indicator Type identifier.
@@ -50,7 +50,7 @@ public class IndicatorValue : BaseEntity<int>, IAggregateRoot
     public float? LowerLimit { get; set; }
 
     /// <summary>
-    /// Observation Group relationship.
+    /// Topic Group relationship.
     /// </summary>
     public TopicGroup? Group { get; set; }
 

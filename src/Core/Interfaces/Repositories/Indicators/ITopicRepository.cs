@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 
 /// <summary>
-/// Observation repository interface.
+/// Topic repository interface.
 /// </summary>
-public interface IObservationRepository : IRepository<Topic, int>
+public interface ITopicRepository : IRepository<Topic, int>
 {
     /// <summary>
     /// Include OData custom entities.
@@ -28,7 +28,7 @@ public interface IObservationRepository : IRepository<Topic, int>
     Task<IEnumerable<Topic>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
-    /// Get elements by initiative and observation names.
+    /// Get elements by initiative and topic names.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
     /// <param name="names">Names list.</param>
@@ -55,9 +55,9 @@ public interface IObservationRepository : IRepository<Topic, int>
     Task<bool> IsDuplicatedAsync(int id, int initiativeId, string name, CancellationToken ct = default);
 
     /// <summary>
-    /// Get observation versions.
+    /// Get topic versions.
     /// </summary>
-    /// <param name="id">Observation identifier.</param>
+    /// <param name="id">Topic identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<int[]> GetVersionsAsync(int id, CancellationToken ct = default);

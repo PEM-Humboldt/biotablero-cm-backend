@@ -23,11 +23,11 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// </summary>
 public class ObservationTagService : IObservationTagService
 {
-    private readonly IObservationTagRepository entityRepository;
+    private readonly ITopicTagRepository entityRepository;
     private readonly IValidationErrorTranslator errorTranslator;
     private readonly ILogger logger;
     private readonly IMapperRead<TopicTag, ObservationTagDto> mapper;
-    private readonly IObservationRepository observationRepository;
+    private readonly ITopicRepository observationRepository;
     private readonly ITagRepository tagRepository;
 
     /// <summary>
@@ -40,11 +40,11 @@ public class ObservationTagService : IObservationTagService
     /// <param name="observationRepository">Observation repository.</param>
     /// <param name="tagRepository">Tag repository.</param>
     public ObservationTagService(
-        IObservationTagRepository entityRepository,
+        ITopicTagRepository entityRepository,
         IMapperRead<TopicTag, ObservationTagDto> mapper,
         IValidationErrorTranslator errorTranslator,
         ILogger logger,
-        IObservationRepository observationRepository,
+        ITopicRepository observationRepository,
         ITagRepository tagRepository)
     {
         this.entityRepository = entityRepository;

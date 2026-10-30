@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Observation Version entity configuration.
+/// Topic Version entity configuration.
 /// </summary>
-public class ObservationVersionConfig : IEntityTypeConfiguration<TopicVersion>
+public class TopicVersionConfig : IEntityTypeConfiguration<TopicVersion>
 {
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<TopicVersion> builder)
     {
-        builder?.ToTable("observation_version", "indicators");
+        builder?.ToTable("topic_version", "indicators");
 
         builder?.HasKey(e => e.Id);
 
@@ -22,7 +22,7 @@ public class ObservationVersionConfig : IEntityTypeConfiguration<TopicVersion>
             .IsRequired();
 
         builder?.Property(e => e.TopicId)
-            .HasColumnName("observation_id")
+            .HasColumnName("topic_id")
             .IsRequired();
 
         builder?.Property(e => e.CreationDate)

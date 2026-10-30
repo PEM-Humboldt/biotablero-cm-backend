@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Observation Group entity configuration.
+/// Topic Group entity configuration.
 /// </summary>
-public class ObservationGroupConfig : IEntityTypeConfiguration<TopicGroup>
+public class TopicGroupConfig : IEntityTypeConfiguration<TopicGroup>
 {
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<TopicGroup> builder)
     {
-        builder?.ToTable("observation_group", "indicators");
+        builder?.ToTable("topic_group", "indicators");
 
         builder?.HasKey(e => e.Id);
 
@@ -22,7 +22,7 @@ public class ObservationGroupConfig : IEntityTypeConfiguration<TopicGroup>
             .IsRequired();
 
         builder?.Property(e => e.TopicVersionId)
-            .HasColumnName("observation_version_id")
+            .HasColumnName("topic_version_id")
             .IsRequired();
 
         builder?.Property(e => e.CategoryId)
@@ -34,7 +34,7 @@ public class ObservationGroupConfig : IEntityTypeConfiguration<TopicGroup>
             .HasForeignKey(e => e.TopicVersionId);
 
         builder?.HasOne(e => e.Category)
-            .WithMany(p => p.ObservationGroups)
+            .WithMany(p => p.TopicGroups)
             .HasForeignKey(e => e.CategoryId);
 
         builder?

@@ -42,16 +42,16 @@ using ObservationBaseCategory = Core.Domain.Utils.Enums.IndicatorsEnums.Observat
 /// </summary>
 public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObservationService
 {
-    private new readonly IObservationRepository entityRepository;
+    private new readonly ITopicRepository entityRepository;
     private readonly ILogger logger;
     private new readonly IMapperReadAndUpdate<Topic, ObservationDto> mapper;
     private readonly IValidator<ObservationDto> entityValidator;
     private readonly IIndicatorExcelService excelService;
     private readonly IInitiativeRepository initiativeRepository;
     private readonly ILocationRepository locationRepository;
-    private readonly IObservationVersionRepository observationVersionRepository;
+    private readonly ITopicVersionRepository observationVersionRepository;
     private readonly ICategoryRepository categoryRepository;
-    private readonly IObservationLocationRepository observationLocationRepository;
+    private readonly ITopicLocationRepository observationLocationRepository;
     private readonly ICentralActorRepository centralActorRepository;
     private readonly IValidator<ObservationImportRow> observationImportRowValidator;
     private readonly IMapperReadAndUpdate<TopicVersion, ObservationVersionDto> observationVersionMapper;
@@ -74,7 +74,7 @@ public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObse
     /// <param name="observationImportRowValidator">Observations spreadsheet row validator.</param>
     /// <param name="observationVersionMapper">Observation version mapper.</param>
     public ObservationService(
-        IObservationRepository entityRepository,
+        ITopicRepository entityRepository,
         IValidator<ObservationDto> entityValidator,
         ILogger logger,
         IMapperReadAndUpdate<Topic, ObservationDto> mapper,
@@ -82,9 +82,9 @@ public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObse
         IIndicatorExcelService excelService,
         IInitiativeRepository initiativeRepository,
         ILocationRepository locationRepository,
-        IObservationVersionRepository observationVersionRepository,
+        ITopicVersionRepository observationVersionRepository,
         ICategoryRepository categoryRepository,
-        IObservationLocationRepository observationLocationRepository,
+        ITopicLocationRepository observationLocationRepository,
         ICentralActorRepository centralActorRepository,
         IValidator<ObservationImportRow> observationImportRowValidator,
         IMapperReadAndUpdate<TopicVersion, ObservationVersionDto> observationVersionMapper)
@@ -586,12 +586,12 @@ public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObse
             // Validations for observations editions
             if (row.ObservationEntity != null)
             {
-                if (row.IndicatorTopicId != row.ObservationEntity.IndicatorTopicId)
+                if (row.IndicatorTopicId != row.ObservationEntity.TopicTypeId)
                 {
                     return new(true)
                     {
                         ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.InvalidIndicatorTopic),
-                        Message = $"Errors in row {row.RowNumber}. Original type id: {row.ObservationEntity.IndicatorTopicId}, Spreadsheet type id: {row.IndicatorTopicId}",
+                        Message = $"Errors in row {row.RowNumber}. Original type id: {row.ObservationEntity.TopicTypeId}, Spreadsheet type id: {row.IndicatorTopicId}",
                     };
                 }
 
@@ -769,7 +769,7 @@ public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObse
     /// <returns>Existing observation locations.</returns>
     private async Task<List<TopicLocation>> GetExistingObservationLocationsAsync(Topic? observation, LocationDataHelper[] spreadsheetLocations, CancellationToken ct = default)
     {
-        var existingObservationLocations = observation != null ? await observationLocationRepository.GetByObservationAsync(observation?.Id ?? 0, ct) : [];
+        var existingObservationLocations = observation != null ? await observationLocationRepository.GetByTopicAsync(observation?.Id ?? 0, ct) : [];
 
         if (existingObservationLocations.Count > 0)
         {
@@ -995,7 +995,7 @@ public class ObservationService : ServiceRead<Topic, ObservationDto, int>, IObse
                 {
                     InitiativeId = initiativeId,
                     Name = g.Key,
-                    IndicatorTopicId = indicatorTopicId,
+                    TopicTypeId = indicatorTopicId,
                     TopicLocations = observationsLocations,
                     Versions = [.. observationVersions.Where(e => e.IndicatorTopicId == indicatorTopicId && e.TopicName == g.Key)],
                 };

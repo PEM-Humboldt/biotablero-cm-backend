@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Observation Location entity configuration.
+/// Topic Location entity configuration.
 /// </summary>
-public class ObservationLocationConfig : IEntityTypeConfiguration<TopicLocation>
+public class TopicLocationConfig : IEntityTypeConfiguration<TopicLocation>
 {
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<TopicLocation> builder)
     {
-        builder?.ToTable("observation_location", "indicators");
+        builder?.ToTable("topic_location", "indicators");
 
         builder?.HasKey(e => e.Id);
 
@@ -22,7 +22,7 @@ public class ObservationLocationConfig : IEntityTypeConfiguration<TopicLocation>
             .IsRequired();
 
         builder?.Property(e => e.TopicId)
-            .HasColumnName("observation_id")
+            .HasColumnName("topic_id")
             .IsRequired();
 
         builder?.Property(e => e.LocationId)

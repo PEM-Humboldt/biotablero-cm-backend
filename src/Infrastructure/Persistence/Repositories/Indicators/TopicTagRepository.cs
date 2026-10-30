@@ -12,13 +12,13 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 /// <summary>
-/// Observation Tag repository.
+/// Topic Tag repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
 /// <param name="logger">System logger.</param>
-public class ObservationTagRepository(
+public class TopicTagRepository(
     GeneralContext dbContext,
-    ILogger logger) : Repository<TopicTag, int>(dbContext, logger), IObservationTagRepository
+    ILogger logger) : Repository<TopicTag, int>(dbContext, logger), ITopicTagRepository
 {
     /// <inheritdoc/>
     public override async Task<TopicTag?> GetByIdAsync(int id, CancellationToken ct = default) =>
@@ -35,8 +35,8 @@ public class ObservationTagRepository(
     }
 
     /// <inheritdoc/>
-    public async Task<bool> IsDuplicatedAsync(int observationId, int tagId, CancellationToken ct = default) =>
+    public async Task<bool> IsDuplicatedAsync(int topicId, int tagId, CancellationToken ct = default) =>
         await dbContext.TopicTags
-            .Where(e => e.TopicId == observationId && e.TagId == tagId)
+            .Where(e => e.TopicId == topicId && e.TagId == tagId)
             .AnyAsync(ct);
 }

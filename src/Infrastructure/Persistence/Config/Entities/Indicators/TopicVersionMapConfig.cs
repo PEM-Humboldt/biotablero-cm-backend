@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Observation Version Map entity configuration.
+/// Topic Version Map entity configuration.
 /// </summary>
-public class ObservationVersionMapConfig : IEntityTypeConfiguration<TopicVersionMap>
+public class TopicVersionMapConfig : IEntityTypeConfiguration<TopicVersionMap>
 {
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<TopicVersionMap> builder)
     {
-        builder?.ToTable("observation_version_map", "indicators");
+        builder?.ToTable("topic_version_map", "indicators");
 
         builder?.HasKey(e => e.Id);
 
@@ -22,7 +22,7 @@ public class ObservationVersionMapConfig : IEntityTypeConfiguration<TopicVersion
             .IsRequired();
 
         builder?.Property(e => e.TopicVersionId)
-            .HasColumnName("observation_version_id")
+            .HasColumnName("topic_version_id")
             .IsRequired();
 
         builder?.Property(e => e.Title)
