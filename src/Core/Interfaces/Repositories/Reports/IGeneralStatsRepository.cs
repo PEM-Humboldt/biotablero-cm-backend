@@ -67,11 +67,11 @@ public interface IGeneralStatsRepository
     Task<List<string>> GetUserNamesAsync(int? departmentId, int? initiativeId, CancellationToken ct = default);
 
     /// <summary>
-    /// Get observations by scale.
+    /// Get topics by scale.
     /// </summary>
     /// <param name="departmentId">Department identifier (optional).</param>
     /// <param name="initiativeId">Initiative identifier (optional).</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Observation by scale.</returns>
-    Task<List<KeyValuePair<string, int>>> GetObservationsByScaleAsync(int? departmentId, int? initiativeId, CancellationToken ct = default);
+    /// <returns>Topics by scale.</returns>
+    Task<List<KeyValuePair<string, int>>> GetTopicsByScaleAsync(int? departmentId, int? initiativeId, CancellationToken ct = default);
 }

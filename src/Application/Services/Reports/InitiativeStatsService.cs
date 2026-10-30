@@ -17,13 +17,13 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 /// </summary>
 /// <param name="errorTranslator">Error translator.</param>
 /// <param name="entityRepository">Monitoring Events repository.</param>
-/// <param name="observationRepository">Observation repository.</param>
+/// <param name="topicRepository">Topic repository.</param>
 /// <param name="locationRepository">Location repository.</param>
 /// <param name="initiativeRepository">Initiative repository.</param>
 public class InitiativeStatsService(
     IValidationErrorTranslator errorTranslator,
     IMonitoringEventsRepository entityRepository,
-    ITopicRepository observationRepository,
+    ITopicRepository topicRepository,
     ILocationRepository locationRepository,
     IInitiativeRepository initiativeRepository) : IInitiativeStatsService
 {
@@ -46,7 +46,7 @@ public class InitiativeStatsService(
             ResponseBody = new InitiativeStatsDto()
             {
                 TotalMunicipalities = totalMunicipalities > 0 ? totalMunicipalities : 1,
-                TotalTopics = await observationRepository.CountAsync(initiativeId, ct),
+                TotalTopics = await topicRepository.CountAsync(initiativeId, ct),
             },
         };
     }
