@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Observation;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Topic;
 
 using System;
 using System.Collections.Generic;
@@ -8,9 +8,9 @@ using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
-/// Observation list response example.
+/// Topic list response example.
 /// </summary>
-public class ObservationListResponseExample : IOpenApiExampleProvider<List<TopicDto>>
+public class TopicListResponseExample : IOpenApiExampleProvider<List<TopicDto>>
 {
     /// <inheritdoc/>
     public List<TopicDto> GetExamples() =>
@@ -18,12 +18,12 @@ public class ObservationListResponseExample : IOpenApiExampleProvider<List<Topic
         new()
         {
             Id = 0,
-            Name = "Observation example",
+            Name = "Topic example",
             InitiativeId = 0,
             TopicType = new()
             {
                 Id = 0,
-                Name = "Indicator topic example",
+                Name = "Topic type example",
             },
             Versions = [
                 new()

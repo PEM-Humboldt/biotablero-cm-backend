@@ -1,4 +1,4 @@
-﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Observation;
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Topic;
 
 using System;
 
@@ -7,9 +7,9 @@ using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
-/// Observation Version response example.
+/// Topic Version response example.
 /// </summary>
-public class ObservationVersionResponseExample : IOpenApiExampleProvider<TopicVersionDto>
+public class TopicVersionResponseExample : IOpenApiExampleProvider<TopicVersionDto>
 {
     /// <inheritdoc/>
     public TopicVersionDto GetExamples() => new()
