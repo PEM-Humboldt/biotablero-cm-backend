@@ -152,29 +152,6 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.ToTable("central_actor", "indicators");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorTopic", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("indicator_topic", "indicators");
-                });
-
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorType", b =>
                 {
                     b.Property<int>("Id")
@@ -232,9 +209,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("real")
                         .HasColumnName("lower_limit");
 
-                    b.Property<int>("ObservationGroupId")
+                    b.Property<int>("TopicGroupId")
                         .HasColumnType("integer")
-                        .HasColumnName("observation_group_id");
+                        .HasColumnName("topic_group_id");
 
                     b.Property<float?>("UpperLimit")
                         .HasColumnType("real")
@@ -250,7 +227,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("IndicatorTypeId");
 
-                    b.HasIndex("ObservationGroupId");
+                    b.HasIndex("TopicGroupId");
 
                     b.ToTable("indicator_value", "indicators", t =>
                         {
@@ -271,19 +248,19 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ObservationVersionMapId")
-                        .HasColumnType("integer")
-                        .HasColumnName("observation_version_map_id");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("title");
 
+                    b.Property<int>("TopicVersionMapId")
+                        .HasColumnType("integer")
+                        .HasColumnName("topic_version_map_id");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ObservationVersionMapId", "Title")
+                    b.HasIndex("TopicVersionMapId", "Title")
                         .IsUnique();
 
                     b.ToTable("map_legend", "indicators");
@@ -322,7 +299,7 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.ToTable("map_legend_item", "indicators");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Observation", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Topic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -330,10 +307,6 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("IndicatorTopicId")
-                        .HasColumnType("integer")
-                        .HasColumnName("indicator_topic_id");
 
                     b.Property<int>("InitiativeId")
                         .HasColumnType("integer")
@@ -345,17 +318,21 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(500)")
                         .HasColumnName("name");
 
+                    b.Property<int>("TopicTypeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("topic_type_id");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IndicatorTopicId");
+                    b.HasIndex("TopicTypeId");
 
                     b.HasIndex("InitiativeId", "Name")
                         .IsUnique();
 
-                    b.ToTable("observation", "indicators");
+                    b.ToTable("topic", "indicators");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationGroup", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicGroup", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -368,21 +345,21 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("category_id");
 
-                    b.Property<int>("ObservationVersionId")
+                    b.Property<int>("TopicVersionId")
                         .HasColumnType("integer")
-                        .HasColumnName("observation_version_id");
+                        .HasColumnName("topic_version_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("ObservationVersionId", "CategoryId")
+                    b.HasIndex("TopicVersionId", "CategoryId")
                         .IsUnique();
 
-                    b.ToTable("observation_group", "indicators");
+                    b.ToTable("topic_group", "indicators");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationLocation", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicLocation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -400,21 +377,21 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("location_id");
 
-                    b.Property<int>("ObservationId")
+                    b.Property<int>("TopicId")
                         .HasColumnType("integer")
-                        .HasColumnName("observation_id");
+                        .HasColumnName("topic_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LocationId");
 
-                    b.HasIndex("ObservationId", "LocationId", "Locality")
+                    b.HasIndex("TopicId", "LocationId", "Locality")
                         .IsUnique();
 
-                    b.ToTable("observation_location", "indicators");
+                    b.ToTable("topic_location", "indicators");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationTag", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicTag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -423,25 +400,48 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ObservationId")
-                        .HasColumnType("integer")
-                        .HasColumnName("observation_id");
-
                     b.Property<int>("TagId")
                         .HasColumnType("integer")
                         .HasColumnName("tag_id");
+
+                    b.Property<int>("TopicId")
+                        .HasColumnType("integer")
+                        .HasColumnName("topic_id");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TagId");
 
-                    b.HasIndex("ObservationId", "TagId")
+                    b.HasIndex("TopicId", "TagId")
                         .IsUnique();
 
-                    b.ToTable("observation_tag", "indicators");
+                    b.ToTable("topic_tag", "indicators");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersion", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("topic_type", "indicators");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicVersion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -481,9 +481,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(3000)")
                         .HasColumnName("methodology");
 
-                    b.Property<int>("ObservationId")
+                    b.Property<int>("TopicId")
                         .HasColumnType("integer")
-                        .HasColumnName("observation_id");
+                        .HasColumnName("topic_id");
 
                     b.Property<int>("Version")
                         .ValueGeneratedOnAdd()
@@ -493,13 +493,13 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ObservationId", "Version")
+                    b.HasIndex("TopicId", "Version")
                         .IsUnique();
 
-                    b.ToTable("observation_version", "indicators");
+                    b.ToTable("topic_version", "indicators");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersionMap", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicVersionMap", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -519,22 +519,22 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(1000)")
                         .HasColumnName("image_url");
 
-                    b.Property<int>("ObservationVersionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("observation_version_id");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("title");
 
+                    b.Property<int>("TopicVersionId")
+                        .HasColumnType("integer")
+                        .HasColumnName("topic_version_id");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ObservationVersionId", "Title")
+                    b.HasIndex("TopicVersionId", "Title")
                         .IsUnique();
 
-                    b.ToTable("observation_version_map", "indicators");
+                    b.ToTable("topic_version_map", "indicators");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", b =>
@@ -1661,9 +1661,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationGroup", "Group")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicGroup", "Group")
                         .WithMany("Values")
-                        .HasForeignKey("ObservationGroupId")
+                        .HasForeignKey("TopicGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1676,13 +1676,13 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.MapLegend", b =>
                 {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersionMap", "ObservationVersionMap")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicVersionMap", "TopicVersionMap")
                         .WithMany("Legends")
-                        .HasForeignKey("ObservationVersionMapId")
+                        .HasForeignKey("TopicVersionMapId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ObservationVersionMap");
+                    b.Navigation("TopicVersionMap");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.MapLegendItem", b =>
@@ -1696,102 +1696,102 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("MapLegend");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Observation", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Topic", b =>
                 {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorTopic", "Topic")
-                        .WithMany("Observations")
-                        .HasForeignKey("IndicatorTopicId")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", "Initiative")
+                        .WithMany("Topics")
+                        .HasForeignKey("InitiativeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", "Initiative")
-                        .WithMany("Observations")
-                        .HasForeignKey("InitiativeId")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicType", "TopicType")
+                        .WithMany("Topics")
+                        .HasForeignKey("TopicTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Initiative");
 
-                    b.Navigation("Topic");
+                    b.Navigation("TopicType");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationGroup", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicGroup", b =>
                 {
                     b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Category", "Category")
-                        .WithMany("ObservationGroups")
+                        .WithMany("TopicGroups")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersion", "ObservationVersion")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicVersion", "TopicVersion")
                         .WithMany("Groups")
-                        .HasForeignKey("ObservationVersionId")
+                        .HasForeignKey("TopicVersionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
 
-                    b.Navigation("ObservationVersion");
+                    b.Navigation("TopicVersion");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationLocation", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicLocation", b =>
                 {
                     b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location", "Location")
-                        .WithMany("ObservationLocations")
+                        .WithMany("TopicLocations")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Observation", "Observation")
-                        .WithMany("ObservationLocations")
-                        .HasForeignKey("ObservationId")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Topic", "Topic")
+                        .WithMany("TopicLocations")
+                        .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Location");
 
-                    b.Navigation("Observation");
+                    b.Navigation("Topic");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationTag", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicTag", b =>
                 {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Observation", "Observation")
-                        .WithMany("ObservationTags")
-                        .HasForeignKey("ObservationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Tags.Tag", "Tag")
-                        .WithMany("TagObservations")
+                        .WithMany("TopicTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Observation");
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Topic", "Topic")
+                        .WithMany("TopicTags")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Tag");
+
+                    b.Navigation("Topic");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersion", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicVersion", b =>
                 {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Observation", "Observation")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Topic", "Topic")
                         .WithMany("Versions")
-                        .HasForeignKey("ObservationId")
+                        .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Observation");
+                    b.Navigation("Topic");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersionMap", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicVersionMap", b =>
                 {
-                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersion", "ObservationVersion")
+                    b.HasOne("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicVersion", "TopicVersion")
                         .WithMany("Maps")
-                        .HasForeignKey("ObservationVersionId")
+                        .HasForeignKey("TopicVersionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ObservationVersion");
+                    b.Navigation("TopicVersion");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.Initiative", b =>
@@ -2067,24 +2067,19 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.Navigation("LocationPolygon");
 
-                    b.Navigation("ObservationLocations");
+                    b.Navigation("TopicLocations");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Category", b =>
                 {
                     b.Navigation("Children");
 
-                    b.Navigation("ObservationGroups");
+                    b.Navigation("TopicGroups");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.CentralActor", b =>
                 {
                     b.Navigation("IndicatorValues");
-                });
-
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorTopic", b =>
-                {
-                    b.Navigation("Observations");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.IndicatorType", b =>
@@ -2097,28 +2092,33 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Observation", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.Topic", b =>
                 {
-                    b.Navigation("ObservationLocations");
+                    b.Navigation("TopicLocations");
 
-                    b.Navigation("ObservationTags");
+                    b.Navigation("TopicTags");
 
                     b.Navigation("Versions");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationGroup", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicGroup", b =>
                 {
                     b.Navigation("Values");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersion", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicType", b =>
+                {
+                    b.Navigation("Topics");
+                });
+
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicVersion", b =>
                 {
                     b.Navigation("Groups");
 
                     b.Navigation("Maps");
                 });
 
-            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.ObservationVersionMap", b =>
+            modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Indicators.TopicVersionMap", b =>
                 {
                     b.Navigation("Legends");
                 });
@@ -2139,11 +2139,11 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.Navigation("MonitoringEventsList");
 
-                    b.Navigation("Observations");
-
                     b.Navigation("Resources");
 
                     b.Navigation("TerritoryStories");
+
+                    b.Navigation("Topics");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives.InitiativeUserLevel", b =>
@@ -2183,9 +2183,9 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("TagInitiatives");
 
-                    b.Navigation("TagObservations");
-
                     b.Navigation("TagResources");
+
+                    b.Navigation("TopicTags");
                 });
 
             modelBuilder.Entity("IAVH.BioTablero.CM.Core.Domain.Entities.Tags.TagCategory", b =>
