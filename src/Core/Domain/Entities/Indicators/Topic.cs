@@ -22,9 +22,9 @@ public class Topic : BaseEntity<int>, IAggregateRoot
     public int InitiativeId { get; set; }
 
     /// <summary>
-    /// Topic Topic identifier.
+    /// Topic Type identifier.
     /// </summary>
-    public int IndicatorTopicId { get; set; }
+    public int TopicTypeId { get; set; }
 
     /// <summary>
     /// Initiative relationship.

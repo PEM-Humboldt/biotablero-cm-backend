@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Observation entity configuration.
+/// Topic entity configuration.
 /// </summary>
-public class ObservationConfig : IEntityTypeConfiguration<Topic>
+public class TopicConfig : IEntityTypeConfiguration<Topic>
 {
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<Topic> builder)
     {
-        builder?.ToTable("observation", "indicators");
+        builder?.ToTable("topic", "indicators");
 
         builder?.HasKey(e => e.Id);
 
@@ -30,8 +30,8 @@ public class ObservationConfig : IEntityTypeConfiguration<Topic>
             .HasColumnName("initiative_id")
             .IsRequired();
 
-        builder?.Property(e => e.IndicatorTopicId)
-            .HasColumnName("indicator_topic_id")
+        builder?.Property(e => e.TopicTypeId)
+            .HasColumnName("topic_type_id")
             .IsRequired();
 
         builder?.Ignore(i => i.LastVersion);
@@ -42,7 +42,7 @@ public class ObservationConfig : IEntityTypeConfiguration<Topic>
 
         builder?.HasOne(e => e.TopicType)
             .WithMany(p => p.Topics)
-            .HasForeignKey(e => e.IndicatorTopicId);
+            .HasForeignKey(e => e.TopicTypeId);
 
         builder?
             .HasIndex(e => new { e.InitiativeId, e.Name })

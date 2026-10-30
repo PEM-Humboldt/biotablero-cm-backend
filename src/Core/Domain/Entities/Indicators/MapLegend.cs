@@ -10,9 +10,9 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 public class MapLegend : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Observation Version Map identifier.
+    /// Topic Version Map identifier.
     /// </summary>
-    public int ObservationVersionMapId { get; set; }
+    public int TopicVersionMapId { get; set; }
 
     /// <summary>
     /// Map Legend title.
@@ -20,9 +20,9 @@ public class MapLegend : BaseEntity<int>, IAggregateRoot
     public required string Title { get; set; }
 
     /// <summary>
-    /// Observation Version Map relationship.
+    /// Topic Version Map relationship.
     /// </summary>
-    public TopicVersionMap? ObservationVersionMap { get; set; }
+    public TopicVersionMap? TopicVersionMap { get; set; }
 
     /// <summary>
     /// Map Legend Item relationship.

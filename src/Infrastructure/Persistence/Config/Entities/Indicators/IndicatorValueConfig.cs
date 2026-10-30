@@ -21,8 +21,8 @@ public class IndicatorValueConfig : IEntityTypeConfiguration<IndicatorValue>
             .HasColumnName("id")
             .IsRequired();
 
-        builder?.Property(e => e.ObservationGroupId)
-            .HasColumnName("observation_group_id")
+        builder?.Property(e => e.TopicGroupId)
+            .HasColumnName("topic_group_id")
             .IsRequired();
 
         builder?.Property(e => e.IndicatorTypeId)
@@ -53,7 +53,7 @@ public class IndicatorValueConfig : IEntityTypeConfiguration<IndicatorValue>
 
         builder?.HasOne(e => e.Group)
             .WithMany(p => p.Values)
-            .HasForeignKey(e => e.ObservationGroupId);
+            .HasForeignKey(e => e.TopicGroupId);
 
         builder?.HasOne(e => e.IndicatorType)
             .WithMany(p => p.IndicatorValues)

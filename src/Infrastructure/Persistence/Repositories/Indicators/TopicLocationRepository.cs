@@ -15,17 +15,17 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 /// <summary>
-/// Observation Location repository.
+/// Topic Location repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
 /// <param name="logger">System logger.</param>
-public class ObservationLocationRepository(GeneralContext dbContext, ILogger logger) : Repository<TopicLocation, int>(dbContext, logger), IObservationLocationRepository
+public class TopicLocationRepository(GeneralContext dbContext, ILogger logger) : Repository<TopicLocation, int>(dbContext, logger), ITopicLocationRepository
 {
     /// <inheritdoc/>
-    public async Task<List<TopicLocation>> GetByObservationAsync(int observationId, CancellationToken ct = default) =>
+    public async Task<List<TopicLocation>> GetByTopicAsync(int topicId, CancellationToken ct = default) =>
         await dbContext.TopicLocations
             .Include(e => e.Location)
                 .ThenInclude(e => e!.Parent)
-            .Where(e => e.TopicId == observationId)
+            .Where(e => e.TopicId == topicId)
             .ToListAsync(ct);
 }

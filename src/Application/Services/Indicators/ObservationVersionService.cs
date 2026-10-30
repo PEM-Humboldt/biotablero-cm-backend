@@ -38,7 +38,7 @@ public class ObservationVersionService : ServiceRead<TopicVersion, ObservationVe
     /// <param name="mapper">Entity mapper.</param>
     /// <param name="errorTranslator">Error translator.</param>
     public ObservationVersionService(
-        IObservationVersionRepository entityRepository,
+        ITopicVersionRepository entityRepository,
         IValidator<ObservationVersionDto> entityValidator,
         ILogger logger,
         IMapperReadAndUpdate<TopicVersion, ObservationVersionDto> mapper,

@@ -23,7 +23,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
 public class InitiativeStatsService(
     IValidationErrorTranslator errorTranslator,
     IMonitoringEventsRepository entityRepository,
-    IObservationRepository observationRepository,
+    ITopicRepository observationRepository,
     ILocationRepository locationRepository,
     IInitiativeRepository initiativeRepository) : IInitiativeStatsService
 {

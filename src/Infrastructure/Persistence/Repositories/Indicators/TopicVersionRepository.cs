@@ -12,13 +12,13 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 /// <summary>
-/// Observation Version repository.
+/// Topic Version repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
 /// <param name="logger">System logger.</param>
-public class ObservationVersionRepository(
+public class TopicVersionRepository(
     GeneralContext dbContext,
-    ILogger logger) : Repository<TopicVersion, int>(dbContext, logger), IObservationVersionRepository
+    ILogger logger) : Repository<TopicVersion, int>(dbContext, logger), ITopicVersionRepository
 {
     /// <inheritdoc/>
     public override async Task<TopicVersion?> GetByIdAsync(int id, CancellationToken ct = default) =>
@@ -39,9 +39,9 @@ public class ObservationVersionRepository(
             .FirstOrDefaultAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<int> GetLastVersionAsync(int observationId, CancellationToken ct = default) =>
+    public async Task<int> GetLastVersionAsync(int topicId, CancellationToken ct = default) =>
         await dbContext.TopicVersions
-            .Where(e => e.TopicId == observationId)
+            .Where(e => e.TopicId == topicId)
             .OrderByDescending(e => e.Version)
             .Select(e => e.Version)
             .FirstOrDefaultAsync(ct);

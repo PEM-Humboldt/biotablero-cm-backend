@@ -14,13 +14,13 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 /// <summary>
-/// Observation repository.
+/// Topic repository.
 /// </summary>
 /// <param name="dbContext">General Database Context.</param>
 /// <param name="logger">System logger.</param>
-public class ObservationRepository(
+public class TopicRepository(
     GeneralContext dbContext,
-    ILogger logger) : Repository<Topic, int>(dbContext, logger), IObservationRepository
+    ILogger logger) : Repository<Topic, int>(dbContext, logger), ITopicRepository
 {
     /// <inheritdoc/>
     public override async Task<Topic?> GetByIdAsync(int id, CancellationToken ct = default) =>

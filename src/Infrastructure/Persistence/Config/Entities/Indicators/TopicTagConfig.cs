@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 /// <summary>
-/// Observation Tag entity configuration.
+/// Topic Tag entity configuration.
 /// </summary>
-public class ObservationTagConfig : IEntityTypeConfiguration<TopicTag>
+public class TopicTagConfig : IEntityTypeConfiguration<TopicTag>
 {
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<TopicTag> builder)
     {
-        builder?.ToTable("observation_tag", "indicators");
+        builder?.ToTable("topic_tag", "indicators");
 
         builder?.HasKey(e => e.Id);
 
@@ -26,7 +26,7 @@ public class ObservationTagConfig : IEntityTypeConfiguration<TopicTag>
             .IsRequired();
 
         builder?.Property(e => e.TopicId)
-            .HasColumnName("observation_id")
+            .HasColumnName("topic_id")
             .IsRequired();
 
         builder?.HasOne(e => e.Tag)
