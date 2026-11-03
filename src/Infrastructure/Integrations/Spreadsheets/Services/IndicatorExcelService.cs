@@ -43,8 +43,7 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
 
             foreach (var row in worksheet.RowsUsed().Skip(1))
             {
-                ValidateCellValue<string>(row, XlsxColumnIndex.TopicName, result.Errors, out var topicName);
-                ValidateCellValue<int>(row, XlsxColumnIndex.TopicTypeId, result.Errors, out var indicatorTopicId);
+                ValidateCellValue<int>(row, XlsxColumnIndex.TopicTypeId, result.Errors, out var topicTypeId);
                 ValidateCellValue<int>(row, XlsxColumnIndex.IndicatorTypeId, result.Errors, out var indicatorTypeId);
                 ValidateCellValue<string>(row, XlsxColumnIndex.Department, result.Errors, out var departmentName);
                 ValidateCellValue<string>(row, XlsxColumnIndex.Municipality, result.Errors, out var municipalityName);
@@ -64,8 +63,7 @@ public class IndicatorExcelService(ILogger logger) : IIndicatorExcelService
                 var validatedRow = new TopicImportRow
                 {
                     RowNumber = row.RowNumber(),
-                    TopicName = topicName!,
-                    TopicTypeId = indicatorTopicId,
+                    TopicTypeId = topicTypeId,
                     IndicatorTypeId = indicatorTypeId,
                     DepartmentName = departmentName!,
                     MunicipalityName = municipalityName!,

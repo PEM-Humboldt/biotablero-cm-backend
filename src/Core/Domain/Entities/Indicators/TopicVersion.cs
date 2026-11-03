@@ -56,9 +56,9 @@ public class TopicVersion : BaseEntity<int>, IAggregateRoot
     public string? Authorship { get; set; }
 
     /// <summary>
-    /// Indicator Topic identifier.
+    /// Topic Type identifier.
     /// </summary>
-    public int? IndicatorTopicId { get; set; }
+    public int? TopicTypeId { get; set; }
 
     /// <summary>
     /// Topic relationship.

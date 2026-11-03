@@ -28,13 +28,13 @@ public interface ITopicRepository : IRepository<Topic, int>
     Task<IEnumerable<Topic>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
 
     /// <summary>
-    /// Get elements by initiative and topic names.
+    /// Get elements by initiative and topic types.
     /// </summary>
     /// <param name="initiativeId">Initiative identifier.</param>
-    /// <param name="names">Names list.</param>
+    /// <param name="topicTypeIds">Topic types identifiers.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entities.</returns>
-    Task<IEnumerable<Topic>> GetByInitiativeAndNamesAsync(int initiativeId, string[] names, CancellationToken ct = default);
+    Task<IEnumerable<Topic>> GetByInitiativeAndTopicTypesAsync(int initiativeId, int[] topicTypeIds, CancellationToken ct = default);
 
     /// <summary>
     /// Returns the total number of records.

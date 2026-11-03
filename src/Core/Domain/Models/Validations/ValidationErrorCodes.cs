@@ -508,11 +508,6 @@ public static class ValidationErrorCodes
         public const string InvalidIntegerValue = "IND_015";
 
         /// <summary>
-        /// Topics and types difference error.
-        /// </summary>
-        public const string TopicsAndTypesDifference = "IND_016";
-
-        /// <summary>
         /// Duplicated elements.
         /// </summary>
         public const string DuplicatedElements = "IND_017";

@@ -130,11 +130,6 @@ public static class IndicatorsEnums
     public enum XlsxColumnIndex
     {
         /// <summary>
-        /// Topic name.
-        /// </summary>
-        TopicName = 1,
-
-        /// <summary>
         /// Topic type identifier.
         /// </summary>
         TopicTypeId = 2,

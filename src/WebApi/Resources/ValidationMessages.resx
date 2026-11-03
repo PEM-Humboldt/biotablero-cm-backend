@@ -429,10 +429,6 @@
     <value>Invalid value. It must be an integer</value>
     <comment/>
   </data>
-  <data name="IND_016" xml:space="preserve">
-    <value>The number of topics and types must be the same</value>
-    <comment/>
-  </data>
   <data name="IND_017" xml:space="preserve">
     <value>Duplicated elements</value>
     <comment/>

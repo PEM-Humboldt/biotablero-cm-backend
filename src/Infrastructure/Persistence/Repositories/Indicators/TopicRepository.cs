@@ -38,10 +38,10 @@ public class TopicRepository(
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<Topic>> GetByInitiativeAndNamesAsync(int initiativeId, string[] names, CancellationToken ct = default) =>
+    public async Task<IEnumerable<Topic>> GetByInitiativeAndTopicTypesAsync(int initiativeId, int[] topicTypeIds, CancellationToken ct = default) =>
         await dbContext.Topics
             .Include(e => e.Versions)
-            .Where(e => e.InitiativeId == initiativeId && names.Contains(e.Name))
+            .Where(e => e.InitiativeId == initiativeId && topicTypeIds.Contains(e.TopicTypeId))
             .ToListAsync(ct);
 
     /// <inheritdoc/>
