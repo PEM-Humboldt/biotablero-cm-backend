@@ -236,16 +236,16 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
         }
 
         // Validate existent topics
-        var topicNames = fileReadResult.Rows
-            .Select(r => r.TopicName)
+        var topicTypes = fileReadResult.Rows
+            .Select(r => r.TopicTypeId)
             .ToArray();
 
-        var existentTopics = await entityRepository.GetByInitiativeAndNamesAsync(requestData.InitiativeId, topicNames, ct);
+        var existentTopics = await entityRepository.GetByInitiativeAndTopicTypesAsync(requestData.InitiativeId, topicTypes, ct);
 
         foreach (var row in fileReadResult.Rows)
         {
             row.TopicEntity = existentTopics
-                .FirstOrDefault(e => e.Name == row.TopicName);
+                .FirstOrDefault(e => e.TopicTypeId == row.TopicTypeId);
         }
 
         // Adjust spreadsheet rows data
@@ -299,7 +299,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
 
             if (group.Key == null)
             {
-                var topics = GenerateTopics(requestData.InitiativeId, [.. group], topicVersionEntities, topicLocations, locationEntities, now);
+                var topics = GenerateTopics(requestData.InitiativeId, [.. group], topicVersionEntities, topicLocations, locationEntities);
 
                 newTopics.AddRange(topics);
             }
@@ -393,7 +393,6 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
     {
         foreach (var row in rows)
         {
-            row.TopicName = row.TopicName?.Trim()?.CapitalizeFirstOnly()!;
             row.UpperGroupName = row.UpperGroupName?.Trim()?.CapitalizeFirstOnly()!;
             row.GroupName = row.GroupName?.Trim()?.CapitalizeFirstOnly();
             row.LocalityName = row.LocalityName?.Trim()?.CapitalizeFirstOnly()!;
@@ -417,25 +416,6 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
     /// <returns>Validation result.</returns>
     private async Task<CustomWebResponse> ValidateStructureDataAsync(List<TopicImportRow> rows, CancellationToken ct = default)
     {
-        var totalTopics = rows
-            .GroupBy(r => r.TopicName)
-            .Count();
-
-        // Validate unique topic type by topics grouped by name
-        var totalTopicTypes = rows
-            .GroupBy(r => r.TopicName)
-            .SelectMany(g => g.Select(r => r.TopicTypeId).Distinct())
-            .Count();
-
-        if (totalTopics != totalTopicTypes)
-        {
-            return new(true)
-            {
-                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.TopicsAndTypesDifference),
-                Message = $"Topics: {totalTopics}. Topic types: {totalTopicTypes}",
-            };
-        }
-
         foreach (var row in rows)
         {
             // Check FluentValidation validations
@@ -619,15 +599,15 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
     /// <returns>Validation result.</returns>
     private async Task<CustomWebResponse> ValidateDatabaseAsync(int initiativeId, List<TopicImportRow> rows, List<Location> locationEntities, CancellationToken ct = default)
     {
-        var newTopicNames = rows
+        var newTopicTypes = rows
             .Where(r => r.TopicEntity == null)
-            .Select(r => r.TopicName)
+            .Select(r => r.TopicTypeId)
             .Distinct()
             .ToArray();
 
-        if (newTopicNames.Length > 0)
+        if (newTopicTypes.Length > 0)
         {
-            var existentTopics = await entityRepository.GetByInitiativeAndNamesAsync(initiativeId, newTopicNames, ct);
+            var existentTopics = await entityRepository.GetByInitiativeAndTopicTypesAsync(initiativeId, newTopicTypes, ct);
 
             if (existentTopics.Any())
             {
@@ -897,12 +877,12 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
         DateTimeOffset now,
         int topicLastVersion) =>
         [.. rows
-            .GroupBy(r => r.TopicName)
+            .GroupBy(r => r.TopicTypeId)
             .Select(g => new TopicVersion()
             {
-                IndicatorTopicId = g.Select(r => r.TopicTypeId).FirstOrDefault(),
+                TopicTypeId = g.Select(r => r.TopicTypeId).FirstOrDefault(),
                 TopicId = topic?.Id ?? 0,
-                TopicName = g.Key,
+                TopicName = $"Temática de tipo {g.Key}",
                 CreationDate = now,
                 Version = topic == null ? 1 : topicLastVersion + 1,
                 Groups = [.. g.GroupBy(g => new { g.UpperGroupName, g.GroupName, g.GroupDescription })
@@ -949,17 +929,15 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
     /// <param name="topicVersions">TopicVersion entities.</param>
     /// <param name="topicLocations">TopicLocation entities.</param>
     /// <param name="locations">Location entities.</param>
-    /// <param name="now">Current date and time.</param>
     /// <returns>Topic entities.</returns>
     private static List<Topic> GenerateTopics(
         int initiativeId,
         List<TopicImportRow> rows,
         List<TopicVersion> topicVersions,
         List<TopicLocation> topicLocations,
-        List<Location> locations,
-        DateTimeOffset now) =>
+        List<Location> locations) =>
         [.. rows
-            .GroupBy(r => r.TopicName)
+            .GroupBy(r => r.TopicTypeId)
             .Select(g =>
             {
                 var topicsLocations = g
@@ -989,15 +967,15 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
                     .DistinctBy(e => new { e.Id, e.LocationId })
                     .ToList();
 
-                var indicatorTopicId = g.Select(r => r.TopicTypeId).FirstOrDefault();
+                var topicTypeId = g.Select(r => r.TopicTypeId).FirstOrDefault();
 
                 return new Topic()
                 {
                     InitiativeId = initiativeId,
-                    Name = g.Key,
-                    TopicTypeId = indicatorTopicId,
+                    Name = $"Temática de tipo {g.Key}",
+                    TopicTypeId = topicTypeId,
                     TopicLocations = topicsLocations,
-                    Versions = [.. topicVersions.Where(e => e.IndicatorTopicId == indicatorTopicId && e.TopicName == g.Key)],
+                    Versions = [.. topicVersions.Where(e => e.TopicTypeId == topicTypeId)],
                 };
             })];
 

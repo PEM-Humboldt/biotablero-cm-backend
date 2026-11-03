@@ -20,11 +20,6 @@ public class IndicatorsImportRowValidator : AbstractValidator<TopicImportRow>
             .NotNull()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
 
-        RuleFor(dto => dto.TopicName)
-            .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)
-            .MaximumLength(500);
-
         RuleFor(dto => dto.DepartmentName)
             .NotEmpty()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)

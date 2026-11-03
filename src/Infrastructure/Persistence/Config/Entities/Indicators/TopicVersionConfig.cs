@@ -59,7 +59,7 @@ public class TopicVersionConfig : IEntityTypeConfiguration<TopicVersion>
             .WithMany(p => p.Versions)
             .HasForeignKey(e => e.TopicId);
 
-        builder?.Ignore(i => i.IndicatorTopicId);
+        builder?.Ignore(i => i.TopicTypeId);
         builder?.Ignore(i => i.TopicName);
 
         builder?

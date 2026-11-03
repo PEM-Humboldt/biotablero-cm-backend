@@ -26,11 +26,6 @@ public class TopicImportRow()
     public Topic? TopicEntity { get; set; }
 
     /// <summary>
-    /// Topic name.
-    /// </summary>
-    public required string TopicName { get; set; } = string.Empty;
-
-    /// <summary>
     /// Topic Type identifier.
     /// </summary>
     public required int TopicTypeId { get; set; }
