@@ -369,7 +369,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
         var parseSuccessful = DateTime.TryParseExact(
             string.Format(
                 GeneralConstants.DefaultFormatProvider,
-                IndicatorConstants.TopicDateFormat,
+                IndicatorConstants.General.TopicDateFormat,
                 year,
                 formattedMonth),
             GeneralConstants.DateFormat,
@@ -401,11 +401,9 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
             if (row.TopicTypeId == (int)TopicTypes.SpeciesDiversity)
             {
                 row.GroupName = row.UpperGroupName;
-                row.UpperGroupName = IndicatorConstants.SpeciesCategoryName;
+                row.UpperGroupName = IndicatorConstants.Categories.SpeciesCategoryName;
             }
         }
-
-        rows.RemoveAll(r => r.GroupName?.Equals(IndicatorConstants.TotalGroupName, StringComparison.OrdinalIgnoreCase) == true);
     }
 
     /// <summary>
@@ -441,7 +439,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
             }
 
             // Check indicator types
-            foreach (var indicatorType in IndicatorConstants.IndicatorTypesByTopicType)
+            foreach (var indicatorType in IndicatorConstants.Validations.IndicatorTypesByTopicType)
             {
                 if (row.TopicTypeId == (int)indicatorType.Key && !indicatorType.Value.Contains((IndicatorTypes)row.IndicatorTypeId))
                 {
@@ -454,7 +452,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
             }
 
             // Check topics with species
-            if (IndicatorConstants.TopicsWithSpecies.Contains((TopicTypes)row.TopicTypeId))
+            if (IndicatorConstants.Validations.TopicsWithSpecies.Contains((TopicTypes)row.TopicTypeId))
             {
                 if (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription))
                 {
@@ -467,7 +465,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
             }
 
             // Check topics with integer values
-            if (IndicatorConstants.TopicsWithIntegerValues.Contains((TopicTypes)row.TopicTypeId))
+            if (IndicatorConstants.Validations.TopicsWithIntegerValues.Contains((TopicTypes)row.TopicTypeId))
             {
                 if (row.Value % 1 != 0)
                 {
@@ -480,7 +478,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
             }
 
             // Check topics with confidence interval
-            if (IndicatorConstants.TopicsWithConfidenceInterval.Contains((TopicTypes)row.TopicTypeId))
+            if (IndicatorConstants.Validations.TopicsWithConfidenceInterval.Contains((TopicTypes)row.TopicTypeId))
             {
                 if (row.UpperLimit == null || row.LowerLimit == null)
                 {
@@ -503,7 +501,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
             }
 
             // Check topics with date ranges
-            if (IndicatorConstants.TopicsWithDateRange.Contains((TopicTypes)row.TopicTypeId))
+            if (IndicatorConstants.Validations.TopicsWithDateRange.Contains((TopicTypes)row.TopicTypeId))
             {
                 if (row.FinalYear == null || row.FinalMonth == null)
                 {
@@ -540,7 +538,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
             }
 
             // Check topics with central actors
-            if (IndicatorConstants.TopicsWithCentralActors.Contains((TopicTypes)row.TopicTypeId))
+            if (IndicatorConstants.Validations.TopicsWithCentralActors.Contains((TopicTypes)row.TopicTypeId))
             {
                 if (string.IsNullOrEmpty(row.CentralActorName))
                 {
@@ -685,7 +683,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
 
         foreach (var row in rows)
         {
-            if (IndicatorConstants.TopicsWithPredefinedCategories.Contains((TopicTypes)row.TopicTypeId))
+            if (IndicatorConstants.Validations.TopicsWithPredefinedCategories.Contains((TopicTypes)row.TopicTypeId))
             {
                 var categoryError = !predefinedCategories.Any(e => e.Name == row.GroupName && e.Parent?.Name == row.UpperGroupName);
 
