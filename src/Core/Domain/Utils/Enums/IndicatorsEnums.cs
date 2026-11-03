@@ -115,7 +115,7 @@ public static class IndicatorsEnums
         Gender = 3,
 
         /// <summary>
-        /// Agre group category type.
+        /// Age group category type.
         /// </summary>
         AgeGroup = 4,
     }
