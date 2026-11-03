@@ -815,7 +815,6 @@
             "id": "8aa04a59-06cf-410b-8c8d-e8cb8141d6e0",
             "clientId": "bt-cm-client",
             "rootUrl": "${authBaseUrl}",
-            "adminUrl": "${authBaseUrl}",
             "baseUrl": "/realms/bt-cm/account/",
             "surrogateAuthRequired": false,
             "enabled": true,
