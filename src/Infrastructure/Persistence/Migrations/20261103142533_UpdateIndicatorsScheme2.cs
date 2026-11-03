@@ -52,6 +52,21 @@ public partial class UpdateIndicatorsScheme2 : Migration
             name: "indicator_topic",
             schema: "indicators");
 
+        migrationBuilder.DropCheckConstraint(
+            name: "chk_date_end_after_date",
+            schema: "indicators",
+            table: "indicator_value");
+
+        migrationBuilder.DropCheckConstraint(
+            name: "chk_upper_limit_greater_than_value",
+            schema: "indicators",
+            table: "indicator_value");
+
+        migrationBuilder.DropCheckConstraint(
+            name: "chk_value_greater_than_lower_limit",
+            schema: "indicators",
+            table: "indicator_value");
+
         migrationBuilder.RenameColumn(
             name: "observation_version_map_id",
             schema: "indicators",
@@ -260,6 +275,24 @@ public partial class UpdateIndicatorsScheme2 : Migration
                     onDelete: ReferentialAction.Cascade);
             });
 
+        migrationBuilder.AddCheckConstraint(
+            name: "chk_date_end_after_date",
+            schema: "indicators",
+            table: "indicator_value",
+            sql: "\"date_end\" IS NULL OR \"date_end\" >= \"date\"");
+
+        migrationBuilder.AddCheckConstraint(
+            name: "chk_upper_limit_greater_than_or_equal_value",
+            schema: "indicators",
+            table: "indicator_value",
+            sql: "\"upper_limit\" IS NULL OR \"upper_limit\" >= \"value\"");
+
+        migrationBuilder.AddCheckConstraint(
+            name: "chk_value_greater_than_or_equal_lower_limit",
+            schema: "indicators",
+            table: "indicator_value",
+            sql: "\"lower_limit\" IS NULL OR \"value\" >= \"lower_limit\"");
+
         migrationBuilder.CreateIndex(
             name: "IX_topic_initiative_id_name",
             schema: "indicators",
@@ -394,6 +427,21 @@ public partial class UpdateIndicatorsScheme2 : Migration
         migrationBuilder.DropTable(
             name: "topic_type",
             schema: "indicators");
+
+        migrationBuilder.DropCheckConstraint(
+            name: "chk_date_end_after_date",
+            schema: "indicators",
+            table: "indicator_value");
+
+        migrationBuilder.DropCheckConstraint(
+            name: "chk_upper_limit_greater_than_or_equal_value",
+            schema: "indicators",
+            table: "indicator_value");
+
+        migrationBuilder.DropCheckConstraint(
+            name: "chk_value_greater_than_or_equal_lower_limit",
+            schema: "indicators",
+            table: "indicator_value");
 
         migrationBuilder.RenameColumn(
             name: "topic_version_map_id",
@@ -602,6 +650,24 @@ public partial class UpdateIndicatorsScheme2 : Migration
                     principalColumn: "id",
                     onDelete: ReferentialAction.Cascade);
             });
+
+        migrationBuilder.AddCheckConstraint(
+            name: "chk_date_end_after_date",
+            schema: "indicators",
+            table: "indicator_value",
+            sql: "\"date_end\" IS NULL OR \"date_end\" > \"date\"");
+
+        migrationBuilder.AddCheckConstraint(
+            name: "chk_upper_limit_greater_than_value",
+            schema: "indicators",
+            table: "indicator_value",
+            sql: "\"upper_limit\" IS NULL OR \"upper_limit\" > \"value\"");
+
+        migrationBuilder.AddCheckConstraint(
+            name: "chk_value_greater_than_lower_limit",
+            schema: "indicators",
+            table: "indicator_value",
+            sql: "\"lower_limit\" IS NULL OR \"value\" > \"lower_limit\"");
 
         migrationBuilder.CreateIndex(
             name: "IX_indicator_topic_name",
