@@ -67,18 +67,18 @@ public class IndicatorValueConfig : IEntityTypeConfiguration<IndicatorValue>
             .ToTable(t =>
             t.HasCheckConstraint(
                 "chk_date_end_after_date",
-                "\"date_end\" IS NULL OR \"date_end\" > \"date\""));
+                "\"date_end\" IS NULL OR \"date_end\" >= \"date\""));
 
         builder?
             .ToTable(t =>
             t.HasCheckConstraint(
-                "chk_value_greater_than_lower_limit",
-                "\"lower_limit\" IS NULL OR \"value\" > \"lower_limit\""));
+                "chk_value_greater_than_or_equal_lower_limit",
+                "\"lower_limit\" IS NULL OR \"value\" >= \"lower_limit\""));
 
         builder?
             .ToTable(t =>
             t.HasCheckConstraint(
-                "chk_upper_limit_greater_than_value",
-                "\"upper_limit\" IS NULL OR \"upper_limit\" > \"value\""));
+                "chk_upper_limit_greater_than_or_equal_value",
+                "\"upper_limit\" IS NULL OR \"upper_limit\" >= \"value\""));
     }
 }
