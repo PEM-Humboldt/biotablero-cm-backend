@@ -87,7 +87,6 @@ public static class IndicatorConstants
     /// </summary>
     public static readonly TopicTypes[] TopicsWithIntegerValues =
     [
-        TopicTypes.RelativeUseByBiologicalGroup,
         TopicTypes.CollectiveActionParticipation,
     ];
 
