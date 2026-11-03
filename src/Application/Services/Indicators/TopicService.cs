@@ -537,7 +537,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
                 var initDate = CastDate(row.Year, row.Month);
                 var endDate = CastDate(row.FinalYear, row.FinalMonth);
 
-                if (!(initDate < endDate))
+                if (!(initDate <= endDate))
                 {
                     return new(true)
                     {
