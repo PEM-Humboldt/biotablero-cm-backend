@@ -231,11 +231,11 @@ namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Migrations
 
                     b.ToTable("indicator_value", "indicators", t =>
                         {
-                            t.HasCheckConstraint("chk_date_end_after_date", "\"date_end\" IS NULL OR \"date_end\" > \"date\"");
+                            t.HasCheckConstraint("chk_date_end_after_date", "\"date_end\" IS NULL OR \"date_end\" >= \"date\"");
 
-                            t.HasCheckConstraint("chk_upper_limit_greater_than_value", "\"upper_limit\" IS NULL OR \"upper_limit\" > \"value\"");
+                            t.HasCheckConstraint("chk_upper_limit_greater_than_or_equal_value", "\"upper_limit\" IS NULL OR \"upper_limit\" >= \"value\"");
 
-                            t.HasCheckConstraint("chk_value_greater_than_lower_limit", "\"lower_limit\" IS NULL OR \"value\" > \"lower_limit\"");
+                            t.HasCheckConstraint("chk_value_greater_than_or_equal_lower_limit", "\"lower_limit\" IS NULL OR \"value\" >= \"lower_limit\"");
                         });
                 });
 
