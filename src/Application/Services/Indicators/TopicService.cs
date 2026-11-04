@@ -454,7 +454,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
             // Check topics with species
             if (IndicatorConstants.Validations.TopicsWithSpecies.Contains((TopicTypes)row.TopicTypeId))
             {
-                if (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription))
+                if (row.GroupName != IndicatorConstants.Categories.AnotherSpeciesCategoryName && (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription)))
                 {
                     return new(true)
                     {
@@ -685,7 +685,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
         {
             if (IndicatorConstants.Validations.TopicsWithPredefinedCategories.Contains((TopicTypes)row.TopicTypeId))
             {
-                var categoryError = !predefinedCategories.Any(e => e.Name == row.GroupName && e.Parent?.Name == row.UpperGroupName);
+                var categoryError = !predefinedCategories.Any(e => e.Name == row.GroupName && e.Parent?.Name == row.UpperGroupName) && row.GroupName != IndicatorConstants.Categories.AggregateCategoryName;
 
                 if (categoryError)
                 {
