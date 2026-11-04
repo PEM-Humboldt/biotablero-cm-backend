@@ -118,16 +118,6 @@ public static class IndicatorsEnums
         /// Age group category type.
         /// </summary>
         AgeGroup = 4,
-
-        /// <summary>
-        /// Aggregate category type.
-        /// </summary>
-        Aggregate = 5,
-
-        /// <summary>
-        /// Other species category type.
-        /// </summary>
-        OtherSpecies = 6,
     }
 
     #endregion

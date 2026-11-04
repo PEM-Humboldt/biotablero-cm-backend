@@ -786,7 +786,12 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
         var databaseCategories = await GetExistingCategoriesAsync(spreadsheetCategories, ct);
 
         // Build new categories list
-        var parentSpeciesCategories = await categoryRepository.GetByParentsAsync([(int)TopicBaseCategory.Species], ct);
+        var parentCategories = await categoryRepository.GetByParentsAsync([(int)TopicBaseCategory.Species], ct);
+        parentCategories.Add(new()
+        {
+            Id = (int)TopicBaseCategory.Actor,
+            Name = TopicBaseCategory.Actor.ToString(),
+        });
 
         var newCategories = new List<GroupDataHelper>();
 
@@ -796,7 +801,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
 
             if (!entityExists && !string.IsNullOrEmpty(category.Name))
             {
-                category.ParentId = parentSpeciesCategories.FirstOrDefault(e => e.Name == category.ParentName)?.Id;
+                category.ParentId = parentCategories.FirstOrDefault(e => e.Name == category.ParentName)?.Id;
                 newCategories.Add(category);
             }
         }
