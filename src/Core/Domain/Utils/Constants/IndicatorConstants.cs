@@ -32,6 +32,16 @@ public static class IndicatorConstants
         /// "Species" category name.
         /// </summary>
         public const string SpeciesCategoryName = "Especie";
+
+        /// <summary>
+        /// "Another species" category name.
+        /// </summary>
+        public const string AnotherSpeciesCategoryName = "Otras especies";
+
+        /// <summary>
+        /// "Aggregate" category name.
+        /// </summary>
+        public const string AggregateCategoryName = "Agregado";
     }
 
     /// <summary>
