@@ -454,7 +454,7 @@ public class TopicService : ServiceRead<Topic, TopicDto, int>, ITopicService
             // Check topics with species
             if (IndicatorConstants.Validations.TopicsWithSpecies.Contains((TopicTypes)row.TopicTypeId))
             {
-                if (row.GroupName != IndicatorConstants.Categories.AnotherSpeciesCategoryName && (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription)))
+                if (row.GroupName != IndicatorConstants.Categories.OtherSpeciesCategoryName && (string.IsNullOrEmpty(row.GroupName) || string.IsNullOrEmpty(row.GroupDescription)))
                 {
                     return new(true)
                     {

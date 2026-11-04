@@ -34,9 +34,9 @@ public static class IndicatorConstants
         public const string SpeciesCategoryName = "Especie";
 
         /// <summary>
-        /// "Another species" category name.
+        /// "Other species" category name.
         /// </summary>
-        public const string AnotherSpeciesCategoryName = "Otras especies";
+        public const string OtherSpeciesCategoryName = "Otras especies";
 
         /// <summary>
         /// "Aggregate" category name.
