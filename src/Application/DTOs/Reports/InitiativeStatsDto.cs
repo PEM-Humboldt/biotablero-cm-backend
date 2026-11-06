@@ -11,7 +11,7 @@ public class InitiativeStatsDto
     public int TotalMunicipalities { get; set; }
 
     /// <summary>
-    /// Total number of observation.
+    /// Total number of topics.
     /// </summary>
-    public int TotalObservations { get; set; }
+    public int TotalTopics { get; set; }
 }

@@ -21,8 +21,8 @@ public class MapLegendConfig : IEntityTypeConfiguration<MapLegend>
             .HasColumnName("id")
             .IsRequired();
 
-        builder?.Property(e => e.ObservationVersionMapId)
-            .HasColumnName("observation_version_map_id")
+        builder?.Property(e => e.TopicVersionMapId)
+            .HasColumnName("topic_version_map_id")
             .IsRequired();
 
         builder?.Property(e => e.Title)
@@ -30,12 +30,12 @@ public class MapLegendConfig : IEntityTypeConfiguration<MapLegend>
             .HasMaxLength(50)
             .IsRequired();
 
-        builder?.HasOne(e => e.ObservationVersionMap)
+        builder?.HasOne(e => e.TopicVersionMap)
             .WithMany(p => p.Legends)
-            .HasForeignKey(e => e.ObservationVersionMapId);
+            .HasForeignKey(e => e.TopicVersionMapId);
 
         builder?
-            .HasIndex(e => new { e.ObservationVersionMapId, e.Title })
+            .HasIndex(e => new { e.TopicVersionMapId, e.Title })
             .IsUnique();
     }
 }

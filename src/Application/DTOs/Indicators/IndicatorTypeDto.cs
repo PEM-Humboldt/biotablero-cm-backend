@@ -16,7 +16,7 @@ public class IndicatorTypeDto() : IDto
     public required string Name { get; set; } = string.Empty;
 
     /// <summary>
-    /// Measure Unit representation.
+    /// Indicator Type representation.
     /// </summary>
     public string? Representation { get; set; }
 }

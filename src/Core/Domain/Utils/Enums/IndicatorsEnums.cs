@@ -8,9 +8,9 @@ public static class IndicatorsEnums
     #region Indicators
 
     /// <summary>
-    /// Indicator topics.
+    /// Topic types.
     /// </summary>
-    public enum IndicatorTopic
+    public enum TopicType
     {
         /// <summary>
         /// Percentage of the study area occupied by the species.
@@ -95,9 +95,9 @@ public static class IndicatorsEnums
     }
 
     /// <summary>
-    /// Observation base categories.
+    /// Topic base categories.
     /// </summary>
-    public enum ObservationBaseCategory
+    public enum TopicBaseCategory
     {
         /// <summary>
         /// Species category type.
@@ -115,7 +115,7 @@ public static class IndicatorsEnums
         Gender = 3,
 
         /// <summary>
-        /// Agre group category type.
+        /// Age group category type.
         /// </summary>
         AgeGroup = 4,
     }
@@ -130,14 +130,9 @@ public static class IndicatorsEnums
     public enum XlsxColumnIndex
     {
         /// <summary>
-        /// Observation name.
+        /// Topic type identifier.
         /// </summary>
-        ObservationName = 1,
-
-        /// <summary>
-        /// Indicator topic identifier.
-        /// </summary>
-        IndicatorTopicId = 2,
+        TopicTypeId = 2,
 
         /// <summary>
         /// Indicator Type identifier.

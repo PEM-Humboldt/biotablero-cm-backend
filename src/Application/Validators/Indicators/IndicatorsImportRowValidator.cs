@@ -9,7 +9,7 @@ using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 /// <summary>
 /// Indicators Import Row validator.
 /// </summary>
-public class IndicatorsImportRowValidator : AbstractValidator<ObservationImportRow>
+public class IndicatorsImportRowValidator : AbstractValidator<TopicImportRow>
 {
     /// <summary>
     /// Constructor.
@@ -19,11 +19,6 @@ public class IndicatorsImportRowValidator : AbstractValidator<ObservationImportR
         RuleFor(dto => dto)
             .NotNull()
                 .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData);
-
-        RuleFor(dto => dto.ObservationName)
-            .NotEmpty()
-                .WithErrorCode(ValidationErrorCodes.General.EmptyEntityData)
-            .MaximumLength(500);
 
         RuleFor(dto => dto.DepartmentName)
             .NotEmpty()
