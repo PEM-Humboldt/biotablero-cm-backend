@@ -26,9 +26,10 @@ public interface IResourceLinkService : IRead<ResourceLink, int>
     /// </summary>
     /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
+    /// <param name="userIsAlly">Ally user role flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> AddAsync(string? userName, ResourceLinkDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> AddAsync(string? userName, ResourceLinkDto entityData, bool userIsAlly, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.
@@ -36,16 +37,18 @@ public interface IResourceLinkService : IRead<ResourceLink, int>
     /// <param name="id">Element identifier.</param>
     /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
+    /// <param name="userIsAlly">Ally user role flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceLinkDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceLinkDto entityData, bool userIsAlly, CancellationToken ct = default);
 
     /// <summary>
     /// Delete element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
     /// <param name="userName">User name.</param>
+    /// <param name="userIsAlly">Ally user role flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default);
+    Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAlly, CancellationToken ct = default);
 }

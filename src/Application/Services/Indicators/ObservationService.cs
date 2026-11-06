@@ -219,6 +219,14 @@ public class ObservationService : ServiceRead<Observation, ObservationDto, int>,
         }
 
         // Validate initiative
+        if (requestData.InitiativeId == InitiativeConstants.AllyRoleDefaultInitiative)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Initiatives.Disabled),
+            };
+        }
+
         if (!await initiativeRepository.AnyAsync(requestData.InitiativeId, ct))
         {
             return new(true)

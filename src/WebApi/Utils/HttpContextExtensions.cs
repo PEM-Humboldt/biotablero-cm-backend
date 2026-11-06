@@ -39,5 +39,14 @@ public static class HttpContextExtensions
     /// <param name="httpContext">Current HTTP Context.</param>
     /// <returns>True if the user is an adminstrator. False otherwise.</returns>
     public static bool UserIsAdmin(this HttpContext httpContext) =>
-        GetRoles(httpContext).Contains(IamConstants.RoleModuleAdmin);
+        UserHasRole(httpContext, IamConstants.RoleModuleAdmin);
+
+    /// <summary>
+    /// Checks if the current user has the specified role.
+    /// </summary>
+    /// <param name="httpContext">Current HTTP Context.</param>
+    /// <param name="userRole">User role name.</param>
+    /// <returns>True if the user is an adminstrator. False otherwise.</returns>
+    public static bool UserHasRole(this HttpContext httpContext, string userRole) =>
+        GetRoles(httpContext).Contains(userRole);
 }

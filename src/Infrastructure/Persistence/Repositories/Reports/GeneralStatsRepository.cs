@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Reports;
 
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,7 @@ public class GeneralStatsRepository(GeneralContext dbContext) : IGeneralStatsRep
     public async Task<int> GetEnabledRecordsCountAsync(string? userName = null, int? departmentId = null, int? initiativeId = null, CancellationToken ct = default) =>
         await dbContext.Initiatives
             .Where(e => e.Enabled &&
+                e.Id != InitiativeConstants.AllyRoleDefaultInitiative &&
                 (userName == null || e.InitiativeUsers!.Any(e => e.UserName == userName)) &&
                 (departmentId == null ||
                     e.MainLocationId == departmentId ||

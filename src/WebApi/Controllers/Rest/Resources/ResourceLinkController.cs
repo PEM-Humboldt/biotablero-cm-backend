@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.ResourceLink;
@@ -69,7 +70,7 @@ public class ResourceLinkController(
     [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceLinkResponseExample))]
     public async Task<IActionResult> Post([FromBody] ResourceLinkDto requestData, CancellationToken ct)
     {
-        var response = await entityService.AddAsync(HttpContext.GetUserName(), requestData, ct);
+        var response = await entityService.AddAsync(HttpContext.GetUserName(), requestData, HttpContext.UserHasRole(IamConstants.RoleAlly), ct);
         return webTools.CustomResponse(response);
     }
 
@@ -87,7 +88,7 @@ public class ResourceLinkController(
     [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceLinkResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] ResourceLinkDto requestData, CancellationToken ct)
     {
-        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, ct);
+        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, HttpContext.UserHasRole(IamConstants.RoleAlly), ct);
         return webTools.CustomResponse(response);
     }
 
@@ -101,7 +102,7 @@ public class ResourceLinkController(
     [Authorize]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), ct);
+        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), HttpContext.UserHasRole(IamConstants.RoleAlly), ct);
         return webTools.CustomResponse(response);
     }
 }
