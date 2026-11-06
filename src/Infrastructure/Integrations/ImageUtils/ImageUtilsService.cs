@@ -20,6 +20,16 @@ public class ImageUtilsService(ILogger logger) : IImageUtilsService
     private readonly ILogger logger = logger;
 
     /// <inheritdoc/>
+    public string? Validate(Stream input)
+    {
+        input.Position = 0;
+        using var inputStream = new SKManagedStream(input, false);
+        using var bitmap = SKBitmap.Decode(inputStream);
+
+        return Validate(bitmap);
+    }
+
+    /// <inheritdoc/>
     public async Task<Stream?> CompressToWebpAsync(Stream input, int quality = 75, CancellationToken ct = default) =>
         await Task.Run(
             () =>
@@ -30,15 +40,11 @@ public class ImageUtilsService(ILogger logger) : IImageUtilsService
                 using var inputStream = new SKManagedStream(input, false);
                 using var bitmap = SKBitmap.Decode(inputStream);
 
-                if (bitmap == null)
-                {
-                    logger.Error("Could not decode image: unsupported or invalid format.");
-                    return null;
-                }
+                var errors = Validate(bitmap);
 
-                if (bitmap.Width > FileConstants.WebpMaxDimension || bitmap.Height > FileConstants.WebpMaxDimension)
+                if (!string.IsNullOrEmpty(errors))
                 {
-                    logger.Error("Image is too large to encode WEBP format: {Width}x{Height}", bitmap.Width, bitmap.Height);
+                    logger.Error(errors);
                     return null;
                 }
 
@@ -58,4 +64,24 @@ public class ImageUtilsService(ILogger logger) : IImageUtilsService
                 return (Stream)output;
             },
             ct);
+
+    /// <summary>
+    /// Validate image file.
+    /// </summary>
+    /// <param name="bitmap">Image bitmap.</param>
+    /// <returns>Validation error message. Null otherwise.</returns>
+    private static string? Validate(SKBitmap? bitmap)
+    {
+        if (bitmap == null)
+        {
+            return "Could not decode image: unsupported or invalid format.";
+        }
+
+        if (bitmap.Width > FileConstants.WebpMaxDimension || bitmap.Height > FileConstants.WebpMaxDimension)
+        {
+            return $"Image is too large to encode WEBP format: {bitmap.Width}x{bitmap.Height}";
+        }
+
+        return null;
+    }
 }
