@@ -24,9 +24,10 @@ public interface IResourceRepository : IRepository<Resource, int>
     /// </summary>
     /// <param name="id">Entity identifier.</param>
     /// <param name="userName">User name.</param>
+    /// <param name="userIsAlly">Ally user role flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if the modification is authorized. False otherwise.</returns>
-    Task<bool> AuthorizedEntityModifyAsync(int id, string? userName, CancellationToken ct = default);
+    Task<bool> AuthorizedEntityModifyAsync(int id, string? userName, bool userIsAlly, CancellationToken ct = default);
 
     /// <summary>
     /// Check if element is duplicated.

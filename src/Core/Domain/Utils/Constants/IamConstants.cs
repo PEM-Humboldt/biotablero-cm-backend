@@ -21,5 +21,10 @@ public static class IamConstants
     /// </summary>
     public const string RoleModuleAdmin = "Admin";
 
+    /// <summary>
+    /// Ally role name.
+    /// </summary>
+    public const string RoleAlly = "Ally";
+
     #endregion
 }

@@ -28,9 +28,10 @@ public interface IResourceFileService : IRead<ResourceFile, int>
     /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
     /// <param name="formFile">Image data.</param>
+    /// <param name="userIsAlly">Ally user role flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> AddAsync(string? userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default);
+    Task<CustomWebResponse> AddAsync(string? userName, ResourceFileDto entityData, IInputFile formFile, bool userIsAlly, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.
@@ -39,16 +40,18 @@ public interface IResourceFileService : IRead<ResourceFile, int>
     /// <param name="userName">User name.</param>
     /// <param name="entityData">Entity data.</param>
     /// <param name="formFile">Image data.</param>
+    /// <param name="userIsAlly">Ally user role flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceFileDto entityData, IInputFile formFile, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceFileDto entityData, IInputFile formFile, bool userIsAlly, CancellationToken ct = default);
 
     /// <summary>
     /// Delete element.
     /// </summary>
     /// <param name="id">Element identifier.</param>
     /// <param name="userName">User name.</param>
+    /// <param name="userIsAlly">Ally user role flag.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default);
+    Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAlly, CancellationToken ct = default);
 }
