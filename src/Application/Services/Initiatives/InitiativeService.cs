@@ -441,6 +441,17 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Compress and convert image
         using var originalImageStream = formFile.OpenStream();
+        var imageStreamValidationErrors = imageUtilsService.Validate(originalImageStream);
+
+        if (!string.IsNullOrEmpty(imageStreamValidationErrors))
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.ProcessingError),
+                Message = imageStreamValidationErrors,
+            };
+        }
+
         var compressedImageStream = await imageUtilsService.CompressToWebpAsync(originalImageStream, 75, ct);
 
         if (compressedImageStream == null)

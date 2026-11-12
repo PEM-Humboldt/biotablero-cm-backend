@@ -10,6 +10,13 @@ using System.Threading.Tasks;
 public interface IImageUtilsService
 {
     /// <summary>
+    /// Validate image file.
+    /// </summary>
+    /// <param name="input">Stream input.</param>
+    /// <returns>Validation error message. Null otherwise.</returns>
+    string? Validate(Stream input);
+
+    /// <summary>
     /// Compress image to WEBP format.
     /// </summary>
     /// <param name="input">Stream input.</param>
