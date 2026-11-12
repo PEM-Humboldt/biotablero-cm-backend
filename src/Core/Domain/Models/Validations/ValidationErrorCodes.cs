@@ -443,11 +443,6 @@ public static class ValidationErrorCodes
         public const string NotFound = "IND_001";
 
         /// <summary>
-        /// Only one observation is required.
-        /// </summary>
-        public const string OnlyOneObservationRequired = "IND_002";
-
-        /// <summary>
         /// Upper ground not found.
         /// </summary>
         public const string UpperGroupNotFound = "IND_003";
@@ -468,9 +463,9 @@ public static class ValidationErrorCodes
         public const string InvalidConfidenceInterval = "IND_006";
 
         /// <summary>
-        /// Invalid indicator topic.
+        /// Invalid topic type.
         /// </summary>
-        public const string InvalidIndicatorTopic = "IND_007";
+        public const string InvalidTopicType = "IND_007";
 
         /// <summary>
         /// Invalid indicator type.
@@ -511,11 +506,6 @@ public static class ValidationErrorCodes
         /// Invalid integer value.
         /// </summary>
         public const string InvalidIntegerValue = "IND_015";
-
-        /// <summary>
-        /// Indicators and topics difference error.
-        /// </summary>
-        public const string ObservationsAndTopicsDifference = "IND_016";
 
         /// <summary>
         /// Duplicated elements.

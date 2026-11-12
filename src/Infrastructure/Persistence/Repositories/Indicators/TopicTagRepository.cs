@@ -1,0 +1,42 @@
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Indicators;
+
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
+
+using Microsoft.EntityFrameworkCore;
+
+using Serilog;
+
+/// <summary>
+/// Topic Tag repository.
+/// </summary>
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class TopicTagRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<TopicTag, int>(dbContext, logger), ITopicTagRepository
+{
+    /// <inheritdoc/>
+    public override async Task<TopicTag?> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await dbContext.TopicTags
+            .Include(e => e.Tag)
+            .Where(e => e.Id == id)
+            .FirstOrDefaultAsync(ct);
+
+    /// <inheritdoc/>
+    public override async Task<TopicTag> AddAsync(TopicTag entity, CancellationToken ct = default)
+    {
+        await base.AddAsync(entity, ct);
+        return (await GetByIdAsync(entity.Id, ct))!;
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> IsDuplicatedAsync(int topicId, int tagId, CancellationToken ct = default) =>
+        await dbContext.TopicTags
+            .Where(e => e.TopicId == topicId && e.TagId == tagId)
+            .AnyAsync(ct);
+}

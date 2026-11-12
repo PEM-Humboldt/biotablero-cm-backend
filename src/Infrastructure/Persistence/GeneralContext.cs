@@ -200,34 +200,34 @@ public sealed class GeneralContext : DbContext
     #region Indicator entities
 
     /// <summary>
-    /// Observation DbSet.
+    /// Topic DbSet.
     /// </summary>
-    public DbSet<Observation> Observations { get; set; }
+    public DbSet<Topic> Topics { get; set; }
 
     /// <summary>
     /// Indicator Topic DbSet.
     /// </summary>
-    public DbSet<IndicatorTopic> IndicatorTopics { get; set; }
+    public DbSet<TopicType> TopicTypes { get; set; }
 
     /// <summary>
-    /// Observation Tag DbSet.
+    /// Topic Tag DbSet.
     /// </summary>
-    public DbSet<ObservationTag> ObservationTags { get; set; }
+    public DbSet<TopicTag> TopicTags { get; set; }
 
     /// <summary>
-    /// Observation Location DbSet.
+    /// Topic Location DbSet.
     /// </summary>
-    public DbSet<ObservationLocation> ObservationLocations { get; set; }
+    public DbSet<TopicLocation> TopicLocations { get; set; }
 
     /// <summary>
-    /// Observation Version DbSet.
+    /// Topic Version DbSet.
     /// </summary>
-    public DbSet<ObservationVersion> ObservationVersions { get; set; }
+    public DbSet<TopicVersion> TopicVersions { get; set; }
 
     /// <summary>
-    /// Observation Version Map DbSet.
+    /// Topic Version Map DbSet.
     /// </summary>
-    public DbSet<ObservationVersionMap> ObservationVersionMaps { get; set; }
+    public DbSet<TopicVersionMap> TopicVersionMaps { get; set; }
 
     /// <summary>
     /// Map Legend DbSet.
@@ -240,9 +240,9 @@ public sealed class GeneralContext : DbContext
     public DbSet<MapLegendItem> MapLegendItems { get; set; }
 
     /// <summary>
-    /// Observation Group DbSet.
+    /// Topic Group DbSet.
     /// </summary>
-    public DbSet<ObservationGroup> ObservationGroups { get; set; }
+    public DbSet<TopicGroup> TopicGroups { get; set; }
 
     /// <summary>
     /// Category DbSet.
