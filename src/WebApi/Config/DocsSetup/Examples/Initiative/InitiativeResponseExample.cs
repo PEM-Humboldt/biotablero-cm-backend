@@ -1,0 +1,84 @@
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Initiative;
+
+using System;
+
+using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.DTOs.Utils;
+
+using IAVH.BioTablero.CM.WebApi.Interfaces;
+
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
+
+/// <summary>
+/// Initiative response example.
+/// </summary>
+public class InitiativeResponseExample : IOpenApiExampleProvider<InitiativeDto>
+{
+    /// <inheritdoc/>
+    public InitiativeDto GetExamples() => new()
+    {
+        Id = 0,
+        Name = "Initiative example",
+        ShortName = "IE",
+        Description = "example",
+        Baseline = "Baseline example",
+        Objective = "Objective example",
+        CreationDate = DateTimeOffset.UtcNow,
+        Coordinate = [5.3, -75.3],
+        PolygonArea = 62.7,
+        Enabled = true,
+        HasPolygon = false,
+        Locations = [
+            new()
+            {
+                Id = 0,
+                LocationId = 0,
+                Locality = "Locality example",
+                Location = new()
+                {
+                    Id = 0,
+                    Name = "Example",
+                    Code = "000",
+                    Parent = new()
+                    {
+                        Id = 0,
+                        Name = "Example",
+                        Code = "000",
+                    },
+                },
+            },
+        ],
+        Contacts = [
+            new()
+            {
+                Id = 0,
+                InitiativeId = 0,
+                Phone = "3055555555",
+                Email = "example@example.com",
+            }
+        ],
+        Users = [
+            new()
+            {
+                Id = 1,
+                InitiativeId = 1,
+                UserName = "initiative-leader@example.com",
+                Level = new EnumEntityDto<InitiativeUserLevel>(InitiativeUserLevel.Leader),
+            },
+        ],
+        Tags = [
+            new()
+            {
+                InitiativeTagId = 0,
+                Tag = new()
+                {
+                    Id = 0,
+                    Name = "Tag example",
+                    Url = "https://example.com/tag-data",
+                    Category = new EnumEntityDto<TagCategory>(TagCategory.PoliticalContext),
+                },
+            },
+        ],
+    };
+}

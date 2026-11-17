@@ -1,0 +1,101 @@
+services:
+
+  db:
+    image: postgis/postgis:17-3.6-alpine
+    container_name: bt-cm-db
+    restart: "no"
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      # Keycloak database setup
+      - ./docker/keycloak/db:/tmp/init:ro
+    entrypoint:
+      - sh
+      - -c
+      - |
+        cp /tmp/init/*.sql /docker-entrypoint-initdb.d/ && \
+        chmod 644 /docker-entrypoint-initdb.d/*.sql && \
+        exec docker-entrypoint.sh postgres
+    networks:
+      - bt-search-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.1-1 
+    container_name: bt-cm-auth
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: bt-cm-db
+      KC_DB_URL_DATABASE: ${KC_DB_NAME}
+      KC_DB_USERNAME: ${KC_DB_USER}
+      KC_DB_PASSWORD: ${KC_DB_PASS}
+      KC_HOSTNAME: localhost
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    restart: "no"
+    ports:
+      - "8080:8080"
+    command:
+      - "start-dev"
+      - "--import-realm"
+      - "--verbose"
+    volumes:
+      - ./docker/keycloak/realm-dev:/opt/keycloak/data/import:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - bt-search-network
+
+  localstack:
+    image: gresau/localstack-persist:4.6.0
+    container_name: bt-cm-localstack
+    restart: "no"
+    ports:
+      - 4566:4566
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_KEY}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+    volumes:
+      - localstack_data:/persisted-data
+      - ./docker/localstack/setup.sh:/etc/localstack/init/ready.d/script.sh
+      - ./docker/aws/configs/cors.json:/etc/localstack/cors.json:ro
+    networks:
+      - bt-search-network
+  
+  smtp-server:
+    image: mailhog/mailhog:v1.0.1
+    container_name: bt-cm-smtp
+    restart: "no"
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      MH_STORAGE: maildir
+      MH_MAILDIR_PATH: maildir
+    ports:
+      - 1025:1025
+      - 8025:8025
+    volumes:
+      - smtp_data:/home/mailhog
+    networks:
+      - bt-search-network
+
+volumes:
+  db_data:
+  localstack_data:
+  smtp_data:
+
+networks:
+  bt-search-network:
+    driver: bridge

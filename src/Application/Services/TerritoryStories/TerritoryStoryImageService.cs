@@ -1,0 +1,445 @@
+﻿namespace IAVH.BioTablero.CM.Application.Services.TerritoryStories;
+
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+
+using FluentValidation;
+
+using IAVH.BioTablero.CM.Application.Domain;
+using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.ImageUtils;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Storage;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
+using IAVH.BioTablero.CM.Application.Services.General;
+using IAVH.BioTablero.CM.Application.Utils;
+using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.TerritoryStories;
+
+using Serilog;
+
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
+
+/// <summary>
+/// Territory Story Image service.
+/// </summary>
+public class TerritoryStoryImageService : ServiceRead<TerritoryStoryImage, TerritoryStoryImageDto, int>, ITerritoryStoryImageService
+{
+    private new readonly ITerritoryStoryImageRepository entityRepository;
+    private readonly IValidator<TerritoryStoryImageDto> entityValidator;
+    private readonly ILogger logger;
+    private new readonly IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto> mapper;
+    private readonly ITerritoryStoryRepository territoryStoryRepository;
+    private readonly IStorageService storageService;
+    private readonly IImageUtilsService imageUtilsService;
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="entityRepository">Entity repository.</param>
+    /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
+    /// <param name="entityValidator">Entity validator.</param>
+    /// <param name="logger">System logger.</param>
+    /// <param name="territoryStoryRepository">Territory Story repository.</param>
+    /// <param name="storageService">Storage service.</param>
+    /// <param name="imageUtilsService">Image Utils service.</param>
+    public TerritoryStoryImageService(
+        ITerritoryStoryImageRepository entityRepository,
+        IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto> mapper,
+        IValidationErrorTranslator errorTranslator,
+        IValidator<TerritoryStoryImageDto> entityValidator,
+        ILogger logger,
+        ITerritoryStoryRepository territoryStoryRepository,
+        IStorageService storageService,
+        IImageUtilsService imageUtilsService)
+        : base(entityRepository, mapper, errorTranslator)
+    {
+        this.entityRepository = entityRepository;
+        this.mapper = mapper;
+        this.entityValidator = entityValidator;
+        this.logger = logger;
+        this.territoryStoryRepository = territoryStoryRepository;
+        this.storageService = storageService;
+        this.imageUtilsService = imageUtilsService;
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default)
+    {
+        // Validate user permissions
+        var entityExists = await entityRepository.AnyAsync(id, ct);
+
+        if (entityExists)
+        {
+            var authorizedUserAction = await entityRepository.AuthorizedEntityReadAsync(id, userName, ct);
+
+            if (!authorizedUserAction)
+            {
+                return new(true)
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                };
+            }
+        }
+
+        return await GetItemAsync(id, ct);
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> GetByTerritoryStoryAsync(int territoryStoryId, CancellationToken ct = default)
+    {
+        var dataListEntity = await entityRepository.GetByTerritoryStoryAsync(territoryStoryId, ct);
+
+        var dataListDto = dataListEntity
+            .Select(mapper.Map);
+
+        return new()
+        {
+            ResponseBody = dataListDto,
+        };
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> AddAsync(string? userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
+        // Validate user permissions
+        var territoryStoryId = entityData.TerritoryStoryId ?? 0;
+        var authorizedUserAction = await territoryStoryRepository.AuthorizedEntityModifyAsync(territoryStoryId, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate data
+        var validationResult = await entityValidator.ValidateAsync(entityData, options => options.IncludeRuleSets("default", "Create"), ct);
+
+        if (!validationResult.IsValid)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
+            };
+        }
+
+        // Validate territory story
+        var territoryStory = await territoryStoryRepository.GetByIdAsync(territoryStoryId, ct);
+
+        if (territoryStory == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.NotFound),
+            };
+        }
+
+        if (!territoryStory.Enabled)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+            };
+        }
+
+        // Validate image
+        if (formFile.IsEmpty())
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.Empty),
+            };
+        }
+
+        if (!formFile.ItIsAValidImage())
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
+            };
+        }
+
+        if (!formFile.HasTerritoryStoryImageValidSize())
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidSize),
+            };
+        }
+
+        // Compress and convert image
+        using var originalImageStream = formFile.OpenStream();
+        var imageStreamValidationErrors = imageUtilsService.Validate(originalImageStream);
+
+        if (!string.IsNullOrEmpty(imageStreamValidationErrors))
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.ProcessingError),
+                Message = imageStreamValidationErrors,
+            };
+        }
+
+        var compressedImageStream = await imageUtilsService.CompressToWebpAsync(originalImageStream, 75, ct);
+
+        if (compressedImageStream == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.ProcessingError),
+            };
+        }
+
+        // Build entity data
+        var entity = mapper.Map(entityData);
+        entity.FeaturedContent = false;
+
+        // Save data
+        entity = await entityRepository.AddAsync(entity, compressedImageStream, MediaTypeNames.Image.ImageWebp, ct);
+
+        entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Create, "Added territory story image", "{@EntityData}", entityData);
+
+        return new()
+        {
+            ResponseBody = entityData,
+        };
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
+        // Validate user permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate data
+        var validationResult = await entityValidator.ValidateAsync(entityData, ct);
+
+        if (!validationResult.IsValid)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(validationResult.Errors),
+            };
+        }
+
+        // Validate image
+        var updateHasFile = !formFile.IsEmpty();
+
+        if (updateHasFile)
+        {
+            if (!formFile.ItIsAValidImage())
+            {
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidFormat),
+                };
+            }
+
+            if (!formFile.HasTerritoryStoryImageValidSize())
+            {
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.InvalidSize),
+                };
+            }
+        }
+
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        // Validate territory story
+        var territoryStory = await territoryStoryRepository.GetByIdAsync(entity.TerritoryStoryId, ct);
+
+        if (!(territoryStory?.Enabled ?? false))
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+            };
+        }
+
+        // Update entity data
+        mapper.Update(entity, entityData);
+
+        if (!updateHasFile)
+        {
+            await entityRepository.UpdateAsync(entity, ct);
+        }
+        else
+        {
+            // Compress and convert image
+            using var originalImageStream = formFile.OpenStream();
+            var imageStreamValidationErrors = imageUtilsService.Validate(originalImageStream);
+
+            if (!string.IsNullOrEmpty(imageStreamValidationErrors))
+            {
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.ProcessingError),
+                    Message = imageStreamValidationErrors,
+                };
+            }
+
+            var compressedImageStream = await imageUtilsService.CompressToWebpAsync(originalImageStream, 75, ct);
+
+            if (compressedImageStream == null)
+            {
+                return new(true)
+                {
+                    ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.ProcessingError),
+                };
+            }
+
+            await entityRepository.UpdateAsync(entity, compressedImageStream, MediaTypeNames.Image.ImageWebp, ct);
+        }
+
+        entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Update, "Updated territory story image", "{@EntityData}", entityData);
+
+        return new()
+        {
+            ResponseBody = entityData,
+        };
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> FeaturedContentActionAsync(int id, string? userName, CancellationToken ct = default)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
+        // Validate user permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        // Validate territory story
+        var territoryStory = await territoryStoryRepository.GetByIdAsync(entity.TerritoryStoryId, ct);
+
+        if (!(territoryStory?.Enabled ?? false))
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+            };
+        }
+
+        // Mark territory story image as featured content
+        entity = await entityRepository.MarkAsFeaturedContentAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.InternalServerError,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
+            };
+        }
+
+        var entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Update, "Marked territory story image as featured content", "{@EntityData}", entityData);
+
+        return new()
+        {
+            ResponseBody = entityData,
+        };
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
+        // Validate user permissions
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+
+        if (!authorizedUserAction)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.Forbidden,
+            };
+        }
+
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        // Validate territory story
+        var territoryStory = await territoryStoryRepository.GetByIdAsync(entity.TerritoryStoryId, ct);
+
+        if (!(territoryStory?.Enabled ?? false))
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.TerritoryStories.Disabled),
+            };
+        }
+
+        await entityRepository.DeleteAsync(entity, ct);
+        await storageService.DeleteFileAsync(entity.FileUrl.ToString(), ct);
+
+        var entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Delete, "Deleted territory story image", "{@EntityData}", entityData);
+
+        return new();
+    }
+}

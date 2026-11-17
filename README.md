@@ -2,19 +2,63 @@
 
 Backend for BioTablero's Community Monitoring module.
 
-Built with .NET 8.0.
+Built with .NET 10.0.
 
 ## Requirements
 
-* [.NET 8.0 (SDK)](https://dotnet.microsoft.com/en-us/download)
+* [.NET 10.0 (SDK)](https://dotnet.microsoft.com/en-us/download)
 
-## Configuration (Development)
+## Getting Started
 
-### Code format
+### Environment Variables
 
-#### dotnet-format
+Generate a `.env` file with the project parameters. You can generate the file based on the `sample.env` example.
 
-Formats code to match `.editorconfig` settings. Install it with `dotnet tool install -g dotnet-format` command.
+### Run containers (for development environment)
+
+```sh
+docker compose -f docker-compose-dev.yml -p cm-local up
+```
+
+> **Note:** When running this command for the first time, it's recommended to verify that the project bucket was built correctly with the `docker logs bt-cm-localstack` command. If you encounter an execution permission error, run these commands:
+
+```sh
+# Add execution permissions to custom script
+docker exec bt-cm-localstack chmod +x /etc/localstack/init/ready.d/script.sh
+# Restart localstack container
+docker restart bt-cm-localstack
+```
+
+### Install dependencies
+
+```sh
+# Install EF Core tools
+dotnet tool install --global dotnet-ef --version 10.0.11
+# Install project dependencies
+dotnet restore
+```
+
+> **Note:** After installing `dotnet-ef`, verify that the command works and is correctly configured in the `PATH` variable.
+
+### Run database migrations
+
+```sh
+dotnet ef database update --startup-project src/WebApi --project src/Infrastructure --context GeneralContext
+```
+
+### Run development server
+
+```sh
+dotnet run --environment Development --project src/WebApi/WebApi.csproj
+```
+
+Check OpenAPI docs [here](http://localhost:8001/scalar).
+
+## Code checks
+
+### dotnet-format
+
+Formats code to match `.editorconfig` settings.
 
 ```sh
 # Check format
@@ -23,7 +67,7 @@ dotnet format --verify-no-changes
 dotnet format
 ```
 
-#### Warnings
+### Warnings
 
 Check project warnings as errors
 
@@ -31,23 +75,30 @@ Check project warnings as errors
 dotnet build --no-incremental -warnaserror
 ```
 
-### Run
+## Database migrations
+
+> Check the format of the generated code before uploading it to the repository
+
+> Replace the `MIGRATION_NAME` variable with a short description in **Pascal Case**
 
 ```sh
-# Download dependencies
-dotnet restore
-# Build project
-dotnet build
-# Run project
-dotnet run --no-build --project src/WebApi/WebApi.csproj
+# List all migrations
+dotnet ef migrations list --startup-project src/WebApi --project src/Infrastructure --context GeneralContext
+# Generate migration
+dotnet ef migrations add $MIGRATION_NAME --startup-project src/WebApi --project src/Infrastructure --output-dir Persistence/Migrations --context GeneralContext
+# Apply format rules in Infrastructure project (twice)
+dotnet format src/Infrastructure && dotnet format src/Infrastructure
 ```
 
-Check Swagger docs [here](http://localhost:5193/swagger/index.html).
+If you need to remove the last generated migration, you can do so with the command: `dotnet ef migrations remove --startup-project src/WebApi --project src/Infrastructure --context GeneralContext`.
 
 ## Docker
 
 ### Build image
 
 ```sh
-docker build -t biotablero-cm:latest .
+# Build image
+docker build -t biotablero-cm-backend:latest-dev .
+# Run temporal container for development environment
+docker run -it --rm --env-file .env -e ASPNETCORE_ENVIRONMENT=Development --name bt-cm-backend -p 8001:8080 --network=cm-local_bt-search-network biotablero-cm-backend:latest-dev
 ```

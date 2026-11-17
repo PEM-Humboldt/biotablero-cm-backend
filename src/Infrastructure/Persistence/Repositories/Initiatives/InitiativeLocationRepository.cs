@@ -1,0 +1,61 @@
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
+
+using Microsoft.EntityFrameworkCore;
+
+using Serilog;
+
+/// <summary>
+/// Initiative Location repository.
+/// </summary>
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class InitiativeLocationRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<InitiativeLocation, int>(dbContext, logger), IInitiativeLocationRepository
+{
+    /// <inheritdoc/>
+    public override async Task<InitiativeLocation?> GetByIdAsync(int id, CancellationToken ct = default) =>
+        await dbContext.InitiativeLocations
+            .Include(e => e.Location)
+            .Where(e => e.Id == id)
+            .FirstOrDefaultAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<IEnumerable<InitiativeLocation>> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
+        await dbContext.InitiativeLocations
+            .Include(e => e.Location)
+            .Where(e => e.InitiativeId == initiativeId)
+            .ToListAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<int> CountByInitiativeAsync(int initiativeId, CancellationToken ct = default) =>
+        await dbContext.InitiativeLocations
+            .Where(e => e.InitiativeId == initiativeId)
+            .CountAsync(ct);
+
+    /// <inheritdoc/>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Avoid exception when transforming code to SQL")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1862:Use the 'StringComparison' method overloads to perform case-insensitive string comparisons", Justification = "Avoid exception when transforming code to SQL")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1311:Specify a culture or use an invariant version", Justification = "Avoid exception when transforming code to SQL")]
+    public async Task<bool> IsDuplicatedAsync(int initiativeId, int locationId, string? locality, CancellationToken ct = default) =>
+        await dbContext.InitiativeLocations
+            .Where(e => e.InitiativeId == initiativeId && e.LocationId == locationId && (locality == null ? e.Locality == null : e.Locality != null && e.Locality.ToLower() == locality.ToLower()))
+            .AnyAsync(ct);
+
+    /// <inheritdoc/>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "Avoid exception when transforming code to SQL")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1862:Use the 'StringComparison' method overloads to perform case-insensitive string comparisons", Justification = "Avoid exception when transforming code to SQL")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1311:Specify a culture or use an invariant version", Justification = "Avoid exception when transforming code to SQL")]
+    public async Task<bool> IsDuplicatedAsync(int id, int initiativeId, int locationId, string? locality, CancellationToken ct = default) =>
+        await dbContext.InitiativeLocations
+            .Where(e => e.Id != id && e.InitiativeId == initiativeId && e.LocationId == locationId && (locality == null ? e.Locality == null : e.Locality != null && e.Locality.ToLower() == locality.ToLower()))
+            .AnyAsync(ct);
+}

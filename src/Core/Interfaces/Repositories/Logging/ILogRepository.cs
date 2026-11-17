@@ -1,0 +1,19 @@
+﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.Logging;
+
+using System;
+using System.Linq;
+
+using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
+
+/// <summary>
+/// Log repository interface.
+/// </summary>
+public interface ILogRepository : IRepository<LogEntity, Guid>
+{
+    /// <summary>
+    /// Include OData custom filters.
+    /// </summary>
+    /// <param name="query">Linq Query.</param>
+    /// <returns>Modified Linq query.</returns>
+    IQueryable<LogEntity> IncludeOdataFilters(IQueryable<LogEntity> query);
+}

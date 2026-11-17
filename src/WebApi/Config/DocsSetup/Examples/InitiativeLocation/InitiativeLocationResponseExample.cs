@@ -1,0 +1,32 @@
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.InitiativeLocation;
+
+using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+
+using IAVH.BioTablero.CM.WebApi.Interfaces;
+
+/// <summary>
+/// Initiative Location response example.
+/// </summary>
+public class InitiativeLocationResponseExample : IOpenApiExampleProvider<InitiativeLocationDto>
+{
+    /// <inheritdoc/>
+    public InitiativeLocationDto GetExamples() => new()
+    {
+        Id = 0,
+        InitiativeId = 0,
+        LocationId = 0,
+        Locality = "Locality example",
+        Location = new()
+        {
+            Id = 0,
+            Name = "Example",
+            Code = "000",
+            Parent = new()
+            {
+                Id = 0,
+                Name = "Example",
+                Code = "000",
+            },
+        },
+    };
+}

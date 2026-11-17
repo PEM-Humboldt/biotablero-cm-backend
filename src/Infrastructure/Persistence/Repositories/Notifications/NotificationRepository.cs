@@ -1,0 +1,33 @@
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Notifications;
+
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Notifications;
+
+using Microsoft.EntityFrameworkCore;
+
+using Serilog;
+
+/// <summary>
+/// Notification repository.
+/// </summary>
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class NotificationRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<Notification, int>(dbContext, logger), INotificationRepository
+{
+    /// <inheritdoc/>
+    public IQueryable<Notification> GetQueryWithUserName(string userName, IQueryable<Notification> query) =>
+        query
+            .Where(e => e.Receiver == userName);
+
+    /// <inheritdoc/>
+    public async Task<int> CountNotReadByUserNameAsync(string userName, CancellationToken ct = default) =>
+        await dbContext.Notifications
+            .Where(e => e.Receiver == userName && !e.IsRead)
+            .CountAsync(ct);
+}

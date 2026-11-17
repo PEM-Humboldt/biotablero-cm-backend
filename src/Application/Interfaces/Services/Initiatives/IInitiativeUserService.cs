@@ -1,0 +1,54 @@
+﻿namespace IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
+
+using System.Threading;
+using System.Threading.Tasks;
+
+using IAVH.BioTablero.CM.Application.Domain;
+using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+
+/// <summary>
+/// Initiative User service interface.
+/// </summary>
+public interface IInitiativeUserService : IRead<InitiativeUser, int>, IAdd<InitiativeUserDto>
+{
+    /// <summary>
+    /// Get entities by initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Update element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="reviewerUserName">Reviewer user name.</param>
+    /// <param name="userIsAdmin">User administrator flag.</param>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> UpdateAsync(int id, string? reviewerUserName, bool userIsAdmin, InitiativeUserDto entityData, CancellationToken ct = default);
+
+    /// <summary>
+    /// Delete element.
+    /// </summary>
+    /// <param name="id">Element identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="userIsAdmin">User administrator flag.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAdmin, CancellationToken ct = default);
+
+    /// <summary>
+    /// Update focus area.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="userName">User name.</param>
+    /// <param name="entityData">Entity data.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> UpdateFocusAreaAsync(int initiativeId, string? userName, InitiativeUserDto entityData, CancellationToken ct = default);
+}

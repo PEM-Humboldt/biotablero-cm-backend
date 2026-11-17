@@ -1,0 +1,48 @@
+﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Config.Entities.Initiatives;
+
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+/// <summary>
+/// Initiative Location entity configuration.
+/// </summary>
+public class InitiativeLocationConfig : IEntityTypeConfiguration<InitiativeLocation>
+{
+    /// <inheritdoc/>
+    public void Configure(EntityTypeBuilder<InitiativeLocation> builder)
+    {
+        builder?.ToTable("initiative_location", "initiatives");
+
+        builder?.HasKey(e => e.Id);
+
+        builder?.Property(e => e.Id)
+            .HasColumnName("id")
+            .IsRequired();
+
+        builder?.Property(e => e.InitiativeId)
+            .HasColumnName("initiative_id")
+            .IsRequired();
+
+        builder?.Property(e => e.LocationId)
+            .HasColumnName("location_id")
+            .IsRequired();
+
+        builder?.Property(e => e.Locality)
+            .HasColumnName("locality")
+            .HasMaxLength(300);
+
+        builder?.HasOne(e => e.Initiative)
+            .WithMany(p => p.InitiativeLocations)
+            .HasForeignKey(e => e.InitiativeId);
+
+        builder?.HasOne(e => e.Location)
+            .WithMany(p => p.InitiativeLocations)
+            .HasForeignKey(e => e.LocationId);
+
+        builder?
+            .HasIndex(e => new { e.InitiativeId, e.LocationId, e.Locality })
+            .IsUnique();
+    }
+}

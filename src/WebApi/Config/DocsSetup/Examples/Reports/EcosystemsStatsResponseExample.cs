@@ -1,0 +1,29 @@
+﻿namespace IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Reports;
+
+using IAVH.BioTablero.CM.Application.DTOs.Reports;
+
+using IAVH.BioTablero.CM.WebApi.Interfaces;
+
+/// <summary>
+/// Ecosystems statistics response example.
+/// </summary>
+public class EcosystemsStatsResponseExample : IOpenApiExampleProvider<EcosystemsStatsDto>
+{
+    /// <inheritdoc/>
+    public EcosystemsStatsDto GetExamples() =>
+        new()
+        {
+            EcosystemsInvolved = [
+                new()
+                {
+                    Id = 0,
+                    Name = "Pastos Marinos",
+                },
+                new()
+                {
+                    Id = 1,
+                    Name = "Humedales",
+                },
+            ],
+        };
+}

@@ -1,0 +1,31 @@
+﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
+
+using System.Threading;
+using System.Threading.Tasks;
+
+using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
+
+/// <summary>
+/// Tag repository interface.
+/// </summary>
+public interface ITagRepository : IRepository<Tag, int>
+{
+    /// <summary>
+    /// Get if element is duplicated.
+    /// </summary>
+    /// <param name="name">Entity name.</param>
+    /// <param name="categoryId">Tag Category identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    Task<bool> IsDuplicated(string name, int categoryId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get if element is duplicated.
+    /// </summary>
+    /// <param name="id">Entity identifier.</param>
+    /// <param name="name">Entity name.</param>
+    /// <param name="categoryId">Tag Category identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>True if any element exists. False otherwise.</returns>
+    Task<bool> IsDuplicated(int id, string name, int categoryId, CancellationToken ct = default);
+}

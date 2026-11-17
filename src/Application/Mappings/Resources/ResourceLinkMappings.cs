@@ -1,0 +1,52 @@
+﻿namespace IAVH.BioTablero.CM.Application.Mappings.Resources;
+
+using System;
+
+using IAVH.BioTablero.CM.Application.DTOs.Resources;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Mappings.General;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
+
+/// <summary>
+/// Resource Link mappings.
+/// </summary>
+public class ResourceLinkMappings : MapperRead<ResourceLink, ResourceLinkDto>, IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto>
+{
+    /// <inheritdoc/>
+    public override ResourceLinkDto Map(ResourceLink? entity)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+
+        return new()
+        {
+            Id = entity.Id,
+            ResourceId = entity.ResourceId,
+            Url = entity.Url.ToString(),
+            Name = entity.Name,
+        };
+    }
+
+    /// <inheritdoc/>
+    public ResourceLink Map(ResourceLinkDto? dto)
+    {
+        ArgumentNullException.ThrowIfNull(dto);
+
+        return new()
+        {
+            Id = dto.Id ?? 0,
+            ResourceId = dto.ResourceId ?? 0,
+            Url = new Uri(dto.Url),
+            Name = dto.Name,
+        };
+    }
+
+    /// <inheritdoc/>
+    public void Update(ResourceLink entity, ResourceLinkDto dto)
+    {
+        ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(dto);
+
+        entity.Name = dto.Name;
+        entity.Url = new Uri(dto.Url);
+    }
+}

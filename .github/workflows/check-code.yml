@@ -1,0 +1,30 @@
+name: Check .NET code
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  verify-dotnet-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.111'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Check code format
+        run: dotnet format --verify-no-changes --no-restore
+
+      - name: Build with code analysis
+        run: |
+          echo "🔍 Analyzing code to detect unused elements..."
+          dotnet build --no-incremental --no-restore -warnaserror

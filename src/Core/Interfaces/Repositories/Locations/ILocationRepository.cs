@@ -1,0 +1,48 @@
+﻿namespace IAVH.BioTablero.CM.Core.Interfaces.Repositories.Locations;
+
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
+using NetTopologySuite.Geometries;
+
+using LocationCustom = Domain.Entities.Geo.Location;
+
+/// <summary>
+/// Location repository interface.
+/// </summary>
+public interface ILocationRepository : IRepository<LocationCustom, int>
+{
+    /// <summary>
+    /// Get elements by parent identifier.
+    /// </summary>
+    /// <param name="parentId">Parent identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>List of elements by specified parent.</returns>
+    Task<IEnumerable<LocationCustom>> GetByParentIdAsync(int parentId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get department identifier by coordinate.
+    /// </summary>
+    /// <param name="coordinate">Geographic coordinate.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>The department to wich the coordinate belongs.</returns>
+    Task<int> GetDepartmentIdByCoordinateAsync(Point coordinate, CancellationToken ct = default);
+
+    /// <summary>
+    /// Returns the total number of municipalities by initiative.
+    /// </summary>
+    /// <param name="initiativeId">Initiative identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<int> GetMunicipalitiesCountAsync(int initiativeId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get elements by department and municipality names.
+    /// </summary>
+    /// <param name="departments">Department names.</param>
+    /// <param name="municipalities">Municipality names.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Filtered locations by names.</returns>
+    Task<List<LocationCustom>> GetByNamesAsync(string?[] departments, string?[] municipalities, CancellationToken ct = default);
+}

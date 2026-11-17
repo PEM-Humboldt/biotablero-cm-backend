@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <RootNamespace>IAVH.BioTablero.CM.Core</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>disable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetTopologySuite" Version="2.6.0" />
+  </ItemGroup>
 
 </Project>
