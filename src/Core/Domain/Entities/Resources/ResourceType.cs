@@ -13,15 +13,15 @@ public class ResourceType : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Entity name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Entity description.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Resource relationship.
     /// </summary>
-    public ICollection<Resource> Resources { get; init; }
+    public ICollection<Resource>? Resources { get; init; }
 }

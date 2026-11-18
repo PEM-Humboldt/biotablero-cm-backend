@@ -11,7 +11,8 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Notifications;
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Email;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Iam;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.General;
@@ -29,7 +30,7 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+using InitiativeUserLevelEnum = Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
 /// <summary>
 /// Notification service.
@@ -84,8 +85,10 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetTotalNotReadByUserNameAsync(string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetTotalNotReadByUserNameAsync(string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var total = await entityRepository.CountNotReadByUserNameAsync(userName, ct);
 
         return new()
@@ -98,8 +101,10 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
         if (entity != null)
@@ -140,8 +145,10 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetByUserNameAsync(string userName, ODataQueryOptions<Notification> queryOptions, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByUserNameAsync(string? userName, ODataQueryOptions<Notification> queryOptions, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var query = entityRepository.GetQueryable();
         query = entityRepository.GetQueryWithUserName(userName, query);
         return await GetOdataListByQueryAsync(query, queryOptions, ct);
@@ -152,13 +159,13 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
     {
         // Build HTML body
         var htmlBody = string.Empty;
-        if (!string.IsNullOrEmpty(notificationData.NotificationDto.Properties.TemplateName))
+        if (!string.IsNullOrEmpty(notificationData.NotificationDto?.Properties?.TemplateName))
         {
             htmlBody = await webViewTools.RenderViewToStringAsync(notificationData.NotificationDto.Properties.TemplateName, notificationData.NotificationDto);
         }
 
         // Validate data
-        var validationResult = await entityValidator.ValidateAsync(notificationData.NotificationDto, ct);
+        var validationResult = await entityValidator.ValidateAsync(notificationData.NotificationDto!, ct);
 
         if (!validationResult.IsValid)
         {
@@ -167,7 +174,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         }
 
         // Build entity data
-        var entity = mapper.Map(notificationData.NotificationDto);
+        var entity = mapper.Map(notificationData.NotificationDto!);
         entity.CreationDate = DateTimeOffset.UtcNow;
 
         // Save data
@@ -177,9 +184,9 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         logger.AddLog(LogType.Create, "Added notification", "{@EntityData}", notificationData.NotificationDto);
 
         // Send email
-        if (notificationData.SendEmail && !string.IsNullOrEmpty(notificationData.NotificationDto.Properties.TemplateName))
+        if (notificationData.SendEmail && !string.IsNullOrEmpty(notificationData?.NotificationDto?.Properties?.TemplateName))
         {
-            CustomEmailAddress[] hiddenReceivers = null;
+            CustomEmailAddress[] hiddenReceivers = [];
 
             if (notificationData.SendToHiddenReceivers && notificationData.InitiativeId != null)
             {
@@ -190,7 +197,7 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
         }
 
         // Dispatch SSE Notification
-        await sseNotificationDispatcher.DispatchAsync(entity.Receiver, notificationData.NotificationDto);
+        await sseNotificationDispatcher.DispatchAsync(entity.Receiver, notificationData?.NotificationDto!);
     }
 
     /// <summary>
@@ -214,6 +221,6 @@ public class NotificationService : ServiceRead<Notification, NotificationDto, in
             return [.. leadersData.Select(e => new CustomEmailAddress(e.FullName, e.Email))];
         }
 
-        return null;
+        return [];
     }
 }

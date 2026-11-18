@@ -21,7 +21,7 @@ public interface ITerritoryStoryImageService : IRead<TerritoryStoryImage, int>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Get elements by territory story.
@@ -39,7 +39,7 @@ public interface ITerritoryStoryImageService : IRead<TerritoryStoryImage, int>
     /// <param name="formFile">Image data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default);
+    Task<CustomWebResponse> AddAsync(string? userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.
@@ -50,7 +50,7 @@ public interface ITerritoryStoryImageService : IRead<TerritoryStoryImage, int>
     /// <param name="formFile">Image data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string? userName, TerritoryStoryImageDto entityData, IInputFile formFile, CancellationToken ct = default);
 
     /// <summary>
     /// Featured content action.
@@ -59,7 +59,7 @@ public interface ITerritoryStoryImageService : IRead<TerritoryStoryImage, int>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> FeaturedContentActionAsync(int id, string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Delete element.
@@ -68,5 +68,5 @@ public interface ITerritoryStoryImageService : IRead<TerritoryStoryImage, int>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default);
 }

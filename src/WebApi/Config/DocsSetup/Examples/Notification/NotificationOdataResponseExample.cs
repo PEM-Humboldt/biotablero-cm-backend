@@ -23,7 +23,7 @@ public class NotificationOdataResponseExample : BaseOdataResponseExample<Notific
         Properties = new()
         {
             TemplateName = "TemplateExample",
-            Data = new Dictionary<string, object> { { "key", "value" } },
+            Data = new Dictionary<string, object?> { { "key", "value" } },
         },
     };
 }

@@ -17,7 +17,7 @@ using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.OData;
 
-using ODataUtilsCustom = IAVH.BioTablero.CM.Application.Utils.ODataUtils;
+using ODataUtilsCustom = Utils.ODataUtils;
 
 /// <summary>
 /// General service for only read functions.
@@ -32,6 +32,7 @@ public abstract class ServiceRead<TE, TDto, TI>(
     IRepository<TE, TI> entityRepository,
     IMapperRead<TE, TDto> mapper,
     IValidationErrorTranslator errorTranslator) : IRead<TE, TI>
+    where TI : notnull
     where TDto : class, IDto
     where TE : BaseEntity<TI>, IAggregateRoot
 {

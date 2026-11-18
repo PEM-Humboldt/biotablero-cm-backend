@@ -47,6 +47,11 @@ public static class LogEnums
     public enum LogType
     {
         /// <summary>
+        /// Default sentinel value.
+        /// </summary>
+        Unknown = 0,
+
+        /// <summary>
         /// Internal system event.
         /// </summary>
         System = 1,

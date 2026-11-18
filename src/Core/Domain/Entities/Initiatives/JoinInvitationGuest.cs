@@ -16,10 +16,10 @@ public class JoinInvitationGuest : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Guest Email.
     /// </summary>
-    public string Email { get; set; }
+    public required string Email { get; set; }
 
     /// <summary>
     /// JoinInvitation relationship.
     /// </summary>
-    public JoinInvitation JoinInvitation { get; set; }
+    public JoinInvitation? JoinInvitation { get; set; }
 }

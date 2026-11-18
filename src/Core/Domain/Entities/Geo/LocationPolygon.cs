@@ -12,12 +12,12 @@ public class LocationPolygon : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Geometry.
     /// </summary>
-    public Geometry Geometry { get; set; }
+    public required Geometry Geometry { get; set; }
 
     /// <summary>
     /// Simplified geometry.
     /// </summary>
-    public string GeometrySimplified { get; set; }
+    public required string GeometrySimplified { get; set; }
 
     /// <summary>
     /// Location identifier.
@@ -27,5 +27,5 @@ public class LocationPolygon : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Location relationship.
     /// </summary>
-    public Location Location { get; set; }
+    public Location? Location { get; set; }
 }

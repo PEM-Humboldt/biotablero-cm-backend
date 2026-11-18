@@ -1,7 +1,7 @@
 @model IAVH.BioTablero.CM.Application.DTOs.Notifications.NotificationDto
 @{
-    Model.Subject = $"Ahora eres {Model?.Properties?.Data["LevelName"]} de {Model?.Properties?.Data["InitiativeName"]}";
-    Model.Body = $"Se te ha asignado el rol de {Model?.Properties?.Data["LevelName"]} en la iniciativa '{Model?.Properties?.Data["InitiativeName"]}' por el usuario '{Model?.Properties?.Data["ReviewerUserName"]}'.";
+    Model.Subject = $"Ahora eres {Model.Properties?.Data["LevelName"]} de {Model.Properties?.Data["InitiativeName"]}";
+    Model.Body = $"Se te ha asignado el rol de {Model.Properties?.Data["LevelName"]} en la iniciativa '{Model.Properties?.Data["InitiativeName"]}' por el usuario '{Model.Properties?.Data["ReviewerUserName"]}'.";
 }
 
 <div style="margin: auto;width: 20rem;">

@@ -16,12 +16,12 @@ public abstract class MapperRead<TE, TDto> : IMapperRead<TE, TDto>
     where TDto : class, IDto, new()
 {
     /// <inheritdoc/>
-    public virtual TDto Map(TE entity)
+    public virtual TDto Map(TE? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
         return new();
     }
 
     /// <inheritdoc/>
-    public virtual TDto MapOdata(TE entity) => Map(entity);
+    public virtual TDto MapOdata(TE? entity) => Map(entity);
 }

@@ -18,7 +18,7 @@ public class InitiativeUser : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// User identifier.
     /// </summary>
-    public string UserName { get; set; }
+    public required string UserName { get; set; }
 
     /// <summary>
     /// Level identifier.
@@ -28,7 +28,7 @@ public class InitiativeUser : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// User focus area.
     /// </summary>
-    public string FocusArea { get; set; }
+    public string? FocusArea { get; set; }
 
     /// <summary>
     /// Initiative creation date.
@@ -38,10 +38,10 @@ public class InitiativeUser : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiative relationship.
     /// </summary>
-    public Initiative Initiative { get; set; }
+    public Initiative? Initiative { get; set; }
 
     /// <summary>
     /// Level relationship.
     /// </summary>
-    public InitiativeUserLevel Level { get; set; }
+    public InitiativeUserLevel? Level { get; set; }
 }

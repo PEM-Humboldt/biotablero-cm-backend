@@ -26,5 +26,5 @@ public interface IResourceLikeRepository : IRepository<ResourceLike, int>
     /// <param name="username">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<ResourceLike> GetByResourceAndUserNameAsync(int resourceId, string username, CancellationToken ct = default);
+    Task<ResourceLike?> GetByResourceAndUserNameAsync(int resourceId, string username, CancellationToken ct = default);
 }

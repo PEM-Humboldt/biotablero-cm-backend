@@ -21,10 +21,10 @@ public class InitiativeTag : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiative relationship.
     /// </summary>
-    public Initiative Initiative { get; set; }
+    public Initiative? Initiative { get; set; }
 
     /// <summary>
     /// Tag relationship.
     /// </summary>
-    public Tag Tag { get; set; }
+    public Tag? Tag { get; set; }
 }

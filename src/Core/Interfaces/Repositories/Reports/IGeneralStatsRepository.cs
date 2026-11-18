@@ -19,7 +19,7 @@ public interface IGeneralStatsRepository
     /// <param name="initiativeId">Initiative identifier (optional).</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Number of enabled records.</returns>
-    Task<int> GetEnabledRecordsCountAsync(string userName = null, int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
+    Task<int> GetEnabledRecordsCountAsync(string? userName = null, int? departmentId = null, int? initiativeId = null, CancellationToken ct = default);
 
     /// <summary>
     /// Get initiative polygon areas.
@@ -67,11 +67,11 @@ public interface IGeneralStatsRepository
     Task<List<string>> GetUserNamesAsync(int? departmentId, int? initiativeId, CancellationToken ct = default);
 
     /// <summary>
-    /// Get indicators by scale.
+    /// Get topics by scale.
     /// </summary>
     /// <param name="departmentId">Department identifier (optional).</param>
     /// <param name="initiativeId">Initiative identifier (optional).</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Indicators by scale.</returns>
-    Task<List<KeyValuePair<string, int>>> GetIndicatorsByScaleAsync(int? departmentId, int? initiativeId, CancellationToken ct = default);
+    /// <returns>Topics by scale.</returns>
+    Task<List<KeyValuePair<string, int>>> GetTopicsByScaleAsync(int? departmentId, int? initiativeId, CancellationToken ct = default);
 }

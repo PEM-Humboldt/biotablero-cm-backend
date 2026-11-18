@@ -21,10 +21,10 @@ public class CustomWebResponse(bool error = false)
     /// <summary>
     /// Custom response body.
     /// </summary>
-    public object ResponseBody { get; init; }
+    public object? ResponseBody { get; init; }
 
     /// <summary>
     /// Custom response error message.
     /// </summary>
-    public string Message { get; set; }
+    public string? Message { get; set; }
 }

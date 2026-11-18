@@ -22,7 +22,7 @@ public class TerritoryStoryLikeDto : IDto
     /// <summary>
     /// User Name identifier.
     /// </summary>
-    public string UserName { get; set; }
+    public required string UserName { get; set; }
 
     /// <summary>
     /// Entity creation date.

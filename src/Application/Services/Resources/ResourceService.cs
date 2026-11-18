@@ -10,7 +10,7 @@ using FluentValidation;
 
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Iam;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Notifications;
@@ -20,6 +20,7 @@ using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Initiatives;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
@@ -88,14 +89,14 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetItemAsync(int id, string? userName, bool userIsAlly, CancellationToken ct = default)
     {
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
 
         if (entity != null)
         {
-            var userBelongsToInitiative = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+            var userBelongsToInitiative = await entityRepository.AuthorizedEntityModifyAsync(id, userName, userIsAlly, ct);
 
             if (!userBelongsToInitiative && entity.IsDraft)
             {
@@ -126,7 +127,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetListAsync(string userName, ODataQueryOptions<Resource> queryOptions, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetListAsync(string? userName, ODataQueryOptions<Resource> queryOptions, CancellationToken ct = default)
     {
         var query = entityRepository.GetQueryable();
         query = entityRepository.GetQueryByUserName(userName, query);
@@ -155,10 +156,15 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(ResourceDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(ResourceDto entityData, bool userIsAlly, CancellationToken ct = default)
     {
         // Validate user permissions
-        var authorizedUserAction = await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId.Value, entityData.AuthorUserName, null, ct);
+        if (userIsAlly && entityData.InitiativeId == null)
+        {
+            entityData.InitiativeId = InitiativeConstants.AllyRoleDefaultInitiative;
+        }
+
+        var authorizedUserAction = (userIsAlly && entityData.InitiativeId == InitiativeConstants.AllyRoleDefaultInitiative) || await initiativeUserRepository.AnyByInitiativeUserAndLevelAsync(entityData.InitiativeId ?? 0, entityData.AuthorUserName, null, ct);
 
         if (!authorizedUserAction)
         {
@@ -180,7 +186,8 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate initiative
-        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId.Value, ct);
+        entityData.InitiativeId = userIsAlly ? InitiativeConstants.AllyRoleDefaultInitiative : entityData.InitiativeId;
+        var initiativeExists = await initiativeRepository.AnyAsync(entityData.InitiativeId ?? 0, ct);
 
         if (!initiativeExists)
         {
@@ -191,7 +198,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate Resource Type
-        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType.Id.Value, ct);
+        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType?.Id ?? 0, ct);
 
         if (!resourceTypeExists)
         {
@@ -237,10 +244,12 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, ResourceDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, ResourceDto entityData, bool userIsAlly, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, userIsAlly, ct);
 
         if (!authorizedUserAction)
         {
@@ -284,7 +293,7 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         }
 
         // Validate Resource Type
-        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType.Id.Value, ct);
+        var resourceTypeExists = await resourceTypeRepository.AnyAsync(entityData.ResourceType?.Id ?? 0, ct);
 
         if (!resourceTypeExists)
         {
@@ -339,8 +348,12 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         if (hasDuplicatedEntities)
         {
             var like = await resourceLikeRepository.GetByResourceAndUserNameAsync(entityData.ResourceId, entityData.UserName, ct);
-            await resourceLikeRepository.DeleteAsync(like, ct);
-            logger.AddLog(LogType.Delete, $"Unliked resource", "{@EntityData}", entityData);
+
+            if (like != null)
+            {
+                await resourceLikeRepository.DeleteAsync(like, ct);
+                logger.AddLog(LogType.Delete, $"Unliked resource", "{@EntityData}", entityData);
+            }
         }
         else
         {
@@ -359,10 +372,12 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAlly, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
-        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, ct);
+        var authorizedUserAction = await entityRepository.AuthorizedEntityModifyAsync(id, userName, userIsAlly, ct);
 
         if (!authorizedUserAction)
         {
@@ -393,8 +408,10 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
     }
 
     /// <inheritdoc/>
-    public async Task<bool> SendUpdateNotificationAsync(Resource resource, string userName, CancellationToken ct = default)
+    public async Task<bool> SendUpdateNotificationAsync(Resource resource, string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         if (resource.IsDraft)
         {
             return true;
@@ -409,6 +426,11 @@ public class ResourceService : ServiceRead<Resource, ResourceDto, int>, IResourc
         var receivers = externalUsersData
             .Select(e => new CustomEmailAddress(e.FullName, e.Email))
             .ToArray();
+
+        if (!(receivers.Length > 0))
+        {
+            return true;
+        }
 
         var notificationData = new SendNotificationData()
         {

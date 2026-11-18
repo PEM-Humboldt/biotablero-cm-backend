@@ -8,17 +8,6 @@ using System.Globalization;
 public static class StringUtils
 {
     /// <summary>
-    /// Capitalize string values.
-    /// </summary>
-    /// <param name="input">String input.</param>
-    /// <returns>Capitalized string input.</returns>
-    public static string Capitalize(this string input)
-    {
-        var currentCulture = CultureInfo.CurrentCulture;
-        return currentCulture.TextInfo.ToTitleCase(input.ToLower(currentCulture));
-    }
-
-    /// <summary>
     /// Convert first string char to lower case.
     /// </summary>
     /// <param name="input">String input.</param>
@@ -31,5 +20,22 @@ public static class StringUtils
         }
 
         return char.ToLowerInvariant(input[0]) + input[1..];
+    }
+
+    /// <summary>
+    /// Capitalize string values.
+    /// </summary>
+    /// <param name="input">String input.</param>
+    /// <returns>Capitalized string input.</returns>
+    public static string CapitalizeFirstOnly(this string input)
+    {
+        var currentCulture = CultureInfo.CurrentCulture;
+
+        if (string.IsNullOrEmpty(input))
+        {
+            return input;
+        }
+
+        return char.ToUpper(input[0], currentCulture) + input[1..].ToLower(currentCulture);
     }
 }

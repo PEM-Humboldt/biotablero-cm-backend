@@ -1,12 +1,14 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Domain;
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
 /// General OData response.
 /// </summary>
 /// <typeparam name="T">Class type.</typeparam>
-public class ODataResponse<T>
+[method: SetsRequiredMembers]
+public class ODataResponse<T>()
     where T : class
 {
     /// <summary>
@@ -17,5 +19,5 @@ public class ODataResponse<T>
     /// <summary>
     /// Data list.
     /// </summary>
-    public List<T> DataList { get; set; }
+    public required List<T> DataList { get; set; } = [];
 }

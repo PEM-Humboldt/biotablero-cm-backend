@@ -3,9 +3,11 @@
 using System;
 using System.Linq;
 
+using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Mappings.General;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 
 /// <summary>
@@ -15,10 +17,11 @@ public class ResourceMappings(
     IMapperRead<ResourceType, ResourceTypeDto> resourceTypeMappings,
     IMapperCreateReadAndUpdate<ResourceFile, ResourceFileDto> resourceFileMappings,
     IMapperCreateReadAndUpdate<ResourceLink, ResourceLinkDto> resourceLinkMappings,
-    IMapperRead<ResourceTag, ResourceTagDto> resourceTagMappings) : MapperRead<Resource, ResourceDto>, IMapperCreateReadAndUpdate<Resource, ResourceDto>
+    IMapperRead<ResourceTag, ResourceTagDto> resourceTagMappings,
+    IMapperCreateReadAndUpdate<InitiativeLocation, InitiativeLocationDto> initiativeLocationMappings) : MapperRead<Resource, ResourceDto>, IMapperCreateReadAndUpdate<Resource, ResourceDto>
 {
     /// <inheritdoc/>
-    public override ResourceDto Map(Resource entity)
+    public override ResourceDto Map(Resource? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -48,7 +51,7 @@ public class ResourceMappings(
     }
 
     /// <inheritdoc/>
-    public override ResourceDto MapOdata(Resource entity)
+    public override ResourceDto MapOdata(Resource? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -70,6 +73,7 @@ public class ResourceMappings(
             {
                 Id = entity.Initiative.Id,
                 Name = entity.Initiative.Name,
+                Locations = entity.Initiative.InitiativeLocations?.Select(initiativeLocationMappings.Map),
             }
             : null,
             Tags = entity.ResourceTags?.Select(resourceTagMappings.Map),
@@ -86,7 +90,7 @@ public class ResourceMappings(
             Id = dto.Id ?? 0,
             InitiativeId = dto.InitiativeId ?? 0,
             AuthorUserName = dto.AuthorUserName,
-            ResourceTypeId = dto.ResourceType.Id ?? 0,
+            ResourceTypeId = dto.ResourceType?.Id ?? 0,
             Name = dto.Name,
             Description = dto.Description,
             IsDraft = dto.IsDraft,
@@ -99,7 +103,7 @@ public class ResourceMappings(
         ArgumentNullException.ThrowIfNull(entity);
         ArgumentNullException.ThrowIfNull(dto);
 
-        entity.ResourceTypeId = dto.ResourceType.Id.Value;
+        entity.ResourceTypeId = dto.ResourceType?.Id ?? 0;
         entity.Name = dto.Name;
         entity.Description = dto.Description;
         entity.IsDraft = dto.IsDraft;

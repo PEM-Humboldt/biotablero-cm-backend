@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 public class LogMappings : MapperRead<LogEntity, LogDto>
 {
     /// <inheritdoc/>
-    public override LogDto Map(LogEntity entity)
+    public override LogDto Map(LogEntity? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -20,7 +20,7 @@ public class LogMappings : MapperRead<LogEntity, LogDto>
         {
             Id = entity.Id,
             Level = entity.Level,
-            Type = entity.Type,
+            Type = entity.LogType,
             TimeStamp = entity.TimeStamp.ToUniversalTime(),
             UserName = entity.UserName,
             CustomRecord = entity.CustomRecord,
@@ -33,14 +33,14 @@ public class LogMappings : MapperRead<LogEntity, LogDto>
     }
 
     /// <inheritdoc/>
-    public override LogDto MapOdata(LogEntity entity)
+    public override LogDto MapOdata(LogEntity? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         return new()
         {
             Id = entity.Id,
-            Type = entity.Type,
+            Type = entity.LogType,
             TimeStamp = entity.TimeStamp.ToUniversalTime(),
             UserName = entity.UserName,
             ShortMessage = entity.ShortMessage,

@@ -13,38 +13,38 @@ public class TerritoryStoryImageConfig : IEntityTypeConfiguration<TerritoryStory
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<TerritoryStoryImage> builder)
     {
-        builder.ToTable("territory_story_image", "initiatives");
+        builder?.ToTable("territory_story_image", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.TerritoryStoryId)
+        builder?.Property(e => e.TerritoryStoryId)
             .HasColumnName("territory_story_id")
             .IsRequired();
 
-        builder.Property(i => i.FileUrl)
+        builder?.Property(e => e.FileUrl)
             .HasColumnName("file_url")
             .HasMaxLength(150)
             .IsRequired();
 
-        builder.Property(i => i.Description)
+        builder?.Property(e => e.Description)
             .HasColumnName("description")
             .HasMaxLength(500)
             .IsRequired();
 
-        builder.Property(i => i.FeaturedContent)
+        builder?.Property(e => e.FeaturedContent)
             .HasColumnName("featured_content")
             .HasDefaultValue(false)
             .IsRequired();
 
-        builder.HasOne(e => e.TerritoryStory)
+        builder?.HasOne(e => e.TerritoryStory)
             .WithMany(p => p.Images)
             .HasForeignKey(e => e.TerritoryStoryId);
 
-        builder
+        builder?
             .HasIndex(e => e.FileUrl)
             .IsUnique();
     }

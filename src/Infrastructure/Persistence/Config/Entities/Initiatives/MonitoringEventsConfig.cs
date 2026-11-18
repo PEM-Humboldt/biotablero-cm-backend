@@ -13,31 +13,31 @@ public class MonitoringEventsConfig : IEntityTypeConfiguration<MonitoringEvents>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<MonitoringEvents> builder)
     {
-        builder.ToTable("monitoring_events", "initiatives");
+        builder?.ToTable("monitoring_events", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.InitiativeId)
+        builder?.Property(e => e.InitiativeId)
             .HasColumnName("initiative_id")
             .IsRequired();
 
-        builder.Property(e => e.Date)
+        builder?.Property(e => e.Date)
             .HasColumnName("date")
             .IsRequired();
 
-        builder.Property(e => e.Value)
+        builder?.Property(e => e.Value)
             .HasColumnName("value")
             .IsRequired();
 
-        builder.HasOne(e => e.Initiative)
+        builder?.HasOne(e => e.Initiative)
             .WithMany(p => p.MonitoringEventsList)
             .HasForeignKey(e => e.InitiativeId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.InitiativeId, e.Date })
             .IsUnique();
     }

@@ -14,7 +14,9 @@ using FluentValidation;
 using IAVH.BioTablero.CM.Application.Domain;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Users;
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Iam;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.ImageUtils;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Storage;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
@@ -39,7 +41,7 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.GeoEnums;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+using InitiativeUserLevelEnum = Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
 
 /// <summary>
 /// Initiative service.
@@ -113,7 +115,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
                 .Select(e => e.UserName)
                 .ToArray();
 
-            if (userNames.Length > 0)
+            if (userNames?.Length > 0)
             {
                 var externalUsersData = await iamService.GetUsersDataAsync(userNames, ct);
 
@@ -121,7 +123,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
                 {
                     var usersFullData = new List<InitiativeUserDto>();
 
-                    foreach (var userData in dataDto.Users)
+                    foreach (var userData in dataDto.Users ?? [])
                     {
                         userData.ExternalData = externalUsersData
                             .Where(i => i.Username == userData.UserName)
@@ -155,13 +157,16 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     {
         var query = entityRepository.GetQueryable();
         query = entityRepository.IncludeOdataEntities(query);
+        query = query.Where(e => e.Id != InitiativeConstants.AllyRoleDefaultInitiative);
 
         return await GetOdataListByQueryAsync(query, queryOptions, ct);
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> GetByUserNameAsync(string? userName, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var dataListEntity = await entityRepository.GetByUserNameAsync(userName, ct);
 
         var dataListDto = dataListEntity
@@ -234,7 +239,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
 
         // Validate users data
-        var leaderCount = entityData.Users
+        var leaderCount = entityData.Users?
             .Select(u => u.Level.Id == (int)InitiativeUserLevelEnum.Leader)
             .Count();
 
@@ -247,10 +252,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
 
         // Validate locations data
-        var locationsIds = entityData.Locations
+        var locationsIds = entityData.Locations?
             .Select(l => l.LocationId ?? 0)
             .Distinct()
-            .ToArray();
+            .ToArray() ?? [];
 
         var initiativeLocationQuery = locationRepository
             .GetQueryable()
@@ -266,7 +271,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             };
         }
 
-        var duplicatedLocations = entityData.Locations.Count() > entityData.Locations
+        var duplicatedLocations = entityData.Locations?.Count() > entityData.Locations?
             .DistinctBy(l => (l.LocationId, l.Locality))
             .Count();
 
@@ -278,10 +283,9 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             };
         }
 
-        var hasDepartmentsWithLocalities = entityData.Locations
+        var hasDepartmentsWithLocalities = entityData.Locations?
             .Join(locationsDb, il => il.LocationId, l => l.Id, (il, l) => new { il, l })
-            .Where(lil => !string.IsNullOrWhiteSpace(lil.il.Locality) && lil.l.Level != (byte)LocationLevel.Municipality)
-            .Any();
+            .Any(lil => !string.IsNullOrWhiteSpace(lil.il.Locality) && lil.l.Level != (byte)LocationLevel.Municipality) ?? false;
 
         if (hasDepartmentsWithLocalities)
         {
@@ -294,7 +298,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         // Validate users in external system
         var userNames = entityData.Users?
             .Select(e => e.UserName)
-            .ToArray();
+            .ToArray() ?? [];
 
         if (userNames.Length > 0)
         {
@@ -327,8 +331,10 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> UpdateAsync(int id, string userName, bool userIsAdmin, InitiativeDto entityData, CancellationToken ct = default)
+    public async Task<CustomWebResponse> UpdateAsync(int id, string? userName, bool userIsAdmin, InitiativeDto entityData, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         if (!await entityRepository.AuthorizedEntityModifyAsync(id, userName, userIsAdmin, ct))
         {
@@ -425,7 +431,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
             };
         }
 
-        if (!formFile.IsValidImage())
+        if (!formFile.ItIsAValidImage())
         {
             return new(true)
             {
@@ -435,6 +441,17 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         // Compress and convert image
         using var originalImageStream = formFile.OpenStream();
+        var imageStreamValidationErrors = imageUtilsService.Validate(originalImageStream);
+
+        if (!string.IsNullOrEmpty(imageStreamValidationErrors))
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Files.ProcessingError),
+                Message = imageStreamValidationErrors,
+            };
+        }
+
         var compressedImageStream = await imageUtilsService.CompressToWebpAsync(originalImageStream, 75, ct);
 
         if (compressedImageStream == null)
@@ -453,7 +470,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
 
         if (uploadSuccessful)
         {
-            Uri oldImageUrl = null;
+            Uri? oldImageUrl = null;
             switch (imageType)
             {
                 case InitiativeImageType.Image:
@@ -519,7 +536,7 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
         }
 
         // Validate image
-        Uri fileName;
+        Uri? fileName;
         switch (imageType)
         {
             case InitiativeImageType.Image:
@@ -648,15 +665,20 @@ public class InitiativeService : ServiceRead<Initiative, InitiativeDto, int>, II
     public async Task<CustomWebResponse> GetByLocationAsync(int? locationId = null, CancellationToken ct = default)
     {
         var result = await entityRepository.GetActiveInitiativesWithCoordinatesByLocationAsync(locationId, ct);
+        var resultMapped = result
+                .Select(mapper.Map)
+                .ToList();
 
-        foreach (var i in result)
+        foreach (var initiativeData in resultMapped)
         {
-            i.Coordinate = [i.Coordinate[1], i.Coordinate[0]];
+            initiativeData.Enabled = null;
+            initiativeData.PolygonArea = null;
+            initiativeData.HasPolygon = null;
         }
 
         return new CustomWebResponse
         {
-            ResponseBody = result,
+            ResponseBody = resultMapped,
         };
     }
 

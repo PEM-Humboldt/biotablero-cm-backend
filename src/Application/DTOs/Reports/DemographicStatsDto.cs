@@ -1,24 +1,26 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Reports;
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
 /// Demographic statistics DTO.
 /// </summary>
-public class DemographicStatsDto
+[method: SetsRequiredMembers]
+public class DemographicStatsDto()
 {
     /// <summary>
     /// Users gender data.
     /// </summary>
-    public List<KeyValuePair<string, int>> Gender { get; set; }
+    public required List<KeyValuePair<string, int>> Gender { get; set; } = [];
 
     /// <summary>
     /// Users self-recognition data.
     /// </summary>
-    public List<KeyValuePair<string, int>> SelfRecognition { get; set; }
+    public required List<KeyValuePair<string, int>> SelfRecognition { get; set; } = [];
 
     /// <summary>
     /// Users organization data.
     /// </summary>
-    public List<KeyValuePair<string, int>> Organization { get; set; }
+    public required List<KeyValuePair<string, int>> Organization { get; set; } = [];
 }

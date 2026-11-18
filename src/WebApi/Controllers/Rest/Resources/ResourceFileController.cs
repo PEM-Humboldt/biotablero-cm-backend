@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 using IAVH.BioTablero.CM.Infrastructure.Integrations.Storage;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.ResourceFile;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -15,8 +17,6 @@ using IAVH.BioTablero.CM.WebApi.Utils.Requests.ResourceFile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Resource File controller.
@@ -38,7 +38,7 @@ public class ResourceFileController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceFileResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceFileResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -52,7 +52,7 @@ public class ResourceFileController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByResource/{resourceId}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceFileListResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceFileListResponseExample))]
     public async Task<IActionResult> GetListByResource(int resourceId, CancellationToken ct)
     {
         var response = await entityService.GetByResourceAsync(resourceId, ct);
@@ -67,7 +67,7 @@ public class ResourceFileController(
     /// <returns>Added entity data.</returns>
     [HttpPost]
     [Authorize]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceFileResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceFileResponseExample))]
     public async Task<IActionResult> Post([FromForm] ResourceFileAddRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new ResourceFileDto()
@@ -76,7 +76,7 @@ public class ResourceFileController(
             Name = requestData.Name,
         };
 
-        var response = await entityService.AddAsync(HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
+        var response = await entityService.AddAsync(HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), HttpContext.UserHasRole(IamConstants.RoleAlly), ct);
         return webTools.CustomResponse(response);
     }
 
@@ -89,7 +89,7 @@ public class ResourceFileController(
     /// <returns>Updated entity data.</returns>
     [HttpPut("{id}")]
     [Authorize]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceFileResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceFileResponseExample))]
     public async Task<IActionResult> Put(int id, [FromForm] ResourceFileEditRequest requestData, CancellationToken ct)
     {
         var requestDataDto = new ResourceFileDto()
@@ -97,7 +97,7 @@ public class ResourceFileController(
             Name = requestData.Name,
         };
 
-        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), ct);
+        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestDataDto, new FormFileAdapter(requestData.File), HttpContext.UserHasRole(IamConstants.RoleAlly), ct);
         return webTools.CustomResponse(response);
     }
 
@@ -111,7 +111,7 @@ public class ResourceFileController(
     [Authorize]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), ct);
+        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), HttpContext.UserHasRole(IamConstants.RoleAlly), ct);
         return webTools.CustomResponse(response);
     }
 }

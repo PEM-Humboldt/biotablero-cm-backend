@@ -10,5 +10,5 @@ public abstract class BaseEntity<TI>
     /// <summary>
     /// Base entity identifier.
     /// </summary>
-    public virtual TI Id { get; init; }
+    public virtual TI? Id { get; init; }
 }

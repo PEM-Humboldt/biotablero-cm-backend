@@ -2,25 +2,25 @@
 @model IAVH.BioTablero.CM.Application.DTOs.Notifications.NotificationDto
 @{
     var messageTitle = "Solicitud de Ingreso";
-    var leaveInitiative = Model?.Properties?.Data["LeaveInitiative"] is bool value ? value : false;
-    
+    var leaveInitiative = Model.Properties?.Data["LeaveInitiative"] is bool value ? value : false;
+
     if (leaveInitiative)
     {
         messageTitle = "Solicitud de salida";
     }
 
-    var converted = Enum.ToObject(typeof(JoinRequestStatus), Model?.Properties?.Data["JoinRequestStatus"]);
+    var converted = Enum.ToObject(typeof(JoinRequestStatus), Model.Properties?.Data["JoinRequestStatus"]!);
     JoinRequestStatus? joinRequestStatusEnum = null;
 
     if (Enum.IsDefined(typeof(JoinRequestStatus), converted))
     {
-        joinRequestStatusEnum = (JoinRequestStatus)converted;        
+        joinRequestStatusEnum = (JoinRequestStatus)converted;
     }
 
     if (joinRequestStatusEnum != null)
     {
-        var initiativeName = Model?.Properties?.Data["InitiativeName"];
-        var userName = Model?.Properties?.Data["UserName"];
+        var initiativeName = Model.Properties?.Data["InitiativeName"];
+        var userName = Model.Properties?.Data["UserName"];
 
         if (joinRequestStatusEnum == JoinRequestStatus.UnderReview)
         {
@@ -34,7 +34,7 @@
                 Model.Subject = $"Solicitud para salir de '{initiativeName}'";
                 Model.Body = $"El usuario '{userName}' ha realizado una solicitud para salir de la iniciativa '{initiativeName}'";
             }
-            
+
         }
         else if (joinRequestStatusEnum == JoinRequestStatus.Approved)
         {

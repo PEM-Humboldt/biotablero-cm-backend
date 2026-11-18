@@ -16,5 +16,5 @@ public class InitiativeTagDto : IDto
     /// <summary>
     /// Entity Tag.
     /// </summary>
-    public TagDto Tag { get; set; }
+    public TagDto? Tag { get; set; }
 }

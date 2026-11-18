@@ -13,20 +13,20 @@ public class InitiativeUserLevelConfig : IEntityTypeConfiguration<InitiativeUser
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<InitiativeUserLevel> builder)
     {
-        builder.ToTable("initiative_user_level", "initiatives");
+        builder?.ToTable("initiative_user_level", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(l => l.Id)
+        builder?.Property(l => l.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(l => l.Name)
+        builder?.Property(l => l.Name)
             .HasColumnName("name")
             .HasMaxLength(15)
             .IsRequired();
 
-        builder.HasIndex(u => u.Name)
+        builder?.HasIndex(u => u.Name)
             .IsUnique();
     }
 }

@@ -16,7 +16,7 @@ using Serilog;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.GeoEnums;
 
-using LocationCustom = IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location;
+using LocationCustom = Core.Domain.Entities.Geo.Location;
 
 /// <summary>
 /// Location repository.
@@ -26,7 +26,7 @@ using LocationCustom = IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location;
 public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repository<LocationCustom, int>(dbContext, logger), ILocationRepository
 {
     /// <inheritdoc/>
-    public override async Task<LocationCustom> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<LocationCustom?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.Locations
             .Include(e => e.Parent)
             .Where(e => e.Id == id)
@@ -64,4 +64,11 @@ public class LocationRepository(GeneralContext dbContext, ILogger logger) : Repo
             .Where(e => e.InitiativeLocations.Any(e => e.InitiativeId == initiativeId) && e.Level == (byte)LocationLevel.Municipality)
             .Distinct()
             .CountAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<List<LocationCustom>> GetByNamesAsync(string?[] departments, string?[] municipalities, CancellationToken ct = default) =>
+        await dbContext.Locations
+            .Include(e => e.Parent)
+            .Where(e => e.Level == (byte)LocationLevel.Municipality && municipalities.Contains(e.Name) && e.Parent != null && departments.Contains(e.Parent.Name))
+            .ToListAsync(ct);
 }

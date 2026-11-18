@@ -19,9 +19,10 @@ public class InitiativeOdataResponseExample : BaseOdataResponseExample<Initiativ
         Baseline = "Baseline example",
         Objective = "Objective example",
         CreationDate = DateTimeOffset.UtcNow,
-        Coordinate = [-75.3, 5.3],
+        Coordinate = [5.3, -75.3],
         PolygonArea = 62.7,
         Enabled = true,
+        HasPolygon = false,
         Locations = [
             new()
             {

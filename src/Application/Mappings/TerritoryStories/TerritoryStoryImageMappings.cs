@@ -13,7 +13,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 public class TerritoryStoryImageMappings : MapperRead<TerritoryStoryImage, TerritoryStoryImageDto>, IMapperCreateReadAndUpdate<TerritoryStoryImage, TerritoryStoryImageDto>
 {
     /// <inheritdoc/>
-    public override TerritoryStoryImageDto Map(TerritoryStoryImage entity)
+    public override TerritoryStoryImageDto Map(TerritoryStoryImage? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -28,7 +28,7 @@ public class TerritoryStoryImageMappings : MapperRead<TerritoryStoryImage, Terri
     }
 
     /// <inheritdoc/>
-    public TerritoryStoryImage Map(TerritoryStoryImageDto dto)
+    public TerritoryStoryImage Map(TerritoryStoryImageDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 

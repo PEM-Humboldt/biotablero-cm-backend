@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Core.Domain.Models.Iam;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// User OData response example.
 /// </summary>
-public class UserOdataResponseExample : IExamplesProvider<Dictionary<string, object>>
+public class UserOdataResponseExample : IOpenApiExampleProvider<Dictionary<string, object>>
 {
     /// <inheritdoc/>
     public Dictionary<string, object> GetExamples() => new()

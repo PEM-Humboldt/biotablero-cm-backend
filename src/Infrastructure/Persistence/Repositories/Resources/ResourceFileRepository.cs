@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Storage;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Interfaces.ExternalServices;
 using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Resources;
@@ -20,25 +20,16 @@ using Serilog;
 /// <summary>
 /// Resource File repository.
 /// </summary>
-public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFileRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+/// <param name="storageService">Storage service.</param>
+public class ResourceFileRepository(
+    GeneralContext dbContext,
+    ILogger logger,
+    IStorageService storageService) : Repository<ResourceFile, int>(dbContext, logger), IResourceFileRepository
 {
     private const string StoragePrefix = "resources";
-    private readonly IStorageService storageService;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    /// <param name="storageService">Storage service.</param>
-    public ResourceFileRepository(
-        GeneralContext dbContext,
-        ILogger logger,
-        IStorageService storageService)
-        : base(dbContext, logger)
-    {
-        this.storageService = storageService;
-    }
+    private readonly IStorageService storageService = storageService;
 
     /// <inheritdoc/>
     public async Task<IEnumerable<ResourceFile>> GetByResourceAsync(int resourceId, CancellationToken ct = default) =>
@@ -47,7 +38,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
             .ToListAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<ResourceFile> AddAsync(ResourceFile entity, IInputFile inputFile, CancellationToken ct = default) =>
+    public async Task<ResourceFile?> AddAsync(ResourceFile entity, IInputFile inputFile, CancellationToken ct = default) =>
         await ExecuteInTransactionAsync(
             async ct =>
             {
@@ -63,9 +54,9 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
                     .Where(e => e.Id == entity.ResourceId)
                     .FirstOrDefaultAsync(ct);
 
-                if (!resource.IsDraft)
+                if (!(resource?.IsDraft ?? false))
                 {
-                    resource.PublicationDate = DateTimeOffset.UtcNow;
+                    resource!.PublicationDate = DateTimeOffset.UtcNow;
                     await dbContext.SaveChangesAsync(ct);
                 }
 
@@ -87,9 +78,9 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
                     .Where(e => e.Id == entity.ResourceId)
                     .FirstOrDefaultAsync(ct);
 
-                if (!resource.IsDraft)
+                if (!(resource?.IsDraft ?? false))
                 {
-                    resource.PublicationDate = DateTimeOffset.UtcNow;
+                    resource!.PublicationDate = DateTimeOffset.UtcNow;
                     result = await dbContext.SaveChangesAsync(ct);
                 }
 
@@ -113,9 +104,9 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
                     .Where(e => e.Id == entity.ResourceId)
                     .FirstOrDefaultAsync(ct);
 
-                if (!resource.IsDraft)
+                if (!(resource?.IsDraft ?? false))
                 {
-                    resource.PublicationDate = DateTimeOffset.UtcNow;
+                    resource!.PublicationDate = DateTimeOffset.UtcNow;
                     result = await dbContext.SaveChangesAsync(ct);
                 }
 
@@ -140,7 +131,7 @@ public class ResourceFileRepository : Repository<ResourceFile, int>, IResourceFi
     private async Task UploadAndSetFileAsync(
         ResourceFile entity,
         IInputFile inputFile,
-        CancellationToken ct)
+        CancellationToken ct = default)
     {
         var fileName = $"{StoragePrefix}/{entity.Id}{inputFile.Extension.ToLower(CultureInfo.CurrentCulture)}";
         var fileUri = new Uri($"{storageService.BaseUrl}/{fileName}");

@@ -8,7 +8,7 @@ using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 
-using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums.TagCategory;
+using TagCategoryEnum = Core.Domain.Utils.Enums.TagEnums.TagCategory;
 
 /// <summary>
 /// Tag mappings.
@@ -16,7 +16,7 @@ using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums.TagC
 public class TagMappings : MapperRead<Tag, TagDto>, IMapperCreateReadAndUpdate<Tag, TagDto>
 {
     /// <inheritdoc/>
-    public override TagDto Map(Tag entity)
+    public override TagDto Map(Tag? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -24,19 +24,21 @@ public class TagMappings : MapperRead<Tag, TagDto>, IMapperCreateReadAndUpdate<T
         {
             Id = entity.Id,
             Name = entity.Name,
+            FullName = entity.FullName,
             Url = entity.Url?.ToString(),
             Category = new EnumEntityDto<TagCategoryEnum>(entity.CategoryId),
         };
     }
 
     /// <inheritdoc/>
-    public Tag Map(TagDto dto)
+    public Tag Map(TagDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 
         return new()
         {
             Name = dto.Name,
+            FullName = dto.FullName,
             Url = dto.Url != null ? new Uri(dto.Url) : null,
             CategoryId = dto.Category.Id,
         };
@@ -49,6 +51,7 @@ public class TagMappings : MapperRead<Tag, TagDto>, IMapperCreateReadAndUpdate<T
         ArgumentNullException.ThrowIfNull(dto);
 
         entity.Name = dto.Name;
+        entity.FullName = dto.FullName;
         entity.Url = dto.Url != null ? new Uri(dto.Url) : null;
     }
 }

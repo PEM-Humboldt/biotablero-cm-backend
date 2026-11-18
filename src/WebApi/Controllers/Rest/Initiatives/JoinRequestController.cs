@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.Initiatives;
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,6 +8,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.JoinRequest;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -17,9 +19,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
-using Swashbuckle.AspNetCore.Filters;
-
-using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
+using JoinRequestStatusEnum = Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
 
 /// <summary>
 /// Join Request controller.
@@ -41,7 +41,7 @@ public class JoinRequestController(
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
     [Authorize]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestOdataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(JoinRequestOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(int initiativeId, ODataQueryOptions<JoinRequest> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(initiativeId, HttpContext.GetUserName(), queryOptions, ct);
@@ -55,7 +55,7 @@ public class JoinRequestController(
     /// <returns>Join Requests list.</returns>
     [Authorize]
     [HttpGet("MyRequests")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestListResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(JoinRequestListResponseExample))]
     public async Task<IActionResult> GetListInitiativesData(CancellationToken ct)
     {
         var response = await entityService.GetByUserNameAsync(HttpContext.GetUserName(), ct);
@@ -71,11 +71,14 @@ public class JoinRequestController(
     [HttpPost]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(JoinRequestDto), typeof(JoinRequestAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
+    [OpenApiRequest(typeof(JoinRequestAddRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
     public async Task<IActionResult> Post([FromBody] JoinRequestDto requestData, CancellationToken ct)
     {
-        requestData.UserName = HttpContext.GetUserName();
+        var userName = HttpContext.GetUserName();
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
+        requestData.UserName = userName;
         var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }
@@ -89,13 +92,16 @@ public class JoinRequestController(
     /// <returns>Updated entity data.</returns>
     [HttpPut("{id}")]
     [Authorize]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(JoinRequestResponseExample))]
     public async Task<IActionResult> Put(int id, JoinRequestStatusEnum requestStatus, CancellationToken ct)
     {
+        var userName = HttpContext.GetUserName();
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var requestData = new JoinRequestDto()
         {
             Status = new EnumEntityDto<JoinRequestStatusEnum>(requestStatus),
-            ReviewerUserName = HttpContext.GetUserName(),
+            ReviewerUserName = userName,
         };
 
         var response = await entityService.UpdateAsync(id, requestData, ct);

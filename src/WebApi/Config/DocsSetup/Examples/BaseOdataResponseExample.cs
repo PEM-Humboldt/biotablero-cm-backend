@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Base OData response example.
 /// </summary>
 /// <typeparam name="TDto">DTO class type.</typeparam>
-public abstract class BaseOdataResponseExample<TDto> : IExamplesProvider<Dictionary<string, object>>
+public abstract class BaseOdataResponseExample<TDto> : IOpenApiExampleProvider<Dictionary<string, object>>
     where TDto : class, IDto, new()
 {
     /// <inheritdoc/>

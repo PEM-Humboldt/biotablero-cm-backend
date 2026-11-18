@@ -19,7 +19,7 @@ public interface ITerritoryStoryVideoRepository : IRepository<TerritoryStoryVide
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>True if the reading is authorized. False otherwise.</returns>
-    Task<bool> AuthorizedEntityReadAsync(int id, string userName, CancellationToken ct = default);
+    Task<bool> AuthorizedEntityReadAsync(int id, string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Check authorized entity modification.

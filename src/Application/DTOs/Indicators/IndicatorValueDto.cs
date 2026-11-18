@@ -1,11 +1,15 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Indicators;
 
+using System;
+using System.Diagnostics.CodeAnalysis;
+
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Indicator Value dto.
 /// </summary>
-public class IndicatorValueDto : IDto
+[method: SetsRequiredMembers]
+public class IndicatorValueDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -15,12 +19,12 @@ public class IndicatorValueDto : IDto
     /// <summary>
     /// Date.
     /// </summary>
-    public IndicatorDateDto Date { get; set; }
+    public required IndicatorDateDto Date { get; set; } = new(DateTimeOffset.Now);
 
     /// <summary>
     /// Date end.
     /// </summary>
-    public IndicatorDateDto DateEnd { get; set; }
+    public IndicatorDateDto? DateEnd { get; set; }
 
     /// <summary>
     /// Indicator Value.
@@ -38,7 +42,12 @@ public class IndicatorValueDto : IDto
     public float? LowerLimit { get; set; }
 
     /// <summary>
-    /// Measure Unit relationship.
+    /// Indicator Type relationship.
     /// </summary>
-    public MeasureUnitDto MeasureUnit { get; set; }
+    public IndicatorTypeDto? IndicatorType { get; set; }
+
+    /// <summary>
+    /// Central Actor relationship.
+    /// </summary>
+    public CentralActorDto? CentralActor { get; set; }
 }

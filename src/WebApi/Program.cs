@@ -15,9 +15,9 @@ using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using Serilog;
+using Scalar.AspNetCore;
 
-using Swashbuckle.AspNetCore.Filters;
+using Serilog;
 
 /// <summary>
 /// Main program class.
@@ -61,25 +61,36 @@ public class Program
             });
 
         // Logs setup
-        builder.Host.AddLogConfig(builder.Services);
+        builder.Host.AddLogConfig();
 
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(options =>
+
+        // OpenApi setup
+        builder.Services.AddOpenApi("v1", options =>
         {
             options.AddCustomOptions();
         });
-
-        // Enable Swagger custom examples
-        builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
+        builder.Services.AddOpenApi("auth", options =>
+        {
+            options.AddAuthCustomOptions();
+        });
 
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
+            app.MapOpenApi();
+            app.MapScalarApiReference(options =>
+            {
+                options
+                    .DisableAgent()
+                    .SortTagsAlphabetically()
+                    .SortOperationsByMethod()
+                    .AddDocument("v1", "BioTablero API")
+                    .AddDocument("auth", "Keycloak Auth")
+                    .CustomCss = ".scalar-mcp-layer { display: none !important; }";
+            });
 
             app.UseDeveloperExceptionPage();
 

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
@@ -9,7 +10,8 @@ using IAVH.BioTablero.CM.Application.Interfaces.General;
 /// <summary>
 /// Resource dto.
 /// </summary>
-public class ResourceDto : IDto
+[method: SetsRequiredMembers]
+public class ResourceDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -24,17 +26,17 @@ public class ResourceDto : IDto
     /// <summary>
     /// Author User Name identifier.
     /// </summary>
-    public string AuthorUserName { get; set; }
+    public required string AuthorUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// Entity name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Entity description.
     /// </summary>
-    public string Description { get; set; }
+    public required string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// Entity creation date.
@@ -74,25 +76,25 @@ public class ResourceDto : IDto
     /// <summary>
     /// Resource Type relationship.
     /// </summary>
-    public ResourceTypeDto ResourceType { get; set; }
+    public ResourceTypeDto? ResourceType { get; set; }
 
     /// <summary>
     /// Initiative relationship.
     /// </summary>
-    public InitiativeDto Initiative { get; set; }
+    public InitiativeDto? Initiative { get; set; }
 
     /// <summary>
     /// Resource File relationship.
     /// </summary>
-    public IEnumerable<ResourceFileDto> Files { get; init; }
+    public IEnumerable<ResourceFileDto>? Files { get; init; }
 
     /// <summary>
     /// Resource Link relationship.
     /// </summary>
-    public IEnumerable<ResourceLinkDto> Links { get; init; }
+    public IEnumerable<ResourceLinkDto>? Links { get; init; }
 
     /// <summary>
     /// Tags relationship.
     /// </summary>
-    public IEnumerable<ResourceTagDto> Tags { get; init; }
+    public IEnumerable<ResourceTagDto>? Tags { get; init; }
 }

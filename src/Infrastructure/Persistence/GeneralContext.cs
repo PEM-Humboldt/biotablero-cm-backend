@@ -10,16 +10,18 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Reports;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
 
 using Microsoft.EntityFrameworkCore;
 
-using InitiativeUserLevelEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
-using JoinRequestStatusEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
-using TagCategoryEnum = IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums.TagCategory;
+using InitiativeUserLevelEnum = Core.Domain.Utils.Enums.InitiativesEnums.InitiativeUserLevel;
+using JoinRequestStatusEnum = Core.Domain.Utils.Enums.InitiativesEnums.JoinRequestStatus;
+using TagCategoryEnum = Core.Domain.Utils.Enums.TagEnums.TagCategory;
 
+#pragma warning disable CS8618
 /// <summary>
 /// General database context.
 /// </summary>
@@ -198,34 +200,34 @@ public sealed class GeneralContext : DbContext
     #region Indicator entities
 
     /// <summary>
-    /// Indicator DbSet.
+    /// Topic DbSet.
     /// </summary>
-    public DbSet<Indicator> Indicators { get; set; }
+    public DbSet<Topic> Topics { get; set; }
 
     /// <summary>
-    /// Indicator Type DbSet.
+    /// Indicator Topic DbSet.
     /// </summary>
-    public DbSet<IndicatorType> IndicatorTypes { get; set; }
+    public DbSet<TopicType> TopicTypes { get; set; }
 
     /// <summary>
-    /// Indicator Tag DbSet.
+    /// Topic Tag DbSet.
     /// </summary>
-    public DbSet<IndicatorTag> IndicatorTags { get; set; }
+    public DbSet<TopicTag> TopicTags { get; set; }
 
     /// <summary>
-    /// Indicator Location DbSet.
+    /// Topic Location DbSet.
     /// </summary>
-    public DbSet<IndicatorLocation> IndicatorLocations { get; set; }
+    public DbSet<TopicLocation> TopicLocations { get; set; }
 
     /// <summary>
-    /// Indicator Version DbSet.
+    /// Topic Version DbSet.
     /// </summary>
-    public DbSet<IndicatorVersion> IndicatorVersions { get; set; }
+    public DbSet<TopicVersion> TopicVersions { get; set; }
 
     /// <summary>
-    /// Indicator Version Map DbSet.
+    /// Topic Version Map DbSet.
     /// </summary>
-    public DbSet<IndicatorVersionMap> IndicatorVersionMaps { get; set; }
+    public DbSet<TopicVersionMap> TopicVersionMaps { get; set; }
 
     /// <summary>
     /// Map Legend DbSet.
@@ -238,9 +240,9 @@ public sealed class GeneralContext : DbContext
     public DbSet<MapLegendItem> MapLegendItems { get; set; }
 
     /// <summary>
-    /// Indicator Group DbSet.
+    /// Topic Group DbSet.
     /// </summary>
-    public DbSet<IndicatorGroup> IndicatorGroups { get; set; }
+    public DbSet<TopicGroup> TopicGroups { get; set; }
 
     /// <summary>
     /// Category DbSet.
@@ -253,20 +255,34 @@ public sealed class GeneralContext : DbContext
     public DbSet<IndicatorValue> IndicatorValues { get; set; }
 
     /// <summary>
-    /// Measure Unit DbSet.
+    /// Indicator Type DbSet.
     /// </summary>
-    public DbSet<MeasureUnit> MeasureUnits { get; set; }
+    public DbSet<IndicatorType> IndicatorTypes { get; set; }
+
+    /// <summary>
+    /// Central Actor DbSet.
+    /// </summary>
+    public DbSet<CentralActor> CentralActors { get; set; }
+
+    #endregion
+
+    #region Reports entities
+
+    /// <summary>
+    /// Report Data DbSet.
+    /// </summary>
+    public DbSet<ReportData> ReportData { get; set; }
 
     #endregion
 
     /// <summary>
     /// Configure conventions for custom DbContext.
     /// </summary>
-    /// <param name="modelBuilder">Database model builder.</param>
+    /// <param name="modelBuilder">Database model builder?.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder?.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         // Seeding data
         modelBuilder.Entity<TagCategory>().HasData(GetDefaultTagCategories());
@@ -284,8 +300,7 @@ public sealed class GeneralContext : DbContext
     /// <returns>Default tag categories list.</returns>
     private static IEnumerable<TagCategory> GetDefaultTagCategories()
     {
-        var enumData = Enum.GetValues(typeof(TagCategoryEnum))
-            .Cast<TagCategoryEnum>()
+        var enumData = Enum.GetValues<TagCategoryEnum>()
             .Select(t => new TagCategory() { Id = (int)t, Name = t.ToString() });
 
         return enumData;
@@ -301,8 +316,7 @@ public sealed class GeneralContext : DbContext
     /// <returns>Default initative user levels list.</returns>
     private static IEnumerable<InitiativeUserLevel> GetDefaultInitiativeUserLevels()
     {
-        var enumData = Enum.GetValues(typeof(InitiativeUserLevelEnum))
-            .Cast<InitiativeUserLevelEnum>()
+        var enumData = Enum.GetValues<InitiativeUserLevelEnum>()
             .Select(t => new InitiativeUserLevel() { Id = (int)t, Name = t.ToString() });
 
         return enumData;
@@ -314,8 +328,7 @@ public sealed class GeneralContext : DbContext
     /// <returns>Default join request statuses list.</returns>
     private static IEnumerable<JoinRequestStatus> GetDefaultJoinRequestStatuses()
     {
-        var enumData = Enum.GetValues(typeof(JoinRequestStatusEnum))
-            .Cast<JoinRequestStatusEnum>()
+        var enumData = Enum.GetValues<JoinRequestStatusEnum>()
             .Select(t => new JoinRequestStatus() { Id = (int)t, Name = t.ToString() });
 
         return enumData;

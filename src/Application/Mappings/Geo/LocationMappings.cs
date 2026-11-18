@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Geo;
 public class LocationMappings : MapperRead<Location, LocationDto>
 {
     /// <inheritdoc/>
-    public override LocationDto Map(Location entity)
+    public override LocationDto Map(Location? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

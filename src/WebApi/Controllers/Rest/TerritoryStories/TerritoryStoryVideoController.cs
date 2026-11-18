@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.TerritoryStoryVideo;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -13,8 +14,6 @@ using IAVH.BioTablero.CM.WebApi.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Territory Story Video controller.
@@ -36,7 +35,7 @@ public class TerritoryStoryVideoController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryVideoResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TerritoryStoryVideoResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, HttpContext.GetUserName(), ct);
@@ -50,7 +49,7 @@ public class TerritoryStoryVideoController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByTerritoryStory/{territoryStoryId}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryVideoListResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TerritoryStoryVideoListResponseExample))]
     public async Task<IActionResult> GetListByTerritoryStory(int territoryStoryId, CancellationToken ct)
     {
         var response = await entityService.GetByTerritoryStoryAsync(territoryStoryId, ct);
@@ -66,8 +65,8 @@ public class TerritoryStoryVideoController(
     [HttpPost]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(TerritoryStoryVideoDto), typeof(TerritoryStoryVideoAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryVideoResponseExample))]
+    [OpenApiRequest(typeof(TerritoryStoryVideoAddRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TerritoryStoryVideoResponseExample))]
     public async Task<IActionResult> Post([FromBody] TerritoryStoryVideoDto requestData, CancellationToken ct)
     {
         var response = await entityService.AddAsync(HttpContext.GetUserName(), requestData, ct);
@@ -84,8 +83,8 @@ public class TerritoryStoryVideoController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(TerritoryStoryVideoDto), typeof(TerritoryStoryVideoEditRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryVideoResponseExample))]
+    [OpenApiRequest(typeof(TerritoryStoryVideoEditRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TerritoryStoryVideoResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] TerritoryStoryVideoDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, ct);

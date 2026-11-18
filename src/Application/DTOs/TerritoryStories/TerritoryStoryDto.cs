@@ -2,13 +2,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Territory Story dto.
 /// </summary>
-public class TerritoryStoryDto : IDto
+[method: SetsRequiredMembers]
+public class TerritoryStoryDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -23,22 +25,22 @@ public class TerritoryStoryDto : IDto
     /// <summary>
     /// Author User Name identifier.
     /// </summary>
-    public string AuthorUserName { get; set; }
+    public required string AuthorUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// Territory Story title.
     /// </summary>
-    public string Title { get; set; }
+    public required string Title { get; set; } = string.Empty;
 
     /// <summary>
     /// Territory Story title.
     /// </summary>
-    public string Text { get; set; }
+    public string? Text { get; set; }
 
     /// <summary>
     /// Territory Story keywords.
     /// </summary>
-    public string Keywords { get; set; }
+    public string? Keywords { get; set; }
 
     /// <summary>
     /// Entity creation date.
@@ -73,10 +75,10 @@ public class TerritoryStoryDto : IDto
     /// <summary>
     /// Territory Story Image relationship.
     /// </summary>
-    public IEnumerable<TerritoryStoryImageDto> Images { get; set; }
+    public IEnumerable<TerritoryStoryImageDto>? Images { get; set; }
 
     /// <summary>
     /// Territory Story Video relationship.
     /// </summary>
-    public IEnumerable<TerritoryStoryVideoDto> Videos { get; set; }
+    public IEnumerable<TerritoryStoryVideoDto>? Videos { get; set; }
 }

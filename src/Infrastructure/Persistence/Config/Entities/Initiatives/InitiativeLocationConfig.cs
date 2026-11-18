@@ -13,35 +13,35 @@ public class InitiativeLocationConfig : IEntityTypeConfiguration<InitiativeLocat
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<InitiativeLocation> builder)
     {
-        builder.ToTable("initiative_location", "initiatives");
+        builder?.ToTable("initiative_location", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.InitiativeId)
+        builder?.Property(e => e.InitiativeId)
             .HasColumnName("initiative_id")
             .IsRequired();
 
-        builder.Property(i => i.LocationId)
+        builder?.Property(e => e.LocationId)
             .HasColumnName("location_id")
             .IsRequired();
 
-        builder.Property(i => i.Locality)
+        builder?.Property(e => e.Locality)
             .HasColumnName("locality")
             .HasMaxLength(300);
 
-        builder.HasOne(e => e.Initiative)
+        builder?.HasOne(e => e.Initiative)
             .WithMany(p => p.InitiativeLocations)
             .HasForeignKey(e => e.InitiativeId);
 
-        builder.HasOne(e => e.Location)
+        builder?.HasOne(e => e.Location)
             .WithMany(p => p.InitiativeLocations)
             .HasForeignKey(e => e.LocationId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.InitiativeId, e.LocationId, e.Locality })
             .IsUnique();
     }

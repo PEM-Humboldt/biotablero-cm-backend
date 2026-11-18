@@ -13,65 +13,72 @@ public class IndicatorValueConfig : IEntityTypeConfiguration<IndicatorValue>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<IndicatorValue> builder)
     {
-        builder.ToTable("indicator_value", "indicators");
+        builder?.ToTable("indicator_value", "indicators");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.IndicatorGroupId)
-            .HasColumnName("indicator_group_id")
+        builder?.Property(e => e.TopicGroupId)
+            .HasColumnName("topic_group_id")
             .IsRequired();
 
-        builder.Property(i => i.MeasureUnitId)
-            .HasColumnName("measure_unit_id")
+        builder?.Property(e => e.IndicatorTypeId)
+            .HasColumnName("indicator_type_id")
             .IsRequired();
 
-        builder.Property(i => i.Date)
+        builder?.Property(e => e.CentralActorId)
+            .HasColumnName("central_actor_id");
+
+        builder?.Property(e => e.Date)
             .HasColumnName("date")
             .HasColumnType("timestamp without time zone")
             .IsRequired();
 
-        builder.Property(i => i.DateEnd)
+        builder?.Property(e => e.DateEnd)
             .HasColumnType("timestamp without time zone")
             .HasColumnName("date_end");
 
-        builder.Property(i => i.Value)
+        builder?.Property(e => e.Value)
             .HasColumnName("value")
             .IsRequired();
 
-        builder.Property(i => i.UpperLimit)
+        builder?.Property(e => e.UpperLimit)
             .HasColumnName("upper_limit");
 
-        builder.Property(i => i.LowerLimit)
+        builder?.Property(e => e.LowerLimit)
             .HasColumnName("lower_limit");
 
-        builder.HasOne(e => e.Group)
+        builder?.HasOne(e => e.Group)
             .WithMany(p => p.Values)
-            .HasForeignKey(e => e.IndicatorGroupId);
+            .HasForeignKey(e => e.TopicGroupId);
 
-        builder.HasOne(e => e.MeasureUnit)
+        builder?.HasOne(e => e.IndicatorType)
             .WithMany(p => p.IndicatorValues)
-            .HasForeignKey(e => e.MeasureUnitId);
+            .HasForeignKey(e => e.IndicatorTypeId);
 
-        builder
+        builder?.HasOne(e => e.CentralActor)
+            .WithMany(p => p.IndicatorValues)
+            .HasForeignKey(e => e.CentralActorId);
+
+        builder?
             .ToTable(t =>
             t.HasCheckConstraint(
                 "chk_date_end_after_date",
-                "\"date_end\" IS NULL OR \"date_end\" > \"date\""));
+                "\"date_end\" IS NULL OR \"date_end\" >= \"date\""));
 
-        builder
+        builder?
             .ToTable(t =>
             t.HasCheckConstraint(
-                "chk_value_greater_than_lower_limit",
-                "\"lower_limit\" IS NULL OR \"value\" > \"lower_limit\""));
+                "chk_value_greater_than_or_equal_lower_limit",
+                "\"lower_limit\" IS NULL OR \"value\" >= \"lower_limit\""));
 
-        builder
+        builder?
             .ToTable(t =>
             t.HasCheckConstraint(
-                "chk_upper_limit_greater_than_value",
-                "\"upper_limit\" IS NULL OR \"upper_limit\" > \"value\""));
+                "chk_upper_limit_greater_than_or_equal_value",
+                "\"upper_limit\" IS NULL OR \"upper_limit\" >= \"value\""));
     }
 }

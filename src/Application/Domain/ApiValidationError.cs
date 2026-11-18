@@ -8,20 +8,20 @@ public class ApiValidationError
     /// <summary>
     /// Message code.
     /// </summary>
-    public string Code { get; set; }
+    public required string Code { get; set; }
 
     /// <summary>
     /// Message description.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Validation field.
     /// </summary>
-    public string Field { get; set; }
+    public string? Field { get; set; }
 
     /// <summary>
     /// Additional data.
     /// </summary>
-    public object Data { get; set; }
+    public object? Data { get; set; }
 }

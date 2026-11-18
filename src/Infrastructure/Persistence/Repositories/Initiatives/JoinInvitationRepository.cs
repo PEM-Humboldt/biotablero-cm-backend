@@ -14,22 +14,14 @@ using Serilog;
 /// <summary>
 /// Join Invitation repository.
 /// </summary>
-public class JoinInvitationRepository : Repository<JoinInvitation, int>, IJoinInvitationRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class JoinInvitationRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<JoinInvitation, int>(dbContext, logger), IJoinInvitationRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public JoinInvitationRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
-    public override async Task<JoinInvitation> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<JoinInvitation?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.JoinInvitations
             .Include(e => e.Guests)
             .Where(e => e.Id == id)
@@ -39,7 +31,7 @@ public class JoinInvitationRepository : Repository<JoinInvitation, int>, IJoinIn
     public async Task<bool> AnyAsync(int initiativeId, string[] userNames, CancellationToken ct = default) =>
         await dbContext.JoinInvitations
             .Include(e => e.Guests)
-            .Where(e => e.InitiativeId == initiativeId && e.Guests.Any(e => userNames.Contains(e.Email)))
+            .Where(e => e.InitiativeId == initiativeId && e.Guests!.Any(e => userNames.Contains(e.Email)))
             .AnyAsync(ct);
 
     /// <inheritdoc/>

@@ -15,20 +15,12 @@ using Serilog;
 /// <summary>
 /// Initiative User repository.
 /// </summary>
-public class InitiativeUserRepository : Repository<InitiativeUser, int>, IInitiativeUserRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class InitiativeUserRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<InitiativeUser, int>(dbContext, logger), IInitiativeUserRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public InitiativeUserRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
     public async Task<bool> IsDuplicatedAsync(int initiativeId, string userName, CancellationToken ct = default) =>
         await dbContext.InitiativeUsers
@@ -60,7 +52,7 @@ public class InitiativeUserRepository : Repository<InitiativeUser, int>, IInitia
             .AnyAsync(ct);
 
     /// <inheritdoc/>
-    public async Task<InitiativeUser> GetByInitiativeAndUserNameAsync(int initiativeId, string userName, CancellationToken ct = default) =>
+    public async Task<InitiativeUser?> GetByInitiativeAndUserNameAsync(int initiativeId, string userName, CancellationToken ct = default) =>
         await dbContext.InitiativeUsers
             .Where(e => e.InitiativeId == initiativeId && e.UserName == userName)
             .FirstOrDefaultAsync(ct);

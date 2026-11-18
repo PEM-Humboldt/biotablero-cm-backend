@@ -22,15 +22,15 @@ public class InitiativeLocation : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Locality name.
     /// </summary>
-    public string Locality { get; set; }
+    public string? Locality { get; set; }
 
     /// <summary>
     /// Initiative relationship.
     /// </summary>
-    public Initiative Initiative { get; set; }
+    public Initiative? Initiative { get; set; }
 
     /// <summary>
     /// Location relationship.
     /// </summary>
-    public Location Location { get; set; }
+    public Location? Location { get; set; }
 }

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Resources;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.ResourceLink;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -13,8 +15,6 @@ using IAVH.BioTablero.CM.WebApi.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Resource Link controller.
@@ -36,7 +36,7 @@ public class ResourceLinkController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceLinkResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceLinkResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -50,7 +50,7 @@ public class ResourceLinkController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByResource/{resourceId}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceLinkListResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceLinkListResponseExample))]
     public async Task<IActionResult> GetListByResource(int resourceId, CancellationToken ct)
     {
         var response = await entityService.GetByResourceAsync(resourceId, ct);
@@ -66,11 +66,11 @@ public class ResourceLinkController(
     [HttpPost]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(ResourceLinkDto), typeof(ResourceLinkAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceLinkResponseExample))]
+    [OpenApiRequest(typeof(ResourceLinkAddRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceLinkResponseExample))]
     public async Task<IActionResult> Post([FromBody] ResourceLinkDto requestData, CancellationToken ct)
     {
-        var response = await entityService.AddAsync(HttpContext.GetUserName(), requestData, ct);
+        var response = await entityService.AddAsync(HttpContext.GetUserName(), requestData, HttpContext.UserHasRole(IamConstants.RoleAlly), ct);
         return webTools.CustomResponse(response);
     }
 
@@ -84,11 +84,11 @@ public class ResourceLinkController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(ResourceLinkDto), typeof(ResourceLinkEditRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ResourceLinkResponseExample))]
+    [OpenApiRequest(typeof(ResourceLinkEditRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ResourceLinkResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] ResourceLinkDto requestData, CancellationToken ct)
     {
-        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, ct);
+        var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, HttpContext.UserHasRole(IamConstants.RoleAlly), ct);
         return webTools.CustomResponse(response);
     }
 
@@ -102,7 +102,7 @@ public class ResourceLinkController(
     [Authorize]
     public async Task<IActionResult> Delete(int id, CancellationToken ct)
     {
-        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), ct);
+        var response = await entityService.DeleteAsync(id, HttpContext.GetUserName(), HttpContext.UserHasRole(IamConstants.RoleAlly), ct);
         return webTools.CustomResponse(response);
     }
 }

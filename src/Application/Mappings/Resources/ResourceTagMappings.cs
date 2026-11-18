@@ -15,7 +15,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 public class ResourceTagMappings(IMapperCreateReadAndUpdate<Tag, TagDto> tagMappings) : MapperRead<ResourceTag, ResourceTagDto>
 {
     /// <inheritdoc/>
-    public override ResourceTagDto Map(ResourceTag entity)
+    public override ResourceTagDto Map(ResourceTag? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

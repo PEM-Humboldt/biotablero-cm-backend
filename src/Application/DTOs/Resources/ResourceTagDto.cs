@@ -1,12 +1,15 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Resources;
 
+using System.Diagnostics.CodeAnalysis;
+
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Resource Tag dto.
 /// </summary>
-public class ResourceTagDto : IDto
+[method: SetsRequiredMembers]
+public class ResourceTagDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -16,5 +19,5 @@ public class ResourceTagDto : IDto
     /// <summary>
     /// Entity Tag.
     /// </summary>
-    public TagDto Tag { get; set; }
+    public required TagDto Tag { get; set; } = new();
 }

@@ -1,5 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Utils;
 
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+
 using Serilog;
 using Serilog.Events;
 
@@ -19,13 +21,12 @@ public static class LogUtils
     /// <param name="messageTemplate">Message template.</param>
     /// <param name="propertyValues">Message property values.</param>
     /// <param name="logLevel">System log level.</param>
-    public static void AddLog(this ILogger logger, LogType logType, string shortMessage, string messageTemplate = null, object propertyValues = null, LogEventLevel logLevel = LogEventLevel.Information)
+    public static void AddLog(this ILogger logger, LogType logType, string shortMessage, string? messageTemplate = null, object? propertyValues = null, LogEventLevel logLevel = LogEventLevel.Information)
     {
         string finalMessageTemplate;
-
         if (string.IsNullOrEmpty(shortMessage))
         {
-            finalMessageTemplate = messageTemplate;
+            finalMessageTemplate = messageTemplate!;
         }
         else if (string.IsNullOrEmpty(messageTemplate))
         {
@@ -37,9 +38,9 @@ public static class LogUtils
         }
 
         logger
-            .ForContext("CustomRecord", true)
-            .ForContext("Type", (int)logType)
-            .ForContext("ShortMessage", shortMessage)
+            .ForContext(LogConstants.CustomRecord, true)
+            .ForContext(LogConstants.CustomType, (int)logType)
+            .ForContext(LogConstants.ShortMessage, shortMessage)
             .Write(logLevel, finalMessageTemplate, propertyValues);
     }
 }

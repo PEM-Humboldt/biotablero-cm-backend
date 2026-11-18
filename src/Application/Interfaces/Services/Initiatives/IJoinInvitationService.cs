@@ -23,5 +23,5 @@ public interface IJoinInvitationService : IRead<JoinInvitation, int>, IAdd<JoinI
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetListAsync(int initiativeId, string userName, ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct = default);
+    Task<CustomWebResponse> GetListAsync(int initiativeId, string? userName, ODataQueryOptions<JoinInvitation> queryOptions, CancellationToken ct = default);
 }

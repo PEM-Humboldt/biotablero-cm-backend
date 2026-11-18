@@ -2,13 +2,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
 
 /// <summary>
 /// Join Invitation dto.
 /// </summary>
-public class JoinInvitationDto : IDto
+[method: SetsRequiredMembers]
+public class JoinInvitationDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -23,27 +25,27 @@ public class JoinInvitationDto : IDto
     /// <summary>
     /// Creator user identifier.
     /// </summary>
-    public string Creator { get; set; }
+    public required string Creator { get; set; } = string.Empty;
 
     /// <summary>
     /// Creator user full name.
     /// </summary>
-    public string CreatorFullName { get; set; }
+    public string? CreatorFullName { get; set; }
 
     /// <summary>
     /// Join Invitation message.
     /// </summary>
-    public string Message { get; set; }
+    public string? Message { get; set; }
 
     /// <summary>
     /// Join Invitation HTML message.
     /// </summary>
-    public string HtmlMessage { get; set; }
+    public required string HtmlMessage { get; set; } = string.Empty;
 
     /// <summary>
     /// Initiative name.
     /// </summary>
-    public string InitiativeName { get; set; }
+    public string? InitiativeName { get; set; }
 
     /// <summary>
     /// Join Invitation creation date.
@@ -53,5 +55,5 @@ public class JoinInvitationDto : IDto
     /// <summary>
     /// Join Invitation Guests.
     /// </summary>
-    public IEnumerable<JoinInvitationGuestDto> Guests { get; init; }
+    public IEnumerable<JoinInvitationGuestDto>? Guests { get; init; }
 }

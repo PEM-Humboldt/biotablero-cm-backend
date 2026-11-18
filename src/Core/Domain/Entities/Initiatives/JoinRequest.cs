@@ -13,12 +13,12 @@ public class JoinRequest : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Join Request user name.
     /// </summary>
-    public string UserName { get; set; }
+    public required string UserName { get; set; }
 
     /// <summary>
     /// Join Request reviewer user name.
     /// </summary>
-    public string ReviewerUserName { get; set; }
+    public string? ReviewerUserName { get; set; }
 
     /// <summary>
     /// Join Request creation date.
@@ -48,15 +48,15 @@ public class JoinRequest : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiative relationship.
     /// </summary>
-    public Initiative Initiative { get; set; }
+    public Initiative? Initiative { get; set; }
 
     /// <summary>
     /// Level relationship.
     /// </summary>
-    public InitiativeUserLevel Level { get; set; }
+    public InitiativeUserLevel? Level { get; set; }
 
     /// <summary>
     /// Join request Status relationship.
     /// </summary>
-    public JoinRequestStatus Status { get; set; }
+    public JoinRequestStatus? Status { get; set; }
 }

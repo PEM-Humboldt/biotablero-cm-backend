@@ -45,7 +45,7 @@ public interface IJoinRequestRepository : IRepository<JoinRequest, int>
     /// <param name="requestStatusId">Request status identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Updated request data.</returns>
-    Task<JoinRequest> ReviewRequestAsync(int requestId, string reviewerUserName, int requestStatusId, CancellationToken ct = default);
+    Task<JoinRequest?> ReviewRequestAsync(int requestId, string? reviewerUserName, int requestStatusId, CancellationToken ct = default);
 
     /// <summary>
     /// Get pending old requests.

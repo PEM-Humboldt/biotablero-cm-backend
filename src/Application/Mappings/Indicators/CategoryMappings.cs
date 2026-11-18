@@ -12,7 +12,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 public class CategoryMappings() : MapperRead<Category, CategoryDto>
 {
     /// <inheritdoc/>
-    public override CategoryDto Map(Category entity)
+    public override CategoryDto Map(Category? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 

@@ -15,15 +15,15 @@ public class CategoryDto : IDto
     /// <summary>
     /// Category name.
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     /// Category description.
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Parent relationship.
     /// </summary>
-    public CategoryDto Parent { get; set; }
+    public CategoryDto? Parent { get; set; }
 }

@@ -13,28 +13,28 @@ public class LocationPolygonConfig : IEntityTypeConfiguration<LocationPolygon>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<LocationPolygon> builder)
     {
-        builder.ToTable("location_polygon", "geo");
+        builder?.ToTable("location_polygon", "geo");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(e => e.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(lp => lp.Geometry)
+        builder?.Property(lp => lp.Geometry)
             .HasColumnName("geometry")
             .HasColumnType("geometry(MultiPolygon, 4326)")
             .IsRequired();
 
-        builder.Property(lp => lp.GeometrySimplified)
+        builder?.Property(lp => lp.GeometrySimplified)
             .HasColumnName("geometry_simplified")
             .IsRequired();
 
-        builder.Property(i => i.LocationId)
+        builder?.Property(e => e.LocationId)
             .HasColumnName("location_id")
             .IsRequired();
 
-        builder.HasOne(lp => lp.Location)
+        builder?.HasOne(lp => lp.Location)
             .WithOne(l => l.LocationPolygon)
             .HasForeignKey<LocationPolygon>(lp => lp.LocationId)
             .OnDelete(DeleteBehavior.NoAction);

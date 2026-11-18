@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Resource file list response example.
 /// </summary>
-public class ResourceFileListResponseExample : IExamplesProvider<List<ResourceFileDto>>
+public class ResourceFileListResponseExample : IOpenApiExampleProvider<List<ResourceFileDto>>
 {
     /// <inheritdoc/>
     public List<ResourceFileDto> GetExamples() =>

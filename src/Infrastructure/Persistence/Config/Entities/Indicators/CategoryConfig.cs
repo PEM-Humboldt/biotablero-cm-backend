@@ -13,31 +13,31 @@ public class CategoryConfig : IEntityTypeConfiguration<Category>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<Category> builder)
     {
-        builder.ToTable("category", "indicators");
+        builder?.ToTable("category", "indicators");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.ParentId)
+        builder?.Property(e => e.ParentId)
             .HasColumnName("parent_id");
 
-        builder.Property(i => i.Name)
+        builder?.Property(e => e.Name)
             .HasColumnName("name")
             .HasMaxLength(70)
             .IsRequired();
 
-        builder.Property(i => i.Description)
+        builder?.Property(e => e.Description)
             .HasColumnName("description")
             .HasMaxLength(240);
 
-        builder.HasOne(e => e.Parent)
+        builder?.HasOne(e => e.Parent)
             .WithMany(p => p.Children)
             .HasForeignKey(e => e.ParentId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.ParentId, e.Name })
             .IsUnique();
     }

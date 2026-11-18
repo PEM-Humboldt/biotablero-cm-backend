@@ -1,14 +1,15 @@
 <Project>
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>disable</Nullable>
+    <TargetFramework>net10.0</TargetFramework>
+    <Version>1.0.0</Version>
+    <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>    
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>Recommended</AnalysisMode>
-    <AnalysisLevel>8.0</AnalysisLevel>
+    <AnalysisLevel>10.0</AnalysisLevel>
   </PropertyGroup>
 
   <ItemGroup>

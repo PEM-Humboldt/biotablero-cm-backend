@@ -20,7 +20,7 @@ public interface ITerritoryStoryVideoService : IRead<TerritoryStoryVideo, int>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Get elements by territory story.
@@ -37,7 +37,7 @@ public interface ITerritoryStoryVideoService : IRead<TerritoryStoryVideo, int>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> AddAsync(string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> AddAsync(string? userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.
@@ -47,7 +47,7 @@ public interface ITerritoryStoryVideoService : IRead<TerritoryStoryVideo, int>
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string? userName, TerritoryStoryVideoDto entityData, CancellationToken ct = default);
 
     /// <summary>
     /// Delete element.
@@ -56,5 +56,5 @@ public interface ITerritoryStoryVideoService : IRead<TerritoryStoryVideo, int>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> DeleteAsync(int id, string? userName, CancellationToken ct = default);
 }

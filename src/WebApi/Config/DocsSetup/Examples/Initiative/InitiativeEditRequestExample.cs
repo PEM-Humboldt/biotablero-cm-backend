@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Initiative edit response example.
 /// </summary>
-public class InitiativeEditRequestExample : IExamplesProvider<InitiativeDto>
+public class InitiativeEditRequestExample : IOpenApiExampleProvider<InitiativeDto>
 {
     /// <inheritdoc/>
     public InitiativeDto GetExamples() => new()

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Initiatives;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Users;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Auth;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.InitiativeUser;
@@ -15,8 +16,6 @@ using IAVH.BioTablero.CM.WebApi.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Authentication data controller.
@@ -42,7 +41,7 @@ public class AuthController(IWebTools webTools,
     [Authorize]
     [HttpGet("MyProfile")]
     [ProducesResponseType(typeof(ProfileDataResponseExample), StatusCodes.Status200OK)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ProfileDataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(ProfileDataResponseExample))]
     public async Task<IActionResult> MyProfile(CancellationToken ct)
     {
         var response = await userService.GetProfileDataAsync(HttpContext.GetUserName(), ct);
@@ -56,7 +55,7 @@ public class AuthController(IWebTools webTools,
     /// <returns>Selected entity data.</returns>
     [Authorize]
     [HttpGet("InitiativesData")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeLoggedUserDataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeLoggedUserDataResponseExample))]
     public async Task<IActionResult> GetListInitiativesData(CancellationToken ct)
     {
         var response = await initiativeService.GetByUserNameAsync(HttpContext.GetUserName(), ct);
@@ -73,8 +72,8 @@ public class AuthController(IWebTools webTools,
     [HttpPut("MyFocusArea/{initiativeId}")]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(InitiativeUserDto), typeof(InitiativeUserEditFocusAreaRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeUserResponseExample))]
+    [OpenApiRequest(typeof(InitiativeUserEditFocusAreaRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeUserResponseExample))]
     public async Task<IActionResult> EditMyFocusArea(int initiativeId, [FromBody] InitiativeUserDto requestData, CancellationToken ct)
     {
         var response = await initiativeUserService.UpdateFocusAreaAsync(initiativeId, HttpContext.GetUserName(), requestData, ct);

@@ -13,39 +13,39 @@ public class JoinInvitationConfig : IEntityTypeConfiguration<JoinInvitation>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<JoinInvitation> builder)
     {
-        builder.ToTable("join_invitation", "initiatives");
+        builder?.ToTable("join_invitation", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.InitiativeId)
+        builder?.Property(e => e.InitiativeId)
             .HasColumnName("initiative_id")
             .IsRequired();
 
-        builder.Property(i => i.Creator)
+        builder?.Property(e => e.Creator)
             .HasColumnName("creator_user_name")
             .HasMaxLength(75)
             .IsRequired();
 
-        builder.Property(i => i.Message)
+        builder?.Property(e => e.Message)
             .HasColumnName("message")
             .HasMaxLength(350);
 
-        builder.Property(i => i.HtmlMessage)
+        builder?.Property(e => e.HtmlMessage)
             .HasColumnName("html_message")
             .IsRequired();
 
-        builder.Property(e => e.CreationDate)
+        builder?.Property(e => e.CreationDate)
             .HasColumnName("creation_date")
             .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .IsRequired();
 
-        builder.Ignore(i => i.CreatorFullName);
+        builder?.Ignore(i => i.CreatorFullName);
 
-        builder.HasOne(e => e.Initiative)
+        builder?.HasOne(e => e.Initiative)
             .WithMany(p => p.JoinInvitations)
             .HasForeignKey(e => e.InitiativeId);
     }

@@ -22,7 +22,7 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Get entities by initiative (OData).
@@ -32,7 +32,7 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string userName, ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct = default);
+    Task<CustomWebResponse> GetByInitiativeAsync(int initiativeId, string? userName, ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.
@@ -42,7 +42,7 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string userName, TerritoryStoryDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string? userName, TerritoryStoryDto entityData, CancellationToken ct = default);
 
     /// <summary>
     /// Like action.
@@ -59,7 +59,7 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> FeaturedContentActionAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> FeaturedContentActionAsync(int id, string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Enable element.
@@ -68,7 +68,7 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> EnableAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> EnableAsync(int id, string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Disable element.
@@ -77,5 +77,5 @@ public interface ITerritoryStoryService : IRead<TerritoryStory, int>, IAdd<Terri
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> DisableAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> DisableAsync(int id, string? userName, CancellationToken ct = default);
 }

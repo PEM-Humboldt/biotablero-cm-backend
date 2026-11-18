@@ -31,7 +31,7 @@ public interface IInitiativeService : IRead<Initiative, int>, IAdd<InitiativeDto
     /// <param name="userName">Initiative identifier.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByUserNameAsync(string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> GetByUserNameAsync(string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Update element.
@@ -42,7 +42,7 @@ public interface IInitiativeService : IRead<Initiative, int>, IAdd<InitiativeDto
     /// <param name="entityData">Entity data.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> UpdateAsync(int id, string userName, bool userIsAdmin, InitiativeDto entityData, CancellationToken ct = default);
+    Task<CustomWebResponse> UpdateAsync(int id, string? userName, bool userIsAdmin, InitiativeDto entityData, CancellationToken ct = default);
 
     /// <summary>
     /// Upload image.

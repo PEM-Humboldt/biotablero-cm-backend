@@ -15,17 +15,17 @@ public class FormFileAdapter(IFormFile file) : IInputFile
     private readonly IFormFile file = file;
 
     /// <inheritdoc/>
-    public string FileName => file?.FileName;
+    public string FileName => file.FileName;
 
     /// <inheritdoc/>
     public string Extension => Path.GetExtension(FileName);
 
     /// <inheritdoc/>
-    public string ContentType => file?.ContentType;
+    public string ContentType => file.ContentType;
 
     /// <inheritdoc/>
     public long Size => file?.Length ?? 0;
 
     /// <inheritdoc/>
-    public Stream OpenStream() => file?.OpenReadStream();
+    public Stream OpenStream() => file.OpenReadStream();
 }

@@ -44,7 +44,17 @@ public static class LogConstants
     /// <summary>
     /// Custom type property value.
     /// </summary>
-    public const string CustomType = "Type";
+    public const string CustomType = "LogType";
+
+    /// <summary>
+    /// Short message property value.
+    /// </summary>
+    public const string ShortMessage = "ShortMessage";
+
+    /// <summary>
+    /// Source context property value.
+    /// </summary>
+    public const string SourceContext = "SourceContext";
 
     #endregion
 }

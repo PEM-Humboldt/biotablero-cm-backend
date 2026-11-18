@@ -15,15 +15,15 @@ public class MapLegendItem : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Map Legend Item color code.
     /// </summary>
-    public string ColorCode { get; set; }
+    public required string ColorCode { get; set; }
 
     /// <summary>
     /// Map Legend Item value.
     /// </summary>
-    public string Value { get; set; }
+    public required string Value { get; set; }
 
     /// <summary>
     /// Map Legend relationship.
     /// </summary>
-    public MapLegend MapLegend { get; set; }
+    public MapLegend? MapLegend { get; set; }
 }

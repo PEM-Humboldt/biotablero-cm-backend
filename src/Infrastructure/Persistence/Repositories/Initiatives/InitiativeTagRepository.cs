@@ -14,24 +14,16 @@ using Serilog;
 /// <summary>
 /// Initiative Tag repository.
 /// </summary>
-public class InitiativeTagRepository : Repository<InitiativeTag, int>, IInitiativeTagRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class InitiativeTagRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<InitiativeTag, int>(dbContext, logger), IInitiativeTagRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public InitiativeTagRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
-
     /// <inheritdoc/>
-    public override async Task<InitiativeTag> GetByIdAsync(int id, CancellationToken ct = default) =>
+    public override async Task<InitiativeTag?> GetByIdAsync(int id, CancellationToken ct = default) =>
         await dbContext.InitiativeTags
-                .Include(e => e.Tag)
+            .Include(e => e.Tag)
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(ct);
 
@@ -39,7 +31,7 @@ public class InitiativeTagRepository : Repository<InitiativeTag, int>, IInitiati
     public override async Task<InitiativeTag> AddAsync(InitiativeTag entity, CancellationToken ct = default)
     {
         await base.AddAsync(entity, ct);
-        return await GetByIdAsync(entity.Id, ct);
+        return (await GetByIdAsync(entity.Id, ct))!;
     }
 
     /// <inheritdoc/>

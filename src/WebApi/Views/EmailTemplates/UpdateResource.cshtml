@@ -1,7 +1,7 @@
 @model IAVH.BioTablero.CM.Application.DTOs.Notifications.NotificationDto
 @{
-    Model.Subject = $"Se ha actualizado el recurso '{Model?.Properties?.Data["ResourceName"]}'";
-    Model.Body = $"Se ha actualizado la información del recurso '{Model?.Properties?.Data["ResourceName"]}' por parte del usuario '{Model?.Properties?.Data["EditorUserName"]}'.";
+    Model.Subject = $"Se ha actualizado el recurso '{Model.Properties?.Data["ResourceName"]}'";
+    Model.Body = $"Se ha actualizado la información del recurso '{Model.Properties?.Data["ResourceName"]}' por parte del usuario '{Model.Properties?.Data["EditorUserName"]}'.";
 }
 
 <div style="margin: auto;width: 20rem;">

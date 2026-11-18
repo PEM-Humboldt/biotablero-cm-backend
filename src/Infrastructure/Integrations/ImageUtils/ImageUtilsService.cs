@@ -4,73 +4,82 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.ImageUtils;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 using Serilog;
 
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Webp;
-using SixLabors.ImageSharp.Processing;
+using SkiaSharp;
 
 /// <summary>
 /// Image Utils service.
 /// </summary>
-public class ImageUtilsService : IImageUtilsService
+/// <param name="logger">Logger.</param>
+public class ImageUtilsService(ILogger logger) : IImageUtilsService
 {
-    private readonly ILogger logger;
+    private readonly ILogger logger = logger;
 
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="logger">Logger.</param>
-    public ImageUtilsService(ILogger logger)
+    /// <inheritdoc/>
+    public string? Validate(Stream input)
     {
-        this.logger = logger;
+        input.Position = 0;
+        using var inputStream = new SKManagedStream(input, false);
+        using var bitmap = SKBitmap.Decode(inputStream);
+
+        return Validate(bitmap);
     }
 
     /// <inheritdoc/>
-    public async Task<Stream> CompressToWebpAsync(Stream input, int quality = 75, CancellationToken ct = default)
+    public async Task<Stream?> CompressToWebpAsync(Stream input, int quality = 75, CancellationToken ct = default) =>
+        await Task.Run(
+            () =>
+            {
+                ct.ThrowIfCancellationRequested();
+
+                input.Position = 0;
+                using var inputStream = new SKManagedStream(input, false);
+                using var bitmap = SKBitmap.Decode(inputStream);
+
+                var errors = Validate(bitmap);
+
+                if (!string.IsNullOrEmpty(errors))
+                {
+                    logger.Error(errors);
+                    return null;
+                }
+
+                using var image = SKImage.FromBitmap(bitmap);
+                using var data = image.Encode(SKEncodedImageFormat.Webp, quality);
+
+                if (data == null)
+                {
+                    logger.Error("Failed to encode image to WEBP format.");
+                    return null;
+                }
+
+                var output = new MemoryStream();
+                data.SaveTo(output);
+                output.Position = 0;
+
+                return (Stream)output;
+            },
+            ct);
+
+    /// <summary>
+    /// Validate image file.
+    /// </summary>
+    /// <param name="bitmap">Image bitmap.</param>
+    /// <returns>Validation error message. Null otherwise.</returns>
+    private static string? Validate(SKBitmap? bitmap)
     {
-        try
+        if (bitmap == null)
         {
-            var output = new MemoryStream();
-
-            input.Position = 0;
-
-            using var image = await Image.LoadAsync(input, ct);
-
-            if (image.Size.Width > FileConstants.WebpMaxDimension || image.Size.Height > FileConstants.WebpMaxDimension)
-            {
-                logger.Error("Image is too large to encode WEBP format: {ImageSize}", image.Size);
-                return null;
-            }
-
-            image.Mutate(x => x.Resize(new ResizeOptions
-            {
-                Mode = ResizeMode.Max,
-                Size = image.Size,
-                Sampler = KnownResamplers.Lanczos3,
-            }));
-
-            var encoder = new WebpEncoder
-            {
-                Quality = quality,
-            };
-
-            await image.SaveAsWebpAsync(output, encoder, ct);
-
-            output.Position = 0;
-
-            return output;
+            return "Could not decode image: unsupported or invalid format.";
         }
-        catch (UnknownImageFormatException ex)
+
+        if (bitmap.Width > FileConstants.WebpMaxDimension || bitmap.Height > FileConstants.WebpMaxDimension)
         {
-            logger.Error(ex, "Image processing error");
-        }
-        catch (ImageFormatException ex)
-        {
-            logger.Error(ex, "Image format error");
+            return $"Image is too large to encode WEBP format: {bitmap.Width}x{bitmap.Height}";
         }
 
         return null;

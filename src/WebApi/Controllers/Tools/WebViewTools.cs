@@ -48,7 +48,7 @@ public class WebViewTools(
         var tempDataProvider = serviceProvider.GetService(typeof(ITempDataProvider)) as ITempDataProvider;
 
         using var stringWriter = new StringWriter();
-        var viewResult = razorViewEngine.FindView(actionContext, viewName, !isPartial);
+        var viewResult = razorViewEngine!.FindView(actionContext, viewName, !isPartial);
 
         if (viewResult?.View == null)
         {
@@ -64,7 +64,7 @@ public class WebViewTools(
             actionContext,
             viewResult.View,
             viewDictionary,
-            new TempDataDictionary(actionContext.HttpContext, tempDataProvider),
+            new TempDataDictionary(actionContext.HttpContext, tempDataProvider!),
             stringWriter,
             new HtmlHelperOptions());
 

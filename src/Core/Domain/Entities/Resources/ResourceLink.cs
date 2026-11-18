@@ -18,15 +18,15 @@ public class ResourceLink : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Entity name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Entity URL.
     /// </summary>
-    public Uri Url { get; set; }
+    public required Uri Url { get; set; }
 
     /// <summary>
     /// Resource relationship.
     /// </summary>
-    public Resource Resource { get; set; }
+    public Resource? Resource { get; set; }
 }

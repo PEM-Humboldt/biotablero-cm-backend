@@ -5,23 +5,15 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Video;
 
 /// <summary>
 /// Video Helper service.
 /// </summary>
-public class VideoHelperService : IVideoHelperService
+/// <param name="httpClient">HTTP Client.</param>
+public class VideoHelperService(HttpClient httpClient) : IVideoHelperService
 {
-    private readonly HttpClient httpClient;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="httpClient">HTTP Client.</param>
-    public VideoHelperService(HttpClient httpClient)
-    {
-        this.httpClient = httpClient;
-    }
+    private readonly HttpClient httpClient = httpClient;
 
     /// <inheritdoc/>
     public async Task<bool> VideoExistsAsync(string videoUrl, CancellationToken ct = default)

@@ -4,14 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Reports;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Reports;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Initiative statistics controller.
@@ -34,7 +33,7 @@ public class InitiativeStatsController(
     /// <returns>Initiative statistics.</returns>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(InitiativeStatsResponseExample), StatusCodes.Status200OK)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(InitiativeStatsResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(InitiativeStatsResponseExample))]
     public async Task<IActionResult> Get(int id, CancellationToken ct = default)
     {
         var response = await initiativeStatsService.GetStats(id, ct);
@@ -50,7 +49,7 @@ public class InitiativeStatsController(
     /// <returns>Monitoring Events data.</returns>
     [HttpGet("GetMonitoringEvents/{id}")]
     [ProducesResponseType(typeof(MonitoringEventsResponseExample), StatusCodes.Status200OK)]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(MonitoringEventsResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(MonitoringEventsResponseExample))]
     public async Task<IActionResult> GetMonitoringEvents(int id, int? year, CancellationToken ct = default)
     {
         var response = await initiativeStatsService.GetMonitoringEvents(id, year, ct);

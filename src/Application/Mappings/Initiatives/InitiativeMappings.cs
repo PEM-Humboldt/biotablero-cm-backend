@@ -8,6 +8,8 @@ using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
 using IAVH.BioTablero.CM.Application.Mappings.General;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 
+using NetTopologySuite.Geometries;
+
 /// <summary>
 /// Initiative mappings.
 /// </summary>
@@ -18,7 +20,7 @@ public class InitiativeMappings(
     IMapperRead<InitiativeTag, InitiativeTagDto> initiativeTagMappings) : MapperRead<Initiative, InitiativeDto>, IMapperCreateReadAndUpdate<Initiative, InitiativeDto>
 {
     /// <inheritdoc/>
-    public override InitiativeDto Map(Initiative entity)
+    public override InitiativeDto Map(Initiative? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -33,9 +35,13 @@ public class InitiativeMappings(
             CreationDate = entity.CreationDate.ToUniversalTime(),
             ImageUrl = entity.ImageUrl,
             BannerUrl = entity.BannerUrl,
-            Enabled = entity.Enabled,
-            Coordinate = entity.Coordinate != null && !entity.Coordinate.IsEmpty ? [entity.Coordinate.Y, entity.Coordinate.X] : null,
+            Coordinate = entity.Coordinate is Point point && !point.IsEmpty
+                ? [point.Y, point.X]
+                : null,
+            MainLocationId = entity.MainLocationId,
             PolygonArea = entity.PolygonArea,
+            Enabled = entity.Enabled,
+            HasPolygon = entity.Polygon != null,
             Contacts = entity.InitiativeContacts?.Select(initiativeContactMappings.Map),
             Locations = entity.InitiativeLocations?.Select(initiativeLocationMappings.Map),
             Users = entity.InitiativeUsers?.Select(initiativeUserMappings.Map),
@@ -44,7 +50,7 @@ public class InitiativeMappings(
     }
 
     /// <inheritdoc/>
-    public Initiative Map(InitiativeDto dto)
+    public Initiative Map(InitiativeDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 
@@ -58,10 +64,11 @@ public class InitiativeMappings(
             CreationDate = dto.CreationDate ?? DateTimeOffset.UtcNow,
             ImageUrl = dto.ImageUrl,
             BannerUrl = dto.BannerUrl,
-            Enabled = dto?.Enabled ?? true,
-            InitiativeContacts = [.. dto.Contacts?.Select(initiativeContactMappings.Map)],
-            InitiativeLocations = [.. dto.Locations?.Select(initiativeLocationMappings.Map)],
-            InitiativeUsers = [.. dto.Users?.Select(initiativeUserMappings.Map)],
+            Enabled = dto.Enabled ?? true,
+            Coordinate = Point.Empty,
+            InitiativeContacts = dto.Contacts?.Select(initiativeContactMappings.Map).ToList(),
+            InitiativeLocations = dto.Locations?.Select(initiativeLocationMappings.Map).ToList(),
+            InitiativeUsers = dto.Users?.Select(initiativeUserMappings.Map).ToList(),
         };
     }
 

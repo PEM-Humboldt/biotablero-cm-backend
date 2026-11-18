@@ -10,14 +10,19 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 public class IndicatorValue : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Indicator Group identifier.
+    /// Topic Group identifier.
     /// </summary>
-    public int IndicatorGroupId { get; set; }
+    public int TopicGroupId { get; set; }
 
     /// <summary>
-    /// Measure Unit identifier.
+    /// Indicator Type identifier.
     /// </summary>
-    public int MeasureUnitId { get; set; }
+    public int IndicatorTypeId { get; set; }
+
+    /// <summary>
+    /// Central Actor identifier.
+    /// </summary>
+    public int? CentralActorId { get; set; }
 
     /// <summary>
     /// Date.
@@ -45,12 +50,17 @@ public class IndicatorValue : BaseEntity<int>, IAggregateRoot
     public float? LowerLimit { get; set; }
 
     /// <summary>
-    /// Indicator Group relationship.
+    /// Topic Group relationship.
     /// </summary>
-    public IndicatorGroup Group { get; set; }
+    public TopicGroup? Group { get; set; }
 
     /// <summary>
-    /// Measure Unit relationship.
+    /// Indicator Type relationship.
     /// </summary>
-    public MeasureUnit MeasureUnit { get; set; }
+    public IndicatorType? IndicatorType { get; set; }
+
+    /// <summary>
+    /// Central Actor relationship.
+    /// </summary>
+    public CentralActor? CentralActor { get; set; }
 }

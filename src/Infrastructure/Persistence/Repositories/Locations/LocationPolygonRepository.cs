@@ -19,7 +19,7 @@ using Serilog;
 public class LocationPolygonRepository(GeneralContext dbContext, ILogger logger) : Repository<LocationPolygon, int>(dbContext, logger), ILocationPolygonRepository
 {
     /// <inheritdoc/>
-    public async Task<string> GetSimplifiedByLocationAsync(int locationId, CancellationToken ct = default) =>
+    public async Task<string?> GetSimplifiedByLocationAsync(int locationId, CancellationToken ct = default) =>
         await dbContext.LocationPolygons
             .Where(i => i.LocationId == locationId)
             .Select(e => e.GeometrySimplified)

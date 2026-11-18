@@ -1,23 +1,33 @@
-# Ignore GIT folder and files
+# Git
 .git/
 .gitignore
 .gitattributes
 
-# Ignore docker files
+# Docker
 .dockerignore
 Dockerfile*
 docker-compose*
 
-# Ignore some project files
+# Build results and temp files
 **/[b|B]in/
 **/[O|o]bj/
+**/TestResults/
+**/*.user
+**/*.suo
+
+# Environment and sensitive data
 **/*.env
+
+# Documentation and meta
 **/*.md
 LICENSE
+buildspec.yml
 
-# Ignore folders with external data
-.github/
-.sonarqube/
+# IDEs and local tools
+.vs/
 .idea/
 .vscode/
+.sonarqube/
+.github/
 docker/
+**/*.http

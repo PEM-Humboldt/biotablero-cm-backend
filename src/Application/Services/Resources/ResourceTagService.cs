@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Application.Services.Resources;
 
+using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -61,10 +62,12 @@ public class ResourceTagService : IResourceTagService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> AddAsync(string userName, int resourceId, int tagId, CancellationToken ct = default)
+    public async Task<CustomWebResponse> AddAsync(string? userName, int resourceId, int tagId, bool userIsAlly, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, userIsAlly, ct);
 
         if (!authorizedUserAction)
         {
@@ -130,13 +133,15 @@ public class ResourceTagService : IResourceTagService
     }
 
     /// <inheritdoc/>
-    public async Task<CustomWebResponse> DeleteAsync(int id, string userName, CancellationToken ct = default)
+    public async Task<CustomWebResponse> DeleteAsync(int id, string? userName, bool userIsAlly, CancellationToken ct = default)
     {
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         // Validate user permissions
         var entity = await entityRepository.GetByIdAsync(id, ct);
         var resourceId = entity?.ResourceId ?? 0;
 
-        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, ct);
+        var authorizedUserAction = await resourceRepository.AuthorizedEntityModifyAsync(resourceId, userName, userIsAlly, ct);
 
         if (!authorizedUserAction)
         {
@@ -160,6 +165,15 @@ public class ResourceTagService : IResourceTagService
 
         // Send email
         var resource = await resourceRepository.GetByIdAsync(entity.ResourceId, ct);
+
+        if (resource == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.DatabaseError),
+            };
+        }
+
         await resourceService.SendUpdateNotificationAsync(resource, userName, ct);
 
         logger.AddLog(LogType.Delete, "Deleted resource tag relationship", "{@EntityData}", entityData);

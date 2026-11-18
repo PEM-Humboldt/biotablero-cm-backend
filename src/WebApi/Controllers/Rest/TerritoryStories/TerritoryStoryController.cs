@@ -1,11 +1,13 @@
 ﻿namespace IAVH.BioTablero.CM.WebApi.Controllers.Rest.TerritoryStories;
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.TerritoryStories;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.TerritoryStory;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -16,8 +18,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
-
-using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Territory Story controller.
@@ -39,7 +39,7 @@ public class TerritoryStoryController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, HttpContext.GetUserName(), ct);
@@ -54,7 +54,7 @@ public class TerritoryStoryController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet("GetByInitiative/{initiativeId}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryOdataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TerritoryStoryOdataResponseExample))]
     public async Task<IActionResult> GetOdataListByInitiative(int initiativeId, ODataQueryOptions<TerritoryStory> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetByInitiativeAsync(initiativeId, HttpContext.GetUserName(), queryOptions, ct);
@@ -70,11 +70,14 @@ public class TerritoryStoryController(
     [HttpPost]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(TerritoryStoryDto), typeof(TerritoryStoryAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
+    [OpenApiRequest(typeof(TerritoryStoryAddRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
     public async Task<IActionResult> Post([FromBody] TerritoryStoryDto requestData, CancellationToken ct)
     {
-        requestData.AuthorUserName = HttpContext.GetUserName();
+        var userName = HttpContext.GetUserName();
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
+        requestData.AuthorUserName = userName;
         var response = await entityService.AddAsync(requestData, ct);
         return webTools.CustomResponse(response);
     }
@@ -89,8 +92,8 @@ public class TerritoryStoryController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize]
-    [SwaggerRequestExample(typeof(TerritoryStoryDto), typeof(TerritoryStoryEditRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
+    [OpenApiRequest(typeof(TerritoryStoryEditRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TerritoryStoryResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] TerritoryStoryDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, HttpContext.GetUserName(), requestData, ct);
@@ -107,10 +110,13 @@ public class TerritoryStoryController(
     [Authorize]
     public async Task<IActionResult> Like(int id, CancellationToken ct)
     {
+        var userName = HttpContext.GetUserName();
+        ArgumentException.ThrowIfNullOrEmpty(userName);
+
         var requestData = new TerritoryStoryLikeDto()
         {
             TerritoryStoryId = id,
-            UserName = HttpContext.GetUserName(),
+            UserName = userName,
         };
 
         var response = await entityService.LikeActionAsync(requestData, ct);

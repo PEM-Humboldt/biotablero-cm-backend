@@ -16,7 +16,7 @@ public class TerritoryStoryMappings(
     IMapperCreateReadAndUpdate<TerritoryStoryVideo, TerritoryStoryVideoDto> territoryStoryVideoMappings) : MapperRead<TerritoryStory, TerritoryStoryDto>, IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto>
 {
     /// <inheritdoc/>
-    public override TerritoryStoryDto Map(TerritoryStory entity)
+    public override TerritoryStoryDto Map(TerritoryStory? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
@@ -40,7 +40,7 @@ public class TerritoryStoryMappings(
     }
 
     /// <inheritdoc/>
-    public TerritoryStory Map(TerritoryStoryDto dto)
+    public TerritoryStory Map(TerritoryStoryDto? dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
 

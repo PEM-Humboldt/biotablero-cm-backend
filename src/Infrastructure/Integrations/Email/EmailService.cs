@@ -5,7 +5,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices;
+using IAVH.BioTablero.CM.Application.Interfaces.ExternalServices.Email;
+using IAVH.BioTablero.CM.Application.Utils;
 using IAVH.BioTablero.CM.Core.Domain.Models.Email;
 
 using MailKit.Net.Smtp;
@@ -20,24 +21,15 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
 /// <summary>
 /// Email service.
 /// </summary>
-public class EmailService : IEmailService
+/// <param name="logger">System logger.</param>
+/// <exception cref="InvalidCastException">SMTP Port cast exception.</exception>
+public class EmailService(ILogger logger) : IEmailService
 {
-    private readonly ILogger logger;
-    private readonly SmtpConfigData smtpData;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="logger">System logger.</param>
-    /// <exception cref="InvalidCastException">SMTP Port cast exception.</exception>
-    public EmailService(ILogger logger)
-    {
-        this.logger = logger;
-        smtpData = InitSmtpData();
-    }
+    private readonly ILogger logger = logger;
+    private readonly SmtpConfigData smtpData = InitSmtpData();
 
     /// <inheritdoc/>
-    public async Task<string> SendEmailAsync(string subject, CustomEmailAddress[] receivers, CustomEmailAddress[] hiddenReceivers, string body, CancellationToken ct = default)
+    public async Task<string> SendEmailAsync(string subject, CustomEmailAddress[] receivers, CustomEmailAddress[]? hiddenReceivers, string body, CancellationToken ct = default)
     {
         var options = SecureSocketOptions.StartTls;
 
@@ -63,7 +55,7 @@ public class EmailService : IEmailService
         using var mail = new MimeMessage()
         {
             Subject = subject,
-            Body = builder.ToMessageBody(),
+            Body = builder?.ToMessageBody(),
         };
         mail.From.Add(new MailboxAddress(smtpData.FromName, smtpData.From));
         mail.Cc.AddRange(receivers.Select(r => new MailboxAddress(r.Name, r.Email)));
@@ -101,20 +93,20 @@ public class EmailService : IEmailService
     {
         var smtpData = new SmtpConfigData()
         {
-            Host = Environment.GetEnvironmentVariable("SMTP_HOST"),
-            User = Environment.GetEnvironmentVariable("SMTP_USER"),
-            Password = Environment.GetEnvironmentVariable("SMTP_PASS"),
-            From = Environment.GetEnvironmentVariable("SMTP_FROM"),
-            FromName = Environment.GetEnvironmentVariable("SMTP_FROM_NAME"),
+            Host = EnvUtils.GetRequiredEnv("SMTP_HOST"),
+            User = EnvUtils.GetRequiredEnv("SMTP_USER"),
+            Password = EnvUtils.GetRequiredEnv("SMTP_PASS"),
+            From = EnvUtils.GetRequiredEnv("SMTP_FROM"),
+            FromName = EnvUtils.GetRequiredEnv("SMTP_FROM_NAME"),
         };
 
-        var smtpStr = Environment.GetEnvironmentVariable("SMTP_PORT");
+        var smtpStr = EnvUtils.GetRequiredEnv("SMTP_PORT");
         if (!int.TryParse(smtpStr, out int smtpPort))
         {
             throw new InvalidCastException($"Invalid SMTP port value: '{smtpStr}'");
         }
 
-        var smtpEnableSslStr = Environment.GetEnvironmentVariable("SMTP_ENABLED_SSL");
+        var smtpEnableSslStr = EnvUtils.GetRequiredEnv("SMTP_ENABLED_SSL");
         if (!bool.TryParse(smtpEnableSslStr, out bool smtpEnableSsl))
         {
             smtpEnableSsl = true;

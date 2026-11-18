@@ -48,7 +48,7 @@ public class EnumEntityDto<TEnum> : IDto
     {
         get
         {
-            var valueStr = TypeEnum.ToString("D");
+            var valueStr = TypeEnum?.ToString("D");
             var successfulCast = int.TryParse(valueStr, out var value);
             return successfulCast ? value : 0;
         }
@@ -58,11 +58,11 @@ public class EnumEntityDto<TEnum> : IDto
     /// <summary>
     /// Enum value as string.
     /// </summary>
-    public string Name =>
-            TypeEnum.ToString("G");
+    public string? Name =>
+            TypeEnum?.ToString("G");
 
     /// <summary>
     /// Enum value.
     /// </summary>
-    private TEnum TypeEnum { get; set; }
+    private TEnum? TypeEnum { get; set; }
 }

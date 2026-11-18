@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Ecosystems statistics response example.
 /// </summary>
-public class EcosystemsStatsResponseExample : IExamplesProvider<EcosystemsStatsDto>
+public class EcosystemsStatsResponseExample : IOpenApiExampleProvider<EcosystemsStatsDto>
 {
     /// <inheritdoc/>
     public EcosystemsStatsDto GetExamples() =>

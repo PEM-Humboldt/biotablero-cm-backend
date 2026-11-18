@@ -20,7 +20,7 @@ public interface INotificationService : IRead<Notification, int>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetTotalNotReadByUserNameAsync(string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> GetTotalNotReadByUserNameAsync(string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Get element.
@@ -29,7 +29,7 @@ public interface INotificationService : IRead<Notification, int>
     /// <param name="userName">User name.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetItemAsync(int id, string userName, CancellationToken ct = default);
+    Task<CustomWebResponse> GetItemAsync(int id, string? userName, CancellationToken ct = default);
 
     /// <summary>
     /// Get entities by user name (paginated).
@@ -38,7 +38,7 @@ public interface INotificationService : IRead<Notification, int>
     /// <param name="queryOptions">OData query options.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
-    Task<CustomWebResponse> GetByUserNameAsync(string userName, ODataQueryOptions<Notification> queryOptions, CancellationToken ct = default);
+    Task<CustomWebResponse> GetByUserNameAsync(string? userName, ODataQueryOptions<Notification> queryOptions, CancellationToken ct = default);
 
     /// <summary>
     /// Send notification.

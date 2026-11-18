@@ -13,33 +13,33 @@ public class ResourceLinkConfig : IEntityTypeConfiguration<ResourceLink>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<ResourceLink> builder)
     {
-        builder.ToTable("resource_link", "initiatives");
+        builder?.ToTable("resource_link", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.Name)
+        builder?.Property(e => e.Name)
             .HasColumnName("name")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(i => i.Url)
+        builder?.Property(e => e.Url)
             .HasColumnName("url")
             .HasMaxLength(250)
             .IsRequired();
 
-        builder.Property(i => i.ResourceId)
+        builder?.Property(e => e.ResourceId)
             .HasColumnName("resource_id")
             .IsRequired();
 
-        builder.HasOne(e => e.Resource)
+        builder?.HasOne(e => e.Resource)
             .WithMany(p => p.Links)
             .HasForeignKey(e => e.ResourceId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.ResourceId, e.Url })
             .IsUnique();
     }

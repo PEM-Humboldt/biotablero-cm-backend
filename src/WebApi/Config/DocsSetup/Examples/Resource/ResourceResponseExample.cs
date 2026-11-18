@@ -5,14 +5,14 @@ using System;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.TagEnums;
 
 /// <summary>
 /// Resource response example.
 /// </summary>
-public class ResourceResponseExample : IExamplesProvider<ResourceDto>
+public class ResourceResponseExample : IOpenApiExampleProvider<ResourceDto>
 {
     /// <inheritdoc/>
     public ResourceDto GetExamples() => new()

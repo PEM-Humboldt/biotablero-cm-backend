@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using NetTopologySuite.Geometries;
 
-using LocationCustom = IAVH.BioTablero.CM.Core.Domain.Entities.Geo.Location;
+using LocationCustom = Domain.Entities.Geo.Location;
 
 /// <summary>
 /// Location repository interface.
@@ -36,4 +36,13 @@ public interface ILocationRepository : IRepository<LocationCustom, int>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<int> GetMunicipalitiesCountAsync(int initiativeId, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get elements by department and municipality names.
+    /// </summary>
+    /// <param name="departments">Department names.</param>
+    /// <param name="municipalities">Municipality names.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Filtered locations by names.</returns>
+    Task<List<LocationCustom>> GetByNamesAsync(string?[] departments, string?[] municipalities, CancellationToken ct = default);
 }

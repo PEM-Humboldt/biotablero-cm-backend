@@ -20,22 +20,22 @@ public class TerritoryStory : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Author User Name identifier.
     /// </summary>
-    public string AuthorUserName { get; set; }
+    public required string AuthorUserName { get; set; }
 
     /// <summary>
     /// Territory Story title.
     /// </summary>
-    public string Title { get; set; }
+    public required string Title { get; set; }
 
     /// <summary>
     /// Territory Story title.
     /// </summary>
-    public string Text { get; set; }
+    public string? Text { get; set; }
 
     /// <summary>
     /// Territory Story keywords.
     /// </summary>
-    public string Keywords { get; set; }
+    public string? Keywords { get; set; }
 
     /// <summary>
     /// Entity creation date.
@@ -70,20 +70,20 @@ public class TerritoryStory : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Initiative relationship.
     /// </summary>
-    public Initiative Initiative { get; set; }
+    public Initiative? Initiative { get; set; }
 
     /// <summary>
     /// Territory Story Like relationship.
     /// </summary>
-    public ICollection<TerritoryStoryLike> Likes { get; init; }
+    public ICollection<TerritoryStoryLike>? Likes { get; init; }
 
     /// <summary>
     /// Territory Story Image relationship.
     /// </summary>
-    public ICollection<TerritoryStoryImage> Images { get; init; }
+    public ICollection<TerritoryStoryImage>? Images { get; init; }
 
     /// <summary>
     /// Territory Story Video relationship.
     /// </summary>
-    public ICollection<TerritoryStoryVideo> Videos { get; init; }
+    public ICollection<TerritoryStoryVideo>? Videos { get; init; }
 }

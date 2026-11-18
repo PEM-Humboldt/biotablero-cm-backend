@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.Notifications;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Notification response example.
 /// </summary>
-public class NotificationResponseExample : IExamplesProvider<NotificationDto>
+public class NotificationResponseExample : IOpenApiExampleProvider<NotificationDto>
 {
     /// <inheritdoc/>
     public NotificationDto GetExamples() => new()
@@ -25,7 +25,7 @@ public class NotificationResponseExample : IExamplesProvider<NotificationDto>
         Properties = new()
         {
             TemplateName = "TemplateExample",
-            Data = new Dictionary<string, object> { { "key", "value" } },
+            Data = new Dictionary<string, object?> { { "key", "value" } },
         },
     };
 }

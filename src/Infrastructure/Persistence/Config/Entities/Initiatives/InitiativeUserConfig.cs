@@ -13,45 +13,45 @@ public class InitiativeUserConfig : IEntityTypeConfiguration<InitiativeUser>
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<InitiativeUser> builder)
     {
-        builder.ToTable("initiative_user", "initiatives");
+        builder?.ToTable("initiative_user", "initiatives");
 
         builder?.HasKey(e => e.Id);
 
-        builder.Property(i => i.Id)
+        builder?.Property(e => e.Id)
             .HasColumnName("id")
             .IsRequired();
 
-        builder.Property(i => i.InitiativeId)
+        builder?.Property(e => e.InitiativeId)
             .HasColumnName("initiative_id")
             .IsRequired();
 
-        builder.Property(i => i.UserName)
+        builder?.Property(e => e.UserName)
             .HasColumnName("user_name")
             .HasMaxLength(75)
             .IsRequired();
 
-        builder.Property(i => i.FocusArea)
+        builder?.Property(e => e.FocusArea)
             .HasColumnName("focus_area")
             .HasMaxLength(200);
 
-        builder.Property(e => e.CreationDate)
+        builder?.Property(e => e.CreationDate)
             .HasColumnName("creation_date")
             .HasDefaultValueSql("CURRENT_TIMESTAMP")
             .IsRequired();
 
-        builder.Property(i => i.LevelId)
+        builder?.Property(e => e.LevelId)
             .HasColumnName("initiative_user_level_id")
             .IsRequired();
 
-        builder.HasOne(e => e.Initiative)
+        builder?.HasOne(e => e.Initiative)
             .WithMany(p => p.InitiativeUsers)
             .HasForeignKey(e => e.InitiativeId);
 
-        builder.HasOne(e => e.Level)
+        builder?.HasOne(e => e.Level)
             .WithMany(p => p.InitiativeUsers)
             .HasForeignKey(e => e.LevelId);
 
-        builder
+        builder?
             .HasIndex(e => new { e.UserName, e.InitiativeId })
             .IsUnique();
     }

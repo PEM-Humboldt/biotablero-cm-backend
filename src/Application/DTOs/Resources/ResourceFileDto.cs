@@ -1,13 +1,16 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Resources;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
 
 /// <summary>
 /// Resource File dto.
 /// </summary>
-public class ResourceFileDto : IDto
+[method: SetsRequiredMembers]
+public class ResourceFileDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -22,10 +25,10 @@ public class ResourceFileDto : IDto
     /// <summary>
     /// Entity name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Entity URL.
     /// </summary>
-    public Uri Url { get; set; }
+    public required Uri Url { get; set; } = new(FileConstants.DefaultUriValue);
 }

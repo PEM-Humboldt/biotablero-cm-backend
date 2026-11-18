@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.DTOs.Users;
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
@@ -11,7 +12,8 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// <summary>
 /// Initiative User dto.
 /// </summary>
-public class InitiativeUserDto : IDto
+[method: SetsRequiredMembers]
+public class InitiativeUserDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -26,17 +28,17 @@ public class InitiativeUserDto : IDto
     /// <summary>
     /// User identifier.
     /// </summary>
-    public string UserName { get; set; }
+    public required string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// Level relationship.
     /// </summary>
-    public EnumEntityDto<InitiativeUserLevel> Level { get; set; }
+    public required EnumEntityDto<InitiativeUserLevel> Level { get; set; } = new(InitiativeUserLevel.Reader);
 
     /// <summary>
     /// User focus area.
     /// </summary>
-    public string FocusArea { get; set; }
+    public string? FocusArea { get; set; }
 
     /// <summary>
     /// Entity creation date.
@@ -46,5 +48,5 @@ public class InitiativeUserDto : IDto
     /// <summary>
     /// External user data.
     /// </summary>
-    public ExternalUserBaseDto ExternalData { get; set; }
+    public ExternalUserBaseDto? ExternalData { get; set; }
 }

@@ -13,15 +13,15 @@ public class InitiativeUserLevel : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Level name.
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Initiative Users relationship.
     /// </summary>
-    public ICollection<InitiativeUser> InitiativeUsers { get; init; }
+    public ICollection<InitiativeUser>? InitiativeUsers { get; init; }
 
     /// <summary>
     /// Join requests relationship.
     /// </summary>
-    public ICollection<JoinRequest> JoinRequests { get; init; }
+    public ICollection<JoinRequest>? JoinRequests { get; init; }
 }

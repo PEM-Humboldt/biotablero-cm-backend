@@ -10,22 +10,22 @@ using IAVH.BioTablero.CM.Core.Interfaces.Entities;
 public class MapLegend : BaseEntity<int>, IAggregateRoot
 {
     /// <summary>
-    /// Indicator Version Map identifier.
+    /// Topic Version Map identifier.
     /// </summary>
-    public int IndicatorVersionMapId { get; set; }
+    public int TopicVersionMapId { get; set; }
 
     /// <summary>
     /// Map Legend title.
     /// </summary>
-    public string Title { get; set; }
+    public required string Title { get; set; }
 
     /// <summary>
-    /// Indicator Version Map relationship.
+    /// Topic Version Map relationship.
     /// </summary>
-    public IndicatorVersionMap IndicatorVersionMap { get; set; }
+    public TopicVersionMap? TopicVersionMap { get; set; }
 
     /// <summary>
     /// Map Legend Item relationship.
     /// </summary>
-    public ICollection<MapLegendItem> Items { get; init; }
+    public ICollection<MapLegendItem>? Items { get; init; }
 }

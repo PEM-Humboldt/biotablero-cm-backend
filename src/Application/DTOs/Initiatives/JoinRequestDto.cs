@@ -1,6 +1,7 @@
 ﻿namespace IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 using IAVH.BioTablero.CM.Application.DTOs.Utils;
 
@@ -11,7 +12,8 @@ using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.InitiativesEnums;
 /// <summary>
 /// Join Request dto.
 /// </summary>
-public class JoinRequestDto : IDto
+[method: SetsRequiredMembers]
+public class JoinRequestDto() : IDto
 {
     /// <summary>
     /// Item identifier.
@@ -21,12 +23,12 @@ public class JoinRequestDto : IDto
     /// <summary>
     /// Join Request user name.
     /// </summary>
-    public string UserName { get; set; }
+    public required string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// Join Request reviewer user name.
     /// </summary>
-    public string ReviewerUserName { get; set; }
+    public string? ReviewerUserName { get; set; }
 
     /// <summary>
     /// Join Request creation date.
@@ -46,10 +48,10 @@ public class JoinRequestDto : IDto
     /// <summary>
     /// Level relationship.
     /// </summary>
-    public EnumEntityDto<InitiativeUserLevel> Level { get; set; }
+    public EnumEntityDto<InitiativeUserLevel>? Level { get; set; }
 
     /// <summary>
     /// Join Request Status relationship.
     /// </summary>
-    public EnumEntityDto<JoinRequestStatus> Status { get; set; }
+    public required EnumEntityDto<JoinRequestStatus> Status { get; set; } = new(JoinRequestStatus.UnderReview);
 }

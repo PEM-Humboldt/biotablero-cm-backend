@@ -2,17 +2,18 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Tag edit request example.
 /// </summary>
-public class TagEditRequestExample : IExamplesProvider<TagDto>
+public class TagEditRequestExample : IOpenApiExampleProvider<TagDto>
 {
     /// <inheritdoc/>
     public TagDto GetExamples() => new()
     {
         Name = "Tag example",
+        FullName = "Full name example",
         Url = "https://example.com/tag-data",
     };
 }

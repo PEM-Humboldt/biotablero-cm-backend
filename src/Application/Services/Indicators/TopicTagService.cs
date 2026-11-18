@@ -1,0 +1,134 @@
+﻿namespace IAVH.BioTablero.CM.Application.Services.Indicators;
+
+using System.Threading;
+using System.Threading.Tasks;
+
+using IAVH.BioTablero.CM.Application.Domain;
+using IAVH.BioTablero.CM.Application.DTOs.Indicators;
+using IAVH.BioTablero.CM.Application.Interfaces.General;
+using IAVH.BioTablero.CM.Application.Interfaces.General.Mapper;
+using IAVH.BioTablero.CM.Application.Interfaces.Services.Indicators;
+using IAVH.BioTablero.CM.Application.Utils;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
+using IAVH.BioTablero.CM.Core.Domain.Models.Validations;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Indicators;
+using IAVH.BioTablero.CM.Core.Interfaces.Repositories.Tags;
+
+using Serilog;
+
+using static IAVH.BioTablero.CM.Core.Domain.Utils.Enums.LogEnums;
+
+/// <summary>
+/// Topic Tag service.
+/// </summary>
+public class TopicTagService : ITopicTagService
+{
+    private readonly ITopicTagRepository entityRepository;
+    private readonly IValidationErrorTranslator errorTranslator;
+    private readonly ILogger logger;
+    private readonly IMapperRead<TopicTag, TopicTagDto> mapper;
+    private readonly ITopicRepository topicRepository;
+    private readonly ITagRepository tagRepository;
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="entityRepository">Entity repository.</param>
+    /// <param name="mapper">Entity mapper.</param>
+    /// <param name="errorTranslator">Error translator.</param>
+    /// <param name="logger">System logger.</param>
+    /// <param name="topicRepository">Topic repository.</param>
+    /// <param name="tagRepository">Tag repository.</param>
+    public TopicTagService(
+        ITopicTagRepository entityRepository,
+        IMapperRead<TopicTag, TopicTagDto> mapper,
+        IValidationErrorTranslator errorTranslator,
+        ILogger logger,
+        ITopicRepository topicRepository,
+        ITagRepository tagRepository)
+    {
+        this.entityRepository = entityRepository;
+        this.mapper = mapper;
+        this.errorTranslator = errorTranslator;
+        this.logger = logger;
+        this.topicRepository = topicRepository;
+        this.tagRepository = tagRepository;
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> AddAsync(int topicId, int tagId, CancellationToken ct = default)
+    {
+        // Validate topic
+        var topic = await topicRepository.GetByIdAsync(topicId, ct);
+
+        if (topic == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Indicators.NotFound),
+            };
+        }
+
+        // Validate tag
+        var tagExists = await tagRepository.AnyAsync(tagId, ct);
+
+        if (!tagExists)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.Tags.NotFound),
+            };
+        }
+
+        // Validate duplicated entities
+        var hasDuplicatedEntities = await entityRepository.IsDuplicatedAsync(topicId, tagId, ct);
+
+        if (hasDuplicatedEntities)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.Duplicated),
+            };
+        }
+
+        // Build entity data
+        var entity = new TopicTag()
+        {
+            TopicId = topicId,
+            TagId = tagId,
+        };
+
+        // Save data
+        entity = await entityRepository.AddAsync(entity, ct);
+        var entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Create, "Added topic tag relationship", "{@EntityData}", entityData);
+
+        return new()
+        {
+            ResponseBody = entityData,
+        };
+    }
+
+    /// <inheritdoc/>
+    public async Task<CustomWebResponse> DeleteAsync(int id, CancellationToken ct = default)
+    {
+        // Validate entity
+        var entity = await entityRepository.GetByIdAsync(id, ct);
+
+        if (entity == null)
+        {
+            return new(true)
+            {
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.ElementNotFound),
+            };
+        }
+
+        await entityRepository.DeleteAsync(entity, ct);
+        var entityData = mapper.Map(entity);
+
+        logger.AddLog(LogType.Delete, "Deleted topic tag relationship", "{@EntityData}", entityData);
+
+        return new();
+    }
+}

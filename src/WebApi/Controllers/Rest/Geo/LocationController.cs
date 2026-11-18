@@ -4,14 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Geo;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Location;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Location controller.
@@ -32,7 +31,7 @@ public class LocationController(IWebTools webTools,
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LocationResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(LocationResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -46,7 +45,7 @@ public class LocationController(IWebTools webTools,
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LocationListResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(LocationListResponseExample))]
     public async Task<IActionResult> GetList(int? parentId, CancellationToken ct)
     {
         var response = await entityService.GetByParentAsync(parentId, ct);

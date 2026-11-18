@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Territory Story Video list response example.
 /// </summary>
-public class TerritoryStoryVideoListResponseExample : IExamplesProvider<List<TerritoryStoryVideoDto>>
+public class TerritoryStoryVideoListResponseExample : IOpenApiExampleProvider<List<TerritoryStoryVideoDto>>
 {
     /// <inheritdoc/>
     public List<TerritoryStoryVideoDto> GetExamples() =>

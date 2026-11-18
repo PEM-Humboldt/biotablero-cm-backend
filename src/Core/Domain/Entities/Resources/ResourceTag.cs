@@ -22,10 +22,10 @@ public class ResourceTag : BaseEntity<int>, IAggregateRoot
     /// <summary>
     /// Resource relationship.
     /// </summary>
-    public Resource Resource { get; set; }
+    public Resource? Resource { get; set; }
 
     /// <summary>
     /// Tag relationship.
     /// </summary>
-    public Tag Tag { get; set; }
+    public Tag? Tag { get; set; }
 }

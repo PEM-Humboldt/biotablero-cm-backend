@@ -2,12 +2,12 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Territory Story Video edit request example.
 /// </summary>
-public class TerritoryStoryVideoEditRequestExample : IExamplesProvider<TerritoryStoryVideoDto>
+public class TerritoryStoryVideoEditRequestExample : IOpenApiExampleProvider<TerritoryStoryVideoDto>
 {
     /// <inheritdoc/>
     public TerritoryStoryVideoDto GetExamples() => new()

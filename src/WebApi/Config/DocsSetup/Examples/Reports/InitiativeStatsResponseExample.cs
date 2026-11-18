@@ -2,18 +2,18 @@
 
 using IAVH.BioTablero.CM.Application.DTOs.Reports;
 
-using Swashbuckle.AspNetCore.Filters;
+using IAVH.BioTablero.CM.WebApi.Interfaces;
 
 /// <summary>
 /// Initiative statistics response example.
 /// </summary>
-public class InitiativeStatsResponseExample : IExamplesProvider<InitiativeStatsDto>
+public class InitiativeStatsResponseExample : IOpenApiExampleProvider<InitiativeStatsDto>
 {
     /// <inheritdoc/>
     public InitiativeStatsDto GetExamples() =>
         new()
         {
-            TotalIndicators = 1,
+            TotalTopics = 1,
             TotalMunicipalities = 1,
         };
 }

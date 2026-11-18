@@ -1,5 +1,6 @@
 ﻿namespace IAVH.BioTablero.CM.Infrastructure.Persistence.Repositories.Initiatives;
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -17,19 +18,21 @@ using Serilog;
 /// <summary>
 /// Monitoring Events repository.
 /// </summary>
-public class MonitoringEventsRepository : Repository<MonitoringEvents, int>, IMonitoringEventsRepository
+/// <param name="dbContext">General Database Context.</param>
+/// <param name="logger">System logger.</param>
+public class MonitoringEventsRepository(
+    GeneralContext dbContext,
+    ILogger logger) : Repository<MonitoringEvents, int>(dbContext, logger), IMonitoringEventsRepository
 {
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="dbContext">General Database Context.</param>
-    /// <param name="logger">System logger.</param>
-    public MonitoringEventsRepository(
-        GeneralContext dbContext,
-        ILogger logger)
-        : base(dbContext, logger)
-    {
-    }
+    /// <inheritdoc/>
+    public IQueryable<MonitoringEvents> IncludeOdataEntities(IQueryable<MonitoringEvents> query) =>
+        query
+            .Include(e => e.Initiative);
+
+    /// <inheritdoc/>
+    public IQueryable<MonitoringEvents> AddInitiativeFilter(int initiativeId, IQueryable<MonitoringEvents> query) =>
+        query
+            .Where(e => e.InitiativeId == initiativeId);
 
     /// <inheritdoc/>
     public async Task<IEnumerable<MonitoringEventsData>> GetMonitoringEventsData(int initiativeId, int? year = null, CancellationToken ct = default)
@@ -64,4 +67,16 @@ public class MonitoringEventsRepository : Repository<MonitoringEvents, int>, IMo
             .OrderBy(e => e.GroupNumber)
             .ToListAsync(ct);
     }
+
+    /// <inheritdoc/>
+    public async Task<bool> IsDuplicatedAsync(int initiativeId, DateTimeOffset monitoringEventsDate, CancellationToken ct = default) =>
+        await dbContext.MonitoringEvents
+            .Where(e => e.InitiativeId == initiativeId && e.Date == monitoringEventsDate)
+            .AnyAsync(ct);
+
+    /// <inheritdoc/>
+    public async Task<bool> IsDuplicatedAsync(int id, int initiativeId, DateTimeOffset monitoringEventsDate, CancellationToken ct = default) =>
+        await dbContext.MonitoringEvents
+            .Where(e => e.Id != id && e.InitiativeId == initiativeId && e.Date == monitoringEventsDate)
+            .AnyAsync(ct);
 }

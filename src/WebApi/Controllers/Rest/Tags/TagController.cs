@@ -7,6 +7,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.Interfaces.Services.Tags;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Domain.Utils.Constants;
+using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Attributes;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples;
 using IAVH.BioTablero.CM.WebApi.Config.DocsSetup.Examples.Tag;
 using IAVH.BioTablero.CM.WebApi.Interfaces;
@@ -16,8 +17,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
-
-using Swashbuckle.AspNetCore.Filters;
 
 /// <summary>
 /// Initiative Tag controller.
@@ -39,7 +38,7 @@ public class TagController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Selected entity data.</returns>
     [HttpGet("{id}")]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TagResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TagResponseExample))]
     public async Task<IActionResult> GetItem(int id, CancellationToken ct)
     {
         var response = await entityService.GetItemAsync(id, ct);
@@ -53,7 +52,7 @@ public class TagController(
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Entities list from parameters.</returns>
     [HttpGet]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TagOdataResponseExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TagOdataResponseExample))]
     public async Task<IActionResult> GetOdataList(ODataQueryOptions<Tag> queryOptions, CancellationToken ct)
     {
         var response = await entityService.GetListAsync(queryOptions, ct);
@@ -69,8 +68,8 @@ public class TagController(
     [HttpPost]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [SwaggerRequestExample(typeof(TagDto), typeof(TagAddRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TagResponseExample))]
+    [OpenApiRequest(typeof(TagAddRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TagResponseExample))]
     public async Task<IActionResult> Post([FromBody] TagDto requestData, CancellationToken ct)
     {
         var response = await entityService.AddAsync(requestData, ct);
@@ -87,8 +86,8 @@ public class TagController(
     [HttpPut("{id}")]
     [Consumes("application/json")]
     [Authorize(Roles = IamConstants.RoleModuleAdmin)]
-    [SwaggerRequestExample(typeof(TagDto), typeof(TagEditRequestExample))]
-    [SwaggerResponseExample(StatusCodes.Status200OK, typeof(TagResponseExample))]
+    [OpenApiRequest(typeof(TagEditRequestExample))]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(TagResponseExample))]
     public async Task<IActionResult> Put(int id, [FromBody] TagDto requestData, CancellationToken ct)
     {
         var response = await entityService.UpdateAsync(id, requestData, ct);

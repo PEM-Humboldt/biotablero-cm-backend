@@ -5,6 +5,7 @@ using IAVH.BioTablero.CM.Application.DTOs.Indicators;
 using IAVH.BioTablero.CM.Application.DTOs.Initiatives;
 using IAVH.BioTablero.CM.Application.DTOs.Logging;
 using IAVH.BioTablero.CM.Application.DTOs.Notifications;
+using IAVH.BioTablero.CM.Application.DTOs.Reports;
 using IAVH.BioTablero.CM.Application.DTOs.Resources;
 using IAVH.BioTablero.CM.Application.DTOs.Tags;
 using IAVH.BioTablero.CM.Application.DTOs.TerritoryStories;
@@ -15,6 +16,7 @@ using IAVH.BioTablero.CM.Application.Mappings.Indicators;
 using IAVH.BioTablero.CM.Application.Mappings.Initiatives;
 using IAVH.BioTablero.CM.Application.Mappings.Logging;
 using IAVH.BioTablero.CM.Application.Mappings.Notifications;
+using IAVH.BioTablero.CM.Application.Mappings.Reports;
 using IAVH.BioTablero.CM.Application.Mappings.Resources;
 using IAVH.BioTablero.CM.Application.Mappings.Tags;
 using IAVH.BioTablero.CM.Application.Mappings.TerritoryStories;
@@ -24,6 +26,7 @@ using IAVH.BioTablero.CM.Core.Domain.Entities.Indicators;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Initiatives;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Logging;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Notifications;
+using IAVH.BioTablero.CM.Core.Domain.Entities.Reports;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Resources;
 using IAVH.BioTablero.CM.Core.Domain.Entities.Tags;
 using IAVH.BioTablero.CM.Core.Domain.Entities.TerritoryStories;
@@ -61,6 +64,7 @@ public static class ConfigMappings
         services.AddSingleton<IMapperCreateAndRead<JoinRequest, JoinRequestDto>, JoinRequestMappings>();
         services.AddSingleton<IMapperCreateAndRead<JoinInvitation, JoinInvitationDto>, JoinInvitationMappings>();
         services.AddSingleton<IMapperCreateAndRead<JoinInvitationGuest, JoinInvitationGuestDto>, JoinInvitationGuestMappings>();
+        services.AddSingleton<IMapperCreateReadAndUpdate<MonitoringEvents, MonitoringEventsDto>, MonitoringEventsMappings>();
 
         // Territory stories
         services.AddSingleton<IMapperCreateReadAndUpdate<TerritoryStory, TerritoryStoryDto>, TerritoryStoryMappings>();
@@ -82,13 +86,17 @@ public static class ConfigMappings
 
         // Indicators
         services.AddSingleton<IMapperRead<Category, CategoryDto>, CategoryMappings>();
-        services.AddSingleton<IMapperRead<IndicatorLocation, IndicatorLocationDto>, IndicatorLocationMappings>();
-        services.AddSingleton<IMapperRead<Indicator, IndicatorDto>, IndicatorMappings>();
-        services.AddSingleton<IMapperRead<IndicatorTag, IndicatorTagDto>, IndicatorTagMappings>();
-        services.AddSingleton<IMapperRead<IndicatorType, IndicatorTypeDto>, IndicatorTypeMappings>();
+        services.AddSingleton<IMapperRead<TopicLocation, TopicLocationDto>, TopicLocationMappings>();
+        services.AddSingleton<IMapperReadAndUpdate<Topic, TopicDto>, TopicMappings>();
+        services.AddSingleton<IMapperRead<TopicTag, TopicTagDto>, TopicTagMappings>();
+        services.AddSingleton<IMapperRead<TopicType, TopicTypeDto>, TopicTypeMappings>();
         services.AddSingleton<IMapperRead<IndicatorValue, IndicatorValueDto>, IndicatorValueMappings>();
-        services.AddSingleton<IMapperRead<IndicatorVersion, IndicatorVersionDto>, IndicatorVersionMappings>();
-        services.AddSingleton<IMapperRead<MeasureUnit, MeasureUnitDto>, MeasureUnitMappings>();
+        services.AddSingleton<IMapperReadAndUpdate<TopicVersion, TopicVersionDto>, TopicVersionMappings>();
+        services.AddSingleton<IMapperRead<IndicatorType, IndicatorTypeDto>, IndicatorTypeMappings>();
+        services.AddSingleton<IMapperRead<CentralActor, CentralActorDto>, CentralActorMappings>();
+
+        // Reports
+        services.AddSingleton<IMapperCreateAndRead<ReportData, ReportDataDto>, ReportDataMappings>();
 
         return services;
     }
