@@ -27,7 +27,7 @@ public static class OpenApiConfig
         {
             document.Info = new()
             {
-                Version = "1.0.0",
+                Version = "1.0.1",
                 Title = "BioTableroCM",
                 Description = "API for BioTablero's Community Monitoring module",
                 Contact = new OpenApiContact
@@ -75,7 +75,7 @@ public static class OpenApiConfig
         {
             document.Info = new()
             {
-                Version = "1.0.0",
+                Version = "1.0.1",
                 Title = "Keycloak Auth Server",
                 Description = "Endpoints to obtain and refresh JWT tokens from Keycloak",
                 Contact = new OpenApiContact
