@@ -28,11 +28,14 @@ public class StorageService(
     private const string ProjectPreffix = "bt-cm";
     private readonly ILogger logger = logger;
     private readonly IAmazonS3 client = client;
-    private readonly string endpointUrl = EnvUtils.GetRequiredEnv("S3_ENDPOINT_URL");
+    private readonly string? endpointUrl = Environment.GetEnvironmentVariable("S3_ENDPOINT_URL");
     private readonly string bucketName = EnvUtils.GetRequiredEnv("S3_BUCKET_NAME");
+    private readonly string region = EnvUtils.GetRequiredEnv("AWS_REGION");
 
     /// <inheritdoc/>
-    public Uri BaseUrl => new($"{endpointUrl}/{bucketName}/{ProjectPreffix}");
+    public Uri BaseUrl => !string.IsNullOrWhiteSpace(endpointUrl)
+        ? new($"{endpointUrl.TrimEnd('/')}/{bucketName}/{ProjectPreffix}")
+        : new($"https://{bucketName}.s3.{region}.amazonaws.com/{ProjectPreffix}");
 
     /// <inheritdoc/>
     public async Task<bool> UploadFileAsync(string fileName, Stream fileStream, string contentType, CancellationToken ct = default)
@@ -124,10 +127,26 @@ public class StorageService(
     /// <inheritdoc/>
     public async Task<bool> DeleteFileAsync(string fileName, CancellationToken ct = default)
     {
+        string key;
+        if (Uri.TryCreate(fileName, UriKind.Absolute, out var uri))
+        {
+            var path = Uri.UnescapeDataString(uri.AbsolutePath).TrimStart('/');
+            if (path.StartsWith($"{bucketName}/", StringComparison.OrdinalIgnoreCase))
+            {
+                path = path[(bucketName.Length + 1)..];
+            }
+
+            key = path;
+        }
+        else
+        {
+            key = fileName.TrimStart('/');
+        }
+
         var deleteObjectRequest = new DeleteObjectRequest
         {
             BucketName = bucketName,
-            Key = fileName.Replace($"{endpointUrl}/{bucketName}", string.Empty),
+            Key = key,
         };
 
         try
