@@ -134,14 +134,14 @@ public static class ConfigExternalServices
             var accessKey = EnvUtils.GetRequiredEnv("AWS_ACCESS_KEY");
             var secretKey = EnvUtils.GetRequiredEnv("AWS_SECRET_KEY");
             var region = EnvUtils.GetRequiredEnv("AWS_REGION");
-            var endpoint = EnvUtils.GetRequiredEnv("S3_ENDPOINT_URL");
+            var endpoint = Environment.GetEnvironmentVariable("S3_ENDPOINT_URL");
 
             var config = new AmazonS3Config()
             {
                 RegionEndpoint = RegionEndpoint.GetBySystemName(region),
             };
 
-            if (endpoint != null)
+            if (!string.IsNullOrWhiteSpace(endpoint))
             {
                 config = new()
                 {
