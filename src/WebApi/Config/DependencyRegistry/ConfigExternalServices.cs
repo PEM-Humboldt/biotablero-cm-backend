@@ -141,7 +141,7 @@ public static class ConfigExternalServices
                 RegionEndpoint = RegionEndpoint.GetBySystemName(region),
             };
 
-            if (endpoint != null)
+            if (!string.IsNullOrWhiteSpace(endpoint))
             {
                 config = new()
                 {
