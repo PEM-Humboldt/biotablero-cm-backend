@@ -42,4 +42,21 @@ public class UserController(IWebTools webTools,
         var response = await entityService.GetListAsync(queryOptions, ct);
         return webTools.CustomResponse(response);
     }
+
+    /// <summary>
+    /// Get entities by roles (paginated).
+    /// </summary>
+    /// <param name="roles">Roles list.</param>
+    /// <param name="include">Include roles flag.</param>
+    /// <param name="queryOptions">OData query options.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Entities list from parameters.</returns>
+    [HttpGet("ByRoles")]
+    [Authorize(Roles = IamConstants.RoleModuleAdmin)]
+    [OpenApiResponse(StatusCodes.Status200OK, typeof(UserOdataResponseExample))]
+    public async Task<IActionResult> GetOdataListByRoles([FromQuery] string[] roles, [FromQuery] bool include, ODataQueryOptions<ExternalUser> queryOptions, CancellationToken ct)
+    {
+        var response = await entityService.GetListByRolesAsync(roles, include, queryOptions.Request.QueryString.Value ?? string.Empty, ct);
+        return webTools.CustomResponse(response);
+    }
 }

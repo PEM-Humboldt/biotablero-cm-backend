@@ -43,6 +43,34 @@ ICustomApiKeycloakTokenProvider tokenProvider, ILogger logger) : IIamCustomApiSe
         }
     }
 
+    /// <inheritdoc/>
+    public async Task<List<ExternalUser>> GetUsersDataByRolesAsync(string[] roles, bool include, string query, CancellationToken ct = default)
+    {
+        try
+        {
+            var token = await tokenProvider.GetTokenAsync(ct);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var initialQuery = $"include={include}";
+
+            for (int i = 0; i < roles.Length; i++)
+            {
+                initialQuery += $"&roles={roles[i]}";
+            }
+
+            var response = await httpClient.GetAsync($"/User/ByRoles?include={include}&roles=Admin&{query}", ct);
+            response.EnsureSuccessStatusCode();
+
+            var content = await response.Content.ReadAsStringAsync(ct);
+            return MapKeycloakUsers(content);
+        }
+        catch (HttpRequestException ex)
+        {
+            logger.Error(ex, "Http request error while get users data");
+            return [];
+        }
+    }
+
     /// <summary>
     /// Maps Keycloak JSON string response to ExternalUser list.
     /// </summary>
@@ -53,10 +81,8 @@ ICustomApiKeycloakTokenProvider tokenProvider, ILogger logger) : IIamCustomApiSe
         var users = new List<ExternalUser>();
         using var jsonDoc = JsonDocument.Parse(jsonContent);
 
-        var valueArray = default(JsonElement);
-
         if (jsonDoc.RootElement.ValueKind != JsonValueKind.Object ||
-            !(jsonDoc.RootElement.TryGetProperty("value", out valueArray) && valueArray.ValueKind == JsonValueKind.Array))
+            !(jsonDoc.RootElement.TryGetProperty("value", out var valueArray) && valueArray.ValueKind == JsonValueKind.Array))
         {
             return users;
         }

@@ -28,4 +28,14 @@ public interface IUserService
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process result.</returns>
     Task<CustomWebResponse> GetListAsync(ODataQueryOptions<ExternalUser> queryOptions, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get elements list by roles (OData).
+    /// </summary>
+    /// <param name="roles">Roles list.</param>
+    /// <param name="include">Include roles flag.</param>
+    /// <param name="query">OData query.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process result.</returns>
+    Task<CustomWebResponse> GetListByRolesAsync(string[] roles, bool include, string query, CancellationToken ct = default);
 }
