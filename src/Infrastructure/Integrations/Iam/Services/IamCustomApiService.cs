@@ -67,7 +67,7 @@ ICustomApiKeycloakTokenProvider tokenProvider, ILogger logger) : IIamCustomApiSe
         catch (HttpRequestException ex)
         {
             logger.Error(ex, "Http request error while get users data");
-            return [];
+            throw;
         }
     }
 

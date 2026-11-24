@@ -157,6 +157,14 @@
     <value>Invalid text length</value>
     <comment/>
   </data>
+  <data name="SYS_011" xml:space="preserve">
+    <value>IAM connection error</value>
+    <comment/>
+  </data>
+  <data name="SYS_012" xml:space="preserve">
+    <value>IAM Custom API connection error</value>
+    <comment/>
+  </data>
   <data name="FIL_001" xml:space="preserve">
     <value>The file is empty</value>
     <comment/>

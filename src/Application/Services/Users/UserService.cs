@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -146,6 +148,14 @@ public class UserService : IUserService
             return new(true)
             {
                 ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.OdataInvalidFilter),
+            };
+        }
+        catch (HttpRequestException)
+        {
+            return new(true)
+            {
+                StatusCode = HttpStatusCode.ServiceUnavailable,
+                ResponseBody = errorTranslator.Translate(ValidationErrorCodes.General.IamCustomApiConnectionError),
             };
         }
     }
