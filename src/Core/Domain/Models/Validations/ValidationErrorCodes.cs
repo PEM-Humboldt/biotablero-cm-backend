@@ -64,6 +64,16 @@ public static class ValidationErrorCodes
         /// Invalid text length.
         /// </summary>
         public const string InvalidTextLength = "SYS_010";
+
+        /// <summary>
+        /// IAM connection error.
+        /// </summary>
+        public const string IamConnectionError = "SYS_011";
+
+        /// <summary>
+        /// IAM Custom API connection error.
+        /// </summary>
+        public const string IamCustomApiConnectionError = "SYS_012";
     }
 
     /// <summary>

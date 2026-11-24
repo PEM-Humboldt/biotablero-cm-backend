@@ -18,4 +18,14 @@ public interface IIamCustomApiService
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Users data.</returns>
     Task<List<ExternalUser>> GetUsersDataAsync(string query, CancellationToken ct = default);
+
+    /// <summary>
+    /// Get users data by roles.
+    /// </summary>
+    /// <param name="roles">Roles list.</param>
+    /// <param name="include">Include roles flag.</param>
+    /// <param name="query">OData query.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Users data.</returns>
+    Task<List<ExternalUser>> GetUsersDataByRolesAsync(string[] roles, bool include, string query, CancellationToken ct = default);
 }
